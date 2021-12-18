@@ -1,0 +1,255 @@
+
+<ion-header class="flightpage-header homefoodheader" >
+  <ion-row>
+    <ion-col class="col-header">
+      <div class="d-flex">
+        <div class="div-goback" (click)="goback()">
+            <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
+        </div>
+        <div class="div-header-title">
+          
+            <div class="div-slide-food">
+              <div class="swiper-food">
+                Bữa trưa
+                <!-- <div class="div-lunch" (click)="setActiveFoodTab(1)">Bữa trưa</div>
+                <div class="div-diner" (click)="setActiveFoodTab(2)">Bữa tối</div>
+                <div class="active-mark-food left-50"></div> -->
+              </div>
+             
+            </div>
+        </div>
+        <div class="div-icon-cart text-center">
+          <img class="img-cart" src="../../assets/ic_food/cart_black.svg" (click)="showCart()">
+          <ion-badge *ngIf="countcart >0" color="danger" class="cls-badge-cart">{{countcart}}</ion-badge>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+  
+</ion-header>
+<ion-content>
+  <div class="div-home cls-tab-visible">
+    
+    <div class="div-content div-content-lunch cls-tab-visible">
+      <div class="div-week-period"> 
+        <div [ngClass] = "!activeWeek ? 'div-current-week active-week' : 'div-current-week'" *ngIf="!activeWeek else divhidetextweek" (click)="changeWeek(1)">
+            <div class=" d-flex">
+              <div class="text-week-title">{{weekmenutitle}}</div>
+              <div class="text-week-title-date">{{weekmenutitle1}}</div>
+              <div class="text-arrow v-align-center"><img class="img-arrow" src="../../assets/ic_food/ic_arrow_tealish.svg"></div>
+              <div class="text-week-title-date">{{weekmenutitle2}}</div>
+            </div>
+        </div>
+        <ng-template #divhidetextweek>
+          <div class = "div-current-week" (click)="changeWeek(0)">
+            <div class="text-week-title text-left">Tuần này</div>
+          </div>
+        </ng-template>
+        <div class="div-split-week"></div>
+        <div [ngClass] = "activeWeek ? 'div-next-week active-week m-left-17' : 'div-next-week'" *ngIf="activeWeek else divhidetextnextweek" (click)="changeWeek(0)">
+          <div class=" d-flex">
+            <div class="text-week-title">{{nextweekmenutitle}}</div>
+            <div class="text-week-title-date">{{nextweekmenutitle1}}</div>
+            <div class="text-arrow v-align-center"><img class="img-arrow" src="../../assets/ic_food/ic_arrow_tealish.svg"></div>
+            <div class="text-week-title-date">{{nextweekmenutitle2}}</div>
+          </div>
+        </div>
+        <ng-template #divhidetextnextweek>
+          <div class = "div-next-week" (click)="changeWeek(1)"><div class="text-week-title text-right">Tuần sau</div></div>
+        </ng-template>
+      </div>
+  
+      <div class="text-filter">
+        Lựa chọn bữa trưa của bạn
+      </div>
+      <div class="div-wrap-filter">
+          <div class="div-filter">
+  
+            <div class="div-filter-item " (click)="filterClick(1)" *ngIf="!itemViBacClick && !itemViTrungClick && !itemViNamClick && !itemCollectionClick">
+              <div class="label-filter min-width-112">Phong vị<span><img class="img-down" src="../../assets/ic_food/ic_down.svg"></span></div>
+            </div>
+  
+            <div class="div-filter-item" *ngIf="itemViBacClick">
+                <div class="label-filter min-width-100 labelvibac" (click)="filterClick(1)">Vị Bắc</div>
+                <span class="div-close" (click)="removeFilter(1)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+              </div>
+                <div class="div-filter-item" *ngIf="itemViTrungClick" >
+                  <div class="label-filter min-width-100 labelvitrung" (click)="filterClick(1)">Vị Trung</div>
+                  <span class="div-close" (click)="removeFilter(2)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                </div>
+                  <div class="div-filter-item" *ngIf="itemViNamClick">
+                    <div class="label-filter min-width-100 labelvinam" (click)="filterClick(1)">Vị Nam</div>
+                    <span class="div-close" (click)="removeFilter(3)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                  </div>
+                  <div class="div-filter-item" *ngIf="itemCollectionClick">
+                    <div class="label-filter min-width-115 labelcollection" (click)="filterClick(1)">Collection</div>
+                    <span class="div-close" (click)="removeFilter(-2)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                  </div>
+  
+            <div class="div-filter-item " (click)="filterClick(2)" *ngIf="!itemThanhDamClick && !itemDamDaClick">
+                <div class="label-filter min-width-112">Cách nấu<span><img class="img-down" src="../../assets/ic_food/ic_down.svg"></span></div>
+              </div>
+  
+              <div class="div-filter-item"  *ngIf="itemThanhDamClick">
+                  <div class="label-filter min-width-125 labelthanhdam" (click)="filterClick(2)">Thanh đạm</div>
+                  <span class="div-close" (click)="removeFilter(4)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                </div>
+                <div class="div-filter-item" *ngIf="itemDamDaClick">
+                    <div class="label-filter min-width-100 labeldamda" (click)="filterClick(2)">Đậm đà</div>
+                    <span class="div-close" (click)="removeFilter(5)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                  </div>
+  
+              <div class="div-filter-item " (click)="filterClick(3)" *ngIf="!item199Click && !item299Click && !item399Click">
+                  <div class="label-filter min-width-100">Giá tiền<span><img class="img-down" src="../../assets/ic_food/ic_down.svg"></span></div>
+                </div>
+  
+                      <div class="div-filter-item" *ngIf="item199Click">
+                          <div class="label-filter min-width-150 label199" (click)="filterClick(3)">225.000 đ/tuần</div>
+                          <span class="div-close" (click)="removeFilter(6)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                        </div>
+                        <div class="div-filter-item" *ngIf="item299Click">
+                            <div class="label-filter min-width-150 label299" (click)="filterClick(3)">325.000 đ/tuần</div>
+                            <span class="div-close" (click)="removeFilter(7)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                          </div>
+                          <div class="div-filter-item" *ngIf="item399Click">
+                              <div class="label-filter min-width-150 label399" (click)="filterClick(3)">425.000 đ/tuần</div>
+                              <span class="div-close" (click)="removeFilter(8)"><img class="img-close" src="../../assets/ic_food/ic_close_w.svg"></span>
+                            </div>
+                               
+            </div>
+      </div>
+  
+  
+      <div class="div-wraper-combo">
+        <div *ngIf="!activeWeek else combonextweek">
+          <div class="div-item-combo" *ngFor="let item of foods; let idx = index" (click)="itemComboClick(item, 0)">
+            <app-fooditem [item]="item"></app-fooditem>
+          </div>
+        </div>
+        <ng-template #combonextweek>
+          <div class="div-item-combo" *ngFor="let itemnextweek of foodsnextweek; let idx = index" (click)="itemComboClick(itemnextweek, 1)">
+            <app-fooditem [item]="itemnextweek"></app-fooditem>
+          </div>
+        </ng-template>
+        
+      </div>
+    
+  <!-- Vùng trả góp -->
+  <div class="div-installment">
+    <div class="installment-content">
+      <div class="text-installment">
+        <ion-label>Trả góp chỉ từ <span class="text-price">{{installmentPriceStr}} </span><span class="text-price-sub">đ</span>/tháng qua thẻ tín dụng Visa, Mastercard, JCB với đơn hàng trên 3 triệu</ion-label>
+      </div>
+      <div class="text-see-detail"><span class="installment-detail" (click)="showInstallmentDetail()">Xem chi tiết <img
+          src="./assets/imgs/vector.svg"></span></div>
+    </div>
+  </div>
+  </div>
+  <!-- <div class="div-content div-content-diner cls-tab-visible">
+    <div class="div-week-period m-bottom-24"> 
+      <div [ngClass] = "!activeWeekDinner ? 'div-current-week active-week' : 'div-current-week'" *ngIf="!activeWeekDinner else divhidetextweekdinner" (click)="changeWeekDinner(0)">
+          <div class=" d-flex">
+            <div class="text-week-title">{{weekmenutitle}}</div>
+            <div class="text-week-title-date">{{weekmenutitle1}}</div>
+            <div class="text-arrow v-align-center"><img class="img-arrow" src="../../assets/ic_food/ic_arrow_tealish.svg"></div>
+            <div class="text-week-title-date">{{weekmenutitle2}}</div>
+          </div>
+      </div>
+      <ng-template #divhidetextweekdinner>
+        <div class = "div-current-week" (click)="changeWeekDinner(0)">
+          <div class="text-week-title text-left">Tuần này</div>
+        </div>
+      </ng-template>
+      <div class="div-split-week"></div>
+      <div [ngClass] = "activeWeekDinner ? 'div-next-week active-week m-left-17' : 'div-next-week'" *ngIf="activeWeekDinner else divhidetextnextweekdinner" (click)="changeWeekDinner(1)">
+        <div class=" d-flex">
+          <div class="text-week-title">{{nextweekmenutitle}}</div>
+          <div class="text-week-title-date">{{nextweekmenutitle1}}</div>
+          <div class="text-arrow v-align-center"><img class="img-arrow" src="../../assets/ic_food/ic_arrow_tealish.svg"></div>
+          <div class="text-week-title-date">{{nextweekmenutitle2}}</div>
+        </div>
+      </div>
+      <ng-template #divhidetextnextweekdinner>
+        <div class = "div-next-week" (click)="changeWeekDinner(1)"><div class="text-week-title text-right">Tuần sau</div></div>
+      </ng-template>
+    </div>
+  
+    <div class="div-wraper-combo leftoffset-6">
+  
+        <ion-slides (ionSlideDidChange)="slidechangedinner()" #myFoodSliderDinner [options]="slideOpts" class="food-slider" >
+          <ion-slide style="display: block;margin-right: 10px;margin-left: 6px;" class="slide-lunch-currentweek main-color">
+            <div class="list-menu" *ngIf="diners && diners.length >0 ">
+              
+                <div class="div-group-damda">
+                  <div class="title-text">Đậm đà nhiều đạm</div>
+                  <div class="sub-title-text m-bottom-16">Giàu năng lượng, cân bằng dinh dưỡng</div>
+
+                  <div class="div-item-combo width-98"  *ngFor="let itemDiner of diners; let idx = index" (click)="itemDinerClick(itemDiner)">
+                    <app-fooddinneritem [item]="itemDiner" *ngIf="itemDiner.groupId == 1"></app-fooddinneritem>
+                  </div>
+                    
+                </div>
+
+                  <div class="div-group-thanhdam p-top-40">
+                    <div class="title-text">Thanh đạm nhiều rau</div>
+                    <div class="sub-title-text">Giàu chất xơ, cơ thể khoẻ đẹp</div>
+
+                    <div class="div-item-combo width-98"  *ngFor="let itemDiner of diners; let idx = index" (click)="itemDinerClick(itemDiner)">
+                      <app-fooddinneritem [item]="itemDiner" *ngIf="itemDiner.groupId == 0"></app-fooddinneritem>
+                    </div>
+                  </div>
+              
+            </div>
+            
+          </ion-slide>
+          <ion-slide style="display: block;" class="slide-lunch-nextweek sub-color" >
+            <div class="list-menu" *ngIf="dinersnextweek && dinersnextweek.length >0 ">
+
+              <div class="div-group-damda">
+                <div class="title-text">Đậm đà nhiều đạm</div>
+                <div class="sub-title-text m-bottom-16">Giàu năng lượng, cân bằng dinh dưỡng</div>
+
+                <div class="div-item-combo width-98"  *ngFor="let itemDinerNextWeek of dinersnextweek; let idx = index" (click)="itemDinerClick(itemDinerNextWeek)">
+                  <app-fooddinneritem [item]="itemDinerNextWeek" *ngIf="itemDinerNextWeek.groupId == 1"></app-fooddinneritem>
+                </div>
+                  
+              </div>
+
+                <div class="div-group-thanhdam p-top-40">
+                  <div class="title-text">Thanh đạm nhiều rau</div>
+                  <div class="sub-title-text">Giàu chất xơ, cơ thể khoẻ đẹp</div>
+
+                  <div class="div-item-combo width-98"  *ngFor="let itemDinerNextWeek of dinersnextweek; let idx = index" (click)="itemDinerClick(itemDinerNextWeek)">
+                    <app-fooddinneritem [item]="itemDinerNextWeek" *ngIf="itemDinerNextWeek.groupId == 0"></app-fooddinneritem>
+                  </div>
+                </div>
+            </div>
+            
+          </ion-slide>
+      </ion-slides>
+    </div>
+  </div> -->
+  
+  
+  </div>
+  
+  <div class="div-myorder cls-tab-disabled">
+    <!-- <app-foodmyorder></app-foodmyorder> -->
+    <app-order *ngIf="!isBizAccount else bookings"></app-order>
+    <ng-template #bookings>
+        <app-booking></app-booking>
+    </ng-template>
+  </div>
+  <div class="div-notify cls-tab-disabled">
+    <app-foodnotify></app-foodnotify>
+  </div>
+  <div class="div-account cls-tab-disabled">
+    <app-foodaccount></app-foodaccount>
+  </div>
+</ion-content>
+
+
+
+<ion-footer>
+  <app-foodmenufooter></app-foodmenufooter>
+</ion-footer>

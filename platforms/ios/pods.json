@@ -1,0 +1,55 @@
+{
+    "declarations": {
+        "use_frameworks!": {
+            "declaration": "use_frameworks!",
+            "count": 1
+        }
+    },
+    "sources": {
+        "https://github.com/CocoaPods/Specs.git": {
+            "source": "https://github.com/CocoaPods/Specs.git",
+            "count": 3
+        },
+        "https://cdn.cocoapods.org/": {
+            "source": "https://cdn.cocoapods.org/",
+            "count": 1
+        }
+    },
+    "libraries": {
+        "Firebase/Analytics": {
+            "name": "Firebase/Analytics",
+            "spec": "~> 6.1.0",
+            "count": 1
+        },
+        "Firebase/Core": {
+            "name": "Firebase/Core",
+            "spec": "~> 6.3.0",
+            "count": 2
+        },
+        "Firebase/Messaging": {
+            "name": "Firebase/Messaging",
+            "spec": "~> 6.3.0",
+            "count": 1
+        },
+        "Firebase/DynamicLinks": {
+            "name": "Firebase/DynamicLinks",
+            "spec": "~> 6.1.0",
+            "count": 1
+        },
+        "FBSDKCoreKit": {
+            "name": "FBSDKCoreKit",
+            "spec": "8.2.0",
+            "count": 1
+        },
+        "FBSDKLoginKit": {
+            "name": "FBSDKLoginKit",
+            "spec": "8.2.0",
+            "count": 1
+        },
+        "FBSDKShareKit": {
+            "name": "FBSDKShareKit",
+            "spec": "8.2.0",
+            "count": 1
+        }
+    }
+}

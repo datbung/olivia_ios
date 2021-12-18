@@ -1,0 +1,143 @@
+<!--
+  Generated template for the RoompaymentselectPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-toolbar style="min-height: 0px;text-align: center">
+    <ion-row>
+      <ion-col style="text-align: center;height: 48px;">
+        <div style="align-self: center">
+          <div style="position: absolute;height: 48px;width: 48px;top: 8px;" (click)="goback()">
+            <img style="height: 48px; padding: 8px;margin-top: -7px;margin-left:-14px"
+              src="./assets/imgs/ios-arrow-round-back.svg">
+          </div>
+          <div style="padding-top: 6px;font-size: 20px;font-weight: bold;"><label class="text-title">Thanh toán</label>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <div style="text-align: center;">
+    <img src="./assets/step/food_step_2.svg">
+  </div>
+  <div class="cls-divpayment">
+<ion-grid style="margin-left: -5px;">
+  <ion-row *ngFor="let item of listmenu">
+    <ion-col size="8.5">
+      <ion-row>
+        <ion-col style="padding:0">
+      <ion-label class="text-food">{{item.quantity}} x {{item.name}} 
+        <span class="div-star">
+            <img *ngIf="item && item.typePriceId && item.typePriceId == 1" src="../../assets/star/ic_star_1.svg">
+            <img *ngIf="item && item.typePriceId && item.typePriceId == 2" src="../../assets/star/ic_star_2.svg">
+            <img *ngIf="item && item.typePriceId && item.typePriceId == 3" src="../../assets/star/ic_star_3.svg">
+        </span>
+      </ion-label>
+      </ion-col>
+      </ion-row>
+      <p class="text-note">{{item.chuoi}}</p>
+      
+    </ion-col>
+    <ion-col size="3.5">
+      <ion-row class="text-price-food">
+        <ion-col style="padding:0">
+          <ion-label class="text-food">{{item.totalPrice}}<span class="text-d">đ</span></ion-label>
+        </ion-col>
+      </ion-row>
+      
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<hr>
+    <ion-row>
+      <ion-col size="6">
+        <ion-row>
+          <ion-col style="padding:0">
+        <ion-label class="text-total">Tổng cộng</ion-label>
+        <p class="text-tax">Giá đã bao gồm thuế & phí</p>
+        </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="6">
+        <ion-row>
+          <ion-col style="padding:0">
+        <p class="total-price" style="text-align: right">
+          {{priceshow}}<span class="total-price-d"> đ</span>
+        </p>
+        </ion-col>
+      </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div class="div-split-panel"></div>
+  <ion-list class="cls-list">
+    <ion-item *ngIf="ischeckpay" (click)="foodpaymentbank()" class="cls-minheight">
+      <label>
+        Chuyển khoản ngân hàng
+      </label>
+      <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+    </ion-item>
+    <ion-item  (click)="foodpaymentatm()" class="cls-minheight">
+      <label>
+        Thẻ ATM nội địa
+      </label>
+      <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+    </ion-item>
+    <ion-item  class="cls-minheight ion-item1">
+      <label  (click)="foodpaymentvisa()">
+        Thẻ thanh toán quốc tế
+      </label>
+      <ion-icon slot="end"  (click)="foodpaymentvisa()"  *ngIf="!ischeckvisa" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+      <img slot="end"  *ngIf="ischeckvisa" style="margin-right: 15px;" src="./assets/imgs/ic_down_b.svg">
+    </ion-item>
+    <ion-radio-group *ngIf="arrbankrmb.length>0&&ischeckvisa">
+      <ion-item class="ion-item" *ngFor="let item of arrbankrmb">
+        <ion-radio mode="md" [checked]="item.checked" (click)="chooseacc(item)"></ion-radio>
+        <img class="imgcard ml8" src={{item.imgbank}}>
+        <ion-label  class="text-infobank ml8">
+          {{item.name_Bank}}
+        </ion-label>
+        <ion-label class="text-infobank "><span style="vertical-align: middle;"> •••• •••• ••••</span>
+          {{item.vpc_CardNum}}</ion-label>
+      </ion-item>
+      <ion-item class="ion-item">
+        <ion-radio mode="md" (click)="nochooseacc()"></ion-radio>
+        <ion-label  class="text-infobank ml8">
+          Chon tài khoản khác
+        </ion-label>
+        </ion-item>
+    </ion-radio-group>
+    <div  style="margin-left: 15px">
+      <ion-checkbox (click)="rememberCard()" checked="isremember" class="ion-checkbox"  color="secondary"></ion-checkbox>
+      <ion-label class="label-input" >Lưu và bảo mật thẻ để đặt dịch vụ nhanh hơn lần sau</ion-label>
+    </div>
+    <hr style="margin-left: 15px;">
+    <ion-item (click)="foodpaymentpayoolive()" class="cls-minheight">
+      <label>
+        Trực tiếp tại cửa hàng tiện lợi <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
+      </label>
+      <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+    </ion-item>
+    <ion-item (click)="foodpaymentpayooqr()" class="cls-minheight">
+      <label>
+        Thanh toán bằng mã QR <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
+      </label>
+      <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+    </ion-item>
+    <ion-item (click)="foodpaymentmomo()">
+      <label>
+        Thanh toán bằng Momo  <img class="img-payoo" src="https://res.ivivu.com/payment/img/momo/logo.png">
+      </label>
+      <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer *ngIf="isbtn">
+  <div style="background-color: #ffffff; text-align: center">
+    <button (click)="next()" ion-button round outline class="button button2">Thanh toán và hoàn thành</button>
+  </div>
+</ion-footer>

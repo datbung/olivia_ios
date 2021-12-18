@@ -1,0 +1,37 @@
+<ion-header class="foodcombo-review-header">
+    <ion-toolbar>
+        <ion-buttons slot="secondary" style="position: absolute;" (click)="goback()">
+          <img class="img-goback" src="./assets/imgs/ios-arrow-round-back.svg" >
+        </ion-buttons>
+  
+        <ion-title class="text-title">
+          {{comboname}}
+        </ion-title>
+  
+        <ion-buttons slot="primary">
+            <button ion-button icon-only class="btn-header">
+                <img  src="./assets/imgs/ic_share_black.svg" >
+              </button>
+        </ion-buttons>
+        <ion-buttons slot="primary">
+            <button ion-button icon-only class="btn-header">
+                <img class="img-cart" src="./assets/ic_food/cart-outline.svg" >
+              </button>
+        </ion-buttons>
+      </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="div-wraper-foodcomboreview">
+      <app-foodchefitem [item]="chef"></app-foodchefitem>
+  </div>
+</ion-content>
+<ion-footer>
+    <div class="div-footer">
+      <div class="div-button-flex">
+        <button ion-button round outline class="button button-cart">Thêm vào giỏ hàng</button>
+        <button ion-button round outline class="button button2">Đặt ngay</button>
+      </div>
+    </div>
+   
+  </ion-footer>

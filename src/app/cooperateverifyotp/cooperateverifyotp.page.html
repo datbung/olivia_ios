@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar style="min-height: 0px;text-align: center">
+    <ion-row>
+      <ion-col style="text-align: center;height: 48px;">
+        <div style="align-self: center">
+          <div style="position: absolute;height: 48px;width: 48px;align-self: center;" (click)="goback()">
+            <img style="height: 48px; padding: 8px;margin-top: -5px;margin-left:-14px"
+              src="./assets/imgs/ios-arrow-round-back.svg">
+          </div>
+          <div style="padding-top: 6px;font-size: 20px;font-weight: bold;"><label>Xác thực thanh toán</label>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <div class="d-flex">
+    <div class="text-title">Mã đơn hàng</div>
+    <div class="text-bookingCode margin-left-25">IVIVU123456</div>
+  </div>
+  <div class="d-flex margin-top-12">
+    <div class="text-title">Số tiền</div>
+    <div class="text-total margin-left-65">1.234.000 đ</div>
+  </div>
+  <hr class="cls-hr">
+  <div class="margin-top-25 text-total font-weight-bold">
+    Xác thực thanh toán
+  </div>
+  <div class="margin-top-19 text-total">
+    Vui lòng nhập mã OTP được gửi số điện thoại ******1234
+  </div>
+  <ion-row class="row-otp margin-left-15">
+    <ion-col size="2" (ionChange)="change1()" class="no-padding">
+      <ion-input [(ngModel)]="num1" #ipOTP1 maxlength=1 type=tel class="input-otp" autofocus></ion-input>
+    </ion-col>
+    <ion-col size="2" (ionChange)="change2()" class="no-padding">
+      <ion-input [(ngModel)]="num2" #ipOTP2 maxlength=1 type=tel class="input-otp" autofocus></ion-input>
+    </ion-col>
+    <ion-col size="2" (ionChange)="change3()" class="no-padding">
+      <ion-input [(ngModel)]="num3" #ipOTP3 maxlength=1 type=tel class="input-otp" autofocus></ion-input>
+    </ion-col>
+    <ion-col size="2" (ionChange)="change4()" class="no-padding">
+      <ion-input [(ngModel)]="num4" #ipOTP4 maxlength=1 type=tel class="input-otp" autofocus></ion-input>
+    </ion-col>
+    <ion-col size="2" (ionChange)="change5()" class="no-padding">
+      <ion-input [(ngModel)]="num5" #ipOTP5 maxlength=1 type=tel class="input-otp" autofocus></ion-input>
+    </ion-col>
+    <ion-col size="2" class="no-padding">
+      <ion-input #ipOTP6 maxlength=1 [(ngModel)]="num6" type=tel class="input-otp" autofocus></ion-input>
+    </ion-col>
+  </ion-row>
+  <div>
+    <div class="text-right margin-top-2">
+      <u class="text-sendOTP">
+        Gửi lại OTP
+      </u>
+    </div>
+  
+  </div>
+</ion-content>
+<ion-footer class="cls-ion-footer">
+  <div  style="background-color: #ffffff; text-align: center; display: flex;">
+    <div  class="div-button-flex">
+      <button  ion-button round outline class="button button-cancel">Hủy</button>
+      <button  ion-button round outline class="button button2">Xác nhận</button>
+    </div>
+  </div>
+</ion-footer>

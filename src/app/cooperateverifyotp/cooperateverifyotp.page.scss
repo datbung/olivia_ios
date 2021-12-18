@@ -1,0 +1,107 @@
+.margin-left-25{
+    margin-left: 25px;
+}
+.margin-left-65{
+    margin-left: 65px;
+}
+.margin-top-12{
+    margin-top: 12px;
+}
+.margin-top-25{
+    margin-top: 25px;
+}
+.margin-top-19{
+    margin-top: 19px;
+}
+.margin-top-2{
+    margin-top: 2px;
+}
+.margin-left-15{
+    margin-left: -15px;
+}
+.text-title{
+  font-size: 14px;
+  line-height: 1.5;
+  color: #828282;
+}
+.text-bookingCode{
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #00c1de;
+}
+.text-total{
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333333;
+}
+.font-weight-bold{
+    font-weight: 600;
+}
+.cls-hr
+{
+  margin-left: -16px;
+  margin-right: -16px;
+  height: 6px;
+  background-color: #f2f2f2 !important;
+}
+.d-flex{
+    display: flex;
+}
+.input-otp{
+    border: solid 1px #bdbdbd;
+    border-radius: 4px;
+    width: 42px;
+    height: 43px;
+    text-align: center;
+    --padding-start: 0px;
+}
+.row-otp{
+    margin-top: 13px;
+}
+.no-padding{
+    padding: 0px 0px 0px 15px;
+    align-self: center;
+    text-align: right;
+}
+.label-otp{
+    margin: 10px 0px 0px 0px;
+}
+.button2
+    {
+        background: #ff9500;
+        color: #ffffff;
+        border-color: #ff9500;
+        width: 162px;
+        font-size: 17px !important;
+        height: 44px !important;
+        margin-left: 20px;
+        
+    } 
+    .button-cancel
+    {
+        background: #ffffff;
+        color: #ff9500;
+        border: solid 1px #ff9500;
+        width: 160px;
+        font-size: 17px !important;
+        height: 44px !important;
+        margin-left: 15px;
+    } 
+    .div-button-flex{
+        display: flex;
+        width: 100%;
+      }
+      .cls-ion-footer{
+        box-shadow: 2px 4px 5px 0px #dedede;
+        position: initial;
+    }
+    .text-sendOTP{
+        font-size: 16px;
+        line-height: 1.5;
+        color: #003c71;
+       
+    }
+    .text-right{
+        text-align: right;
+    }

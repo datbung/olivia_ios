@@ -1,0 +1,184 @@
+.foodmyorder-header{
+    position: fixed;
+    .text-title{
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+        padding-left: 80px;
+        padding-top: 0;
+    }
+    .btn-header{
+        background: #fff;
+        width: 32px;
+        opacity: 0.8;
+        padding: 6px;
+    }
+}
+
+.foodmyorder-content{
+    padding: 0 16px;
+    margin-bottom: calc( env(safe-area-inset-bottom) + 90px);
+    position: -webkit-sticky;
+    .d-flex{
+        display: flex;
+
+        .text-bkg{
+            font-size: 14px;
+            font-weight: 200;
+            white-space: nowrap;
+            color: #003c71;
+           
+        }
+
+        .text-bkgcode{
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            padding-left: 4px;
+            width: 100%;
+            color: #003c71;
+        }
+    }
+    .div-line{
+        border-bottom: solid 1px #f2f2f2;
+        margin: 16px 0 10px 0;
+    }
+    .m-top-16{
+        margin-top: 16px;
+    }
+    .order-item{
+        .p-top-8{
+            padding-top: 8px;
+        }
+        .div-line{
+            border-bottom: solid 1px #f2f2f2;
+            margin: 16px 0 10px 0;
+        }
+        .d-flex{
+            display: flex;
+        }
+
+        .text-menu{
+            color: #000000;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 21px;
+            letter-spacing: -0.69px;
+            width: 230%;
+
+        }
+        .text-status{
+            color: #003c71;
+            font-size: 14px;
+            line-height: 21px;
+            letter-spacing: -1px;
+            width: 100%;
+            text-align: right;
+        }
+        .text-reorder{
+            color: #26bed6;
+            font-size: 14px;
+            line-height: 21px;
+            letter-spacing: -0.14px;
+            width: 100%;
+            text-align: right;
+        }
+        
+        .text-quantity{
+            color: #828282;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 21px;
+            letter-spacing: -0.4px;
+        }
+    }
+
+    .text-center{
+        text-align: center;
+
+        .img-empty{
+            padding-top: 96px;
+            padding-bottom: 32px;
+        }
+        .text-empty{
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: -0.4px;
+            color: #333333;
+        }
+        .button-main{
+            background: #ff9500;
+            color: #ffffff;
+            border-color: #ff9500;
+            width: 100%;
+            font-size: 16px !important;
+            line-height: 1.5;
+            letter-spacing: -0.48px;
+            margin: 0;
+            margin-top: 32px;
+        }
+    }
+
+    .item-menu{
+        font-size: 14px;
+        color: #000000;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+    }
+    .text-menu-title{
+        font-size: 14px;
+        color: #000000;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+        width: 100%;
+    }
+    .text-menu-name{
+        font-size: 12px;
+        color: #828282;
+        line-height: 20px;
+        letter-spacing: -0.34px;
+        font-weight: 300;
+    }
+    .div-star{
+        padding-left: 8px;
+        display: table-cell;
+        align-self: center;
+        white-space: nowrap;
+        width: 100%;
+    }
+    .div-100{
+        width: 100%;
+        white-space: nowrap;
+
+    }
+    .div-price{
+        font-size: 14px;
+        color: #000000;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+        width: 100%;
+        text-align: right;
+
+    }
+    .text-review,.text-reorder{
+        font-size: 14px;
+        line-height: 21px;
+        letter-spacing: -0.14px;
+        color: #26bed6;
+        width: 30%;
+    }
+
+    .div-label-week{
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 16px;
+    }
+
+    .p-top-24{
+        padding-top: 24px;
+    }
+}

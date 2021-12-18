@@ -1,0 +1,49 @@
+.text-title{
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+    letter-spacing: -0.28px;
+    color: #222222;
+}
+.text{
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+    color: #000000;
+}
+.margin-top-8{
+    margin-top: 8px;
+}
+img-payment{
+    left: 0;
+    bottom: 0;
+    -o-object-fit: contain;
+    object-fit: contain;
+    max-width: initial;
+    background-color: #dedede;
+    height: 100%;
+    width: 110px;
+    margin: 0 auto;
+    padding: 2px;
+    border: none;
+}
+.card-img{
+    box-shadow:none !important;
+    margin-left: 0px;
+    margin-top: 0px;
+    border-radius: 0px;
+}
+.img-empty{
+    width: 160px;
+    height: 146px;
+}
+.button2
+{
+    border-color: #F79221;
+    background-color: #F79221;
+    color: #ffffff;
+    width: 90%;
+    height: 48px;
+
+}

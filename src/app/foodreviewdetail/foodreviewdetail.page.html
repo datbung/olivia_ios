@@ -1,0 +1,108 @@
+<ion-header class="foodreviewdetail-header">
+    <ion-toolbar style="min-height: 0px;text-align: center">
+        <ion-row>
+          <ion-col style="text-align: center;height: 48px;">
+            <div style="align-self: center;display: flex">
+              <div class="title-header">
+                <label class="text-title">{{title}}</label></div>
+                  <div class="div-close" (click)="closeModal()">
+                      <img class="img-close" src="./assets/ic_close.svg" >
+                  </div>
+              </div>
+          </ion-col>
+        </ion-row>
+      </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="foodreviewdetail-content">
+
+    <div class="food-review">
+      <div class="text-review">Nhận xét bữa ăn</div>
+      <div class="div-star d-flex">
+        <div class="star1 cls-star" (click)="clickStar(1)">
+            <img class="img-star" *ngIf="star1Active ==0 || star1Active<1" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf=" star1Active >=1 && star1Active<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star2 cls-star" (click)="clickStar(2)">
+            <img class="img-star" *ngIf="star1Active<2" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf=" star1Active >=2 && star1Active<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star3 cls-star" (click)="clickStar(3)">
+            <img class="img-star" *ngIf="star1Active<3" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf=" star1Active >=3 && star1Active<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star4 cls-star" (click)="clickStar(4)">
+            <img class="img-star" *ngIf="star1Active<4" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf=" star1Active >=4 && star1Active<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star5 cls-star" (click)="clickStar(5)">
+            <img class="img-star" *ngIf="star1Active<5" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf=" star1Active ==5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+          
+      </div>
+
+      <div class="text-review p-top-10">Nhận xét nhân viên giao</div>
+      <div class="div-star d-flex">
+        <div class="star1 cls-star" (click)="clickStarShiper(1)">
+            <img class="img-star" *ngIf="star1ShiperActive ==0 || star1ShiperActive<1" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf="star1ShiperActive >=1 && star1ShiperActive<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star2 cls-star" (click)="clickStarShiper(2)">
+            <img class="img-star" *ngIf="star1ShiperActive <2" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf="star1ShiperActive >=2 && star1ShiperActive<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star3 cls-star" (click)="clickStarShiper(3)">
+            <img class="img-star" *ngIf="star1ShiperActive <3" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf="star1ShiperActive >=3 && star1ShiperActive<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star4 cls-star" (click)="clickStarShiper(4)">
+            <img class="img-star" *ngIf="star1ShiperActive <4" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf="star1ShiperActive >=4 && star1ShiperActive<=5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+
+        <div class="star5 cls-star" (click)="clickStarShiper(5)">
+            <img class="img-star" *ngIf="star1ShiperActive <5" src="./assets/imgs/star_fb.svg">
+            <img class="img-star" *ngIf="star1ShiperActive ==5" src="./assets/imgs/star_active_fb.svg">
+        </div>
+          
+      </div>
+
+
+      <div class="text-review p-top-10">Chia sẻ cảm nhận</div>
+      <div class="div-comment p-top-4">
+          <ion-textarea style="border: solid 0.5px #bdbdbd;border-radius: 4px;" class="ip-comment" maxlength=300 [(ngModel)]="Description"
+          class="cls-text-comment"></ion-textarea>
+      </div>
+
+      <div class="div-addimage">
+        <div class="div-wrap-button" *ngIf="!menu.hasreview">
+            <button (click)="addImage()" class="button btn-addimage">Thêm ảnh</button>
+            <img (click)="addImage()" class="img-plus" src="./assets/imgs/ic_plus.svg">
+            
+        </div>
+          
+      </div>
+      <div style="height: 200px;margin-left: -5px;margin-top: 10px;">
+        <label *ngFor="let img of imageReview; let idx= index" >
+          <img [ngClass]="idx == 0 ? 'img-review' : 'img-review m-l-5'" src={{img.img}}>
+          <img src="../../assets/imgs/close_img.svg" class="img-close-review" (click) = "clearImg(idx)" *ngIf="!menu.hasreview">
+        </label> 
+        
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer *ngIf="!menu.hasreview">
+    <div style="background-color: #ffffff; text-align: center">
+        <button (click)="sendFeedBack()" ion-button round outline class="button button2">Gửi đánh giá</button>
+      </div>
+</ion-footer>

@@ -1,0 +1,237 @@
+.foodmyorderdetail-header{
+    .toolbar-header{
+        text-align: center;
+    }
+    .col-header-back{
+        text-align: center;
+        height: 48px;
+    }
+    .div-goback{
+        position: absolute;
+        height: 48px;
+        width: 48px;
+        top: 8px;
+
+        .img-back{
+            height: 48px;
+            padding: 8px;
+            margin-top: -9px;
+            margin-left:-14px;
+        }
+    }
+    .div-title{
+        font-size: 20px;
+        font-weight: bold;
+
+        .text-title
+        {
+          font-weight: 600;
+          font-size: 18px;
+        }
+    }
+    .div-subtitle{
+        font-size: 11px;
+        font-weight: 300;
+        letter-spacing: -0.31px;
+        text-align: center;
+        color: #222222;
+    }
+}
+
+.div-foodmyorderdetail-content{
+    padding: 16px;
+
+    .p-top-24{
+        padding-top: 24px;
+    }
+    .d-flex{
+        display: flex;
+
+        .text-bkg{
+            font-size: 14px;
+            font-weight: 200;
+            white-space: nowrap;
+           
+        }
+
+        .text-bkgcode{
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            padding-left: 4px;
+            width: 100%;
+        }
+        .text-status{
+            width: 300%;
+            text-align: right;
+        }
+        .text-right{
+            font-size: 12px;
+            color: #003c71;
+        }
+    }
+
+    .div-line-bottom{
+        margin: 16px 0;
+        border-bottom: solid 1px #dedede;
+    }
+
+    .text-menu{
+        color: #000000;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 21px;
+        letter-spacing: -0.48px;
+        width: 150%;
+
+    }
+
+    .div-order-statusbar{
+        text-align: center;
+        margin: 12px 0px 25px 0px;
+    }
+
+    .div-list-item{
+
+        .text-title{
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: -0.48px;
+        }
+    }
+    .item-menu{
+        font-size: 14px;
+        color: #000000;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+
+        
+    }
+    .div-relative{
+        position: relative;
+    }
+    .p-top-32{
+        padding-top: 32px !important;
+    }
+    .div-left{
+        width: 70%;
+    }
+    .div-right{
+        width: 32%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        .img-cook{
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .div-howtocook{
+            font-size: 14px;
+            font-weight: 300;
+            color: #26bed6;
+            letter-spacing: -0.4px;
+            .img-span{
+                padding-left: 8px;
+            }
+        }
+    }
+   .p-bottom-16{
+       padding-bottom: 16px;
+   }
+    .text-menu-title{
+        font-size: 14px;
+        color: #000000;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+        width: 100%;
+    }
+    .text-menu-name{
+        font-size: 12px;
+        color: #828282;
+        line-height: 20px;
+        letter-spacing: -0.34px;
+        font-weight: 300;
+    }
+    .text-quantity{
+        font-size: 14px;
+        color: #828282;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+    }
+    .div-star{
+        padding-left: 8px;
+        display: table-cell;
+        align-self: center;
+        white-space: nowrap;
+    }
+    .div-100{
+        width: 100%;
+        white-space: nowrap;
+
+    }
+    .div-price{
+        font-size: 14px;
+        color: #000000;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+        width: 100%;
+        text-align: right;
+
+    }
+    .text-review,.text-reorder{
+        font-size: 14px;
+        line-height: 21px;
+        letter-spacing: -0.14px;
+        color: #26bed6;
+        width: 30%;
+    }
+
+    .text-contact{
+        font-size: 14px;
+        color: #222222;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+        font-weight: 300;
+    }
+    .div-split{
+        height: 6px;
+        background: #f2f2f2;
+        margin: 16px -16px;
+        border-bottom: none;
+    }
+    .img-contact{
+        width: 12px;
+        height: 12px;
+        margin-right: 12px;
+    }
+
+    .div-total{
+        display: flex;
+
+        .label-total{
+            font-size: 14px;
+            color: #000000;
+            line-height: 21px;
+            letter-spacing: -0.4px;
+            font-weight: 300;
+            width: 100%;
+        }
+
+        .text-price-total{
+            font-size: 18px;
+            font-weight: bold;
+            color: #26bed6;
+            text-align: right;
+            width: 150%;
+        }
+    }
+    
+}

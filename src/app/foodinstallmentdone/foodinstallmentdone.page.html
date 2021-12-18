@@ -1,0 +1,83 @@
+<ion-header class="installment-payment-done-header">
+  <ion-toolbar class="text-center">
+    <ion-row>
+      <ion-col class="text-center">
+        <div  class="align-self-center" >
+          <div class="title-header"><label class="text-title">Hoàn thành</label></div>
+        </div>
+      </ion-col>
+    </ion-row>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="installment-payment-done-content">
+    <div  style="text-align: center">
+      <img src="./assets/step/food_step_3.svg">
+    </div>
+   
+    <div class="div-label-title">
+      <ion-label class="cls-primary f-bold">
+        Cảm ơn Quý khách đã sử dụng dịch vụ iVIVU.com
+      </ion-label>
+    </div>
+    <div *ngIf="paymentsuccess">
+     
+      <ion-label *ngIf="!isDinner else isdinner" class="text">
+        Mã đặt bữa trưa của Quý khách là
+        <span style="font-weight: bold">{{code}}</span>
+      </ion-label>
+      <ng-template #isdinner>
+          <ion-label class="text">
+              Mã đặt nguyên liệu bữa tối của Quý khách là
+              <span style="font-weight: bold">{{code}}</span>
+            </ion-label>
+      </ng-template>
+    </div>
+    <div *ngIf='!isDinner'>
+      <ion-label text-wrap>
+        Bữa trưa sẽ giao cho quý khách từ thứ 2, {{startdate}} đến thứ 6, {{enddate}} trong khung giờ 11:30 - 12:15
+      </ion-label>
+    </div>
+    <div *ngIf='isDinner'>
+      <ion-label text-wrap>
+        Nguyên liệu bữa tối sẽ giao cho quý khách từ thứ 2, {{startdate}} đến thứ 6, {{enddate}} trong khung giờ 16:30 - 17:30
+      </ion-label>
+    </div>
+    <div *ngIf="paymentsuccess else paymentcancel">
+      <div>
+        <ion-label text-wrap>
+          Quý khách đã thanh toán trả góp thành công. Xác nhận đơn hàng sẽ gửi đến {{email}}
+        </ion-label>
+      </div>
+     
+    </div>
+    <ng-template #paymentcancel>
+      <div *ngIf="!errorcode else haserrorcode">
+        <ion-label text-wrap>
+          Rất tiếc, thanh toán trả góp qua thẻ Tín dụng của Quý khách chưa thành công vì lý do <span class="cls-cancel">Khách hàng hủy giao dịch</span>. Vui lòng liên hệ với iVIVU.com để được hỗ trợ.
+        </ion-label>
+      </div>
+      <ng-template #haserrorcode>
+        <div >
+          <ion-label text-wrap>
+            Rất tiếc, thanh toán trả góp qua thẻ Tín dụng của Quý khách chưa thành công vì lý do <span class="cls-cancel">{{errorcode}}</span>. Vui lòng liên hệ với iVIVU.com để được hỗ trợ.
+          </ion-label>
+        </div>
+      </ng-template>
+    </ng-template>
+    
+    <div>
+      <ion-label class="text" text-wrap>
+        Nếu cần sự hỗ trợ vui lòng liên hệ tổng đài <b>(028) 3933 8000</b>, thời gian làm việc: từ <b>8:30-18:30</b>. Hoặc email <b>food@ivivu.com</b> để được trợ giúp.
+      </ion-label>
+    </div>
+    
+  </div>
+  
+</ion-content>
+<ion-footer>
+  <div style="background-color: #ffffff; text-align: center">
+    <button (click)="next()" ion-button round outline class="button button2">Hoàn thành</button>
+  </div>
+</ion-footer>

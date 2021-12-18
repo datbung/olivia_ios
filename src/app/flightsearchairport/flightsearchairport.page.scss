@@ -1,0 +1,93 @@
+.d-flex{
+    display: flex;
+}
+.p-l-8{
+    padding-left: 8px;
+}
+.m-b-8{
+    margin-bottom: 8px;
+}
+.v-align-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.f-12{
+    font-size: 12px;
+}
+
+.flightsearchairport-header{
+    .col-header{
+        text-align: center;
+        height: 56px;
+
+        .div-goback{
+            height: 48px;
+            width: 48px;
+
+            .header-img-back{
+                width: 36px;
+            }
+        }
+
+        .div-header-title{
+            width: 100%;
+            z-index: -1;
+            position: absolute;
+            padding-top: 6px;
+            
+            .div-title{
+                font-size: 15px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.6;
+                letter-spacing: -0.45px;
+            }
+            .div-subtitle{
+                font-size: 11px;
+                font-weight: 300;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.82;
+                letter-spacing: -0.31px;
+            }
+        }
+       
+    }
+}
+
+.search-content-result{
+ 
+    .m-bottom-8{
+        margin-bottom: 8px;
+    }
+    .p-l-8{
+        padding-left: 8px;
+    }
+    .p-l-16{
+        padding-left: 16px;
+    }
+    .div-icon{
+
+        .img-plane{
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    .div-text-result{
+        width: 100%;
+        padding-left: 8px;
+
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 21px;
+        letter-spacing: -0.4px;
+
+    }
+
+    .text-code{
+        color: #828282;
+    }
+}

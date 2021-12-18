@@ -1,0 +1,39 @@
+
+         <div (click)="itemComboClick(item)" class="div-wrap-item">
+         <div class="div-img">
+            <img-loader class="img-item" [src]="item.image" backgroundSize="cover" spinner="true" ></img-loader>
+          </div>
+          <div *ngIf="item.promoTitle" class="float-promo">
+              <div>{{item.promoTitle}}</div>
+            </div>
+          <div class="p-l-8"> 
+            <div class="d-flex">
+              <div class="text-catname">{{item.name}}</div>
+            </div>
+            <div class="div-point">
+              <div class="d-flex" *ngIf="item.avgPoint else noPoint">
+                  <div class="div-badge">{{item.avgPoint}}</div>
+                  <div class="div-text-point text-point" *ngIf="item.avgPoint >=9">Tuyệt vời</div>
+                  <div class="div-text-point text-point" *ngIf="item.avgPoint >=8 && item.avgPoint <9">Rất tốt</div>
+                  <div class="div-text-point text-point" *ngIf="item.avgPoint >=7 && item.avgPoint <8">Khá tốt</div>
+                  <div class="div-text-point text-point" *ngIf="item.avgPoint >=6 && item.avgPoint <7">Tạm được</div>
+                  <div class="div-text-point text-point" *ngIf="item.Avgpoin <6">Không tốt</div>
+                  <div class="text-recommend text-poin"> |<span class="p-left-8">{{item.numOfReview}} đánh giá</span></div>
+      
+              </div>
+              <ng-template #noPoint>
+              </ng-template>
+  
+              <div class="div-price">
+                <div class="hot-deal" *ngIf='item.totalBook24H'>
+                  <div>{{item.totalBook24H}} Khách đặt trong 24h qua</div>
+                </div>
+                <div class="text-price">
+                  <div class="text-sub-price">1 tuần chỉ</div>
+                  <div>{{item.priceDisplay}}<span class="s-text">đ</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     

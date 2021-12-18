@@ -1,0 +1,70 @@
+.d-flex{
+    display: flex;
+}
+.p-right-16{
+    padding-right: 16px;
+}
+.p-right-4{
+    padding-right: 4px;
+}
+.div-useful-content{
+   
+        .item-useful{
+            border-radius: 4px;
+            background-color: #ffffff;
+            padding: 8px;
+            margin-top: 12px;
+            margin-bottom: 68px;
+
+            .text-content{
+                font-size: 16px;
+                font-weight: 300;
+                line-height: 2;
+                color: #333333;
+            }
+        }
+    
+        .div-useful-show{
+            border-radius: 4px;
+            background-color: rgba(242,242,242, 0.5);
+            padding: 8px;
+            margin-top: 11px;
+
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 2;
+            color: #333333;
+        }
+    
+    .title-padding{
+        padding: 38px 0px 0px 0px;
+        padding-right:16px !important;
+      }
+  
+      .sub-title{
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: -0.34px;
+        color: #333333;
+      }
+
+    .text-title2
+    {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #222222;
+    }
+
+    .has-clicked{
+        font-weight: 500 !important;
+        color: #003c71 !important;
+    }
+
+    
+}
+
+
+.div-useful-title.cls-topdeal-float .title-padding{
+    padding-top: 0px !important;
+  }

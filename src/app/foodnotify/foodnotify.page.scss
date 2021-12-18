@@ -1,0 +1,89 @@
+
+.foodnotify-header{
+  position: fixed;
+}
+.header-title{
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header-arrow{
+  margin: 3px 11px;
+}
+
+
+      .toolbar-title-md {
+          text-align: center;
+          margin-right: 70px;
+        }  
+        .text-trip-empty{
+          text-align: center;
+          font-size: 14px;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: -0.4px;
+            color: #333333;
+      }
+      .img-inbox-empty{
+        text-align: center;
+      }
+  .foodnotify-content
+  {
+    height: auto;
+    padding: calc( env(safe-area-inset-bottom) + 80px) 16px;
+    padding-bottom: 110px;
+    position: -webkit-sticky;
+  }
+    .cls-icon{
+      background-color: #003c71;
+      border-radius: 20px;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+    }
+    .cls-row-content{
+      padding: 0px 16px 16px 16px;
+    }
+    .inbox-content-empty{
+      padding: 16px;
+    }
+  .cls-border-bottom{
+    padding: 12px 0px;
+    margin: 0 16px;
+    border-bottom: solid 1px rgba(201, 201, 201, 0.5);
+  }
+  .inbox-title{
+    font-size: 14px;
+    font-weight: bold;
+    white-space: normal;
+  }
+  
+  .inbox-message{
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.4px;
+  }
+  
+  .inbox-date{
+    font-size: 12px;
+    letter-spacing: -0.34px;
+    color: #828282;
+  }
+  
+  .item-unread{
+    background-color: rgba(0, 60, 113, 0.1);
+  }
+  
+  .inbox-content:first-child{
+    padding-top: 4px;
+  }
+  .readed-text{
+    white-space: normal;
+  }
+  
+  .img-empty{
+    padding-top: 96px;
+    padding-bottom: 32px;
+}

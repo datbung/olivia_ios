@@ -1,0 +1,6 @@
+framework module Pods_iVIVU_com {
+  umbrella header "Pods-iVIVU.com-umbrella.h"
+
+  export *
+  module * { export * }
+}

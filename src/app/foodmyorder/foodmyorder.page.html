@@ -1,0 +1,154 @@
+<ion-header class="foodmyorder-header">
+        <ion-toolbar>
+          <ion-title class="text-title" *ngIf="activeTab ==1">
+            Bữa ăn của tôi
+          </ion-title>
+          
+            <ion-buttons slot="primary" (click)="refreshData()">
+              <button ion-button icon-only class="btn-header">
+                <img class="img-refresh" src="./assets/imgs/refresh.svg" >
+                </button>
+            </ion-buttons>
+          </ion-toolbar>
+         
+    </ion-header>
+      <div class="foodmyorder-content">
+        <div *ngIf="loaddatadone else loadsk" class="m-top-16">
+          <div>
+            <div *ngIf=" (mylistOrders && mylistOrders.length>0 && listOrderActive.length >0) else noorder">
+                  <div  class="order-item" *ngFor="let order of mylistOrders; let idx = index">
+                    <div *ngIf='order.isActive'>
+                      <div class=" d-flex p-top-16">
+                        <div class="text-bkg"><ion-label class="label-bkg">Mã đặt:</ion-label></div>
+                        <div class="text-bkgcode">{{ order.bookingCode }}</div>
+
+                        <div class="text-status" *ngIf="!order.isOver else orderdone">
+                          <div *ngIf="order.status == 1 ">Yêu cầu đặt</div>
+                          <div *ngIf="order.status == 2 ">Chờ thanh toán</div>
+                          <div *ngIf="order.status == 3 ">Đã thanh toán</div>
+                          <div *ngIf="order.status == 4 ">Hủy</div>
+                        </div>
+                        <ng-template #orderdone><div class="text-status">Hoàn tất</div></ng-template>
+
+                      </div>
+
+                      <div *ngFor="let detail of order.listDetailCurrentWeek; let idx = index" class="div-item-detail">
+                        <div *ngIf="detail.iscurrentweek else divnextweek" class="div-currentweek" >
+                          <div class="div-label-week label-currentweek"  *ngIf="listWeek && listWeek.length >0 && idx == 0">{{ listWeek[0].weekname }}</div> 
+
+                          <div class="text-quantity ">
+                            <div class="p-top-8">
+                              <div class="text-menu-title d-flex" *ngIf="detail" (click)="showOrderDetail(order, detail)">
+                                <div class="div-100">{{detail.quantity}} x {{detail.name}}</div>
+                                <div class="div-star">
+                                  <img *ngIf="detail && detail.typePriceId == 1" src="../../assets/star/ic_star_1.svg">
+                                  <img *ngIf="detail && detail.typePriceId == 2" src="../../assets/star/ic_star_2.svg">
+                                  <img *ngIf="detail && detail.typePriceId == 3" src="../../assets/star/ic_star_3.svg">
+                                </div>
+                                <div class="div-price">{{detail.totalPriceDisplay}}</div>
+                              </div>
+                              <div class="text-menu-name" (click)="showOrderDetail(order, detail)">{{detail.extraDisplay}}</div>
+                                <div class="d-flex">
+                                  <div class="text-review" (click)="showFoodReview(detail,order)" *ngIf="order.isOver && order.allowReview">Đánh giá</div>
+                              </div> 
+                            </div>
+                               
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div *ngFor="let detail of order.listDetailNextWeek; let idx = index" class="div-item-detail">
+                        
+                          <div class="div-nextweek">
+                            <div class="div-label-week label-nextweek"  *ngIf="listWeek && listWeek.length >0 && idx ==0">{{ listWeek[1].weekname }}</div> 
+                            <div class="text-quantity ">
+                              <div class="p-top-8">
+                                <div class="text-menu-title d-flex" *ngIf="detail" (click)="showOrderDetail(order, detail)">
+                                  <div class="div-100">{{detail.quantity}} x {{detail.name}}</div>
+                                  <div class="div-star">
+                                    <img *ngIf="detail && detail.typePriceId == 1" src="../../assets/star/ic_star_1.svg">
+                                    <img *ngIf="detail && detail.typePriceId == 2" src="../../assets/star/ic_star_2.svg">
+                                    <img *ngIf="detail && detail.typePriceId == 3" src="../../assets/star/ic_star_3.svg">
+                                  </div>
+                                  <div class="div-price">{{detail.totalPriceDisplay}}</div>
+                                </div>
+                                <div class="text-menu-name" (click)="showOrderDetail(order, detail)">{{detail.extraDisplay}}</div>
+                                  <div class="d-flex">
+                                    <div class="text-review" (click)="showFoodReview(detail,order)" *ngIf="order.isOver && order.allowReview">Đánh giá</div>
+                                </div> 
+                              </div>
+                                 
+                            </div>
+                          </div>
+                        
+                      </div>
+
+                      <div *ngFor="let detail of order.listDetailHistory; let idx = index" class="div-item-detail">
+                        
+                        <div class="div-history">
+                          <div class="div-label-week label-history" >{{ detail.weekname }}</div> 
+                          <div class="text-quantity ">
+                            <div class="p-top-8">
+                              <div class="text-menu-title d-flex" *ngIf="detail" (click)="showOrderDetail(order, detail)">
+                                <div class="div-100">{{detail.quantity}} x {{detail.name}}</div>
+                                <div class="div-star">
+                                  <img *ngIf="detail && detail.typePriceId == 1" src="../../assets/star/ic_star_1.svg">
+                                  <img *ngIf="detail && detail.typePriceId == 2" src="../../assets/star/ic_star_2.svg">
+                                  <img *ngIf="detail && detail.typePriceId == 3" src="../../assets/star/ic_star_3.svg">
+                                </div>
+                                <div class="div-price">{{detail.totalPriceDisplay}}</div>
+                              </div>
+                              <div class="text-menu-name" (click)="showOrderDetail(order, detail)">{{detail.extraDisplay}}</div>
+                                <div class="d-flex">
+                                  <div class="text-review" (click)="showFoodReview(detail,order)" *ngIf="order.isOver && order.allowReview">Đánh giá</div>
+                              </div> 
+                            </div>
+                               
+                          </div>
+                        </div>
+                      
+                    </div>
+                      
+                      <div class="div-line"></div>
+                    </div>
+                    
+                  </div>
+
+                  
+              </div>
+              <ng-template #noorder>
+                <div class="text-center">
+                  <div class="img-empty"><img  src="../../assets/ic_food/fried.svg"></div>
+                  <div class="text-empty">Bạn chưa có đơn hàng nào với iVIVU</div>
+                  <div><button class="button button-main" (click)="gotomenu(1)">Xem thêm thực đơn</button></div>
+                </div>
+              </ng-template>
+          </div>
+          
+          </div>
+          <ng-template #loadsk>
+              <div *ngFor="let item of itemsks" class="m-top-16">
+                  <div class=" d-flex">
+                      <ion-skeleton-text animated class="text-menu" style="height: 16px"></ion-skeleton-text>
+                      <ion-skeleton-text animated class="text-status" style="height: 16px;width: 40%;margin-left: 5%;"></ion-skeleton-text>
+                </div>
+                <div class="text-quantity p-top-6">
+                     
+                      <div class="text-menu-title d-flex">
+                          <ion-skeleton-text class="div-100" animated  style="height: 16px"></ion-skeleton-text>
+                          <ion-skeleton-text class="div-star" animated  style="height: 16px;width: 5%;margin-left: 8px;"></ion-skeleton-text>
+                          <ion-skeleton-text class="div-price" animated  style="height: 16px;width: 45%;margin-left: 5%;"></ion-skeleton-text>
+                      </div>
+                      <ion-skeleton-text class="text-menu-name" animated  style="height: 16px;width: 20%;"></ion-skeleton-text>
+                </div>
+                <div class="div-line"></div>
+              </div>
+            </ng-template>
+
+           
+        </div>
+
+
+    
+        <!-- <app-foodmenufooter></app-foodmenufooter> -->

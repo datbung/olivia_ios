@@ -1,0 +1,145 @@
+.foodreviewweek-header{
+    .title-header{
+        padding-top: 6px;
+        font-size: 20px;
+        font-weight: bold;
+        padding-left: 40px;
+        width: 100%;
+    }
+    .div-close{
+        width: 12%;
+    }
+}
+
+.foodreviewweek-content{
+    padding: 16px;
+
+    .content-title{
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -0.48px;
+        color: #000000;
+    }
+    .content-text{
+        font-size: 14px;
+        font-weight: 300;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -0.4px;
+        color: #000000;
+    }
+    .d-flex{
+        display: flex;
+        position: relative;
+
+        .div-star{
+            padding-left: 8px;
+            display: table-cell;
+            align-self: center;
+        }
+    }
+    .p-top-8{
+        padding-top: 8px;
+    }
+    .food-review{
+
+        .text-review{
+            font-size: 14px;
+            line-height: 21px;
+            letter-spacing: -0.4px;
+            color: #000000;
+            font-weight: 300;
+        }
+        .star1{
+            margin-left: 0 !important;
+        }
+        .div-star{
+            padding-top: 3px;
+
+            .cls-star{
+                margin-left: 5px;
+                width: 19px;
+                height: 23px;
+            }
+            .img-star{
+                width: 19px;
+                height: 23px;
+            }
+        }
+    }    
+
+    .d-flex{
+        display: flex;
+    }
+    .p-top-10{
+        padding-top: 10px;
+    }
+    .p-top-4{
+        padding-top: 4px;
+    }
+    .ip-comment{
+        border: solid 0.5px #bdbdbd;
+        border-radius: 4px;
+    }
+
+    .div-addimage{
+        padding-top: 16px;
+        display: flex;
+        justify-content: center;
+
+        .div-wrap-button{
+            position: relative;
+
+            .btn-addimage{
+                font-size: 14px !important;
+                color: #003c71;
+                background-color: transparent;
+                border: solid 0.5px #003c71;
+                width: 120px;
+                height: 34px !important;
+                padding: 0;
+                margin: 0;
+                border-radius: 4px;
+                padding-left: 20px;
+            }
+            .img-plus{
+                position: absolute;
+                top: 4px;
+                left: 10px;
+                width: 24px;
+            }
+        }
+        
+    }
+    .img-review {
+        object-fit: cover;
+        max-width: initial;
+        height: 80px;
+        width: 80px;
+        
+    }
+    .img-close-review{
+        position: absolute;
+        margin-left: -24px;
+        margin-top: 4px;
+    }
+}
+
+
+.m-l-5{
+    margin-left: 5px;
+}
+
+.button2
+    {
+        border-color: #F79221;
+        background-color: #F79221;
+        color: #ffffff;
+        width: 94%;
+        height: 48px;
+        font-size: 17px !important;
+    }

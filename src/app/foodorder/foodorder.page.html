@@ -1,0 +1,82 @@
+<div class="div-close">
+  <div class="cls-close" (click)="closeModal()">
+    <img src="../../assets/ic_close_w.svg">
+  </div>
+</div>
+<ion-content class="div-foodorder-content" style="--offset-bottom: 1px;">
+  <div class="mt10">
+    <ion-label class="text-title">
+      {{menutitle}}
+    </ion-label>
+  </div>
+  <div class="wrap-foodorder-content">
+  
+    <div class="d-flex">
+      <div class="div-minus" (click)="minusItem()">
+        <img src="./assets/minus.svg">
+      </div>
+      <div class="div-top-bottom" *ngIf="item">
+        <ion-label>{{item.quantity}}</ion-label>
+      </div>
+      <div class="div-plus" (click)="plusItem()">
+        <img src="./assets/plus.svg">
+      </div>
+      <div class="ml25">
+        <ion-label class="text-dv">Phần</ion-label>
+      </div>
+    </div>
+    <div >
+      <div class="div-flex" *ngFor="let item of extraOther; let idx1 = index">
+        <ion-checkbox style="width: 24px; height: 24px;--border-width: 0.5px;" class="chk-order" (ionChange)="itemOtherCheck($event,item)" [checked]="idx1==1" *ngIf="item.show"></ion-checkbox>
+        <div class="div-food content-center" *ngIf="item.show">
+          <ion-label class="text-food">{{item.name}}</ion-label>
+        </div>
+        <div class="content-center" *ngIf="item.show">
+          <ion-label class="text-food-price">+ {{item.priceDisplay}}<span class="text-sub-total"> đ/ngày</span></ion-label>
+        </div>
+      </div>
+    
+    </div>
+    <hr class="cls-hr">
+    <div class="mt16">
+      <ion-label class="text-order-1">Nước uống dùng kèm</ion-label>
+      <div class="div-flex" *ngFor="let item of extraWater; let idx= index">
+        <ion-checkbox style="width: 24px; height: 24px;--border-radius: 24px;--border-width: 0.5px;" [checked]="item.checked" (ionChange)="itemWaterCheck($event,item)"></ion-checkbox>
+        <div class="div-food content-center">
+          <ion-label class="text-food">{{item.name}}</ion-label>
+        </div>
+        <div class="content-center">
+          <ion-label class="text-food-price">+ {{item.priceDisplay}}<span class="text-sub-total"> đ/ngày</span></ion-label>
+        </div>
+      </div>
+    </div>
+    <div class="text-note">
+      Giao hàng miễn phí từ 11h30 đến 12h15 hàng ngày
+    </div>
+  </div>
+  </ion-content>
+  <ion-footer class="cls-ion-footer" no-border padding>
+    <ion-row>
+      <ion-col class="no-padding">
+        <hr class="cls-hr">
+        <div class="div-total">
+          <div class="div-total-left">
+            <ion-label class="cls-text-total">
+              Tổng cộng:
+            </ion-label>
+          </div>
+          <div class="div-total-2">
+            <ion-label class="text-total">
+              <span class="text-total-d"></span>{{totalPriceDisplay}}<span class="text-sub-total"> đ/{{dayofweek}} ngày</span>
+            </ion-label>
+          </div>
+        </div>
+        <div style="background-color: #ffffff; text-align: center; display: flex;">
+          <button (click)="addToCart()" ion-button round outline class="button button2" *ngIf="!isBook else btnbook">Thêm giỏ hàng</button>
+          <ng-template #btnbook>
+              <button (click)="addToCart()" ion-button round outline class="button button2">Đặt ngay</button>
+          </ng-template>
+        </div>
+      </ion-col>
+    </ion-row>
+</ion-footer>

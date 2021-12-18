@@ -1,0 +1,30 @@
+<ion-header class="foodcombolist-header">
+    <ion-toolbar>
+        <ion-buttons slot="secondary" style="position: absolute;" (click)="goback()">
+          <img class="img-goback" src="./assets/imgs/ios-arrow-round-back.svg" >
+        </ion-buttons>
+  
+        <ion-title class="text-title">
+          Thực dưỡng
+        </ion-title>
+  
+        <ion-buttons slot="primary" (click)="showFilter()">
+            <button ion-button icon-only class="btn-header">
+                <img  src="./assets/imgs/ic_filter_b.svg" >
+              </button>
+        </ion-buttons>
+        <ion-buttons slot="primary" (click)="addToCart()">
+            <button ion-button icon-only class="btn-header">
+                <img class="img-cart" src="./assets/ic_food/cart-outline.svg" >
+              </button>
+        </ion-buttons>
+      </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="div-wraper-combo">
+      <div class="div-item-combo" *ngFor="let item of foods; let idx = index" (click)="itemComboClick(item)">
+        <app-fooditem [item]="item"></app-fooditem>
+      </div>
+  </div>
+</ion-content>

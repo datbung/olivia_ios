@@ -1,0 +1,76 @@
+
+<ion-header class="flightsearchairport-header">
+    <ion-row>
+      <ion-col class="col-header">
+        <div class="d-flex">
+          <div class="div-goback" (click)="goback()">
+              <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
+          </div>
+          <div class="div-header-title">
+            <div class="div-title" *ngIf="isdepart">Bay từ</div>
+            <div class="div-title" *ngIf="!isdepart">Bay đến</div>
+          </div>
+          
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-header>
+  <ion-content padding>
+    <form action=".">
+      <ion-searchbar searchIcon="false" #input id="input" style="padding: 0;padding-bottom: 15px;" autocomplete="on" autocorrect="true" debounce="300" placeholder="Nhập tên thành phố,khu vực..." (ionChange)="getItems($event)" ></ion-searchbar>
+    </form>
+    <div class="search-content-result">
+  
+      <div>
+        <div (click)="itemclick(item)" *ngFor="let item of items">
+          <div *ngIf="item && item.show">
+            <div class="d-flex m-bottom-8" *ngIf="!item.SameCity else itemsamecity">
+              <div class="div-icon v-align-center">
+                  <img class="img-plane" src="./assets/ic_flight/icon_flight.svg">
+              </div>
+              <div class="div-text-result" >
+                <div>
+                  {{item.city}}, {{item.country}} <span class="text-code">{{item.code}}</span>
+                </div>
+                <div class="text-code f-12" >
+                  {{item.airport}}
+                </div>
+
+              </div>
+          </div>
+          <ng-template #itemsamecity>
+            
+            <div class="m-bottom-8">
+              <div class="d-flex m-bottom-8">
+                <div class="div-icon ">
+                  <img class="img-plane" src="./assets/ic_facility/Group.svg">
+                </div>
+                <div class="div-text-result p-l-8" >
+                  {{item.city}}, {{item.country}} <span class="text-code">Tất cả các sân bay</span>
+                </div>
+              </div>
+
+              <div *ngFor="let itemsub of item.Items">
+                <div class="d-flex m-bottom-8 p-l-16">
+                  <div class="div-icon">
+                      <img class="img-plane" src="./assets/ic_flight/icon_flight.svg">
+                  </div>
+                  <div class="div-text-result" >
+                      {{itemsub.airport}} <span class="text-code">{{itemsub.code}}</span>
+                  </div>
+                </div>
+              </div>
+          </div>
+          </ng-template>
+          </div>
+          
+        </div>
+      </div>
+     
+    </div>
+    <div style="margin-top: 20px" *ngIf="!items || (items && items.length ==0)">
+        <label>Không tìm thấy kết quả tìm kiếm.Vui lòng nhập lại!</label>
+    </div>
+  
+  
+  </ion-content>
