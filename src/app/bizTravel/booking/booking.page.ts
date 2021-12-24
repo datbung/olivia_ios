@@ -44,6 +44,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { saveAs } from 'file-saver';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { FileOpener } from  '@ionic-native/file-opener/ngx';
 
 @Component({
     selector: 'app-booking',
@@ -168,7 +169,8 @@ import { File } from '@ionic-native/file/ngx';
         private sanitizer: DomSanitizer,
         private safariViewController:SafariViewController,
         private transfer:FileTransfer,
-        private file: File) {
+        private file: File,
+        private fileOpener: FileOpener) {
         this.handleSplashScreen();
         
         //this.getdata();
@@ -795,7 +797,10 @@ import { File } from '@ionic-native/file/ngx';
                             if(element.payment_info && element.payment_info.length >0){
                               element.payment_info=JSON.parse(element.payment_info);
                             }
-                            element.PaymentCode=element.payment_info.PaymentCode;
+                            if(element.payment_info){
+                              element.PaymentCode=element.payment_info.PaymentCode;
+                            }
+                            
                           }
                         
                         }
@@ -5152,7 +5157,7 @@ import { File } from '@ionic-native/file/ngx';
         
          //var blob = new Blob([data], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
          var time = new Date().toTimeString();
-         var fileName = 'bookings_'+time+'.xls';//if you have the fileName header available
+         var fileName = 'bookings.xls';//if you have the fileName header available
          //var a = document.createElement('a');
         //  var a =$('.exportdiv')[0];
         //  a.target = "_blank"; 
@@ -5162,7 +5167,7 @@ import { File } from '@ionic-native/file/ngx';
         //  a.download = fileName;
          //document.body.appendChild(a);
          //let blob = se.b64toBlob(data, 'application/vnd.ms-excel');
-         let blob = se.b64toBlob(data, 'application/vnd.ms-excel');
+         var blob = se.b64toBlob(data, 'application/vnd.ms-excel');
           let blobUrl = URL.createObjectURL(blob);
           var a =$('.exportdiv')[0];
           a.href = blobUrl;
@@ -5187,11 +5192,11 @@ import { File } from '@ionic-native/file/ngx';
         //saveAs(blob, fileName);
         //this.file.checkDir(this.file.dataDirectory, 'mydir').then((check)=> {
           //if(check){
-            this.file.writeFile(this.file.dataDirectory, fileName, blob).then((value)=>{
-              setTimeout(()=> {
-                window.open(value, "_blank");
-              },500)
-            });
+            // this.file.writeFile(this.file.dataDirectory, fileName, blob).then((value)=>{
+            //   setTimeout(()=> {
+            //     window.open(value, "_blank");
+            //   },500)
+            // });
             
           //}
         //})
@@ -5202,7 +5207,52 @@ import { File } from '@ionic-native/file/ngx';
         //     console.log('download complete: ' + entry.toURL());
         //   }
         // );
-      })
+        
+
+          // if (se.platform.is('desktop') || se.platform.is('mobileweb')) {
+          //     const url = window.URL.createObjectURL(blob);
+          //     const link = window.document.createElement("a");
+          //     link.href = url;
+          //     link.setAttribute("download", fileName);
+          //     window.document.body.appendChild(link);
+          //     link.click();
+          //     link.remove();
+          //   } else {
+          //     return se.file.writeFile(
+          //       se.file.documentsDirectory + "/Download",
+          //       fileName,blob).then(()=>{
+          //         se.fileOpener.open(
+          //           se.file.documentsDirectory +  "/Download/" + fileName,
+          //         "application/vnd.ms-excel"
+          //       );
+          //       })
+          //   }
+          // })
+          // .then(() => {
+          //   var time = new Date().toTimeString();
+          //   var fileName = 'bookings.xls';
+          //     return se.fileOpener.open(
+          //       se.file.documentsDirectory +  "/Download/" + fileName,
+          //     "application/vnd.ms-excel"
+          //   );
+          // })
+          // .catch((error) => {
+          //   console.log(error);
+          // });
+         
+          var storageLocation = "";
+
+          if(se.platform.is('android')){
+            storageLocation = se.file.externalDataDirectory;
+          }
+          else if(se.platform.is('ios')){
+            storageLocation = se.file.documentsDirectory;
+          }
+    
+          var folderPath = storageLocation;
+
+
+       })
   }
 
   b64toBlob (b64Data, contentType='', sliceSize=512){

@@ -120,8 +120,12 @@ export class CombopaymentPage implements OnInit {
                   this.bizTravelService.isCompany = true;
                 })
                
+              }else{
+                this.bizTravelService.isCompany = false;
               }
             })
+          }else{
+            this.bizTravelService.isCompany = false;
           }
         });
     //google analytic
@@ -493,7 +497,7 @@ export class CombopaymentPage implements OnInit {
           url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + this.Roomif.phone + '&memberId=' + se.jti + '&TokenId=' + se.tokenid + '&rememberToken='+se.isremember+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
         }
         else {
-          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
+          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&memberId=' + se.jti + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
         }
         this.gf.CreateUrl(url).then(dataBuildLink => {
           dataBuildLink = JSON.parse(dataBuildLink);
@@ -535,7 +539,7 @@ export class CombopaymentPage implements OnInit {
       }
       else {
         if (paymentType == 'payoo_store') {
-          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
+          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&memberId=' + se.jti + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
           this.gf.CreateUrl(url).then(dataBuildLink => {
             if (this.loader) {
               this.loader.dismiss();

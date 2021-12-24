@@ -8,6 +8,8 @@
           <div class="div-header-title">
             <div class="div-title">Chi tiết thanh toán</div>
           </div>
+
+          <div class="div-button-refresh" (click)="refresh()"><img class="img-refresh" src="./assets/imgs/refresh.svg" ></div>
         </div>
       </ion-col>
     </ion-row>
@@ -20,6 +22,7 @@
               <div class="div-button-item m-r-12 btn-active btn-all" (click)="filterItem(0)">Tất cả</div>
               <div class="div-button-item m-r-12 btn-in"  (click)="filterItem(1)">Tiền vào</div>
               <div class="div-button-item btn-out"  (click)="filterItem(2)">Tiền ra</div>
+              
             </div>
         
             <div class="div-transaction-history-list" *ngIf="(bizTravelService.actionHistory && bizTravelService.actionHistory.length >0) else emptyTrans">

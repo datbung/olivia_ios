@@ -32,6 +32,7 @@ export class RoompaymentbanknewPage implements OnInit {
   bankName: string;
   accountNumber: string;
   bankBranch: string;
+  jti: any;
   constructor(public platform: Platform,public Roomif: RoomInfo, public zone: NgZone, public storage: Storage, 
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
@@ -65,6 +66,11 @@ export class RoompaymentbanknewPage implements OnInit {
     if(this.Roomif && this.Roomif.priceshow){
       this.totalPrice = this.Roomif.priceshow;
     }
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
+      }
+    })
     gf.googleAnalytion('roompaymentbank','load','');
   }
   ngOnInit() {
@@ -110,7 +116,7 @@ export class RoompaymentbanknewPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "ACBbank";
+      this.textbank = "ACB";
       this.bankName = "Ngân hàng TMCP Á Châu (ACB)";
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "190862589";
@@ -195,7 +201,7 @@ export class RoompaymentbanknewPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "Vietinbank";
+      this.textbank = "Viettinbank";
       this.bankName = "Ngân hàng TMCP Công thương Việt Nam VietinBank";
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "1110 0014 2852";
@@ -282,7 +288,7 @@ export class RoompaymentbanknewPage implements OnInit {
       this.rowoneactive = false;
       this.rowtwoactive = true;
       this.rowthreeactive = false;
-      this.textbank = "Dongabank";
+      this.textbank = "dongabank";
       this.bankName = "NH TMCP Đông Á (DongABank)";
       this.bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
       this.accountNumber = "0139 9166 0002";
@@ -634,11 +640,22 @@ export class RoompaymentbanknewPage implements OnInit {
                 se.Roomif.bankBranch = se.bankBranch;
                 se.Roomif.paymentbank=se.paymentMethod;
                 //PDANH 22/03/2021 - Case trả sau của VIN gọi thêm hàn build link để đẩy xuống backend luồng VIN
-                let mealtype = se.jsonroom.RoomClasses[0].MealTypeRates[se.booking.indexmealtype];
-                if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD") ){
-                  let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.totalPrice + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone;
-                  se.gf.CreateUrl(url);
-                }
+                //let mealtype = se.jsonroom.RoomClasses[0].MealTypeRates[se.booking.indexmealtype];
+                //if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD" || mealtype.Supplier == "EAN") ){
+                  let totalprice = '';
+                  if (se.Roomif.priceshow) {
+                    totalprice= se.Roomif.priceshow;
+                  }
+                  else
+                  {
+                    totalprice=(se.Roomif.roomtype as any).PriceAvgPlusTAStr;
+                  }
+                  if(se.jti){
+                    let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + body.code + '&memberId=' + se.jti + '&buyerPhone=' + se.Roomif.phone;
+                    se.gf.CreateUrl(url);
+                  }
+                
+                //}
                 se.navCtrl.navigateForward('/roompaymentdonenew/'+code+'/'+stt);
               }
               else{

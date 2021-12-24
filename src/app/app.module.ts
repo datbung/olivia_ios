@@ -110,6 +110,7 @@ import { Calendar } from '@ionic-native/calendar/ngx';
 import { IDFAService } from './providers/IDFATrackingService.service';
 import { FlightdcpickaddressinputPageModule } from './flightdcpickaddressinput/flightdcpickaddressinput.module';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { FileOpener } from  '@ionic-native/file-opener/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -219,6 +220,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
     IDFAService,
     FileTransfer,
     File,
+    FileOpener,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -396,7 +396,7 @@ export class FlightcombochosebankPage implements OnInit {
       var paymentTime=moment(temptime).format('YYYYMMDDHHmmss');
       var paymentDate=moment(data.booking.DeliveryPaymentDate).format('YYYYMMDDHHmmss');
       if (paymentTime < paymentDate) {
-        var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + se.totalPrice + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink'
+        var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + se.totalPrice + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
         this.gf.CreateUrl(url).then(datapayoo => {
           if (se.loader) {
             se.loader.dismiss();

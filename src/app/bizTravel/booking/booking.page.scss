@@ -2421,7 +2421,7 @@ $content-ios-transition-background: #ffffff;
 
     .card-background-page-mytrips{
         height: 100%;
-        padding-top: calc( env(safe-area-inset-top));
+        //padding-top: calc( env(safe-area-inset-top));
         padding-bottom: 160px;
 
         .min-height-84{

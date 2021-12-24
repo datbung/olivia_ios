@@ -16,7 +16,7 @@ export class PaymentDetailPage implements OnInit {
   typeSearch: any=0;
   showDetailTransaction: boolean = false;
   pageIndex = 1;
-  pageSize = 25;
+  pageSize = 50;
   private _infiniteScroll: any;
   emptyCredit: boolean;
   emptyDedit: boolean;
@@ -46,8 +46,10 @@ export class PaymentDetailPage implements OnInit {
           authorization: text
       }
       if (auth_token && this.bizTravelService.bizAccount) {
+        this.gf.showLoading();
         this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile + '/api/Dashboard/GetBizTransactions?type=0&pageIndex='+this.pageIndex+'&pageSize='+this.pageSize, headers, {}, 'companyinfo', 'GetBizTransactions').then((data) => {
           this.loadDataDone = true;
+          this.gf.hideLoading();
           if(data && data.length >0){
             if(this.bizTravelService.actionHistory && this.bizTravelService.actionHistory.length >0){
               this.bizTravelService.actionHistory = [...this.bizTravelService.actionHistory,...data]; 
@@ -106,8 +108,15 @@ export class PaymentDetailPage implements OnInit {
     this.zone.run(() => {
           this.pageIndex++;
           this.loadData();
-          this._infiniteScroll = infiniteScroll;
-          infiniteScroll.target.complete();
+            this._infiniteScroll = infiniteScroll;
+            infiniteScroll.target.complete();
     })
+  }
+
+  refresh(){
+    this.pageIndex = 1;
+    this.loadDataDone = false;
+    this.bizTravelService.actionHistory = [];
+    this.loadData();
   }
 }

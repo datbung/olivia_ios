@@ -43,6 +43,7 @@ export class RoomadddetailsPage implements OnInit {
   listpaxhint: any = [];
   hidepaxhint: boolean = false;
   currentSelectPax: any;
+  jti: any;
   ngOnInit() {
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,public bookcombo:Bookcombo,
@@ -131,6 +132,7 @@ export class RoomadddetailsPage implements OnInit {
 
     this.storage.get('jti').then(jti => {
       if (jti) {
+        this.jti = jti;
         this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/api/Dashboard/GetListNameHotel?memberid='+jti, {},{}, 'flightadddetails', 'GetListName').then((data)=>{
           if(data && data.length >0){
             this.listPaxSuggestByMemberId = [...data];
@@ -560,6 +562,18 @@ export class RoomadddetailsPage implements OnInit {
               var ischeck = '1'
               se.clearClonePage('page-roompaymentdoneean');
               se.loader.dismiss();
+              
+              var priceBooking:any = "";
+              if(se.Roomif.priceshow){
+                priceBooking = se.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
+              }else if(se.booking.cost){
+                priceBooking = se.booking.cost.replace(/\./g, '').replace(/\,/g, '');
+              }
+              if(priceBooking){
+                let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + priceBooking + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
+                se.gf.CreateUrl(url);
+              }
+              
               se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
             }
             else {
@@ -832,6 +846,18 @@ export class RoomadddetailsPage implements OnInit {
             // console.log(body.code);
             var code = body.code;
             var stt = body.bookingStatus;
+
+            var priceBooking:any = "";
+              if(se.Roomif.priceshow){
+                priceBooking = se.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
+              }else if(se.booking.cost){
+                priceBooking = se.booking.cost.replace(/\./g, '').replace(/\,/g, '');
+              }
+              if(priceBooking){
+                let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + priceBooking + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
+                se.gf.CreateUrl(url);
+              }
+
             se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
             se.loader.dismiss();
             //se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
