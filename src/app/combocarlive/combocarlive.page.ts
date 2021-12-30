@@ -18,6 +18,7 @@ export class CombocarlivePage implements OnInit {
 
   text;
   public loader:any;listcars;hoten;phone;totalAdult;email
+  jti: any;
   constructor(public bookCombo: Bookcombo,public platform: Platform,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone) {
     this.text = "<b>Văn phòng tại TP. Hồ Chí Minh:</b> Lầu 2, tòa nhà Saigon Prime, 107-109-111 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh<br />Thời gian làm việc:<br /><ul><li>Thứ 2 - Thứ 7: từ 07h30 đến 21h00</li><li>Chủ Nhật: từ 07h30 đến 20h00</li></ul><br /><b>Văn phòng tại Hà Nội:</b> Lầu 9, 70-72 Bà Triệu, Quận Hoàn Kiếm<br />Thời gian làm việc:<br /><ul ><li>Thứ 2 - Thứ 6: từ 07h30 đến 17h30</li></ul>";
     this.listcars = this.gf.getParams('carscombo');
@@ -27,6 +28,11 @@ export class CombocarlivePage implements OnInit {
     this.storage.get('email').then(e => {
       if (e !== null) {
         this.email = e;
+      }
+    })
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
       }
     })
     //google analytic
@@ -69,6 +75,13 @@ export class CombocarlivePage implements OnInit {
           se.loader.dismiss();
           var json=JSON.parse(body);
           if (json.Error==0) {
+            if(se.jti){
+              var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + obj.Code+ '&memberId=' + se.jti;
+              se.gf.CreatePayoo(url).then(() => {
+              
+              })
+            }
+            
             se.navCtrl.navigateForward('/combodone/'+obj.Code);
           }
         });

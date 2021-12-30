@@ -39,6 +39,7 @@ export class FlightpaymentbankPage implements OnInit {
   bankid: number;
   bankTransfer: string;
   allowCheckHoldTicket: boolean=true;
+  jti: any;
   constructor(public platform: Platform,public Roomif: RoomInfo, public zone: NgZone, public storage: Storage, 
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
@@ -72,6 +73,12 @@ export class FlightpaymentbankPage implements OnInit {
     this.accountNumber = "007 1000 895 230";
     this.bankTransfer = "Vietcombank";
     this.bookingCode = this._flightService.itemFlightCache.pnr.resNo;
+
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
+      }
+    })
   }
   ngOnInit() {
   }
@@ -143,7 +150,7 @@ export class FlightpaymentbankPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "ACBbank";
+      this.textbank = "ACB";
       this.bankName = "Ngân hàng TMCP Á Châu (ACB)";
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "190862589";
@@ -230,7 +237,7 @@ export class FlightpaymentbankPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "Vietinbank";
+      this.textbank = "Viettinbank";
       this.bankName = "Ngân hàng TMCP Công thương Việt Nam VietinBank";
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "1110 0014 2852";
@@ -319,7 +326,7 @@ export class FlightpaymentbankPage implements OnInit {
       this.rowoneactive = false;
       this.rowtwoactive = true;
       this.rowthreeactive = false;
-      this.textbank = "Dongabank";
+      this.textbank = "dongabank";
       this.bankName = "NH TMCP Đông Á (DongABank)";
       this.bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
       this.accountNumber = "0139 9166 0002";
@@ -637,15 +644,18 @@ export class FlightpaymentbankPage implements OnInit {
                   if(se._flightService.itemFlightCache.objHotelCitySelected){
                     se.gf.updatePaymentMethodForCombo(se._flightService.itemFlightCache.pnr.bookingCode, se.paymentMethod);
 
-                    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=1&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone;
+                    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone+ '&memberId=' + se.jti ;
                       se.gf.CreatePayoo(url).then(databanktransfer => {
                         se.gf.hideLoading();
                         se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
                         
                     })
                   }else{
-                    se.gf.hideLoading();
-                    se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone+ '&memberId=' + se.jti ;
+                      se.gf.CreatePayoo(url).then(() => {
+                        se.gf.hideLoading();
+                        se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                    })
                   }
              
             }else{//hold vé thất bại về trang tìm kiếm

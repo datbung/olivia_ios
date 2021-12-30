@@ -68,8 +68,12 @@ export class MytripaymentflightcomboPage implements OnInit {
                   this.bizTravelService.isCompany = true;
                 })
                
+              }else{
+                this.bizTravelService.isCompany = false;
               }
             })
+          }else{
+            this.bizTravelService.isCompany = false;
           }
         });
   }
@@ -302,10 +306,10 @@ export class MytripaymentflightcomboPage implements OnInit {
       var paymentDate = moment(data.booking.DeliveryPaymentDate).format('YYYYMMDDHHmmss');
       if (paymentTime < paymentDate) {
         if (paymentType=='visa') {
-          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.cus_phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.cus_phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
         }
         else{
-          url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + this.cus_phone + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
+          url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + se.cus_phone + '&memberId=' + se.jti+ '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
         }
         this.gf.CreateUrl(url).then(dataBuildLink => {
           dataBuildLink = JSON.parse(dataBuildLink);
@@ -428,7 +432,7 @@ export class MytripaymentflightcomboPage implements OnInit {
     let se = this;
     return new Promise((resolve, reject) => {
     let url;
-      url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + this.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.cus_phone + '&memberId=' + se.jti +'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+      url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + se.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.cus_phone + '&memberId=' + se.jti +'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
       se.gf.CreateUrl(url).then(dataBuildLink => {
         dataBuildLink = JSON.parse(dataBuildLink);
         if (dataBuildLink.success) {

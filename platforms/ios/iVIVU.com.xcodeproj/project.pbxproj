@@ -46,6 +46,9 @@
 		346A3C3AC9C64A3B945948D7 /* SafariViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACED4DD9DDEF4893B9CE8BBD /* SafariViewController.m */; };
 		34D80204B8124F598E018106 /* CodePushJWTCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EE8FBFBB814F44B597C63B /* CodePushJWTCoding.m */; };
 		350B76BA2314BE6A00BE0C3E /* www in Resources */ = {isa = PBXBuildFile; fileRef = EB87FDF31871DA8E0020F90C /* www */; };
+		35409060276F05AD00379591 /* FileOpener2.m in Sources */ = {isa = PBXBuildFile; fileRef = 3540905F276F05AD00379591 /* FileOpener2.m */; };
+		35409062276F090200379591 /* apple-app-site-association.json in Resources */ = {isa = PBXBuildFile; fileRef = 3540905D276EFD2600379591 /* apple-app-site-association.json */; };
+		35409064276F090600379591 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3540905C276EFD1400379591 /* GoogleService-Info.plist */; };
 		354BC692230B8F37008B4279 /* FCMPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 354BC690230B8F37008B4279 /* FCMPlugin.m */; };
 		35CE3BA92652BE04000A8C1B /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35CE3BA72652BDF8000A8C1B /* iAd.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		35CE3BAB2652BE27000A8C1B /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35CE3BAA2652BE27000A8C1B /* AppTrackingTransparency.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -274,6 +277,10 @@
 		32CA4F630368D1EE00C91783 /* iVIVU.com-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iVIVU.com-Prefix.pch"; sourceTree = "<group>"; };
 		32CF0067E47C430491682482 /* CDVWKWebViewEngine.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVWKWebViewEngine.h; path = "cordova-plugin-ionic-webview/CDVWKWebViewEngine.h"; sourceTree = "<group>"; };
 		33375D831FC04C94A1039468 /* CTCrop.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CTCrop.h; path = "cordova-plugin-crop/CTCrop.h"; sourceTree = "<group>"; };
+		3540905C276EFD1400379591 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3540905D276EFD2600379591 /* apple-app-site-association.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "apple-app-site-association.json"; path = "../../apple-app-site-association.json"; sourceTree = "<group>"; };
+		3540905E276F058600379591 /* FileOpener2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOpener2.h; path = "cordova-plugin-file-opener2/FileOpener2.h"; sourceTree = "<group>"; };
+		3540905F276F05AD00379591 /* FileOpener2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileOpener2.m; path = "cordova-plugin-file-opener2/FileOpener2.m"; sourceTree = "<group>"; };
 		354BC68D230B8F37008B4279 /* FCMPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCMPlugin.h; sourceTree = "<group>"; };
 		354BC690230B8F37008B4279 /* FCMPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCMPlugin.m; sourceTree = "<group>"; };
 		35CE3BA72652BDF8000A8C1B /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -547,8 +554,13 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				4C6C997E277ABCFE0060DB74 /* apple-app-site-association.json */,
 				4C6C9980277ABD230060DB74 /* GoogleService-Info.plist */,
+=======
+				3540905D276EFD2600379591 /* apple-app-site-association.json */,
+				3540905C276EFD1400379591 /* GoogleService-Info.plist */,
+>>>>>>> 745756deb2c361debba866d3e481a7b4c475400e
 				EB87FDF41871DAF40020F90C /* config.xml */,
 				EB87FDF31871DA8E0020F90C /* www */,
 				EB87FDF11871DA420020F90C /* Staging */,
@@ -657,6 +669,8 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				3540905E276F058600379591 /* FileOpener2.h */,
+				3540905F276F05AD00379591 /* FileOpener2.m */,
 				354BC68D230B8F37008B4279 /* FCMPlugin.h */,
 				354BC690230B8F37008B4279 /* FCMPlugin.m */,
 				67607A5BFD644F8FB2E41351 /* UIImage+CropScaleOrientation.m */,
@@ -1009,7 +1023,11 @@
 				EA8B4031AF7540B8B5BE3873 /* GMEmptyFolder@1x.png in Resources */,
 				65DD3FD4BDA3469FB8689C40 /* GMEmptyFolder@2x.png in Resources */,
 				350B76BA2314BE6A00BE0C3E /* www in Resources */,
+<<<<<<< HEAD
 				4C6C997F277ABCFE0060DB74 /* apple-app-site-association.json in Resources */,
+=======
+				35409062276F090200379591 /* apple-app-site-association.json in Resources */,
+>>>>>>> 745756deb2c361debba866d3e481a7b4c475400e
 				9743A0FDE1A54EC1867966B1 /* GMSelected.png in Resources */,
 				2FC67315C9B24C9FBA687E34 /* GMSelected@2x.png in Resources */,
 				D6CD6360DA764BFEA0457DDA /* GMVideoIcon.png in Resources */,
@@ -1019,7 +1037,11 @@
 				FBF025DF21ED4E82B845CCD9 /* en.lproj in Resources */,
 				A19E7B93352F46DABE096203 /* es.lproj in Resources */,
 				F89AB9B440C042FA834AB49E /* fr.lproj in Resources */,
+<<<<<<< HEAD
 				4C6C9981277ABD230060DB74 /* GoogleService-Info.plist in Resources */,
+=======
+				35409064276F090600379591 /* GoogleService-Info.plist in Resources */,
+>>>>>>> 745756deb2c361debba866d3e481a7b4c475400e
 				9B2FBE5EB8094145BA2CAA99 /* it.lproj in Resources */,
 				15A9ECC199B0486AA8188B72 /* pt.lproj in Resources */,
 				61CAA718CB7844089010F067 /* pl.lproj in Resources */,
@@ -1110,6 +1132,7 @@
 				569DA8A284114BCBA82C6ACD /* NSString+SSURLEncoding.m in Sources */,
 				249179DA908C4848B22D6ABD /* SocialSharing.m in Sources */,
 				CC2D367859A5480980F113D2 /* CFCallNumber.m in Sources */,
+				35409060276F05AD00379591 /* FileOpener2.m in Sources */,
 				0B1D055BCE7B46D88D340CED /* FirebaseAnalyticsPlugin.m in Sources */,
 				C158B14FE420462593A6B6F6 /* LaunchReview.m in Sources */,
 				705EE038A5B94B1ABBA0E7D5 /* UIWindow+DismissNotification.m in Sources */,

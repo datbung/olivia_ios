@@ -122,7 +122,7 @@ export class RoompaymentbankPage implements OnInit{
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "ACBbank";
+      this.textbank = "ACB";
       this.bankName = "Ngân hàng TMCP Á Châu (ACB)";
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "190862589";
@@ -203,7 +203,7 @@ export class RoompaymentbankPage implements OnInit{
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "Vietinbank";
+      this.textbank = "Viettinbank";
       this.bankName = "Ngân hàng TMCP Công thương Việt Nam VietinBank";
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "1110 0014 2852";
@@ -286,7 +286,7 @@ export class RoompaymentbankPage implements OnInit{
       this.rowoneactive = false;
       this.rowtwoactive = true;
       this.rowthreeactive = false;
-      this.textbank = "Dongabank";
+      this.textbank = "dongabank";
       this.bankName = "NH TMCP Đông Á (DongABank)";
       this.bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
       this.accountNumber = "0139 9166 0002";

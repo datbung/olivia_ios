@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 import { ConfirmemailPage } from '../confirmemail/confirmemail.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { BizTravelService } from '../providers/bizTravelService';
 
 /**
  * Generated class for the FacilitiesPage page.
@@ -47,10 +48,12 @@ export class FlightComboAddDetailsPage implements OnInit {
   listpaxhint: any = [];
   hidepaxhint: boolean = false;
   currentSelectPax: any;
+  jti: any;
   constructor(public platform: Platform, private toastCtrl: ToastController, public valueGlobal: ValueGlobal, public navCtrl: NavController, public zone: NgZone,
     public searchhotel: SearchHotel, private booking: Booking, private bookcombo: Bookcombo, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction, public loadingCtrl: LoadingController,
     public Roomif:RoomInfo,public actionsheetCtrl: ActionSheetController,
-    private fb: Facebook) {
+    private fb: Facebook,
+    public bizTravelService: BizTravelService) {
       var id = 1;
       let num = 1;
       this.objectFlight = this.gf.getParams('flightcombo');
@@ -208,6 +211,12 @@ export class FlightComboAddDetailsPage implements OnInit {
           }
         }else{
           this.validemail = false;
+        }
+      })
+
+      this.storage.get('jti').then(jti => {
+        if (jti) {
+          this.jti = jti;
         }
       })
       // this.storage.get('order').then(order => {
@@ -1139,7 +1148,14 @@ export class FlightComboAddDetailsPage implements OnInit {
                         se.loader.dismiss();
                       }
                       if (data) {
-                        se.gf.createFlightTransactionCombo(se.bookcombo.FlightCode);
+
+                        if(se.bizTravelService.isCompany){
+                          let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=2&source=app&amount=' + se.bookcombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookcombo.bookingcode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti ;
+                          se.gf.CreateUrl(url);
+                        }
+                         
+
+                        se.gf.createFlightTransactionCombo(se.bookcombo.FlightCode)
                         se.navCtrl.navigateForward('/flightcombopaymentdone/RQ');
                      
                       } else {
@@ -1192,6 +1208,12 @@ export class FlightComboAddDetailsPage implements OnInit {
                         se.loader.dismiss();
                       }
                       if (data) {
+
+                        if(se.bizTravelService.isCompany){
+                          let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + se.bookcombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookcombo.bookingcode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti ;
+                          se.gf.CreateUrl(url);
+                        }
+
                         se.navCtrl.navigateForward('/flightcombodoneprepay/' + se.bookcombo.bookingcode + '/' + se.PriceAvgPlusTAStr + '/' + 1)
                       } else {
                         alert('Gặp sự cố, vui lòng thử lại')
@@ -1273,6 +1295,10 @@ export class FlightComboAddDetailsPage implements OnInit {
                     if (data) {
                       if (se.loader) {
                         se.loader.dismiss();
+                      }
+                      if(se.bizTravelService.isCompany){
+                        let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + se.bookcombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookcombo.bookingcode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti ;
+                        se.gf.CreateUrl(url);
                       }
                       se.navCtrl.navigateForward('/flightcombodoneprepay/' + se.bookcombo.bookingcode + '/' + se.PriceAvgPlusTAStr + '/' + 1)
                     } else {

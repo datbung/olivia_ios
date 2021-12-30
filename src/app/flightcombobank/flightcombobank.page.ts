@@ -27,6 +27,7 @@ export class FlightcombobankPage implements OnInit {
   accountNumber: string;
   bankBranch: string;
   public loader: any;
+  jti: any;
   constructor(public platform: Platform, public Roomif: RoomInfo, public zone: NgZone, public storage: Storage,
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController, public bookCombo: Bookcombo,
     public gf: GlobalFunction,
@@ -62,6 +63,11 @@ export class FlightcombobankPage implements OnInit {
     this.storage.get('email').then(e => {
       if (e !== null) {
         this.email = e;
+      }
+    })
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
       }
     })
     //Xử lý nút back của dt
@@ -111,7 +117,7 @@ export class FlightcombobankPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "ACBbank";
+      this.textbank = "ACB";
       this.bankName = "Ngân hàng TMCP Á Châu (ACB)";
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "190862589";
@@ -196,7 +202,7 @@ export class FlightcombobankPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "Vietinbank";
+      this.textbank = "Viettinbank";
       this.bankName = "Ngân hàng TMCP Công thương Việt Nam VietinBank";
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "1110 0014 2852";
@@ -283,7 +289,7 @@ export class FlightcombobankPage implements OnInit {
       this.rowoneactive = false;
       this.rowtwoactive = true;
       this.rowthreeactive = false;
-      this.textbank = "Dongabank";
+      this.textbank = "dongabank";
       this.bankName = "NH TMCP Đông Á (DongABank)";
       this.bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
       this.accountNumber = "0139 9166 0002";
@@ -577,6 +583,10 @@ export class FlightcombobankPage implements OnInit {
             se.Roomif.bankName = se.bankName;
             se.Roomif.bankBranch = se.bankBranch;
             se.Roomif.paymentbank = se.paymentMethod;
+            if(se.jti){
+              var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
+                        se.gf.CreatePayoo(url);
+              }
             if (se.Roomif.payment == 'AL' && datafly.depcode && datafly.retcode) {
               se.navCtrl.navigateForward('/flightcombopaymentdonebank/AL');
             }

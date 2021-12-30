@@ -13,6 +13,7 @@ import jwt_decode from 'jwt-decode';
 import { ConfirmemailPage } from '../confirmemail/confirmemail.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { BizTravelService } from '../providers/bizTravelService';
 
 /**
  * Generated class for the RoomadddetailsPage page.
@@ -40,6 +41,7 @@ export class ComboadddetailsPage implements OnInit {
   listpaxhint: any = [];
   hidepaxhint: boolean = false;
   currentSelectPax: any;
+  jti: any;
   ngOnInit() {
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,
@@ -47,7 +49,8 @@ export class ComboadddetailsPage implements OnInit {
     public booking: Booking, public gf: GlobalFunction, public Bookcombo: Bookcombo,public alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private fb: Facebook,
-    public searchhotel: SearchHotel) {
+    public searchhotel: SearchHotel,
+    public bizTravelService: BizTravelService) {
     this.ischeckpayment = Roomif.ischeckpayment;
     this.totalAdult = Bookcombo.totalAdult;
     this.listcars = this.gf.getParams('carscombo');
@@ -60,6 +63,11 @@ export class ComboadddetailsPage implements OnInit {
         }
       }else{
         this.validemail = false;
+      }
+    })
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
       }
     })
     this.storage.get('infocus').then(infocus => {
@@ -263,6 +271,10 @@ export class ComboadddetailsPage implements OnInit {
           se.Roomif.priceshowtt = '0';
           var total = 0;
           se.loader.dismiss();
+          if(se.bizTravelService.isCompany){
+            let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + se.listcars.HotelBooking.TotalPrices.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + obj.Code + '&buyerPhone=' + se.phone + '&memberId=' + se.jti ;
+            se.gf.CreateUrl(url);
+          }
           if (se.Roomif.payment == "AL") {
             se.navCtrl.navigateForward('/combodoneprepay/' + obj.Code + '/' + total + '/' + ischeck);
           }

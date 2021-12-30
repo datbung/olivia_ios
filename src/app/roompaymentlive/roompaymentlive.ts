@@ -21,10 +21,15 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RoompaymentlivePage implements OnInit{
   text; isenabled = true; ischeck; timestamp; paymentMethod;auth_token: any;
+  jti: any;
 ; room; jsonroom;loader:any;stt;booking_type
   constructor(public activityService: ActivityService,public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,private activatedRoute: ActivatedRoute) {
    
-    
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
+      }
+    })
     //google analytic
     gf.googleAnalytion('roompaymentlive','load','');
   }
@@ -132,10 +137,18 @@ export class RoompaymentlivePage implements OnInit{
               se.loader.dismiss();
               //PDANH 22/03/2021 - Case trả sau của VIN gọi thêm hàn build link để đẩy xuống backend luồng VIN
               let mealtype = se.jsonroom.RoomClasses[0].MealTypeRates[se.booking.indexmealtype];
-                if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD") ){
-                  let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.Roomif.priceshow + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone;
+                //if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD") ){
+                  let totalprice = '';
+                  if (se.Roomif.priceshow) {
+                    totalprice= se.Roomif.priceshow;
+                  }
+                  else
+                  {
+                    totalprice=(se.Roomif.roomtype as any).PriceAvgPlusTAStr;
+                  }
+                  let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + body.code + '&memberId=' + se.jti + '&buyerPhone=' + se.Roomif.phone;
                   se.gf.CreateUrl(url);
-                }
+                //}
               se.navCtrl.navigateForward('/roompaymentdone/'+code+'/'+stt);
               //se.gf.googleAnalytion('paymentdirect','Purchases','hotelid:'+se.booking.cost+'/cin:'+se.jsonroom.CheckInDate+'/cout:'+se.jsonroom.CheckOutDate+'/adults:'+se.booking.Adults+'/child:'+se.booking.Child+'/price:'+se.booking.cost)
             }

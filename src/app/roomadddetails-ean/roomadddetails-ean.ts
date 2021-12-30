@@ -25,6 +25,7 @@ export class RoomadddetailsEanPage implements OnInit{
   ishide=false; companyname; address; tax; addressorder; bed; bedchuoi; arrbed = [];_email: any;
   validemail: boolean = true;
   auth_token: any;
+  jti: any;
 ; ischeck=false;
   timestamp; paymentMethod; jsonroom; ischeckbtn; textbed; ischeckpayment;public loader:any
   checkchangeemail=false;
@@ -224,6 +225,7 @@ export class RoomadddetailsEanPage implements OnInit{
 
     this.storage.get('jti').then(jti => {
       if (jti) {
+        this.jti = jti;
         this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/api/Dashboard/GetListNameHotel?memberid='+jti, {},{}, 'flightadddetails', 'GetListName').then((data)=>{
           if(data && data.length >0){
             this.listPaxSuggestByMemberId = [...data];
@@ -1269,14 +1271,14 @@ export class RoomadddetailsEanPage implements OnInit{
               // se.clearClonePage('page-roompaymentdoneean');
               // se.navCtrl.navigateForward('RoompaymentdoneeanPage');
               var id = body.code;
-              var total = se.Roomif.pricepoint;
+              var total = se.Roomif.pricepoint.toString().replace(/\./g, '').replace(/\,/g, '');
               var ischeck = '1';
               let mealtype = se.jsonroom.RoomClasses[0].MealTypeRates[se.booking.indexmealtype];
               //PDANH 22/03/2021 - Case cấn trừ điểm của VIN gọi thêm hàn build link để đẩy xuống backend luồng VIN
-              if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD")){
-                let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + total + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone;
+              //if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD")){
+                let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + total + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
                 se.gf.CreateUrl(url);
-              }
+              //}
               se.clearClonePage('page-roompaymentdoneean');
               se.loader.dismiss();
               se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
