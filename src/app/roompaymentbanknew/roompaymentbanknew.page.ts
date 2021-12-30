@@ -6,8 +6,7 @@ import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
 import { GlobalFunction, ActivityService } from '../providers/globalfunction';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 @Component({
@@ -36,7 +35,7 @@ export class RoompaymentbanknewPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    public iab: InAppBrowser,
+    
     public clipboard: Clipboard) {
     this.ischeckvietin = true;
     this.ischeckacb = true;

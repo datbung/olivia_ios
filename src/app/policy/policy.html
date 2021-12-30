@@ -38,7 +38,7 @@
 </ion-header>
 <ion-content class="content-policy">
   <div style="margin: 5px 16px">
-    <div>
+    <div *ngIf="cin">
       <label style="font-size: 14px;font-weight: 500">
         Thời gian nhận phòng
       </label>
@@ -50,7 +50,7 @@
       </label>
 
     </div>
-    <div>
+    <div *ngIf="cout">
       <label style="font-size: 14px;font-weight: 500">
         Thời gian trả phòng
       </label>

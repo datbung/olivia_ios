@@ -4,8 +4,7 @@ import { NavController, LoadingController, ToastController,Platform,AlertControl
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { GlobalFunction } from '../providers/globalfunction';
 import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
@@ -31,7 +30,7 @@ export class RoomchoosebankPage implements OnInit{
   public loader: any
   auth_token: any = '';arrbankrmb=[];totalPrice=0;bookingCode;isckb = false; TokenId;bankid="";jti;intervalID: NodeJS.Timeout;
   _inAppBrowser: any;  isremember=true;stt;isdisable=false;isshowRemember=false;
-  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, private iab: InAppBrowser, public alertCtrl: AlertController,
+  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,  public alertCtrl: AlertController,
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,private safariViewController: SafariViewController,private activatedRoute: ActivatedRoute,public activityService: ActivityService) {
    

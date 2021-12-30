@@ -1,4 +1,4 @@
-import { NavController } from '@ionic/angular';
+import { NavController ,AlertController} from '@ionic/angular';
 import { SearchHotel } from './../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import { foodService } from './../providers/foodService';
@@ -6,6 +6,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 @Component({
   selector: 'app-foodpaymentdonepayoo',
   templateUrl: './foodpaymentdonepayoo.page.html',
@@ -14,10 +15,18 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 export class FoodpaymentdonepayooPage implements OnInit {
 
   total;_email;code;stt;startdate;enddate;PeriodPaymentDate;qrimg;
-  PeriodPaymentHour;BillingCode
+  PeriodPaymentHour;BillingCode;checkreview
   isDinner: any=false;
   constructor(private activatedRoute: ActivatedRoute,public storage: Storage,public foodService:foodService, 
-    private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController) { 
+    private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController,public alertCtrl: AlertController, private launchReview: LaunchReview,) { 
+      this.storage.get('checkreview').then(checkreview => {
+        if (checkreview==0) {
+          this.checkreview=0;
+        }else
+        {
+          this.checkreview=checkreview;
+        }
+      })
     this.total=this.foodService.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this.isDinner = this.foodService.isDinner;
     this.storage.get('email').then(email => {
@@ -52,6 +61,9 @@ export class FoodpaymentdonepayooPage implements OnInit {
     })
     //this.foodService.itemActiveFoodTab.emit(3);
     //this.searchhotel.backPage = "foodpaymentdonepage";
+    if (this.checkreview==0) {
+      this.showConfirm();
+    }
     this.navCtrl.navigateForward('/homefood');
   }
   openWebpage() {
@@ -81,6 +93,33 @@ export class FoodpaymentdonepayooPage implements OnInit {
       } else {
         // use fallback browser, example InAppBrowser
       }
+    })
+  }
+  public async showConfirm() {
+    this.storage.set("checkreview", 1);
+    let alert = await this.alertCtrl.create({
+      header: 'Bạn thích iVIVU.com?',
+      message: 'Đánh giá ứng dụng trên App Store',
+      mode: "ios",
+      cssClass: 'cls-reivewapp',
+      buttons: [
+        {
+          text: 'Hủy',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Đánh giá',
+          role: 'OK',
+          handler: () => {
+            this.launchReview.launch()
+              .then(() => console.log('Successfully launched store app'));
+          }
+        }
+      ]
+    });
+    alert.present();
+    alert.onDidDismiss().then((data) => {
     })
   }
 }

@@ -5,7 +5,7 @@ import { NavController, ModalController, LoadingController, Platform } from '@io
 import { Booking, RoomInfo, SearchHotel,ValueGlobal } from '../providers/book-service';
 import { AuthService } from '../providers/auth-service';
 import * as request from 'requestretry';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { C } from '../providers/constants';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -26,7 +26,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   intervalID: any; ischeckTransaction = false;
   _inAppBrowser: any;isremember=true;isdisable=false;
   constructor(public platform: Platform, public searchhotel: SearchHotel, public navCtrl: NavController,
-    public storage: Storage, public Roomif: RoomInfo, private iab: InAppBrowser, public booking1: Booking,
+    public storage: Storage, public Roomif: RoomInfo,  public booking1: Booking,
     public booking: Booking, public authService: AuthService, public modalCtrl: ModalController, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, public zone: NgZone, private router: Router, private bookCombo: Bookcombo, private valueGlobal: ValueGlobal,private safariViewController: SafariViewController,
     public bizTravelService: BizTravelService) {

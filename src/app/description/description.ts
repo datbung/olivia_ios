@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController, Platform,LoadingController } from '@ionic/angular';
 import { C } from './../providers/constants';
 import { GlobalFunction } from './../providers/globalfunction';
 import { ActivatedRoute } from '@angular/router';
@@ -23,9 +23,10 @@ export class DescriptionPage implements OnInit{
   public FullDescription;
   public HotelID;
   public urlpath = C.urls.baseUrl.urlPost;
+  loader: any;
   constructor(public platform: Platform,public navCtrl: NavController,private gf: GlobalFunction,public activatedRoute: ActivatedRoute,
     public zone: NgZone,
-    private storage: Storage) {
+    private storage: Storage,public loadingCtrl: LoadingController) {
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
     this.Name = this.activatedRoute.snapshot.paramMap.get('name');
     //this.getdata();
@@ -59,12 +60,14 @@ export class DescriptionPage implements OnInit{
   }
   getdata() {
     var se = this;
+    se.presentLoading();
     var options = {
       method: 'POST',
       url: se.urlpath + "/mhoteldetail/" + se.HotelID,
       timeout: 180000, maxAttempts: 5, retryDelay: 2000,
     };
     request(options, function (error, response, body) {
+      se.loader.dismiss();
       if(response.statusCode != 200){
         var objError ={
             page: "description",
@@ -92,5 +95,9 @@ export class DescriptionPage implements OnInit{
       }
     })
   }
-
+  async presentLoading() {
+    this.loader = await this.loadingCtrl.create({
+   });
+   this.loader.present();
+ }
 }

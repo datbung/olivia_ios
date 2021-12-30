@@ -5,8 +5,7 @@ import { NavController, LoadingController, ToastController, Platform,AlertContro
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { GlobalFunction } from '../providers/globalfunction';
 import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
@@ -24,7 +23,7 @@ export class CombochoosebankPage implements OnInit {
   intervalID: NodeJS.Timeout;
   _inAppBrowser: any;
   isremember=true;isdisable=false;
-  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, private iab: InAppBrowser,
+  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, 
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,public alertCtrl: AlertController,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction, public bookCombo: Bookcombo,private safariViewController:SafariViewController) {
     this.searchhotel.rootPage = "combochoosebank";

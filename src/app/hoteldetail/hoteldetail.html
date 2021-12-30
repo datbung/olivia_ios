@@ -427,6 +427,23 @@
           </div>
         </div>
       </div>
+      <!-- Vùng hiển thị text suggest...  -->
+    <div class="div-warning" *ngIf="hotelRoomClasses.length >0 && loadcomplete&&ischeckwarn">
+      <div class="warning-content">
+        <div class="text-warning">
+          <ion-label>Rất tiếc, iVIVU không tìm thấy phòng thoả yêu cầu của bạn. Vui lòng chọn lại số lượng phòng hoặc
+            tham khảo gợi ý dưới đây.</ion-label>
+        </div>
+      </div>
+    </div>
+
+    <div class="div-option" *ngIf="hotelRoomClasses.length >0 && loadcomplete &&ischeckwarn">
+      <div class="option-content">
+        <div class="text-option">
+          <ion-label>Các lựa chọn chia phòng khác</ion-label>
+        </div>
+      </div>
+    </div>
       <!-- Vùng hiển thị detail room -->
         <div *ngIf="hotelRoomClasses.length >0 && loadcomplete">
           <div class="hotel-detail-content">
@@ -435,6 +452,13 @@
                 <div class="card-background-detailpage">
                   <ion-item-group *ngFor="let hotelroom of hotelRoomClasses; let itemindex = index"
                     [myScrollVanish]="scrollArea">
+                    <div class="div-option" *ngIf="hotelroom.checkwarning==1">
+                      <div class="option-content">
+                        <div class="text-option-item">
+                          <ion-label>Các lựa chọn chia phòng khác</ion-label>
+                        </div>
+                      </div>
+                    </div>
                     <ion-row class="item-room-first-child" style="padding:3px 3px 7px 3px;">
                       <ion-col size="4">
                         <div class="div-wrapimg">
@@ -774,26 +798,25 @@
                                   </ion-col>
                                 </ion-row>
                                 <div class="div-btnbook"
-                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status=='AL'&&hotelroom.RoomType!='villa'"
-                                  >
-                                  <button 
-                                    (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,itemindex)"
-                                    ion-button round outline class="button btn-book-outline">Đặt {{room}} phòng</button>
-                                </div>
-                                <div class="div-btnbook"
-                                *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status=='AL' &&hotelroom.RoomType=='villa'"
-                                >
-                                <button 
-                                  (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,itemindex)"
-                                  ion-button round outline class="button btn-book-outline">Đặt {{room}} villa</button>
-                              </div>
-                                <div class="div-btnbook"
-                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status!='AL'"
-                                 >
-                                  <button 
-                                    (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,itemindex)"
-                                    ion-button round outline class="button btn-book-outline">Yêu cầu đặt</button>
-                                </div>
+                              *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && (mealtype.Status=='AL')&&hotelroom.RoomType!='villa'">
+                              <button
+                                (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
+                                ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
+                                phòng</button>
+                            </div>
+                            <div class="div-btnbook"
+                              *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status=='AL' &&hotelroom.RoomType=='villa'">
+                              <button
+                                (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
+                                ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
+                                villa</button>
+                            </div>
+                            <div class="div-btnbook"
+                              *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status!='AL'">
+                              <button
+                                (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
+                                ion-button round outline class="button btn-book-outline">Yêu cầu đặt</button>
+                            </div>
                               </ion-col>
                             </ion-row>
                           </ion-grid>

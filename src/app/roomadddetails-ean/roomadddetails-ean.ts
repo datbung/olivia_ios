@@ -60,7 +60,7 @@ export class RoomadddetailsEanPage implements OnInit{
       }
       
       })
-    if (this.ischeckpoint == true) {
+    if (this.ischeckpoint == true || this.Roomif.promocode) {
       if (this.Roomif.priceshow == "0") {
         this.priceshow = this.Roomif.priceshow;
       }
@@ -1200,7 +1200,6 @@ export class RoomadddetailsEanPage implements OnInit{
     this.jsonroom.RoomClasses = this.room;
     this.timestamp = Date.now();
     //this.storage.get('auth_token').then(auth_token => {
-      if (se.booking.CEmail) {
         var Invoice = 0;
         if (se.Roomif.order) {
           Invoice = 1;
@@ -1217,7 +1216,7 @@ export class RoomadddetailsEanPage implements OnInit{
           {
             RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
             CName: se.Roomif.hoten.trim(),
-            CEmail: se.booking.CEmail,
+            CEmail: se._email,
             CPhone: se.Roomif.phone,
             timestamp: se.timestamp,
             HotelID: se.booking.HotelId,
@@ -1298,7 +1297,7 @@ export class RoomadddetailsEanPage implements OnInit{
           
         });
 
-      }
+     
     //})
   }
   async presentToasterror() {

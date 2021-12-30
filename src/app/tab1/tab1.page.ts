@@ -25,8 +25,7 @@ import {
 import { HttpClientModule } from "@angular/common/http";
 import * as request from "requestretry";
 import * as moment from "moment";
-import { InAppBrowserOptions } from "@ionic-native/in-app-browser";
-import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+
 import { C } from "./../providers/constants";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { GlobalFunction, ActivityService } from "./../providers/globalfunction";
@@ -167,7 +166,7 @@ export class Tab1Page implements OnInit {
   isNotice = false;
   allowShowCalendarFirstTime: any = true;
   constructor(
-    private iab: InAppBrowser,
+    
     public navCtrl: NavController,
     public authService: AuthService,
     public modalCtrl: ModalController,
@@ -1783,6 +1782,7 @@ export class Tab1Page implements OnInit {
           }
           objTextMonthStartDate = $(obj).closest('.month-box').children()[0].textContent;
           objTextMonthEndDate = $('.endSelection').closest('.month-box').children()[0].textContent;
+        
         }
 
         if (
@@ -1836,7 +1836,6 @@ export class Tab1Page implements OnInit {
     if(!this.allowclickcalendar){
       return;
     }
-    
     this.allowclickcalendar = false;
     //this.navCtrl.navigateForward('/pickup-calendar/true');
     let fromdate = new Date(this.searchhotel.CheckInDate ? this.searchhotel.CheckInDate : this.cin);

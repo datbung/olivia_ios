@@ -1,4 +1,4 @@
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { GlobalFunction } from '../providers/globalfunction';
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { NavController, MenuController,Platform } from '@ionic/angular';
@@ -28,7 +28,7 @@ export class RegisterPage implements OnInit {
   constructor(public keyboard: Keyboard,
     public navCtrl: NavController,
     public menuCtrl: MenuController,
-    public formBuilder: FormBuilder, private iab: InAppBrowser, public platform: Platform, private toastCtrl: ToastController, public storage: Storage, public gf: GlobalFunction, public zone: NgZone
+    public formBuilder: FormBuilder,  public platform: Platform, private toastCtrl: ToastController, public storage: Storage, public gf: GlobalFunction, public zone: NgZone
     , private appVersion: AppVersion, public valueGlobal: ValueGlobal
     , private fcm: FCM) {
 

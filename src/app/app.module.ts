@@ -19,8 +19,7 @@ import { Component, NgZone, Input, ViewChild } from '@angular/core';
 import { NavController, NavParams, ModalController,ToastController,LoadingController } from '@ionic/angular';
 import * as request from 'requestretry';
 import * as moment from 'moment';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { DateTime } from 'ionic-angular';
 import { FirebaseAnalytics } from '@ionic-native/firebase-analytics/ngx';
 import { IonicStorageModule } from '@ionic/storage';
@@ -166,7 +165,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
   providers: [
     StatusBar,
     SplashScreen,
-    InAppBrowser,
     AuthService,
     SearchHotel,
     ValueGlobal,

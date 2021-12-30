@@ -2,7 +2,7 @@ import { SearchHotel, ValueGlobal } from './../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from 'moment';
-import { NavController, ModalController, Platform } from '@ionic/angular';
+import { NavController, ModalController, Platform ,AlertController} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { flightService } from '../providers/flightService';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -11,6 +11,7 @@ import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 @Component({
   selector: 'app-flightpaymentdone',
   templateUrl: './flightpaymentdone.page.html',
@@ -24,8 +25,8 @@ export class FlightpaymentdonePage implements OnInit {
   pacificVNA: string = "";
   pacificVNAReturn: string="";listDiChung: any = "";
   checkInDisplayDC: string;
-  checkOutDisplayDC: string;
-  constructor(private activatedRoute: ActivatedRoute,public _flightService: flightService,
+  checkOutDisplayDC: string;checkreview
+  constructor(private activatedRoute: ActivatedRoute,public _flightService: flightService,public alertCtrl: AlertController, private launchReview: LaunchReview,
     private navCtrl:NavController, public searchhotel: SearchHotel,public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
     public gf: GlobalFunction,
@@ -39,6 +40,14 @@ export class FlightpaymentdonePage implements OnInit {
         this.bookingCode =  this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
         this.bookingFlight = this._flightService.itemFlightCache;
       }
+      this.storage.get('checkreview').then(checkreview => {
+        if (checkreview==0) {
+          this.checkreview=0;
+        }else
+        {
+          this.checkreview=checkreview;
+        }
+      })
       
     }
 
@@ -389,7 +398,9 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     this._flightService.itemMenuFlightClick.emit(2);
     this._flightService.bookingCodePayment = this.bookingCode;
     this._flightService.bookingSuccess = true;
-   
+    if (this.checkreview == 0) {
+      this.showConfirm();
+    }
     this.navCtrl.navigateBack('/tabs/tab1');
   }
 
@@ -401,6 +412,9 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     se._flightService.bookingCodePayment = this.bookingCode;
     se._flightService.bookingSuccess = true;
     se.valueGlobal.backValue = "flightmytrip";
+     if (this.checkreview == 0) {
+      this.showConfirm();
+    }
     se.navCtrl.navigateBack('/tabs/tab1');
       //   const modal: HTMLIonModalElement =
       //   await se.modalCtrl.create({
@@ -467,5 +481,32 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
       return true;
     }
     return false;
+  }
+  public async showConfirm() {
+    this.storage.set("checkreview", 1);
+    let alert = await this.alertCtrl.create({
+      header: 'Bạn thích iVIVU.com?',
+      message: 'Đánh giá ứng dụng trên App Store',
+      mode: "ios",
+      cssClass: 'cls-reivewapp',
+      buttons: [
+        {
+          text: 'Hủy',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Đánh giá',
+          role: 'OK',
+          handler: () => {
+            this.launchReview.launch()
+              .then(() => console.log('Successfully launched store app'));
+          }
+        }
+      ]
+    });
+    alert.present();
+    alert.onDidDismiss().then((data) => {
+    })
   }
 }

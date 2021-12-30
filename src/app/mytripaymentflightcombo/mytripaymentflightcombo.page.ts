@@ -5,7 +5,7 @@ import { NavController, ModalController, LoadingController, Platform } from '@io
 import { Booking, RoomInfo, SearchHotel,ValueGlobal } from '../providers/book-service';
 import { AuthService } from '../providers/auth-service';
 import * as request from 'requestretry';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { C } from '../providers/constants';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -31,7 +31,7 @@ export class MytripaymentflightcomboPage implements OnInit {
   roomnumber; breakfast; PriceAvgPlusTAStr;priceshow;totalPaxStr;
   auth_token: any = '';  bookingCode = "";cus_phone="";stt
   totalPrice: any;
-  constructor(public navCtrl: NavController, private iab: InAppBrowser, public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public activatedRoute: ActivatedRoute,
+  constructor(public navCtrl: NavController,  public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public activatedRoute: ActivatedRoute,
     public bizTravelService: BizTravelService,
     private zone: NgZone) { 
     this.titlecombo=this.activityService.objPaymentMytrip.trip.combo_name;

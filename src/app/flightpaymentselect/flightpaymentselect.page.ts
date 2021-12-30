@@ -7,8 +7,7 @@ import { NavController, LoadingController, ToastController, Platform, ModalContr
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { GlobalFunction } from '../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
@@ -51,7 +50,7 @@ export class FlightPaymentSelectPage implements OnInit {
   totalPaxStr: string;
   totalRoom: string;
   constructor(private navCtrl:NavController,public _flightService: flightService
-    ,private iab: InAppBrowser,public gf: GlobalFunction, public loadingCtrl: LoadingController
+    ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel,private safariViewController: SafariViewController, public storage: Storage,
     private modalCtrl: ModalController,
     private platform: Platform,
