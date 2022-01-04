@@ -109,10 +109,10 @@ export class RoomdetailreviewPage implements OnInit {
       //     }
       //   }
       // });
-    setTimeout(()=>{
-      this.loaddatadone = true;
-    }, 150)  
-    
+    // setTimeout(()=>{
+    //   this.loaddatadone = true;
+    // }, 150)  
+    this.loaddatadone = true;
     //google analytic
     //gf.googleAnalytion('roomdetailreview', 'add_to_cart', this.booking.code + '|' + this.booking.CheckInDate + '|' + this.booking.CheckOutDate + '|' + this.adults + '|' + this.children + '|' + this.roomnumber + '|' + this.PriceAvgPlusTAStr);
     

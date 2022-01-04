@@ -83,9 +83,9 @@ export class RoomadddetailsEanPage implements OnInit{
       this.textbed = this.textbed.description;
     }
 
-    if (Roomif.ischeck) {
-      this.ischeck = Roomif.ischeck;
-    }
+    // if (Roomif.ischeck) {
+    //   this.ischeck = Roomif.ischeck;
+    // }
     this.storage.get('infocus').then(infocus => {
       this.arrbed = [];
       this.bed = this.Roomif.arrrbed;
@@ -445,6 +445,7 @@ export class RoomadddetailsEanPage implements OnInit{
               this.storage.set("order", order1);
               this.Roomif.order = this.companyname + "," + this.address + "," + this.tax + "," + this.addressorder;
               this.storage.set("email", this._email);
+              this.booking.CEmail=this._email;
               if (!this.checkchangeemail) {
                 if (this.Roomif.payment == 'true') {
                   this.paymentnotAL();
@@ -521,6 +522,7 @@ export class RoomadddetailsEanPage implements OnInit{
             this.arr1.push(item1);
             this.Roomif.arrcustomer = this.arr1;
             this.storage.set("email", this._email);
+            this.booking.CEmail=this._email;
             if (!this.checkchangeemail) {
               if (this.Roomif.payment == 'true') {
                 this.paymentnotAL();
@@ -706,6 +708,7 @@ export class RoomadddetailsEanPage implements OnInit{
       this.Roomif.arrcustomer = this.arr1;
       this.Roomif.notetotal = this.note;
       this.storage.set("email", this._email);
+      this.booking.CEmail=this._email;
       if (!this.checkchangeemail) {
         if (this.Roomif.payment == 'true') {
           this.paymentnotAL();
