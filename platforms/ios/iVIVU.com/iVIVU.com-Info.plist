@@ -82,7 +82,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>CDVLaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -123,9 +123,9 @@
 		<string>pt-BR</string>
 	</array>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện lịch cho tùy chọn thêm ghi chú vào lịch cá nhân</string>
+	<string/>
 	<key>NSContactsUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện lịch cho tùy chọn thêm ghi chú vào lịch cá nhân</string>
+	<string/>
 	<key>FacebookAppID</key>
 	<string>628025334278848</string>
 	<key>FacebookDisplayName</key>
@@ -146,6 +146,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	
+	
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
