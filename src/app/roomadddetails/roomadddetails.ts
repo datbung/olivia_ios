@@ -100,7 +100,7 @@ export class RoomadddetailsPage implements OnInit {
     this.room = this.Roomif.arrroom;
     this.jsonroom = Roomif.jsonroom;
     this.ischeckpoint = this.Roomif.ischeckpoint;
-    if (this.ischeckpoint == true) {
+    if (this.ischeckpoint == true || this.Roomif.promocode)  {
       if (this.Roomif.priceshow == "0") {
         this.priceshow = this.Roomif.priceshow;
       }
@@ -505,7 +505,7 @@ export class RoomadddetailsPage implements OnInit {
           {
             RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
             CName: se.Roomif.hoten,
-            CEmail: se.booking.CEmail,
+            CEmail: se._email,
             CPhone: se.Roomif.phone,
             timestamp: se.timestamp,
             HotelID: se.booking.HotelId,

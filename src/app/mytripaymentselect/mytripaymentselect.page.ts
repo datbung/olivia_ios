@@ -1,9 +1,8 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { ActivityService } from './../providers/globalfunction';
 import { NavController, LoadingController } from '@ionic/angular';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
 import { C } from '../providers/constants';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import * as request from 'requestretry';
 import * as moment from 'moment';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -26,7 +25,7 @@ export class MytripaymentselectPage implements OnInit {
   auth_token: any = '';  bookingCode = ""; jti; arrbankrmb = []; tokenid; isbtn = false;
   isremember=true;totalPrice: any;
 ;ischeckvisa = false;cus_phone="";isdisable=false;stt
-  constructor(public navCtrl: NavController, private iab: InAppBrowser, public activatedRoute: ActivatedRoute, public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public _mytripservice: MytripService,
+  constructor(public navCtrl: NavController,  public activatedRoute: ActivatedRoute, public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public _mytripservice: MytripService,
     public bizTravelService: BizTravelService,
     private zone: NgZone) { 
     this.Avatar=this.activityService.objPaymentMytrip.trip.avatar;

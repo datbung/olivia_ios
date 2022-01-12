@@ -1,4 +1,4 @@
-import { NavController, Platform } from '@ionic/angular';
+import { NavController, Platform,AlertController } from '@ionic/angular';
 import { SearchHotel, ValueGlobal } from './../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import { flightService } from './../providers/flightService';
@@ -9,6 +9,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { GlobalFunction } from '../providers/globalfunction';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 @Component({
   selector: 'app-flightpaymentdonepayoo',
   templateUrl: './flightpaymentdonepayoo.page.html',
@@ -18,16 +19,24 @@ export class FlightpaymentdonepayooPage implements OnInit {
   event;
   total;_email;code;stt;startdate;enddate;PeriodPaymentDate;qrimg;
   PeriodPaymentHour;BillingCode
-  isDinner: any=false;
+  isDinner: any=false;checkreview
   constructor(private activatedRoute: ActivatedRoute,public storage: Storage,public _flightService:flightService, 
     private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController,
     public valueGlobal: ValueGlobal,
     public gf: GlobalFunction,
     private fb: Facebook,
     private _platform: Platform,
-    private _calendar: Calendar) { 
+    private _calendar: Calendar,public alertCtrl: AlertController, private launchReview: LaunchReview) { 
     this.total=this._flightService.itemFlightCache.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this._email = this._flightService.itemFlightCache.email;
+    this.storage.get('checkreview').then(checkreview => {
+      if (checkreview==0) {
+        this.checkreview=0;
+      }else
+      {
+        this.checkreview=checkreview;
+      }
+    })
   }
 
   ngOnInit() {
@@ -280,6 +289,9 @@ if(itemflight.childs && itemflight.childs.length >0){
     this._flightService.itemFlightCache = {};
     this._flightService.itemTabFlightActive.emit(true);
     this.valueGlobal.backValue = "homeflight";
+    if (this.checkreview==0) {
+      this.showConfirm();
+    }
     this.navCtrl.navigateBack('/tabs/tab1');
   }
   openWebpage() {
@@ -309,6 +321,33 @@ if(itemflight.childs && itemflight.childs.length >0){
       } else {
         // use fallback browser, example InAppBrowser
       }
+    })
+  }
+  public async showConfirm() {
+    this.storage.set("checkreview", 1);
+    let alert = await this.alertCtrl.create({
+      header: 'Bạn thích iVIVU.com?',
+      message: 'Đánh giá ứng dụng trên App Store',
+      mode: "ios",
+      cssClass: 'cls-reivewapp',
+      buttons: [
+        {
+          text: 'Hủy',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Đánh giá',
+          role: 'OK',
+          handler: () => {
+            this.launchReview.launch()
+              .then(() => console.log('Successfully launched store app'));
+          }
+        }
+      ]
+    });
+    alert.present();
+    alert.onDidDismiss().then((data) => {
     })
   }
 }

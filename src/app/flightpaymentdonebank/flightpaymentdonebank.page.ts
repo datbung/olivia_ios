@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { SearchHotel, ValueGlobal } from './../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { NavController, ModalController, ToastController, Platform } from '@ionic/angular';
+import { NavController, ModalController, ToastController, Platform,AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { flightService } from '../providers/flightService';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -13,6 +13,7 @@ import { RoomInfo } from '../providers/book-service';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 @Component({
   selector: 'app-flightpaymentdonebank',
   templateUrl: './flightpaymentdonebank.page.html',
@@ -28,6 +29,7 @@ export class FlightpaymentdonebankPage implements OnInit {
   listDiChung: any = "";
   checkInDisplayDC: string;
   checkOutDisplayDC: string;
+  checkreview: number;
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
     private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -35,7 +37,7 @@ export class FlightpaymentdonebankPage implements OnInit {
     private modalCtrl: ModalController, private toastCtrl: ToastController, public clipboard: Clipboard,private safariViewController: SafariViewController,
     private fb: Facebook,
     private _platform: Platform,
-    private _calendar: Calendar) { 
+    private _calendar: Calendar,public alertCtrl: AlertController, private launchReview: LaunchReview,) { 
       this.accountNumber = this.Roomif.accountNumber;
       this.textbank = this.Roomif.textbank;
       this.bankName = this.Roomif.bankName + " . " + this.Roomif.bankBranch;
@@ -45,6 +47,14 @@ export class FlightpaymentdonebankPage implements OnInit {
       this.bookingCode = this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
       this.bookingFlight = this._flightService.itemFlightCache;
       this.getbank();
+      this.storage.get('checkreview').then(checkreview => {
+        if (checkreview==0) {
+          this.checkreview=0;
+        }else
+        {
+          this.checkreview=checkreview;
+        }
+      })
     }
 
   ngOnInit() {
@@ -528,7 +538,9 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     } catch (error) {
       console.log('fail to set storage object')
     }
-  
+    if (this.checkreview == 0) {
+      this.showConfirm();
+    }
     this.navCtrl.navigateBack('/tabs/tab1');
     
   }
@@ -561,5 +573,31 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     }
     return false;
   }
-
+  public async showConfirm() {
+    this.storage.set("checkreview", 1);
+    let alert = await this.alertCtrl.create({
+      header: 'Bạn thích iVIVU.com?',
+      message: 'Đánh giá ứng dụng trên App Store',
+      mode: "ios",
+      cssClass: 'cls-reivewapp',
+      buttons: [
+        {
+          text: 'Hủy',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Đánh giá',
+          role: 'OK',
+          handler: () => {
+            this.launchReview.launch()
+              .then(() => console.log('Successfully launched store app'));
+          }
+        }
+      ]
+    });
+    alert.present();
+    alert.onDidDismiss().then((data) => {
+    })
+  }
 }

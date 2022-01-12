@@ -4,8 +4,7 @@ import {  NavController, ModalController, LoadingController,Platform, ToastContr
 import { Booking, RoomInfo, SearchHotel,Bookcombo } from '../providers/book-service';
 import { AuthService } from '../providers/auth-service';
 import * as request from 'requestretry';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { C } from '../providers/constants';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -40,7 +39,7 @@ export class RoompaymentselectPage implements OnInit{
   isremember=true;isdisable=false;isshowRemember=false;
   totalPrice: any;
   constructor(public platform: Platform,public searchhotel:SearchHotel,public bookcombo:Bookcombo,public navCtrl: NavController,
-    public storage: Storage, public Roomif: RoomInfo, private iab: InAppBrowser, public booking1: Booking, 
+    public storage: Storage, public Roomif: RoomInfo,  public booking1: Booking, 
     public booking: Booking, public authService: AuthService,public modalCtrl: ModalController, public loadingCtrl: LoadingController,public alertCtrl: AlertController,
     public gf: GlobalFunction, public zone: NgZone,private router: Router,private safariViewController: SafariViewController,private toastCtrl: ToastController,
     public bizTravelService: BizTravelService) {
@@ -270,7 +269,6 @@ export class RoompaymentselectPage implements OnInit{
                 
                
               }
-              // se.Roomif.promocode ="ttkkm45";
               if (se.Roomif.promocode && se.bookingCode) {
                 // alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
                 se.Roomif.bookingCode=se.bookingCode
@@ -679,7 +677,6 @@ export class RoompaymentselectPage implements OnInit{
             
            
           }
-          se.Roomif.promocode ="ttkkm45";
           if (se.Roomif.promocode && se.bookingCode) {
             // alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
             se.showInfo("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!")

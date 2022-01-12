@@ -5,7 +5,7 @@ import {  NavController ,LoadingController,Platform, ToastController} from '@ion
 import { Booking, RoomInfo } from '../providers/book-service';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction, ActivityService } from '../providers/globalfunction';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { C } from './../providers/constants';
 @Component({
@@ -34,7 +34,7 @@ export class FoodpaymentbankPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    public iab: InAppBrowser,
+    
     public clipboard: Clipboard,public foodService:foodService) {
     this.ischeckvietin = true;
     this.ischeckacb = true;

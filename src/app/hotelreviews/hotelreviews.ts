@@ -38,7 +38,7 @@ export class HotelReviewsPage implements OnInit{
     private storage: Storage,
     public _foodservice :foodService) {
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
-    this.Name = this.activatedRoute.snapshot.paramMap.get('name');
+    // this.Name = this.activatedRoute.snapshot.paramMap.get('name');
     //Load all image reviews
     setTimeout(()=>{
       this.loaddatadone = true;

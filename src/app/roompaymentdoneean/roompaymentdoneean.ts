@@ -9,8 +9,7 @@ import { C } from '../providers/constants';
 import jwt_decode from 'jwt-decode';
 import { LaunchReview } from '@ionic-native/launch-review/ngx';
 import { GlobalFunction, ActivityService } from '../providers/globalfunction';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
@@ -47,7 +46,7 @@ export class RoompaymentdoneeanPage implements OnInit {
     public zone: NgZone, public booking: Booking, public authService: AuthService, public storage: Storage, public alertCtrl: AlertController, private launchReview: LaunchReview,
     public gf: GlobalFunction,
     public activityService: ActivityService,
-    public iab: InAppBrowser,
+    
     public clipboard: Clipboard,
     private toastCtrl: ToastController,
     public searchhotel: SearchHotel,

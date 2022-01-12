@@ -1,5 +1,5 @@
 import { Component,OnInit, NgZone } from '@angular/core';
-import { NavController,Platform } from '@ionic/angular';
+import { NavController,Platform,LoadingController } from '@ionic/angular';
 import { C } from './../providers/constants';
 import { GlobalFunction } from './../providers/globalfunction';
 import { ActivatedRoute } from '@angular/router';
@@ -22,10 +22,11 @@ export class PolicyPage implements OnInit{
   cin; cout;
   HotelPolicies;
   HotelID;
+  loader: any;
   constructor(public platform: Platform,public navCtrl: NavController, public gf: GlobalFunction,private activatedRoute:ActivatedRoute,public zone: NgZone,
-    private storage: Storage) {
+    private storage: Storage,public loadingCtrl: LoadingController) {
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
-    this.Name = this.activatedRoute.snapshot.paramMap.get('name');
+    // this.Name = this.activatedRoute.snapshot.paramMap.get('name');
     this.storage.get('hoteldetail_'+this.HotelID).then((data) =>{
       if(data){
         let jsondata = data;
@@ -77,6 +78,7 @@ export class PolicyPage implements OnInit{
     //   }
     //   );
     var se=this;
+    se.presentLoading();
     let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.HotelID;
     var options = {
       method: 'POST',
@@ -84,6 +86,7 @@ export class PolicyPage implements OnInit{
       timeout: 180000, maxAttempts: 5, retryDelay: 2000,
     };
     request(options, function (error, response, body) {
+      se.loader.dismiss();
       if(response.statusCode != 200){
         var objError ={
             page: "policy",
@@ -126,5 +129,9 @@ export class PolicyPage implements OnInit{
       str = str.toString();
     return str.replace(/<[^>]*>/g, '');
   }
-
+  async presentLoading() {
+    this.loader = await this.loadingCtrl.create({
+   });
+   this.loader.present();
+ }
 }

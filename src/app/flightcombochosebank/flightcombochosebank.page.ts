@@ -4,8 +4,7 @@ import { NavController, LoadingController, ToastController, Platform } from '@io
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { GlobalFunction } from '../providers/globalfunction';
 import { Bookcombo } from './../providers/book-service';
 import * as moment from 'moment';
@@ -23,7 +22,7 @@ export class FlightcombochosebankPage implements OnInit {
   auth_token: any = ''; arrbankrmb = []; totalPrice = 0; bookingCode; isckb = false; TokenId; bankid = ""; jti; intervalID: NodeJS.Timeout;
   ischeckTransaction = false; listfly; _inAppBrowser: any;
   isremember=true;isdisable=false;
-  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, private iab: InAppBrowser,
+  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, 
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction, public bookCombo: Bookcombo,private safariViewController: SafariViewController) {
     this.searchhotel.rootPage = "flightcombochosebank";

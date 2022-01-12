@@ -577,7 +577,7 @@ export class FlightComboAddDetailsPage implements OnInit {
         }
         let departdate = moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD');
         let departdatestring = moment(this.searchhotel.CheckInDate).format('DD-MM-YYYY');
-        if (moment(departdate).diff(moment(this.arrchild[i].BirthDay), 'days') < 15) {
+        if (moment(departdate).diff(moment(this.arrchild[i].BirthDay), 'days') < 14) {
           if (this.arrchild[i].PassengerType == 1) {
             this.arrchild[i].errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành " + departdatestring;
             this.arrchild[i].errorBirthday = true;
@@ -586,7 +586,7 @@ export class FlightComboAddDetailsPage implements OnInit {
             break;
           }
           if (this.arrchild[i].PassengerType == 2) {
-            this.arrchild[i].errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ sơ sinh lớn hơn 15 ngày tuổi so với ngày khởi hành " + departdatestring;
+            this.arrchild[i].errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ sơ sinh lớn hơn 14 ngày tuổi so với ngày khởi hành " + departdatestring;
             this.arrchild[i].errorBirthday = true;
             this.arrchild[i].errorBirthday1 = true;
             co = 4;
@@ -1899,14 +1899,14 @@ async openLotusPointSave(itemAdult){
                 inputcheck.errorTextBirthday = "";
               }
               if (inputcheck.BirthDay) {
-                let departdate = moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD');
-                let departdatestring = moment(this.searchhotel.CheckInDate).format('DD-MM-YYYY');
-                if (moment(departdate).diff(moment(inputcheck.BirthDay), 'days') < 15) {
+                let departdate = moment(this.searchhotel.CheckOutDate).format('YYYY-MM-DD');
+                let departdatestring = moment(this.searchhotel.CheckOutDate).format('DD-MM-YYYY');
+                if (moment(departdate).diff(moment(inputcheck.BirthDay).format('YYYY-MM-DD'), 'days') < 14) {
                   if (inputcheck.PassengerType == 1) {
-                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành " + departdatestring;
+                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em lớn hơn hoặc bằng 2 tuổi so với ngày về " + departdatestring;
                   }
                   else if (inputcheck.PassengerType == 2){
-                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ sơ sinh lớn hơn 15 ngày tuổi so với ngày khởi hành " + departdatestring;
+                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ sơ sinh lớn hơn 14 ngày tuổi so với ngày về " + departdatestring;
                   }
                   inputcheck.errorBirthday = true;
                   inputcheck.errorBirthday1 = true;
@@ -1920,10 +1920,10 @@ async openLotusPointSave(itemAdult){
       
                 //Check độ tuổi trẻ em <12
                 if (inputcheck.PassengerType == 1) {
-                  if (moment(departdate).diff(moment(inputcheck.BirthDay), 'months') >= 144) {
+                  if (moment(departdate).diff(moment(inputcheck.BirthDay).format('YYYY-MM-DD'), 'months') >= 144) {
                     inputcheck.errorBirthday = true;
                     inputcheck.errorBirthday1 = true;
-                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em không được lớn hơn 12 tuổi so với ngày khởi hành " + departdatestring;
+                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em không được lớn hơn 12 tuổi so với ngày về " + departdatestring;
                     return;
                   }
                   else {
@@ -1931,10 +1931,10 @@ async openLotusPointSave(itemAdult){
                     inputcheck.errorBirthday1 = false;
                     inputcheck.errorTextBirthday = "";
                   }
-                  if (moment(departdate).diff(moment(inputcheck.BirthDay), 'months') <24) {
+                  if (moment(departdate).diff(moment(inputcheck.BirthDay).format('YYYY-MM-DD'), 'months') <24) {
                     inputcheck.errorBirthday = true;
                     inputcheck.errorBirthday1 = true;
-                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em không được nhỏ hơn 2 tuổi so với ngày khởi hành " + departdatestring;
+                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ em không được nhỏ hơn 2 tuổi so với ngày về " + departdatestring;
                     return;
                   }
                   else {
@@ -1946,10 +1946,10 @@ async openLotusPointSave(itemAdult){
       
                 if (inputcheck.PassengerType == 2) {
                   //Check độ tuổi trẻ sơ sinh <2
-                  if (moment(departdate).diff(moment(inputcheck.BirthDay), 'months') >= 24) {
+                  if (moment(departdate).diff(moment(inputcheck.BirthDay).format('YYYY-MM-DD'), 'months') >= 24) {
                     inputcheck.errorBirthday = true;
                     inputcheck.errorBirthday1 = true;
-                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ sơ sinh không được lớn hơn 2 tuổi so với ngày khởi hành " + departdatestring;
+                    inputcheck.errorTextBirthday = "Vui lòng nhập ngày sinh Trẻ sơ sinh không được lớn hơn 2 tuổi so với ngày về " + departdatestring;
                     return;
                   }
                   else {

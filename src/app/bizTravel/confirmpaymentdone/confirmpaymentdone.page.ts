@@ -2,7 +2,7 @@ import { Bookcombo, RoomInfo, SearchHotel, ValueGlobal } from './../../providers
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from 'moment';
-import { NavController, ModalController, Platform } from '@ionic/angular';
+import { NavController, ModalController, Platform,AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { flightService } from '../../providers/flightService';
 import { ActivityService, GlobalFunction } from '../../providers/globalfunction';
@@ -12,6 +12,7 @@ import { CustomAnimations } from '../../providers/CustomAnimations';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import { BizTravelService } from 'src/app/providers/bizTravelService';
+import { LaunchReview } from '@ionic-native/launch-review/ngx';
 @Component({
   selector: 'app-confirmpaymentdone',
   templateUrl: './confirmpaymentdone.page.html',
@@ -27,6 +28,7 @@ export class ConfirmPaymentDonePage implements OnInit {
   checkInDisplayDC: string;
   checkOutDisplayDC: string;
   totaldisplay: any;
+  checkreview: number;
   constructor(private activatedRoute: ActivatedRoute,public _flightService: flightService,
     private navCtrl:NavController, public searchhotel: SearchHotel,public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -38,7 +40,7 @@ export class ConfirmPaymentDonePage implements OnInit {
     public bizTravelService: BizTravelService,
     public bookCombo: Bookcombo,
     public roomInfo: RoomInfo,
-    public activityService: ActivityService) { 
+    public activityService: ActivityService,public alertCtrl: AlertController, private launchReview: LaunchReview) { 
       if(this.bizTravelService.paymentType == 1 && this._flightService.itemFlightCache && this._flightService.itemFlightCache.pnr){
           this.total = this._flightService.itemFlightCache.totalPrice;
           this._email = this._flightService.itemFlightCache.email;
@@ -73,6 +75,14 @@ export class ConfirmPaymentDonePage implements OnInit {
         this.totaldisplay= this.activityService.objPaymentMytrip.trip.priceShow;
         this.bookingCode = this.bizTravelService.mytripPaymentBookingCode ;
       }
+      this.storage.get('checkreview').then(checkreview => {
+        if (checkreview==0) {
+          this.checkreview=0;
+        }else
+        {
+          this.checkreview=checkreview;
+        }
+      })
     }
 
  
@@ -88,6 +98,9 @@ export class ConfirmPaymentDonePage implements OnInit {
 
   next()
   {
+    if (this.checkreview==0) {
+      this.showConfirm();
+    }
     this.gf.hideLoading();
     this.clearItemCache();
     this.navCtrl.navigateBack('/tabs/tab1');
@@ -95,6 +108,9 @@ export class ConfirmPaymentDonePage implements OnInit {
 
   async showBooking(){
     var se = this;
+     if (this.checkreview==0) {
+      this.showConfirm();
+    }
     se.clearItemCache();
     se.navCtrl.navigateBack('/tabs/tab1');
    
@@ -118,5 +134,31 @@ export class ConfirmPaymentDonePage implements OnInit {
         this._flightService.itemFlightCache.isnewmodelreturnseat = false;
   }
 
-  
+  public async showConfirm() {
+    this.storage.set("checkreview", 1);
+    let alert = await this.alertCtrl.create({
+      header: 'Bạn thích iVIVU.com?',
+      message: 'Đánh giá ứng dụng trên App Store',
+      mode: "ios",
+      cssClass: 'cls-reivewapp',
+      buttons: [
+        {
+          text: 'Hủy',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Đánh giá',
+          role: 'OK',
+          handler: () => {
+            this.launchReview.launch()
+              .then(() => console.log('Successfully launched store app'));
+          }
+        }
+      ]
+    });
+    alert.present();
+    alert.onDidDismiss().then((data) => {
+    })
+  }
 }

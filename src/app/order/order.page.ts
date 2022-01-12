@@ -8,8 +8,7 @@ import { Storage } from '@ionic/storage';
 import { C } from './../providers/constants';
 import { ValueGlobal, SearchHotel } from '../providers/book-service';
 import { GlobalFunction, ActivityService } from './../providers/globalfunction';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
+
 import { NetworkProvider } from '../network-provider.service';
 import { Network } from '@ionic-native/network/ngx';
 import { UserReviewsPage } from '../userreviews/userreviews';
@@ -133,7 +132,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
   noLoginObj: any;
   childList: any;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
-        public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, public iab: InAppBrowser,
+        public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
         public network: Network,
         public networkProvider: NetworkProvider,
@@ -3150,17 +3149,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
         return res;
       }
     
-      openWebpage(url: string) {
-        const options: InAppBrowserOptions = {
-          zoom: 'no',
-          location: 'yes',
-          toolbar: 'yes',
-          hideurlbar: 'yes',
-          closebuttoncaption: 'Đóng'
-        };
-        const browser = this.iab.create(url, '_self', options);
-        browser.show();
-      }
+      
     
       loadUserReviews() {
         var se = this;

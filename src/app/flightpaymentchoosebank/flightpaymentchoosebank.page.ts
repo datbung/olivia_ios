@@ -6,8 +6,7 @@ import { NavController, LoadingController, ToastController, Platform } from '@io
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { GlobalFunction } from '../providers/globalfunction';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from '../providers/flightService';
@@ -30,7 +29,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
   intervalID: any;
   allowCheckHoldTicket: boolean = true;
   isremember=true;isdisable=false
-  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, private iab: InAppBrowser,
+  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, 
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,private safariViewController: SafariViewController,
     public loadingCtrl: LoadingController,public _flightService : flightService, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
     private backgroundmode: BackgroundMode) {

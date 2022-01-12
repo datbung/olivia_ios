@@ -2493,6 +2493,7 @@ export class FlightComboReviewsPage implements OnInit{
             }
             else
             {
+              se.ischeckbtnpromo = true;
               se.Pricepointshow=0;
             }
             se.msg=json.msg;

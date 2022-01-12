@@ -8,8 +8,7 @@ import * as $ from 'jquery';
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({
@@ -34,7 +33,7 @@ export class FoodinstallmentPage implements OnInit {
   auth_token: any;
   jsonroom: any;
   constructor(private navCtrl:NavController,private foodService:foodService
-    ,private iab: InAppBrowser,public gf: GlobalFunction, public loadingCtrl: LoadingController
+    ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel,private toastCtrl: ToastController,
     private zone: NgZone,public activityService: ActivityService,public Roomif:RoomInfo,private safariViewController: SafariViewController) { 
     this.priceshow=this.foodService.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");

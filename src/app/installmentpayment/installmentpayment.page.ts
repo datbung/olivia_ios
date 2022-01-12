@@ -6,8 +6,7 @@ import * as $ from 'jquery';
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { trigger } from '@angular/animations';
 
@@ -54,7 +53,7 @@ export class InstallmentpaymentPage implements OnInit {
     public activityService: ActivityService,
     private toastCtrl: ToastController,
     private storage: Storage,
-    private iab: InAppBrowser,
+    
     private loadingCtrl: LoadingController,
     private zone: NgZone,
     private safariViewController: SafariViewController) {
