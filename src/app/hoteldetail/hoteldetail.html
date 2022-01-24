@@ -407,6 +407,11 @@
                  class="button-combo">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(1,null,0)">Đặt Combo</button>
               </ion-row>
+
+              <ion-row
+                *ngIf="!loadcomplete" class="button-combo">
+                <ion-skeleton-text animated style="width: 100%;height: 48px;border-radius: 4px;margin:8px 0px 16px 0px"></ion-skeleton-text> 
+              </ion-row>
             </div>
             <!-- Combo khác -->
             <ion-row *ngIf="nm && loadcomplete&&(!ischeckBOD && checkBODdone)">

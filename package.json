@@ -45,7 +45,7 @@
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/crop": "^5.10.0",
     "@ionic-native/deeplinks": "^5.26.0",
-    "@ionic-native/facebook": "^5.31.1",
+    "@ionic-native/facebook": "^5.36.0",
     "@ionic-native/fcm": "^5.9.0",
     "@ionic-native/file": "^5.10.0",
     "@ionic-native/file-opener": "^5.36.0",

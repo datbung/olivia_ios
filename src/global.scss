@@ -118,17 +118,21 @@ label > p{
 
 ///custom lịch bay giá rẻ
 .flight-calendar-custom ion-calendar-modal ion-toolbar {
-  color: #222222;
-  --ion-color-primary: #fff;
+  color: #ffffff;
+  --ion-color-primary: #26bed6;
 }
 
 .flight-calendar-custom ion-calendar-modal ion-toolbar ion-title{
   width: 100%;
   font-weight: 600;
+  font-size: 18px !important;
 }
-
+ion-toggle {
+  --background: #cdcdcd;
+  --background-checked: #26bed6;
+}
 .flight-calendar-custom ion-toggle {
-  --background: #bdbdbd;
+  --background: #cdcdcd;
   --background-checked: #26bed6;
   --handle-background: #fff;
   --handle-background-checked: #fff;
@@ -140,20 +144,22 @@ label > p{
 }
 
 .flight-calendar-custom .week-title{
-  color: #222222 !important;
+  color: #ffffff !important;
+  height: 38px;
 }
 
 .flight-calendar-custom .week-toolbar .week-title{
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: 600;
   letter-spacing: 1.2px;
-  color: #828282 !important;
+  color: #ffffff !important;
   padding-left: 8px !important;
   padding: 12px 0 !important;
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
+  height: 38px !important;
 }
 .flight-calendar-custom .week-toolbar{
-  height: 42px;
+  height: 38px;
 }
 
 .flight-calendar-custom .month-box .month-title{
@@ -164,13 +170,44 @@ label > p{
   line-height: normal;
   letter-spacing: 1.4px;
   color: #4f4f4f;
-  text-align: left !important;
+  text-align: center !important;
   padding-left: 16px;
+  padding-bottom: 16px;
+}
+.flight-calendar-custom .header-ios ion-toolbar:last-child {
+  border: none !important;
+  --border-width: 0;
+}
+.flight-calendar-custom ion-header {
+  padding-top: 0 !important;
+}
+@media (min-width: 350px) and (max-width: 375px) {
+  .flight-calendar-custom ion-header ion-toolbar:first-child {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+    height: 60px !important;
+  }
 }
 
+@media (min-width: 376px) and (max-width: 440px) {
+  .flight-calendar-custom ion-header ion-toolbar:first-child {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+    height: 78px !important;
+  }
+}
 
 .flight-calendar-custom 
   {
+    .ico-arrow {
+      color: #fff;
+      width: 24px;
+      height: 100%;
+    }
+    .div-show-calendar-cincout{
+      background-color: #26bed6;
+      justify-content: space-around;
+    }
     .d-flex{
       display: flex;
     }
@@ -181,7 +218,7 @@ label > p{
       position: absolute;
       width: 48px;
       height: 48px;
-      right: 8px;
+      padding-top: 4px;
     }
 
     .bg-f2{
@@ -194,8 +231,7 @@ label > p{
       height: 40px;
     }
     .p-16{
-      padding: 16px;
-      padding-bottom: 0;
+      padding: 0 16px;
     }
     .p-l-8 {
       padding-left: 8px;
@@ -242,13 +278,8 @@ label > p{
     }
 
     .text-date-normal{
-      font-size: 12px;
-      font-weight: 100;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.67;
-      letter-spacing: -0.34px;
-      color: #4f4f4f;
+      font-size: 13px;
+      color: #ffffff;
     }
 
     .text-flight-datetime{
@@ -258,7 +289,7 @@ label > p{
       font-style: normal;
       line-height: normal;
       letter-spacing: -0.4px;
-      color: #222222;
+      color: #ffffff;
       margin-top: 4px;
     }
 
@@ -280,7 +311,7 @@ label > p{
       font-style: normal;
       line-height: 1.67;
       letter-spacing: -0.69px;
-      color: #828282 !important;
+      color: #ffffff !important;
       position: absolute;
       bottom: -22px !important;
       margin-left: 3px;
@@ -288,6 +319,10 @@ label > p{
 
     .min-price{
       color: #a0c245 !important;
+    }
+
+    .normal-price{
+      color: #828282 !important;
     }
 
     .price-calendar-disabled{
@@ -307,13 +342,47 @@ label > p{
     .div-month-text-small{
       margin-left: 26px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      overflow: scroll;
+
+      .div-border-small {
+        padding: 6px 12px;
+        padding-top: 4px;
+        border: solid 0.5px #cccccc;
+        border-radius: 4px;
+        margin-right: 12px;
+      }
       
       small{
         visibility: visible;
         bottom: 0 !important;
         margin: 0 !important;
+        white-space: nowrap;
       }
+      .text-red {
+        color: #e52822;
+      }
+    }
+
+    .div-cout-oneway{
+          border: solid 0.5px #fff;
+          padding: 9px 12px;
+          height: 34px;
+          width: 76px;
+          border-radius: 4px;
+          text-align: center;
+          margin-top: 12px;
+    }
+
+    .img-expand-down, .img-expand-up{
+      padding-left: 24px;
+    }
+    .visible-span {
+      height: auto !important;
+      transition: 0.5s ease-out;
+    }
+    .img-disabled{
+      display: none;
     }
 
     .calendar-visible{
@@ -325,6 +394,24 @@ label > p{
 
     .m-l-5{
       margin-left: 5px !important;
+    }
+
+    .f-36 {
+      font-size: 36px;
+      font-weight: 500;
+      color: #ffffff;
+      padding-right: 3px;
+    }
+
+    .v-align-center {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      height: 41px;
+    }
+
+    .p-top-3 {
+      padding-top: 3px;
     }
   }
   /////////////////////
@@ -491,7 +578,7 @@ ion-toolbar{
         //position: absolute;
         text-align: center;
         width: 100%;
-        font-size: 20px !important;
+        font-size: 18px !important;
         height: 48px;
     }
     ion-calendar-modal .sc-ion-buttons-ios-s ion-button{

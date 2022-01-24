@@ -987,6 +987,7 @@ export class HotelListPage implements OnInit{
           // do your on enter page stuff here
       this.hasfilteragain =this.activeRoute.snapshot.paramMap.get('filteragain') == "true" ? true : false;
       if(this.hasfilteragain){
+        this.ishide = false;
           this.nodata = false;
           this.json1 = [];
           this.dataList = [];

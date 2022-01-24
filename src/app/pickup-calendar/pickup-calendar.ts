@@ -23,6 +23,7 @@ export class PickupCalendarPage implements OnInit {
         pickMode: 'range',
         disableWeeks: [],
         weekdays : ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+        weekStart: 1,
         daysConfig: [{date: new Date(),cssClass: 'my-day'}]
     };
     weekdays: CalendarComponentOptions = {weekdays : ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']};

@@ -155,6 +155,7 @@ export class LoginPage implements OnInit{
                 se.fb.api('me?fields=id,name,email,first_name,gender,picture.width(720).height(720).as(picture_large)', permissions).then(profile => {
                   se.fb.getLoginStatus().then(response => {
                     var test = response.authResponse.accessToken;
+                    se.storage.set('fbaccesstoken',test);
                     se.userData = { accessToken: test, id: profile['id'], email: profile['email'], UserName: profile['first_name'], picture: profile['picture_large']['data']['url'], username: profile['name'], phone: profile['phone'], gender: profile['gender'] }
                     if (se.userData.email) {
                       se.postDatafb();

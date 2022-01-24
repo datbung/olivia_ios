@@ -15,6 +15,7 @@ import {FlightpricedetailPage} from './../flightpricedetail/flightpricedetail.pa
 import { FlightsearchairportPage } from '../flightsearchairport/flightsearchairport.page';
 import { FlightselectpaxPage } from '../flightselectpax/flightselectpax.page';
 import { FlightselecttimepriorityPage } from '../flightselecttimepriority/flightselecttimepriority.page';
+import { CustomAnimations } from '../providers/CustomAnimations';
 
 @Component({
   selector: 'app-flightchangeinfo',
@@ -23,7 +24,7 @@ import { FlightselecttimepriorityPage } from '../flightselecttimepriority/flight
 })
 
 export class FlightchangeinfoPage implements OnInit {
-    flighttype: string;
+    flighttype: string='twoway';
     departCode: any;
     departCity: any;
     departAirport: any;
@@ -71,6 +72,11 @@ export class FlightchangeinfoPage implements OnInit {
                 if(this._flightService.itemFlightCache){
                   let data = this._flightService.itemFlightCache;
                   this.flighttype = data.roundTrip ? 'twoway' : 'oneway';
+                  if(!data.roundTrip){
+                    $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
+                  }else{
+                    $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
+                  }
                   this.departCode = data.departCode;
                   this.departCity = data.departCity;
                   this.departAirport = data.departAirport;
@@ -86,8 +92,8 @@ export class FlightchangeinfoPage implements OnInit {
                   this.infant = data.infant ? data.infant : 0;
                   this.arrchild = data.arrchild;
   
-                  this.cindisplaymonth = data.checkInDisplayMonth ? data.checkInDisplayMonth : moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM") ;
-                  this.coutdisplaymonth = data.checkOutDisplayMonth ? data.checkOutDisplayMonth : moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+                  this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+                  this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
   
                   this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
                   this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
@@ -146,9 +152,9 @@ export class FlightchangeinfoPage implements OnInit {
                 child: se.child ? se.child : 0,
                 infant: se.infant ? se.infant : 0,
                 title: "Đi " + se.departCity +" - " + se.returnCity,
-                subtitle : se.cinthu + ", " + moment(se.cin).format("DD-M-YYYY") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách",
+                subtitle : se.cinthu + ", " +moment(se.cin).format("DD") + " thg " +moment(se.cin).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
                 titleReturn: "Về " + se.returnCity +" - " + se.departCity,
-                subtitleReturn : se.coutthu + ", " + moment(se.cout).format("DD-M-YYYY") + " · " + (se.adult + se.child+ (se.infant ? se.infant : 0)) + " khách",
+                subtitleReturn : se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
                 // itemSameCity: se.itemSameCity,
                 // itemDepartSameCity: se.itemDepartSameCity,
                 // itemReturnSameCity: se.itemReturnSameCity,
@@ -284,8 +290,10 @@ export class FlightchangeinfoPage implements OnInit {
           reloadInfoOneway(isoneway){
             if(isoneway){
               this.cout = this.cin;
+              $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
             }else{
               this.cout = moment(this.cin).add(2,'days');
+              $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
             }
   
             this._flightService.objSearch.departDate = this.cin;
@@ -294,8 +302,8 @@ export class FlightchangeinfoPage implements OnInit {
             this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
             this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
   
-            this.cindisplaymonth = moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-            this.coutdisplaymonth = moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+            this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+            this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
             this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
             this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
 
@@ -495,10 +503,10 @@ export class FlightchangeinfoPage implements OnInit {
           objTextMonthStartDate &&
           objTextMonthStartDate.length > 0
         ) {
-          monthstartdate = objTextMonthStartDate.trim().split(",")[0];
-          yearstartdate = objTextMonthStartDate.trim().split(",")[1];
-          monthenddate = objTextMonthEndDate.trim().split(",")[0];
-          yearenddate = objTextMonthEndDate.trim().split(",")[1];
+          monthstartdate = objTextMonthStartDate.trim().split(" ")[0];
+          yearstartdate = objTextMonthStartDate.trim().split(" ")[1];
+          monthenddate = objTextMonthEndDate.trim().split(" ")[0];
+          yearenddate = objTextMonthEndDate.trim().split(" ")[1];
           var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           let diffday =moment(todate).diff(fromdate, "days");
@@ -524,8 +532,8 @@ export class FlightchangeinfoPage implements OnInit {
               se.datecout = new Date(se.cout);
               se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
               se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-              se.cindisplaymonth = moment(se.datecin).format("DD") + " thg " + moment(se.cin).format("MM");
-              se.coutdisplaymonth = moment(se.datecout).format("DD") + " thg " + moment(se.cout).format("MM");
+              se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+              se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
 
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
               se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
@@ -559,7 +567,7 @@ export class FlightchangeinfoPage implements OnInit {
         let fromdate = new Date(moment(this.cin).format('YYYY-MM-DD'));
         let todate = new Date(moment(this.cout).format('YYYY-MM-DD'));
 
-        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode;
+        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
         this.storage.get(key).then((data)=>{
           if(!data){
             this.loadCalendarPrice();
@@ -568,12 +576,23 @@ export class FlightchangeinfoPage implements OnInit {
         
         let countday = moment(todate).diff(moment(fromdate),'days');
         this.countdaydisplay = (this.flighttype == "twoway") ? (countday +1) : 1;
+        let fd = new Date(moment(this.cout).year(), moment(this.cout).month() +1, 1);
+        let ed = new Date(moment(moment(fd).subtract(1, 'days')).format('YYYY-MM-DD'));
+        let monthed = todate.getMonth();
+        let cindayofweek = this.gf.getDayOfWeek(this.cin).daynameshort;
+        let cindaydisplay = moment(this.cin).format('DD');
+        let cinmonthdisplay = 'Thg ' + moment(this.cin).format('M');
 
+        let coutdayofweek = this.gf.getDayOfWeek(this.cout).daynameshort;
+        let coutdaydisplay = moment(this.cout).format('DD');
+        let coutmonthdisplay = 'Thg ' + moment(this.cout).format('M');
+        
+        let tetConfig = ['29 Tết','30 Tết','Mùng 1','Mùng 2','Mùng 3','Mùng 4','Mùng 5','Mùng 6','Mùng 7','Mùng 8','Mùng 9','Mùng 10',];
         let _daysConfig: DayConfig[] = [];
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
+            subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : this.valueGlobal.listlunar[j].description,
             cssClass: 'lunarcalendar'
         })
         }
@@ -582,12 +601,13 @@ export class FlightchangeinfoPage implements OnInit {
           options  = {
             pickMode: "range",
             title: "Chọn ngày",
-            monthFormat: " M, YYYY",
+            monthFormat: " M YYYY",
             weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+            weekStart: 1,
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: fromdate,
+            defaultScrollTo: ed,
             defaultDateRange: { from: fromdate, to: todate },
             daysConfig: _daysConfig
             };
@@ -595,12 +615,13 @@ export class FlightchangeinfoPage implements OnInit {
           options  = {
             pickMode: "single",
             title: "Chọn ngày",
-            monthFormat: " M, YYYY",
+            monthFormat: " M YYYY",
             weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+            weekStart: 1,
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: fromdate,
+            defaultScrollTo: ed,
             defaultDate: fromdate,
             daysConfig: _daysConfig
             };
@@ -611,13 +632,14 @@ export class FlightchangeinfoPage implements OnInit {
         component: CalendarModal,
         cssClass: 'flight-calendar-custom',
         animated: true,
-        componentProps: { options }
+        componentProps: { options },
+        enterAnimation: CustomAnimations.iosCustomCalendarEnterAnimation,
         });
-
+       
         this.myCalendar.present().then(() => {
           this.allowclickcalendar = true;
         //$(".days-btn").click(e => this.clickedElement(e));
-        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode;
+        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
           this.storage.get(key).then((data)=>{
             if(data){
               if(this.flighttype == "twoway"){//2 chiều
@@ -630,20 +652,20 @@ export class FlightchangeinfoPage implements OnInit {
           this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
           setTimeout(()=>{
               //custom style lịch giá
-              $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=end]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_close.svg' ></div>");
-              if(this.countdaydisplay >0){
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
-              }else{
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'><img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
-              }
+              $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_close_calendar.svg' ></div>");
+              // if(this.countdaydisplay >0){
+              //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
+              // }else{
+              //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'><img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
+              // }
               if(this.flighttype == "twoway"){
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div class='div-width-100'> <div class='text-date-normal'>Ngày đi</div><div class='text-flight-datetime'>${ this.checkInDisplayMonth } </div></div> <div class='div-width-100'><div class='text-date-normal p-l-8'>Ngày về</div> <div class='text-flight-datetime p-l-8 border-left' *ngIf='flighttype=='twoway''>${ this.checkOutDisplayMonth } </div></div></div>`);
+                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <img class='img-arrow' src='./assets/ic_flight/icon_arrow_calendar.svg'> </div> <div ><div class='text-date-normal'>Bay về</div> <div class='d-flex' *ngIf='flighttype=='twoway'> <div class='f-36'>${coutdaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${coutdayofweek}</div> <div>${coutmonthdisplay}</div> </div> </div> </div></div>`);
               }else{
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div class='div-width-100'> <div class='text-date-normal'>Ngày đi</div><div class='text-flight-datetime'>${ this.checkInDisplayMonth } </div></div> </div>`);
+                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <ion-icon class='ico-arrow' name="remove"></ion-icon> </div> <div class='text-date-normal div-cout-oneway'>Bay về</div> </div>`);
               }
               //add div show giá thấp nhất
               if(this.showlowestprice){
-                $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice" checked></ion-toggle></div> </div>`);
+                $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' (ionChange)="showLowestPrice($event)" [(ngModel)]="showlowestprice" checked></ion-toggle></div> </div>`);
               }else{
                 $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice"></ion-toggle></div> </div>`);
               }
@@ -684,10 +706,20 @@ export class FlightchangeinfoPage implements OnInit {
                   const em = divmonth[index];
                     let divsmall = $('#'+em.id+' small');
                     if(divsmall && divsmall.length >0){
-                      $('#'+em.id).append("<div class='div-month-text-small'></div>")
+                      $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                      // if(divsmall.length > 3) {
+                      //   $('#'+em.id).append("<div class='div-button-expand-"+em.id+"'><img class='img-expand-down' src='./assets/imgs/ic_down.svg'> <img class='img-expand-up img-disabled' src='./assets/imgs/ic_up.svg'></div> </div>");
+                      //   if($('.div-button-expand-'+em.id)){
+                      //     $('.div-button-expand-'+em.id).click(e => this.handleExpandDiv(em.id));
+                      //   }
+                      // }
                       for (let i = 0; i < divsmall.length; i++) {
                         const es = divsmall[i];
-                        $('#'+em.id+' .div-month-text-small').append("<div class='sm-"+em.id+'-'+i+"'></div>");
+                        let arres = es.innerHTML.split(':');
+                        $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                        if(arres && arres.length >1){
+                          es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>"+"<span>"+arres[1]+"</span>";
+                        }
                         $('.sm-'+em.id+'-'+i).append(es);
                       }
                     }
@@ -709,14 +741,49 @@ export class FlightchangeinfoPage implements OnInit {
             se.datecout = new Date(se.cout);
             se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
             se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-            se.cindisplaymonth = moment(se.datecin).format("DD") + " thg " + moment(se.cin).format("MM");
-            se.coutdisplaymonth = moment(se.datecout).format("DD") + " thg " + moment(se.cout).format("MM");
+            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
             se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
             se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
             se.getDayName(se.datecin, se.datecout);
             
         });
         }
+    }
+
+    handleExpandDiv(id){
+      var el = $('.div-button-expand-'+id).siblings().last();
+      
+      if(el.hasClass('div-month-text-small')){
+        if(el.hasClass('visible-span')){
+          el.removeClass('visible-span');
+          el.addClass('hide-span');
+          let arr = $('.div-button-expand-'+id).children();
+          for (let j = 0; j < arr.length; j++) {
+            let item = $(arr[j]);
+            if(item.hasClass('img-expand-down')){
+              item.removeClass('img-disabled');
+            }else if(item.hasClass('img-expand-up')){
+              item.addClass('img-disabled');
+            }
+
+            
+          }
+        }else{
+          el.removeClass('hide-span');
+          el.addClass('visible-span');
+          
+          let arr = $('.div-button-expand-'+id).children();
+          for (let j = 0; j < arr.length; j++) {
+            let item = $(arr[j]);
+            if(item.hasClass('img-expand-down')){
+              item.addClass('img-disabled');
+            }else if(item.hasClass('img-expand-up')){
+              item.removeClass('img-disabled');
+            }
+          }
+        }
+      }
     }
 
     checklunar(s) {
@@ -897,8 +964,8 @@ export class FlightchangeinfoPage implements OnInit {
         this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
         this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
 
-        this.cindisplaymonth = moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-        this.coutdisplaymonth = moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+        this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+        this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
 
         this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
         this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
@@ -976,7 +1043,7 @@ export class FlightchangeinfoPage implements OnInit {
           'Content-Type': 'application/json; charset=utf-8'
           }, {}, "homeflight", "showCalendarPrice").then((data) =>{
             if(data){
-              let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode;
+              let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
               this.storage.set(key, data);
               if(data && data.departs && data.departs.length >0){
 
@@ -999,23 +1066,26 @@ export class FlightchangeinfoPage implements OnInit {
           for (let index = 0; index < $('.month-box').length; index++) {
             const elementMonth = $('.month-box')[index];
             let objtextmonth = elementMonth.children[0].textContent.replace('Tháng ','');
-            let monthstartdate:any = objtextmonth.trim().split(",")[0];
-            let yearstartdate:any = objtextmonth.trim().split(",")[1];
+            let monthstartdate:any = objtextmonth.trim().split(" ")[0];
+            let yearstartdate:any = objtextmonth.trim().split(" ")[1];
             let textmonth = moment(new Date(yearstartdate, monthstartdate - 1, 1)).format('YYYY-MM');
             
             if(objtextmonth && objtextmonth.length >0){
               let listdepartinmonth = departs.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
               let listreturninmonth:any;
-              if(this.flighttype == "twoway"){
-                listreturninmonth = arrivals.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
-              }
+              let listreturnallmonth:any;
+                if(this.flighttype == "twoway"){
+                  listreturninmonth = arrivals.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
+                  listreturnallmonth = [...arrivals];
+                }
               
               let listdayinmonth = elementMonth.children[1].children[0].children[0].children;
               if(listdayinmonth && listdayinmonth.length >0){
                   for (let j = 0; j < listdayinmonth.length; j++) {
                     const elementday = listdayinmonth[j];
                     if(elementday && elementday.textContent){
-                      let fday:any = elementday.textContent;
+                      //let fday:any = elementday.textContent;
+                      let fday:any = elementday.children[0].children[0].textContent;
                       let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
                       let todate = moment(fromdate).add(diffday ,'days').format('YYYY-MM-DD');
                       if(fromdate){
@@ -1030,7 +1100,7 @@ export class FlightchangeinfoPage implements OnInit {
                               pricefromdate = itemfromdate[0].price;
                             }
                             let pricetodate =0;
-                            let itemtodate = listreturninmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
+                            let itemtodate = listreturnallmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
                             if(itemtodate && itemtodate.length >0){
                               pricetodate = itemtodate[0].price;
                             }
@@ -1043,7 +1113,7 @@ export class FlightchangeinfoPage implements OnInit {
                               if(minvalue == totalpriceitem){
                                 $(elementday.children[0]).append(`<span class='price-calendar-text price-calendar-disabled min-price'>${totalprice}</span>`);
                               }else{
-                                $(elementday.children[0]).append(`<span class='price-calendar-text price-calendar-disabled'>${totalprice}</span>`);
+                                $(elementday.children[0]).append(`<span class='price-calendar-text price-calendar-disabled normal-price'>${totalprice}</span>`);
                               }
                               
                             }
@@ -1065,7 +1135,7 @@ export class FlightchangeinfoPage implements OnInit {
                               if(minvalue == pricefromdate){
                                 $(elementday.children[0]).append(`<span class='price-calendar-text m-l-5 price-calendar-disabled min-price'>${totalprice}</span>`);
                               }else{
-                                $(elementday.children[0]).append(`<span class='price-calendar-text m-l-5 price-calendar-disabled'>${totalprice}</span>`);
+                                $(elementday.children[0]).append(`<span class='price-calendar-text m-l-5 price-calendar-disabled normal-price'>${totalprice}</span>`);
                               }
                               
                             }
@@ -1120,6 +1190,13 @@ export class FlightchangeinfoPage implements OnInit {
           }
         }
       })
+    }
+
+    changeRoundTrip(ev){
+
+      this.reloadInfoOneway(!ev.currentTarget.checked);
+      this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
+      
     }
 
 }

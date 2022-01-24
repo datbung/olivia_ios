@@ -48,6 +48,7 @@ export class Tab5Page implements OnInit{
   fileType: any;
 
   checkIsCompany: any;
+  linkfb: any;
   constructor(public platform: Platform,public navCtrl: NavController, public storage: Storage,public modalCtrl: ModalController,private router: Router,private callNumber: CallNumber,
     public valueGlobal:ValueGlobal,public zone : NgZone,public alertCtrl: AlertController,public gf: GlobalFunction,public loadingCtrl: LoadingController,
     public network: Network,
@@ -62,7 +63,9 @@ export class Tab5Page implements OnInit{
     storage.get('auth_token').then(auth_token => {
       this.loginuser = auth_token;
      });
-    
+     this.storage.get('fbaccesstoken').then((accesstoken)=> {
+      this.linkfb = accesstoken;
+    });
      this.handleSplashScreen();
      //Lấy danh sách nhân viên hỗ trợ
 
@@ -137,6 +140,10 @@ export class Tab5Page implements OnInit{
         if(se.gf.getParams('userAvatar')){
           se.croppedImagepath = se.gf.getParams('userAvatar');
         }
+
+        se.storage.get('fbaccesstoken').then((accesstoken)=> {
+          se.linkfb = accesstoken;
+        });
     })
     
   }
@@ -741,6 +748,10 @@ export class Tab5Page implements OnInit{
                               se.bizTravelService.bizAccount = null;
                               se.bizTravelService.isCompany = false;
                             }
+
+                            se.storage.get('fbaccesstoken').then((accesstoken)=> {
+                              se.linkfb = accesstoken;
+                            });
                         }
                     }
                 });
@@ -796,6 +807,10 @@ export class Tab5Page implements OnInit{
                             se.bizTravelService.bizAccount = data.bizAccount;
                             se.bizTravelService.isCompany = true;
                           }
+
+                          se.storage.get('fbaccesstoken').then((accesstoken)=> {
+                            se.linkfb = accesstoken;
+                          });
                       }
                   }
               });
@@ -1093,7 +1108,9 @@ export class Tab5Page implements OnInit{
                       se.bizTravelService.bizAccount = data.bizAccount;
                       se.bizTravelService.isCompany = true;
                     }
-                    
+                    se.storage.get('fbaccesstoken').then((accesstoken)=> {
+                      se.linkfb = accesstoken;
+                    });
                     // se.storage.get('auth_token').then(auth_token => {
                     //   se.loginuser = auth_token;
                     // });
@@ -1189,6 +1206,10 @@ export class Tab5Page implements OnInit{
                       se.bizTravelService.bizAccount = data.bizAccount;
                       se.bizTravelService.isCompany = true;
                     }
+
+                    se.storage.get('fbaccesstoken').then((accesstoken)=> {
+                      se.linkfb = accesstoken;
+                    });
                   }
       
                 }
@@ -1203,4 +1224,27 @@ export class Tab5Page implements OnInit{
         showCompanyInfo(){
           this.navCtrl.navigateForward('/companyinfo');
         }
+
+        
+  linkProfile(){
+    var se = this;
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        this.navCtrl.navigateForward('/userlinkprofile');
+      } else {
+        if (se.isShowConfirm) return;
+        se.showConfirmLogin("Bạn cần đăng nhập để sử dụng chức năng này.");
+        se.isShowConfirm = true;
+      }
+    });
+   
+  }
+
+  showPrivacyPolicy(){
+    this.navCtrl.navigateForward('/userprivacypolicy');
+  }
+
+  showCondition(){
+    this.navCtrl.navigateForward('/usercondition');
+  }
 }

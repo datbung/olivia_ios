@@ -3144,6 +3144,7 @@ async bookcombo() {
         title: 'Chọn ngày',
         monthFormat: 'MM / YYYY', 
         weekdays:['CN','T2','T3','T4','T5','T6','T7'],
+        weekStart: 1,
         closeLabel:'Thoát',
         doneLabel: '',
         step: 0,

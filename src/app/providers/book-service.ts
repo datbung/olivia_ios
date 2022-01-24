@@ -125,6 +125,7 @@ export class ValueGlobal {
   titlecombo:string;
   refreshUserToken = new EventEmitter(); 
   backpageCathay:string;
+  refreshFBAccessToken= new EventEmitter(); 
 }
 export class SearchHotel {
     recent: Array<ItemBook>;

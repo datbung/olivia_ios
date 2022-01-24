@@ -65,7 +65,17 @@
                 </ion-col>
             </ion-row>
         </div>
-        
+        <div class="div-item">
+            <ion-row (click)="linkProfile()">
+                <ion-col size="1">
+                    <img src="./assets/imgs/ic_people.svg">
+                </ion-col>
+                <ion-col size="10">
+                    <span class="item-list">Liên kết tài khoản</span>
+                </ion-col>
+                <ion-col size="1" class="t-right no-padding" *ngIf="linkfb"><ion-icon class="logo-fb" name="logo-facebook"></ion-icon></ion-col>
+            </ion-row>
+        </div>
         <div class="div-item" *ngIf="loginuser && bizTravelService.isCompany">
             <ion-row (click)="showCompanyInfo()">
                 <ion-col size="1">
@@ -171,6 +181,27 @@
                     </ion-col>
                 </ion-row>
             </div>
+        </div>
+        <div class="div-item">
+            <ion-row (click)="showCondition()">
+                <ion-col size="1"  class="p-l-3">
+                    <img class="ico-lock" src="./assets/imgs/alert-circle-outline.svg">
+                </ion-col>
+                <ion-col>
+                        <span class="item-list">Điều khoản và điều kiện</span>
+                </ion-col>
+            </ion-row>
+        </div>
+        
+        <div class="div-item">
+            <ion-row (click)="showPrivacyPolicy()">
+                <ion-col size="1" class="p-l-3">
+                    <img class="ico-lock m-t-1" src="./assets/imgs/lock-closed-outline.svg">
+                </ion-col>
+                <ion-col>
+                        <span class="item-list">Chính sách quyền riêng tư</span>
+                </ion-col>
+            </ion-row>
         </div>
         <div *ngIf="loginuser" class="div-item">
             <ion-row >
