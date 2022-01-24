@@ -218,7 +218,7 @@
                 <div *ngFor="let itemChild of childs; let idxc = index">
                     <div class="d-flex">
                         <div class="div-width-300">
-                                <div class="div-sub-title " *ngIf="!itemChild.isInfant else divinfant">Trẻ em {{itemChild.id}} <span class="sub-label f-12">(Từ 2 - 11 tuổi)</span></div>
+                                <div class="div-sub-title " *ngIf="!itemChild.isInfant else divinfant">Trẻ em {{itemChild.id}} <span class="sub-label f-12">(Từ 2 - Dưới 12 tuổi)</span></div>
                                 <ng-template #divinfant>
                                     <div class="div-sub-title m-bottom-6">Em bé {{itemChild.iddisplay}} <span class="sub-label f-12">(Dưới 2 tuổi)</span></div>
                                 </ng-template>

@@ -780,7 +780,8 @@ export class FlightsearchresultPage implements OnInit {
           "roundTrip": obj.roundTrip
         },
         "roundTrip": obj.roundTrip,
-        "noCache": se._flightService.bookingSuccess ? true : (hascache ? hascache : false)
+        "noCache": true
+        //"noCache": se._flightService.bookingSuccess ? true : (hascache ? hascache : false)
       }
       
       var options = {

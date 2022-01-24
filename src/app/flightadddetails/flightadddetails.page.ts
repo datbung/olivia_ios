@@ -108,7 +108,7 @@ export class FlightadddetailsPage implements OnInit {
             this.maxAgeOfChild = moment(new Date()).format('YYYY').toString();
             let mindob ='2007', maxdob = '2020';
             let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
-            let departdate = moment(this._flightService.itemFlightCache.checkInDate);
+            let departdate = moment(this._flightService.itemFlightCache.checkOutDate);
             for (let index = 0; index < this._flightService.itemFlightCache.adult; index++) {
                 this.adults.push({id: index+1, name: '', subName: '', gender: 1, genderdisplay: '', airlineMemberCode: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate,
                                   errorName: false});
@@ -129,7 +129,7 @@ export class FlightadddetailsPage implements OnInit {
 
               
               this.zone.run(()=>{
-                maxdob = moment(moment(departdate).add(-15, 'days')).format('YYYY-MM-DD');//trên 15 ngày tuổi
+                maxdob = moment(moment(departdate).add(-14, 'days')).format('YYYY-MM-DD');//trên 15 ngày tuổi
                 mindob = moment( moment(moment(departdate).add(-2, 'years')).add(1,'days') ).format('YYYY-MM-DD');//dưới 2 tuổi
                 for (let index = 0; index < this._flightService.itemFlightCache.infant; index++) {
                     this.childs.push({id: (this._flightService.itemFlightCache.child > 0 ? this._flightService.itemFlightCache.child : index) +1, iddisplay: index +1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: true, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate});
@@ -328,9 +328,9 @@ export class FlightadddetailsPage implements OnInit {
                         this.zone.run(()=>{
                           if(!element.isInfant){
                             maxdob = moment( moment(moment(departdate).add(-2, 'years')).add(-1,'days') ).format('YYYY-MM-DD');//trên 2 tuổi
-                            mindob = moment(moment(departdate).add(-11, 'years')).format('YYYY-MM-DD');//dưới 11 tuổi
+                            mindob = moment(moment(departdate).add(-12, 'years')).format('YYYY-MM-DD');//dưới 12 tuổi
                           }else{
-                            maxdob = moment(moment(departdate).add(-15, 'days')).format('YYYY-MM-DD');//trên 15 ngày tuổi
+                            maxdob = moment(moment(departdate).add(-14, 'days')).format('YYYY-MM-DD');//trên 14 ngày tuổi
                             mindob = moment( moment(moment(departdate).add(-2, 'years')).add(1,'days') ).format('YYYY-MM-DD');//dưới 2 tuổi
                           }
                             element.mindob = mindob;
@@ -454,12 +454,12 @@ export class FlightadddetailsPage implements OnInit {
                           {
                             let isInfant = moment(departdate).diff(moment(element.dateOfBirth), 'month') < 24 ;
                             if(isInfant){
-                              maxdob = moment(moment(departdate).add(-15, 'days')).format('YYYY-MM-DD');//trên 15 ngày tuổi
+                              maxdob = moment(moment(departdate).add(-14, 'days')).format('YYYY-MM-DD');//trên 14 ngày tuổi
                               mindob = moment( moment(moment(departdate).add(-2, 'years')).add(1,'days') ).format('YYYY-MM-DD');//dưới 2 tuổi
                             }else 
                             {
                               maxdob = moment( moment(moment(departdate).add(-2, 'years')).add(-1,'days') ).format('YYYY-MM-DD');//trên 2 tuổi
-                              mindob = moment(moment(departdate).add(-11, 'years')).format('YYYY-MM-DD');//dưới 11 tuổi
+                              mindob = moment(moment(departdate).add(-12, 'years')).format('YYYY-MM-DD');//dưới 12 tuổi
 
                             }
                             let itemchild = {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
@@ -862,8 +862,8 @@ export class FlightadddetailsPage implements OnInit {
                             resolve(false);
                           }
                           else if(elementAdult.passportExpireDate){
-                            let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                            let diffdate = moment(elementAdult.passportExpireDate).diff(moment(departdate), 'days');
+                            let departdate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                            let diffdate = moment(moment(elementAdult.passportExpireDate).format('YYYY-MM-DD')).diff(moment(departdate), 'days');
                             if(diffdate < 0){
                               elementAdult.errorPassportExpireDate = true;
                               elementAdult.textErrorPassportExpireDate = "Hộ chiếu Người lớn "+(elementAdult.id)+" đã hết hạn";
@@ -903,7 +903,7 @@ export class FlightadddetailsPage implements OnInit {
                   elementChild.textErrorPassportExpireDate = '';
                   elementChild.textErrorInfo ='';
 
-                  let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
+                  let departdate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
 
                   if(!elementChild.genderdisplay && !elementChild.name){
                     resolve(false);
@@ -977,8 +977,8 @@ export class FlightadddetailsPage implements OnInit {
                     if(!elementChild.dateofbirth){
                       resolve(false);
                     }
-                    //Check độ tuổi của em bé <15 ngày
-                    if(elementChild.isInfant && moment(departdate).diff(moment(elementChild.dateofbirth), 'days') < 15){
+                    //Check độ tuổi của em bé <14 ngày
+                    if(elementChild.isInfant && moment(departdate).diff(moment(elementChild.dateofbirth), 'days') < 14){
                       resolve(false);
                     }
                     //Check độ tuổi của em bé <2
@@ -1010,7 +1010,7 @@ export class FlightadddetailsPage implements OnInit {
                         resolve(false);
                       }
                       else if(elementChild.passportExpireDate){
-                        let diffdate = moment(elementChild.passportExpireDate).diff(moment(departdate), 'days');
+                        let diffdate = moment(moment(elementChild.passportExpireDate).format('YYYY-MM-DD')).diff(moment(departdate), 'days');
                         if(diffdate < 0){
                           resolve(false);
                         }
@@ -1130,8 +1130,8 @@ export class FlightadddetailsPage implements OnInit {
                                   return;
                                 }
                                 else if(elementAdult.passportExpireDate){
-                                  let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                                  let diffdate = moment(elementAdult.passportExpireDate).diff(moment(departdate), 'days');
+                                  let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                                  let diffdate = moment(moment(elementAdult.passportExpireDate).format('YYYY-MM-DD')).diff(moment(returndate), 'days');
                                   if(diffdate < 0){
                                     elementAdult.errorPassportExpireDate = true;
                                     elementAdult.textErrorPassportExpireDate = "Hộ chiếu Người lớn "+(elementAdult.id)+" đã hết hạn";
@@ -1151,9 +1151,9 @@ export class FlightadddetailsPage implements OnInit {
                               return;
                             }
                             else{
-                              let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
+                              let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
                               let dateofbirth = moment(elementAdult.dateofbirth).format('YYYY-MM-DD');
-                              let diffdate = moment(departdate).diff(dateofbirth, 'months');
+                              let diffdate = moment(returndate).diff(dateofbirth, 'months');
                               if(diffdate < 144){
                                 elementAdult.errorDateofbirth = true;
                                 elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi";
@@ -1188,7 +1188,8 @@ export class FlightadddetailsPage implements OnInit {
                         elementChild.textErrorPassportExpireDate = '';
                         elementChild.textErrorInfo ='';
 
-                        let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
+                        let departdatenew = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
+                        let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
 
                         if(!elementChild.genderdisplay && !elementChild.name){
                           elementChild.errorInfo = !elementChild.errorInfo;
@@ -1237,26 +1238,27 @@ export class FlightadddetailsPage implements OnInit {
                                 elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id);
                                 return;
                               }
-                              let departdatestring = moment(departdate).format('DD-MM-YYYY');
+                              let returndatestring = moment(returndate).format('DD-MM-YYYY');
+                              let departdatestringnew = moment(departdatenew).format('DD-MM-YYYY');
                               //Check độ tuổi trẻ em > 2
-                              if(!elementChild.isInfant && moment(departdate).diff(moment(elementChild.dateofbirth), 'months') < 24){
+                              if(!elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'months') < 24){
                                 //se.gf.showToastWarning("Ngày sinh trẻ em "+(elementChild.id)+" phải lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                                 elementChild.errorDateofbirth = true;
-                                elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành "+departdatestring;
+                                elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring;
                                   return;
                               }
                               //Check độ tuổi trẻ em <12
-                              if(!elementChild.isInfant && moment(departdate).diff(moment(elementChild.dateofbirth), 'months') >= 144){
+                              if(!elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'months') >= 144){
                                 //se.gf.showToastWarning("Ngày sinh trẻ em "+(elementChild.id)+" không được lớn hơn 12 tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                                 elementChild.errorDateofbirth = true;
-                                elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" không được lớn hơn 12 tuổi so với ngày khởi hành "+departdatestring;
+                                elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring;
                                   return;
                               }
                               
                             }
                         }else{
                           let idx = elementChild.iddisplay;
-                          let departdatestring = moment(departdate).format('DD-MM-YYYY');
+                          let returndatestring = moment(returndate).format('DD-MM-YYYY');
                           if(!elementChild.genderdisplay){
                             //se.gf.showToastWarning("Danh xưng Em bé "+(idx)+" không được để trống. Vui lòng kiểm tra lại!");
                               elementChild.errorGender = true;
@@ -1298,18 +1300,18 @@ export class FlightadddetailsPage implements OnInit {
                             elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+idx;
                             return;
                           }
-                          //Check độ tuổi của em bé <15 ngày
-                          if(elementChild.isInfant && moment(departdate).diff(moment(elementChild.dateofbirth), 'days') < 15){
-                            //se.gf.showToastWarning("Ngày sinh Em bé "+(idx)+" phải lớn hơn 15 ngày tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
+                          //Check độ tuổi của em bé <14 ngày
+                          if(elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'days') < 14){
+                            //se.gf.showToastWarning("Ngày sinh Em bé "+(idx)+" phải lớn hơn 14 ngày tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                               elementChild.errorDateofbirth = true;
-                              elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ idx +" lớn hơn 15 ngày tuổi so với ngày khởi hành "+departdatestring;
+                              elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ idx +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring;
                               return;
                           }
                           //Check độ tuổi của em bé <2
-                          if(elementChild.isInfant && moment(departdate).diff(moment(elementChild.dateofbirth), 'months') >= 24){
+                          if(elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'months') >= 24){
                             //se.gf.showToastWarning("Ngày sinh Em bé "+(idx)+" không được lớn hơn 2 tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                               elementChild.errorDateofbirth = true;
-                                elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ idx +" không được lớn hơn 2 tuổi so với ngày khởi hành "+departdatestring;
+                                elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ idx +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring;
                               return;
                           }
                           
@@ -1355,7 +1357,7 @@ export class FlightadddetailsPage implements OnInit {
                               return;
                             }
                             else if(elementChild.passportExpireDate){
-                              let diffdate = moment(elementChild.passportExpireDate).diff(moment(departdate), 'days');
+                              let diffdate = moment(moment(elementChild.passportExpireDate).format('YYYY-MM-DD')).diff(moment(returndate).format('YYYY-MM-DD'), 'days');
                               if(diffdate < 0){
                                 //se.gf.showToastWarning("Hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" đã hết hạn. Vui lòng kiểm tra lại!");
                                 elementChild.errorPassportExpireDate = true;
@@ -1754,8 +1756,8 @@ export class FlightadddetailsPage implements OnInit {
                       return;
                   }
                   else{
-                    let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                    let diffdate = moment(inputcheck.passportExpireDate).diff(moment(departdate), 'days');
+                    let departdate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                    let diffdate = moment(moment(inputcheck.passportExpireDate).format('YYYY-MM-DD')).diff(moment(departdate), 'days');
                     if(diffdate < 0){
                       inputcheck.errorPassportExpireDate = true;
                       inputcheck.textErrorPassportExpireDate = "Hộ chiếu Người lớn "+(inputcheck.id)+" đã hết hạn";
@@ -1859,21 +1861,21 @@ export class FlightadddetailsPage implements OnInit {
               }
 
               if(inputcheck.dateofbirth){
-                let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                let departdatestring = moment(departdate).format('DD-MM-YYYY');
+                let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                let returndatestring = moment(returndate).format('DD-MM-YYYY');
                             //Check độ tuổi trẻ em > 2
-                            if(!inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'months') < 24){
+                            if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') < 24){
                               inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                              inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành "+departdatestring;
+                              inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring;
                                 return;
                             }else{
                               inputcheck.errorDateofbirth = false;
                               inputcheck.textErrorDateofbirth = "";
                             }
                             //Check độ tuổi trẻ em <12
-                            if(!inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'months') >= 144){
+                            if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') >= 144){
                               inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                              inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 12 tuổi so với ngày khởi hành "+departdatestring;
+                              inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring;
                                 return;
                             }
                             else{
@@ -1881,10 +1883,10 @@ export class FlightadddetailsPage implements OnInit {
                               inputcheck.textErrorDateofbirth = "";
                             }
 
-                            //Check độ tuổi của em bé <15 ngày
-                            if(inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'days') < 15){
+                            //Check độ tuổi của em bé <14 ngày
+                            if(inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'days') < 14){
                                 inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn 15 ngày tuổi so với ngày khởi hành "+departdatestring;
+                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring;
                                 return;
                             }
                             else{
@@ -1892,9 +1894,9 @@ export class FlightadddetailsPage implements OnInit {
                               inputcheck.textErrorDateofbirth = "";
                             }
                             //Check độ tuổi của em bé <2
-                            if(inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'months') >= 24){
+                            if(inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth), 'months') >= 24){
                                 inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                  inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 2 tuổi so với ngày khởi hành "+departdatestring;
+                                  inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring;
                                 return;
                             }
                             else{
@@ -1917,21 +1919,21 @@ export class FlightadddetailsPage implements OnInit {
                 }
 
                 if(inputcheck.dateofbirth){
-                  let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                  let departdatestring = moment(departdate).format('DD-MM-YYYY');
+                  let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                  let returndatestring = moment(returndate).format('DD-MM-YYYY');
                               //Check độ tuổi trẻ em > 2
-                              if(!inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'months') < 24){
+                              if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') < 24){
                                 inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành "+departdatestring;
+                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring;
                                   return;
                               }else{
                                 inputcheck.errorDateofbirth = false;
                                 inputcheck.textErrorDateofbirth = "";
                               }
                               //Check độ tuổi trẻ em <12
-                              if(!inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'months') >= 144){
+                              if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') >= 144){
                                 inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 12 tuổi so với ngày khởi hành "+departdatestring;
+                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring;
                                   return;
                               }
                               else{
@@ -1939,10 +1941,10 @@ export class FlightadddetailsPage implements OnInit {
                                 inputcheck.textErrorDateofbirth = "";
                               }
 
-                              //Check độ tuổi của em bé <15 ngày
-                              if(inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'days') < 15){
+                              //Check độ tuổi của em bé <14 ngày
+                              if(inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'days') < 14){
                                   inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                  inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn 15 ngày tuổi so với ngày khởi hành "+departdatestring;
+                                  inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring;
                                   return;
                               }
                               else{
@@ -1950,9 +1952,9 @@ export class FlightadddetailsPage implements OnInit {
                                 inputcheck.textErrorDateofbirth = "";
                               }
                               //Check độ tuổi của em bé <2
-                              if(inputcheck.isInfant && moment(departdate).diff(moment(inputcheck.dateofbirth), 'months') >= 24){
+                              if(inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') >= 24){
                                   inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                    inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 2 tuổi so với ngày khởi hành "+departdatestring;
+                                    inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring;
                                   return;
                               }
                               else{
@@ -2014,8 +2016,8 @@ export class FlightadddetailsPage implements OnInit {
                     return;
                 }
                 else{
-                  let departdate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                  let diffdate = moment(inputcheck.passportExpireDate).diff(moment(departdate), 'days');
+                  let departdate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                  let diffdate = moment(moment(inputcheck.passportExpireDate).format('YYYY-MM-DD')).diff(moment(departdate), 'days');
                   if(diffdate < 0){
                     inputcheck.errorPassportExpireDate = true;
                     inputcheck.textErrorPassportExpireDate = "Hộ chiếu "+ (!inputcheck.isInfant ? "Trẻ em" : "Em bé") +" "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay)+" đã hết hạn";
