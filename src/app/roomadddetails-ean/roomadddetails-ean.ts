@@ -1494,8 +1494,7 @@ export class RoomadddetailsEanPage implements OnInit{
     // this.booking.Hotels = this.jsonroom
     se.jsonroom.RoomClasses = se.room;
     se.timestamp = Date.now();
-    se.storage.get('auth_token').then(auth_token => {
-      if (auth_token) {
+   
         var Invoice = 0;
         if (se.Roomif.order) {
           Invoice = 1;
@@ -1519,7 +1518,7 @@ export class RoomadddetailsEanPage implements OnInit{
             paymentMethod: "51",
             note: se.Roomif.notetotal,
             source: '6',
-            MemberToken: auth_token,
+            MemberToken: se.auth_token,
             CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
             UsePointPrice: se.Roomif.pricepoint,
             NoteCorp: se.Roomif.order,
@@ -1585,8 +1584,7 @@ export class RoomadddetailsEanPage implements OnInit{
           
         });
 
-      }
-    })
+     
 
   }
 

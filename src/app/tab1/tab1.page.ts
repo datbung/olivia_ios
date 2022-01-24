@@ -59,6 +59,7 @@ import { foodService } from '../providers/foodService';
 import { flightService } from '../providers/flightService';
 import { MytripService } from "../providers/mytrip-service.service";
 import { BizTravelService } from "../providers/bizTravelService";
+import { marker } from "leaflet";
 /**
  *
  * Generated class for the MainPage page.
@@ -165,6 +166,7 @@ export class Tab1Page implements OnInit {
   allowclickcalendar: boolean = true;
   isNotice = false;
   allowShowCalendarFirstTime: any = true;
+  arrHistory = [];
   constructor(
     
     public navCtrl: NavController,
@@ -224,6 +226,27 @@ export class Tab1Page implements OnInit {
     this.appVersion.getVersionNumber().then(version => {
       this.appversion = version;
     });
+    this.storage.get('arrHistory').then((data: any) => {
+      if (data) {
+        this.arrHistory = data;
+        if(this.arrHistory.length>1){
+          let elements = document.querySelectorAll(".d-flex-recent");
+          if (elements.length>0) {
+            Object.keys(elements).map((key) => {
+              let itemstyle=(320*this.arrHistory.length) + 20 +'px';
+              elements[key].style.width = itemstyle;
+            });
+          }else{
+            let elements = document.querySelectorAll(".d-flex-only");
+            Object.keys(elements).map((key) => {
+              let itemstyle=(320*this.arrHistory.length) + 20 +'px';
+              elements[key].style.width = itemstyle;
+            });
+          }
+        }
+        
+      }
+    })
     this.valueGlobal.notRefreshDetail = false;
     //dynamic link
     if (this.valueGlobal.fbObject) {
@@ -339,6 +362,27 @@ export class Tab1Page implements OnInit {
     if(se.activeTab ==1){
       return;
     }
+    this.storage.get('arrHistory').then((data: any) => {
+      if (data) {
+        this.arrHistory = data;
+        if( this.arrHistory.length>1){
+          let elements = document.querySelectorAll(".d-flex-recent");
+          if (elements.length>0) {
+            Object.keys(elements).map((key) => {
+              let itemstyle=(320*this.arrHistory.length) + 20 +'px';
+              elements[key].style.width = itemstyle;
+            });
+          }else{
+            let elements = document.querySelectorAll(".d-flex-only");
+            Object.keys(elements).map((key) => {
+              let itemstyle=(320*this.arrHistory.length) + 20 +'px';
+              elements[key].style.width = itemstyle;
+            });
+          }
+        }
+       
+      }
+    })
     se.flightService.itemTabFlightActive.pipe().subscribe((data)=>{
       if(data){
         se.setActiveTab(1);
@@ -1848,6 +1892,7 @@ export class Tab1Page implements OnInit {
         cssClass: 'lunarcalendar'
       })
     }
+    
     const options: CalendarModalOptions = {
       pickMode: "range",
       title: "Chọn ngày",
@@ -2414,6 +2459,26 @@ export class Tab1Page implements OnInit {
         }
         //Xóa clone page-hotel-list do push page
         this.valueGlobal.logingoback='/app/tabs/hotellist/true';
+        var item: any ={};
+        item.adult=se.searchhotel.adult;
+        item.child=se.searchhotel.child;
+        item.arrchild= se.searchhotel.arrchild
+        if(this.gbmsg.imageUrl){
+          item.imageUrl = (this.gbmsg.imageUrl.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + this.gbmsg.imageUrl : this.gbmsg.imageUrl;
+        }
+        else{
+          item.imageUrl='';
+        }
+        var checkInDate=new Date(this.searchhotel.CheckInDate);
+        var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+        item.CheckInDate=this.searchhotel.CheckInDate
+        item.CheckOutDate=this.searchhotel.CheckOutDate;
+        item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+        item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+        item.id=this.gbmsg.regionId;
+        item.name=this.gbmsg.regionName;
+        item.isType=1;
+        this.gf.setCacheSearch(item,0);
         this.navCtrl.navigateForward('/hotellist/' + se.isrefreshlist);
         //this.navCtrl.navigateForward("/app/tabs/hotellist/true");
         this.gf.googleAnalytion(
@@ -2428,8 +2493,8 @@ export class Tab1Page implements OnInit {
             this.cout
         );
       } else if (this.co == 0) {
-        if (this.gbitem.type == 1) {
-          var id1 = { id: this.gbitem.hotelId };
+        if (this.gbitem.Type == 1) {
+          var id1 = { id: this.gbitem.HotelId };
           if (this.recent) {
             var cocheck = 0;
             for (let i = 0; i < this.recent.length; i++) {
@@ -2442,8 +2507,8 @@ export class Tab1Page implements OnInit {
             if (cocheck == 0) {
               var item2 = {
                 type: "1",
-                hotelId: this.gbitem.hotelId,
-                hotelName: this.gbitem.hotelName,
+                hotelId: this.gbitem.HotelId,
+                hotelName: this.gbitem.HotelName,
                 regionId: "",
                 regionCode: "",
                 regionName: "",
@@ -2463,8 +2528,8 @@ export class Tab1Page implements OnInit {
           } else {
             var item2 = {
               type: "1",
-              hotelId: this.gbitem.hotelId,
-              hotelName: this.gbitem.hotelName,
+              hotelId: this.gbitem.HotelId,
+              hotelName: this.gbitem.HotelName,
               regionId: "",
               regionCode: "",
               regionName: "",
@@ -2476,9 +2541,26 @@ export class Tab1Page implements OnInit {
             this.searchhotel.recent.push(item2);
           }
           this.searchhotel.rootPage = "mainpage";
-          //this.navCtrl.navigateForward('/hoteldetail/'+this.gbitem.HotelId);
-          this.valueGlobal.logingoback= "/hoteldetail/" + se.gbitem.hotelId;
-          se.navCtrl.navigateForward('/hoteldetail/'+ se.gbitem.hotelId);
+      
+          this.valueGlobal.logingoback= "/hoteldetail/" + se.gbitem.HotelId;
+          var item: any ={};
+          item.adult=this.searchhotel.adult;
+          item.child=this.searchhotel.child;
+          item.arrchild= this.searchhotel.arrchild;
+          item.roomnumber= this.searchhotel.roomnumber;
+          item.imageUrl = '';
+          var checkInDate=new Date(this.searchhotel.CheckInDate);
+          var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+          item.CheckInDate=this.searchhotel.CheckInDate
+          item.CheckOutDate=this.searchhotel.CheckOutDate;
+          item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+          item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+          item.id=this.gbitem.HotelId;
+          item.name=this.gbitem.HotelName;
+          item.isType=0;
+          //this.arrHistory.push(item);
+          this.gf.setCacheSearch(item,0);
+          se.navCtrl.navigateForward('/hoteldetail/'+ se.gbitem.HotelId);
           // this.navCtrl.navigateForward(
           //   "/app/tabs/hoteldetail/" + this.gbitem.HotelId
           // );
@@ -2491,9 +2573,9 @@ export class Tab1Page implements OnInit {
               "|" +
               this.cout +
               "|" +
-              this.gbitem.hotelId +
+              this.gbitem.HotelId +
               "|" +
-              this.gbitem.hotelName
+              this.gbitem.HotelName
           );
         } else {
           if (this.recent) {
@@ -2509,9 +2591,9 @@ export class Tab1Page implements OnInit {
                 type: "2",
                 hotelId: "",
                 hotelName: "",
-                regionId: this.gbitem.regionId,
-                regionCode: this.gbitem.regionCode,
-                regionName: this.gbitem.regionName,
+                regionId: this.gbitem.RegionId,
+                regionCode: this.gbitem.RegionCode,
+                regionName: this.gbitem.RegionName,
                 flag: "0",
                 totalHotels: this.gbitem.totalHotels
               };
@@ -2530,9 +2612,9 @@ export class Tab1Page implements OnInit {
               type: "2",
               hotelId: "",
               hotelName: "",
-              regionId: this.gbitem.regionId,
-              regionCode: this.gbitem.regionCode,
-              regionName: this.gbitem.regionName,
+              regionId: this.gbitem.RegionId,
+              regionCode: this.gbitem.RegionCode,
+              regionName: this.gbitem.RegionName,
               flag: "0",
               totalHotels: this.gbitem.totalHotels
             };
@@ -2540,9 +2622,9 @@ export class Tab1Page implements OnInit {
             this.searchhotel.recent.push(item3);
           }
 
-          this.authService.region = this.gbitem.regionName;
-          this.authService.regionid = this.gbitem.regionId;
-          this.authService.regioncode = this.gbitem.regionCode;
+          this.authService.region = this.gbitem.RegionName;
+          this.authService.regionid = this.gbitem.RegionId;
+          this.authService.regioncode = this.gbitem.RegionCode;
           var obj = {
             regionName: this.authService.region,
             regionId: this.authService.regionid,
@@ -2550,7 +2632,27 @@ export class Tab1Page implements OnInit {
           };
           this.searchhotel.gbmsg = obj;
           this.valueGlobal.logingoback="/hotellist/false";
-          //this.navCtrl.navigateForward("/app/tabs/hotellist/false");
+          var item: any ={};
+          item.adult=this.searchhotel.adult;
+          item.child=this.searchhotel.child;
+          item.arrchild= this.searchhotel.arrchild;
+          item.roomnumber= this.searchhotel.roomnumber;
+          if(this.gbitem.imageUrl){
+            item.imageUrl = (this.gbitem.imageUrl.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + this.gbitem.imageUrl : this.gbitem.imageUrl;
+          }
+          else{
+            item.imageUrl='';
+          }
+          var checkInDate=new Date(this.searchhotel.CheckInDate);
+          var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+          item.CheckInDate=this.searchhotel.CheckInDate
+          item.CheckOutDate=this.searchhotel.CheckOutDate;
+          item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+          item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+          item.id=this.gbitem.RegionId;
+          item.name=this.gbitem.RegionName;
+          item.isType=1;
+          this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward('/hotellist/' + se.isrefreshlist);
           this.gf.googleAnalytion(
             "main",
@@ -2567,11 +2669,28 @@ export class Tab1Page implements OnInit {
           );
         }
       } else if (this.co == 2) {
-        if (this.gbmsg.type == 1) {
+        if (this.gbmsg.Type == 1) {
           var id1 = { id: this.gbmsg.hotelId };
           this.searchhotel.rootPage = "mainpage";
           this.searchhotel.gbitem.hotelId = this.gbmsg.hotelId;
           this.valueGlobal.logingoback="/hoteldetail/" + id1;
+          var item: any ={};
+          item.adult=this.searchhotel.adult;
+          item.child=this.searchhotel.child;
+          item.arrchild= this.searchhotel.arrchild;
+          item.roomnumber= this.searchhotel.roomnumber;
+          item.imageUrl = '';
+          var checkInDate=new Date(this.searchhotel.CheckInDate);
+          var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+          item.CheckInDate=this.searchhotel.CheckInDate
+          item.CheckOutDate=this.searchhotel.CheckOutDate;
+          item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+          item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+          item.id=this.gbmsg.HotelId;
+          item.name=this.gbmsg.HotelName;
+          item.isType=0;
+          //this.arrHistory.push(item);
+          this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward("/hoteldetail/" + id1);
           this.gf.googleAnalytion(
             "main",
@@ -2599,6 +2718,27 @@ export class Tab1Page implements OnInit {
             if (cocheck == 0) {
               se.isrefreshlist = "true";
             }
+            var item: any ={};
+            item.adult=this.searchhotel.adult;
+            item.child=this.searchhotel.child;
+            item.arrchild= this.searchhotel.arrchild;
+            item.roomnumber= this.searchhotel.roomnumber;
+            if(this.gbmsg.imageUrl){
+              item.imageUrl = (this.gbmsg.imageUrl.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + this.gbmsg.imageUrl : this.gbmsg.imageUrl;
+            }
+            else{
+              item.imageUrl='';
+            }
+            var checkInDate=new Date(this.searchhotel.CheckInDate);
+            var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+            item.CheckInDate=this.searchhotel.CheckInDate
+            item.CheckOutDate=this.searchhotel.CheckOutDate;
+            item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+            item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+            item.id=this.gbmsg.regionId;
+            item.name=this.gbmsg.regionName;
+            item.isType=1;
+            this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward("/hotellist/" + se.isrefreshlist);
           this.gf.googleAnalytion(
             "main",
@@ -2759,6 +2899,26 @@ export class Tab1Page implements OnInit {
     this.searchhotel.hotelID = item.id;
     this.searchhotel.rootPage = "topdeal";
     //this.navCtrl.navigateForward('/hoteldetail/'+item.id);
+    var itemRecent: any ={};
+    itemRecent.adult=this.searchhotel.adult;
+    itemRecent.child=this.searchhotel.child;
+    itemRecent.arrchild= this.searchhotel.arrchild;
+    itemRecent.roomnumber= this.searchhotel.roomnumber;
+    if(item.imageUrl){
+      itemRecent.imageUrl = (item.imageUrl.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + item.imageUrl : item.imageUrl;
+    }
+    // itemRecent.imageUrl = 'https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
+    var checkInDate=new Date(this.searchhotel.CheckInDate);
+    var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+    itemRecent.CheckInDate=this.searchhotel.CheckInDate;
+    itemRecent.CheckOutDate=this.searchhotel.CheckOutDate;
+    itemRecent.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+    itemRecent.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+    itemRecent.id=item.id;
+    itemRecent.name=item.name;
+    itemRecent.isType=0;
+    //this.arrHistory.push(item);
+    this.gf.setCacheSearch(itemRecent,0);
     this.valueGlobal.logingoback="/hoteldetail/" + item.id;
     setTimeout(()=>{
       //this.navCtrl.navigateForward("/app/tabs/hoteldetail/" + item.id);
@@ -2841,6 +3001,24 @@ export class Tab1Page implements OnInit {
     //this.navCtrl.navigateForward('/hotellist/true');
     this.valueGlobal.logingoback="/hotellist/true";
     //this.navCtrl.navigateForward("/app/tabs/hotellist/true");
+    var itemRecent: any ={};
+        itemRecent.adult=this.searchhotel.adult;
+        itemRecent.child=this.searchhotel.child;
+        itemRecent.arrchild= this.searchhotel.arrchild;
+        itemRecent.roomnumber= this.searchhotel.roomnumber;
+        if(item.image){
+          itemRecent.imageUrl = (item.image.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + item.image : item.image;
+        }
+        var checkInDate=new Date(this.searchhotel.CheckInDate);
+        var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+        itemRecent.CheckInDate=this.searchhotel.CheckInDate;
+        itemRecent.CheckOutDate=this.searchhotel.CheckOutDate
+        itemRecent.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+        itemRecent.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+        itemRecent.id=item.id;
+        itemRecent.name=item.name;
+        itemRecent.isType=1;
+        this.gf.setCacheSearch(itemRecent,0);
     this.navCtrl.navigateForward("/hotellist/true");
     this.hideStatusBar();
     //google analytic
@@ -3723,6 +3901,9 @@ export class Tab1Page implements OnInit {
     }
     else if ( currentIndex === 2 ) {//Combo
         this.valueGlobal.backValue = "";
+        this.searchhotel.adult=this.adult;
+        this.searchhotel.child=this.child;
+        this.searchhotel.roomnumber= this.roomnumber;
          this.navCtrl.navigateForward('/topdeallist');
     }
     else if ( currentIndex === 1 ) {//Flight
@@ -3860,6 +4041,80 @@ export class Tab1Page implements OnInit {
     })
    })
     
+  }
+  funcRecent(item) {
+    this.searchhotel.isRecent=1;
+    if (item.isType == 0) {
+      this.searchhotel.rootPage = "mainpage";
+      this.valueGlobal.notRefreshDetail = false;
+      this.valueGlobal.logingoback = '/hoteldetail/' + item.id;
+      this.searchhotel.hotelID = item.id;
+      this.searchhotel.adult=item.adult;
+      this.searchhotel.child=item.child;
+      this.searchhotel.arrchild= item.arrchild;
+      this.searchhotel.roomnumber= item.roomnumber;
+      this.searchhotel.CheckInDate =  item.CheckInDate;
+      this.searchhotel.CheckOutDate = item.CheckOutDate;
+      this.searchhotel.objRecent=item;
+      // item.CheckInDate='2022-01-10'
+      // item.CheckOutDate='2022-01-12'
+      let diffdate = moment(item.CheckInDate).diff(moment(moment(new Date()).format('YYYY-MM-DD')), 'days');
+      if (item.CheckInDate && diffdate < 0) {
+        this.newMethod(item);
+      }
+      this.navCtrl.navigateForward('/hoteldetail/' + item.id);
+     
+
+     
+    } else if (item.isType == 1) {
+      this.authService.region = item.name;
+      this.authService.regionid = item.id;
+      this.searchhotel.adult=item.adult;
+      this.searchhotel.child=item.child;
+      this.searchhotel.arrchild= item.arrchild;
+      this.searchhotel.roomnumber= item.roomnumber;
+      this.searchhotel.CheckInDate =  item.CheckInDate;
+      this.searchhotel.CheckOutDate = item.CheckOutDate;
+      this.searchhotel.objRecent=item;
+      let diffdate = moment(item.CheckInDate).diff(moment(moment(new Date()).format('YYYY-MM-DD')), 'days');
+      if (item.CheckInDate && diffdate < 0) {
+        this.newMethod(item);
+      }
+      this.navCtrl.navigateForward('/hotellist/' + this.isrefreshlist);
+    
+      
+    // } else if (item.isType == 2) {
+    //   this.navCtrl.navigateForward('/searchhotel/1/' + item.name + '');
+    }
+  }
+  private newMethod(item: any) {
+    this.cin = new Date();
+    var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000));
+    var datein = new Date(rescin);
+    this.cin = moment(datein).format("YYYY-MM-DD");
+    this.cindisplay = moment(datein).format("DD-MM-YYYY");
+    this.datecin = new Date(rescin);
+    let diffdateCheckout = moment(item.CheckOutDate).diff(moment(item.CheckInDate), 'days');
+    this.cout = new Date();
+    var res = this.cout.setTime(
+      this.cout.getTime() + ((diffdateCheckout + 1) * 24 * 60 * 60 * 1000)
+    );
+    var date = new Date(res);
+    this.cout = moment(date).format("YYYY-MM-DD");
+    this.coutdisplay = moment(date).format("DD-MM-YYYY");
+    this.datecout = new Date(res);
+
+    this.searchhotel.CheckInDate = this.cin;
+    this.searchhotel.CheckOutDate = this.cout;
+    this.searchhotel.datecin = new Date(this.searchhotel.CheckInDate);
+    this.searchhotel.datecout = new Date(this.searchhotel.CheckOutDate);
+    this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
+    this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
+    item.CheckInDate=this.searchhotel.CheckInDate;
+    item.CheckOutDate=this.searchhotel.CheckOutDate;
+    item.checkInDate=moment(this.searchhotel.datecin).format('DD')+ ' '+ 'tháng' + ' ' +  moment(this.searchhotel.datecin).format('MM') +', ' +moment(this.searchhotel.datecin).format('YYYY')
+    item.checkOutDate=moment(this.searchhotel.datecout).format('DD')+ ' '+ 'tháng' + ' ' +  moment(this.searchhotel.datecout).format('MM') +', ' +moment(this.searchhotel.datecout).format('YYYY')
+    this.gf.setCacheSearch(item,0);
   }
 }
 

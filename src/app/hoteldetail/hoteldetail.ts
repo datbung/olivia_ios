@@ -199,6 +199,7 @@ export class HotelDetailPage implements OnInit {
   roomCombo='';
   comboDetailEndDate: any;
   ischeckwarn: boolean = false;
+  loaddonecombo=false;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -269,6 +270,7 @@ export class HotelDetailPage implements OnInit {
           se.valueGlobal.backValue = '';
           se.valueGlobal.notRefreshDetail = false;
           se.emptyroom = false;
+          se.setCacheHotel();
           se.loaddata();
         }
         //se.loaddata();
@@ -306,12 +308,15 @@ export class HotelDetailPage implements OnInit {
     });
     //this.value.logingoback = "HoteldetailPage";
     if (this.searchhotel.isRefreshDetail) {
-      this.HotelID = this.searchhotel.hotelID ? this.searchhotel.hotelID : (this.searchhotel.gbitem ? this.searchhotel.gbitem.hotelId : this.searchhotel.hotelID);
+      this.HotelID = this.searchhotel.hotelID ? this.searchhotel.hotelID : (this.searchhotel.gbitem ? this.searchhotel.gbitem.HotelId : this.searchhotel.hotelID);
     } else {
       if (this.searchhotel.rootPage == "listpage" || this.searchhotel.rootPage == "topdeal" || this.searchhotel.rootPage == "listmood" || this.searchhotel.rootPage == "likepage" || this.searchhotel.backPage == "roompaymentselect" || this.searchhotel.backPage == "roompaymentselect-ean" || this.searchhotel.rootPage == "MyTrip" || this.searchhotel.rootPage == "combolist" || this.searchhotel.rootPage == "topdeallist") {
         this.HotelID = this.searchhotel.hotelID;
       } else if (this.searchhotel.rootPage == "mainpage") {
-        this.HotelID = (this.searchhotel.gbitem ? this.searchhotel.gbitem.hotelId : this.searchhotel.hotelID);
+        this.HotelID = (this.searchhotel.gbitem ? this.searchhotel.gbitem.HotelId : this.searchhotel.hotelID);
+        if(this.searchhotel.isRecent==1){
+          this.HotelID=this.activeRoute.snapshot.paramMap.get('id');
+        }
       }else if(this.activeRoute.snapshot.paramMap.get('id')){
         this.HotelID = this.activeRoute.snapshot.paramMap.get('id');
       }
@@ -685,6 +690,7 @@ export class HotelDetailPage implements OnInit {
 
   modal.onDidDismiss().then((data: OverlayEventDetail) => {
     var se = this;
+    se.setCacheHotel();
     //this.presentLoadingnotime();
         se.zone.run(() => {
           se.hotelRoomClasses = [];
@@ -1249,7 +1255,8 @@ export class HotelDetailPage implements OnInit {
           'RoomsRequest[0][Child][value]': se.child ? se.child : "0",
           IsFenced: se.loginuser ? true : false,
           GetVinHms: 1,
-          GetSMD: 1
+          GetSMD: 1,
+          IsB2B: true
         };
         if (se.searchhotel.arrchild) {
           for (var i = 0; i < se.searchhotel.arrchild.length; i++) {
@@ -1442,6 +1449,7 @@ export class HotelDetailPage implements OnInit {
   getDetailCombo(comboid): any {
     var se = this;
     se.ischeckcbcarhide=false;
+    se.loaddonecombo=false;
     var optionscombo = {
       method: 'GET',
       url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/ComboDetailList?comboId=' + (comboid ? comboid : se.comboid) + '&checkin=' + moment(this.cin).format('DD-MM-YYYY') + '&checkout=' + moment(this.cout).format('DD-MM-YYYY'),
@@ -1635,6 +1643,7 @@ export class HotelDetailPage implements OnInit {
           
         }
       })
+      se.loaddonecombo = true;
     })
   }
   async getInsurranceFee(comboid): Promise<any>{
@@ -1761,7 +1770,8 @@ async getdataroom() {
     'RoomsRequest[0][Child][value]': self.child ? self.child : "0",
     IsFenced: self.loginuser ? true : false,
     GetVinHms: 1,
-    GetSMD: 1
+    GetSMD: 1,
+    IsB2B: true
   };
   if (self.searchhotel.arrchild) {
     self.arrchild1 = [];
@@ -1870,7 +1880,7 @@ excuteLoadHotelRoom(data){
               }
               // + ( (element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length !=0)? element.MealTypeRates[i].Notes[0] : '' )
               //if(element.hotelMealTypes.filter(item =>item.Name == element.MealTypeRates[i].Name ).length ==0 ){
-                if(element.hotelMealTypes.filter(item => item.Notes && item.Notes.length >0 ? (item.Name + ", " + item.Notes.join(', ') == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )) : item.Name == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length==0) {
+                if(element.hotelMealTypes.filter(item => item.Code == element.MealTypeRates[i].Code && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length==0) {
                 groupMealType = groupMealType +1;
                 element.MealTypeRates[i].displayMealType=true;
                 element.MealTypeRates[i].groupMealType = index;
@@ -1890,12 +1900,15 @@ excuteLoadHotelRoom(data){
           }
           element.countMealType = 0;
           for (let m =0; m < element.hotelMealTypes.length; m++){
-            let mealTypeName = element.hotelMealTypes[m].Name;
+            let mealTypeCode = element.hotelMealTypes[m].Code;
             //Trường hợp có thêm note thì filter theo name + note
-            if(element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length >0){
-                mealTypeName = element.hotelMealTypes[m].Name + ", " +element.hotelMealTypes[m].Notes.join(', ');
-            }
-            let  count = element.MealTypeRates.filter(item => item.Notes && item.Notes.length >0 ? (item.Name + ", " + item.Notes.join(', ') == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )) : item.Name == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
+          //   if(element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length >0){
+          //       mealTypeName = element.hotelMealTypes[m].Code + ", " +element.hotelMealTypes[m].Notes.join(', ');
+          //   }
+          //   if(element.hotelMealTypes[m].PromotionInclusions && element.hotelMealTypes[m].PromotionInclusions.length >0){
+          //     mealTypeName = element.hotelMealTypes[m].Code + ", " +element.hotelMealTypes[m].PromotionInclusions.join(', ');
+          // }
+            let  count = element.MealTypeRates.filter(item => item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
             //let count = element.MealTypeRates.filter(item =>item.Name == element.hotelMealTypes[m].Name && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )).length;
             element.hotelMealTypes[m].countMealType = count -1;
             //Nếu chỉ có 2 nhóm mealtype thì hiển thị 2 item đầu
@@ -1908,7 +1921,7 @@ excuteLoadHotelRoom(data){
             }
             //Nhiều hơn 2 nhóm mealtype => hiển thị giá gạch TA của item có giá cao nhất
             else{
-              let lastElementMealTypeGroup = element.MealTypeRates.filter(item => item.Notes && item.Notes.length >0 ? (item.Name + ", " + item.Notes.join(', ') == mealTypeName) : item.Name == mealTypeName );
+              let lastElementMealTypeGroup = element.MealTypeRates.filter(item => item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
               let objMap = lastElementMealTypeGroup[lastElementMealTypeGroup.length - 1];
               if(objMap){
                 lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTA = true;
@@ -1977,7 +1990,7 @@ excuteLoadHotelRoom(data){
                 if (element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length > 0) {
                   mealTypeName = element.MealTypeRates[i].Name + ", " + element.MealTypeRates[i].Notes.join(', ');
                 }
-                if (element.hotelMealTypes.filter(item => item.Notes && item.Notes.length > 0 ? (item.Name + ", " + item.Notes.join(', ') == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))) : item.Name == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length == 0) {
+                if (element.hotelMealTypes.filter(item => item.Code == element.MealTypeRates[i].Code && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length == 0) {
                   groupMealType = groupMealType + 1;
                   element.MealTypeRates[i].displayMealType = true;
                   element.MealTypeRates[i].groupMealType = index;
@@ -2000,12 +2013,12 @@ excuteLoadHotelRoom(data){
           if (element.hotelMealTypes && element.hotelMealTypes.length > 0) {
             element.countMealType = 0;
             for (let m = 0; m < element.hotelMealTypes.length; m++) {
-              let mealTypeName = element.hotelMealTypes[m].Name;
+              let mealTypeCode = element.hotelMealTypes[m].Code;
               //Trường hợp có thêm note thì filter theo name + note
-              if (element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length > 0) {
-                mealTypeName = element.hotelMealTypes[m].Name + ", " + element.hotelMealTypes[m].Notes.join(', ');
-              }
-              let count = element.MealTypeRates.filter(item => item.Notes && item.Notes.length > 0 ? (item.Name + ", " + item.Notes.join(', ') == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))) : item.Name == mealTypeName && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
+              // if (element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length > 0) {
+              //   mealTypeName = element.hotelMealTypes[m].Name + ", " + element.hotelMealTypes[m].Notes.join(', ');
+              // }
+              let count = element.MealTypeRates.filter(item =>  item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
               //let count = element.MealTypeRates.filter(item =>item.Name == element.hotelMealTypes[m].Name && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )).length;
               element.hotelMealTypes[m].countMealType = count - 1;
               //Nếu chỉ có 2 nhóm mealtype thì hiển thị 2 item đầu
@@ -2018,7 +2031,7 @@ excuteLoadHotelRoom(data){
               }
               //Nhiều hơn 2 nhóm mealtype => hiển thị giá gạch TA của item có giá cao nhất
               else {
-                let lastElementMealTypeGroup = element.MealTypeRates.filter(item => item.Notes && item.Notes.length > 0 ? (item.Name + ", " + item.Notes.join(', ') == mealTypeName) : item.Name == mealTypeName);
+                let lastElementMealTypeGroup = element.MealTypeRates.filter(item =>  item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
                 let objMap = lastElementMealTypeGroup[lastElementMealTypeGroup.length - 1];
                 if (objMap) {
                   lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTA = true;
@@ -2202,6 +2215,7 @@ excuteLoadHotelRoom(data){
       se.installmentPriceStr = priceinstallment.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g, '.') + "đ/tháng";
       se.activityService.installmentPriceStr = se.installmentPriceStr;
     }
+    
   }
   checkRoomDefaultFsale(roomId, roomClass): Promise<any> {
     var res = true;
@@ -2440,6 +2454,12 @@ excuteLoadHotelRoom(data){
           self.Roomif.ischeckpayment=true;
             self.navCtrl.navigateForward('/roomdetailreview')
         }
+        else if(MealTypeRates.Supplier == 'B2B'){
+          self.Roomif.payment = "RQ";
+          self.Roomif.ischeckpayment = false;
+          self.Roomif.roomcancelhbed = 1;
+          self.router.navigateByUrl('/roomdetailreview')
+        }
         else {
           // console.log(this.arrroom[0].Rooms[0].Penaltys[0].IsPenaltyFree);
           this.Roomif.arrrbed = this.arrroom[0].MealTypeRates[indexme].BedTypes;
@@ -2605,17 +2625,19 @@ async bookcombo() {
    * Hàm click vào row khách sạn liên quan
    * PDANH 15/02/2019
    */
-  itemHotelRelated(id) {
+  itemHotelRelated(msg) {
     var se = this;
     se.flag = 1;
     se.isheader1 = true;
     se.presentLoadingRelated(100);
     se.zone.run(() => {
-      se.HotelID = id;
+      se.HotelID = msg.Id;
+      se.hotelname=msg.Name;
       se.searchhotel.isRefreshDetail = true;
-      se.searchhotel.hotelID = id;
+      se.searchhotel.hotelID = msg.Id;
+      se.setCacheHotel();
       se.presentLoading();
-      se.loadTopSale24h(id);
+      se.loadTopSale24h(msg.Id);
           let el = document.getElementsByClassName('div-float-arrow');
           if(el.length >0){
               el[0].classList.remove('float-arrow-enabled');
@@ -3138,7 +3160,11 @@ async bookcombo() {
         })
       }
      }
-     
+    //  var day : any="2022-02-16";
+    // _daysConfig.push({
+    //   date: day,
+    //   cssClass: 'dayhot'
+    // })
       const options: CalendarModalOptions = {
         pickMode: 'range',
         title: 'Chọn ngày',
@@ -3149,7 +3175,7 @@ async bookcombo() {
         step: 0,
         defaultScrollTo: fromdate,
         defaultDateRange: {from: fromdate, to: todate},
-        daysConfig: _daysConfig
+        daysConfig: _daysConfig,
       };
   
        this.myCalendar = await this.modalCtrl.create({
@@ -3165,9 +3191,11 @@ async bookcombo() {
       let se = this;
       const event: any = await this.myCalendar.onDidDismiss();
       if(event){
+        
         se.allowclickcalendar = true;
       }
       if(event.data){
+        se.setCacheHotel();
         const date = event.data;
         const from: CalendarResult = date.from;
         const to: CalendarResult = date.to;
@@ -3562,7 +3590,7 @@ async bookcombo() {
           var objMealTypeRates;
  
       for (let i = 0; i < self.hotelRoomClasses.length; i++) {
-        if (this.comboDetail.roomId == self.hotelRoomClasses[i].Rooms[0].RoomID) {
+        if (this.comboDetail.comboDetail.roomId== self.hotelRoomClasses[i].Rooms[0].RoomID) {
           self.arrroom.push(self.hotelRoomClasses[i]);
           self.indexroom = i;
           objMealTypeRates = self.hotelRoomClasses[i].MealTypeRates;
@@ -3628,37 +3656,37 @@ async bookcombo() {
             this.bookCombo.ObjectHotelDetail = this.objDetail;
             this.bookCombo.ComboRoomPrice = this.comboDetail.comboDetail.totalPriceSale;
             this.bookCombo.objComboDetail = this.comboDetail;
-
-            var options = {
-              method: 'GET',
-              url: C.urls.baseUrl.urlContracting + '/api/toolsapi/CheckAllotment',
-              qs:
-              {
-                token: '3b760e5dcf038878925b5613c32615ea3',
-                hotelcode: this.booking.HotelId,
-                roomcode: this.bookCombo.ComboDetail.comboDetail.roomId,
-                checkin: this.booking.CheckInDate,
-                checkout: this.booking.CheckOutDate,
-                totalroom: this.room
-              },
-              headers:
-                {}
-            };
-            request(options, function (error, response, body) {
-              var rs = JSON.parse(body);
-              if (rs.Msg == "AL") {
-                self.Roomif.payment = rs.Msg;
-                self.Roomif.ischeckpayment = true;
-              } else if (rs.Msg == "RQ") {
-                self.Roomif.payment = rs.Msg;
-                self.Roomif.ischeckpayment = false;
-              }
-              self.GetUserInfo();
-              self.navCtrl.navigateForward('/combocarnew');
+            self.router.navigateByUrl('/combocarnew');
+          //   var options = {
+          //     method: 'GET',
+          //     url: C.urls.baseUrl.urlContracting + '/api/toolsapi/CheckAllotment',
+          //     qs:
+          //     {
+          //       token: '3b760e5dcf038878925b5613c32615ea3',
+          //       hotelcode: this.booking.HotelId,
+          //       roomcode: this.bookCombo.ComboDetail.comboDetail.roomId,
+          //       checkin: this.booking.CheckInDate,
+          //       checkout: this.booking.CheckOutDate,
+          //       totalroom: this.room
+          //     },
+          //     headers:
+          //       {}
+          //   };
+          //   request(options, function (error, response, body) {
+          //     var rs = JSON.parse(body);
+          //     if (rs.Msg == "AL") {
+          //       self.Roomif.payment = rs.Msg;
+          //       self.Roomif.ischeckpayment = true;
+          //     } else if (rs.Msg == "RQ") {
+          //       self.Roomif.payment = rs.Msg;
+          //       self.Roomif.ischeckpayment = false;
+          //     }
+          //     self.GetUserInfo();
+          //     self.navCtrl.navigateForward('/combocarnew');
     
-            });
-          } else {
-            self.navCtrl.navigateForward('/combocarnew');
+          //   });
+          // } else {
+          //   self.navCtrl.navigateForward('/combocarnew');
           }
         }
         else if (value == 5) {
@@ -4068,6 +4096,7 @@ async bookcombo() {
         })
   
         if (!data.data) {
+          se.setCacheHotel();
           se.valueGlobal.notRefreshDetail = false;
           se.ischeckBOD= se.searchhotel.ischeckBOD;
           se.bookCombo.Address = se.Address;
@@ -4391,5 +4420,23 @@ async bookcombo() {
       $('img.preview').removeClass('preview');
     },500)
     
+  }
+  setCacheHotel() {
+    var item: any ={};
+    item.adult=this.searchhotel.adult;
+    item.child=this.searchhotel.child;
+    item.arrchild= this.searchhotel.arrchild;
+    item.roomnumber= this.searchhotel.roomnumber;
+    item.imageUrl = '';
+    var checkInDate=new Date(this.searchhotel.CheckInDate);
+    var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+    item.CheckInDate=this.searchhotel.CheckInDate
+    item.CheckOutDate=this.searchhotel.CheckOutDate;
+    item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+    item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+    item.id=this.HotelID;
+    item.name=this.hotelname;
+    item.isType=0;
+    this.gf.setCacheSearch(item,1);
   }
 }

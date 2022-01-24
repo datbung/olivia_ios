@@ -172,7 +172,8 @@ export class BookingHotelDetailPage implements OnInit{
       'RoomsRequest[0][Child][value]': self.child,
       GetVinHms: 1,
       GetSMD: 1,
-      IsFenced: true
+      IsFenced: true,
+      IsB2B: true
     };
     options = {
       method: 'POST',

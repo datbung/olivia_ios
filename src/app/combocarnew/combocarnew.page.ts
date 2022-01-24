@@ -356,7 +356,7 @@ export class CombocarnewPage implements OnInit {
       data.IsPackageRate = true;
       data.GetVinHms = 1;
       data.GetSMD= 1;
-
+      data.IsB2B=true;
       var form = data;
       var options = {
         method: 'POST',
@@ -931,6 +931,12 @@ export class CombocarnewPage implements OnInit {
         self.bookCombo.totalseatsdep = totalseatsdep;
         self.bookCombo.totalseatsret = totalseatsret;
         self.gf.setParams(objectCar, 'carscombo');
+        if(self.elementMealtype.Supplier=='Internal'){
+          self.checkAllotment();
+        }else{
+          self.Roomif.payment = "RQ";
+          self.Roomif.ischeckpayment = false;
+        }
         self.navCtrl.navigateForward("comboadddetails");
       }
     })
@@ -1642,6 +1648,7 @@ export class CombocarnewPage implements OnInit {
               se.ischeckpromo = true;
             }
             else {
+              se.ischeckbtnpromo = true;
               se.Pricepointshow = 0;
             }
             se.msg = json.msg;
@@ -1656,6 +1663,13 @@ export class CombocarnewPage implements OnInit {
             se.ischeckerror = 1;
           }
           else if (json.error == 2) {
+            se.ischeckbtnpromo = false;
+            se.msg = json.msg;
+            se.discountpromo = 0;
+            se.ischecktext = 2;
+            se.ischeckerror = 1;
+          }
+          else if (json.error == 3) {
             se.ischeckbtnpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
@@ -2076,7 +2090,7 @@ export class CombocarnewPage implements OnInit {
           //Valid thì check tiếp BOD
           se.checkBOD(se.bookCombo.objComboDetail.comboDetail.roomId).then((checkbod) =>{
             if(checkbod){
-              se.checkAllotment();
+              // se.checkAllotment();
               se.getHotelContractPrice(se.bookCombo.FormParam);
             }else{
               //Không valid thì hiển thị gửi yêu cầu

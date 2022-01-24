@@ -13,92 +13,76 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head> -->
 <ion-header>
-  <ion-row class="header-height">
-    <ion-col style="text-align: center;height: 48px;">
-      <div style="align-self: center">
-        <div style="position: absolute;height: 48px;width: 48px;align-self: center;" (click)="goback()">
-          <img style="height: 48px; padding: 8px;margin-top: 0px;margin-left:-8px" src="./assets/imgs/ios-arrow-round-back.svg" >
-        </div>
-        <div class="header-title"><label class="text-title">Tìm kiếm</label></div>
-      </div>
-    </ion-col>
-  </ion-row>
+  <ion-toolbar class="new-background">
+    <div class="img-back" (click)="goback()">
+      <img 
+        src="./assets/imgs/icon_back.svg">
+    </div>
+    <div class="div-search">
+      <ion-input  [(ngModel)]="inputText" (ionChange)="getItems($event)" [ngClass]="inputText ? 'cls-input-search-text' : 'cls-input-search'" placeholder="Nhập tên khách sạn,thành phố..."></ion-input>
+    </div>
+    <div *ngIf="inputText"  class="img-close" >
+      <img (click)="clearText()"
+        src="./assets/imgs/icon_close.svg">
+    </div>
+  </ion-toolbar>
   </ion-header>
 <ion-content padding style="--keyboard-offset: 50px !important">
-  <!-- <input (input)="getItems($event)" class="inputtext form-control" [(ngModel)]="input" (click)="change()" placeholder="Nhập tên khách sạn,thành phố,khu vực..."
-  type="text" id="mytext"> -->
-  <form action=".">
-    <ion-searchbar searchIcon="false" #input id="input" style="padding: 0;padding-bottom: 15px;" autocomplete="on" autocorrect="true" debounce="300" placeholder="Nhập tên khách sạn,thành phố,khu vực..." (ionChange)="getItems($event)" ></ion-searchbar>
-  </form>
-  <div>
+  
+  <div *ngIf="!ischecklist">
+    <div class="div-popular">
+      <ion-label class="text-popular">
+       Phổ biến
+      </ion-label>
+      
+    </div>
+    <div style="margin-top:28px">
+      <div  *ngFor="let msg of json; let i = index">
+        <ion-row class="cls-row" (click)="nextPopular(msg,i)">
+          <ion-col size="12" text-left>
+            <ion-label >
+              <ion-label>
+                <p class="text-region"> {{msg.regionName}}</p>
+                <p class="text-region-1">{{msg.province}}, {{msg.country}}</p>
+              
+              </ion-label>
+            </ion-label>
+           
+          </ion-col>
+        </ion-row>
+        <div class="div-split">
 
-    <div *ngIf="ischecklist==true">
+        </div>
+      </div>
+
+    </div>
+   
+  </div>
+  
+    <!-- <form action =".">
+      <ion-searchbar #input class="searchhotel-bar" style="padding-inline-start: 11px;padding-inline-end: 11px;" searchIcon="false" id="input" style="padding: 0;padding-bottom: 15px;" autocomplete="on" autocorrect="true" debounce="300" placeholder="Nhập tên khách sạn,thành phố,khu vực..." (ionChange)="getItems($event)" ></ion-searchbar>
+    </form> -->
+  <div>
+    <div *ngIf="ischecklist">
       <div (click)="itemclick(item)" *ngFor="let item of items">
         <ion-row *ngIf="item.show" class="cls-row-width">
           <ion-col text-left style="padding:16px 0px">
-            <ion-label *ngIf="item.hotelName" class="label-item-search">
-              <img src="./assets/ic_facility/ic_hotel.svg"> {{ item.hotelName }}
+            <ion-label *ngIf="item.HotelName" class="label-item-search">
+              <img src="./assets/ic_facility/ic_hotel.svg"> {{ item.HotelName }}
             </ion-label>
-            <ion-label *ngIf="item.regionName" class="label-item-search">
-              <img src="./assets/ic_facility/Group.svg"> {{ item.regionName }}
+            <ion-label *ngIf="item.RegionName" class="label-item-search">
+              <img src="./assets/ic_facility/Group.svg"> {{ item.RegionName }}
             </ion-label>
           </ion-col>
-          <ion-col *ngIf="item.regionName" text-right style="padding:16px 0px">
-            <ion-label style="color: #26bed6" *ngIf="item.totalHotels">
-              {{item.totalHotels}} khách sạn
-            </ion-label>
-            <ion-label style="color: #26bed6" *ngIf="item.totalHotel">
-              {{item.totalHotel}} khách sạn
+          <ion-col *ngIf="item.RegionName" text-right style="padding:16px 0px">
+            <ion-label style="color: #26bed6">
+              {{item.TotalHotels}} khách sạn
             </ion-label>
           </ion-col>
         </ion-row>
       </div>
     </div>
-    <div *ngIf="recent&&ischecklist == false">
-      <div class="title-item-search">
-        Gần đây
-      </div>
-      <div *ngFor="let msg of recent">
-        <ion-row class="cls-row-width" (click)="nextRecent(msg)">
-          <ion-col size="12" text-left style="padding:16px 0px">
-            <ion-label *ngIf="msg.hotelName" class="label-item-search">
-              <img src="./assets/ic_facility/Group.svg"> {{msg.hotelName}}
-            </ion-label>
-            <ion-label *ngIf="msg.regionName" class="label-item-search">
-              <img src="./assets/ic_facility/Group.svg"> {{msg.regionName}}
-            </ion-label>
-          </ion-col>
-          <!-- <ion-col size="6" *ngIf="msg.regionName" text-right style="padding:16px 0px">
-            <ion-label style="color: #26bed6; min-width: 145px;">
-              {{msg.totalHotels}} khách sạn
-            </ion-label>
-          </ion-col> -->
-        </ion-row>
-      </div>
-    </div>
-    <hr *ngIf="recent" style="margin-top: -15px">
-    <div *ngIf="ischecklist == false">
-      <div class="title-item-search">
-        Phổ biến
-      </div>
-      <div *ngFor="let msg of json; let i = index">
-        <ion-row class="cls-row-width" (click)="nextPopular(msg,i)">
-          <ion-col size="6" text-left style="padding:16px 0px">
-            <ion-label class="label-item-search">
-              <img src="./assets/ic_facility/Group.svg"> {{msg.regionName}}
-            </ion-label>
-          </ion-col>
-          <ion-col size="6" text-right style="padding:16px 0px">
-            <ion-label style="color: #26bed6;min-width: 145px;" *ngIf="msg.totalHotels">
-              {{msg.totalHotels}} khách sạn
-            </ion-label>
-            <ion-label style="color: #26bed6;min-width: 145px;" *ngIf="msg.totalHotel">
-              {{msg.totalHotel}} khách sạn
-            </ion-label>
-          </ion-col>
-        </ion-row>
-      </div>
-    </div>
+
   </div>
   <div style="margin-top: 20px">
       <label *ngIf="ischecktext">Không tìm thấy kết quả tìm kiếm.Vui lòng nhập lại!</label>

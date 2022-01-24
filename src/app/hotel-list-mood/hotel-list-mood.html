@@ -25,7 +25,7 @@
           <div class="row-item-hotellist">
             <!-- left image region-->
             <div class="col-img-hotellist">
-                <img  class="img-radius" src={{msg.Avatar}} style="position:relative" (click)="itemSelected(msg.HotelId,msg.Name)">
+                <img  class="img-radius" src={{msg.Avatar}} style="position:relative" (click)="itemSelected(msg)">
                 <div *ngIf="msg.Liked" class="img-heart" (click)="unlikeItem(msg.HotelId)">
                   <img src="./assets/imgs/heart-red.svg" class="cls-img-content" >
                 </div>
@@ -39,7 +39,7 @@
             <!-- right content region -->
             <div class="col-description-hotellist">
                 <div  class="fix-height-104">
-                    <div (click)="itemSelected(msg.HotelId,msg.Name)" >
+                    <div (click)="itemSelected(msg)" >
                     <h2 class="text-name" >{{msg.Name}}
                     </h2>
                     <p>

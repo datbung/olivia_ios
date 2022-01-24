@@ -314,7 +314,8 @@
               </div>
             </div>
             <div class="div-split-fsale" *ngIf=" loadpricecombodone && comboDetailList.length ==0 && !warningMaxPax && !flashSaleEndDate && !warningCombofs"></div>
-            <div>
+            <div *ngIf="loaddonecombo">
+             
               <!-- <ion-row
                 *ngIf="loginuser && loadpricecombodone && comboDetailList.length ==0 && !warningMaxPax && !flashSaleEndDate">
                 <ion-col size="6" class="text-pax"><span>{{adults}} người lớn | {{child}} trẻ em</span></ion-col>
@@ -408,6 +409,10 @@
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(1,null,0)">Đặt Combo</button>
               </ion-row>
             </div>
+            <ion-row *ngIf="!loaddonecombo" style="padding:0px 11px">
+              <ion-skeleton-text animated style="width:100%;height:48px;border-radius:6px">
+              </ion-skeleton-text>
+            </ion-row>
             <!-- Combo khác -->
             <ion-row *ngIf="nm && loadcomplete&&(!ischeckBOD && checkBODdone)">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(3,null,0)">Gửi yêu cầu</button>
@@ -1079,7 +1084,7 @@
             <div class="row-item-hotelrelate">
               <!-- left image region-->
               <div class="col-img-hotelrelate">
-                  <img  class="img-radius" src={{msg.Avatar}} style="position:relative" (click)="itemHotelRelated(msg.Id)">
+                  <img  class="img-radius" src={{msg.Avatar}} style="position:relative" (click)="itemHotelRelated(msg)">
                  
                   <div *ngIf="msg.PromotionDescriptionSubstring" class="hotel-related-img transbox_0">
                       {{msg.PromotionDescriptionSubstring}}
@@ -1088,7 +1093,7 @@
               <!-- right content region -->
               <div class="col-description-hotelrelate">
                   <div  class="fix-height-104">
-                      <div (click)="itemHotelRelated(msg.Id)" >
+                      <div (click)="itemHotelRelated(msg)" >
                       <h2 class="text-name" >{{msg.Name}}
                       </h2>
                       <p>

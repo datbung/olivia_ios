@@ -352,13 +352,13 @@
     }
 }
 ::ng-deep {
-    .cls-alert-flightcomboreview {
+    .rcls-alert-carcombo  .cls-alert-flightcomboreview {
         align-items: center !important;
         --max-width: 280px;
         text-align: center;
     }
     
-    .sc-ion-alert-ios-h {
+    .cls-alert-carcombo .sc-ion-alert-ios-h {
           --background: var(--ion-overlay-background-color,var(--ion-color-step-150,#f9f9f9)) !important;
           --max-width: 290px !important;
          
@@ -382,7 +382,7 @@
           user-select: none !important;
       }
     
-      .alert-head.sc-ion-alert-ios{
+      .cls-alert-carcombo .alert-head.sc-ion-alert-ios{
         padding-top: 12px !important;
         padding-bottom: 7px !important;
         text-align: center !important;

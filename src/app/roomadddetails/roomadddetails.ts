@@ -487,8 +487,7 @@ export class RoomadddetailsPage implements OnInit {
     var se = this;
     this.jsonroom.RoomClasses = this.room;
     this.timestamp = Date.now();
-    this.storage.get('auth_token').then(auth_token => {
-      if (auth_token) {
+  
         var Invoice = 0;
         if (se.Roomif.order) {
           Invoice = 1;
@@ -512,7 +511,7 @@ export class RoomadddetailsPage implements OnInit {
             paymentMethod: "51",
             note: se.Roomif.notetotal,
             source: '6',
-            MemberToken: auth_token,
+            MemberToken: se.auth_token,
             CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
             UsePointPrice: se.Roomif.pricepoint,
             NoteCorp: se.Roomif.order,
@@ -593,9 +592,9 @@ export class RoomadddetailsPage implements OnInit {
             alert("Đã có sự cố xảy ra, vui lòng thử lại!");
           }
           
-        });
+       
 
-      }
+      
     })
   }
   refreshToken() {
@@ -858,7 +857,7 @@ export class RoomadddetailsPage implements OnInit {
                 se.gf.CreateUrl(url);
               }
 
-            se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
+            se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + se.Roomif.payment);
             se.loader.dismiss();
             //se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
           }

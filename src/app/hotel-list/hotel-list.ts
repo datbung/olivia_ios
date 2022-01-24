@@ -68,6 +68,9 @@ export class HotelListPage implements OnInit{
     public activityService: ActivityService,
     private fb: Facebook) {
     this.name = searchhotel.gbmsg ?  (searchhotel.gbmsg.regionName ? searchhotel.gbmsg.regionName : searchhotel.gbmsg.regionName) : authService.region;
+    if(this.searchhotel.isRecent==1){
+      this.name =authService.region;
+    }
     this.ischeckAL=this.searchhotel.ischeckAL;
       this.loadpricedone = false;
         setTimeout(() => {
@@ -84,6 +87,22 @@ export class HotelListPage implements OnInit{
     var se = this;
      se.searchhotel.changeInfoHotelList.pipe().subscribe((data)=>{
        if(data){
+        var item: any ={};
+        item.adult=this.searchhotel.adult;
+        item.child=this.searchhotel.child;
+        item.arrchild= this.searchhotel.arrchild;
+        item.roomnumber= this.searchhotel.roomnumber;
+        item.imageUrl = this.searchhotel.objRecent.imageUrl;
+        var checkInDate=new Date(this.searchhotel.CheckInDate);
+        var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+        item.CheckInDate=this.searchhotel.CheckInDate
+        item.CheckOutDate=this.searchhotel.CheckOutDate;
+        item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+        item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+        item.id=this.searchhotel.objRecent.id;
+        item.name=this.searchhotel.objRecent.name;
+        item.isType=1;
+        this.gf.setCacheSearch(item,1);
          se.doRefresh();
        }
      })
@@ -113,6 +132,11 @@ export class HotelListPage implements OnInit{
     }
     
     var id = searchhotel.gbmsg ?  (searchhotel.gbmsg.regionId ? searchhotel.gbmsg.regionId : searchhotel.gbmsg.regionId) : authService.regionid;
+    if(this.searchhotel.isRecent==1){
+      id= authService.regionid;
+      this.name =this.authService.region;
+      
+    }
     var strurl = C.urls.baseUrl.urlGet + '/hotelslist?regionId=' + id + '&page=' + this.page + '&pageSize=200&version=2' + (this.memberid ? '&memberid='+this.memberid : '');
     if (searchhotel.chuoi) {
       if (searchhotel.minprice) {
@@ -918,21 +942,41 @@ export class HotelListPage implements OnInit{
     });
     loader.present();
   }
-  itemSelected(id) {
+  itemSelected(msg) {
     //if (this.loginuser) {
       //this.presentLoadingnavi();
-      let id1 = {detailId: id};
-      this.searchhotel.hotelID = id;
+      this.searchhotel.hotelID = msg.HotelId;
       this.value.flag = 1;
       this.value.arrhotellist = this.json1;
       //this.navCtrl.push('HoteldetailPage', id1);
       this.searchhotel.rootPage = "listpage";
       this.booking.HotelId = null;
-      this.valueGlobal.logingoback='/hoteldetail/'+id;
+      this.valueGlobal.logingoback='/hoteldetail/'+msg.HotelId;
+      var item: any ={};
+      item.adult=this.searchhotel.adult;
+      item.child=this.searchhotel.child;
+      item.arrchild= this.searchhotel.arrchild;
+      item.roomnumber= this.searchhotel.roomnumber;
+      if(msg.Avatar){
+        item.Avatar = (msg.Avatar.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + msg.Avatar : msg.Avatar;
+      }
+      else{
+        item.Avatar='https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
+      }
+      var checkInDate=new Date(this.searchhotel.CheckInDate);
+      var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+      item.CheckInDate=this.searchhotel.CheckInDate
+      item.CheckOutDate=this.searchhotel.CheckOutDate;
+      item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+      item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+      item.id=msg.HotelId;
+      item.name=msg.Name;
+      item.isType=0;
+      this.gf.setCacheSearch(item,0);
       //this.router.navigateByUrl('/hoteldetail/'+id);
       setTimeout(()=>{
         //this.router.navigateByUrl('/app/tabs/hoteldetail/'+id);
-        this.navCtrl.navigateForward('/hoteldetail/'+ id);
+        this.navCtrl.navigateForward('/hoteldetail/'+  msg.HotelId);
       },10)
       
     //}

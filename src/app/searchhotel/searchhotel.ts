@@ -40,21 +40,25 @@ export class SearchHotelPage implements OnInit{
   items = []; ischecklist = false; isenabled = true;
   co = 0; recent; index
   setInter;ischecktext=false;isConnected;
+  inputText="";arrHistory=[];objHotelInfo;id
   constructor(public platform: Platform,public navCtrl: NavController, public authService: AuthService, public zone: NgZone, public searchHotel: SearchHotel,
     public gf: GlobalFunction,private networkProvider: NetworkProvider,public storage: Storage, public keyboard: Keyboard) {
     this.recent = this.searchHotel.recent;
     //this.getdata();
     this.isConnected = this.networkProvider.isOnline();
       if (this.isConnected) {
-        setTimeout(()=>{
-          this.storage.get('listregion').then((data:any)=>{
-            if(data){
-              this.json = data;
-            }else{
-              this.getdata();
-            }
+        // setTimeout(()=>{
+          this.zone.run(() => {
+            this.storage.get('listregion').then((data:any)=>{
+              if(data){
+                this.json = data;
+              }else{
+                this.getdata();
+              }
+            })
           })
-        },100)
+         
+        // },100)
       }else{
         this.gf.showWarning('Không có kết nối mạng','Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng','Đóng');
       }
@@ -159,19 +163,21 @@ export class SearchHotelPage implements OnInit{
     this.navCtrl.navigateBack('/app/tabs/tab1');
     //this.gf.hiddenHeader();
   }
-  itemclick(item) {
-    this.searchHotel.gbitem = item;
-    // this.gbitem = item;
-    if (item.hotelName) {
-      this.searchHotel.input = item.hotelName;
+  itemclick(msg) {
+    this.searchHotel.gbitem = msg;
+    if (msg.RegionName) {
+      this.searchHotel.input = msg.RegionName;
+      // var obj = this.arrHistory.filter((item) =>  item.id == msg.RegionId);
+
+      //this.arrHistory.push(item);
+    // }
     } else {
-      this.searchHotel.input = item.regionName;
+      this.searchHotel.input = msg.HotelName;
+      // var obj = this.arrHistory.filter((item) =>  item.id == msg.HotelId);
+      
     }
-    this.searchHotel.flag = -0;
+    this.searchHotel.flag = 0;
     this.co = 0;
-    // this.clearClonePage('page-main');
-    // this.app.getActiveNav().push('MainPage');
-    //this.app.getActiveNav().setRoot('MainPage');
     this.searchHotel.itemSearchHotelHome.emit(1);
     this.navCtrl.navigateBack('/app/tabs/tab1');
     //this.gf.hiddenHeader();
@@ -185,10 +191,9 @@ export class SearchHotelPage implements OnInit{
       const val = ev.detail.value;
       var options = {
         method: 'GET',
-        //url: 'https://www.ivivu.com/GListSuggestion',
-        url : C.urls.baseUrl.urlMobile+ '/search/searchhotel',
+        url: 'https://www.ivivu.com/GListSuggestion',
         timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-        qs: { keyword: val },
+        qs: { key: val },
         headers:
         {
         }
@@ -203,22 +208,6 @@ export class SearchHotelPage implements OnInit{
           throw new Error(error)
         };
         se.zone.run(() => {
-          // se.items = JSON.parse(body);
-          // if ( se.items.length>0 ) {
-          //   se.ischecktext=false;
-          //   if (val && val.trim() != '') {
-          //     se.ischecklist = true;
-             
-          //   }
-          //   else {
-          //     se.ischecklist = false;
-          //     se.items = [];
-          //   }
-          // }
-          // else
-          // {
-          //   se.ischecktext=true;
-          // }
           let lstitems = JSON.parse(body);
           
           if(lstitems.length && lstitems.length >0){
@@ -227,8 +216,9 @@ export class SearchHotelPage implements OnInit{
               if(se.items.length ==0){
                 lstitems.forEach(element => {
                   element.show = true;
+                  se.items.push(element);
                 })
-                se.items.push(...lstitems);
+                
               }else{
                 se.items.forEach(e => {
                   e.show = false;
@@ -251,6 +241,7 @@ export class SearchHotelPage implements OnInit{
               element.show = false;
             });
             se.ischecktext=true;
+            se.ischecklist = true;
           }
         });
       })
@@ -259,8 +250,8 @@ export class SearchHotelPage implements OnInit{
       se.ischecklist = false;
       se.ischecktext=false;
       se.items.forEach(element => {
-        element.show = false;
-    });
+          element.show = false;
+      });
     }
   }
   search() {
@@ -418,13 +409,7 @@ export class SearchHotelPage implements OnInit{
     this.navCtrl.back();
     //this.gf.hiddenHeader();
   }
-
-  ionViewDidEnter() {
-    setTimeout(() => {
-      this.myInput.setFocus();
-    }, 150);
-    this.keyboard.show();
+  clearText(){
+    this.inputText="";
   }
-
-
 }

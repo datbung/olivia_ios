@@ -699,7 +699,7 @@ export class FlightComboReviewsPage implements OnInit{
         data.IsPackageRate = true;
         data.GetVinHms = 1;
         data.GetSMD= 1;
-        
+        data.IsB2B=true;
         var form = data;
         var options = {
           method: 'POST',
