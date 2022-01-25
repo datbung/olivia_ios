@@ -2310,7 +2310,6 @@ body{
 }
 .div-recent-1{
   margin-right: 16px;
-  height:96px;
   width: 100%;
   display: flex;
   margin-left: 16px;
@@ -2324,7 +2323,7 @@ body{
 }
 .div-scroll-recent{
     overflow-x: scroll;
-    height: 100px;
+    height: 120px;
     margin-top: 16px;
     overflow-y: hidden;
 }

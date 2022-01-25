@@ -346,25 +346,25 @@
         ></ion-spinner>
       </div>
     </div>
-    <div [ngClass]="blogtrips.length > 0 ? 'title-padding p-left-16 p-top-21' : 'title-padding p-left-16 p-top-30' " *ngIf="slideData1.length >0">
+    <div [ngClass]="blogtrips.length > 0 ? 'title-padding p-left-16 p-top-21' : 'title-padding p-left-16 p-top-30'" style="background-color: #f2f2f2;" *ngIf="slideData1.length >0">
       <ion-label class="text-title2">
         Ưu đãi tốt nhất hôm nay
       </ion-label>
-      <div style="margin-top: 5px;text-align: right;float: right;">
+      <div style="margin-top: 5px;text-align: right;float: right;background-color: #f2f2f2;">
         <ion-label (click)="seemoredeal()" style="color: #26bed6">
           Xem thêm
         </ion-label>
         <img src="./assets/imgs/vector.svg" />
       </div>
     </div>
-    <div class="sub-title p-left-16 " *ngIf="slideData1.length >0">
+    <div style="background-color: #f2f2f2;" class="sub-title p-left-16 " *ngIf="slideData1.length >0">
       <ion-label class="text-subtitle">
         Nhanh tay đặt ngay. Để mai sẽ lỡ
       </ion-label>
     </div>
     <div *ngIf="slideData1.length >0"
       class="innerdeals1 slide2-scroll"
-      style="overflow-x: scroll;overflow-y: hidden; margin-left: -4px;"
+      style="overflow-x: scroll;overflow-y: hidden; margin-left: -4px;background-color: #f2f2f2;"
       padding
       (scroll)="onScroll($event)">
     <div
@@ -709,7 +709,7 @@
       </ion-grid>
     </div>
 
-    <div class="title-padding-1 p-left-16" style="position: relative;">
+    <div class="title-padding-1 p-left-16" style="position: relative;background-color: #f2f2f2;">
       <ion-label class="text-title2">
         Cẩm nang du lịch
       </ion-label>
@@ -720,14 +720,14 @@
         <img src="./assets/imgs/vector.svg" />
       </div>
     </div>
-    <div class="sub-title p-left-16 p-bottom-0">
+    <div class="sub-title p-left-16 p-bottom-0" style="background-color: #f2f2f2;">
       <ion-label class="text-subtitle">
         Cập nhật thông tin. Chuyến đi tuyệt vời
       </ion-label>
     </div>
     <div
       class="innerdeals1 slide5-scroll"
-      style="overflow-x: scroll; overflow-y: hidden; margin-left: 0px;--padding-top: 0px"
+      style="overflow-x: scroll; overflow-y: hidden; margin-left: 0px;--padding-top: 0px;background-color: #f2f2f2"
       padding
       (scroll)="onScrollBlog($event)"
     >
