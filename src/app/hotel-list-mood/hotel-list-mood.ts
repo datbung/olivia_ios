@@ -633,17 +633,37 @@ export class HotelListMoodPage implements OnInit{
     //this.navCtrl.navigateForward('SearchPage', id1);
   }
   
-  itemSelected(hotelid) {
+  itemSelected(msg) {
     //this.presentLoadingnavi();
     var se = this;
-    se.searchhotel.hotelID = hotelid;
+    se.searchhotel.hotelID = msg.HotelId;
     se.searchhotel.rootPage = "listmood";
-    se.gf.setParams(hotelid,'hotellistmoodselected');
+    se.gf.setParams(msg.HotelId,'hotellistmoodselected');
     this.gf.setParams({moodid: this.id, title: this.title},'hotellistmood');
-    this.value.logingoback='/app/tabs/hoteldetail/'+hotelid;
+    this.value.logingoback='/app/tabs/hoteldetail/'+msg.HotelId;
+    var item: any ={};
+    item.adult=this.searchhotel.adult;
+    item.child=this.searchhotel.child;
+    item.arrchild= this.searchhotel.arrchild
+    if(msg.Avatar){
+      item.Avatar = (msg.Avatar.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + msg.Avatar : msg.Avatar;
+    }
+    else{
+      item.Avatar='https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
+    }
+    var checkInDate=new Date(this.searchhotel.CheckInDate);
+    var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+    item.CheckInDate=this.searchhotel.CheckInDate
+    item.CheckOutDate=this.searchhotel.CheckOutDate;
+    item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+    item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+    item.id=msg.HotelId;
+    item.name=msg.Name;
+    item.isType=0;
+    this.gf.setCacheSearch(item,1);
     //this.navCtrl.navigateForward('/hoteldetail/'+hotelid);
     setTimeout(()=>{
-      this.navCtrl.navigateForward('/hoteldetail/'+ hotelid);
+      this.navCtrl.navigateForward('/hoteldetail/'+ msg.HotelId);
       //this.navCtrl.navigateForward(['/app/tabs/hoteldetail/'+hotelid]);
     },10)
   }

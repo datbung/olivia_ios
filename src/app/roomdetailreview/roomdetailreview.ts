@@ -162,7 +162,7 @@ export class RoomdetailreviewPage implements OnInit {
       this.Roomif.promocode= "";
       this.promocode= "";
     }
-    if (this.room[0].MealTypeRates[this.indexme].Supplier == 'Internal') {
+    if (this.room[0].MealTypeRates[this.indexme].Supplier == 'Internal' || this.room[0].MealTypeRates[this.indexme].Supplier == 'B2B') {
       this.navCtrl.navigateForward('roomadddetails');
     } else {
       if(this.room[0].MealTypeRates[this.indexme].Supplier == 'EAN'){

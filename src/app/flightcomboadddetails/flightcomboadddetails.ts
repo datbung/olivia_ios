@@ -1075,6 +1075,32 @@ export class FlightComboAddDetailsPage implements OnInit {
           se.bookcombo.FlightCode = response.flyBookingCode;
           //check ALM room
           if(se.objectFlight.HotelBooking.SupplierName != "VINPEARL"){
+            if (se.objectFlight.HotelBooking.SupplierName == "B2B") {
+              //truong hơp giữ chỗ đc mà phòng ko có AL thì k cho trả trước
+              se.Roomif.payment = 'RQ';
+              se.Roomif.ischeckpaymentCard = true;
+              se.Roomif.ischeckpaymentLater = false;
+              se.gf.holdflight(se.bookcombo.FlightCode, se.bookcombo.iddepart, se.bookcombo.idreturn).then(datafly => {
+                se.gf.createTransactionCombo(se.bookcombo.bookingcode, se.bookcombo.FlightCode, datafly.depcode, datafly.retcode).then(data => {
+                  if (se.loader) {
+                    se.loader.dismiss();
+                  }
+                  if (data) {
+                    if(se.bizTravelService.isCompany){
+                      let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=2&source=app&amount=' + se.bookcombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookcombo.bookingcode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti ;
+                      se.gf.CreateUrl(url);
+                    }
+
+                    se.gf.createFlightTransactionCombo(se.bookcombo.FlightCode);
+                    se.navCtrl.navigateForward('/flightcombopaymentdone/RQ');
+
+                  } else {
+                    alert('Gặp sự cố, vui lòng thử lại sau')
+                  }
+                })
+              })
+              return;
+           }
             var options = {
               method: 'GET',
               url: C.urls.baseUrl.urlContracting + '/api/toolsapi/CheckAllotment',

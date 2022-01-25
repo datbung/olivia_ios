@@ -138,13 +138,13 @@
 
         <ion-item (click)="flightpaymentatm()" [ngClass]="blockPayCard ? 'cls-minheight' : 'cls-minheight'">
             <label  class="text-list">
-              Thẻ ATM nội địa
+              Thẻ ATM nội địa /Internet Banking
             </label>
             <ion-icon slot="end" name="ios-arrow-round-forward" *ngIf="!blockPayCard" class='m-right-16'></ion-icon>
         </ion-item>
         <ion-item [ngClass]="(arrbankrmb.length>0&&ischeckvisa) ? 'cls-minheight no-border-bottom ion-item1' : 'cls-minheight no-border-bottom ion-item1'  " (click)="flightpaymentvisa()">
           <label  class="text-list ion-item1" >
-            Thẻ tín dụng (Visa, Master Card)
+            Thẻ tín dụng <img class="img-visa" src="./assets/imgs/ic_visa.png">
           </label>
           <ion-icon slot="end"  *ngIf="!ischeckvisa && !blockPayCard" name="ios-arrow-round-forward" class='m-right-16'></ion-icon>
           <img slot="end"  *ngIf="ischeckvisa" style="margin-right: -9px;" src="./assets/imgs/ic_down.svg">

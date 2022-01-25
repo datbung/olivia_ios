@@ -46,7 +46,6 @@
 		346A3C3AC9C64A3B945948D7 /* SafariViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACED4DD9DDEF4893B9CE8BBD /* SafariViewController.m */; };
 		34D80204B8124F598E018106 /* CodePushJWTCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EE8FBFBB814F44B597C63B /* CodePushJWTCoding.m */; };
 		350B76BA2314BE6A00BE0C3E /* www in Resources */ = {isa = PBXBuildFile; fileRef = EB87FDF31871DA8E0020F90C /* www */; };
-		35409060276F05AD00379591 /* FileOpener2.m in Sources */ = {isa = PBXBuildFile; fileRef = 3540905F276F05AD00379591 /* FileOpener2.m */; };
 		35409062276F090200379591 /* apple-app-site-association.json in Resources */ = {isa = PBXBuildFile; fileRef = 3540905D276EFD2600379591 /* apple-app-site-association.json */; };
 		35409064276F090600379591 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3540905C276EFD1400379591 /* GoogleService-Info.plist */; };
 		354BC692230B8F37008B4279 /* FCMPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 354BC690230B8F37008B4279 /* FCMPlugin.m */; };
@@ -66,6 +65,7 @@
 		48B9EEFF75B64B8E9E89D66D /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DC3EFD66AA4A55B817DD94 /* CDVFile.m */; };
 		4AA21902FCB14F53A8900BA6 /* PECropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 39D2F4469806431E85A99FEF /* PECropView.m */; };
 		4ADD118BA5204CF0855B62AF /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C89C73CC433408781E73874 /* SafariServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4C165473277DB7B700A81C0F /* FileOpener2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C165472277DB7B700A81C0F /* FileOpener2.m */; };
 		4D504AA12171406887D5DCA6 /* CDVWKWebViewEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C7B87BB4F410DA2D2BB58 /* CDVWKWebViewEngine.m */; };
 		50AEB308514D4AB0B3184C9E /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = EEB2334C25EC4437A1368F06 /* entropy.c */; };
 		5188BD79AFB242EB95BB1CC2 /* AppDelegate+FirebaseDynamicLinksPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 512A6DB3E86B42CE9EC3DAA5 /* AppDelegate+FirebaseDynamicLinksPlugin.m */; };
@@ -277,8 +277,6 @@
 		33375D831FC04C94A1039468 /* CTCrop.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CTCrop.h; path = "cordova-plugin-crop/CTCrop.h"; sourceTree = "<group>"; };
 		3540905C276EFD1400379591 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3540905D276EFD2600379591 /* apple-app-site-association.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "apple-app-site-association.json"; path = "../../apple-app-site-association.json"; sourceTree = "<group>"; };
-		3540905E276F058600379591 /* FileOpener2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOpener2.h; path = "cordova-plugin-file-opener2/FileOpener2.h"; sourceTree = "<group>"; };
-		3540905F276F05AD00379591 /* FileOpener2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileOpener2.m; path = "cordova-plugin-file-opener2/FileOpener2.m"; sourceTree = "<group>"; };
 		354BC68D230B8F37008B4279 /* FCMPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCMPlugin.h; sourceTree = "<group>"; };
 		354BC690230B8F37008B4279 /* FCMPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCMPlugin.m; sourceTree = "<group>"; };
 		35CE3BA72652BDF8000A8C1B /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
@@ -309,6 +307,8 @@
 		4B271661A8984BD5A0F9BF0F /* CDVViewController+SplashScreen.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "CDVViewController+SplashScreen.h"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.h"; sourceTree = "<group>"; };
 		4BCE92EB81C6499EACD377D7 /* GMVideoIcon.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; path = GMVideoIcon.png; sourceTree = "<group>"; };
 		4BF24E2D10614DB69529DE48 /* CodePushJWTClaim.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CodePushJWTClaim.h; path = "cordova-plugin-code-push/CodePushJWTClaim.h"; sourceTree = "<group>"; };
+		4C165470277DB7B700A81C0F /* FileOpener2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOpener2.h; path = "cordova-plugin-file-opener2/FileOpener2.h"; sourceTree = "<group>"; };
+		4C165472277DB7B700A81C0F /* FileOpener2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileOpener2.m; path = "cordova-plugin-file-opener2/FileOpener2.m"; sourceTree = "<group>"; };
 		50BF2BAD24D147CD82054203 /* CDVWKWebViewUIDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKWebViewUIDelegate.m; path = "cordova-plugin-ionic-webview/CDVWKWebViewUIDelegate.m"; sourceTree = "<group>"; };
 		512A6DB3E86B42CE9EC3DAA5 /* AppDelegate+FirebaseDynamicLinksPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+FirebaseDynamicLinksPlugin.m"; path = "cordova-plugin-firebase-dynamiclinks/AppDelegate+FirebaseDynamicLinksPlugin.m"; sourceTree = "<group>"; };
 		5184C78D02BF4725B04FF663 /* GMGridViewCell.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GMGridViewCell.h; path = "cordova-plugin-telerik-imagepicker/GMGridViewCell.h"; sourceTree = "<group>"; };
@@ -660,8 +660,8 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				3540905E276F058600379591 /* FileOpener2.h */,
-				3540905F276F05AD00379591 /* FileOpener2.m */,
+				4C165470277DB7B700A81C0F /* FileOpener2.h */,
+				4C165472277DB7B700A81C0F /* FileOpener2.m */,
 				354BC68D230B8F37008B4279 /* FCMPlugin.h */,
 				354BC690230B8F37008B4279 /* FCMPlugin.m */,
 				67607A5BFD644F8FB2E41351 /* UIImage+CropScaleOrientation.m */,
@@ -1115,7 +1115,6 @@
 				569DA8A284114BCBA82C6ACD /* NSString+SSURLEncoding.m in Sources */,
 				249179DA908C4848B22D6ABD /* SocialSharing.m in Sources */,
 				CC2D367859A5480980F113D2 /* CFCallNumber.m in Sources */,
-				35409060276F05AD00379591 /* FileOpener2.m in Sources */,
 				0B1D055BCE7B46D88D340CED /* FirebaseAnalyticsPlugin.m in Sources */,
 				C158B14FE420462593A6B6F6 /* LaunchReview.m in Sources */,
 				705EE038A5B94B1ABBA0E7D5 /* UIWindow+DismissNotification.m in Sources */,
@@ -1181,6 +1180,7 @@
 				DECC48027CE44DCD8F9CC0BF /* StatusReport.m in Sources */,
 				ABB22C6F7E854B57A98DC603 /* UpdateHashUtils.m in Sources */,
 				294D97C4E58C45E8A6B43FF4 /* Utilities.m in Sources */,
+				4C165473277DB7B700A81C0F /* FileOpener2.m in Sources */,
 				434CFFFD79C141FCB236005F /* CDVWKWebViewEngine+CodePush.m in Sources */,
 				58451F6E72DE4DE18C112C1A /* CodePushJWTAlgorithmFactory.m in Sources */,
 				A6861A1FCDDD4C56A145574F /* CodePushJWTAlgorithmNone.m in Sources */,

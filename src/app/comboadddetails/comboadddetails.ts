@@ -57,6 +57,7 @@ export class ComboadddetailsPage implements OnInit {
     this.storage.get('email').then(email => {
       if(email){
         this.email = email;
+        // this._email = 'abc@vivumember.info';
         var checkappleemail=(this.email.includes("appleid") || this.email.includes('vivumember.info'));
         if (checkappleemail) {
           this.validemail = false;
@@ -800,111 +801,7 @@ export class ComboadddetailsPage implements OnInit {
       }
     }
   }
-  pushdata() {
-    this.presentLoading();
-    var se = this;
-    // var arrMealTypeRates = [];
-    // var room1 = [];
-    // arrMealTypeRates.push(this.room[0].MealTypeRates[this.booking.indexmealtype]);
-    // var itemroom1 = {
-    //   Penalty_Type: this.room[0].Rooms[0].Penalty_Type, RoomID: this.room[0].Rooms[0].RoomID, RoomPriceBreak: this.room[0].Rooms[0].RoomPriceBreak,
-    //   SupplierRef: this.room[0].Rooms[0].SupplierRef, SalesTax: this.room[0].Rooms[0].SalesTax
-    // }
-    // room1.push(itemroom1);
-    // this.jsonroom.RoomClasses = this.room;
-    // this.jsonroom.RoomClasses[0].MealTypeRates = arrMealTypeRates;
-    // this.jsonroom.RoomClasses[0].Rooms = room1;
-    // this.jsonroom.RoomClassesHidden = [];
-    // this.booking.Hotels = this.jsonroom
-    this.jsonroom.RoomClasses = this.room;
-    this.timestamp = Date.now();
-    this.storage.get('auth_token').then(auth_token => {
-      if (auth_token) {
-        var Invoice = 0;
-        if (se.Roomif.order) {
-          Invoice = 1;
-        }
-        var options = {
-          method: 'POST',
-          url: C.urls.baseUrl.urlPost + '/mInsertBooking',
-          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-          headers:
-          {
-            'content-type': 'application/json'
-          },
-          body:
-          {
-            RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
-            CName: se.Roomif.hoten,
-            CEmail: se.email,
-            CPhone: se.Roomif.phone,
-            timestamp: se.timestamp,
-            HotelID: se.booking.HotelId,
-            paymentMethod: "51",
-            note: se.Roomif.notetotal,
-            source: '6',
-            MemberToken: auth_token,
-            CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
-            UsePointPrice: se.Roomif.pricepoint,
-            NoteCorp: se.Roomif.order,
-            Invoice: Invoice,
-            UserPoints: se.Roomif.point,
-            CheckInDate: se.jsonroom.CheckInDate,
-            CheckOutDate: se.jsonroom.CheckOutDate,
-            TotalNight: se.jsonroom.TotalNight,
-            MealTypeIndex: this.booking.indexmealtype,
-            CompanyName: se.Roomif.companyname,
-            CompanyAddress: se.Roomif.address,
-            CompanyTaxCode: se.Roomif.tax,
-            BillingAddress: se.Roomif.addressorder,
-            promotionCode: se.Roomif.promocode
-
-          },
-          json: true
-        };
-        //console.log(JSON.stringify(options.body));
-        request(options, function (error, response, body) {
-          if (response.statusCode != 200) {
-            var objError = {
-              page: "comboadddetails",
-              func: "pushdata",
-              message: response.statusMessage,
-              content: response.body,
-              type: "warning",
-              param: JSON.stringify(options)
-            };
-            C.writeErrorLog(objError, response);
-          }
-          if (error) {
-            error.page = "comboadddetails";
-            error.func = "pushdata";
-            error.param = JSON.stringify(options);
-            C.writeErrorLog(error, response);
-          };
-          // var rs = JSON.parse(body);
-          if (body.error == 0) {
-            //console.log(body.code);
-            // var value = { BookingCode: body.code, total: se.Roomif.pricepoint ,ischeck:'1'};
-            //se.closeLoading();
-            var id = body.code;
-            var total = se.Roomif.pricepoint;
-            var ischeck = '1'
-            se.clearClonePage('page-comboadddetails');
-            se.loader.dismiss();
-            se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
-          }
-          else {
-            se.loader.dismiss();
-            alert(body.Msg);
-            //se.refreshToken();
-            //se.navCtrl.popToRoot();
-            //se.app.getRootNav().getActiveChildNav().select(0);
-          }
-        });
-
-      }
-    })
-  }
+  
   async presentToasterror() {
     let toast = await this.toastCtrl.create({
       message: "Số điểm không đủ để tạo booking",
@@ -1011,94 +908,6 @@ export class ComboadddetailsPage implements OnInit {
   }
   goback() {
     this.navCtrl.back();
-  }
-  paymentnotAL() {
-    this.presentLoading();
-    var se = this;
-    se.jsonroom.RoomClasses = se.room;
-    se.timestamp = Date.now();
-    se.storage.get('auth_token').then(auth_token => {
-      if (auth_token) {
-        var Invoice = 0;
-        if (se.Roomif.order) {
-          Invoice = 1;
-        }
-        var options = {
-          method: 'POST',
-          url: C.urls.baseUrl.urlPost + '/mInsertBooking',
-          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-          headers:
-          {
-            'content-type': 'application/json'
-          },
-          body:
-          {
-            RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
-            CName: se.Roomif.hoten,
-            CEmail: se.email,
-            CPhone: se.Roomif.phone,
-            timestamp: se.timestamp,
-            HotelID: se.booking.HotelId,
-            paymentMethod: "51",
-            note: se.Roomif.notetotal,
-            source: '6',
-            MemberToken: auth_token,
-            CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
-            UsePointPrice: se.Roomif.pricepoint,
-            NoteCorp: se.Roomif.order,
-            Invoice: Invoice,
-            UserPoints: se.Roomif.point,
-            CheckInDate: se.jsonroom.CheckInDate,
-            CheckOutDate: se.jsonroom.CheckOutDate,
-            TotalNight: se.jsonroom.TotalNight,
-            MealTypeIndex: se.booking.indexmealtype,
-            CompanyName: se.Roomif.companyname,
-            CompanyAddress: se.Roomif.address,
-            CompanyTaxCode: se.Roomif.tax,
-            BillingAddress: se.Roomif.addressorder,
-            promotionCode: se.Roomif.promocode
-          },
-          json: true
-        };
-        request(options, function (error, response, body) {
-          if (response.statusCode != 200) {
-            var objError = {
-              page: "roomadddetails",
-              func: "next",
-              message: response.statusMessage,
-              content: response.body,
-              type: "warning",
-              param: JSON.stringify(options)
-            };
-            C.writeErrorLog(objError, response);
-          }
-          if (error) {
-            error.page = "roomadddetails";
-            error.func = "next";
-            error.param = JSON.stringify(options);
-            C.writeErrorLog(error, response);
-          };
-          // var rs = JSON.parse(body);
-          if (body.error == 0) {
-            // console.log(body.code);
-            var code = body.code;
-            var stt = body.bookingStatus;
-            se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
-            se.loader.dismiss();
-            //se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
-          }
-          else {
-            se.loader.dismiss();
-            alert(body.Msg);
-            //se.refreshToken();
-            // se.navCtrl.popToRoot();
-            // se.app.getRootNav().getActiveChildNav().select(0);
-          }
-        });
-
-      }
-    })
-
   }
   hasWhiteSpace(s) {
     return s.indexOf(' ') >= 0;

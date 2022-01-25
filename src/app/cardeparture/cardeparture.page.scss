@@ -91,16 +91,16 @@
       }
 
       
-      .sc-ion-alert-ios-h {
+      .request-combo-css .sc-ion-alert-ios-h {
         --background: var(--ion-overlay-background-color,#fff);
         font-size: 14px;
         align-items: flex-end !important;
     }
     
-    .alert-head.sc-ion-alert-ios{
+    .request-combo-css .alert-head.sc-ion-alert-ios{
         display: none;
     }
-    .alert-wrapper.sc-ion-alert-ios{
+    .request-combo-css .alert-wrapper.sc-ion-alert-ios{
         width: 100%;
         min-width: 100%;
         border-radius: 0;
@@ -152,10 +152,10 @@
             margin-bottom: 0px;
           }
         }
-    .alert-button-inner.sc-ion-alert-ios {
+    .request-combo-css .alert-button-inner.sc-ion-alert-ios {
         justify-content: center;
     }
-    .alert-button.sc-ion-alert-ios{
+    .request-combo-css .alert-button.sc-ion-alert-ios{
         height: 48px ;
         border-radius: 28px ;
         font-size: 18px ;
@@ -166,7 +166,7 @@
         text-align: center;
         margin: 16px;
     }
-    .alert-button-group.sc-ion-alert-ios button:first-child{
+    .request-combo-css .alert-button-group.sc-ion-alert-ios button:first-child{
         display: none !important;
     }
     .alert-checkbox-group.sc-ion-alert-ios{
@@ -212,11 +212,11 @@
         -webkit-transform:none !important; 
     }
     @media (min-height:812px) and (max-height: 1024px) {
-        .alert-button-group.sc-ion-alert-ios{
+      .request-combo-css .alert-button-group.sc-ion-alert-ios{
           margin-bottom: 30px;
         }
       }
-      .sc-ion-alert-ios-h.sc-ion-alert-ios-s.cls-reivewapp {
+      .request-combo-css .sc-ion-alert-ios-h.sc-ion-alert-ios-s.cls-reivewapp {
         align-items: center !important;
       }
     //ion-select

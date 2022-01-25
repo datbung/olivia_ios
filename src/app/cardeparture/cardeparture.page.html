@@ -76,7 +76,7 @@
                 <div class="flightdeparture-button-filter">
                     <img style="margin-left: -6px;position: absolute;" src="./assets/imgs/ic_filter.svg">
                     <ion-label style="top: 20px;position: absolute;margin-left: 40px;">Lọc theo hãng</ion-label>
-                    <ion-select style="height:48px" class="selectclass" multiple="true" cancelText="" okText="Xác nhận" title="Lọc theo hãng"   mode="ios" selectedText=" " (ionChange)="filterAirline($event)" >
+                    <ion-select style="height:48px" class="selectclass" multiple="true" cancelText="Hủy" okText="Xác nhận" title="Lọc theo hãng"   mode="ios" selectedText=" " (ionChange)="filterAirline($event)" >
                                 <ion-select-option *ngFor="let item of listcarname" value={{item.id}}><img class="img-airline" src="./assets/ic_airticket/ic_vietnamairlines_b.png">{{item.name}}</ion-select-option>
                     </ion-select>
                 </div>

@@ -1,6 +1,9 @@
 node_modules
+<<<<<<< HEAD
 platforms
 plugins
 resources
 www
-
+=======
+platforms
+>>>>>>> 745756deb2c361debba866d3e481a7b4c475400e

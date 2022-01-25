@@ -270,6 +270,8 @@ export class SearchHotel {
   datecout: Date;
   cinthu: string;
   coutthu: string;
+  isRecent:any;
+  objRecent:any;
 }
 export class child {
     text: string;

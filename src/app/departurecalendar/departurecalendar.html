@@ -56,14 +56,14 @@
     </ion-row>
     <ion-row class="calendar-date">
       <ion-col size="1" *ngFor="let lastDay of daysInLastMonth" class="last-month" >
-        <div *ngIf="!lastDay.BOD">
+        <!-- <div *ngIf="!lastDay.BOD">
             <label  (click)="changeDateCombo(lastDay)" *ngIf="lastDay.price" [ngClass]="lastDay.price >0 ? 'cls-orange' : 'cls-green' ">{{lastDay.dateDisplay}}</label>
             <label  (click)="changeDateCombo(lastDay)" *ngIf="!lastDay.price" class="no-price">{{lastDay.dateDisplay}}</label>
         </div>
         <div *ngIf="lastDay.BOD">
             <label class="strikethrough">{{lastDay.dateDisplay}}</label>
             <div style="font-size: 11px" >Hết phòng</div>
-        </div>
+        </div> -->
       </ion-col>
       <ion-col class="current-month" size="1" *ngFor="let day of daysInThisMonth"   [ngClass]="currentDay == day.dateDisplay ? 'div-current-date': ''">
         <div  *ngIf="!day.BOD">
@@ -80,13 +80,13 @@
         <!-- <ng-template #otherDate class="otherDate" [ngClass]="day.price >0 ? 'cls-orange' : 'cls-green' ">{{day.dateDisplay}}</ng-template> -->
       </ion-col>
       <ion-col size="1" *ngFor="let nextDay of daysInNextMonth" >
-          <div *ngIf="!nextDay.BOD">
+          <!-- <div *ngIf="!nextDay.BOD">
               <label  class="next-month" (click)="changeDateCombo(nextDay)">{{nextDay.dateDisplay}}</label>
           </div>
           <div *ngIf="nextDay.BOD">
               <label class="strikethrough">{{nextDay.dateDisplay}}</label>
               <div style="font-size: 11px" >Hết phòng</div>
-          </div>
+          </div> -->
       </ion-col>
     </ion-row>
     

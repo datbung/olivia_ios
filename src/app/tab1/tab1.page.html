@@ -88,6 +88,7 @@
    
   </ion-slides>
 </div>
+
 <div [ngClass]="activeTab ==0 ? 'div-wraper-hotel cls-visible' : 'div-wraper-hotel cls-disabled'">
   <div [ngClass]="isNotice ? 'background-notice' : 'background'">
     <img class="img-background" src="./assets/blue.jpg">
@@ -217,10 +218,43 @@
     </div>
   </div>
 
+
+
   <div
     *ngIf="ischeck == true && ischeckks == true "
     [ngClass]="isNotice ? 'cls-content-slide-notice' : 'cls-content-slide'"
   >
+  <!-- tìm kiếm gần đây -->
+<ion-row *ngIf="arrHistory.length>0" style="margin-left: -5px;padding-top:16px" class="p-left-16">
+
+  <ion-col size="12" style="padding-bottom: 0">
+    <ion-label class="text-title2">
+      Tìm kiếm gần đây của bạn
+    </ion-label>
+  </ion-col>
+
+</ion-row>
+<div *ngIf="arrHistory.length>0"  class="div-scroll-recent">
+  <div  [ngClass]="arrHistory.length==1 ? 'd-flex-only' : 'd-flex-recent'"  id="div-recent">
+    <div [ngClass]="arrHistory.length==1 ? 'div-recent-1' : 'div-recent'" (click)="funcRecent(item)" *ngFor="let item of arrHistory.slice().reverse()">
+      <div>
+        <img class="img-recent" src={{item.imageUrl}}>
+      </div>
+      <div [ngClass]="arrHistory.length==1 ? 'div-right-recent-1' : 'div-right-recent'">
+        <div class="div-text-info-1">
+          <ion-label >
+            <p class="text-hotelname-recent">{{item.name}}</p>
+              <p class="text-info-recent">{{item.checkInDate}} - {{item.checkOutDate}}</p>
+              <p class="text-info-recent-1">{{item.adult}} người lớn, {{item.child}} trẻ em</p>
+          </ion-label>
+        </div>
+      
+      
+      </div>
+    </div>
+</div>
+
+</div>
     <ion-row
       *ngIf="blogtrips.length > 0"
       style="margin-left: -5px;padding-top:16px"
@@ -328,7 +362,7 @@
         Nhanh tay đặt ngay. Để mai sẽ lỡ
       </ion-label>
     </div>
-    <div
+    <div *ngIf="slideData1.length >0"
       class="innerdeals1 slide2-scroll"
       style="overflow-x: scroll;overflow-y: hidden; margin-left: -4px;"
       padding
@@ -370,7 +404,7 @@
         ></ion-spinner>
       </div>
     </div>
-    <div class="title-padding  p-left-16 p-top-24 bg-white">
+    <div class="title-padding  p-left-16 bg-white">
       <ion-label class="text-title2">
         <!-- Du lịch ngay! Vì bạn xứng đáng -->
         Du lịch an toàn
