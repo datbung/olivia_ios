@@ -101,7 +101,7 @@ export class HotelListPage implements OnInit{
         item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
         item.id=this.searchhotel.objRecent.id;
         item.name=this.searchhotel.objRecent.name;
-        item.isType=1;
+        item.isType=this.searchhotel.objRecent.isType;
         this.gf.setCacheSearch(item,1);
          se.doRefresh();
        }
