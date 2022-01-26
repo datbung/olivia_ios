@@ -638,7 +638,7 @@ unlikeItem(id) {
       this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
       return;
     }
-    this.searchhotel.hotelID = item.id;
+    this.searchhotel.hotelID = msg.id;
     this.searchhotel.rootPage = "topdeallist";
     var item: any ={};
     item.adult=this.searchhotel.adult;
