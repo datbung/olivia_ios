@@ -2151,6 +2151,8 @@ excuteLoadHotelRoom(data){
     // }
     se.roomCombo='';
     se.ischeckcbfs=false;
+    se.warningCombofs='';
+    se.loaddonecombo = false;
     se.checkRoomDefaultFsale(se.comboDetail.comboDetail.roomId, se.ListRoomClasses).then((check) => {
       if (check) {
         if (se.objroomfsale[0].Status == 'AL') {
@@ -2175,9 +2177,13 @@ excuteLoadHotelRoom(data){
                 }
                se.comboprice=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].PriceAvgPlusTAStr;
                 se.roomCombo = se.hotelRoomClasses[i].ClassName;
+                se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
                 // check status IP thi k show gia
                 if (se.hotelRoomClasses[i].Status == 'IP') {
-                  se.warningCombofsIP = 'Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+                  setTimeout(()=>{
+                    se.warningCombofsIP = 'Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+                  },1000)
+                
                   // se.ischeckcbfs = false;
                 }
   
@@ -2186,7 +2192,9 @@ excuteLoadHotelRoom(data){
               }
             }
             if (!cocheckCombofs) {
-              se.warningCombofs = 'Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+              setTimeout(()=>{
+                se.warningCombofs='Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+              },1000)
             }
           }
         }
@@ -2203,21 +2211,29 @@ excuteLoadHotelRoom(data){
             }
            se.comboprice=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].PriceAvgPlusTAStr;
            se.roomCombo=se.hotelRoomClasses[i].ClassName;
+           se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
              // check status IP thi k show gia
           if(se.hotelRoomClasses[i].Status == 'IP'){
-            se.warningCombofsIP='Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
-             se.ischeckcbfs = false;
+              setTimeout(()=>{
+                se.warningCombofsIP='Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+                se.ischeckcbfs = false;
+              },1000)
+          
           }
            cocheckCombofs=true;
            break;
           }
         }
         if(!cocheckCombofs){
-          se.warningCombofs='Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+          setTimeout(()=>{
+            se.warningCombofs='Giai đoạn không áp dụng. Quý khách vui lòng chọn ngày khác.';
+          },1000)
+         
         }
        
       }
       se.loadpricecombodone = true;
+      se.loaddonecombo=true;
      
     })
   }
@@ -2245,12 +2261,19 @@ excuteLoadHotelRoom(data){
               break;
             }
           }
+          if(this.objroomfsale==0){
+            this.objroomfsale = objmap;
+          }
         }
         else {
           this.objroomfsale = objmap;
         }
-        this.comboprice = this.objroomfsale[0].PriceAvgPlusTAStr;
-        this.roomCombo = this.objroomfsale[0].RoomName;
+        if( this.objroomfsale.length > 0){
+          this.comboprice = this.objroomfsale[0].PriceAvgPlusTAStr;
+          this.roomCombo = this.objroomfsale[0].RoomName;
+          this.bookCombo.roomNb = this.objroomfsale[0].TotalRoom;
+        }
+      
       }
       resolve(res);
     })
