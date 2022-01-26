@@ -225,7 +225,7 @@ export class RequestCombo1Page implements OnInit{
           Adult: this.searchhotel.adult,
           child:this.searchhotel.child,
           ChildAgeStr: "",
-          Troom: this.searchhotel.roomnumber ? this.searchhotel.roomnumber : 1,
+          Troom: this.bookCombo.roomNb,
           UrlBookBack: "",
           HotelLink: this.bookCombo.HotelLink,
           RoomData: null,
