@@ -189,6 +189,14 @@ ion-toggle {
   }
 }
 
+@media (min-height: 812px) and (max-height: 840px){
+  .flight-calendar-custom ion-header ion-toolbar:first-child {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+    height: 78px !important;
+  }
+}
+
 @media (min-width: 376px) and (max-width: 440px) {
   .flight-calendar-custom ion-header ion-toolbar:first-child {
     margin-top: 0 !important;
