@@ -1,22 +1,21 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[12],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/0tqlwsdt.sc.entry.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/0tqlwsdt.sc.entry.js ***!
-  \*****************************************************************************/
-/*! exports provided: IonPopover, IonPopoverController */
+/***/ "./node_modules/@ionic/core/dist/esm/ion-action-sheet-md.entry.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/ion-action-sheet-md.entry.js ***!
+  \************************************************************************/
+/*! exports provided: ion_action_sheet */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonPopover", function() { return Popover; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonPopoverController", function() { return PopoverController; });
-/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
-/* harmony import */ var _chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-9a4a967d.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-9a4a967d.js");
-/* harmony import */ var _chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-2f96b3d2.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2f96b3d2.js");
-/* harmony import */ var _chunk_99929188_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-99929188.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-99929188.js");
-/* harmony import */ var _chunk_90d954cd_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-90d954cd.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-90d954cd.js");
-/* harmony import */ var _chunk_2da9a352_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./chunk-2da9a352.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2da9a352.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_action_sheet", function() { return ActionSheet; });
+/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
+/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
+/* harmony import */ var _helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers-46f4a262.js */ "./node_modules/@ionic/core/dist/esm/helpers-46f4a262.js");
+/* harmony import */ var _animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./animation-af478fe9.js */ "./node_modules/@ionic/core/dist/esm/animation-af478fe9.js");
+/* harmony import */ var _overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./overlays-10640d86.js */ "./node_modules/@ionic/core/dist/esm/overlays-10640d86.js");
+/* harmony import */ var _theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./theme-18cbe2cc.js */ "./node_modules/@ionic/core/dist/esm/theme-18cbe2cc.js");
 
 
 
@@ -24,416 +23,208 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-function iosEnterAnimation(AnimationC, baseEl, ev) {
-    let originY = 'top';
-    let originX = 'left';
-    const contentEl = baseEl.querySelector('.popover-content');
-    const contentDimentions = contentEl.getBoundingClientRect();
-    const contentWidth = contentDimentions.width;
-    const contentHeight = contentDimentions.height;
-    const bodyWidth = baseEl.ownerDocument.defaultView.innerWidth;
-    const bodyHeight = baseEl.ownerDocument.defaultView.innerHeight;
-    const targetDim = ev && ev.target && ev.target.getBoundingClientRect();
-    const targetTop = targetDim != null && 'top' in targetDim ? targetDim.top : bodyHeight / 2 - contentHeight / 2;
-    const targetLeft = targetDim != null && 'left' in targetDim ? targetDim.left : bodyWidth / 2;
-    const targetWidth = (targetDim && targetDim.width) || 0;
-    const targetHeight = (targetDim && targetDim.height) || 0;
-    const arrowEl = baseEl.querySelector('.popover-arrow');
-    const arrowDim = arrowEl.getBoundingClientRect();
-    const arrowWidth = arrowDim.width;
-    const arrowHeight = arrowDim.height;
-    if (targetDim == null) {
-        arrowEl.style.display = 'none';
-    }
-    const arrowCSS = {
-        top: targetTop + targetHeight,
-        left: targetLeft + targetWidth / 2 - arrowWidth / 2
-    };
-    const popoverCSS = {
-        top: targetTop + targetHeight + (arrowHeight - 1),
-        left: targetLeft + targetWidth / 2 - contentWidth / 2
-    };
-    let checkSafeAreaLeft = false;
-    let checkSafeAreaRight = false;
-    if (popoverCSS.left < POPOVER_IOS_BODY_PADDING + 25) {
-        checkSafeAreaLeft = true;
-        popoverCSS.left = POPOVER_IOS_BODY_PADDING;
-    }
-    else if (contentWidth + POPOVER_IOS_BODY_PADDING + popoverCSS.left + 25 > bodyWidth) {
-        checkSafeAreaRight = true;
-        popoverCSS.left = bodyWidth - contentWidth - POPOVER_IOS_BODY_PADDING;
-        originX = 'right';
-    }
-    if (targetTop + targetHeight + contentHeight > bodyHeight && targetTop - contentHeight > 0) {
-        arrowCSS.top = targetTop - (arrowHeight + 1);
-        popoverCSS.top = targetTop - contentHeight - (arrowHeight - 1);
-        baseEl.className = baseEl.className + ' popover-bottom';
-        originY = 'bottom';
-    }
-    else if (targetTop + targetHeight + contentHeight > bodyHeight) {
-        contentEl.style.bottom = POPOVER_IOS_BODY_PADDING + '%';
-    }
-    arrowEl.style.top = arrowCSS.top + 'px';
-    arrowEl.style.left = arrowCSS.left + 'px';
-    contentEl.style.top = popoverCSS.top + 'px';
-    contentEl.style.left = popoverCSS.left + 'px';
-    if (checkSafeAreaLeft) {
-        contentEl.style.left = `calc(${popoverCSS.left}px + var(--ion-safe-area-left, 0px))`;
-    }
-    if (checkSafeAreaRight) {
-        contentEl.style.left = `calc(${popoverCSS.left}px - var(--ion-safe-area-right, 0px))`;
-    }
-    contentEl.style.transformOrigin = originY + ' ' + originX;
-    const baseAnimation = new AnimationC();
-    const backdropAnimation = new AnimationC();
-    backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    backdropAnimation.fromTo('opacity', 0.01, 0.08);
-    const wrapperAnimation = new AnimationC();
-    wrapperAnimation.addElement(baseEl.querySelector('.popover-wrapper'));
-    wrapperAnimation.fromTo('opacity', 0.01, 1);
-    return Promise.resolve(baseAnimation
+/**
+ * iOS Action Sheet Enter Animation
+ */
+const iosEnterAnimation = (baseEl) => {
+    const baseAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const backdropAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const wrapperAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    backdropAnimation
+        .addElement(baseEl.querySelector('ion-backdrop'))
+        .fromTo('opacity', 0.01, 0.4);
+    wrapperAnimation
+        .addElement(baseEl.querySelector('.action-sheet-wrapper'))
+        .fromTo('transform', 'translateY(100%)', 'translateY(0%)');
+    return baseAnimation
         .addElement(baseEl)
-        .easing('ease')
-        .duration(100)
-        .add(backdropAnimation)
-        .add(wrapperAnimation));
-}
-const POPOVER_IOS_BODY_PADDING = 5;
-
-function iosLeaveAnimation(AnimationC, baseEl) {
-    const baseAnimation = new AnimationC();
-    const backdropAnimation = new AnimationC();
-    backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    const wrapperAnimation = new AnimationC();
-    wrapperAnimation.addElement(baseEl.querySelector('.popover-wrapper'));
-    wrapperAnimation.fromTo('opacity', 0.99, 0);
-    backdropAnimation.fromTo('opacity', 0.08, 0);
-    return Promise.resolve(baseAnimation
-        .addElement(baseEl)
-        .easing('ease')
-        .duration(500)
-        .add(backdropAnimation)
-        .add(wrapperAnimation));
-}
-
-function mdEnterAnimation(AnimationC, baseEl, ev) {
-    const doc = baseEl.ownerDocument;
-    const isRTL = doc.dir === 'rtl';
-    let originY = 'top';
-    let originX = isRTL ? 'right' : 'left';
-    const contentEl = baseEl.querySelector('.popover-content');
-    const contentDimentions = contentEl.getBoundingClientRect();
-    const contentWidth = contentDimentions.width;
-    const contentHeight = contentDimentions.height;
-    const bodyWidth = doc.defaultView.innerWidth;
-    const bodyHeight = doc.defaultView.innerHeight;
-    const targetDim = ev && ev.target && ev.target.getBoundingClientRect();
-    const targetTop = targetDim != null && 'bottom' in targetDim
-        ? targetDim.bottom
-        : bodyHeight / 2 - contentHeight / 2;
-    const targetLeft = targetDim != null && 'left' in targetDim
-        ? isRTL
-            ? targetDim.left - contentWidth + targetDim.width
-            : targetDim.left
-        : bodyWidth / 2 - contentWidth / 2;
-    const targetHeight = (targetDim && targetDim.height) || 0;
-    const popoverCSS = {
-        top: targetTop,
-        left: targetLeft
-    };
-    if (popoverCSS.left < POPOVER_MD_BODY_PADDING) {
-        popoverCSS.left = POPOVER_MD_BODY_PADDING;
-        originX = 'left';
-    }
-    else if (contentWidth + POPOVER_MD_BODY_PADDING + popoverCSS.left >
-        bodyWidth) {
-        popoverCSS.left = bodyWidth - contentWidth - POPOVER_MD_BODY_PADDING;
-        originX = 'right';
-    }
-    if (targetTop + targetHeight + contentHeight > bodyHeight &&
-        targetTop - contentHeight > 0) {
-        popoverCSS.top = targetTop - contentHeight - targetHeight;
-        baseEl.className = baseEl.className + ' popover-bottom';
-        originY = 'bottom';
-    }
-    else if (targetTop + targetHeight + contentHeight > bodyHeight) {
-        contentEl.style.bottom = POPOVER_MD_BODY_PADDING + 'px';
-    }
-    contentEl.style.top = popoverCSS.top + 'px';
-    contentEl.style.left = popoverCSS.left + 'px';
-    contentEl.style.transformOrigin = originY + ' ' + originX;
-    const baseAnimation = new AnimationC();
-    const backdropAnimation = new AnimationC();
-    backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    backdropAnimation.fromTo('opacity', 0.01, 0.32);
-    const wrapperAnimation = new AnimationC();
-    wrapperAnimation.addElement(baseEl.querySelector('.popover-wrapper'));
-    wrapperAnimation.fromTo('opacity', 0.01, 1);
-    const contentAnimation = new AnimationC();
-    contentAnimation.addElement(baseEl.querySelector('.popover-content'));
-    contentAnimation.fromTo('scale', 0.001, 1);
-    const viewportAnimation = new AnimationC();
-    viewportAnimation.addElement(baseEl.querySelector('.popover-viewport'));
-    viewportAnimation.fromTo('opacity', 0.01, 1);
-    return Promise.resolve(baseAnimation
-        .addElement(baseEl)
-        .easing('cubic-bezier(0.36,0.66,0.04,1)')
-        .duration(300)
-        .add(backdropAnimation)
-        .add(wrapperAnimation)
-        .add(contentAnimation)
-        .add(viewportAnimation));
-}
-const POPOVER_MD_BODY_PADDING = 12;
-
-function mdLeaveAnimation(AnimationC, baseEl) {
-    const baseAnimation = new AnimationC();
-    const backdropAnimation = new AnimationC();
-    backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    const wrapperAnimation = new AnimationC();
-    wrapperAnimation.addElement(baseEl.querySelector('.popover-wrapper'));
-    wrapperAnimation.fromTo('opacity', 0.99, 0);
-    backdropAnimation.fromTo('opacity', 0.32, 0);
-    return Promise.resolve(baseAnimation
-        .addElement(baseEl)
-        .easing('ease')
-        .duration(500)
-        .add(backdropAnimation)
-        .add(wrapperAnimation));
-}
-
-class Popover {
-    constructor() {
-        this.presented = false;
-        this.keyboardClose = true;
-        this.backdropDismiss = true;
-        this.showBackdrop = true;
-        this.translucent = false;
-        this.animated = true;
-    }
-    onDismiss(ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
-        this.dismiss();
-    }
-    onBackdropTap() {
-        this.dismiss(undefined, _chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["a"]);
-    }
-    lifecycle(modalEvent) {
-        const el = this.usersElement;
-        const name = LIFECYCLE_MAP[modalEvent.type];
-        if (el && name) {
-            const event = new CustomEvent(name, {
-                bubbles: false,
-                cancelable: false,
-                detail: modalEvent.detail
-            });
-            el.dispatchEvent(event);
-        }
-    }
-    async present() {
-        if (this.presented) {
-            return;
-        }
-        const container = this.el.querySelector('.popover-content');
-        if (!container) {
-            throw new Error('container is undefined');
-        }
-        const data = Object.assign({}, this.componentProps, { popover: this.el });
-        this.usersElement = await Object(_chunk_99929188_js__WEBPACK_IMPORTED_MODULE_3__["a"])(this.delegate, container, this.component, ['popover-viewport', this.el['s-sc']], data);
-        await Object(_chunk_2da9a352_js__WEBPACK_IMPORTED_MODULE_5__["a"])(this.usersElement);
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["c"])(this, 'popoverEnter', iosEnterAnimation, mdEnterAnimation, this.event);
-    }
-    async dismiss(data, role) {
-        const shouldDismiss = await Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["d"])(this, data, role, 'popoverLeave', iosLeaveAnimation, mdLeaveAnimation, this.event);
-        if (shouldDismiss) {
-            await Object(_chunk_99929188_js__WEBPACK_IMPORTED_MODULE_3__["b"])(this.delegate, this.usersElement);
-        }
-        return shouldDismiss;
-    }
-    onDidDismiss() {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["e"])(this.el, 'ionPopoverDidDismiss');
-    }
-    onWillDismiss() {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["e"])(this.el, 'ionPopoverWillDismiss');
-    }
-    hostData() {
-        return {
-            'aria-modal': 'true',
-            'no-router': true,
-            style: {
-                zIndex: 20000 + this.overlayIndex,
-            },
-            class: Object.assign({}, Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_2__["a"])(this.cssClass), { [`${this.mode}`]: true, 'popover-translucent': this.translucent })
-        };
-    }
-    render() {
-        return [
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-backdrop", { tappable: this.backdropDismiss, visible: this.showBackdrop }),
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "popover-wrapper" },
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "popover-arrow" }),
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "popover-content" }))
-        ];
-    }
-    static get is() { return "ion-popover"; }
-    static get encapsulation() { return "scoped"; }
-    static get properties() { return {
-        "animated": {
-            "type": Boolean,
-            "attr": "animated"
-        },
-        "backdropDismiss": {
-            "type": Boolean,
-            "attr": "backdrop-dismiss"
-        },
-        "component": {
-            "type": String,
-            "attr": "component"
-        },
-        "componentProps": {
-            "type": "Any",
-            "attr": "component-props"
-        },
-        "config": {
-            "context": "config"
-        },
-        "cssClass": {
-            "type": String,
-            "attr": "css-class"
-        },
-        "delegate": {
-            "type": "Any",
-            "attr": "delegate"
-        },
-        "dismiss": {
-            "method": true
-        },
-        "el": {
-            "elementRef": true
-        },
-        "enterAnimation": {
-            "type": "Any",
-            "attr": "enter-animation"
-        },
-        "event": {
-            "type": "Any",
-            "attr": "event"
-        },
-        "keyboardClose": {
-            "type": Boolean,
-            "attr": "keyboard-close"
-        },
-        "leaveAnimation": {
-            "type": "Any",
-            "attr": "leave-animation"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "onDidDismiss": {
-            "method": true
-        },
-        "onWillDismiss": {
-            "method": true
-        },
-        "overlayIndex": {
-            "type": Number,
-            "attr": "overlay-index"
-        },
-        "present": {
-            "method": true
-        },
-        "showBackdrop": {
-            "type": Boolean,
-            "attr": "show-backdrop"
-        },
-        "translucent": {
-            "type": Boolean,
-            "attr": "translucent"
-        }
-    }; }
-    static get events() { return [{
-            "name": "ionPopoverDidPresent",
-            "method": "didPresent",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionPopoverWillPresent",
-            "method": "willPresent",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionPopoverWillDismiss",
-            "method": "willDismiss",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionPopoverDidDismiss",
-            "method": "didDismiss",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get listeners() { return [{
-            "name": "ionDismiss",
-            "method": "onDismiss"
-        }, {
-            "name": "ionBackdropTap",
-            "method": "onBackdropTap"
-        }, {
-            "name": "ionPopoverDidPresent",
-            "method": "lifecycle"
-        }, {
-            "name": "ionPopoverWillPresent",
-            "method": "lifecycle"
-        }, {
-            "name": "ionPopoverWillDismiss",
-            "method": "lifecycle"
-        }, {
-            "name": "ionPopoverDidDismiss",
-            "method": "lifecycle"
-        }]; }
-    static get style() { return ".sc-ion-popover-md-h{--background:var(--ion-background-color,#fff);--min-width:0;--min-height:0;--max-width:auto;--height:auto;left:0;right:0;top:0;bottom:0;display:-ms-flexbox;display:flex;position:fixed;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;color:var(--ion-text-color,#000);z-index:1000}.overlay-hidden.sc-ion-popover-md-h{display:none}.popover-wrapper.sc-ion-popover-md{opacity:0;z-index:10}.popover-content.sc-ion-popover-md{display:-ms-flexbox;display:flex;position:absolute;-ms-flex-direction:column;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);background:var(--background);-webkit-box-shadow:var(--box-shadow);box-shadow:var(--box-shadow);overflow:auto;z-index:10}.popover-viewport.sc-ion-popover-md{--ion-safe-area-top:0px;--ion-safe-area-right:0px;--ion-safe-area-bottom:0px;--ion-safe-area-left:0px}.sc-ion-popover-md-h{--width:250px;--max-height:90%;--box-shadow:0 5px 5px -3px rgba(0,0,0,0.2),0 8px 10px 1px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12)}.popover-content.sc-ion-popover-md{border-radius:4px;-webkit-transform-origin:left top;transform-origin:left top}[dir=rtl].sc-ion-popover-md-h   .popover-content.sc-ion-popover-md, [dir=rtl]   .sc-ion-popover-md-h   .popover-content.sc-ion-popover-md{-webkit-transform-origin:right top;transform-origin:right top}.popover-viewport.sc-ion-popover-md{-webkit-transition-delay:.1s;transition-delay:.1s}"; }
-    static get styleMode() { return "md"; }
-}
-const LIFECYCLE_MAP = {
-    'ionPopoverDidPresent': 'ionViewDidEnter',
-    'ionPopoverWillPresent': 'ionViewWillEnter',
-    'ionPopoverWillDismiss': 'ionViewWillLeave',
-    'ionPopoverDidDismiss': 'ionViewDidLeave',
+        .easing('cubic-bezier(.36,.66,.04,1)')
+        .duration(400)
+        .addAnimation([backdropAnimation, wrapperAnimation]);
 };
 
-class PopoverController {
-    create(options) {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["f"])(this.doc.createElement('ion-popover'), options);
+/**
+ * iOS Action Sheet Leave Animation
+ */
+const iosLeaveAnimation = (baseEl) => {
+    const baseAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const backdropAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const wrapperAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    backdropAnimation
+        .addElement(baseEl.querySelector('ion-backdrop'))
+        .fromTo('opacity', 0.4, 0);
+    wrapperAnimation
+        .addElement(baseEl.querySelector('.action-sheet-wrapper'))
+        .fromTo('transform', 'translateY(0%)', 'translateY(100%)');
+    return baseAnimation
+        .addElement(baseEl)
+        .easing('cubic-bezier(.36,.66,.04,1)')
+        .duration(450)
+        .addAnimation([backdropAnimation, wrapperAnimation]);
+};
+
+/**
+ * MD Action Sheet Enter Animation
+ */
+const mdEnterAnimation = (baseEl) => {
+    const baseAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const backdropAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const wrapperAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    backdropAnimation
+        .addElement(baseEl.querySelector('ion-backdrop'))
+        .fromTo('opacity', 0.01, 0.32);
+    wrapperAnimation
+        .addElement(baseEl.querySelector('.action-sheet-wrapper'))
+        .fromTo('transform', 'translateY(100%)', 'translateY(0%)');
+    return baseAnimation
+        .addElement(baseEl)
+        .easing('cubic-bezier(.36,.66,.04,1)')
+        .duration(400)
+        .addAnimation([backdropAnimation, wrapperAnimation]);
+};
+
+/**
+ * MD Action Sheet Leave Animation
+ */
+const mdLeaveAnimation = (baseEl) => {
+    const baseAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const backdropAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    const wrapperAnimation = Object(_animation_af478fe9_js__WEBPACK_IMPORTED_MODULE_3__["c"])();
+    backdropAnimation
+        .addElement(baseEl.querySelector('ion-backdrop'))
+        .fromTo('opacity', 0.32, 0);
+    wrapperAnimation
+        .addElement(baseEl.querySelector('.action-sheet-wrapper'))
+        .fromTo('transform', 'translateY(0%)', 'translateY(100%)');
+    return baseAnimation
+        .addElement(baseEl)
+        .easing('cubic-bezier(.36,.66,.04,1)')
+        .duration(450)
+        .addAnimation([backdropAnimation, wrapperAnimation]);
+};
+
+const ActionSheet = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.presented = false;
+        this.mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
+        /**
+         * If `true`, the keyboard will be automatically dismissed when the overlay is presented.
+         */
+        this.keyboardClose = true;
+        /**
+         * An array of buttons for the action sheet.
+         */
+        this.buttons = [];
+        /**
+         * If `true`, the action sheet will be dismissed when the backdrop is clicked.
+         */
+        this.backdropDismiss = true;
+        /**
+         * If `true`, the action sheet will be translucent.
+         * Only applies when the mode is `"ios"` and the device supports
+         * [`backdrop-filter`](https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter#Browser_compatibility).
+         */
+        this.translucent = false;
+        /**
+         * If `true`, the action sheet will animate.
+         */
+        this.animated = true;
+        this.onBackdropTap = () => {
+            this.dismiss(undefined, _overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["B"]);
+        };
+        this.dispatchCancelHandler = (ev) => {
+            const role = ev.detail.role;
+            if (Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["i"])(role)) {
+                const cancelButton = this.getButtons().find(b => b.role === 'cancel');
+                this.callButtonHandler(cancelButton);
+            }
+        };
+        Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["d"])(this.el);
+        this.didPresent = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionActionSheetDidPresent", 7);
+        this.willPresent = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionActionSheetWillPresent", 7);
+        this.willDismiss = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionActionSheetWillDismiss", 7);
+        this.didDismiss = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionActionSheetDidDismiss", 7);
     }
-    dismiss(data, role, id) {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["g"])(this.doc, data, role, 'ion-popover', id);
+    /**
+     * Present the action sheet overlay after it has been created.
+     */
+    present() {
+        return Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["e"])(this, 'actionSheetEnter', iosEnterAnimation, mdEnterAnimation);
     }
-    async getTop() {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["h"])(this.doc, 'ion-popover');
+    /**
+     * Dismiss the action sheet overlay after it has been presented.
+     *
+     * @param data Any data to emit in the dismiss events.
+     * @param role The role of the element that is dismissing the action sheet.
+     * This can be useful in a button handler for determining which button was
+     * clicked to dismiss the action sheet.
+     * Some examples include: ``"cancel"`, `"destructive"`, "selected"`, and `"backdrop"`.
+     */
+    dismiss(data, role) {
+        return Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["f"])(this, data, role, 'actionSheetLeave', iosLeaveAnimation, mdLeaveAnimation);
     }
-    static get is() { return "ion-popover-controller"; }
-    static get properties() { return {
-        "create": {
-            "method": true
-        },
-        "dismiss": {
-            "method": true
-        },
-        "doc": {
-            "context": "document"
-        },
-        "getTop": {
-            "method": true
+    /**
+     * Returns a promise that resolves when the action sheet did dismiss.
+     */
+    onDidDismiss() {
+        return Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["g"])(this.el, 'ionActionSheetDidDismiss');
+    }
+    /**
+     * Returns a promise that resolves when the action sheet will dismiss.
+     *
+     */
+    onWillDismiss() {
+        return Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["g"])(this.el, 'ionActionSheetWillDismiss');
+    }
+    async buttonClick(button) {
+        const role = button.role;
+        if (Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["i"])(role)) {
+            return this.dismiss(undefined, role);
         }
-    }; }
-}
+        const shouldDismiss = await this.callButtonHandler(button);
+        if (shouldDismiss) {
+            return this.dismiss(undefined, button.role);
+        }
+        return Promise.resolve();
+    }
+    async callButtonHandler(button) {
+        if (button) {
+            // a handler has been provided, execute it
+            // pass the handler the values from the inputs
+            const rtn = await Object(_overlays_10640d86_js__WEBPACK_IMPORTED_MODULE_4__["s"])(button.handler);
+            if (rtn === false) {
+                // if the return value of the handler is false then do not dismiss
+                return false;
+            }
+        }
+        return true;
+    }
+    getButtons() {
+        return this.buttons.map(b => {
+            return (typeof b === 'string')
+                ? { text: b }
+                : b;
+        });
+    }
+    render() {
+        const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
+        const allButtons = this.getButtons();
+        const cancelButton = allButtons.find(b => b.role === 'cancel');
+        const buttons = allButtons.filter(b => b.role !== 'cancel');
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { role: "dialog", "aria-modal": "true", style: {
+                zIndex: `${20000 + this.overlayIndex}`,
+            }, class: Object.assign(Object.assign({ [mode]: true }, Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_5__["g"])(this.cssClass)), { 'action-sheet-translucent': this.translucent }), onIonActionSheetWillDismiss: this.dispatchCancelHandler, onIonBackdropTap: this.onBackdropTap }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-backdrop", { tappable: this.backdropDismiss }), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "action-sheet-wrapper", role: "dialog" }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "action-sheet-container" }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "action-sheet-group" }, this.header !== undefined &&
+            Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "action-sheet-title" }, this.header, this.subHeader && Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "action-sheet-sub-title" }, this.subHeader)), buttons.map(b => Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("button", { type: "button", "ion-activatable": true, class: buttonClass(b), onClick: () => this.buttonClick(b) }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("span", { class: "action-sheet-button-inner" }, b.icon && Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-icon", { icon: b.icon, lazy: false, class: "action-sheet-icon" }), b.text), mode === 'md' && Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-ripple-effect", null)))), cancelButton &&
+            Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "action-sheet-group action-sheet-group-cancel" }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("button", { type: "button", class: buttonClass(cancelButton), onClick: () => this.buttonClick(cancelButton) }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("span", { class: "action-sheet-button-inner" }, cancelButton.icon &&
+                Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-icon", { icon: cancelButton.icon, lazy: false, class: "action-sheet-icon" }), cancelButton.text)))))));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+    static get style() { return ".sc-ion-action-sheet-md-h{--color:initial;--min-width:auto;--width:100%;--max-width:500px;--min-height:auto;--height:100%;--max-height:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;left:0;right:0;top:0;bottom:0;display:block;position:fixed;font-family:var(--ion-font-family,inherit);-ms-touch-action:none;touch-action:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:1001}.overlay-hidden.sc-ion-action-sheet-md-h{display:none}.action-sheet-wrapper.sc-ion-action-sheet-md{left:0;right:0;bottom:0;margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0);display:block;position:absolute;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);z-index:10;pointer-events:none}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.action-sheet-wrapper.sc-ion-action-sheet-md{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.action-sheet-button.sc-ion-action-sheet-md{display:block;width:100%;border:0;outline:none;font-family:inherit}.action-sheet-button.activated.sc-ion-action-sheet-md{background:var(--background-activated)}.action-sheet-button-inner.sc-ion-action-sheet-md{display:-ms-flexbox;display:flex;-ms-flex-flow:row nowrap;flex-flow:row nowrap;-ms-flex-negative:0;flex-shrink:0;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:100%;height:100%}.action-sheet-container.sc-ion-action-sheet-md{display:-ms-flexbox;display:flex;-ms-flex-flow:column;flex-flow:column;-ms-flex-pack:end;justify-content:flex-end;height:100%;max-height:100%}.action-sheet-group.sc-ion-action-sheet-md{-ms-flex-negative:2;flex-shrink:2;overscroll-behavior-y:contain;overflow-y:auto;-webkit-overflow-scrolling:touch;pointer-events:all;background:var(--background)}.action-sheet-group.sc-ion-action-sheet-md::-webkit-scrollbar{display:none}.action-sheet-group-cancel.sc-ion-action-sheet-md{-ms-flex-negative:0;flex-shrink:0;overflow:hidden}.action-sheet-selected.sc-ion-action-sheet-md{background:var(--background-selected)}.sc-ion-action-sheet-md-h{--background:var(--ion-overlay-background-color,var(--ion-background-color,#fff));--background-selected:var(--background,);--background-activated:var(--background)}.action-sheet-title.sc-ion-action-sheet-md{padding-left:16px;padding-right:16px;padding-top:20px;padding-bottom:17px;height:60px;color:var(--color,rgba(var(--ion-text-color-rgb,0,0,0),.54));font-size:16px;text-align:start}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.action-sheet-title.sc-ion-action-sheet-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}.action-sheet-sub-title.sc-ion-action-sheet-md{padding-left:0;padding-right:0;padding-top:16px;padding-bottom:0;font-size:14px}.action-sheet-group.sc-ion-action-sheet-md:first-child{padding-top:0}.action-sheet-group.sc-ion-action-sheet-md:last-child{padding-bottom:0}.action-sheet-button.sc-ion-action-sheet-md{padding-left:16px;padding-right:16px;padding-top:0;padding-bottom:0;position:relative;height:52px;background:transparent;color:var(--color,var(--ion-color-step-850,#262626));font-size:16px;text-align:start;contain:strict;overflow:hidden}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.action-sheet-button.sc-ion-action-sheet-md{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}.action-sheet-icon.sc-ion-action-sheet-md{padding-bottom:4px;margin-left:0;margin-right:32px;margin-top:0;margin-bottom:0;color:var(--color,rgba(var(--ion-text-color-rgb,0,0,0),.54));font-size:24px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.action-sheet-icon.sc-ion-action-sheet-md{margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:32px;margin-inline-end:32px}}.action-sheet-button-inner.sc-ion-action-sheet-md{-ms-flex-pack:start;justify-content:flex-start}.action-sheet-selected.sc-ion-action-sheet-md{font-weight:700}"; }
+};
+const buttonClass = (button) => {
+    return Object.assign({ 'action-sheet-button': true, 'ion-activatable': true, [`action-sheet-${button.role}`]: button.role !== undefined }, Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_5__["g"])(button.cssClass));
+};
 
 
 

@@ -1,33 +1,38 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[65],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/he63oefa.entry.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/he63oefa.entry.js ***!
-  \**************************************************************************/
-/*! exports provided: IonRoute, IonRouteRedirect, IonRouter, IonRouterOutlet */
+/***/ "./node_modules/@ionic/core/dist/esm/ion-route_4.entry.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/ion-route_4.entry.js ***!
+  \****************************************************************/
+/*! exports provided: ion_route, ion_route_redirect, ion_router, ion_router_link */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonRoute", function() { return Route; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonRouteRedirect", function() { return RouteRedirect; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonRouter", function() { return Router; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonRouterOutlet", function() { return RouterOutlet; });
-/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
-/* harmony import */ var _chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-6d7d2f8c.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-6d7d2f8c.js");
-/* harmony import */ var _chunk_99929188_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-99929188.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-99929188.js");
-/* harmony import */ var _chunk_90d954cd_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-90d954cd.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-90d954cd.js");
-/* harmony import */ var _chunk_2da9a352_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-2da9a352.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2da9a352.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_route", function() { return Route; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_route_redirect", function() { return RouteRedirect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_router", function() { return Router; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_router_link", function() { return RouterLink; });
+/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
+/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
+/* harmony import */ var _helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers-46f4a262.js */ "./node_modules/@ionic/core/dist/esm/helpers-46f4a262.js");
+/* harmony import */ var _theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./theme-18cbe2cc.js */ "./node_modules/@ionic/core/dist/esm/theme-18cbe2cc.js");
 
 
 
 
 
-
-
-class Route {
-    constructor() {
+const Route = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        /**
+         * Relative path that needs to match in order for this route to apply.
+         *
+         * Accepts paths similar to expressjs so that you can define parameters
+         * in the url /foo/:bar where bar would be available in incoming props.
+         */
         this.url = '';
+        this.ionRouteDataChanged = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionRouteDataChanged", 7);
     }
     onUpdate(newValue) {
         this.ionRouteDataChanged.emit(newValue);
@@ -49,82 +54,44 @@ class Route {
             }
         }
     }
-    componentDidLoad() {
+    connectedCallback() {
         this.ionRouteDataChanged.emit();
     }
-    componentDidUnload() {
-        this.ionRouteDataChanged.emit();
-    }
-    static get is() { return "ion-route"; }
-    static get properties() { return {
-        "component": {
-            "type": String,
-            "attr": "component",
-            "watchCallbacks": ["onUpdate"]
-        },
-        "componentProps": {
-            "type": "Any",
-            "attr": "component-props",
-            "watchCallbacks": ["onComponentProps"]
-        },
-        "url": {
-            "type": String,
-            "attr": "url",
-            "watchCallbacks": ["onUpdate"]
-        }
+    static get watchers() { return {
+        "url": ["onUpdate"],
+        "component": ["onUpdate"],
+        "componentProps": ["onComponentProps"]
     }; }
-    static get events() { return [{
-            "name": "ionRouteDataChanged",
-            "method": "ionRouteDataChanged",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-}
+};
 
-class RouteRedirect {
+const RouteRedirect = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.ionRouteRedirectChanged = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionRouteRedirectChanged", 7);
+    }
     propDidChange() {
         this.ionRouteRedirectChanged.emit();
     }
-    componentDidLoad() {
+    connectedCallback() {
         this.ionRouteRedirectChanged.emit();
     }
-    componentDidUnload() {
-        this.ionRouteRedirectChanged.emit();
-    }
-    static get is() { return "ion-route-redirect"; }
-    static get properties() { return {
-        "from": {
-            "type": String,
-            "attr": "from",
-            "watchCallbacks": ["propDidChange"]
-        },
-        "to": {
-            "type": String,
-            "attr": "to",
-            "watchCallbacks": ["propDidChange"]
-        }
+    static get watchers() { return {
+        "from": ["propDidChange"],
+        "to": ["propDidChange"]
     }; }
-    static get events() { return [{
-            "name": "ionRouteRedirectChanged",
-            "method": "ionRouteRedirectChanged",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-}
+};
 
 const ROUTER_INTENT_NONE = 'root';
 const ROUTER_INTENT_FORWARD = 'forward';
 const ROUTER_INTENT_BACK = 'back';
 
-function generatePath(segments) {
+const generatePath = (segments) => {
     const path = segments
         .filter(s => s.length > 0)
         .join('/');
     return '/' + path;
-}
-function chainToPath(chain) {
+};
+const chainToPath = (chain) => {
     const path = [];
     for (const route of chain) {
         for (const segment of route.path) {
@@ -141,8 +108,8 @@ function chainToPath(chain) {
         }
     }
     return path;
-}
-function writePath(history, root, useHash, path, direction, state) {
+};
+const writePath = (history, root, useHash, path, direction, state) => {
     let url = generatePath([
         ...parsePath(root),
         ...path
@@ -156,8 +123,8 @@ function writePath(history, root, useHash, path, direction, state) {
     else {
         history.replaceState(state, '', url);
     }
-}
-function removePrefix(prefix, path) {
+};
+const removePrefix = (prefix, path) => {
     if (prefix.length > path.length) {
         return null;
     }
@@ -173,8 +140,8 @@ function removePrefix(prefix, path) {
         return [''];
     }
     return path.slice(prefix.length);
-}
-function readPath(loc, root, useHash) {
+};
+const readPath = (loc, root, useHash) => {
     let pathname = loc.pathname;
     if (useHash) {
         const hash = loc.hash;
@@ -185,8 +152,8 @@ function readPath(loc, root, useHash) {
     const prefix = parsePath(root);
     const path = parsePath(pathname);
     return removePrefix(prefix, path);
-}
-function parsePath(path) {
+};
+const parsePath = (path) => {
     if (path == null) {
         return [''];
     }
@@ -199,9 +166,9 @@ function parsePath(path) {
     else {
         return segments;
     }
-}
+};
 
-function printRoutes(routes) {
+const printRoutes = (routes) => {
     console.group(`[ion-core] ROUTES[${routes.length}]`);
     for (const chain of routes) {
         const path = [];
@@ -210,8 +177,8 @@ function printRoutes(routes) {
         console.debug(`%c ${generatePath(path)}`, 'font-weight: bold; padding-left: 20px', '=>\t', `(${ids.join(', ')})`);
     }
     console.groupEnd();
-}
-function printRedirects(redirects) {
+};
+const printRedirects = (redirects) => {
     console.group(`[ion-core] REDIRECTS[${redirects.length}]`);
     for (const redirect of redirects) {
         if (redirect.to) {
@@ -219,22 +186,29 @@ function printRedirects(redirects) {
         }
     }
     console.groupEnd();
-}
+};
 
-async function writeNavState(root, chain, direction, index, changed = false) {
+const writeNavState = async (root, chain, direction, index, changed = false) => {
     try {
+        // find next navigation outlet in the DOM
         const outlet = searchNavNode(root);
+        // make sure we can continue interacting the DOM, otherwise abort
         if (index >= chain.length || !outlet) {
             return changed;
         }
         await outlet.componentOnReady();
         const route = chain[index];
         const result = await outlet.setRouteId(route.id, route.params, direction);
+        // if the outlet changed the page, reset navigation to neutral (no direction)
+        // this means nested outlets will not animate
         if (result.changed) {
             direction = ROUTER_INTENT_NONE;
             changed = true;
         }
+        // recursively set nested outlets
         changed = await writeNavState(result.element, chain, direction, index + 1, changed);
+        // once all nested outlets are visible let's make the parent visible too,
+        // using markVisible prevents flickering
         if (result.markVisible) {
             await result.markVisible();
         }
@@ -244,11 +218,12 @@ async function writeNavState(root, chain, direction, index, changed = false) {
         console.error(e);
         return false;
     }
-}
-async function readNavState(root) {
+};
+const readNavState = async (root) => {
     const ids = [];
     let outlet;
     let node = root;
+    // tslint:disable-next-line:no-constant-condition
     while (true) {
         outlet = searchNavNode(node);
         if (outlet) {
@@ -267,17 +242,17 @@ async function readNavState(root) {
         }
     }
     return { ids, outlet };
-}
-function waitUntilNavNode(win) {
-    if (searchNavNode(win.document.body)) {
+};
+const waitUntilNavNode = () => {
+    if (searchNavNode(document.body)) {
         return Promise.resolve();
     }
     return new Promise(resolve => {
-        win.addEventListener('ionNavWillLoad', resolve, { once: true });
+        window.addEventListener('ionNavWillLoad', resolve, { once: true });
     });
-}
+};
 const QUERY = ':not([no-router]) ion-nav, :not([no-router]) ion-tabs, :not([no-router]) ion-router-outlet';
-function searchNavNode(root) {
+const searchNavNode = (root) => {
     if (!root) {
         return undefined;
     }
@@ -286,9 +261,9 @@ function searchNavNode(root) {
     }
     const outlet = root.querySelector(QUERY);
     return outlet ? outlet : undefined;
-}
+};
 
-function matchesRedirect(input, route) {
+const matchesRedirect = (input, route) => {
     const { from, to } = route;
     if (to === undefined) {
         return false;
@@ -306,11 +281,11 @@ function matchesRedirect(input, route) {
         }
     }
     return from.length === input.length;
-}
-function routeRedirect(path, routes) {
+};
+const routeRedirect = (path, routes) => {
     return routes.find(route => matchesRedirect(path, route));
-}
-function matchesIDs(ids, chain) {
+};
+const matchesIDs = (ids, chain) => {
     const len = Math.min(ids.length, chain.length);
     let i = 0;
     for (; i < len; i++) {
@@ -319,8 +294,8 @@ function matchesIDs(ids, chain) {
         }
     }
     return i;
-}
-function matchesPath(inputPath, chain) {
+};
+const matchesPath = (inputPath, chain) => {
     const segments = new RouterSegments(inputPath);
     let matchesDefault = false;
     let allparams;
@@ -332,6 +307,7 @@ function matchesPath(inputPath, chain) {
         else {
             for (const segment of path) {
                 const data = segments.next();
+                // data param
                 if (segment[0] === ':') {
                     if (data === '') {
                         return null;
@@ -361,8 +337,8 @@ function matchesPath(inputPath, chain) {
         }));
     }
     return chain;
-}
-function mergeParams(a, b) {
+};
+const mergeParams = (a, b) => {
     if (!a && b) {
         return b;
     }
@@ -370,11 +346,11 @@ function mergeParams(a, b) {
         return a;
     }
     else if (a && b) {
-        return Object.assign({}, a, b);
+        return Object.assign(Object.assign({}, a), b);
     }
     return undefined;
-}
-function routerIDsToChain(ids, chains) {
+};
+const routerIDsToChain = (ids, chains) => {
     let match = null;
     let maxMatches = 0;
     const plainIDs = ids.map(i => i.id);
@@ -393,8 +369,8 @@ function routerIDsToChain(ids, chains) {
         }));
     }
     return null;
-}
-function routerPathToChain(path, chains) {
+};
+const routerPathToChain = (path, chains) => {
     let match = null;
     let matches = 0;
     for (const chain of chains) {
@@ -408,8 +384,8 @@ function routerPathToChain(path, chains) {
         }
     }
     return match;
-}
-function computePriority(chain) {
+};
+const computePriority = (chain) => {
     let score = 1;
     let level = 1;
     for (const route of chain) {
@@ -424,7 +400,7 @@ function computePriority(chain) {
         }
     }
     return score;
-}
+};
 class RouterSegments {
     constructor(path) {
         this.path = path.slice();
@@ -437,7 +413,7 @@ class RouterSegments {
     }
 }
 
-function readRedirects(root) {
+const readRedirects = (root) => {
     return Array.from(root.children)
         .filter(el => el.tagName === 'ION-ROUTE-REDIRECT')
         .map(el => {
@@ -447,11 +423,11 @@ function readRedirects(root) {
             to: to == null ? undefined : parsePath(to),
         };
     });
-}
-function readRoutes(root) {
+};
+const readRoutes = (root) => {
     return flattenRouterTree(readRouteNodes(root));
-}
-function readRouteNodes(root, node = root) {
+};
+const readRouteNodes = (root, node = root) => {
     return Array.from(node.children)
         .filter(el => el.tagName === 'ION-ROUTE' && el.component)
         .map(el => {
@@ -466,8 +442,8 @@ function readRouteNodes(root, node = root) {
             children: readRouteNodes(root, el)
         };
     });
-}
-function readProp(el, prop) {
+};
+const readProp = (el, prop) => {
     if (prop in el) {
         return el[prop];
     }
@@ -475,15 +451,15 @@ function readProp(el, prop) {
         return el.getAttribute(prop);
     }
     return null;
-}
-function flattenRouterTree(nodes) {
+};
+const flattenRouterTree = (nodes) => {
     const routes = [];
     for (const node of nodes) {
         flattenNode([], routes, node);
     }
     return routes;
-}
-function flattenNode(chain, routes, node) {
+};
+const flattenNode = (chain, routes, node) => {
     const s = chain.slice();
     s.push({
         id: node.id,
@@ -497,26 +473,48 @@ function flattenNode(chain, routes, node) {
     for (const sub of node.children) {
         flattenNode(s, routes, sub);
     }
-}
+};
 
-class Router {
-    constructor() {
+const Router = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
         this.previousPath = null;
         this.busy = false;
         this.state = 0;
         this.lastState = 0;
+        /**
+         * By default `ion-router` will match the routes at the root path ("/").
+         * That can be changed when
+         *
+         */
         this.root = '/';
+        /**
+         * The router can work in two "modes":
+         * - With hash: `/index.html#/path/to/page`
+         * - Without hash: `/path/to/page`
+         *
+         * Using one or another might depend in the requirements of your app and/or where it's deployed.
+         *
+         * Usually "hash-less" navigation works better for SEO and it's more user friendly too, but it might
+         * requires additional server-side configuration in order to properly work.
+         *
+         * On the otherside hash-navigation is much easier to deploy, it even works over the file protocol.
+         *
+         * By default, this property is `true`, change to `false` to allow hash-less URLs.
+         */
         this.useHash = true;
+        this.ionRouteWillChange = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionRouteWillChange", 7);
+        this.ionRouteDidChange = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionRouteDidChange", 7);
     }
     async componentWillLoad() {
         console.debug('[ion-router] router will load');
-        await waitUntilNavNode(this.win);
+        await waitUntilNavNode();
         console.debug('[ion-router] found nav');
         await this.onRoutesChanged();
     }
     componentDidLoad() {
-        this.win.addEventListener('ionRouteRedirectChanged', Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_1__["j"])(this.onRedirectChanged.bind(this), 10));
-        this.win.addEventListener('ionRouteDataChanged', Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_1__["j"])(this.onRoutesChanged.bind(this), 100));
+        window.addEventListener('ionRouteRedirectChanged', Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["e"])(this.onRedirectChanged.bind(this), 10));
+        window.addEventListener('ionRouteDataChanged', Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["e"])(this.onRoutesChanged.bind(this), 100));
     }
     onPopState() {
         const direction = this.historyDirection();
@@ -527,31 +525,42 @@ class Router {
     onBackButton(ev) {
         ev.detail.register(0, () => this.back());
     }
+    /**
+     * Navigate to the specified URL.
+     *
+     * @param url The url to navigate to.
+     * @param direction The direction of the animation. Defaults to `"forward"`.
+     */
     push(url, direction = 'forward') {
         if (url.startsWith('.')) {
-            url = (new URL(url, this.win.location.href)).pathname;
+            url = (new URL(url, window.location.href)).pathname;
         }
         console.debug('[ion-router] URL pushed -> updating nav', url, direction);
         const path = parsePath(url);
         this.setPath(path, direction);
         return this.writeNavStateRoot(path, direction);
     }
+    /**
+     * Go back to previous page in the window.history.
+     */
     back() {
-        this.win.history.back();
+        window.history.back();
         return Promise.resolve(this.waitPromise);
     }
-    printDebug() {
+    /** @internal */
+    async printDebug() {
         console.debug('CURRENT PATH', this.getPath());
         console.debug('PREVIOUS PATH', this.previousPath);
         printRoutes(readRoutes(this.el));
         printRedirects(readRedirects(this.el));
     }
+    /** @internal */
     async navChanged(direction) {
         if (this.busy) {
             console.warn('[ion-router] router is busy, navChanged was cancelled');
             return false;
         }
-        const { ids, outlet } = await readNavState(this.win.document.body);
+        const { ids, outlet } = await readNavState(window.document.body);
         const routes = readRoutes(this.el);
         const chain = routerIDsToChain(ids, routes);
         if (!chain) {
@@ -578,7 +587,7 @@ class Router {
         return this.writeNavStateRoot(this.getPath(), ROUTER_INTENT_NONE);
     }
     historyDirection() {
-        const win = this.win;
+        const win = window;
         if (win.history.state === null) {
             this.state++;
             win.history.replaceState(this.state, win.document.title, win.document.location && win.document.location.href);
@@ -601,6 +610,7 @@ class Router {
             console.error('[ion-router] URL is not part of the routing set');
             return false;
         }
+        // lookup redirect rule
         const redirects = readRedirects(this.el);
         const redirect = routeRedirect(path, redirects);
         let redirectFrom = null;
@@ -609,13 +619,15 @@ class Router {
             redirectFrom = redirect.from;
             path = redirect.to;
         }
+        // lookup route chain
         const routes = readRoutes(this.el);
         const chain = routerPathToChain(path, routes);
         if (!chain) {
             console.error('[ion-router] the path does not match any route');
             return false;
         }
-        return this.safeWriteNavState(this.win.document.body, chain, direction, path, redirectFrom);
+        // write DOM give
+        return this.safeWriteNavState(document.body, chain, direction, path, redirectFrom);
     }
     async safeWriteNavState(node, chain, direction, path, redirectFrom, index = 0) {
         const unlock = await this.lock();
@@ -644,6 +656,7 @@ class Router {
             return false;
         }
         this.busy = true;
+        // generate route event and emit will change
         const routeEvent = this.routeChangeEvent(path, redirectFrom);
         if (routeEvent) {
             this.ionRouteWillChange.emit(routeEvent);
@@ -653,6 +666,7 @@ class Router {
         if (changed) {
             console.debug('[ion-router] route changed', path);
         }
+        // emit did change
         if (routeEvent) {
             this.ionRouteDidChange.emit(routeEvent);
         }
@@ -660,10 +674,10 @@ class Router {
     }
     setPath(path, direction) {
         this.state++;
-        writePath(this.win.history, this.root, this.useHash, path, direction, this.state);
+        writePath(window.history, this.root, this.useHash, path, direction, this.state);
     }
     getPath() {
-        return readPath(this.win.location, this.root, this.useHash);
+        return readPath(window.location, this.root, this.useHash);
     }
     routeChangeEvent(path, redirectFromPath) {
         const from = this.previousPath;
@@ -679,231 +693,32 @@ class Router {
             to,
         };
     }
-    static get is() { return "ion-router"; }
-    static get properties() { return {
-        "back": {
-            "method": true
-        },
-        "config": {
-            "context": "config"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "navChanged": {
-            "method": true
-        },
-        "printDebug": {
-            "method": true
-        },
-        "push": {
-            "method": true
-        },
-        "queue": {
-            "context": "queue"
-        },
-        "root": {
-            "type": String,
-            "attr": "root"
-        },
-        "useHash": {
-            "type": Boolean,
-            "attr": "use-hash"
-        },
-        "win": {
-            "context": "window"
-        }
-    }; }
-    static get events() { return [{
-            "name": "ionRouteWillChange",
-            "method": "ionRouteWillChange",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionRouteDidChange",
-            "method": "ionRouteDidChange",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get listeners() { return [{
-            "name": "window:popstate",
-            "method": "onPopState"
-        }, {
-            "name": "document:ionBackButton",
-            "method": "onBackButton"
-        }]; }
-}
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+};
 
-class RouterOutlet {
-    constructor() {
-        this.animated = true;
-    }
-    swipeHandlerChanged() {
-        if (this.gesture) {
-            this.gesture.setDisabled(this.swipeHandler === undefined);
-        }
-    }
-    componentWillLoad() {
-        this.ionNavWillLoad.emit();
-    }
-    async componentDidLoad() {
-        this.gesture = (await Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e("common"), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./chunk-ca529fbc.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-ca529fbc.js"))).createSwipeBackGesture(this.el, this.queue, () => !!this.swipeHandler && this.swipeHandler.canStart(), () => this.swipeHandler && this.swipeHandler.onStart(), step => this.ani && this.ani.progressStep(step), (shouldComplete, step, dur) => {
-            if (this.ani) {
-                this.ani.progressEnd(shouldComplete, step, dur);
-            }
-            if (this.swipeHandler) {
-                this.swipeHandler.onEnd(shouldComplete);
-            }
-        });
-        this.swipeHandlerChanged();
-    }
-    componentDidUnload() {
-        this.activeEl = this.activeComponent = undefined;
-        if (this.gesture) {
-            this.gesture.destroy();
-            this.gesture = undefined;
-        }
-    }
-    async commit(enteringEl, leavingEl, opts) {
-        const unlock = await this.lock();
-        let changed = false;
-        try {
-            changed = await this.transition(enteringEl, leavingEl, opts);
-        }
-        catch (e) {
-            console.error(e);
-        }
-        unlock();
-        return changed;
-    }
-    async setRouteId(id, params, direction) {
-        const changed = await this.setRoot(id, params, {
-            duration: direction === 'root' ? 0 : undefined,
-            direction: direction === 'back' ? 'back' : 'forward',
-        });
-        return {
-            changed,
-            element: this.activeEl
+const RouterLink = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        /**
+         * When using a router, it specifies the transition direction when navigating to
+         * another page using `href`.
+         */
+        this.routerDirection = 'forward';
+        this.onClick = (ev) => {
+            Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__["o"])(this.href, ev, this.routerDirection);
         };
     }
-    async getRouteId() {
-        const active = this.activeEl;
-        return active ? {
-            id: active.tagName,
-            element: active,
-        } : undefined;
-    }
-    async setRoot(component, params, opts) {
-        if (this.activeComponent === component) {
-            return false;
-        }
-        const leavingEl = this.activeEl;
-        const enteringEl = await Object(_chunk_99929188_js__WEBPACK_IMPORTED_MODULE_2__["a"])(this.delegate, this.el, component, ['ion-page', 'ion-page-invisible'], params);
-        this.activeComponent = component;
-        this.activeEl = enteringEl;
-        await this.commit(enteringEl, leavingEl, opts);
-        await Object(_chunk_99929188_js__WEBPACK_IMPORTED_MODULE_2__["b"])(this.delegate, leavingEl);
-        return true;
-    }
-    async transition(enteringEl, leavingEl, opts = {}) {
-        if (leavingEl === enteringEl) {
-            return false;
-        }
-        this.ionNavWillChange.emit();
-        const { mode, queue, win, el } = this;
-        const animated = this.animated && this.config.getBoolean('animated', true);
-        const animationBuilder = this.animation || opts.animationBuilder || this.config.get('navAnimation');
-        await Object(_chunk_2da9a352_js__WEBPACK_IMPORTED_MODULE_4__["c"])(Object.assign({ mode,
-            queue,
-            animated,
-            animationBuilder, window: win, enteringEl,
-            leavingEl, baseEl: el, progressCallback: (opts.progressAnimation
-                ? ani => this.ani = ani
-                : undefined) }, opts));
-        this.ionNavDidChange.emit();
-        return true;
-    }
-    async lock() {
-        const p = this.waitPromise;
-        let resolve;
-        this.waitPromise = new Promise(r => resolve = r);
-        if (p !== undefined) {
-            await p;
-        }
-        return resolve;
-    }
     render() {
-        return (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null));
+        const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
+        const attrs = {
+            href: this.href,
+            rel: this.rel,
+            target: this.target
+        };
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onClick: this.onClick, class: Object.assign(Object.assign({}, Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__["c"])(this.color)), { [mode]: true, 'ion-activatable': true }) }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("a", Object.assign({}, attrs), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null))));
     }
-    static get is() { return "ion-router-outlet"; }
-    static get encapsulation() { return "shadow"; }
-    static get properties() { return {
-        "animated": {
-            "type": Boolean,
-            "attr": "animated"
-        },
-        "animation": {
-            "type": "Any",
-            "attr": "animation"
-        },
-        "commit": {
-            "method": true
-        },
-        "config": {
-            "context": "config"
-        },
-        "delegate": {
-            "type": "Any",
-            "attr": "delegate"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "getRouteId": {
-            "method": true
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "queue": {
-            "context": "queue"
-        },
-        "setRouteId": {
-            "method": true
-        },
-        "swipeHandler": {
-            "type": "Any",
-            "attr": "swipe-handler",
-            "watchCallbacks": ["swipeHandlerChanged"]
-        },
-        "win": {
-            "context": "window"
-        }
-    }; }
-    static get events() { return [{
-            "name": "ionNavWillLoad",
-            "method": "ionNavWillLoad",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionNavWillChange",
-            "method": "ionNavWillChange",
-            "bubbles": false,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionNavDidChange",
-            "method": "ionNavDidChange",
-            "bubbles": false,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get style() { return ":host{left:0;right:0;top:0;bottom:0;position:absolute;contain:layout size style;overflow:hidden;z-index:0}"; }
-}
+    static get style() { return ":host{--background:transparent;--color:var(--ion-color-primary,#3880ff);background:var(--background);color:var(--color)}:host(.ion-color){color:var(--ion-color-base)}a{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit}"; }
+};
 
 
 

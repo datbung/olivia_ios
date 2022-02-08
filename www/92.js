@@ -1,292 +1,370 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[92],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/jtlohgvo.sc.entry.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/jtlohgvo.sc.entry.js ***!
-  \*****************************************************************************/
-/*! exports provided: IonTextarea */
+/***/ "./node_modules/@ionic/core/dist/esm/shadow-css-4889ae62-23996f3f.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/shadow-css-4889ae62-23996f3f.js ***!
+  \***************************************************************************/
+/*! exports provided: scopeCss */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonTextarea", function() { return Textarea; });
-/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
-/* harmony import */ var _chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-2f96b3d2.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2f96b3d2.js");
-/* harmony import */ var _chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6d7d2f8c.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-6d7d2f8c.js");
-
-
-
-
-
-class Textarea {
-    constructor() {
-        this.inputId = `ion-input-${textareaIds++}`;
-        this.didBlurAfterEdit = false;
-        this.hasFocus = false;
-        this.autocapitalize = 'none';
-        this.autofocus = false;
-        this.clearOnEdit = false;
-        this.debounce = 0;
-        this.disabled = false;
-        this.name = this.inputId;
-        this.readonly = false;
-        this.required = false;
-        this.spellcheck = false;
-        this.autoGrow = false;
-        this.value = '';
-        this.onInput = (ev) => {
-            if (this.nativeInput) {
-                this.value = this.nativeInput.value;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scopeCss", function() { return scopeCss; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ *
+ * This file is a port of shadowCSS from webcomponents.js to TypeScript.
+ * https://github.com/webcomponents/webcomponentsjs/blob/4efecd7e0e/src/ShadowCSS/ShadowCSS.js
+ * https://github.com/angular/angular/blob/master/packages/compiler/src/shadow_css.ts
+ */
+const safeSelector = (selector) => {
+    const placeholders = [];
+    let index = 0;
+    let content;
+    // Replaces attribute selectors with placeholders.
+    // The WS in [attr="va lue"] would otherwise be interpreted as a selector separator.
+    selector = selector.replace(/(\[[^\]]*\])/g, (_, keep) => {
+        const replaceBy = `__ph-${index}__`;
+        placeholders.push(keep);
+        index++;
+        return replaceBy;
+    });
+    // Replaces the expression in `:nth-child(2n + 1)` with a placeholder.
+    // WS and "+" would otherwise be interpreted as selector separators.
+    content = selector.replace(/(:nth-[-\w]+)(\([^)]+\))/g, (_, pseudo, exp) => {
+        const replaceBy = `__ph-${index}__`;
+        placeholders.push(exp);
+        index++;
+        return pseudo + replaceBy;
+    });
+    const ss = {
+        content,
+        placeholders,
+    };
+    return ss;
+};
+const restoreSafeSelector = (placeholders, content) => {
+    return content.replace(/__ph-(\d+)__/g, (_, index) => placeholders[+index]);
+};
+const _polyfillHost = '-shadowcsshost';
+const _polyfillSlotted = '-shadowcssslotted';
+// note: :host-context pre-processed to -shadowcsshostcontext.
+const _polyfillHostContext = '-shadowcsscontext';
+const _parenSuffix = ')(?:\\((' +
+    '(?:\\([^)(]*\\)|[^)(]*)+?' +
+    ')\\))?([^,{]*)';
+const _cssColonHostRe = new RegExp('(' + _polyfillHost + _parenSuffix, 'gim');
+const _cssColonHostContextRe = new RegExp('(' + _polyfillHostContext + _parenSuffix, 'gim');
+const _cssColonSlottedRe = new RegExp('(' + _polyfillSlotted + _parenSuffix, 'gim');
+const _polyfillHostNoCombinator = _polyfillHost + '-no-combinator';
+const _polyfillHostNoCombinatorRe = /-shadowcsshost-no-combinator([^\s]*)/;
+const _shadowDOMSelectorsRe = [
+    /::shadow/g,
+    /::content/g
+];
+const _selectorReSuffix = '([>\\s~+\[.,{:][\\s\\S]*)?$';
+const _polyfillHostRe = /-shadowcsshost/gim;
+const _colonHostRe = /:host/gim;
+const _colonSlottedRe = /::slotted/gim;
+const _colonHostContextRe = /:host-context/gim;
+const _commentRe = /\/\*\s*[\s\S]*?\*\//g;
+const stripComments = (input) => {
+    return input.replace(_commentRe, '');
+};
+const _commentWithHashRe = /\/\*\s*#\s*source(Mapping)?URL=[\s\S]+?\*\//g;
+const extractCommentsWithHash = (input) => {
+    return input.match(_commentWithHashRe) || [];
+};
+const _ruleRe = /(\s*)([^;\{\}]+?)(\s*)((?:{%BLOCK%}?\s*;?)|(?:\s*;))/g;
+const _curlyRe = /([{}])/g;
+const OPEN_CURLY = '{';
+const CLOSE_CURLY = '}';
+const BLOCK_PLACEHOLDER = '%BLOCK%';
+const processRules = (input, ruleCallback) => {
+    const inputWithEscapedBlocks = escapeBlocks(input);
+    let nextBlockIndex = 0;
+    return inputWithEscapedBlocks.escapedString.replace(_ruleRe, (...m) => {
+        const selector = m[2];
+        let content = '';
+        let suffix = m[4];
+        let contentPrefix = '';
+        if (suffix && suffix.startsWith('{' + BLOCK_PLACEHOLDER)) {
+            content = inputWithEscapedBlocks.blocks[nextBlockIndex++];
+            suffix = suffix.substring(BLOCK_PLACEHOLDER.length + 1);
+            contentPrefix = '{';
+        }
+        const cssRule = {
+            selector,
+            content
+        };
+        const rule = ruleCallback(cssRule);
+        return `${m[1]}${rule.selector}${m[3]}${contentPrefix}${rule.content}${suffix}`;
+    });
+};
+const escapeBlocks = (input) => {
+    const inputParts = input.split(_curlyRe);
+    const resultParts = [];
+    const escapedBlocks = [];
+    let bracketCount = 0;
+    let currentBlockParts = [];
+    for (let partIndex = 0; partIndex < inputParts.length; partIndex++) {
+        const part = inputParts[partIndex];
+        if (part === CLOSE_CURLY) {
+            bracketCount--;
+        }
+        if (bracketCount > 0) {
+            currentBlockParts.push(part);
+        }
+        else {
+            if (currentBlockParts.length > 0) {
+                escapedBlocks.push(currentBlockParts.join(''));
+                resultParts.push(BLOCK_PLACEHOLDER);
+                currentBlockParts = [];
             }
-            this.emitStyle();
-            this.ionInput.emit(ev);
-        };
-        this.onFocus = () => {
-            this.hasFocus = true;
-            this.focusChange();
-            this.ionFocus.emit();
-        };
-        this.onBlur = () => {
-            this.hasFocus = false;
-            this.focusChange();
-            this.ionBlur.emit();
-        };
-        this.onKeyDown = () => {
-            this.checkClearOnEdit();
-        };
-    }
-    debounceChanged() {
-        this.ionChange = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["f"])(this.ionChange, this.debounce);
-    }
-    disabledChanged() {
-        this.emitStyle();
-    }
-    valueChanged() {
-        const nativeInput = this.nativeInput;
-        const value = this.getValue();
-        if (nativeInput && nativeInput.value !== value) {
-            nativeInput.value = value;
+            resultParts.push(part);
         }
-        this.runAutoGrow();
-        this.emitStyle();
-        this.ionChange.emit({ value });
-    }
-    componentWillLoad() {
-        this.emitStyle();
-    }
-    componentDidLoad() {
-        this.debounceChanged();
-        this.runAutoGrow();
-        this.ionInputDidLoad.emit();
-    }
-    runAutoGrow() {
-        if (this.nativeInput && this.autoGrow) {
-            this.nativeInput.style.height = 'inherit';
-            this.nativeInput.style.height = this.nativeInput.scrollHeight + 'px';
+        if (part === OPEN_CURLY) {
+            bracketCount++;
         }
     }
-    componentDidUnload() {
-        this.ionInputDidUnload.emit();
+    if (currentBlockParts.length > 0) {
+        escapedBlocks.push(currentBlockParts.join(''));
+        resultParts.push(BLOCK_PLACEHOLDER);
     }
-    setFocus() {
-        if (this.nativeInput) {
-            this.nativeInput.focus();
+    const strEscapedBlocks = {
+        escapedString: resultParts.join(''),
+        blocks: escapedBlocks
+    };
+    return strEscapedBlocks;
+};
+const insertPolyfillHostInCssText = (selector) => {
+    selector = selector
+        .replace(_colonHostContextRe, _polyfillHostContext)
+        .replace(_colonHostRe, _polyfillHost)
+        .replace(_colonSlottedRe, _polyfillSlotted);
+    return selector;
+};
+const convertColonRule = (cssText, regExp, partReplacer) => {
+    // m[1] = :host(-context), m[2] = contents of (), m[3] rest of rule
+    return cssText.replace(regExp, (...m) => {
+        if (m[2]) {
+            const parts = m[2].split(',');
+            const r = [];
+            for (let i = 0; i < parts.length; i++) {
+                const p = parts[i].trim();
+                if (!p)
+                    break;
+                r.push(partReplacer(_polyfillHostNoCombinator, p, m[3]));
+            }
+            return r.join(',');
         }
+        else {
+            return _polyfillHostNoCombinator + m[3];
+        }
+    });
+};
+const colonHostPartReplacer = (host, part, suffix) => {
+    return host + part.replace(_polyfillHost, '') + suffix;
+};
+const convertColonHost = (cssText) => {
+    return convertColonRule(cssText, _cssColonHostRe, colonHostPartReplacer);
+};
+const colonHostContextPartReplacer = (host, part, suffix) => {
+    if (part.indexOf(_polyfillHost) > -1) {
+        return colonHostPartReplacer(host, part, suffix);
     }
-    getInputElement() {
-        return Promise.resolve(this.nativeInput);
+    else {
+        return host + part + suffix + ', ' + part + ' ' + host + suffix;
     }
-    emitStyle() {
-        this.ionStyle.emit({
-            'interactive': true,
-            'textarea': true,
-            'input': true,
-            'interactive-disabled': this.disabled,
-            'has-placeholder': this.placeholder != null,
-            'has-value': this.hasValue(),
-            'has-focus': this.hasFocus
+};
+const convertColonSlotted = (cssText, slotAttr) => {
+    const regExp = _cssColonSlottedRe;
+    return cssText.replace(regExp, (...m) => {
+        if (m[2]) {
+            const compound = m[2].trim();
+            const suffix = m[3];
+            const sel = '.' + slotAttr + ' > ' + compound + suffix;
+            return sel;
+        }
+        else {
+            return _polyfillHostNoCombinator + m[3];
+        }
+    });
+};
+const convertColonHostContext = (cssText) => {
+    return convertColonRule(cssText, _cssColonHostContextRe, colonHostContextPartReplacer);
+};
+const convertShadowDOMSelectors = (cssText) => {
+    return _shadowDOMSelectorsRe.reduce((result, pattern) => result.replace(pattern, ' '), cssText);
+};
+const makeScopeMatcher = (scopeSelector) => {
+    const lre = /\[/g;
+    const rre = /\]/g;
+    scopeSelector = scopeSelector.replace(lre, '\\[').replace(rre, '\\]');
+    return new RegExp('^(' + scopeSelector + ')' + _selectorReSuffix, 'm');
+};
+const selectorNeedsScoping = (selector, scopeSelector) => {
+    const re = makeScopeMatcher(scopeSelector);
+    return !re.test(selector);
+};
+const applySimpleSelectorScope = (selector, scopeSelector, hostSelector) => {
+    // In Android browser, the lastIndex is not reset when the regex is used in String.replace()
+    _polyfillHostRe.lastIndex = 0;
+    if (_polyfillHostRe.test(selector)) {
+        const replaceBy = `.${hostSelector}`;
+        return selector
+            .replace(_polyfillHostNoCombinatorRe, (_, selector) => {
+            return selector.replace(/([^:]*)(:*)(.*)/, (_, before, colon, after) => {
+                return before + replaceBy + colon + after;
+            });
+        })
+            .replace(_polyfillHostRe, replaceBy + ' ');
+    }
+    return scopeSelector + ' ' + selector;
+};
+const applyStrictSelectorScope = (selector, scopeSelector, hostSelector) => {
+    const isRe = /\[is=([^\]]*)\]/g;
+    scopeSelector = scopeSelector.replace(isRe, (_, ...parts) => parts[0]);
+    const className = '.' + scopeSelector;
+    const _scopeSelectorPart = (p) => {
+        let scopedP = p.trim();
+        if (!scopedP) {
+            return '';
+        }
+        if (p.indexOf(_polyfillHostNoCombinator) > -1) {
+            scopedP = applySimpleSelectorScope(p, scopeSelector, hostSelector);
+        }
+        else {
+            // remove :host since it should be unnecessary
+            const t = p.replace(_polyfillHostRe, '');
+            if (t.length > 0) {
+                const matches = t.match(/([^:]*)(:*)(.*)/);
+                if (matches) {
+                    scopedP = matches[1] + className + matches[2] + matches[3];
+                }
+            }
+        }
+        return scopedP;
+    };
+    const safeContent = safeSelector(selector);
+    selector = safeContent.content;
+    let scopedSelector = '';
+    let startIndex = 0;
+    let res;
+    const sep = /( |>|\+|~(?!=))\s*/g;
+    // If a selector appears before :host it should not be shimmed as it
+    // matches on ancestor elements and not on elements in the host's shadow
+    // `:host-context(div)` is transformed to
+    // `-shadowcsshost-no-combinatordiv, div -shadowcsshost-no-combinator`
+    // the `div` is not part of the component in the 2nd selectors and should not be scoped.
+    // Historically `component-tag:host` was matching the component so we also want to preserve
+    // this behavior to avoid breaking legacy apps (it should not match).
+    // The behavior should be:
+    // - `tag:host` -> `tag[h]` (this is to avoid breaking legacy apps, should not match anything)
+    // - `tag :host` -> `tag [h]` (`tag` is not scoped because it's considered part of a
+    //   `:host-context(tag)`)
+    const hasHost = selector.indexOf(_polyfillHostNoCombinator) > -1;
+    // Only scope parts after the first `-shadowcsshost-no-combinator` when it is present
+    let shouldScope = !hasHost;
+    while ((res = sep.exec(selector)) !== null) {
+        const separator = res[1];
+        const part = selector.slice(startIndex, res.index).trim();
+        shouldScope = shouldScope || part.indexOf(_polyfillHostNoCombinator) > -1;
+        const scopedPart = shouldScope ? _scopeSelectorPart(part) : part;
+        scopedSelector += `${scopedPart} ${separator} `;
+        startIndex = sep.lastIndex;
+    }
+    const part = selector.substring(startIndex);
+    shouldScope = shouldScope || part.indexOf(_polyfillHostNoCombinator) > -1;
+    scopedSelector += shouldScope ? _scopeSelectorPart(part) : part;
+    // replace the placeholders with their original values
+    return restoreSafeSelector(safeContent.placeholders, scopedSelector);
+};
+const scopeSelector = (selector, scopeSelectorText, hostSelector, slotSelector) => {
+    return selector.split(',')
+        .map(shallowPart => {
+        if (slotSelector && shallowPart.indexOf('.' + slotSelector) > -1) {
+            return shallowPart.trim();
+        }
+        if (selectorNeedsScoping(shallowPart, scopeSelectorText)) {
+            return applyStrictSelectorScope(shallowPart, scopeSelectorText, hostSelector).trim();
+        }
+        else {
+            return shallowPart.trim();
+        }
+    })
+        .join(', ');
+};
+const scopeSelectors = (cssText, scopeSelectorText, hostSelector, slotSelector, commentOriginalSelector) => {
+    return processRules(cssText, (rule) => {
+        let selector = rule.selector;
+        let content = rule.content;
+        if (rule.selector[0] !== '@') {
+            selector = scopeSelector(rule.selector, scopeSelectorText, hostSelector, slotSelector);
+        }
+        else if (rule.selector.startsWith('@media') || rule.selector.startsWith('@supports') ||
+            rule.selector.startsWith('@page') || rule.selector.startsWith('@document')) {
+            content = scopeSelectors(rule.content, scopeSelectorText, hostSelector, slotSelector);
+        }
+        const cssRule = {
+            selector: selector.replace(/\s{2,}/g, ' ').trim(),
+            content
+        };
+        return cssRule;
+    });
+};
+const scopeCssText = (cssText, scopeId, hostScopeId, slotScopeId, commentOriginalSelector) => {
+    cssText = insertPolyfillHostInCssText(cssText);
+    cssText = convertColonHost(cssText);
+    cssText = convertColonHostContext(cssText);
+    cssText = convertColonSlotted(cssText, slotScopeId);
+    cssText = convertShadowDOMSelectors(cssText);
+    if (scopeId) {
+        cssText = scopeSelectors(cssText, scopeId, hostScopeId, slotScopeId);
+    }
+    cssText = cssText.replace(/-shadowcsshost-no-combinator/g, `.${hostScopeId}`);
+    cssText = cssText.replace(/>\s*\*\s+([^{, ]+)/gm, ' $1 ');
+    return cssText.trim();
+};
+const scopeCss = (cssText, scopeId, commentOriginalSelector) => {
+    const hostScopeId = scopeId + '-h';
+    const slotScopeId = scopeId + '-s';
+    const commentsWithHash = extractCommentsWithHash(cssText);
+    cssText = stripComments(cssText);
+    const orgSelectors = [];
+    if (commentOriginalSelector) {
+        const processCommentedSelector = (rule) => {
+            const placeholder = `/*!@___${orgSelectors.length}___*/`;
+            const comment = `/*!@${rule.selector}*/`;
+            orgSelectors.push({ placeholder, comment });
+            rule.selector = placeholder + rule.selector;
+            return rule;
+        };
+        cssText = processRules(cssText, rule => {
+            if (rule.selector[0] !== '@') {
+                return processCommentedSelector(rule);
+            }
+            else if (rule.selector.startsWith('@media') || rule.selector.startsWith('@supports') ||
+                rule.selector.startsWith('@page') || rule.selector.startsWith('@document')) {
+                rule.content = processRules(rule.content, processCommentedSelector);
+                return rule;
+            }
+            return rule;
         });
     }
-    checkClearOnEdit() {
-        if (!this.clearOnEdit) {
-            return;
-        }
-        if (this.didBlurAfterEdit && this.hasValue()) {
-            this.value = '';
-        }
-        this.didBlurAfterEdit = false;
+    const scopedCssText = scopeCssText(cssText, scopeId, hostScopeId, slotScopeId);
+    cssText = [scopedCssText, ...commentsWithHash].join('\n');
+    if (commentOriginalSelector) {
+        orgSelectors.forEach(({ placeholder, comment }) => {
+            cssText = cssText.replace(placeholder, comment);
+        });
     }
-    focusChange() {
-        if (this.clearOnEdit && !this.hasFocus && this.hasValue()) {
-            this.didBlurAfterEdit = true;
-        }
-        this.emitStyle();
-    }
-    hasValue() {
-        return this.getValue() !== '';
-    }
-    getValue() {
-        return this.value || '';
-    }
-    hostData() {
-        return {
-            'aria-disabled': this.disabled ? 'true' : null,
-            class: Object.assign({}, Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__["c"])(this.color), { [`${this.mode}`]: true })
-        };
-    }
-    render() {
-        const value = this.getValue();
-        const labelId = this.inputId + '-lbl';
-        const label = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["d"])(this.el);
-        if (label) {
-            label.id = labelId;
-        }
-        return (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("textarea", { class: "native-textarea", ref: el => this.nativeInput = el, autoCapitalize: this.autocapitalize, autoFocus: this.autofocus, disabled: this.disabled, maxLength: this.maxlength, minLength: this.minlength, name: this.name, placeholder: this.placeholder || '', readOnly: this.readonly, required: this.required, spellCheck: this.spellcheck, cols: this.cols, rows: this.rows, wrap: this.wrap, onInput: this.onInput, onBlur: this.onBlur, onFocus: this.onFocus, onKeyDown: this.onKeyDown }, value));
-    }
-    static get is() { return "ion-textarea"; }
-    static get encapsulation() { return "scoped"; }
-    static get properties() { return {
-        "autocapitalize": {
-            "type": String,
-            "attr": "autocapitalize"
-        },
-        "autofocus": {
-            "type": Boolean,
-            "attr": "autofocus"
-        },
-        "autoGrow": {
-            "type": Boolean,
-            "attr": "auto-grow"
-        },
-        "clearOnEdit": {
-            "type": Boolean,
-            "attr": "clear-on-edit",
-            "mutable": true
-        },
-        "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "cols": {
-            "type": Number,
-            "attr": "cols"
-        },
-        "debounce": {
-            "type": Number,
-            "attr": "debounce",
-            "watchCallbacks": ["debounceChanged"]
-        },
-        "disabled": {
-            "type": Boolean,
-            "attr": "disabled",
-            "watchCallbacks": ["disabledChanged"]
-        },
-        "el": {
-            "elementRef": true
-        },
-        "getInputElement": {
-            "method": true
-        },
-        "hasFocus": {
-            "state": true
-        },
-        "maxlength": {
-            "type": Number,
-            "attr": "maxlength"
-        },
-        "minlength": {
-            "type": Number,
-            "attr": "minlength"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "name": {
-            "type": String,
-            "attr": "name"
-        },
-        "placeholder": {
-            "type": String,
-            "attr": "placeholder"
-        },
-        "readonly": {
-            "type": Boolean,
-            "attr": "readonly"
-        },
-        "required": {
-            "type": Boolean,
-            "attr": "required"
-        },
-        "rows": {
-            "type": Number,
-            "attr": "rows"
-        },
-        "setFocus": {
-            "method": true
-        },
-        "spellcheck": {
-            "type": Boolean,
-            "attr": "spellcheck"
-        },
-        "value": {
-            "type": String,
-            "attr": "value",
-            "mutable": true,
-            "watchCallbacks": ["valueChanged"]
-        },
-        "wrap": {
-            "type": String,
-            "attr": "wrap"
-        }
-    }; }
-    static get events() { return [{
-            "name": "ionChange",
-            "method": "ionChange",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionInput",
-            "method": "ionInput",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionStyle",
-            "method": "ionStyle",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionBlur",
-            "method": "ionBlur",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionFocus",
-            "method": "ionFocus",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionInputDidLoad",
-            "method": "ionInputDidLoad",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionInputDidUnload",
-            "method": "ionInputDidUnload",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get style() { return ".sc-ion-textarea-ios-h{--background:initial;--color:initial;--placeholder-color:initial;--placeholder-font-style:initial;--placeholder-font-weight:initial;--placeholder-opacity:.5;--padding-top:0;--padding-end:0;--padding-bottom:0;--border-radius:0;display:block;position:relative;-ms-flex:1;flex:1;width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;background:var(--background);color:var(--color);font-family:var(--ion-font-family,inherit);z-index:2}.ion-color.sc-ion-textarea-ios-h{background:initial;color:var(--ion-color-base)}ion-item.sc-ion-textarea-ios-h, ion-item   .sc-ion-textarea-ios-h{-ms-flex-item-align:baseline;align-self:baseline}ion-item.sc-ion-textarea-ios-h:not(.item-label), ion-item:not(.item-label)   .sc-ion-textarea-ios-h{--padding-start:0}.native-textarea.sc-ion-textarea-ios{border-radius:var(--border-radius);margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:block;width:100%;max-width:100%;max-height:100%;border:0;outline:none;background:transparent;-webkit-box-sizing:border-box;box-sizing:border-box;resize:none;-webkit-appearance:none;-moz-appearance:none;appearance:none;white-space:pre-wrap}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.native-textarea.sc-ion-textarea-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}.native-textarea.sc-ion-textarea-ios::-webkit-input-placeholder{color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea.sc-ion-textarea-ios:-ms-input-placeholder{color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea.sc-ion-textarea-ios::-ms-input-placeholder{color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea.sc-ion-textarea-ios::placeholder{color:var(--placeholder-color);font-family:inherit;font-style:var(--placeholder-font-style);font-weight:var(--placeholder-font-weight);opacity:var(--placeholder-opacity)}.native-textarea[disabled].sc-ion-textarea-ios{opacity:.4}.cloned-input.sc-ion-textarea-ios{left:0;top:0;position:absolute;pointer-events:none}[dir=rtl].sc-ion-textarea-ios-h   .cloned-input.sc-ion-textarea-ios, [dir=rtl]   .sc-ion-textarea-ios-h   .cloned-input.sc-ion-textarea-ios{right:0}.sc-ion-textarea-ios-h{--padding-top:10px;--padding-end:8px;--padding-bottom:10px;--padding-start:0;font-size:inherit}.item-label-floating.sc-ion-textarea-ios-h, .item-label-floating   .sc-ion-textarea-ios-h, .item-label-stacked.sc-ion-textarea-ios-h, .item-label-stacked   .sc-ion-textarea-ios-h{--padding-top:8px;--padding-bottom:8px;--padding-start:0px}"; }
-    static get styleMode() { return "ios"; }
-}
-let textareaIds = 0;
+    return cssText;
+};
 
 
 

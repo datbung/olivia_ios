@@ -3072,8 +3072,6 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
                  
                   this.storage.set('arrHistory', data);
                 }
-              }else{
-
               }
               
             })

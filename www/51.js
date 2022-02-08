@@ -1,451 +1,916 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[51],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/emuc9tqd.entry.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/emuc9tqd.entry.js ***!
-  \**************************************************************************/
-/*! exports provided: IonItemOption, IonItemOptions, IonItemSliding */
+/***/ "./node_modules/@ionic/core/dist/esm/ion-nav_5.entry.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/ion-nav_5.entry.js ***!
+  \**************************************************************/
+/*! exports provided: ion_nav, ion_nav_link, ion_nav_pop, ion_nav_push, ion_nav_set_root */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonItemOption", function() { return ItemOption; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonItemOptions", function() { return ItemOptions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonItemSliding", function() { return ItemSliding; });
-/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
-/* harmony import */ var _chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-2f96b3d2.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2f96b3d2.js");
-/* harmony import */ var _chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6d7d2f8c.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-6d7d2f8c.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_nav", function() { return Nav; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_nav_link", function() { return NavLink; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_nav_pop", function() { return NavPop; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_nav_push", function() { return NavPush; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_nav_set_root", function() { return NavSetRoot; });
+/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
+/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
+/* harmony import */ var _helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers-46f4a262.js */ "./node_modules/@ionic/core/dist/esm/helpers-46f4a262.js");
+/* harmony import */ var _constants_3c3e1099_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants-3c3e1099.js */ "./node_modules/@ionic/core/dist/esm/constants-3c3e1099.js");
+/* harmony import */ var _framework_delegate_c2e2e1f4_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./framework-delegate-c2e2e1f4.js */ "./node_modules/@ionic/core/dist/esm/framework-delegate-c2e2e1f4.js");
+/* harmony import */ var _index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./index-4d91f03a.js */ "./node_modules/@ionic/core/dist/esm/index-4d91f03a.js");
+/* harmony import */ var _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./cubic-bezier-2812fda3.js */ "./node_modules/@ionic/core/dist/esm/cubic-bezier-2812fda3.js");
 
 
 
 
 
-class ItemOption {
-    constructor() {
-        this.disabled = false;
-        this.expandable = false;
+
+
+
+const VIEW_STATE_NEW = 1;
+const VIEW_STATE_ATTACHED = 2;
+const VIEW_STATE_DESTROYED = 3;
+class ViewController {
+    constructor(component, params) {
+        this.component = component;
+        this.params = params;
+        this.state = VIEW_STATE_NEW;
     }
-    onClick(ev) {
-        const el = ev.target.closest('ion-item-option');
-        if (el) {
-            ev.preventDefault();
+    async init(container) {
+        this.state = VIEW_STATE_ATTACHED;
+        if (!this.element) {
+            const component = this.component;
+            this.element = await Object(_framework_delegate_c2e2e1f4_js__WEBPACK_IMPORTED_MODULE_4__["a"])(this.delegate, container, component, ['ion-page', 'ion-page-invisible'], this.params);
         }
     }
-    hostData() {
-        const { disabled, expandable } = this;
-        return {
-            class: Object.assign({}, Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__["c"])(this.color), { [`${this.mode}`]: true, 'item-option-disabled': disabled, 'item-option-expandable': expandable, 'ion-activatable': true })
-        };
-    }
-    render() {
-        const TagType = this.href === undefined ? 'button' : 'a';
-        return (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])(TagType, { type: "button", class: "button-native", disabled: this.disabled, href: this.href },
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("span", { class: "button-inner" },
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "top" }),
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "horizontal-wrapper" },
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "start" }),
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "icon-only" }),
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null),
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "end" })),
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "bottom" })),
-            this.mode === 'md' && Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-ripple-effect", null)));
-    }
-    static get is() { return "ion-item-option"; }
-    static get encapsulation() { return "shadow"; }
-    static get properties() { return {
-        "color": {
-            "type": String,
-            "attr": "color"
-        },
-        "disabled": {
-            "type": Boolean,
-            "attr": "disabled"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "expandable": {
-            "type": Boolean,
-            "attr": "expandable"
-        },
-        "href": {
-            "type": String,
-            "attr": "href"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        }
-    }; }
-    static get listeners() { return [{
-            "name": "click",
-            "method": "onClick"
-        }]; }
-    static get style() { return ":host{--background:var(--ion-color-primary,#3880ff);--color:var(--ion-color-primary-contrast,#fff);background:var(--background);color:var(--color);font-family:var(--ion-font-family,inherit)}:host(.in-list.item-options-end:last-child){padding-right:calc(.7em + var(--ion-safe-area-right))}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){:host(.in-list.item-options-end:last-child){padding-right:unset;-webkit-padding-end:calc(.7em + var(--ion-safe-area-right));padding-inline-end:calc(.7em + var(--ion-safe-area-right))}}:host(.in-list.item-options-start:first-child){padding-left:calc(.7em + var(--ion-safe-area-left))}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){:host(.in-list.item-options-start:first-child){padding-left:unset;-webkit-padding-start:calc(.7em + var(--ion-safe-area-left));padding-inline-start:calc(.7em + var(--ion-safe-area-left))}}:host(.ion-color){background:var(--ion-color-base);color:var(--ion-color-contrast)}.button-native{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;padding-left:.7em;padding-right:.7em;padding-top:0;padding-bottom:0;display:inline-block;position:relative;width:100%;height:100%;border:0;outline:none;background:transparent;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;-webkit-box-sizing:border-box;box-sizing:border-box}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.button-native{padding-left:unset;padding-right:unset;-webkit-padding-start:.7em;padding-inline-start:.7em;-webkit-padding-end:.7em;padding-inline-end:.7em}}.button-inner{-ms-flex-flow:column nowrap;flex-flow:column nowrap;height:100%}.button-inner,.horizontal-wrapper{display:-ms-flexbox;display:flex;-ms-flex-negative:0;flex-shrink:0;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:100%}.horizontal-wrapper{-ms-flex-flow:row nowrap;flex-flow:row nowrap}::slotted(*){-ms-flex-negative:0;flex-shrink:0}::slotted([slot=start]){margin-left:0;margin-right:5px;margin-top:0;margin-bottom:0}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){::slotted([slot=start]){margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:5px;margin-inline-end:5px}}::slotted([slot=end]){margin-left:5px;margin-right:0;margin-top:0;margin-bottom:0}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){::slotted([slot=end]){margin-left:unset;margin-right:unset;-webkit-margin-start:5px;margin-inline-start:5px;-webkit-margin-end:0;margin-inline-end:0}}::slotted([slot=icon-only]){padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:10px;margin-right:10px;margin-top:0;margin-bottom:0;min-width:.9em;font-size:1.8em}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){::slotted([slot=icon-only]){margin-left:unset;margin-right:unset;-webkit-margin-start:10px;margin-inline-start:10px;-webkit-margin-end:10px;margin-inline-end:10px}}:host(.item-option-expandable){-ms-flex-negative:0;flex-shrink:0;-webkit-transition-duration:0;transition-duration:0;-webkit-transition-property:none;transition-property:none;-webkit-transition-timing-function:cubic-bezier(.65,.05,.36,1);transition-timing-function:cubic-bezier(.65,.05,.36,1)}:host(.item-option-disabled){pointer-events:none}:host(.item-option-disabled) .button-native{cursor:default;opacity:.5;pointer-events:none}:host{font-size:16px}:host(.activated){background:var(--ion-color-primary-shade,#3171e0)}:host(.ion-color.activated){background:var(--ion-color-shade)}"; }
-    static get styleMode() { return "ios"; }
-}
-
-class ItemOptions {
-    constructor() {
-        this.side = 'end';
-    }
-    fireSwipeEvent() {
-        this.ionSwipe.emit({
-            side: this.side
-        });
-    }
-    hostData() {
-        const isEnd = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["g"])(this.win, this.side);
-        return {
-            class: {
-                [`${this.mode}`]: true,
-                [`item-options-${this.mode}`]: true,
-                'item-options-start': !isEnd,
-                'item-options-end': isEnd
+    /**
+     * DOM WRITE
+     */
+    _destroy() {
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(this.state !== VIEW_STATE_DESTROYED, 'view state must be ATTACHED');
+        const element = this.element;
+        if (element) {
+            if (this.delegate) {
+                this.delegate.removeViewFromDom(element.parentElement, element);
             }
-        };
-    }
-    static get is() { return "ion-item-options"; }
-    static get properties() { return {
-        "el": {
-            "elementRef": true
-        },
-        "fireSwipeEvent": {
-            "method": true
-        },
-        "side": {
-            "type": String,
-            "attr": "side"
-        },
-        "win": {
-            "context": "window"
+            else {
+                element.remove();
+            }
         }
-    }; }
-    static get events() { return [{
-            "name": "ionSwipe",
-            "method": "ionSwipe",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get style() { return "ion-item-options{top:0;right:0;-ms-flex-pack:end;justify-content:flex-end;display:none;position:absolute;height:100%;font-size:14px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:1}:host-context([dir=rtl]) ion-item-options{-ms-flex-pack:start;justify-content:flex-start}:host-context([dir=rtl]) ion-item-options:not(.item-options-end){right:auto;left:0;-ms-flex-pack:end;justify-content:flex-end}.item-options-start{right:auto;left:0;-ms-flex-pack:start;justify-content:flex-start}:host-context([dir=rtl]) .item-options-start{-ms-flex-pack:end;justify-content:flex-end}.item-options-start ion-item-option:first-child{padding-right:var(--ion-safe-area-left)}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.item-options-start ion-item-option:first-child{padding-right:unset;-webkit-padding-end:var(--ion-safe-area-left);padding-inline-end:var(--ion-safe-area-left)}}.item-options-end ion-item-option:last-child{padding-right:var(--ion-safe-area-right)}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.item-options-end ion-item-option:last-child{padding-right:unset;-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}:host-context([dir=rtl]) .item-sliding-active-slide.item-sliding-active-options-start ion-item-options:not(.item-options-end){width:100%;visibility:visible}.item-sliding-active-slide ion-item-options{display:-ms-flexbox;display:flex;visibility:hidden}.item-sliding-active-slide.item-sliding-active-options-end ion-item-options:not(.item-options-start),.item-sliding-active-slide.item-sliding-active-options-start .item-options-start{width:100%;visibility:visible}.item-options-ios{border-bottom-width:0;border-bottom-style:solid;border-bottom-color:var(--ion-item-border-color,var(--ion-border-color,var(--ion-color-step-150,#c8c7cc)))}.item-options-ios.item-options-end{border-bottom-width:.55px}.list-ios-lines-none .item-options-ios{border-bottom-width:0}.list-ios-lines-full .item-options-ios,.list-ios-lines-inset .item-options-ios.item-options-end{border-bottom-width:.55px}"; }
-    static get styleMode() { return "ios"; }
+        this.nav = undefined;
+        this.state = VIEW_STATE_DESTROYED;
+    }
 }
-
-const SWIPE_MARGIN = 30;
-const ELASTIC_FACTOR = 0.55;
-let openSlidingItem;
-class ItemSliding {
-    constructor() {
-        this.item = null;
-        this.openAmount = 0;
-        this.initialOpenAmount = 0;
-        this.optsWidthRightSide = 0;
-        this.optsWidthLeftSide = 0;
-        this.sides = 0;
-        this.optsDirty = true;
-        this.state = 2;
-        this.disabled = false;
+const matches = (view, id, params) => {
+    if (!view) {
+        return false;
     }
-    disabledChanged() {
-        if (this.gesture) {
-            this.gesture.setDisabled(this.disabled);
+    if (view.component !== id) {
+        return false;
+    }
+    const currentParams = view.params;
+    if (currentParams === params) {
+        return true;
+    }
+    if (!currentParams && !params) {
+        return true;
+    }
+    if (!currentParams || !params) {
+        return false;
+    }
+    const keysA = Object.keys(currentParams);
+    const keysB = Object.keys(params);
+    if (keysA.length !== keysB.length) {
+        return false;
+    }
+    // Test for A's keys different from B.
+    for (const key of keysA) {
+        if (currentParams[key] !== params[key]) {
+            return false;
         }
+    }
+    return true;
+};
+const convertToView = (page, params) => {
+    if (!page) {
+        return null;
+    }
+    if (page instanceof ViewController) {
+        return page;
+    }
+    return new ViewController(page, params);
+};
+const convertToViews = (pages) => {
+    return pages.map(page => {
+        if (page instanceof ViewController) {
+            return page;
+        }
+        if ('page' in page) {
+            return convertToView(page.page, page.params);
+        }
+        return convertToView(page, undefined);
+    }).filter(v => v !== null);
+};
+
+const Nav = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.transInstr = [];
+        this.animationEnabled = true;
+        this.useRouter = false;
+        this.isTransitioning = false;
+        this.destroyed = false;
+        this.views = [];
+        /**
+         * If `true`, the nav should animate the transition of components.
+         */
+        this.animated = true;
+        this.ionNavWillLoad = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionNavWillLoad", 7);
+        this.ionNavWillChange = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionNavWillChange", 3);
+        this.ionNavDidChange = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionNavDidChange", 3);
+    }
+    swipeGestureChanged() {
+        if (this.gesture) {
+            this.gesture.setDisabled(this.swipeGesture !== true);
+        }
+    }
+    rootChanged() {
+        if (this.root !== undefined) {
+            if (!this.useRouter) {
+                this.setRoot(this.root, this.rootParams);
+            }
+        }
+    }
+    componentWillLoad() {
+        this.useRouter =
+            !!document.querySelector('ion-router') &&
+                !this.el.closest('[no-router]');
+        if (this.swipeGesture === undefined) {
+            const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
+            this.swipeGesture = _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__["b"].getBoolean('swipeBackEnabled', mode === 'ios');
+        }
+        this.ionNavWillLoad.emit();
     }
     async componentDidLoad() {
-        this.item = this.el.querySelector('ion-item');
-        await this.updateOptions();
-        this.gesture = (await Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e("common")]).then(__webpack_require__.bind(null, /*! ./chunk-f56eaea8.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-f56eaea8.js"))).createGesture({
-            el: this.el,
-            queue: this.queue,
-            gestureName: 'item-swipe',
-            gesturePriority: 100,
-            threshold: 5,
-            canStart: () => this.canStart(),
-            onStart: () => this.onStart(),
-            onMove: ev => this.onMove(ev),
-            onEnd: ev => this.onEnd(ev),
-        });
-        this.disabledChanged();
+        this.rootChanged();
+        this.gesture = (await __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./swipe-back-35ad8e37.js */ "./node_modules/@ionic/core/dist/esm/swipe-back-35ad8e37.js"))).createSwipeBackGesture(this.el, this.canStart.bind(this), this.onStart.bind(this), this.onMove.bind(this), this.onEnd.bind(this));
+        this.swipeGestureChanged();
     }
     componentDidUnload() {
+        for (const view of this.views) {
+            Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["l"])(view.element, _constants_3c3e1099_js__WEBPACK_IMPORTED_MODULE_3__["d"]);
+            view._destroy();
+        }
         if (this.gesture) {
             this.gesture.destroy();
             this.gesture = undefined;
         }
-        this.item = null;
-        this.leftOptions = this.rightOptions = undefined;
-        if (openSlidingItem === this.el) {
-            openSlidingItem = undefined;
-        }
+        // release swipe back gesture and transition
+        this.transInstr.length = this.views.length = 0;
+        this.destroyed = true;
     }
-    getOpenAmount() {
-        return Promise.resolve(this.openAmount);
+    /**
+     * Push a new component onto the current navigation stack. Pass any additional
+     * information along as an object. This additional information is accessible
+     * through NavParams.
+     *
+     * @param component The component to push onto the navigation stack.
+     * @param componentProps Any properties of the component.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    push(component, componentProps, opts, done) {
+        return this.queueTrns({
+            insertStart: -1,
+            insertViews: [{ page: component, params: componentProps }],
+            opts
+        }, done);
     }
-    getSlidingRatio() {
-        return Promise.resolve(this.getSlidingRatioSync());
+    /**
+     * Inserts a component into the navigation stack at the specified index.
+     * This is useful to add a component at any point in the navigation stack.
+     *
+     * @param insertIndex The index to insert the component at in the stack.
+     * @param component The component to insert into the navigation stack.
+     * @param componentProps Any properties of the component.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    insert(insertIndex, component, componentProps, opts, done) {
+        return this.queueTrns({
+            insertStart: insertIndex,
+            insertViews: [{ page: component, params: componentProps }],
+            opts
+        }, done);
     }
-    async open(side) {
-        if (this.item === null) {
-            return;
-        }
-        const optionsToOpen = this.getOptions(side);
-        if (!optionsToOpen) {
-            return;
-        }
-        if (side === undefined) {
-            side = (optionsToOpen === this.leftOptions) ? 'start' : 'end';
-        }
-        const isStartOpen = this.openAmount < 0;
-        const isEndOpen = this.openAmount > 0;
-        if (isStartOpen && optionsToOpen === this.leftOptions) {
-            return;
-        }
-        if (isEndOpen && optionsToOpen === this.rightOptions) {
-            return;
-        }
-        this.closeOpened();
-        this.state = 4;
-        requestAnimationFrame(() => {
-            this.calculateOptsWidth();
-            const width = (side === 'end') ? this.optsWidthRightSide : -this.optsWidthLeftSide;
-            openSlidingItem = this.el;
-            this.setOpenAmount(width, false);
-            this.state = (side === 'end') ? 8 : 16;
-        });
+    /**
+     * Inserts an array of components into the navigation stack at the specified index.
+     * The last component in the array will become instantiated as a view, and animate
+     * in to become the active view.
+     *
+     * @param insertIndex The index to insert the components at in the stack.
+     * @param insertComponents The components to insert into the navigation stack.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    insertPages(insertIndex, insertComponents, opts, done) {
+        return this.queueTrns({
+            insertStart: insertIndex,
+            insertViews: insertComponents,
+            opts
+        }, done);
     }
-    async close() {
-        this.setOpenAmount(0, true);
+    /**
+     * Pop a component off of the navigation stack. Navigates back from the current
+     * component.
+     *
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    pop(opts, done) {
+        return this.queueTrns({
+            removeStart: -1,
+            removeCount: 1,
+            opts
+        }, done);
     }
-    async closeOpened() {
-        if (openSlidingItem !== undefined) {
-            openSlidingItem.close();
-            openSlidingItem = undefined;
-            return true;
+    /**
+     * Pop to a specific index in the navigation stack.
+     *
+     * @param indexOrViewCtrl The index or view controller to pop to.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    popTo(indexOrViewCtrl, opts, done) {
+        const tiConfig = {
+            removeStart: -1,
+            removeCount: -1,
+            opts
+        };
+        if (typeof indexOrViewCtrl === 'object' && indexOrViewCtrl.component) {
+            tiConfig.removeView = indexOrViewCtrl;
+            tiConfig.removeStart = 1;
         }
-        return false;
+        else if (typeof indexOrViewCtrl === 'number') {
+            tiConfig.removeStart = indexOrViewCtrl + 1;
+        }
+        return this.queueTrns(tiConfig, done);
     }
-    getOptions(side) {
-        if (side === undefined) {
-            return this.leftOptions || this.rightOptions;
-        }
-        else if (side === 'start') {
-            return this.leftOptions;
-        }
-        else {
-            return this.rightOptions;
-        }
+    /**
+     * Navigate back to the root of the stack, no matter how far back that is.
+     *
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    popToRoot(opts, done) {
+        return this.queueTrns({
+            removeStart: 1,
+            removeCount: -1,
+            opts
+        }, done);
     }
-    async updateOptions() {
-        const options = this.el.querySelectorAll('ion-item-options');
-        let sides = 0;
-        this.leftOptions = this.rightOptions = undefined;
-        for (let i = 0; i < options.length; i++) {
-            const option = await options.item(i).componentOnReady();
-            if (option.side === 'start') {
-                this.leftOptions = option;
-                sides |= 1;
-            }
-            else {
-                this.rightOptions = option;
-                sides |= 2;
-            }
-        }
-        this.optsDirty = true;
-        this.sides = sides;
+    /**
+     * Removes a component from the navigation stack at the specified index.
+     *
+     * @param startIndex The number to begin removal at.
+     * @param removeCount The number of components to remove.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    removeIndex(startIndex, removeCount = 1, opts, done) {
+        return this.queueTrns({
+            removeStart: startIndex,
+            removeCount,
+            opts
+        }, done);
     }
-    canStart() {
-        const selected = openSlidingItem;
-        if (selected && selected !== this.el) {
-            this.closeOpened();
-            return false;
-        }
-        return !!(this.rightOptions || this.leftOptions);
+    /**
+     * Set the root for the current navigation stack to a component.
+     *
+     * @param component The component to set as the root of the navigation stack.
+     * @param componentProps Any properties of the component.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    setRoot(component, componentProps, opts, done) {
+        return this.setPages([{ page: component, params: componentProps }], opts, done);
     }
-    onStart() {
-        openSlidingItem = this.el;
-        if (this.tmr !== undefined) {
-            clearTimeout(this.tmr);
-            this.tmr = undefined;
+    /**
+     * Set the views of the current navigation stack and navigate to the last view.
+     * By default animations are disabled, but they can be enabled by passing options
+     * to the navigation controller. Navigation parameters can also be passed to the
+     * individual pages in the array.
+     *
+     * @param views The list of views to set as the navigation stack.
+     * @param opts The navigation options.
+     * @param done The transition complete function.
+     */
+    setPages(views, opts, done) {
+        if (opts == null) {
+            opts = {};
         }
-        if (this.openAmount === 0) {
-            this.optsDirty = true;
-            this.state = 4;
+        // if animation wasn't set to true then default it to NOT animate
+        if (opts.animated !== true) {
+            opts.animated = false;
         }
-        this.initialOpenAmount = this.openAmount;
-        if (this.item) {
-            this.item.style.transition = 'none';
-        }
+        return this.queueTrns({
+            insertStart: 0,
+            insertViews: views,
+            removeStart: 0,
+            removeCount: -1,
+            opts
+        }, done);
     }
-    onMove(gesture) {
-        if (this.optsDirty) {
-            this.calculateOptsWidth();
+    /** @internal */
+    setRouteId(id, params, direction) {
+        const active = this.getActiveSync();
+        if (matches(active, id, params)) {
+            return Promise.resolve({
+                changed: false,
+                element: active.element
+            });
         }
-        let openAmount = this.initialOpenAmount - gesture.deltaX;
-        switch (this.sides) {
-            case 2:
-                openAmount = Math.max(0, openAmount);
-                break;
-            case 1:
-                openAmount = Math.min(0, openAmount);
-                break;
-            case 3: break;
-            case 0: return;
-            default:
-                console.warn('invalid ItemSideFlags value', this.sides);
-                break;
-        }
-        let optsWidth;
-        if (openAmount > this.optsWidthRightSide) {
-            optsWidth = this.optsWidthRightSide;
-            openAmount = optsWidth + (openAmount - optsWidth) * ELASTIC_FACTOR;
-        }
-        else if (openAmount < -this.optsWidthLeftSide) {
-            optsWidth = -this.optsWidthLeftSide;
-            openAmount = optsWidth + (openAmount - optsWidth) * ELASTIC_FACTOR;
-        }
-        this.setOpenAmount(openAmount, false);
-    }
-    onEnd(gesture) {
-        const velocity = gesture.velocityX;
-        let restingPoint = (this.openAmount > 0)
-            ? this.optsWidthRightSide
-            : -this.optsWidthLeftSide;
-        const isResetDirection = (this.openAmount > 0) === !(velocity < 0);
-        const isMovingFast = Math.abs(velocity) > 0.3;
-        const isOnCloseZone = Math.abs(this.openAmount) < Math.abs(restingPoint / 2);
-        if (swipeShouldReset(isResetDirection, isMovingFast, isOnCloseZone)) {
-            restingPoint = 0;
-        }
-        const state = this.state;
-        this.setOpenAmount(restingPoint, true);
-        if ((state & 32) !== 0 && this.rightOptions) {
-            this.rightOptions.fireSwipeEvent();
-        }
-        else if ((state & 64) !== 0 && this.leftOptions) {
-            this.leftOptions.fireSwipeEvent();
-        }
-    }
-    calculateOptsWidth() {
-        this.optsWidthRightSide = 0;
-        if (this.rightOptions) {
-            this.rightOptions.style.display = 'flex';
-            this.optsWidthRightSide = this.rightOptions.offsetWidth;
-            this.rightOptions.style.display = '';
-        }
-        this.optsWidthLeftSide = 0;
-        if (this.leftOptions) {
-            this.leftOptions.style.display = 'flex';
-            this.optsWidthLeftSide = this.leftOptions.offsetWidth;
-            this.leftOptions.style.display = '';
-        }
-        this.optsDirty = false;
-    }
-    setOpenAmount(openAmount, isFinal) {
-        if (this.tmr !== undefined) {
-            clearTimeout(this.tmr);
-            this.tmr = undefined;
-        }
-        if (!this.item) {
-            return;
-        }
-        const style = this.item.style;
-        this.openAmount = openAmount;
-        if (isFinal) {
-            style.transition = '';
-        }
-        if (openAmount > 0) {
-            this.state = (openAmount >= (this.optsWidthRightSide + SWIPE_MARGIN))
-                ? 8 | 32
-                : 8;
-        }
-        else if (openAmount < 0) {
-            this.state = (openAmount <= (-this.optsWidthLeftSide - SWIPE_MARGIN))
-                ? 16 | 64
-                : 16;
-        }
-        else {
-            this.tmr = setTimeout(() => {
-                this.state = 2;
-                this.tmr = undefined;
-            }, 600);
-            openSlidingItem = undefined;
-            style.transform = '';
-            return;
-        }
-        style.transform = `translate3d(${-openAmount}px,0,0)`;
-        this.ionDrag.emit({
-            amount: openAmount,
-            ratio: this.getSlidingRatioSync()
-        });
-    }
-    getSlidingRatioSync() {
-        if (this.openAmount > 0) {
-            return this.openAmount / this.optsWidthRightSide;
-        }
-        else if (this.openAmount < 0) {
-            return this.openAmount / this.optsWidthLeftSide;
-        }
-        else {
-            return 0;
-        }
-    }
-    hostData() {
-        return {
-            class: {
-                [`${this.mode}`]: true,
-                'item-sliding-active-slide': (this.state !== 2),
-                'item-sliding-active-options-end': (this.state & 8) !== 0,
-                'item-sliding-active-options-start': (this.state & 16) !== 0,
-                'item-sliding-active-swipe-end': (this.state & 32) !== 0,
-                'item-sliding-active-swipe-start': (this.state & 64) !== 0
+        let resolve;
+        const promise = new Promise(r => (resolve = r));
+        let finish;
+        const commonOpts = {
+            updateURL: false,
+            viewIsReady: enteringEl => {
+                let mark;
+                const p = new Promise(r => (mark = r));
+                resolve({
+                    changed: true,
+                    element: enteringEl,
+                    markVisible: async () => {
+                        mark();
+                        await finish;
+                    }
+                });
+                return p;
             }
         };
-    }
-    static get is() { return "ion-item-sliding"; }
-    static get properties() { return {
-        "close": {
-            "method": true
-        },
-        "closeOpened": {
-            "method": true
-        },
-        "disabled": {
-            "type": Boolean,
-            "attr": "disabled",
-            "watchCallbacks": ["disabledChanged"]
-        },
-        "el": {
-            "elementRef": true
-        },
-        "getOpenAmount": {
-            "method": true
-        },
-        "getSlidingRatio": {
-            "method": true
-        },
-        "open": {
-            "method": true
-        },
-        "queue": {
-            "context": "queue"
-        },
-        "state": {
-            "state": true
+        if (direction === 'root') {
+            finish = this.setRoot(id, params, commonOpts);
         }
+        else {
+            const viewController = this.views.find(v => matches(v, id, params));
+            if (viewController) {
+                finish = this.popTo(viewController, Object.assign(Object.assign({}, commonOpts), { direction: 'back' }));
+            }
+            else if (direction === 'forward') {
+                finish = this.push(id, params, commonOpts);
+            }
+            else if (direction === 'back') {
+                finish = this.setRoot(id, params, Object.assign(Object.assign({}, commonOpts), { direction: 'back', animated: true }));
+            }
+        }
+        return promise;
+    }
+    /** @internal */
+    async getRouteId() {
+        const active = this.getActiveSync();
+        return active
+            ? {
+                id: active.element.tagName,
+                params: active.params,
+                element: active.element
+            }
+            : undefined;
+    }
+    /**
+     * Get the active view.
+     */
+    getActive() {
+        return Promise.resolve(this.getActiveSync());
+    }
+    /**
+     * Get the view at the specified index.
+     *
+     * @param index The index of the view.
+     */
+    getByIndex(index) {
+        return Promise.resolve(this.views[index]);
+    }
+    /**
+     * Returns `true` if the current view can go back.
+     *
+     * @param view The view to check.
+     */
+    canGoBack(view) {
+        return Promise.resolve(this.canGoBackSync(view));
+    }
+    /**
+     * Get the previous view.
+     *
+     * @param view The view to get.
+     */
+    getPrevious(view) {
+        return Promise.resolve(this.getPreviousSync(view));
+    }
+    getLength() {
+        return this.views.length;
+    }
+    getActiveSync() {
+        return this.views[this.views.length - 1];
+    }
+    canGoBackSync(view = this.getActiveSync()) {
+        return !!(view && this.getPreviousSync(view));
+    }
+    getPreviousSync(view = this.getActiveSync()) {
+        if (!view) {
+            return undefined;
+        }
+        const views = this.views;
+        const index = views.indexOf(view);
+        return index > 0 ? views[index - 1] : undefined;
+    }
+    // _queueTrns() adds a navigation stack change to the queue and schedules it to run:
+    // 1. _nextTrns(): consumes the next transition in the queue
+    // 2. _viewInit(): initializes enteringView if required
+    // 3. _viewTest(): ensures canLeave/canEnter Returns `true`, so the operation can continue
+    // 4. _postViewInit(): add/remove the views from the navigation stack
+    // 5. _transitionInit(): initializes the visual transition if required and schedules it to run
+    // 6. _viewAttachToDOM(): attaches the enteringView to the DOM
+    // 7. _transitionStart(): called once the transition actually starts, it initializes the Animation underneath.
+    // 8. _transitionFinish(): called once the transition finishes
+    // 9. _cleanup(): syncs the navigation internal state with the DOM. For example it removes the pages from the DOM or hides/show them.
+    queueTrns(ti, done) {
+        if (this.isTransitioning && ti.opts != null && ti.opts.skipIfBusy) {
+            return Promise.resolve(false);
+        }
+        const promise = new Promise((resolve, reject) => {
+            ti.resolve = resolve;
+            ti.reject = reject;
+        });
+        ti.done = done;
+        // Normalize empty
+        if (ti.insertViews && ti.insertViews.length === 0) {
+            ti.insertViews = undefined;
+        }
+        // Enqueue transition instruction
+        this.transInstr.push(ti);
+        // if there isn't a transition already happening
+        // then this will kick off this transition
+        this.nextTrns();
+        return promise;
+    }
+    success(result, ti) {
+        if (this.destroyed) {
+            this.fireError('nav controller was destroyed', ti);
+            return;
+        }
+        if (ti.done) {
+            ti.done(result.hasCompleted, result.requiresTransition, result.enteringView, result.leavingView, result.direction);
+        }
+        ti.resolve(result.hasCompleted);
+        if (ti.opts.updateURL !== false && this.useRouter) {
+            const router = document.querySelector('ion-router');
+            if (router) {
+                const direction = result.direction === 'back' ? 'back' : 'forward';
+                router.navChanged(direction);
+            }
+        }
+    }
+    failed(rejectReason, ti) {
+        if (this.destroyed) {
+            this.fireError('nav controller was destroyed', ti);
+            return;
+        }
+        this.transInstr.length = 0;
+        this.fireError(rejectReason, ti);
+    }
+    fireError(rejectReason, ti) {
+        if (ti.done) {
+            ti.done(false, false, rejectReason);
+        }
+        if (ti.reject && !this.destroyed) {
+            ti.reject(rejectReason);
+        }
+        else {
+            ti.resolve(false);
+        }
+    }
+    nextTrns() {
+        // this is the framework's bread 'n butta function
+        // only one transition is allowed at any given time
+        if (this.isTransitioning) {
+            return false;
+        }
+        // there is no transition happening right now
+        // get the next instruction
+        const ti = this.transInstr.shift();
+        if (!ti) {
+            return false;
+        }
+        this.runTransition(ti);
+        return true;
+    }
+    async runTransition(ti) {
+        try {
+            // set that this nav is actively transitioning
+            this.ionNavWillChange.emit();
+            this.isTransitioning = true;
+            this.prepareTI(ti);
+            const leavingView = this.getActiveSync();
+            const enteringView = this.getEnteringView(ti, leavingView);
+            if (!leavingView && !enteringView) {
+                throw new Error('no views in the stack to be removed');
+            }
+            if (enteringView && enteringView.state === VIEW_STATE_NEW) {
+                await enteringView.init(this.el);
+            }
+            this.postViewInit(enteringView, leavingView, ti);
+            // Needs transition?
+            const requiresTransition = (ti.enteringRequiresTransition || ti.leavingRequiresTransition) &&
+                enteringView !== leavingView;
+            const result = requiresTransition
+                ? await this.transition(enteringView, leavingView, ti)
+                : {
+                    // transition is not required, so we are already done!
+                    // they're inserting/removing the views somewhere in the middle or
+                    // beginning, so visually nothing needs to animate/transition
+                    // resolve immediately because there's no animation that's happening
+                    hasCompleted: true,
+                    requiresTransition: false
+                };
+            this.success(result, ti);
+            this.ionNavDidChange.emit();
+        }
+        catch (rejectReason) {
+            this.failed(rejectReason, ti);
+        }
+        this.isTransitioning = false;
+        this.nextTrns();
+    }
+    prepareTI(ti) {
+        const viewsLength = this.views.length;
+        ti.opts = ti.opts || {};
+        if (ti.opts.delegate === undefined) {
+            ti.opts.delegate = this.delegate;
+        }
+        if (ti.removeView !== undefined) {
+            Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(ti.removeStart !== undefined, 'removeView needs removeStart');
+            Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(ti.removeCount !== undefined, 'removeView needs removeCount');
+            const index = this.views.indexOf(ti.removeView);
+            if (index < 0) {
+                throw new Error('removeView was not found');
+            }
+            ti.removeStart += index;
+        }
+        if (ti.removeStart !== undefined) {
+            if (ti.removeStart < 0) {
+                ti.removeStart = viewsLength - 1;
+            }
+            if (ti.removeCount < 0) {
+                ti.removeCount = viewsLength - ti.removeStart;
+            }
+            ti.leavingRequiresTransition =
+                ti.removeCount > 0 && ti.removeStart + ti.removeCount === viewsLength;
+        }
+        if (ti.insertViews) {
+            // allow -1 to be passed in to auto push it on the end
+            // and clean up the index if it's larger then the size of the stack
+            if (ti.insertStart < 0 || ti.insertStart > viewsLength) {
+                ti.insertStart = viewsLength;
+            }
+            ti.enteringRequiresTransition = ti.insertStart === viewsLength;
+        }
+        const insertViews = ti.insertViews;
+        if (!insertViews) {
+            return;
+        }
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(insertViews.length > 0, 'length can not be zero');
+        const viewControllers = convertToViews(insertViews);
+        if (viewControllers.length === 0) {
+            throw new Error('invalid views to insert');
+        }
+        // Check all the inserted view are correct
+        for (const view of viewControllers) {
+            view.delegate = ti.opts.delegate;
+            const nav = view.nav;
+            if (nav && nav !== this) {
+                throw new Error('inserted view was already inserted');
+            }
+            if (view.state === VIEW_STATE_DESTROYED) {
+                throw new Error('inserted view was already destroyed');
+            }
+        }
+        ti.insertViews = viewControllers;
+    }
+    getEnteringView(ti, leavingView) {
+        const insertViews = ti.insertViews;
+        if (insertViews !== undefined) {
+            // grab the very last view of the views to be inserted
+            // and initialize it as the new entering view
+            return insertViews[insertViews.length - 1];
+        }
+        const removeStart = ti.removeStart;
+        if (removeStart !== undefined) {
+            const views = this.views;
+            const removeEnd = removeStart + ti.removeCount;
+            for (let i = views.length - 1; i >= 0; i--) {
+                const view = views[i];
+                if ((i < removeStart || i >= removeEnd) && view !== leavingView) {
+                    return view;
+                }
+            }
+        }
+        return undefined;
+    }
+    postViewInit(enteringView, leavingView, ti) {
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(leavingView || enteringView, 'Both leavingView and enteringView are null');
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(ti.resolve, 'resolve must be valid');
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(ti.reject, 'reject must be valid');
+        const opts = ti.opts;
+        const insertViews = ti.insertViews;
+        const removeStart = ti.removeStart;
+        const removeCount = ti.removeCount;
+        let destroyQueue;
+        // there are views to remove
+        if (removeStart !== undefined && removeCount !== undefined) {
+            Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(removeStart >= 0, 'removeStart can not be negative');
+            Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(removeCount >= 0, 'removeCount can not be negative');
+            destroyQueue = [];
+            for (let i = 0; i < removeCount; i++) {
+                const view = this.views[i + removeStart];
+                if (view && view !== enteringView && view !== leavingView) {
+                    destroyQueue.push(view);
+                }
+            }
+            // default the direction to "back"
+            opts.direction = opts.direction || 'back';
+        }
+        const finalBalance = this.views.length +
+            (insertViews !== undefined ? insertViews.length : 0) -
+            (removeCount !== undefined ? removeCount : 0);
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(finalBalance >= 0, 'final balance can not be negative');
+        if (finalBalance === 0) {
+            console.warn(`You can't remove all the pages in the navigation stack. nav.pop() is probably called too many times.`, this, this.el);
+            throw new Error('navigation stack needs at least one root page');
+        }
+        // At this point the transition can not be rejected, any throw should be an error
+        // there are views to insert
+        if (insertViews) {
+            // add the views to the
+            let insertIndex = ti.insertStart;
+            for (const view of insertViews) {
+                this.insertViewAt(view, insertIndex);
+                insertIndex++;
+            }
+            if (ti.enteringRequiresTransition) {
+                // default to forward if not already set
+                opts.direction = opts.direction || 'forward';
+            }
+        }
+        // if the views to be removed are in the beginning or middle
+        // and there is not a view that needs to visually transition out
+        // then just destroy them and don't transition anything
+        // batch all of lifecycles together
+        // let's make sure, callbacks are zoned
+        if (destroyQueue && destroyQueue.length > 0) {
+            for (const view of destroyQueue) {
+                Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["l"])(view.element, _constants_3c3e1099_js__WEBPACK_IMPORTED_MODULE_3__["b"]);
+                Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["l"])(view.element, _constants_3c3e1099_js__WEBPACK_IMPORTED_MODULE_3__["c"]);
+                Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["l"])(view.element, _constants_3c3e1099_js__WEBPACK_IMPORTED_MODULE_3__["d"]);
+            }
+            // once all lifecycle events has been delivered, we can safely detroy the views
+            for (const view of destroyQueue) {
+                this.destroyView(view);
+            }
+        }
+    }
+    async transition(enteringView, leavingView, ti) {
+        // we should animate (duration > 0) if the pushed page is not the first one (startup)
+        // or if it is a portal (modal, actionsheet, etc.)
+        const opts = ti.opts;
+        const progressCallback = opts.progressAnimation
+            ? (ani) => this.sbAni = ani
+            : undefined;
+        const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
+        const enteringEl = enteringView.element;
+        const leavingEl = leavingView && leavingView.element;
+        const animationOpts = Object.assign({ mode, showGoBack: this.canGoBackSync(enteringView), baseEl: this.el, animationBuilder: this.animation || opts.animationBuilder || _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__["b"].get('navAnimation'), progressCallback, animated: this.animated && _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__["b"].getBoolean('animated', true), enteringEl,
+            leavingEl }, opts);
+        const { hasCompleted } = await Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["t"])(animationOpts);
+        return this.transitionFinish(hasCompleted, enteringView, leavingView, opts);
+    }
+    transitionFinish(hasCompleted, enteringView, leavingView, opts) {
+        const cleanupView = hasCompleted ? enteringView : leavingView;
+        if (cleanupView) {
+            this.cleanup(cleanupView);
+        }
+        return {
+            hasCompleted,
+            requiresTransition: true,
+            enteringView,
+            leavingView,
+            direction: opts.direction
+        };
+    }
+    insertViewAt(view, index) {
+        const views = this.views;
+        const existingIndex = views.indexOf(view);
+        if (existingIndex > -1) {
+            // this view is already in the stack!!
+            // move it to its new location
+            Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(view.nav === this, 'view is not part of the nav');
+            views.splice(index, 0, views.splice(existingIndex, 1)[0]);
+        }
+        else {
+            Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(!view.nav, 'nav is used');
+            // this is a new view to add to the stack
+            // create the new entering view
+            view.nav = this;
+            // insert the entering view into the correct index in the stack
+            views.splice(index, 0, view);
+        }
+    }
+    removeView(view) {
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(view.state === VIEW_STATE_ATTACHED || view.state === VIEW_STATE_DESTROYED, 'view state should be loaded or destroyed');
+        const views = this.views;
+        const index = views.indexOf(view);
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["b"])(index > -1, 'view must be part of the stack');
+        if (index >= 0) {
+            views.splice(index, 1);
+        }
+    }
+    destroyView(view) {
+        view._destroy();
+        this.removeView(view);
+    }
+    /**
+     * DOM WRITE
+     */
+    cleanup(activeView) {
+        // ok, cleanup time!! Destroy all of the views that are
+        // INACTIVE and come after the active view
+        // only do this if the views exist, though
+        if (this.destroyed) {
+            return;
+        }
+        const views = this.views;
+        const activeViewIndex = views.indexOf(activeView);
+        for (let i = views.length - 1; i >= 0; i--) {
+            const view = views[i];
+            const element = view.element;
+            if (i > activeViewIndex) {
+                // this view comes after the active view
+                // let's unload it
+                Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["l"])(element, _constants_3c3e1099_js__WEBPACK_IMPORTED_MODULE_3__["d"]);
+                this.destroyView(view);
+            }
+            else if (i < activeViewIndex) {
+                // this view comes before the active view
+                // and it is not a portal then ensure it is hidden
+                Object(_index_4d91f03a_js__WEBPACK_IMPORTED_MODULE_5__["s"])(element, true);
+            }
+        }
+    }
+    canStart() {
+        return (!!this.swipeGesture &&
+            !this.isTransitioning &&
+            this.transInstr.length === 0 &&
+            this.animationEnabled &&
+            this.canGoBackSync());
+    }
+    onStart() {
+        this.queueTrns({
+            removeStart: -1,
+            removeCount: 1,
+            opts: {
+                direction: 'back',
+                progressAnimation: true
+            }
+        }, undefined);
+    }
+    onMove(stepValue) {
+        if (this.sbAni) {
+            this.sbAni.progressStep(stepValue);
+        }
+    }
+    onEnd(shouldComplete, stepValue, dur) {
+        if (this.sbAni) {
+            this.animationEnabled = false;
+            this.sbAni.onFinish(() => {
+                this.animationEnabled = true;
+            }, { oneTimeCallback: true });
+            // Account for rounding errors in JS
+            let newStepValue = (shouldComplete) ? -0.001 : 0.001;
+            /**
+             * Animation will be reversed here, so need to
+             * reverse the easing curve as well
+             *
+             * Additionally, we need to account for the time relative
+             * to the new easing curve, as `stepValue` is going to be given
+             * in terms of a linear curve.
+             */
+            if (!shouldComplete) {
+                this.sbAni.easing('cubic-bezier(1, 0, 0.68, 0.28)');
+                newStepValue += Object(_cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["g"])(new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](0, 0), new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](1, 0), new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](0.68, 0.28), new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](1, 1), stepValue);
+            }
+            else {
+                newStepValue += Object(_cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["g"])(new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](0, 0), new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](0.32, 0.72), new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](0, 1), new _cubic_bezier_2812fda3_js__WEBPACK_IMPORTED_MODULE_6__["P"](1, 1), stepValue);
+            }
+            this.sbAni.progressEnd(shouldComplete ? 1 : 0, newStepValue, dur);
+        }
+    }
+    render() {
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+    static get watchers() { return {
+        "swipeGesture": ["swipeGestureChanged"],
+        "root": ["rootChanged"]
     }; }
-    static get events() { return [{
-            "name": "ionDrag",
-            "method": "ionDrag",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get style() { return "ion-item-sliding{display:block;position:relative;width:100%;overflow:hidden}ion-item-sliding,ion-item-sliding .item{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.item-sliding-active-slide .item{position:relative;-webkit-transition:-webkit-transform .5s cubic-bezier(.36,.66,.04,1);transition:-webkit-transform .5s cubic-bezier(.36,.66,.04,1);transition:transform .5s cubic-bezier(.36,.66,.04,1);transition:transform .5s cubic-bezier(.36,.66,.04,1),-webkit-transform .5s cubic-bezier(.36,.66,.04,1);opacity:1;z-index:2;pointer-events:none;will-change:transform}.item-sliding-active-swipe-end .item-options-end .item-option-expandable{padding-left:100%;-ms-flex-order:1;order:1;-webkit-transition-duration:.6s;transition-duration:.6s;-webkit-transition-property:padding-left;transition-property:padding-left}:host-context([dir=rtl]) .item-sliding-active-swipe-end .item-options-end .item-option-expandable{-ms-flex-order:-1;order:-1}.item-sliding-active-swipe-start .item-options-start .item-option-expandable{padding-right:100%;-ms-flex-order:-1;order:-1;-webkit-transition-duration:.6s;transition-duration:.6s;-webkit-transition-property:padding-right;transition-property:padding-right}:host-context([dir=rtl]) .item-sliding-active-swipe-start .item-options-start .item-option-expandable{-ms-flex-order:1;order:1}"; }
-}
-function swipeShouldReset(isResetDirection, isMovingFast, isOnResetZone) {
-    return (!isMovingFast && isOnResetZone) || (isResetDirection && isMovingFast);
-}
+    static get style() { return ":host{left:0;right:0;top:0;bottom:0;position:absolute;contain:layout size style;overflow:hidden;z-index:0}"; }
+};
+
+const navLink = (el, routerDirection, component, componentProps) => {
+    const nav = el.closest('ion-nav');
+    if (nav) {
+        if (routerDirection === 'forward') {
+            if (component !== undefined) {
+                return nav.push(component, componentProps, { skipIfBusy: true });
+            }
+        }
+        else if (routerDirection === 'root') {
+            if (component !== undefined) {
+                return nav.setRoot(component, componentProps, { skipIfBusy: true });
+            }
+        }
+        else if (routerDirection === 'back') {
+            return nav.pop({ skipIfBusy: true });
+        }
+    }
+    return Promise.resolve(false);
+};
+
+const NavLink = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        /**
+         * The transition direction when navigating to another page.
+         */
+        this.routerDirection = 'forward';
+        this.onClick = () => {
+            return navLink(this.el, this.routerDirection, this.component, this.componentProps);
+        };
+    }
+    render() {
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onClick: this.onClick }));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+};
+
+const NavPop = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.pop = () => {
+            return navLink(this.el, 'back');
+        };
+    }
+    componentDidLoad() {
+        console.warn('[DEPRECATED][ion-nav-pop] <ion-nav-pop> is deprecated. Use `<ion-nav-link routerDirection="back">` instead.');
+    }
+    render() {
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onClick: this.pop }));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+};
+
+const NavPush = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.push = () => {
+            return navLink(this.el, 'forward', this.component, this.componentProps);
+        };
+    }
+    componentDidLoad() {
+        console.warn('[DEPRECATED][ion-nav-push] `<ion-nav-push component="MyComponent">` is deprecated. Use `<ion-nav-link component="MyComponent">` instead.');
+    }
+    render() {
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onClick: this.push }));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+};
+
+const NavSetRoot = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.setRoot = () => {
+            return navLink(this.el, 'root', this.component, this.componentProps);
+        };
+    }
+    componentDidLoad() {
+        console.warn('[DEPRECATED][ion-nav-set-root] `<ion-nav-set-root component="MyComponent">` is deprecated. Use `<ion-nav-link component="MyComponent" routerDirection="root">` instead.');
+    }
+    render() {
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onClick: this.setRoot }));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+};
 
 
 
