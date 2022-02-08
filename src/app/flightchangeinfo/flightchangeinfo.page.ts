@@ -292,7 +292,7 @@ export class FlightchangeinfoPage implements OnInit {
               this.cout = this.cin;
               $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
             }else{
-              this.cout = moment(this.cin).add(2,'days');
+              this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
               $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
             }
   
@@ -592,7 +592,7 @@ export class FlightchangeinfoPage implements OnInit {
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : this.valueGlobal.listlunar[j].description,
+            subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M') + ':  '+ this.valueGlobal.listlunar[j].description,
             cssClass: 'lunarcalendar'
         })
         }
@@ -652,7 +652,7 @@ export class FlightchangeinfoPage implements OnInit {
           this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
           setTimeout(()=>{
               //custom style lịch giá
-              $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_close_calendar.svg' ></div>");
+              $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
               // if(this.countdaydisplay >0){
               //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
               // }else{
@@ -700,31 +700,25 @@ export class FlightchangeinfoPage implements OnInit {
               }
               
               //Custom ngày lễ
-              let divmonth = $('.month-box');
-              if(divmonth && divmonth.length >0){
-                for (let index = 0; index < divmonth.length; index++) {
-                  const em = divmonth[index];
-                    let divsmall = $('#'+em.id+' small');
-                    if(divsmall && divsmall.length >0){
-                      $('#'+em.id).append("<div class='div-month-text-small'></div>");
-                      // if(divsmall.length > 3) {
-                      //   $('#'+em.id).append("<div class='div-button-expand-"+em.id+"'><img class='img-expand-down' src='./assets/imgs/ic_down.svg'> <img class='img-expand-up img-disabled' src='./assets/imgs/ic_up.svg'></div> </div>");
-                      //   if($('.div-button-expand-'+em.id)){
-                      //     $('.div-button-expand-'+em.id).click(e => this.handleExpandDiv(em.id));
-                      //   }
-                      // }
-                      for (let i = 0; i < divsmall.length; i++) {
-                        const es = divsmall[i];
-                        let arres = es.innerHTML.split(':');
-                        $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
-                        if(arres && arres.length >1){
-                          es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>"+"<span>"+arres[1]+"</span>";
-                        }
-                        $('.sm-'+em.id+'-'+i).append(es);
-                      }
-                    }
-                }
-              }
+              // let divmonth = $('.month-box');
+              // if(divmonth && divmonth.length >0){
+              //   for (let index = 0; index < divmonth.length; index++) {
+              //     const em = divmonth[index];
+              //       let divsmall = $('#'+em.id+' small');
+              //       if(divsmall && divsmall.length >0){
+              //         $('#'+em.id).append("<div class='div-month-text-small'></div>");
+              //         for (let i = 0; i < divsmall.length; i++) {
+              //           const es = divsmall[i];
+              //           let arres = es.innerHTML.split(':');
+              //           $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+              //           if(arres && arres.length >1){
+              //             es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>"+"<span>"+arres[1]+"</span>";
+              //           }
+              //           $('.sm-'+em.id+'-'+i).append(es);
+              //         }
+              //       }
+              //   }
+              // }
 
           },10)
         });

@@ -139,7 +139,7 @@ export class FlightDeparturePage implements OnInit{
       cssClass: 'action-sheets-flight-departure',
       buttons: [
         {
-          text: "VietnamAirlines",
+          text: "VietnamAirlines/ Pacific Airlines",
           cssClass:"btn-VietnamAirlines cls-border-bottom",
           handler: () => {
             this.buttonVASelected = !this.buttonVASelected;
@@ -158,16 +158,16 @@ export class FlightDeparturePage implements OnInit{
             return false;
           }
         },
-        {
-          text: "JetStar",
-          cssClass:"btn-JetStar cls-border-bottom",
-          handler: () => {
-            this.buttonJSSelected = !this.buttonJSSelected;
-            this.buttonJSSelected ? $(".btn-JetStar > span").addClass('selected') : $(".btn-JetStar > span").removeClass('selected');
-            this.buttonJSSelected ? this.arrFilterAirline.push("JetStar") : this.removeItemAirlineFileterInArray(this.arrFilterAirline, "JetStar");
-            return false;
-          }
-        },
+        // {
+        //   text: "Pacific Airlines",
+        //   cssClass:"btn-JetStar cls-border-bottom",
+        //   handler: () => {
+        //     this.buttonJSSelected = !this.buttonJSSelected;
+        //     this.buttonJSSelected ? $(".btn-JetStar > span").addClass('selected') : $(".btn-JetStar > span").removeClass('selected');
+        //     this.buttonJSSelected ? this.arrFilterAirline.push("JetStar") : this.removeItemAirlineFileterInArray(this.arrFilterAirline, "JetStar");
+        //     return false;
+        //   }
+        // },
         {
           text: "BambooAirways",
           cssClass:"btn-BambooAirways cls-border-bottom",
@@ -194,7 +194,7 @@ export class FlightDeparturePage implements OnInit{
     $(".btn-BambooAirways > span").prepend('<img class="img-filter" src="./assets/ic_airticket/ic_bamboo_b.png" />');
     this.buttonVASelected ? $(".btn-VietnamAirlines > span").addClass('selected') : $(".btn-VietnamAirlines > span").removeClass('selected');
     this.buttonVJSelected ? $(".btn-VietJet > span").addClass('selected') : $(".btn-VietJet > span").removeClass('selected');
-    this.buttonJSSelected ? $(".btn-JetStar > span").addClass('selected') : $(".btn-JetStar > span").removeClass('selected');
+    //this.buttonJSSelected ? $(".btn-JetStar > span").addClass('selected') : $(".btn-JetStar > span").removeClass('selected');
     this.buttonBASelected ? $(".btn-BambooAirways > span").addClass('selected') : $(".btn-BambooAirways > span").removeClass('selected');
 
     actionSheet.present();

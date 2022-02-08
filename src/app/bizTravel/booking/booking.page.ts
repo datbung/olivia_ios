@@ -4964,7 +4964,9 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
             });
             toast.present();
           }
-
+          closecalendar(){
+            this.modalCtrl.dismiss();
+          }
     async openPickupCalendar(openDefault: boolean) {
 
             if(!this.allowclickcalendar){
@@ -4989,7 +4991,7 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
               monthFormat: "MM / YYYY",
               weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
               weekStart: 1,
-              closeLabel: "Thoát",
+              closeLabel: "",
               doneLabel: "",
               step: 0,
               defaultScrollTo: fromdate,
@@ -5000,12 +5002,17 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
             this.myCalendar = await this.modalCtrl.create({
               component: CalendarModal,
               animated: true,
+              cssClass: 'hotel-calendar-custom',
               componentProps: { options }
             });
         
             this.myCalendar.present().then(() => {
               se.allowclickcalendar = true;
               $(".days-btn").click(e => this.clickedElement(e, openDefault));
+
+              $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+              //add event close header
+              $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
             });
             var se = this;
             const event: any = await this.myCalendar.onDidDismiss();
