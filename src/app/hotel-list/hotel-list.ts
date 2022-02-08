@@ -545,6 +545,7 @@ export class HotelListPage implements OnInit{
       }
       se.zone.run(() => {
         se.jsonhtprice = [];
+        se.listHotelPrice=[];
         se.jsonhtprice1 = JSON.parse(body);
         if (se.jsonhtprice1.HotelListResponse) {
           se.jsonhtprice1 = se.jsonhtprice1.HotelListResponse.HotelList.HotelSummary;
