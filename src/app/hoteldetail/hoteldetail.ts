@@ -224,6 +224,29 @@ export class HotelDetailPage implements OnInit {
         })
       })
     }
+  getHotelSuggestDaily() {
+    var se = this;
+    var options = {
+      method: 'GET',
+      url: C.urls.baseUrl.urlMobile + '/api/data/HotelSuggestDaily?hotelcode='+ se.HotelID,
+      headers: {
+       
+      },
+      timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+    };
+    request(options, function (error, response, body) {
+      if (error) {
+        error.page = "hoteldetail";
+        error.func = "loaddata";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(error,response);
+      }
+      if (response.statusCode == 200) {
+        var res = JSON.parse(body);
+        se.valueGlobal.dayhot=res.data.daily;
+      }
+    })
+  }
 
     public async ngOnInit(){
       var se = this;
@@ -1629,7 +1652,6 @@ export class HotelDetailPage implements OnInit {
       }else{
         se.zone.run(()=>{
           se.checkBODdone = true;
-          se.loaddonecombo = true;
           })
       }
       se.getInsurranceFee(comboid).then((data)=>{
@@ -1644,7 +1666,7 @@ export class HotelDetailPage implements OnInit {
           
         }
       })
-      
+      se.loaddonecombo = true;
     })
   }
   async getInsurranceFee(comboid): Promise<any>{
@@ -3148,9 +3170,7 @@ async bookcombo() {
       }
     }
   }
-  closecalendar(){
-    this.modalCtrl.dismiss();
-  }
+  
   /*** Xử lý refresh data khi người dùng đổi ngày checkin,checkout
    * PDANH  18/02/2018
    */
@@ -3191,18 +3211,38 @@ async bookcombo() {
         })
       }
      }
-     var day : any="2022-02-16";
-    _daysConfig.push({
-      date: day,
-      cssClass: 'dayhot'
-    })
+    //  if(this.valueGlobal.dayhot){
+    //   for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
+    //     _daysConfig.push({
+    //       date: this.valueGlobal.dayhot[j],
+    //       cssClass: 'dayhot'
+    //     })
+    //   }
+    //  }
+      //Custom ngày lễ
+      // let divmonth = $('.month-box');
+      // if(divmonth && divmonth.length >0){
+      //   for (let index = 0; index < divmonth.length; index++) {
+      //     const em = divmonth[index];
+      //       let divsmall = $('#'+em.id+' small');
+      //       if(divsmall && divsmall.length >0){
+      //         $('#'+em.id).append("<div class='div-month-text-small'></div>")
+      //         for (let i = 0; i < divsmall.length; i++) {
+      //           const es = divsmall[i];
+      //           $('#'+em.id+' .div-month-text-small').append("<div class='sm-"+em.id+'-'+i+"'></div>");
+      //           $('.sm-'+em.id+'-'+i).append(es);
+      //         }
+      //       }
+      //   }
+      // }
+    //  var day : any="2022-02-16";
+   
       const options: CalendarModalOptions = {
         pickMode: 'range',
         title: 'Chọn ngày',
         monthFormat: 'MM / YYYY', 
         weekdays:['CN','T2','T3','T4','T5','T6','T7'],
-        weekStart: 1,
-        closeLabel:'',
+        closeLabel:'Thoát',
         doneLabel: '',
         step: 0,
         defaultScrollTo: fromdate,
@@ -3212,7 +3252,6 @@ async bookcombo() {
   
        this.myCalendar = await this.modalCtrl.create({
         component: CalendarModal,
-        cssClass: 'hotel-calendar-custom',
         componentProps: { options }
 
       });
@@ -3220,9 +3259,6 @@ async bookcombo() {
       this.myCalendar.present().then(()=>{
         se.allowclickcalendar = true;
         $('.days-btn').click(e => this.clickedElement(e));
-        $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
-        //add event close header
-        $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
       });
       let se = this;
       const event: any = await this.myCalendar.onDidDismiss();
@@ -3265,9 +3301,9 @@ async bookcombo() {
             se.showpopup = true;
             se.ischeck = true;
             se.guest = se.adults + (se.child ? se.child : 0);
-            // if (se.comboid) {
-            //   se.getDetailCombo(se.comboid);
-            // }
+            if (se.comboid) {
+              se.getDetailCombo(se.comboid);
+            }
             se.getdata(false);
             // se.checkPriceHotelDetail().then((check)=>{
             //   if(check){
@@ -4322,19 +4358,13 @@ async bookcombo() {
             var checkBODtemp = new Date(arrBOD[i]);
             var checkBOD=moment(checkBODtemp).format('YYYYMMDD');
             if (checkcin<=checkBOD&&checkBOD<checkcout) {
-              se.zone.run(()=>{
-                se.ischeckBOD=true;
-              })
-              
+              se.ischeckBOD=true;
               break;
             }
           }
         }
       }
-      se.zone.run(()=>{
-        se.checkBODdone = true;
-        se.loaddonecombo = true;
-      })
+      se.checkBODdone = true;
       se.checkCombo();
     })
   }
