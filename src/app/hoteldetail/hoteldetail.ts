@@ -215,7 +215,7 @@ export class HotelDetailPage implements OnInit {
     ) {
       this.loaddata();
       this.valueGlobal.notRefreshDetail = false;
-
+      //this.getHotelSuggestDaily();
       // imgLoaderConfigService.enableSpinner(true);
       // imgLoaderConfigService.setConcurrency(10);
       this.platform.resume.subscribe(async()=>{
@@ -3191,11 +3191,11 @@ async bookcombo() {
         })
       }
      }
-    //  var day : any="2022-02-16";
-    // _daysConfig.push({
-    //   date: day,
-    //   cssClass: 'dayhot'
-    // })
+     var day : any="2022-02-16";
+    _daysConfig.push({
+      date: day,
+      cssClass: 'dayhot'
+    })
       const options: CalendarModalOptions = {
         pickMode: 'range',
         title: 'Chọn ngày',
