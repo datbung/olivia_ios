@@ -69,7 +69,7 @@ ComboadddetailsPageModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".text {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n.button2 {\n  background: #ff9500;\n  color: #ffffff;\n  border-color: #ff9500;\n  width: 90%;\n}\n\n.button4 {\n  background: #ff9500;\n  color: #ffffff;\n  border-color: #ff9500;\n  width: 30%;\n  font-size: 12px;\n}\n\n.list-departure {\n  margin: 0;\n  display: inline-flex;\n}\n\n.rd-departure .radio-icon {\n  width: 12px;\n  height: 12px;\n}\n\n.radio-md .radio-inner {\n  left: 1px;\n  top: 1px;\n  width: 6px;\n  height: 6px;\n}\n\n.radio-md .radio-checked {\n  border-color: #26bed6;\n}\n\n.toolbar-title-md {\n  text-align: center;\n  margin-right: 70px;\n}\n\n.cls-label {\n  color: #828282;\n  font-size: 12px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfbmV3IDA5MTEyMDIxL3NyYy9hcHAvY29tYm9hZGRkZXRhaWxzL2NvbWJvYWRkZGV0YWlscy5zY3NzIiwic3JjL2FwcC9jb21ib2FkZGRldGFpbHMvY29tYm9hZGRkZXRhaWxzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUk7RUFDSSxlQUFBO0VBQ0EsaUJBQUE7QUNDUjs7QURDSTtFQUVJLG1CQUFBO0VBQ0EsY0FBQTtFQUNBLHFCQUFBO0VBQ0EsVUFBQTtBQ0NSOztBRENJO0VBRUksbUJBQUE7RUFDQSxjQUFBO0VBQ0EscUJBQUE7RUFDQSxVQUFBO0VBQ0EsZUFBQTtBQ0NSOztBREVJO0VBQ0ksU0FBQTtFQUNBLG9CQUFBO0FDQ1I7O0FERUk7RUFDSSxXQUFBO0VBQ0EsWUFBQTtBQ0NSOztBREVJO0VBQ0ksU0FBQTtFQUNBLFFBQUE7RUFDQSxVQUFBO0VBQ0EsV0FBQTtBQ0NSOztBRENJO0VBQ0kscUJBQUE7QUNFUjs7QURBSTtFQUNJLGtCQUFBO0VBQ0Esa0JBQUE7QUNHUjs7QURETTtFQUVJLGNBQUE7RUFDQSxlQUFBO0FDR1YiLCJmaWxlIjoic3JjL2FwcC9jb21ib2FkZGRldGFpbHMvY29tYm9hZGRkZXRhaWxzLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIgICAgLnRleHR7XG4gICAgICAgIGZvbnQtc2l6ZTogMThweDtcbiAgICAgICAgZm9udC13ZWlnaHQ6IGJvbGRcbiAgICB9XG4gICAgLmJ1dHRvbjJcbiAgICB7XG4gICAgICAgIGJhY2tncm91bmQ6ICNmZjk1MDA7XG4gICAgICAgIGNvbG9yOiAjZmZmZmZmO1xuICAgICAgICBib3JkZXItY29sb3I6ICNmZjk1MDA7XG4gICAgICAgIHdpZHRoOiA5MCU7XG4gICAgfSBcbiAgICAuYnV0dG9uNFxuICAgIHtcbiAgICAgICAgYmFja2dyb3VuZDogI2ZmOTUwMDtcbiAgICAgICAgY29sb3I6ICNmZmZmZmY7XG4gICAgICAgIGJvcmRlci1jb2xvcjogI2ZmOTUwMDtcbiAgICAgICAgd2lkdGg6IDMwJTtcbiAgICAgICAgZm9udC1zaXplOiAxMnB4O1xuICAgIH1cbiBcbiAgICAubGlzdC1kZXBhcnR1cmV7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgZGlzcGxheTogaW5saW5lLWZsZXg7XG4gICAgfVxuXG4gICAgLnJkLWRlcGFydHVyZSAucmFkaW8taWNvbntcbiAgICAgICAgd2lkdGg6IDEycHg7XG4gICAgICAgIGhlaWdodDogMTJweDtcbiAgICB9XG4gICBcbiAgICAucmFkaW8tbWQgLnJhZGlvLWlubmVye1xuICAgICAgICBsZWZ0OiAxcHg7XG4gICAgICAgIHRvcDogMXB4O1xuICAgICAgICB3aWR0aDogNnB4O1xuICAgICAgICBoZWlnaHQ6IDZweDtcbiAgICB9XG4gICAgLnJhZGlvLW1kIC5yYWRpby1jaGVja2VkIHtcbiAgICAgICAgYm9yZGVyLWNvbG9yOiAjMjZiZWQ2O1xuICAgIH1cbiAgICAudG9vbGJhci10aXRsZS1tZCB7XG4gICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICAgICAgbWFyZ2luLXJpZ2h0OiA3MHB4O1xuICAgICAgfSBcbiAgICAgIC5jbHMtbGFiZWxcbiAgICAgIHtcbiAgICAgICAgICBjb2xvcjogIzgyODI4MjtcbiAgICAgICAgICBmb250LXNpemU6IDEycHhcbiAgICAgIH0gXG4gICAgICBcblxuIiwiLnRleHQge1xuICBmb250LXNpemU6IDE4cHg7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG4uYnV0dG9uMiB7XG4gIGJhY2tncm91bmQ6ICNmZjk1MDA7XG4gIGNvbG9yOiAjZmZmZmZmO1xuICBib3JkZXItY29sb3I6ICNmZjk1MDA7XG4gIHdpZHRoOiA5MCU7XG59XG5cbi5idXR0b240IHtcbiAgYmFja2dyb3VuZDogI2ZmOTUwMDtcbiAgY29sb3I6ICNmZmZmZmY7XG4gIGJvcmRlci1jb2xvcjogI2ZmOTUwMDtcbiAgd2lkdGg6IDMwJTtcbiAgZm9udC1zaXplOiAxMnB4O1xufVxuXG4ubGlzdC1kZXBhcnR1cmUge1xuICBtYXJnaW46IDA7XG4gIGRpc3BsYXk6IGlubGluZS1mbGV4O1xufVxuXG4ucmQtZGVwYXJ0dXJlIC5yYWRpby1pY29uIHtcbiAgd2lkdGg6IDEycHg7XG4gIGhlaWdodDogMTJweDtcbn1cblxuLnJhZGlvLW1kIC5yYWRpby1pbm5lciB7XG4gIGxlZnQ6IDFweDtcbiAgdG9wOiAxcHg7XG4gIHdpZHRoOiA2cHg7XG4gIGhlaWdodDogNnB4O1xufVxuXG4ucmFkaW8tbWQgLnJhZGlvLWNoZWNrZWQge1xuICBib3JkZXItY29sb3I6ICMyNmJlZDY7XG59XG5cbi50b29sYmFyLXRpdGxlLW1kIHtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xuICBtYXJnaW4tcmlnaHQ6IDcwcHg7XG59XG5cbi5jbHMtbGFiZWwge1xuICBjb2xvcjogIzgyODI4MjtcbiAgZm9udC1zaXplOiAxMnB4O1xufSJdfQ== */"
+module.exports = ".text {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n.button2 {\n  background: #ff9500;\n  color: #ffffff;\n  border-color: #ff9500;\n  width: 90%;\n}\n\n.button4 {\n  background: #ff9500;\n  color: #ffffff;\n  border-color: #ff9500;\n  width: 30%;\n  font-size: 12px;\n}\n\n.list-departure {\n  margin: 0;\n  display: inline-flex;\n}\n\n.rd-departure .radio-icon {\n  width: 12px;\n  height: 12px;\n}\n\n.radio-md .radio-inner {\n  left: 1px;\n  top: 1px;\n  width: 6px;\n  height: 6px;\n}\n\n.radio-md .radio-checked {\n  border-color: #26bed6;\n}\n\n.toolbar-title-md {\n  text-align: center;\n  margin-right: 70px;\n}\n\n.cls-label {\n  color: #828282;\n  font-size: 12px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfaU9TL29saXZpYV9pb3MgY29weS9zcmMvYXBwL2NvbWJvYWRkZGV0YWlscy9jb21ib2FkZGRldGFpbHMuc2NzcyIsInNyYy9hcHAvY29tYm9hZGRkZXRhaWxzL2NvbWJvYWRkZGV0YWlscy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFJO0VBQ0ksZUFBQTtFQUNBLGlCQUFBO0FDQ1I7O0FEQ0k7RUFFSSxtQkFBQTtFQUNBLGNBQUE7RUFDQSxxQkFBQTtFQUNBLFVBQUE7QUNDUjs7QURDSTtFQUVJLG1CQUFBO0VBQ0EsY0FBQTtFQUNBLHFCQUFBO0VBQ0EsVUFBQTtFQUNBLGVBQUE7QUNDUjs7QURFSTtFQUNJLFNBQUE7RUFDQSxvQkFBQTtBQ0NSOztBREVJO0VBQ0ksV0FBQTtFQUNBLFlBQUE7QUNDUjs7QURFSTtFQUNJLFNBQUE7RUFDQSxRQUFBO0VBQ0EsVUFBQTtFQUNBLFdBQUE7QUNDUjs7QURDSTtFQUNJLHFCQUFBO0FDRVI7O0FEQUk7RUFDSSxrQkFBQTtFQUNBLGtCQUFBO0FDR1I7O0FERE07RUFFSSxjQUFBO0VBQ0EsZUFBQTtBQ0dWIiwiZmlsZSI6InNyYy9hcHAvY29tYm9hZGRkZXRhaWxzL2NvbWJvYWRkZGV0YWlscy5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiICAgIC50ZXh0e1xuICAgICAgICBmb250LXNpemU6IDE4cHg7XG4gICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkXG4gICAgfVxuICAgIC5idXR0b24yXG4gICAge1xuICAgICAgICBiYWNrZ3JvdW5kOiAjZmY5NTAwO1xuICAgICAgICBjb2xvcjogI2ZmZmZmZjtcbiAgICAgICAgYm9yZGVyLWNvbG9yOiAjZmY5NTAwO1xuICAgICAgICB3aWR0aDogOTAlO1xuICAgIH0gXG4gICAgLmJ1dHRvbjRcbiAgICB7XG4gICAgICAgIGJhY2tncm91bmQ6ICNmZjk1MDA7XG4gICAgICAgIGNvbG9yOiAjZmZmZmZmO1xuICAgICAgICBib3JkZXItY29sb3I6ICNmZjk1MDA7XG4gICAgICAgIHdpZHRoOiAzMCU7XG4gICAgICAgIGZvbnQtc2l6ZTogMTJweDtcbiAgICB9XG4gXG4gICAgLmxpc3QtZGVwYXJ0dXJle1xuICAgICAgICBtYXJnaW46IDA7XG4gICAgICAgIGRpc3BsYXk6IGlubGluZS1mbGV4O1xuICAgIH1cblxuICAgIC5yZC1kZXBhcnR1cmUgLnJhZGlvLWljb257XG4gICAgICAgIHdpZHRoOiAxMnB4O1xuICAgICAgICBoZWlnaHQ6IDEycHg7XG4gICAgfVxuICAgXG4gICAgLnJhZGlvLW1kIC5yYWRpby1pbm5lcntcbiAgICAgICAgbGVmdDogMXB4O1xuICAgICAgICB0b3A6IDFweDtcbiAgICAgICAgd2lkdGg6IDZweDtcbiAgICAgICAgaGVpZ2h0OiA2cHg7XG4gICAgfVxuICAgIC5yYWRpby1tZCAucmFkaW8tY2hlY2tlZCB7XG4gICAgICAgIGJvcmRlci1jb2xvcjogIzI2YmVkNjtcbiAgICB9XG4gICAgLnRvb2xiYXItdGl0bGUtbWQge1xuICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gICAgICAgIG1hcmdpbi1yaWdodDogNzBweDtcbiAgICAgIH0gXG4gICAgICAuY2xzLWxhYmVsXG4gICAgICB7XG4gICAgICAgICAgY29sb3I6ICM4MjgyODI7XG4gICAgICAgICAgZm9udC1zaXplOiAxMnB4XG4gICAgICB9IFxuICAgICAgXG5cbiIsIi50ZXh0IHtcbiAgZm9udC1zaXplOiAxOHB4O1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cblxuLmJ1dHRvbjIge1xuICBiYWNrZ3JvdW5kOiAjZmY5NTAwO1xuICBjb2xvcjogI2ZmZmZmZjtcbiAgYm9yZGVyLWNvbG9yOiAjZmY5NTAwO1xuICB3aWR0aDogOTAlO1xufVxuXG4uYnV0dG9uNCB7XG4gIGJhY2tncm91bmQ6ICNmZjk1MDA7XG4gIGNvbG9yOiAjZmZmZmZmO1xuICBib3JkZXItY29sb3I6ICNmZjk1MDA7XG4gIHdpZHRoOiAzMCU7XG4gIGZvbnQtc2l6ZTogMTJweDtcbn1cblxuLmxpc3QtZGVwYXJ0dXJlIHtcbiAgbWFyZ2luOiAwO1xuICBkaXNwbGF5OiBpbmxpbmUtZmxleDtcbn1cblxuLnJkLWRlcGFydHVyZSAucmFkaW8taWNvbiB7XG4gIHdpZHRoOiAxMnB4O1xuICBoZWlnaHQ6IDEycHg7XG59XG5cbi5yYWRpby1tZCAucmFkaW8taW5uZXIge1xuICBsZWZ0OiAxcHg7XG4gIHRvcDogMXB4O1xuICB3aWR0aDogNnB4O1xuICBoZWlnaHQ6IDZweDtcbn1cblxuLnJhZGlvLW1kIC5yYWRpby1jaGVja2VkIHtcbiAgYm9yZGVyLWNvbG9yOiAjMjZiZWQ2O1xufVxuXG4udG9vbGJhci10aXRsZS1tZCB7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgbWFyZ2luLXJpZ2h0OiA3MHB4O1xufVxuXG4uY2xzLWxhYmVsIHtcbiAgY29sb3I6ICM4MjgyODI7XG4gIGZvbnQtc2l6ZTogMTJweDtcbn0iXX0= */"
 
 /***/ }),
 
@@ -94,6 +94,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _providers_globalfunction__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../providers/globalfunction */ "./src/app/providers/globalfunction.ts");
 /* harmony import */ var _confirmemail_confirmemail_page__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../confirmemail/confirmemail.page */ "./src/app/confirmemail/confirmemail.page.ts");
 /* harmony import */ var _ionic_native_facebook_ngx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ionic-native/facebook/ngx */ "./node_modules/@ionic-native/facebook/ngx/index.js");
+/* harmony import */ var _providers_bizTravelService__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../providers/bizTravelService */ "./src/app/providers/bizTravelService.ts");
+
 
 
 
@@ -107,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ComboadddetailsPage = class ComboadddetailsPage {
-    constructor(platform, navCtrl, zone, toastCtrl, Roomif, storage, loadingCtrl, booking, gf, Bookcombo, alertCtrl, modalCtrl, fb, searchhotel) {
+    constructor(platform, navCtrl, zone, toastCtrl, Roomif, storage, loadingCtrl, booking, gf, Bookcombo, alertCtrl, modalCtrl, fb, searchhotel, bizTravelService) {
         this.platform = platform;
         this.navCtrl = navCtrl;
         this.zone = zone;
@@ -122,6 +124,7 @@ let ComboadddetailsPage = class ComboadddetailsPage {
         this.modalCtrl = modalCtrl;
         this.fb = fb;
         this.searchhotel = searchhotel;
+        this.bizTravelService = bizTravelService;
         this.phone = "";
         this.validemail = true;
         this.checkchangeemail = false;
@@ -143,6 +146,11 @@ let ComboadddetailsPage = class ComboadddetailsPage {
             }
             else {
                 this.validemail = false;
+            }
+        });
+        this.storage.get('jti').then(jti => {
+            if (jti) {
+                this.jti = jti;
             }
         });
         this.storage.get('infocus').then(infocus => {
@@ -325,6 +333,10 @@ let ComboadddetailsPage = class ComboadddetailsPage {
                     se.Roomif.priceshowtt = '0';
                     var total = 0;
                     se.loader.dismiss();
+                    if (se.bizTravelService.isCompany) {
+                        let url = _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + se.listcars.HotelBooking.TotalPrices.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + obj.Code + '&buyerPhone=' + se.phone + '&memberId=' + se.jti;
+                        se.gf.CreateUrl(url);
+                    }
                     if (se.Roomif.payment == "AL") {
                         se.navCtrl.navigateForward('/combodoneprepay/' + obj.Code + '/' + total + '/' + ischeck);
                     }
@@ -824,87 +836,6 @@ let ComboadddetailsPage = class ComboadddetailsPage {
             }
         }
     }
-    pushdata() {
-        this.presentLoading();
-        var se = this;
-        this.jsonroom.RoomClasses = this.room;
-        this.timestamp = Date.now();
-        this.storage.get('auth_token').then(auth_token => {
-            if (auth_token) {
-                var Invoice = 0;
-                if (se.Roomif.order) {
-                    Invoice = 1;
-                }
-                var options = {
-                    method: 'POST',
-                    url: _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].urls.baseUrl.urlPost + '/mInsertBooking',
-                    timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: {
-                        RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
-                        CName: se.Roomif.hoten,
-                        CEmail: se.email,
-                        CPhone: se.Roomif.phone,
-                        timestamp: se.timestamp,
-                        HotelID: se.booking.HotelId,
-                        paymentMethod: "51",
-                        note: se.Roomif.notetotal,
-                        source: '6',
-                        MemberToken: auth_token,
-                        CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
-                        UsePointPrice: se.Roomif.pricepoint,
-                        NoteCorp: se.Roomif.order,
-                        Invoice: Invoice,
-                        UserPoints: se.Roomif.point,
-                        CheckInDate: se.jsonroom.CheckInDate,
-                        CheckOutDate: se.jsonroom.CheckOutDate,
-                        TotalNight: se.jsonroom.TotalNight,
-                        MealTypeIndex: this.booking.indexmealtype,
-                        CompanyName: se.Roomif.companyname,
-                        CompanyAddress: se.Roomif.address,
-                        CompanyTaxCode: se.Roomif.tax,
-                        BillingAddress: se.Roomif.addressorder,
-                        promotionCode: se.Roomif.promocode
-                    },
-                    json: true
-                };
-                requestretry__WEBPACK_IMPORTED_MODULE_5__(options, function (error, response, body) {
-                    if (response.statusCode != 200) {
-                        var objError = {
-                            page: "comboadddetails",
-                            func: "pushdata",
-                            message: response.statusMessage,
-                            content: response.body,
-                            type: "warning",
-                            param: JSON.stringify(options)
-                        };
-                        _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].writeErrorLog(objError, response);
-                    }
-                    if (error) {
-                        error.page = "comboadddetails";
-                        error.func = "pushdata";
-                        error.param = JSON.stringify(options);
-                        _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].writeErrorLog(error, response);
-                    }
-                    ;
-                    if (body.error == 0) {
-                        var id = body.code;
-                        var total = se.Roomif.pricepoint;
-                        var ischeck = '1';
-                        se.clearClonePage('page-comboadddetails');
-                        se.loader.dismiss();
-                        se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
-                    }
-                    else {
-                        se.loader.dismiss();
-                        alert(body.Msg);
-                    }
-                });
-            }
-        });
-    }
     presentToasterror() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             let toast = yield this.toastCtrl.create({
@@ -1012,85 +943,6 @@ let ComboadddetailsPage = class ComboadddetailsPage {
     }
     goback() {
         this.navCtrl.back();
-    }
-    paymentnotAL() {
-        this.presentLoading();
-        var se = this;
-        se.jsonroom.RoomClasses = se.room;
-        se.timestamp = Date.now();
-        se.storage.get('auth_token').then(auth_token => {
-            if (auth_token) {
-                var Invoice = 0;
-                if (se.Roomif.order) {
-                    Invoice = 1;
-                }
-                var options = {
-                    method: 'POST',
-                    url: _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].urls.baseUrl.urlPost + '/mInsertBooking',
-                    timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: {
-                        RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
-                        CName: se.Roomif.hoten,
-                        CEmail: se.email,
-                        CPhone: se.Roomif.phone,
-                        timestamp: se.timestamp,
-                        HotelID: se.booking.HotelId,
-                        paymentMethod: "51",
-                        note: se.Roomif.notetotal,
-                        source: '6',
-                        MemberToken: auth_token,
-                        CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
-                        UsePointPrice: se.Roomif.pricepoint,
-                        NoteCorp: se.Roomif.order,
-                        Invoice: Invoice,
-                        UserPoints: se.Roomif.point,
-                        CheckInDate: se.jsonroom.CheckInDate,
-                        CheckOutDate: se.jsonroom.CheckOutDate,
-                        TotalNight: se.jsonroom.TotalNight,
-                        MealTypeIndex: se.booking.indexmealtype,
-                        CompanyName: se.Roomif.companyname,
-                        CompanyAddress: se.Roomif.address,
-                        CompanyTaxCode: se.Roomif.tax,
-                        BillingAddress: se.Roomif.addressorder,
-                        promotionCode: se.Roomif.promocode
-                    },
-                    json: true
-                };
-                requestretry__WEBPACK_IMPORTED_MODULE_5__(options, function (error, response, body) {
-                    if (response.statusCode != 200) {
-                        var objError = {
-                            page: "roomadddetails",
-                            func: "next",
-                            message: response.statusMessage,
-                            content: response.body,
-                            type: "warning",
-                            param: JSON.stringify(options)
-                        };
-                        _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].writeErrorLog(objError, response);
-                    }
-                    if (error) {
-                        error.page = "roomadddetails";
-                        error.func = "next";
-                        error.param = JSON.stringify(options);
-                        _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].writeErrorLog(error, response);
-                    }
-                    ;
-                    if (body.error == 0) {
-                        var code = body.code;
-                        var stt = body.bookingStatus;
-                        se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
-                        se.loader.dismiss();
-                    }
-                    else {
-                        se.loader.dismiss();
-                        alert(body.Msg);
-                    }
-                });
-            }
-        });
     }
     hasWhiteSpace(s) {
         return s.indexOf(' ') >= 0;
@@ -1261,8 +1113,49 @@ ComboadddetailsPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         _providers_book_service__WEBPACK_IMPORTED_MODULE_1__["Booking"], _providers_globalfunction__WEBPACK_IMPORTED_MODULE_7__["GlobalFunction"], _providers_book_service__WEBPACK_IMPORTED_MODULE_1__["Bookcombo"], _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["AlertController"],
         _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["ModalController"],
         _ionic_native_facebook_ngx__WEBPACK_IMPORTED_MODULE_9__["Facebook"],
-        _providers_book_service__WEBPACK_IMPORTED_MODULE_1__["SearchHotel"]])
+        _providers_book_service__WEBPACK_IMPORTED_MODULE_1__["SearchHotel"],
+        _providers_bizTravelService__WEBPACK_IMPORTED_MODULE_10__["BizTravelService"]])
 ], ComboadddetailsPage);
+
+
+
+/***/ }),
+
+/***/ "./src/app/providers/bizTravelService.ts":
+/*!***********************************************!*\
+  !*** ./src/app/providers/bizTravelService.ts ***!
+  \***********************************************/
+/*! exports provided: BizTravelService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BizTravelService", function() { return BizTravelService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let BizTravelService = class BizTravelService {
+    constructor() {
+        this.bizAccount = {
+            taxCode: '',
+            legalName: '',
+            address: '',
+            phone: '',
+            balanceAvaiable: 0,
+            balanceAvailableStr: '0',
+            phoneOtp: '',
+            supporter: null
+        };
+        this.accountBizTravelChange = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+    }
+    ;
+};
+BizTravelService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], BizTravelService);
 
 
 

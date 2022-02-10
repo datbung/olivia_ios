@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--\n  Generated template for the PolicyPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <!-- <ion-navbar>\n    <div>\n      <label class=\"text-title\">\n        Chính sách\n      </label>\n    </div>\n    <div>\n      <label style=\"font-size: 11px\">\n        {{Name}}\n      </label>\n    </div>\n  </ion-navbar> -->\n  <ion-row style=\"padding-top:11px\">\n    <ion-col style=\"text-align: center\">\n      <div style=\"align-self: center\" >\n        <!-- <div style=\"position: absolute;height: 48px;width: 48px;top:8px\" (click)=\"goback()\">\n            <ion-icon color=\"dark-tint\" style=\"font-size: 2em;\" name=\"arrow-back\" class=\"card-title\"></ion-icon>\n        </div> -->\n        <div style=\"position: absolute;height: 48px;width: 48px;align-self: center;\" (click)=\"goback()\">\n          <img  class=\"header-img-twoline\" src=\"./assets/imgs/ios-arrow-round-back.svg\">\n          <!-- <ion-icon color=\"dark-tint\" style=\"font-size: 20px; margin-top: 10px;\" name=\"arrow-back\" class=\"card-title\">\n          </ion-icon> -->\n        </div>\n        \n        <div><label class=\"text-title\">Chính sách</label></div>\n        <div><label style=\"font-size: 11px;color: #828282\">{{Name}}</label></div>\n      </div>\n    </ion-col>\n  </ion-row>\n</ion-header>\n<ion-content class=\"content-policy\">\n  <div style=\"margin: 5px 16px\">\n    <div>\n      <label style=\"font-size: 14px;font-weight: 500\">\n        Thời gian nhận phòng\n      </label>\n\n    </div>\n    <div>\n      <label>\n        {{cin}}\n      </label>\n\n    </div>\n    <div>\n      <label style=\"font-size: 14px;font-weight: 500\">\n        Thời gian trả phòng\n      </label>\n\n    </div>\n    <div>\n      <label>\n        {{cout}}\n      </label>\n    </div>\n\n  </div>\n  <div>\n    <ion-list no-lines *ngFor=\"let msg of HotelPolicies\">\n      <ion-item>\n        <label style=\"font-weight: 500;font-size: 14px;\">\n          {{msg.Key}}\n        </label>\n      </ion-item>\n      <ion-item style=\"margin-top: -12px;\">\n        <label [innerHTML]=\"msg.PolicyDes\" text-wrap>\n        </label>\n      </ion-item>\n    </ion-list>\n  </div>\n</ion-content>"
+module.exports = "<!--\n  Generated template for the PolicyPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <!-- <ion-navbar>\n    <div>\n      <label class=\"text-title\">\n        Chính sách\n      </label>\n    </div>\n    <div>\n      <label style=\"font-size: 11px\">\n        {{Name}}\n      </label>\n    </div>\n  </ion-navbar> -->\n  <ion-row style=\"padding-top:11px\">\n    <ion-col style=\"text-align: center\">\n      <div style=\"align-self: center\" >\n        <!-- <div style=\"position: absolute;height: 48px;width: 48px;top:8px\" (click)=\"goback()\">\n            <ion-icon color=\"dark-tint\" style=\"font-size: 2em;\" name=\"arrow-back\" class=\"card-title\"></ion-icon>\n        </div> -->\n        <div style=\"position: absolute;height: 48px;width: 48px;align-self: center;\" (click)=\"goback()\">\n          <img  class=\"header-img-twoline\" src=\"./assets/imgs/ios-arrow-round-back.svg\">\n          <!-- <ion-icon color=\"dark-tint\" style=\"font-size: 20px; margin-top: 10px;\" name=\"arrow-back\" class=\"card-title\">\n          </ion-icon> -->\n        </div>\n        \n        <div><label class=\"text-title\">Chính sách</label></div>\n        <div><label style=\"font-size: 11px;color: #828282\">{{Name}}</label></div>\n      </div>\n    </ion-col>\n  </ion-row>\n</ion-header>\n<ion-content class=\"content-policy\">\n  <div style=\"margin: 5px 16px\">\n    <div *ngIf=\"cin\">\n      <label style=\"font-size: 14px;font-weight: 500\">\n        Thời gian nhận phòng\n      </label>\n\n    </div>\n    <div>\n      <label>\n        {{cin}}\n      </label>\n\n    </div>\n    <div *ngIf=\"cout\">\n      <label style=\"font-size: 14px;font-weight: 500\">\n        Thời gian trả phòng\n      </label>\n\n    </div>\n    <div>\n      <label>\n        {{cout}}\n      </label>\n    </div>\n\n  </div>\n  <div>\n    <ion-list no-lines *ngFor=\"let msg of HotelPolicies\">\n      <ion-item>\n        <label style=\"font-weight: 500;font-size: 14px;\">\n          {{msg.Key}}\n        </label>\n      </ion-item>\n      <ion-item style=\"margin-top: -12px;\">\n        <label [innerHTML]=\"msg.PolicyDes\" text-wrap>\n        </label>\n      </ion-item>\n    </ion-list>\n  </div>\n</ion-content>"
 
 /***/ }),
 
@@ -65,7 +65,7 @@ PolicyPageModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".text-title {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n::ng-deep .content-policy {\n  font-weight: 300;\n  font-size: 14px;\n}\n\n::ng-deep .content-policy label > p {\n  margin: 2px 0;\n  line-height: 20px;\n  font-weight: 300;\n  font-size: 14px;\n}\n\n::ng-deep .content-policy p > em > strong {\n  font-style: normal;\n  font-weight: 300 !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfbmV3IDA5MTEyMDIxL3NyYy9hcHAvcG9saWN5L3BvbGljeS5zY3NzIiwic3JjL2FwcC9wb2xpY3kvcG9saWN5LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0k7RUFDSSxlQUFBO0VBQ0EsaUJBQUE7QUNBUjs7QURJUTtFQUVJLGdCQUFBO0VBQ0EsZUFBQTtBQ0ZaOztBRElZO0VBQ0ksYUFBQTtFQUNBLGlCQUFBO0VBQ0EsZ0JBQUE7RUFDQSxlQUFBO0FDRmhCOztBREtZO0VBQ0ksa0JBQUE7RUFDQSwyQkFBQTtBQ0hoQiIsImZpbGUiOiJzcmMvYXBwL3BvbGljeS9wb2xpY3kuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIlxuICAgIC50ZXh0LXRpdGxle1xuICAgICAgICBmb250LXNpemU6IDE4cHg7XG4gICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkXG4gICAgfVxuXG4gICAgOjpuZy1kZWVwe1xuICAgICAgICAuY29udGVudC1wb2xpY3lcbiAgICAgICAge1xuICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgICAgICAgICAgIGZvbnQtc2l6ZTogMTRweDtcbiAgICBcbiAgICAgICAgICAgIGxhYmVsID4gcCB7XG4gICAgICAgICAgICAgICAgbWFyZ2luOiAycHggMDtcbiAgICAgICAgICAgICAgICBsaW5lLWhlaWdodDogMjBweDtcbiAgICAgICAgICAgICAgICBmb250LXdlaWdodDogMzAwO1xuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMTRweDtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgcCA+IGVtID4gc3Ryb25ne1xuICAgICAgICAgICAgICAgIGZvbnQtc3R5bGU6IG5vcm1hbDtcbiAgICAgICAgICAgICAgICBmb250LXdlaWdodDogMzAwICFpbXBvcnRhbnQ7XG4gICAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICB9XG4gICAgIiwiLnRleHQtdGl0bGUge1xuICBmb250LXNpemU6IDE4cHg7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG46Om5nLWRlZXAgLmNvbnRlbnQtcG9saWN5IHtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgZm9udC1zaXplOiAxNHB4O1xufVxuOjpuZy1kZWVwIC5jb250ZW50LXBvbGljeSBsYWJlbCA+IHAge1xuICBtYXJnaW46IDJweCAwO1xuICBsaW5lLWhlaWdodDogMjBweDtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgZm9udC1zaXplOiAxNHB4O1xufVxuOjpuZy1kZWVwIC5jb250ZW50LXBvbGljeSBwID4gZW0gPiBzdHJvbmcge1xuICBmb250LXN0eWxlOiBub3JtYWw7XG4gIGZvbnQtd2VpZ2h0OiAzMDAgIWltcG9ydGFudDtcbn0iXX0= */"
+module.exports = ".text-title {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n::ng-deep .content-policy {\n  font-weight: 300;\n  font-size: 14px;\n}\n\n::ng-deep .content-policy label > p {\n  margin: 2px 0;\n  line-height: 20px;\n  font-weight: 300;\n  font-size: 14px;\n}\n\n::ng-deep .content-policy p > em > strong {\n  font-style: normal;\n  font-weight: 300 !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfaU9TL29saXZpYV9pb3MgY29weS9zcmMvYXBwL3BvbGljeS9wb2xpY3kuc2NzcyIsInNyYy9hcHAvcG9saWN5L3BvbGljeS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNJO0VBQ0ksZUFBQTtFQUNBLGlCQUFBO0FDQVI7O0FESVE7RUFFSSxnQkFBQTtFQUNBLGVBQUE7QUNGWjs7QURJWTtFQUNJLGFBQUE7RUFDQSxpQkFBQTtFQUNBLGdCQUFBO0VBQ0EsZUFBQTtBQ0ZoQjs7QURLWTtFQUNJLGtCQUFBO0VBQ0EsMkJBQUE7QUNIaEIiLCJmaWxlIjoic3JjL2FwcC9wb2xpY3kvcG9saWN5LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAudGV4dC10aXRsZXtcbiAgICAgICAgZm9udC1zaXplOiAxOHB4O1xuICAgICAgICBmb250LXdlaWdodDogYm9sZFxuICAgIH1cblxuICAgIDo6bmctZGVlcHtcbiAgICAgICAgLmNvbnRlbnQtcG9saWN5XG4gICAgICAgIHtcbiAgICAgICAgICAgIGZvbnQtd2VpZ2h0OiAzMDA7XG4gICAgICAgICAgICBmb250LXNpemU6IDE0cHg7XG4gICAgXG4gICAgICAgICAgICBsYWJlbCA+IHAge1xuICAgICAgICAgICAgICAgIG1hcmdpbjogMnB4IDA7XG4gICAgICAgICAgICAgICAgbGluZS1oZWlnaHQ6IDIwcHg7XG4gICAgICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDMwMDtcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDE0cHg7XG4gICAgICAgICAgICB9XG5cbiAgICAgICAgICAgIHAgPiBlbSA+IHN0cm9uZ3tcbiAgICAgICAgICAgICAgICBmb250LXN0eWxlOiBub3JtYWw7XG4gICAgICAgICAgICAgICAgZm9udC13ZWlnaHQ6IDMwMCAhaW1wb3J0YW50O1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG4gICAgfVxuICAgICIsIi50ZXh0LXRpdGxlIHtcbiAgZm9udC1zaXplOiAxOHB4O1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cblxuOjpuZy1kZWVwIC5jb250ZW50LXBvbGljeSB7XG4gIGZvbnQtd2VpZ2h0OiAzMDA7XG4gIGZvbnQtc2l6ZTogMTRweDtcbn1cbjo6bmctZGVlcCAuY29udGVudC1wb2xpY3kgbGFiZWwgPiBwIHtcbiAgbWFyZ2luOiAycHggMDtcbiAgbGluZS1oZWlnaHQ6IDIwcHg7XG4gIGZvbnQtd2VpZ2h0OiAzMDA7XG4gIGZvbnQtc2l6ZTogMTRweDtcbn1cbjo6bmctZGVlcCAuY29udGVudC1wb2xpY3kgcCA+IGVtID4gc3Ryb25nIHtcbiAgZm9udC1zdHlsZTogbm9ybWFsO1xuICBmb250LXdlaWdodDogMzAwICFpbXBvcnRhbnQ7XG59Il19 */"
 
 /***/ }),
 
@@ -97,15 +97,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let PolicyPage = class PolicyPage {
-    constructor(platform, navCtrl, gf, activatedRoute, zone, storage) {
+    constructor(platform, navCtrl, gf, activatedRoute, zone, storage, loadingCtrl) {
         this.platform = platform;
         this.navCtrl = navCtrl;
         this.gf = gf;
         this.activatedRoute = activatedRoute;
         this.zone = zone;
         this.storage = storage;
+        this.loadingCtrl = loadingCtrl;
         this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
-        this.Name = this.activatedRoute.snapshot.paramMap.get('name');
         this.storage.get('hoteldetail_' + this.HotelID).then((data) => {
             if (data) {
                 let jsondata = data;
@@ -131,6 +131,7 @@ let PolicyPage = class PolicyPage {
     }
     getdata() {
         var se = this;
+        se.presentLoading();
         let url = _providers_constants__WEBPACK_IMPORTED_MODULE_3__["C"].urls.baseUrl.urlPost + "/mhoteldetail/" + this.HotelID;
         var options = {
             method: 'POST',
@@ -138,6 +139,7 @@ let PolicyPage = class PolicyPage {
             timeout: 180000, maxAttempts: 5, retryDelay: 2000,
         };
         requestretry__WEBPACK_IMPORTED_MODULE_6__(options, function (error, response, body) {
+            se.loader.dismiss();
             if (response.statusCode != 200) {
                 var objError = {
                     page: "policy",
@@ -176,6 +178,12 @@ let PolicyPage = class PolicyPage {
             str = str.toString();
         return str.replace(/<[^>]*>/g, '');
     }
+    presentLoading() {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            this.loader = yield this.loadingCtrl.create({});
+            this.loader.present();
+        });
+    }
 };
 PolicyPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -184,7 +192,7 @@ PolicyPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [__webpack_require__(/*! ./policy.scss */ "./src/app/policy/policy.scss")]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"], _providers_globalfunction__WEBPACK_IMPORTED_MODULE_4__["GlobalFunction"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
-        _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"]])
+        _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"]])
 ], PolicyPage);
 
 

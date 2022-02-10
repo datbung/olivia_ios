@@ -67,7 +67,7 @@ FacilitiesPageModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".text-title {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n.list-md {\n  margin: 0;\n}\n\n.list-ios {\n  margin-bottom: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfbmV3IDA5MTEyMDIxL3NyYy9hcHAvZmFjaWxpdGllcy9mYWNpbGl0aWVzLnNjc3MiLCJzcmMvYXBwL2ZhY2lsaXRpZXMvZmFjaWxpdGllcy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNJO0VBQ0ksZUFBQTtFQUNBLGlCQUFBO0FDQVI7O0FERUk7RUFDSSxTQUFBO0FDQ1I7O0FEQ0k7RUFDSSxnQkFBQTtBQ0VSIiwiZmlsZSI6InNyYy9hcHAvZmFjaWxpdGllcy9mYWNpbGl0aWVzLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAudGV4dC10aXRsZXtcbiAgICAgICAgZm9udC1zaXplOiAxOHB4O1xuICAgICAgICBmb250LXdlaWdodDogYm9sZFxuICAgIH1cbiAgICAubGlzdC1tZCB7XG4gICAgICAgIG1hcmdpbjogMFxuICAgIH1cbiAgICAubGlzdC1pb3N7XG4gICAgICAgIG1hcmdpbi1ib3R0b206IDA7XG4gICAgfSIsIi50ZXh0LXRpdGxlIHtcbiAgZm9udC1zaXplOiAxOHB4O1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cblxuLmxpc3QtbWQge1xuICBtYXJnaW46IDA7XG59XG5cbi5saXN0LWlvcyB7XG4gIG1hcmdpbi1ib3R0b206IDA7XG59Il19 */"
+module.exports = ".text-title {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n.list-md {\n  margin: 0;\n}\n\n.list-ios {\n  margin-bottom: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfaU9TL29saXZpYV9pb3MgY29weS9zcmMvYXBwL2ZhY2lsaXRpZXMvZmFjaWxpdGllcy5zY3NzIiwic3JjL2FwcC9mYWNpbGl0aWVzL2ZhY2lsaXRpZXMuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDSTtFQUNJLGVBQUE7RUFDQSxpQkFBQTtBQ0FSOztBREVJO0VBQ0ksU0FBQTtBQ0NSOztBRENJO0VBQ0ksZ0JBQUE7QUNFUiIsImZpbGUiOiJzcmMvYXBwL2ZhY2lsaXRpZXMvZmFjaWxpdGllcy5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiXG4gICAgLnRleHQtdGl0bGV7XG4gICAgICAgIGZvbnQtc2l6ZTogMThweDtcbiAgICAgICAgZm9udC13ZWlnaHQ6IGJvbGRcbiAgICB9XG4gICAgLmxpc3QtbWQge1xuICAgICAgICBtYXJnaW46IDBcbiAgICB9XG4gICAgLmxpc3QtaW9ze1xuICAgICAgICBtYXJnaW4tYm90dG9tOiAwO1xuICAgIH0iLCIudGV4dC10aXRsZSB7XG4gIGZvbnQtc2l6ZTogMThweDtcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XG59XG5cbi5saXN0LW1kIHtcbiAgbWFyZ2luOiAwO1xufVxuXG4ubGlzdC1pb3Mge1xuICBtYXJnaW4tYm90dG9tOiAwO1xufSJdfQ== */"
 
 /***/ }),
 
@@ -99,16 +99,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FacilitiesPage = class FacilitiesPage {
-    constructor(platform, navCtrl, gf, activatedRoute, zone, storage) {
+    constructor(platform, navCtrl, gf, activatedRoute, zone, storage, loadingCtrl) {
         this.platform = platform;
         this.navCtrl = navCtrl;
         this.gf = gf;
         this.activatedRoute = activatedRoute;
         this.zone = zone;
         this.storage = storage;
+        this.loadingCtrl = loadingCtrl;
         this.urlpath = _providers_constants__WEBPACK_IMPORTED_MODULE_3__["C"].urls.baseUrl.urlPost;
         this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
-        this.Name = this.activatedRoute.snapshot.paramMap.get('name');
         this.storage.get('hoteldetail_' + this.HotelID).then((data) => {
             if (data) {
                 let jsondata = data;
@@ -135,12 +135,14 @@ let FacilitiesPage = class FacilitiesPage {
     }
     getdata() {
         var se = this;
+        se.presentLoading();
         var options = {
             method: 'POST',
             url: se.urlpath + "/mhoteldetail/" + se.HotelID,
             timeout: 180000, maxAttempts: 5, retryDelay: 2000,
         };
         requestretry__WEBPACK_IMPORTED_MODULE_6__(options, function (error, response, body) {
+            se.loader.dismiss();
             if (response.statusCode != 200) {
                 var objError = {
                     page: "facilities",
@@ -167,6 +169,12 @@ let FacilitiesPage = class FacilitiesPage {
             }
         });
     }
+    presentLoading() {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            this.loader = yield this.loadingCtrl.create({});
+            this.loader.present();
+        });
+    }
 };
 FacilitiesPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -175,7 +183,7 @@ FacilitiesPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [__webpack_require__(/*! ./facilities.scss */ "./src/app/facilities/facilities.scss")]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"], _providers_globalfunction__WEBPACK_IMPORTED_MODULE_4__["GlobalFunction"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
-        _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"]])
+        _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"]])
 ], FacilitiesPage);
 
 

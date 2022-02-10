@@ -67,7 +67,7 @@ DescriptionPageModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".text-title {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n.description-content {\n  padding: 16px;\n  line-height: 1.5;\n  text-align: justify;\n  letter-spacing: -0.4px;\n  font-weight: 400;\n  font-size: 14px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfbmV3IDA5MTEyMDIxL3NyYy9hcHAvZGVzY3JpcHRpb24vZGVzY3JpcHRpb24uc2NzcyIsInNyYy9hcHAvZGVzY3JpcHRpb24vZGVzY3JpcHRpb24uc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDSTtFQUNJLGVBQUE7RUFDQSxpQkFBQTtBQ0FSOztBREdBO0VBQ0ksYUFBQTtFQUNBLGdCQUFBO0VBQ0EsbUJBQUE7RUFDQSxzQkFBQTtFQUNBLGdCQUFBO0VBQ0EsZUFBQTtBQ0FKIiwiZmlsZSI6InNyYy9hcHAvZGVzY3JpcHRpb24vZGVzY3JpcHRpb24uc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIlxuICAgIC50ZXh0LXRpdGxle1xuICAgICAgICBmb250LXNpemU6IDE4cHg7XG4gICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkXG4gICAgfVxuXG4uZGVzY3JpcHRpb24tY29udGVudHtcbiAgICBwYWRkaW5nOiAxNnB4O1xuICAgIGxpbmUtaGVpZ2h0OiAxLjU7XG4gICAgdGV4dC1hbGlnbjoganVzdGlmeTtcbiAgICBsZXR0ZXItc3BhY2luZzogLTAuNHB4O1xuICAgIGZvbnQtd2VpZ2h0OiA0MDA7XG4gICAgZm9udC1zaXplOiAxNHB4O1xufSIsIi50ZXh0LXRpdGxlIHtcbiAgZm9udC1zaXplOiAxOHB4O1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cblxuLmRlc2NyaXB0aW9uLWNvbnRlbnQge1xuICBwYWRkaW5nOiAxNnB4O1xuICBsaW5lLWhlaWdodDogMS41O1xuICB0ZXh0LWFsaWduOiBqdXN0aWZ5O1xuICBsZXR0ZXItc3BhY2luZzogLTAuNHB4O1xuICBmb250LXdlaWdodDogNDAwO1xuICBmb250LXNpemU6IDE0cHg7XG59Il19 */"
+module.exports = ".text-title {\n  font-size: 18px;\n  font-weight: bold;\n}\n\n.description-content {\n  padding: 16px;\n  line-height: 1.5;\n  text-align: justify;\n  letter-spacing: -0.4px;\n  font-weight: 400;\n  font-size: 14px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9pdGRldi9Eb2N1bWVudHMvRGV2ZWxvcC9PbGl2aWFfaU9TL29saXZpYV9pb3MgY29weS9zcmMvYXBwL2Rlc2NyaXB0aW9uL2Rlc2NyaXB0aW9uLnNjc3MiLCJzcmMvYXBwL2Rlc2NyaXB0aW9uL2Rlc2NyaXB0aW9uLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0k7RUFDSSxlQUFBO0VBQ0EsaUJBQUE7QUNBUjs7QURHQTtFQUNJLGFBQUE7RUFDQSxnQkFBQTtFQUNBLG1CQUFBO0VBQ0Esc0JBQUE7RUFDQSxnQkFBQTtFQUNBLGVBQUE7QUNBSiIsImZpbGUiOiJzcmMvYXBwL2Rlc2NyaXB0aW9uL2Rlc2NyaXB0aW9uLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICAudGV4dC10aXRsZXtcbiAgICAgICAgZm9udC1zaXplOiAxOHB4O1xuICAgICAgICBmb250LXdlaWdodDogYm9sZFxuICAgIH1cblxuLmRlc2NyaXB0aW9uLWNvbnRlbnR7XG4gICAgcGFkZGluZzogMTZweDtcbiAgICBsaW5lLWhlaWdodDogMS41O1xuICAgIHRleHQtYWxpZ246IGp1c3RpZnk7XG4gICAgbGV0dGVyLXNwYWNpbmc6IC0wLjRweDtcbiAgICBmb250LXdlaWdodDogNDAwO1xuICAgIGZvbnQtc2l6ZTogMTRweDtcbn0iLCIudGV4dC10aXRsZSB7XG4gIGZvbnQtc2l6ZTogMThweDtcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XG59XG5cbi5kZXNjcmlwdGlvbi1jb250ZW50IHtcbiAgcGFkZGluZzogMTZweDtcbiAgbGluZS1oZWlnaHQ6IDEuNTtcbiAgdGV4dC1hbGlnbjoganVzdGlmeTtcbiAgbGV0dGVyLXNwYWNpbmc6IC0wLjRweDtcbiAgZm9udC13ZWlnaHQ6IDQwMDtcbiAgZm9udC1zaXplOiAxNHB4O1xufSJdfQ== */"
 
 /***/ }),
 
@@ -99,13 +99,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let DescriptionPage = class DescriptionPage {
-    constructor(platform, navCtrl, gf, activatedRoute, zone, storage) {
+    constructor(platform, navCtrl, gf, activatedRoute, zone, storage, loadingCtrl) {
         this.platform = platform;
         this.navCtrl = navCtrl;
         this.gf = gf;
         this.activatedRoute = activatedRoute;
         this.zone = zone;
         this.storage = storage;
+        this.loadingCtrl = loadingCtrl;
         this.urlpath = _providers_constants__WEBPACK_IMPORTED_MODULE_3__["C"].urls.baseUrl.urlPost;
         this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
         this.Name = this.activatedRoute.snapshot.paramMap.get('name');
@@ -135,12 +136,14 @@ let DescriptionPage = class DescriptionPage {
     }
     getdata() {
         var se = this;
+        se.presentLoading();
         var options = {
             method: 'POST',
             url: se.urlpath + "/mhoteldetail/" + se.HotelID,
             timeout: 180000, maxAttempts: 5, retryDelay: 2000,
         };
         requestretry__WEBPACK_IMPORTED_MODULE_6__(options, function (error, response, body) {
+            se.loader.dismiss();
             if (response.statusCode != 200) {
                 var objError = {
                     page: "description",
@@ -167,6 +170,12 @@ let DescriptionPage = class DescriptionPage {
             }
         });
     }
+    presentLoading() {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            this.loader = yield this.loadingCtrl.create({});
+            this.loader.present();
+        });
+    }
 };
 DescriptionPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -176,7 +185,7 @@ DescriptionPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"], _providers_globalfunction__WEBPACK_IMPORTED_MODULE_4__["GlobalFunction"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"],
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
-        _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"]])
+        _ionic_storage__WEBPACK_IMPORTED_MODULE_7__["Storage"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"]])
 ], DescriptionPage);
 
 
