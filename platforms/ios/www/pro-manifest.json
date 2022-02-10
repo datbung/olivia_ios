@@ -1006,8 +1006,8 @@
   },
   {
     "href": "default~hotel-list-hotel-list-module~tabs-tabs-module.js",
-    "size": 133226,
-    "integrity": "sha256-9j2uzvhOgqoBNmdBUR206Mb1dJsxXsJddA6K6Bah2Ss= sha384-kECJ0ood/I7bSY9/05gHq2P3e4LuEakldEsAqfZdiIFIJ5k708X7rA4EByISnc5n sha512-tg4xVLrNf5zRG/4mQjOjmeZ3itAPFJRdhnbuf+GOLmYoWR0HyFdl6o6RjSrXZsl79YJIRZT6u44Z0oIip7/Tkg=="
+    "size": 143637,
+    "integrity": "sha256-nHhXAsc5n6BB64aClRZAi5MWqGpqW8DHqdW0dBJ6PHI= sha384-3boBvTIlxLdymwoujUYXbBxH+coyzZaa13HwR6wb4rZrcKqrJnQW2OpkDuUNRe2t sha512-pHhKgkQ2qh2ivxSh5nCMlfmknZGPNVbaem70adqEMNlrv0OW9IsF6LHWHjGLpCESuwqGh/WqRHtmPjnEaYG84g=="
   },
   {
     "href": "description-description-module.js",
@@ -1331,8 +1331,8 @@
   },
   {
     "href": "hoteldetail-hoteldetail-module.js",
-    "size": 497861,
-    "integrity": "sha256-m1Jlcsqst3gAJ01iIrhjntC0vyQYhBVbm54S8YYaCQU= sha384-azMFmYMRBi+VNbg4Nc1LNlRecC3aVBnjhe33Rmg9oJ4/hRbGbRB8lfdywNPyBO6Z sha512-KBfeCoMcWj1D/WAAKZqfL2j6YGtqD2RhgOrl6A+x3iG8sZiAfPOEPVGCKIcU6KcNpORubPkzczOU67CjmV25ew=="
+    "size": 496811,
+    "integrity": "sha256-dOzJ8qDT4sPRoCHv1nqcjcU2EEpVDpBPAGJ2RN7Ul6g= sha384-NzO0TZY9oXgZEFMpCBevIs5FhepypTvcQSRFUWQ3UvjK5g1a5TKrHkJ6qcQ7DLNg sha512-9F4J+134iEXX+RiOYPTj0+B1+YBYX3EFGZSRRYl7gmwwZ4Ns4PRNmABdmw2LaEPcIrs0CoRhYUAvcAbbxSEjIA=="
   },
   {
     "href": "hotelexpsnotes-hotelexpsnotes-module.js",
@@ -1466,8 +1466,8 @@
   },
   {
     "href": "main.js",
-    "size": 2286660,
-    "integrity": "sha256-HNjgZPop/SHuPbLxxj9UYd0YFM/IBViQf/GhkGN7azA= sha384-TaxdDx2CSbBrnCsY5KbyJXGtqE8loGS6HZRC7DSs4/5cDVUNLc9vTGOt+MNqQqCZ sha512-+yHTaYu6Hso60ucPpjsuETz7dOAFYH9EZ6mwM8npqXh/1P0ltus/sA0CT2Lh8UDWtIAZPMVLDgd6n0GDDSeeVA=="
+    "size": 2287328,
+    "integrity": "sha256-mdLaN/NigiHQUQzfmQEYx/Wch+kt8sxUjg7qnZNW1uI= sha384-w2rcAiCJe8kxB3Hw6KsTg4e1twLzhaNMA27qf7xuZc5vDFhhyfPs9lO8NiNpkZgv sha512-p8F/wL+BTAzPIjQyPhwDeCfWOB+0v1to9g0PK8dhm0Ln2xusXKbCEHOa3v9tYAP89gF62OjEeMD61VWd17bYmA=="
   },
   {
     "href": "marker-icon.png",
@@ -1681,8 +1681,8 @@
   },
   {
     "href": "tab1-tab1-module.js",
-    "size": 1002883,
-    "integrity": "sha256-V0qXEo0OfyD9KkIEFz1VTDheT7vfNuryG6CR5aT0aD4= sha384-VrTbohS3JjLkR7k5nEgOTWSNoC+GYT3f7s0PlEW1smT2UhQVvpqF2BhkNoTs9x/G sha512-D7hWa34MV1PM2l3fePkq0HSWjiN7HSaKRM65atV7q5wbNJrlBxHfyA8hq3QVOCn5HDfycmJU8yXvMvLxWS9Bhg=="
+    "size": 1003025,
+    "integrity": "sha256-3StSDGJbK5YCUtPRyzOxvOil7wmtH0tDXiXAZvuMBs0= sha384-dGF11L0qmwPp7esM8SAn4zgFiEZo1sc6fQbptNQTP3LfXwbO727ZYXawrKRFov3z sha512-KGzHGvhxogzL1Awyd2Ml7+vYIb2lA2MByTLGqigLcBkLjc9eu3vRAmVspgekSqHDlFtvtQvLRfpPpekFPV8/fQ=="
   },
   {
     "href": "tab2-tab2-module.js",

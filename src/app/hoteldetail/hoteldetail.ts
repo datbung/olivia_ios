@@ -2153,7 +2153,7 @@ excuteLoadHotelRoom(data){
     se.roomCombo='';
     se.ischeckcbfs=false;
     se.warningCombofs='';
-    se.loaddonecombo = false;
+    //se.loaddonecombo = false;
     se.checkRoomDefaultFsale(se.comboDetail.comboDetail.roomId, se.ListRoomClasses).then((check) => {
       if (check) {
         if (se.objroomfsale[0].Status == 'AL') {
@@ -2234,7 +2234,7 @@ excuteLoadHotelRoom(data){
        
       }
       se.loadpricecombodone = true;
-      se.loaddonecombo=true;
+      //se.loaddonecombo=true;
      
     })
   }
@@ -3123,23 +3123,23 @@ async bookcombo() {
                   se.hotelRoomClasses = [];
                   se.loadcomplete = false;
                   se.emptyroom = false;
-                  if (se.comboid) {
-                    se.getDetailCombo(se.comboid);
-                  }
-                  se.checkPriceHotelDetail().then((check)=>{
-                    if(check){
-                      se.getdataroom();
-                    }else{
-                      se.hotelRoomClasses = [];
-                      se.emptyroom = true;
-                      se.ischeckoutofroom = false;
-                      se.loadcomplete = true;
-                      se.ischeck = true;
-                      se.allowbookcombofc = false;
-                      se.allowbookcombofx = false;
+                  // if (se.comboid) {
+                  //   se.getDetailCombo(se.comboid);
+                  // }
+                  // se.checkPriceHotelDetail().then((check)=>{
+                  //   if(check){
+                  //     se.getdataroom();
+                  //   }else{
+                  //     se.hotelRoomClasses = [];
+                  //     se.emptyroom = true;
+                  //     se.ischeckoutofroom = false;
+                  //     se.loadcomplete = true;
+                  //     se.ischeck = true;
+                  //     se.allowbookcombofc = false;
+                  //     se.allowbookcombofx = false;
                       
-                    }
-                  });
+                  //   }
+                  // });
               })
 
               se.searchhotel.changeInfoHotelList.emit(1);
@@ -3166,6 +3166,7 @@ async bookcombo() {
     this.zone.run(() => {
       this.loadpricecombodone = false;
       this.loadcomplete = false;
+      this.loaddonecombo = false;
       this.hotelRoomClasses = [];
       this.emptyroom = false;
       this.flashSaleEndDate = null;
@@ -4331,10 +4332,12 @@ async bookcombo() {
           }
         }
       }
-      se.zone.run(()=>{
-        se.checkBODdone = true;
-        se.loaddonecombo = true;
-      })
+
+        se.zone.run(()=>{
+          se.checkBODdone = true;
+          se.loaddonecombo = true;
+        })
+     
       se.checkCombo();
     })
   }

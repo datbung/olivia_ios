@@ -15097,7 +15097,7 @@ NetworkProvider = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <!-- <ion-toolbar style=\"min-height: 0px;text-align: center\"> -->\n      <ion-row style=\"height: 56px;text-align: center\">\n        <ion-title>Số lượng đặt phòng</ion-title>\n        <ion-buttons start style=\"position: absolute;right: 8px;\">\n          <button routerDirection=\"root\" class=\"btn-close\" (click)=\"closeModal()\">\n            <img style=\"max-width: 150%\" src=\"./assets/ic_close.svg\" >\n          </button>\n        </ion-buttons>\n    </ion-row>\n  <!-- </ion-toolbar> -->\n</ion-header>\n  <ion-content class=\"content-occupancy\" padding>\n    <div>\n      <div>\n        <div class=\"d-flex\">\n            <div class=\"text-left\">\n                <label class=\"number-room\" >{{room}}</label>\n                <label class=\"text-room\" class=\"text-room\">phòng</label>\n            </div>\n            <div  class=\"t-center ic-minus\" (click)=\"minusroom()\">\n              <div >\n                <img *ngIf=\"ischeckroom==true\"  src=\"./assets/ic_facility/ic_minus.svg\">\n                <img *ngIf=\"ischeckroom==false\" src=\"./assets/ic_facility/ic_minus_in.svg\">\n              </div>\n            </div>\n            <div text-right class=\"t-center ic-plus\" (click)=\"plusroom()\">\n              <img  src=\"./assets/ic_facility/ic_plus.svg\">\n            </div>\n        </div>\n        <div class=\"d-flex\">\n            <div  class=\"text-left\">\n                <label class=\"number-room\">{{adults}}</label>\n                <label class=\"text-room\">người lớn</label>\n            </div>\n            <div class=\"t-center  ic-minus\" (click)=\"minusadults()\">\n              <div align=\"left\">\n                <img *ngIf=\"ischeckadults==true\"  src=\"./assets/ic_facility/ic_minus.svg\">\n                <img *ngIf=\"ischeckadults==false\" src=\"./assets/ic_facility/ic_minus_in.svg\">\n              </div>\n            </div>\n            <div text-right  class=\"t-center ic-plus\" (click)=\"plusadults()\">\n              <img src=\"./assets/ic_facility/ic_plus.svg\">\n            </div>\n        </div>\n        <div class=\"d-flex no-border-bottom\">\n            <div class=\"text-left\" >\n                <label class=\"number-room\">{{child}}</label>\n                <label class=\"text-room\">trẻ em</label>\n            </div>\n            <div  class=\"t-center  ic-minus\" (click)=\"minuschild()\">\n              <div align=\"left\" >\n                <img *ngIf=\"ischeckchild==true\" src=\"./assets/ic_facility/ic_minus.svg\">\n                <img *ngIf=\"ischeckchild==false\" src=\"./assets/ic_facility/ic_minus_in.svg\">\n  \n              </div>\n            </div>\n            <div text-right  class=\"t-center  ic-plus\" (click)=\"pluschild()\">\n              <img  src=\"./assets/ic_facility/ic_plus.svg\">\n  \n            </div>\n        </div>\n        \n      </div>\n    </div>\n  \n    <div class=\"p-top-20\">\n      <label class=\"text-child-age\" *ngIf=\"arrchild.length >0\">\n        Tuổi trẻ em\n      </label>\n      <div *ngFor=\"let msg of arrchild; let idx = index\" class=\"p-top-20\">\n        <div (click)=\"selectAge(msg.text)\"  class=\"div-age no-border-bottom\">\n          <ion-label class=\"text-child\">{{msg.text}}</ion-label>\n          <div class=\"div-text-age\"><ion-label class=\"selected-age p-right-8\">{{msg.numage}}</ion-label><img class=\"img-down\" src=\"./assets/imgs/ic_down.svg\"></div>\n        </div>\n  \n      </div>\n    </div>\n  </ion-content>\n  <ion-footer>\n    <div class=\"div-footer\">\n      <button (click)=\"data()\" ion-button round outline class=\"button button-done\">Xác nhận</button>\n    </div>\n  </ion-footer>"
+module.exports = "<ion-header>\n  <ion-toolbar style=\"min-height: 56px;text-align: center\">\n      <!-- <ion-row style=\"height: 56px;text-align: center\"> -->\n        <ion-title>Số lượng đặt phòng</ion-title>\n        <ion-buttons start style=\"position: absolute;right: 8px;top:-6px\">\n          <button routerDirection=\"root\" class=\"btn-close\" (click)=\"closeModal()\">\n            <img style=\"max-width: 150%\" src=\"./assets/ic_close.svg\" >\n          </button>\n        </ion-buttons>\n    <!-- </ion-row> -->\n  </ion-toolbar>\n</ion-header>\n  <ion-content class=\"content-occupancy\" padding>\n    <div>\n      <div>\n        <div class=\"d-flex\">\n            <div class=\"text-left\">\n                <label class=\"number-room\" >{{room}}</label>\n                <label class=\"text-room\" class=\"text-room\">phòng</label>\n            </div>\n            <div  class=\"t-center ic-minus\" (click)=\"minusroom()\">\n              <div >\n                <img *ngIf=\"ischeckroom==true\"  src=\"./assets/ic_facility/ic_minus.svg\">\n                <img *ngIf=\"ischeckroom==false\" src=\"./assets/ic_facility/ic_minus_in.svg\">\n              </div>\n            </div>\n            <div text-right class=\"t-center ic-plus\" (click)=\"plusroom()\">\n              <img  src=\"./assets/ic_facility/ic_plus.svg\">\n            </div>\n        </div>\n        <div class=\"d-flex\">\n            <div  class=\"text-left\">\n                <label class=\"number-room\">{{adults}}</label>\n                <label class=\"text-room\">người lớn</label>\n            </div>\n            <div class=\"t-center  ic-minus\" (click)=\"minusadults()\">\n              <div align=\"left\">\n                <img *ngIf=\"ischeckadults==true\"  src=\"./assets/ic_facility/ic_minus.svg\">\n                <img *ngIf=\"ischeckadults==false\" src=\"./assets/ic_facility/ic_minus_in.svg\">\n              </div>\n            </div>\n            <div text-right  class=\"t-center ic-plus\" (click)=\"plusadults()\">\n              <img src=\"./assets/ic_facility/ic_plus.svg\">\n            </div>\n        </div>\n        <div class=\"d-flex no-border-bottom\">\n            <div class=\"text-left\" >\n                <label class=\"number-room\">{{child}}</label>\n                <label class=\"text-room\">trẻ em</label>\n            </div>\n            <div  class=\"t-center  ic-minus\" (click)=\"minuschild()\">\n              <div align=\"left\" >\n                <img *ngIf=\"ischeckchild==true\" src=\"./assets/ic_facility/ic_minus.svg\">\n                <img *ngIf=\"ischeckchild==false\" src=\"./assets/ic_facility/ic_minus_in.svg\">\n  \n              </div>\n            </div>\n            <div text-right  class=\"t-center  ic-plus\" (click)=\"pluschild()\">\n              <img  src=\"./assets/ic_facility/ic_plus.svg\">\n  \n            </div>\n        </div>\n        \n      </div>\n    </div>\n  \n    <div class=\"p-top-20\">\n      <label class=\"text-child-age\" *ngIf=\"arrchild.length >0\">\n        Tuổi trẻ em\n      </label>\n      <div *ngFor=\"let msg of arrchild; let idx = index\" class=\"p-top-20\">\n        <div (click)=\"selectAge(msg.text)\"  class=\"div-age no-border-bottom\">\n          <ion-label class=\"text-child\">{{msg.text}}</ion-label>\n          <div class=\"div-text-age\"><ion-label class=\"selected-age p-right-8\">{{msg.numage}}</ion-label><img class=\"img-down\" src=\"./assets/imgs/ic_down.svg\"></div>\n        </div>\n  \n      </div>\n    </div>\n  </ion-content>\n  <ion-footer>\n    <div class=\"div-footer\">\n      <button (click)=\"data()\" ion-button round outline class=\"button button-done\">Xác nhận</button>\n    </div>\n  </ion-footer>"
 
 /***/ }),
 
@@ -15971,7 +15971,6 @@ class ValueGlobal {
     constructor() {
         this.updatedLastestVersion = false;
         this.refreshUserToken = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
-        this.refreshFBAccessToken = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
 }
 class SearchHotel {
@@ -19061,49 +19060,27 @@ let GlobalFunction = class GlobalFunction {
     setCacheSearch(objSearch, stt) {
         return new Promise((resolve, reject) => {
             this.storage.get('arrHistory').then((data) => {
-                if (data && stt == 1) {
+                var co = 0;
+                var objkey = objSearch.id + "_" + objSearch.CheckInDate + "_" + objSearch.CheckOutDate + "_" + objSearch.adult + "_" + objSearch.child;
+                if (data) {
                     for (let i = 0; i < data.length; i++) {
                         const element = data[i];
-                        if (objSearch.id == element.id) {
-                            data.splice(i, 1);
+                        if (objkey == element.objkey) {
+                            co = 1;
                         }
                     }
                 }
-                this.searchhotel.objRecent = objSearch;
-                if (!objSearch.imageUrl) {
-                    if (objSearch.isType == 0) {
-                        this.getHoteldetail(objSearch.id).then((obj) => {
-                            if (obj) {
-                                objSearch.imageUrl = obj;
-                            }
-                            if (data && data.length > 2) {
-                                data.splice(0, 1);
-                                data.push(objSearch);
-                                this.storage.set('arrHistory', data);
-                            }
-                            else {
-                                if (!data) {
-                                    data = [];
-                                }
-                                data.push(objSearch);
-                                this.storage.set('arrHistory', data);
-                            }
-                        });
-                    }
-                    else {
-                        this.storage.get('listtopregions').then(dataregion => {
-                            if (dataregion) {
-                                var el = dataregion.filter(item => item.regionId == objSearch.id);
-                                if (el && el.length > 0) {
-                                    if (el[0].image) {
-                                        objSearch.imageUrl = (el[0].image.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + el[0].image : el[0].image;
-                                    }
-                                }
-                                else {
-                                    objSearch.imageUrl = 'https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
+                if (co == 0) {
+                    this.searchhotel.objRecent = objSearch;
+                    if (!objSearch.imageUrl) {
+                        if (objSearch.isType == 0) {
+                            this.getHoteldetail(objSearch.id).then((obj) => {
+                                if (obj) {
+                                    objSearch.imageUrl = obj;
                                 }
                                 if (data && data.length > 2) {
                                     data.splice(0, 1);
+                                    objSearch.objkey = objkey;
                                     data.push(objSearch);
                                     this.storage.set('arrHistory', data);
                                 }
@@ -19111,27 +19088,57 @@ let GlobalFunction = class GlobalFunction {
                                     if (!data) {
                                         data = [];
                                     }
+                                    objSearch.objkey = objkey;
                                     data.push(objSearch);
                                     this.storage.set('arrHistory', data);
                                 }
-                            }
-                            else {
-                            }
-                        });
-                    }
-                }
-                else {
-                    if (data && data.length > 2) {
-                        data.splice(0, 1);
-                        data.push(objSearch);
-                        this.storage.set('arrHistory', data);
+                            });
+                        }
+                        else {
+                            this.storage.get('listtopregions').then(dataregion => {
+                                if (dataregion) {
+                                    var el = dataregion.filter(item => item.regionId == objSearch.id);
+                                    if (el && el.length > 0) {
+                                        if (el[0].image) {
+                                            objSearch.imageUrl = (el[0].image.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + el[0].image : el[0].image;
+                                        }
+                                    }
+                                    else {
+                                        objSearch.imageUrl = 'https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
+                                    }
+                                    if (data && data.length > 2) {
+                                        data.splice(0, 1);
+                                        objSearch.objkey = objkey;
+                                        data.push(objSearch);
+                                        this.storage.set('arrHistory', data);
+                                    }
+                                    else {
+                                        if (!data) {
+                                            data = [];
+                                        }
+                                        objSearch.objkey = objkey;
+                                        data.push(objSearch);
+                                        this.storage.set('arrHistory', data);
+                                    }
+                                }
+                            });
+                        }
                     }
                     else {
-                        if (!data) {
-                            data = [];
+                        if (data && data.length > 2) {
+                            data.splice(0, 1);
+                            objSearch.objkey = objkey;
+                            data.push(objSearch);
+                            this.storage.set('arrHistory', data);
                         }
-                        data.push(objSearch);
-                        this.storage.set('arrHistory', data);
+                        else {
+                            if (!data) {
+                                data = [];
+                            }
+                            objSearch.objkey = objkey;
+                            data.push(objSearch);
+                            this.storage.set('arrHistory', data);
+                        }
                     }
                 }
                 resolve(true);

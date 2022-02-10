@@ -350,12 +350,12 @@
                 <ion-col class="flashsale-enddate-warning"><span>{{warningCombofs}}</span></ion-col>
               </ion-row>
               <!-- Text warning khi quá hạn flashsale -->
-              <ion-row class="cls-fs-warning" *ngIf=" fs && flashSaleEndDate">
+              <ion-row class="cls-fs-warning" *ngIf="loadcomplete&& fs && flashSaleEndDate">
                 <ion-col><label class="flashsale-enddate-warning">Combo chỉ áp dụng đến ngày {{flashSaleEndDate}}</label>
                 </ion-col>
               </ion-row>
               <!-- Text warning BOD -->
-              <ion-row class="cls-fs-warning" *ngIf="ischeckBOD && checkBODdone" >
+              <ion-row class="cls-fs-warning" *ngIf="loadcomplete && loaddonecombo && ischeckBOD && checkBODdone" >
                 <ion-col><label class="flashsale-enddate-warning">Phòng cuối cùng trong giai đoạn này vừa đặt xong. Vui lòng chọn ngày khác!</label>
                 </ion-col>
               </ion-row>
@@ -389,16 +389,12 @@
                  class="button-combo">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(1,null,0)">Đặt Combo</button>
               </ion-row>
-
-              <ion-row
-                *ngIf="!loadcomplete || !loaddonecombo ||!checkBODdone" class="button-combo">
-                <ion-skeleton-text animated style="width: 100%;height: 48px;border-radius: 4px;margin:8px 0px 16px 0px"></ion-skeleton-text> 
-              </ion-row>
+             
             </div>
             <ion-row
-                *ngIf="!loaddonecombo" class="button-combo">
-                <ion-skeleton-text animated style="width: 100%;height: 48px;border-radius: 4px;margin:8px 0px 16px 0px"></ion-skeleton-text> 
-              </ion-row>
+            *ngIf="!loadcomplete || !loaddonecombo ||!checkBODdone" class="button-combo">
+            <ion-skeleton-text animated style="width: 100%;height: 48px;border-radius: 4px;margin:8px 0px 16px 0px"></ion-skeleton-text> 
+          </ion-row>
             <!-- Combo khác -->
             <ion-row *ngIf="nm && loaddonecombo && loadcomplete &&(!ischeckBOD && checkBODdone)">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(3,null,0)">Gửi yêu cầu</button>
