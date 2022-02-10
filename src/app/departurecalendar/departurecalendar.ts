@@ -187,7 +187,7 @@ export class DepartureCalendarPage {
     var firstDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
     var curmonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getMonth();
     var prevNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth(), 0).getDate();
-    for (var i = prevNumOfDays - (firstDayThisMonth - 1); i <= prevNumOfDays; i++) {
+    for (var i = prevNumOfDays - (firstDayThisMonth - 2); i <= prevNumOfDays; i++) {
       //var d = new Date(this.date.getFullYear(), (this.date.getMonth() === new Date().getMonth() ? curmonth : curmonth - 1), i);
       var d = new Date(this.date.getFullYear(), curmonth - 1, i);
       var obj = this.listPriceDate.filter((cp: ComboPrice) => new Date(cp.day).toDateString() == d.toDateString());

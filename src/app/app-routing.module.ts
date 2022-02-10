@@ -197,6 +197,10 @@ const routes: Routes = [
   { path: 'confirmpaymentdone', loadChildren: './bizTravel/confirmpaymentdone/confirmpaymentdone.module#ConfirmPaymentDonePageModule' },
   { path: 'topup', loadChildren: './bizTravel/topup/topup.module#TopupPageModule' },
   { path: 'paymentdetail', loadChildren: './bizTravel/paymentdetail/paymentdetail.module#PaymentDetailPageModule' },
+
+  { path: 'userlinkprofile', loadChildren: './userlinkprofile/userlinkprofile.module#UserLinkProfilePageModule', },
+  { path: 'userprivacypolicy', loadChildren: './userprivacypolicy/userprivacypolicy.module#UserPrivacyPolicyPageModule', },
+  { path: 'usercondition', loadChildren: './usercondition/usercondition.module#UserConditionPageModule', },
 ];
 @NgModule({
   imports:

@@ -1,36 +1,41 @@
 
 <ion-header class="flightsearchairport-header">
     <ion-row>
-      <ion-col class="col-header">
+      <ion-col class="col-header" size="1.5">
         <div class="d-flex">
           <div class="div-goback" (click)="goback()">
-              <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
-          </div>
-          <div class="div-header-title">
-            <div class="div-title" *ngIf="isdepart">Bay từ</div>
-            <div class="div-title" *ngIf="!isdepart">Bay đến</div>
+              <img class="header-img-back" src="./assets/ic_flight/icon_back.svg" >
           </div>
           
         </div>
       </ion-col>
+      <ion-col class="col-header" size="10.1">
+        <div class="div-header-title">
+          <!-- <div class="div-title" *ngIf="isdepart">Bay từ</div>
+          <div class="div-title" *ngIf="!isdepart">Bay đến</div> -->
+            <form action=".">
+              <ion-searchbar searchIcon="false" #input id="input" class="ip-search-flight" style="padding: 0;padding-bottom: 15px;" autocomplete="on" autocorrect="true" debounce="300" placeholder="Nhập tên sân bay..." (ionChange)="getItems($event)" ></ion-searchbar>
+            </form>
+         
+        </div>
+      </ion-col>
     </ion-row>
   </ion-header>
-  <ion-content padding>
-    <form action=".">
-      <ion-searchbar searchIcon="false" #input id="input" style="padding: 0;padding-bottom: 15px;" autocomplete="on" autocorrect="true" debounce="300" placeholder="Nhập tên thành phố,khu vực..." (ionChange)="getItems($event)" ></ion-searchbar>
-    </form>
+  <ion-content >
+    <div class="text-normal">Danh sách các sân bay</div>
     <div class="search-content-result">
   
       <div>
+        
         <div (click)="itemclick(item)" *ngFor="let item of items">
           <div *ngIf="item && item.show">
             <div class="d-flex m-bottom-8" *ngIf="!item.SameCity else itemsamecity">
-              <div class="div-icon v-align-center">
+              <!-- <div class="div-icon v-align-center">
                   <img class="img-plane" src="./assets/ic_flight/icon_flight.svg">
-              </div>
+              </div> -->
               <div class="div-text-result" >
-                <div>
-                  {{item.city}}, {{item.country}} <span class="text-code">{{item.code}}</span>
+                <div class="text-bold">
+                  {{item.city}}, {{item.country}} ({{item.code}})
                 </div>
                 <div class="text-code f-12" >
                   {{item.airport}}
@@ -42,9 +47,9 @@
             
             <div class="m-bottom-8">
               <div class="d-flex m-bottom-8">
-                <div class="div-icon ">
+                <!-- <div class="div-icon ">
                   <img class="img-plane" src="./assets/ic_facility/Group.svg">
-                </div>
+                </div> -->
                 <div class="div-text-result p-l-8" >
                   {{item.city}}, {{item.country}} <span class="text-code">Tất cả các sân bay</span>
                 </div>
@@ -62,7 +67,10 @@
               </div>
           </div>
           </ng-template>
+
+          <div class="div-split-result"></div>
           </div>
+          
           
         </div>
       </div>

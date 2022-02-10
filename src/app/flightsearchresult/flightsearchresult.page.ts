@@ -3328,6 +3328,7 @@ export class FlightsearchresultPage implements OnInit {
         title: "Chọn ngày",
         monthFormat: " M, YYYY",
         weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        weekStart: 1,
         closeLabel: "",
         doneLabel: "",
         step: 0,
@@ -3341,6 +3342,7 @@ export class FlightsearchresultPage implements OnInit {
         title: "Chọn ngày",
         monthFormat: " M, YYYY",
         weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        weekStart: 1,
         closeLabel: "",
         doneLabel: "",
         step: 0,
@@ -3373,7 +3375,9 @@ export class FlightsearchresultPage implements OnInit {
         this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
         setTimeout(()=>{
             //custom style lịch giá
-            $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=end]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_close.svg' ></div>");
+           
+            $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+            
             if(this.countdaydisplay >0){
               $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
             }else{

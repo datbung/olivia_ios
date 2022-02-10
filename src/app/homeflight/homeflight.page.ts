@@ -14,6 +14,7 @@ import * as request from 'requestretry';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { NetworkProvider } from '../network-provider.service';
 import { BizTravelService } from '../providers/bizTravelService';
+import { CustomAnimations } from '../providers/CustomAnimations';
 
 @Component({
     selector: 'app-homeflight',
@@ -111,6 +112,7 @@ import { BizTravelService } from '../providers/bizTravelService';
                 this._flightService.itemFlightCache = data;
                 if(data.roundTrip != undefined){
                   this.flighttype = data.roundTrip ? 'twoway' : 'oneway';
+
                 }
                 
                 this.myflight = {...data};
@@ -136,8 +138,8 @@ import { BizTravelService } from '../providers/bizTravelService';
                 this.infant = data.infant ? data.infant : 0;
                 this.arrchild = data.arrchild;
 
-                this.cindisplaymonth =  moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM") ;
-                this.coutdisplaymonth =  moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+                this.cindisplaymonth =  moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+                this.coutdisplaymonth =  moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
 
                 this.myflight.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
                 this.myflight.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
@@ -391,8 +393,8 @@ import { BizTravelService } from '../providers/bizTravelService';
             this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
             this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
 
-            this.cindisplaymonth = moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-            this.coutdisplaymonth = moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+            this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+            this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
 
             this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
             this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
@@ -421,13 +423,13 @@ import { BizTravelService } from '../providers/bizTravelService';
             if(!this.cin){
               this.cin = moment(new Date()).add(7,'days');
               this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
-              this.cindisplaymonth = moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
+              this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM")+ ", " + moment(this.cin).format("YYYY");
               this.cinthu = this.getDayOfWeek(this.cin).dayname;
             }
             if(!this.cout){
               this.cout = moment(new Date()).add(9,'days');
               this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
-              this.coutdisplaymonth = moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+              this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
               this.coutthu = this.getDayOfWeek(this.cout).dayname;
             }
             this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
@@ -489,15 +491,15 @@ import { BizTravelService } from '../providers/bizTravelService';
           if(isoneway){
             this.cout = this.cin;
           }else{
-            this.cout = moment(this.cin).add(2,'days');
+            this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
           }
 
          
           this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
           this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
 
-          this.cindisplaymonth = moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-          this.coutdisplaymonth = moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+          this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM")+ ", " + moment(this.cin).format("YYYY");
+          this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM")+ ", " + moment(this.cout).format("YYYY");
 
           this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
                 this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
@@ -586,6 +588,13 @@ import { BizTravelService } from '../providers/bizTravelService';
             }
         }
 
+        changeRoundTrip(ev){
+
+          this.reloadInfoOneway(!ev.currentTarget.checked);
+          this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
+          
+        }
+
         searchFlight(index){
           if(!this.isConnected){
             this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
@@ -672,10 +681,10 @@ import { BizTravelService } from '../providers/bizTravelService';
           objTextMonthStartDate &&
           objTextMonthStartDate.length > 0
         ) {
-          monthstartdate = objTextMonthStartDate.trim().split(",")[0];
-          yearstartdate = objTextMonthStartDate.trim().split(",")[1];
-          monthenddate = objTextMonthEndDate.trim().split(",")[0];
-          yearenddate = objTextMonthEndDate.trim().split(",")[1];
+          monthstartdate = objTextMonthStartDate.trim().split(" ")[0];
+          yearstartdate = objTextMonthStartDate.trim().split(" ")[1];
+          monthenddate = objTextMonthEndDate.trim().split(" ")[0];
+          yearenddate = objTextMonthEndDate.trim().split(" ")[1];
           var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           let diffday =moment(todate).diff(fromdate, "days");
@@ -697,8 +706,8 @@ import { BizTravelService } from '../providers/bizTravelService';
               se.datecout = new Date(se.cout);
               se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
               se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-              se.cindisplaymonth = moment(se.datecin).format("DD") + " thg " + moment(se.cin).format("MM");
-              se.coutdisplaymonth = moment(se.datecout).format("DD") + " thg " + moment(se.cout).format("MM");
+              se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM")+ ", " + moment(this.cin).format("YYYY");
+              se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
               
@@ -728,20 +737,32 @@ import { BizTravelService } from '../providers/bizTravelService';
         this.allowclickcalendar = false;
         let fromdate = new Date(moment(this.cin).format('YYYY-MM-DD'));
         let todate = new Date(moment(this.cout).format('YYYY-MM-DD'));
-        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode;
+        let fd = new Date(moment(this.cout).year(), moment(this.cout).month() +1, 1);
+        let ed = new Date(moment(moment(fd).subtract(1, 'days')).format('YYYY-MM-DD'));
+        let monthed = todate.getMonth();
+        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
         this.storage.get(key).then((data)=>{
           if(!data || (data.arrivals.length == 0 && data.departs.length ==0) ){
             this.loadCalendarPrice();
           }
         })
+        let cindayofweek = this.gf.getDayOfWeek(this.cin).daynameshort;
+        let cindaydisplay = moment(this.cin).format('DD');
+        let cinmonthdisplay = 'Thg ' + moment(this.cin).format('M');
+
+        let coutdayofweek = this.gf.getDayOfWeek(this.cout).daynameshort;
+        let coutdaydisplay = moment(this.cout).format('DD');
+        let coutmonthdisplay = 'Thg ' + moment(this.cout).format('M');
         
         this.countday = moment(todate).diff(moment(fromdate),'days');
         this.countdaydisplay = (this.flighttype == "twoway") ? (this.countday +1) : 1;
+        let tetConfig = ['29 Tết','30 Tết','Mùng 1','Mùng 2','Mùng 3','Mùng 4','Mùng 5','Mùng 6','Mùng 7','Mùng 8','Mùng 9','Mùng 10',];
         let _daysConfig: DayConfig[] = [];
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
+            subTitle: this.valueGlobal.listlunar[j].name,
+            //subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M')+ ':  '+ this.valueGlobal.listlunar[j].description,
             cssClass: 'lunarcalendar'
         })
         }
@@ -750,8 +771,9 @@ import { BizTravelService } from '../providers/bizTravelService';
           options  = {
             pickMode: "range",
             title: "Chọn ngày",
-            monthFormat: " M, YYYY",
-            weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+            monthFormat: " M YYYY",
+            weekdays: ["CN","T2", "T3", "T4", "T5", "T6", "T7", ],
+            weekStart: 1,
             closeLabel: "",
             doneLabel: "",
             step: 0,
@@ -763,12 +785,13 @@ import { BizTravelService } from '../providers/bizTravelService';
           options  = {
             pickMode: "single",
             title: "Chọn ngày",
-            monthFormat: " M, YYYY",
-            weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+            monthFormat: " M YYYY",
+            weekdays: ["CN","T2", "T3", "T4", "T5", "T6", "T7", ],
+            weekStart: 1,
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: fromdate,
+            defaultScrollTo: ed,
             defaultDate: fromdate,
             //defaultDateRange: { from: fromdate, to: todate },
             daysConfig: _daysConfig
@@ -780,12 +803,16 @@ import { BizTravelService } from '../providers/bizTravelService';
         component: CalendarModal,
         cssClass: 'flight-calendar-custom',
         animated: true,
-        componentProps: { options }
+        componentProps: { options },
+        enterAnimation: CustomAnimations.iosCustomCalendarEnterAnimation,
+
         });
 
+       
+        
         this.myCalendar.present().then(() => {
           this.allowclickcalendar = true;
-          let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode;
+          let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
           this.storage.get(key).then((data)=>{
             if(data){
               if(this.flighttype == "twoway"){//2 chiều
@@ -798,16 +825,16 @@ import { BizTravelService } from '../providers/bizTravelService';
           this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
           setTimeout(()=>{
               //custom style lịch giá
-              $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=end]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_close.svg' ></div>");
-              if(this.countdaydisplay >0){
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
-              }else{
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'><img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
-              }
+               $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+              // if(this.countdaydisplay >0){
+              //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
+              // }else{
+              //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'><img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
+              // }
               if(this.flighttype == "twoway"){
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div class='div-width-100'> <div class='text-date-normal'>Ngày đi</div><div class='text-flight-datetime'>${ this.checkInDisplayMonth } </div></div> <div class='div-width-100'><div class='text-date-normal p-l-8'>Ngày về</div> <div class='text-flight-datetime p-l-8 border-left' *ngIf='flighttype=='twoway''>${ this.checkOutDisplayMonth } </div></div></div>`);
+                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <img class='img-arrow' src='./assets/ic_flight/icon_arrow_calendar.svg'> </div> <div ><div class='text-date-normal'>Bay về</div> <div class='d-flex' *ngIf='flighttype=='twoway'> <div class='f-36'>${coutdaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${coutdayofweek}</div> <div>${coutmonthdisplay}</div> </div> </div> </div></div>`);
               }else{
-                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div class='div-width-100'> <div class='text-date-normal'>Ngày đi</div><div class='text-flight-datetime'>${ this.checkInDisplayMonth } </div></div> </div>`);
+                $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <ion-icon class='ico-arrow' name="remove"></ion-icon> </div> <div class='text-date-normal div-cout-oneway'>Bay về</div> </div>`);
               }
               //add div show giá thấp nhất
               if(this.showlowestprice){
@@ -846,21 +873,25 @@ import { BizTravelService } from '../providers/bizTravelService';
                 $('.div-calendar-cincout').click(e => this.showCalendarCinCout());
               }
               //Custom ngày lễ
-              let divmonth = $('.month-box');
-              if(divmonth && divmonth.length >0){
-                for (let index = 0; index < divmonth.length; index++) {
-                  const em = divmonth[index];
-                    let divsmall = $('#'+em.id+' small');
-                    if(divsmall && divsmall.length >0){
-                      $('#'+em.id).append("<div class='div-month-text-small'></div>")
-                      for (let i = 0; i < divsmall.length; i++) {
-                        const es = divsmall[i];
-                        $('#'+em.id+' .div-month-text-small').append("<div class='sm-"+em.id+'-'+i+"'></div>");
-                        $('.sm-'+em.id+'-'+i).append(es);
-                      }
-                    }
-                }
-              }
+              // let divmonth = $('.month-box');
+              // if(divmonth && divmonth.length >0){
+              //   for (let index = 0; index < divmonth.length; index++) {
+              //     const em = divmonth[index];
+              //       let divsmall = $('#'+em.id+' small');
+              //       if(divsmall && divsmall.length >0){
+              //         $('#'+em.id).append("<div class='div-month-text-small'></div>")
+              //         for (let i = 0; i < divsmall.length; i++) {
+              //           const es = divsmall[i];
+              //           let arres = es.innerHTML.split(':');
+              //           $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+              //           if(arres && arres.length >1){
+              //             es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>"+"<span>"+arres[1]+"</span>";
+              //           }
+              //           $('.sm-'+em.id+'-'+i).append(es);
+              //         }
+              //       }
+              //   }
+              // }
           },10)
         });
         var se = this;
@@ -879,8 +910,8 @@ import { BizTravelService } from '../providers/bizTravelService';
             se.datecout = new Date(se.cout);
             se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
             se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-            se.cindisplaymonth = moment(se.datecin).format("DD") + " thg " + moment(se.cin).format("MM");
-            se.coutdisplaymonth = moment(se.datecout).format("DD") + " thg " + moment(se.cout).format("MM");
+            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
             se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
 
@@ -889,6 +920,40 @@ import { BizTravelService } from '../providers/bizTravelService';
         }
     }
 
+    handleExpandDiv(id){
+      var el = $('.div-button-expand-'+id).siblings().last();
+      
+      if(el.hasClass('div-month-text-small')){
+        if(el.hasClass('visible-span')){
+          el.removeClass('visible-span');
+          el.addClass('hide-span');
+          let arr = $('.div-button-expand-'+id).children();
+          for (let j = 0; j < arr.length; j++) {
+            let item = $(arr[j]);
+            if(item.hasClass('img-expand-down')){
+              item.removeClass('img-disabled');
+            }else if(item.hasClass('img-expand-up')){
+              item.addClass('img-disabled');
+            }
+
+            
+          }
+        }else{
+          el.removeClass('hide-span');
+          el.addClass('visible-span');
+          
+          let arr = $('.div-button-expand-'+id).children();
+          for (let j = 0; j < arr.length; j++) {
+            let item = $(arr[j]);
+            if(item.hasClass('img-expand-down')){
+              item.addClass('img-disabled');
+            }else if(item.hasClass('img-expand-up')){
+              item.removeClass('img-disabled');
+            }
+          }
+        }
+      }
+    }
 
     checklunar(s) {
         return s.indexOf('Mùng') >= 0;
@@ -1094,10 +1159,10 @@ import { BizTravelService } from '../providers/bizTravelService';
             adult: se.adult,
             child: se.child ? se.child : 0,
             infant: se.infant ? se.infant : 0,
-            title: "Đi " + se.departCity +" - " + se.returnCity,
-            subtitle : se.cinthu + ", " + moment(se.cin).format("DD-M-YYYY") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách",
-            titleReturn: "Về " + se.returnCity +" - " + se.departCity,
-            subtitleReturn : se.coutthu + ", " + moment(se.cout).format("DD-M-YYYY") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách",
+            title: se.departCity +" - " + se.returnCity,
+            subtitle : se.cinthu + ", " +moment(se.cin).format("DD") + " thg " +moment(se.cin).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
+            titleReturn: se.returnCity +" - " + se.departCity,
+            subtitleReturn : se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
             itemSameCity: se.itemSameCity,
             itemDepartSameCity: se.itemDepartSameCity,
             itemReturnSameCity: se.itemReturnSameCity,
@@ -1317,9 +1382,9 @@ import { BizTravelService } from '../providers/bizTravelService';
               child: se.child ? se.child : 0,
               infant: se.infant ? se.infant : 0,
               title: "Đi " + item.fromPlaceName +" - " + item.toPlaceNameDisplay,
-              subtitle : objday.dayname + ", " + moment(item.depart.departTime).format("DD-M-YYYY") + " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách",
+              subtitle : objday.dayname + ", " +moment(item.depart.departTime).format("DD") +  " thg " +moment(item.depart.departTime).format("M")  + " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
               titleReturn: "Về " + item.toPlaceNameDisplay +" - " + item.fromPlaceName,
-              subtitleReturn : objdayreturn.dayname + ", " + moment(item.return.departTime).format("DD-M-YYYY") + " · " + 1 + " khách",
+              subtitleReturn : objdayreturn.dayname + ", " + moment(item.return.departTime).format("DD") + " thg " +moment(item.return.departTime).format("M") + " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
               itemSameCity: null,
               itemDepartSameCity: "",
               itemReturnSameCity: "",
@@ -1485,7 +1550,7 @@ import { BizTravelService } from '../providers/bizTravelService';
               'Content-Type': 'application/json; charset=utf-8'
               }, {}, "homeflight", "showCalendarPrice").then((data) =>{
                 if(data){
-                  let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode;
+                  let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
                  
                   if(data && data.departs && data.departs.length >0){
                     this.storage.set(key, data);
@@ -1508,15 +1573,17 @@ import { BizTravelService } from '../providers/bizTravelService';
               for (let index = 0; index < $('.month-box').length; index++) {
                 const elementMonth = $('.month-box')[index];
                 let objtextmonth = elementMonth.children[0].textContent.replace('Tháng ','');
-                let monthstartdate:any = objtextmonth.trim().split(",")[0];
-                let yearstartdate:any = objtextmonth.trim().split(",")[1];
+                let monthstartdate:any = objtextmonth.trim().split(" ")[0];
+                let yearstartdate:any = objtextmonth.trim().split(" ")[1];
                 let textmonth = moment(new Date(yearstartdate, monthstartdate - 1, 1)).format('YYYY-MM');
                 
                 if(objtextmonth && objtextmonth.length >0){
                   let listdepartinmonth = departs.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
                   let listreturninmonth:any;
+                  let listreturnallmonth:any;
                   if(this.flighttype == "twoway"){
                     listreturninmonth = arrivals.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
+                    listreturnallmonth = [...arrivals];
                   }
                   
                   let listdayinmonth = elementMonth.children[1].children[0].children[0].children;
@@ -1524,13 +1591,40 @@ import { BizTravelService } from '../providers/bizTravelService';
                       for (let j = 0; j < listdayinmonth.length; j++) {
                         const elementday = listdayinmonth[j];
                         if(elementday && elementday.textContent){
-                          let fday:any = elementday.textContent;
+                          //let fday:any = elementday.textContent;
+                          let fday:any = elementday.children[0].children[0].textContent;
                           let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
                           let todate = moment(fromdate).add(diffday ,'days').format('YYYY-MM-DD');
-                          if(fromdate){
+                          if(fromdate && moment(fromdate).diff( moment(new Date()).format('YYYY-MM-DD'), 'days') >=0){
                               if(type ==1){
                                 let mindepartvalue = Math.min(...listdepartinmonth.map(o => o.price));
                                 let minreturnvalue = Math.min(...listreturninmonth.map(o => o.price));
+
+                                // let itemmin = listdepartinmonth.filter((d)=>{ return d.price == mindepartvalue });
+                                // if(itemmin && itemmin.length ==1){
+                                //   let itemReturnInSameDate = listreturninmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
+                                //   if(itemReturnInSameDate && itemReturnInSameDate.length >0){
+                                //     minreturnvalue = itemReturnInSameDate[0].price;
+                                //   }
+                                // }
+                                // else if(itemmin && itemmin.length >1){
+                                //   let itemminreturn = listreturninmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
+                                //   let totalminprice = 0;
+                                //   if(itemminreturn && itemminreturn.length >0){
+                                //     totalminprice = itemminreturn[0].price + mindepartvalue;
+                                //   }
+                                //   itemmin.forEach(elementmin => {
+                                //   let itemReturnInSameDate = listreturninmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
+                                //   if(totalminprice ==0){
+                                //     totalminprice = elementmin.price + mindepartvalue;
+                                //   }
+                                //   if(itemReturnInSameDate && itemReturnInSameDate.length >0 && (itemReturnInSameDate[0].price + elementmin.price) < totalminprice){
+                                //     totalminprice = elementmin.price + mindepartvalue;
+                                //     minreturnvalue = itemReturnInSameDate[0].price;
+                                //   }
+                                //  }); 
+                                // }
+
                                 let minvalue = mindepartvalue + minreturnvalue;
 
                                 let pricefromdate =0;
@@ -1539,7 +1633,7 @@ import { BizTravelService } from '../providers/bizTravelService';
                                   pricefromdate = itemfromdate[0].price;
                                 }
                                 let pricetodate =0;
-                                let itemtodate = listreturninmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
+                                let itemtodate = listreturnallmonth.filter((d)=>{ return moment(d.departTime).format('YYYY-MM-DD') == todate });
                                 if(itemtodate && itemtodate.length >0){
                                   pricetodate = itemtodate[0].price;
                                 }
@@ -1552,7 +1646,7 @@ import { BizTravelService } from '../providers/bizTravelService';
                                   if(minvalue == totalpriceitem){
                                     $(elementday.children[0]).append(`<span class='price-calendar-text price-calendar-disabled min-price'>${totalprice}</span>`);
                                   }else{
-                                    $(elementday.children[0]).append(`<span class='price-calendar-text price-calendar-disabled'>${totalprice}</span>`);
+                                    $(elementday.children[0]).append(`<span class='price-calendar-text price-calendar-disabled normal-price'>${totalprice}</span>`);
                                   }
                                   
                                 }
@@ -1574,7 +1668,7 @@ import { BizTravelService } from '../providers/bizTravelService';
                                   if(minvalue == pricefromdate){
                                     $(elementday.children[0]).append(`<span class='price-calendar-text m-l-5 price-calendar-disabled min-price'>${totalprice}</span>`);
                                   }else{
-                                    $(elementday.children[0]).append(`<span class='price-calendar-text m-l-5 price-calendar-disabled'>${totalprice}</span>`);
+                                    $(elementday.children[0]).append(`<span class='price-calendar-text m-l-5 price-calendar-disabled normal-price'>${totalprice}</span>`);
                                   }
                                   
                                 }

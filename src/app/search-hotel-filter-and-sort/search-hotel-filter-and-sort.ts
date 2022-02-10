@@ -599,7 +599,7 @@ export class SearchHotelFilterAndSortPage implements OnInit{
             }else{
               this.arrfacilitycheck.push(idx);
             }
-            obj[0].classList.add(this.gf.checkExistsIndex(this.arrfacilitycheck,idx) ? 'style-check' : 'style-uncheck');
+            obj[0].classList.add(this.gf.checkExistsIndex(this.arrfacilitycheck,idx) ? 'facility-check' : 'facility-uncheck');
           }
 
           if(name == "hoteltype"){

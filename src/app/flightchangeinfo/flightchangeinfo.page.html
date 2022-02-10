@@ -20,7 +20,7 @@
         <div class="p-16">
             <div class="padding div-wrap-content">
 
-                <div class="div-direction">
+                <!-- <div class="div-direction">
                     <ion-row>
                         <ion-list class="div-list-flighttype">
                             <ion-radio-group name="rdgroup" class="list-flighttype d-flex" [(ngModel)]="flighttype" mode="md">
@@ -38,7 +38,7 @@
                     </ion-list>
                     </ion-row>
                     
-                </div>
+                </div> -->
 
                 <ion-row class="row-flight">
                     <div class="div-width div-relative">
@@ -85,9 +85,9 @@
                 </ion-row>
 
                 <div>
-                    <ion-row class="row-cin-cout" (click)="openPickupCalendar()">
-                        <div class="div-width">
-                            <div class="div-cin">
+                    <ion-row class="row-cin-cout" >
+                        <div class="div-width d-flex">
+                            <div class="div-cin div-width-100" (click)="openPickupCalendar()">
                                 <div class="img-cin-cout">
                                     <img class="img-padding img-checkin" src="./assets/iocnsearch/ic_checkin.svg"/>
                                 </div>
@@ -103,9 +103,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="div-cout" *ngIf="flighttype == 'twoway'">
+                            <div class="div-roundtrip  div-width-100">
+                                <div class=" d-flex t-right"> 
+                                    <div class="j-center h-48 text-roundtrip div-width-100">Khứ hồi?</div>
+                                    <div class="j-center h-48 m-r-16"><ion-toggle (ionChange)="changeRoundTrip($event)" [checked]="flighttype == 'twoway' ? true : false"></ion-toggle></div>
+                                    
+                                </div>
+                                
+                            </div>
+                            <!-- <div class="div-cout div-width-100" *ngIf="flighttype == 'twoway'">
                                 <div class="img-cin-cout">
-                                    <!-- <img class="img-padding img-checkout" src="./assets/iocnsearch/ic_checkout.svg"/> -->
+                                   
                                     <img class="img-padding img-checkout" src="./assets/ic_flight/icon_arrow_gray.svg">
                                 </div>
                                 <div class="div-input-right text-input-cout div-flex-center">
@@ -117,7 +125,29 @@
                                         <label *ngIf="cotdate==1" class="text-color text-cinthu text-red">{{coutthu}}</label>
                                     </div>
                                 </div>
+                            </div> -->
+                        </div>
+                    </ion-row>
+
+                    <ion-row (click)="openPickupCalendar()" [ngClass]="flighttype == 'twoway' ? 'row-cin-cout' : 'row-cin-cout div-hidden'">
+                        <div class="div-width">
+                            <div class="div-cin">
+                                <div class="img-cin-cout">
+                                    <img class="img-padding img-checkin" src="./assets/iocnsearch/ic_checkout.svg"/>
+                                </div>
+                                <div class="div-input-right text-input-cin div-flex-center">
+                                    <div class="text-cin">
+                                        <label class="text-cin-input">{{ coutdisplaymonth }}</label>
+                                    </div>
+                                    <div class="font-thu" *ngIf="cotdate==0">
+                                        <label *ngIf="cotdate==0" class="text-color text-cinthu">{{coutthu}}</label>
+                                    </div>
+                                    <div class="font-thu" *ngIf="cotdate==1">
+                                        <label *ngIf="cotdate==1" class="text-color text-cinthu text-red">{{coutthu}}</label>
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>
                     </ion-row>
 

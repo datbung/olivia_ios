@@ -8,6 +8,20 @@
         width: 40px;
     }
 
+    .div-flight-type {
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.67;
+      letter-spacing: -0.34px;
+      color: #494b55;
+      margin-top: 3px;
+      max-width: 104px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-left: -8px;
+    }
+
     .div-flight-label{
         font-size: 14px;
         color: #4f4f4f;

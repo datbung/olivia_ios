@@ -15,25 +15,35 @@
 .f-12{
     font-size: 12px;
 }
+.text-normal{
+    color: #333333;
+    font-size: 14px;
+    padding: 13px 0 11px 16px;
+    background-color: #f2f2f2;
+}
 
 .flightsearchairport-header{
+    background: #26bed6;
     .col-header{
         text-align: center;
-        height: 56px;
+        height: 60px;
+        padding: 0;
 
         .div-goback{
             height: 48px;
             width: 48px;
 
             .header-img-back{
-                width: 36px;
+                width: 42px;
+                padding-top: 9px;
+                margin-left: 4px;
             }
         }
 
         .div-header-title{
             width: 100%;
             z-index: -1;
-            position: absolute;
+            //position: absolute;
             padding-top: 6px;
             
             .div-title{
@@ -58,7 +68,7 @@
 }
 
 .search-content-result{
- 
+    padding: 16px;
     .m-bottom-8{
         margin-bottom: 8px;
     }
@@ -75,10 +85,14 @@
             height: 16px;
         }
     }
+    .div-split-result{
+        margin: 12px 0px;
+        border-bottom: solid 0.5px #f2f2f2;
+    }
 
     .div-text-result{
         width: 100%;
-        padding-left: 8px;
+        //padding-left: 8px;
 
         font-size: 14px;
         font-weight: 300;
@@ -87,7 +101,25 @@
 
     }
 
+    .text-bold{
+        color: #333333;
+        font-weight: bold;
+    }
     .text-code{
         color: #828282;
+    }
+}
+
+::ng-deep {
+    .ip-search-flight .searchbar-input.sc-ion-searchbar-ios {
+        background: #fff;
+        border-radius: 4px;
+        width: 100%;
+        padding-inline-start: 13px !important;
+        left: 30px;
+        text-align: left;
+    }
+    .ip-search-flight .searchbar-input-container.sc-ion-searchbar-ios {
+        height: 48px;
     }
 }

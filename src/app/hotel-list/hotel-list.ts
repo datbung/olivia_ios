@@ -258,7 +258,7 @@ export class HotelListPage implements OnInit{
               }
             //}
           }
-          se.pushdata(0, se.dataList.length, isloadmore);
+          
           se.listhotels = "";
           se.listhotelIdInternal = "";
           for (let i = 0; i < lst.List.length; i++) {
@@ -275,6 +275,7 @@ export class HotelListPage implements OnInit{
               se.listhotelIdInternal = se.listhotelIdInternal + lst.List[i].HotelId + ",";
             }
           }
+          se.pushdata(0, se.dataList.length, isloadmore);
           //se.getHotelprice(isloadmore);
         }
         else {
@@ -293,7 +294,7 @@ export class HotelListPage implements OnInit{
             //}
           }
           //se.dataList = lst.List;
-          se.pushdata(0, se.dataList.length, isloadmore);
+          
           se.length = se.dataList.length;
           for (let i = 0; i < lst.List.length; i++) {
             if (i == lst.List.length - 1) {
@@ -312,6 +313,7 @@ export class HotelListPage implements OnInit{
           if(se.listhotels.lastIndexOf(',') == se.listhotels.length-1){
             se.listhotels = se.listhotels.substring(0, se.listhotels.length-2);
           }
+          se.pushdata(0, se.dataList.length, isloadmore);
           //se.getHotelprice(isloadmore);
         }
       }
@@ -1032,6 +1034,7 @@ export class HotelListPage implements OnInit{
           // do your on enter page stuff here
       this.hasfilteragain =this.activeRoute.snapshot.paramMap.get('filteragain') == "true" ? true : false;
       if(this.hasfilteragain){
+        this.ishide = false;
           this.nodata = false;
           this.json1 = [];
           this.dataList = [];

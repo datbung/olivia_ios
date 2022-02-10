@@ -40,6 +40,7 @@ export class FlightaccountPage {
   base64Image: any;
   croppedImagefilename: any;
   fileType: any;
+  linkfb: any;
   constructor(public platform: Platform,public navCtrl: NavController, public storage: Storage,public modalCtrl: ModalController,private router: Router,private callNumber: CallNumber,
     public valueGlobal:ValueGlobal,public zone : NgZone,public alertCtrl: AlertController,public gf: GlobalFunction,public loadingCtrl: LoadingController,
     public network: Network,
@@ -72,6 +73,10 @@ export class FlightaccountPage {
       }else{
         this.gf.showWarning('Không có kết nối mạng','Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng','Đóng');
       }
+    });
+
+    this.storage.get('fbaccesstoken').then((accesstoken)=> {
+      this.linkfb = accesstoken;
     });
   }
   
@@ -121,14 +126,25 @@ export class FlightaccountPage {
               });
           }, 350);
           
+         
       }
     })
-    
+
+    se.valueGlobal.refreshFBAccessToken.pipe().subscribe((check)=> {
+      if(check){
+        se.storage.get('fbaccesstoken').then((accesstoken)=> {
+          se.linkfb = accesstoken;
+        });
+      }
+    })
   }
 
    onRefreshAvatar(){
     var se = this;
     se.zone.run(()=>{
+      se.storage.get('auth_token').then(auth_token => {
+        se.loginuser = auth_token;
+       });
       //console.log(se.gf.getParams('userAvatar'));
       se.storage.get('userInfoData').then((data) => {
         if (data) {
@@ -149,6 +165,10 @@ export class FlightaccountPage {
         if(se.gf.getParams('userAvatar')){
           se.croppedImagepath = se.gf.getParams('userAvatar');
         }
+
+        se.storage.get('fbaccesstoken').then((accesstoken)=> {
+          se.linkfb = accesstoken;
+        });
     })
     
   }
@@ -726,6 +746,10 @@ export class FlightaccountPage {
                               se.bizTravelService.bizAccount = null;
                               se.bizTravelService.isCompany = false;
                             }
+
+                            se.storage.get('fbaccesstoken').then((accesstoken)=> {
+                              se.linkfb = accesstoken;
+                            });
                         }
                     }
                 });
@@ -1030,6 +1054,9 @@ export class FlightaccountPage {
                       se.bizTravelService.bizAccount = data.bizAccount;
                       se.bizTravelService.isCompany = true;
                     }
+                    se.storage.get('fbaccesstoken').then((accesstoken)=> {
+                      se.linkfb = accesstoken;
+                    });
                   }
       
                 }
@@ -1128,5 +1155,27 @@ export class FlightaccountPage {
 
         showCompanyInfo(){
           this.navCtrl.navigateForward('/companyinfo');
+        }
+
+        showPrivacyPolicy(){
+          this.navCtrl.navigateForward('/userprivacypolicy');
+        }
+      
+        showCondition(){
+          this.navCtrl.navigateForward('/usercondition');
+        }
+
+        linkProfile(){
+          var se = this;
+          se.storage.get('auth_token').then(auth_token => {
+            if (auth_token) {
+              this.navCtrl.navigateForward('/userlinkprofile');
+            } else {
+              if (se.isShowConfirm) return;
+              se.showConfirmLogin("Bạn cần đăng nhập để sử dụng chức năng này.");
+              se.isShowConfirm = true;
+            }
+          });
+         
         }
 }

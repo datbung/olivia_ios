@@ -147,8 +147,8 @@
                    
     
                     .div-cin{
-                        position: absolute;
-                        width: 46%;
+                        //position: absolute;
+                        //width: 46%;
                         height: 48px;
                     }
                     
@@ -262,6 +262,38 @@
                 }
             }
            
+
+  .div-width-100 {
+    width: 100%;
+  }
+  .j-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .t-right{
+    text-align: right;
+  }
+  .h-48 {
+    height: 48px;
+  }
+  .m-r-16{
+    margin-right: 16px;
+  }
+  .div-hidden{
+    //visibility: hidden;
+    display: none;
+  }
+
+  .div-roundtrip {
+    .text-roundtrip {
+      color: #333333;
+      font-size: 14px;
+      padding-right: 8px;
+      width: 100%;
+    }
+  }
+
           }
     
           .text-flight-datetime{
@@ -440,7 +472,12 @@
 
 ::ng-deep{
     .sc-ion-modal-ios-h.modal-flight-change-info{
-        --height: calc( env(safe-area-inset-top) + 448px);
+        --height: calc( env(safe-area-inset-top) + 432px);
         align-items: flex-start;
+    }
+
+    .sc-ion-modal-ios-h.modal-flight-change-info.twoway{
+      --height: calc( env(safe-area-inset-top) + 486px) !important;
+      align-items: flex-start;
     }
 }

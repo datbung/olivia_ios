@@ -818,6 +818,9 @@ export class InsurrancedetailPage implements OnInit {
     this.showReceiveInfo = true;
     this.showTransferInfo = false;
   }
+  closecalendar(){
+    this.modalCtrl.dismiss();
+  }
 
   async openPickupCalendar() {
     var arrdate = this.expecteddate.split('-')
@@ -825,7 +828,7 @@ export class InsurrancedetailPage implements OnInit {
     const options: CalendarModalOptions = {
       pickMode: 'single',
       title: 'Chọn ngày',
-      closeLabel: 'Thoát',
+      closeLabel: '',
       doneLabel: '',
       monthFormat: 'MM / YYYY',
       defaultScrollTo: fromdate,
@@ -835,11 +838,16 @@ export class InsurrancedetailPage implements OnInit {
     this.myCalendar = await this.modalCtrl.create({
       component: CalendarModal,
       animated: false,
+      cssClass: 'hotel-calendar-custom',
       componentProps: { options }
     });
 
     this.myCalendar.present().then(() => {
       $('.days-btn').click(e => this.clickedElement(e));
+
+      $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+        //add event close header
+        $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
     });
     
     var se = this;

@@ -1,8 +1,8 @@
 <div class="div-flight-content" *ngIf="flightTabActive == 1">
     <!-- <div [ngClass]="isNotice ? 'background mb50' : 'background'"> -->
-        <div class="background">
+        <div [ngClass]="flighttype == 'twoway' ? 'background cls-bg-twoway' : 'background cls-bg-oneway' ">
         <!-- <img [ngClass]="isNotice ? 'img-background-notice' : 'img-background'"  src="./assets/ic_flight/flight_bg.jpg"> -->
-        <img class="img-background" src="./assets/ic_flight/flight_bg.jpg">
+        <img [ngClass]="flighttype == 'twoway' ? 'img-background cls-bg-twoway' : 'img-background cls-bg-oneway' " src="./assets/ic_flight/flight_bg.jpg">
         <div class="div-wrap-background"></div>
         <div class="text-center">
             <img class="img-logo" src="./assets/logo/logo.svg" />
@@ -14,9 +14,9 @@
                     Lựa chọn thông minh - Hành trình như ý
                 </label>
             </div>
-            <div class="div-wrap-search-input"></div>
+            <div [ngClass]="flighttype == 'twoway' ? 'div-wrap-search-input div-wc-twoway' : 'div-wrap-search-input div-wc-oneway' "></div>
             <div class="div-direction">
-                <ion-row>
+                <!-- <ion-row>
                     <ion-list class="div-list-flighttype">
                         <ion-radio-group name="rdgroup" class="list-flighttype d-flex" [(ngModel)]="flighttype" mode="md">
                             <div class="div-twoway d-flex rd-active">
@@ -31,7 +31,7 @@
                         </ion-radio-group>
                         
                 </ion-list>
-                </ion-row>
+                </ion-row> -->
                 
             </div>
 
@@ -80,9 +80,9 @@
             </ion-row>
 
             <div>
-                <ion-row class="row-cin-cout" (click)="openPickupCalendar()">
-                    <div class="div-width">
-                        <div class="div-cin">
+                <ion-row class="row-cin-cout " >
+                    <div class="div-width d-flex">
+                        <div class="div-cin div-width-100" (click)="openPickupCalendar()">
                             <div class="img-cin-cout">
                                 <img class="img-padding img-checkin" src="./assets/iocnsearch/ic_checkin.svg"/>
                             </div>
@@ -90,29 +90,44 @@
                                 <div class="text-cin">
                                     <label class="text-cin-input">{{ cindisplaymonth }}</label>
                                 </div>
-                                <div class="font-thu" *ngIf="cofdate==0">
+                                <div class="font-thu" *ngIf="!cofdate">
                                     <label class="text-color text-cinthu">{{ cinthu }}</label>
                                 </div>
-                                <div class="font-thu" *ngIf="cofdate==1">
+                                <div class="font-thu" *ngIf="cofdate">
                                     <label class="text-color text-cinthu text-red">{{cinthu}}</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="div-cout" [ngClass]="flighttype == 'twoway' ? '' : 'div-hidden'">
-                            <div class="img-cin-cout p-top-12">
-                                <!-- <img class="img-padding img-checkout" src="./assets/iocnsearch/ic_checkout.svg"/> -->
-                                <img class="img-padding img-checkout" src="./assets/ic_flight/icon_arrow_gray.svg">
+                        <div class="div-roundtrip  div-width-100">
+                            <div class=" d-flex t-right"> 
+                                <div class="j-center h-48 text-roundtrip div-width-100">Khứ hồi?</div>
+                                <div class="j-center h-48 m-r-16"><ion-toggle (ionChange)="changeRoundTrip($event)" [checked]="flighttype == 'twoway' ? true : false"></ion-toggle></div>
+                                
                             </div>
-                            <div class="div-input-right text-input-cout div-flex-center">
+                            
+                        </div>
+                    </div>
+                </ion-row>
+
+                <ion-row (click)="openPickupCalendar()" [ngClass]="flighttype == 'twoway' ? 'row-cin-cout' : 'row-cin-cout div-hidden'">
+                    <div class="div-width">
+                        <div class="div-cin">
+                            <div class="img-cin-cout">
+                                <img class="img-padding img-checkin" src="./assets/iocnsearch/ic_checkout.svg"/>
+                            </div>
+                            <div class="div-input-right text-input-cin div-flex-center">
                                 <div class="text-cin">
                                     <label class="text-cin-input">{{ coutdisplaymonth }}</label>
                                 </div>
-                                <div class="font-thu">
-                                    <label *ngIf="cotdate==0" class="text-color text-cinthu">{{coutthu}}</label>
-                                    <label *ngIf="cotdate==1" class="text-color text-cinthu text-red">{{coutthu}}</label>
+                                <div class="font-thu" *ngIf="!cotdate">
+                                    <label *ngIf="!cotdate" class="text-color text-cinthu">{{coutthu}}</label>
+                                </div>
+                                <div class="font-thu" *ngIf="cotdate">
+                                    <label *ngIf="cotdate" class="text-color text-cinthu text-red">{{coutthu}}</label>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </ion-row>
 

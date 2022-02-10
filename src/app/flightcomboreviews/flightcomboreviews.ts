@@ -2715,6 +2715,10 @@ export class FlightComboReviewsPage implements OnInit{
     toast.present();
   }
 
+  closecalendar(){
+    this.modalCtrl.dismiss();
+  }
+
   async changeDateInfo() {
     var se = this;
     
@@ -2738,7 +2742,8 @@ export class FlightComboReviewsPage implements OnInit{
       title: 'Chọn ngày',
       monthFormat: 'MM / YYYY',
       weekdays: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
-      closeLabel: 'Thoát',
+      weekStart: 1,
+      closeLabel: '',
       doneLabel: '',
       step: 0,
       defaultScrollTo: fromdate,
@@ -2749,12 +2754,16 @@ export class FlightComboReviewsPage implements OnInit{
     this.myCalendar = await this.modalCtrl.create({
       component: CalendarModal,
       animated: true,
+      cssClass: 'hotel-calendar-custom',
       componentProps: { options }
     });
 
     this.myCalendar.present().then(() => {
       this.allowclickcalendar = true;
       $('.days-btn').click(e => this.clickedElement(e));
+      $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+        //add event close header
+        $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
     });
   }
   async clickedElement(e: any) {
