@@ -124,7 +124,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 this.returnCity = data.returnCity;
                 this.returnAirport = data.returnAirport;
                 let diffday = moment(data.checkInDate).diff(new Date(), 'days');
-                if(diffday <= 0){
+                if(diffday < 0){
                   this.cin = moment(new Date()).add(7, 'days');
                   this.cout = this.flighttype == "twoway" ? moment(this.cin).add(2, 'days') : this.cin;
                 }else{
@@ -710,6 +710,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
+                se._flightService.itemFlightCache.checkInDate = se.datecin;
+                se._flightService.itemFlightCache.checkOutDate = se.datecout;
               
               se.storage.get("itemFlightCache").then((data)=>{
                 if(data){

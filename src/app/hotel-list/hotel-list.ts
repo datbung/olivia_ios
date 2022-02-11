@@ -626,6 +626,7 @@ export class HotelListPage implements OnInit{
               element.HasCheckPrice = true;
             })
           }
+          se.loadpricedone = true;
         }
         setTimeout(() => {
           if (se.json1.length >0 && se.json1.length < 6 && se.page * 5 < se.totalData) {
