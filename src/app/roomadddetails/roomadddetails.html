@@ -140,7 +140,7 @@
     
   </div>
   
-  <div *ngIf=" (priceshow>0||ischeckbtn==true)" style="background-color: #ffffff; text-align: center; display: flex;">
+  <div *ngIf=" (priceshow>0||ischeckbtn==true)" style="background-color: #ffffff; text-align: center;">
     <div *ngIf="showInstallmentButton else hideInstallmentButton" class="div-button-flex">
       <button  (click)="installment()" ion-button round outline class="button button-installment">Trả góp <br><p class="text-sub">chỉ từ {{installmentPriceStr}}</p></button>
       <button (click)="next()" ion-button round outline class="button button-payment">Thanh toán ngay</button>

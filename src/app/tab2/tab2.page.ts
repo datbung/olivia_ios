@@ -116,15 +116,36 @@ export class Tab2Page implements OnInit {
   ionViewDidEnter() {
    
   }
-  itemSelected(item) {
+  itemSelected(msg) {
     if (!this.networkProvider.isOnline()) {
       this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
       return;
     }
-    let id1 = { detailId: item.HotelId };
-    this.searchhotel.hotelID = item.HotelId;
+    this.searchhotel.hotelID = msg.HotelId;
     this.searchhotel.rootPage = "likepage";
-    this.navCtrl.navigateForward('/hoteldetail/'+item.HotelId);
+    var item: any ={};
+    item.adult=this.searchhotel.adult?this.searchhotel.adult:2;
+    item.child=this.searchhotel.child?this.searchhotel.child:0;
+    item.arrchild= this.searchhotel.arrchild;
+    item.roomnumber= this.searchhotel.roomnumber?this.searchhotel.roomnumber:1;
+    if(msg.Avatar){
+      item.Avatar = (msg.Avatar.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + msg.Avatar : msg.Avatar;
+    }
+    else{
+      item.Avatar='https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
+    }
+    var checkInDate=new Date(this.searchhotel.CheckInDate);
+    var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+    item.CheckInDate=this.searchhotel.CheckInDate
+    item.CheckOutDate=this.searchhotel.CheckOutDate;
+    item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+    item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+    item.id=msg.HotelId;
+    item.name=msg.Name;
+    item.isType=0;
+    this.gf.setCacheSearch(item,0);
+
+    this.navCtrl.navigateForward('/hoteldetail/'+msg.HotelId);
     //this.navCtrl.navigateForward(['/app/tabs/hoteldetail/' + item.HotelId]);
     //this.navCtrl.navigateForward('HoteldetailPage', id1);
   }
