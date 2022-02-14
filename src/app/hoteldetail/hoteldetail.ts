@@ -466,7 +466,6 @@ export class HotelDetailPage implements OnInit {
     
     
     this.gf.setCacheSearchHotelInfo({checkInDate: this.searchhotel.CheckInDate, checkOutDate: this.searchhotel.CheckOutDate, adult: this.searchhotel.adult, child: this.searchhotel.child, childAge: this.searchhotel.arrchild, roomNumber: this.searchhotel.roomnumber});
-    
     var date1 = new Date(this.cin);
     var date2 = new Date(this.cout);
     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -952,6 +951,7 @@ export class HotelDetailPage implements OnInit {
         C.writeErrorLog(objError,response);
       }
         if (response.statusCode == 200) {
+          
           let jsondata = JSON.parse(body);
           se.hotelcode = jsondata.Code;
           //Có cache thì xóa đi load mới nhất
@@ -973,7 +973,7 @@ export class HotelDetailPage implements OnInit {
             // se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_VIEWED_CONTENT, {'fb_content_type': 'hotel'  ,'fb_content_id': jsondata.Code,
             // 'city': jsondata.Province ? jsondata.Province: se.searchhotel.OriginalCity, 'region': jsondata.District, 'country': 'Viet Nam', 'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0) } );
           }
-          
+          se.setCacheHotel();
         }else{
           if (se.loader) {
             se.loader.dismiss();
@@ -3211,30 +3211,15 @@ async bookcombo() {
         })
       }
      }
-    //  if(this.valueGlobal.dayhot){
-    //   for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
-    //     _daysConfig.push({
-    //       date: this.valueGlobal.dayhot[j],
-    //       cssClass: 'dayhot'
-    //     })
-    //   }
-    //  }
-      //Custom ngày lễ
-      // let divmonth = $('.month-box');
-      // if(divmonth && divmonth.length >0){
-      //   for (let index = 0; index < divmonth.length; index++) {
-      //     const em = divmonth[index];
-      //       let divsmall = $('#'+em.id+' small');
-      //       if(divsmall && divsmall.length >0){
-      //         $('#'+em.id).append("<div class='div-month-text-small'></div>")
-      //         for (let i = 0; i < divsmall.length; i++) {
-      //           const es = divsmall[i];
-      //           $('#'+em.id+' .div-month-text-small').append("<div class='sm-"+em.id+'-'+i+"'></div>");
-      //           $('.sm-'+em.id+'-'+i).append(es);
-      //         }
-      //       }
-      //   }
-      // }
+     if(this.valueGlobal.dayhot){
+      for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
+        _daysConfig.push({
+          date: this.valueGlobal.dayhot[j],
+          cssClass: 'dayhot'
+        })
+      }
+     }
+     
     //  var day : any="2022-02-16";
    
       const options: CalendarModalOptions = {
@@ -3259,6 +3244,18 @@ async bookcombo() {
       this.myCalendar.present().then(()=>{
         se.allowclickcalendar = true;
         $('.days-btn').click(e => this.clickedElement(e));
+         //Custom ngày lễ
+      // let divmonth = $('.month-box');
+      // if(divmonth && divmonth.length >0){
+      //   for (let index = 0; index < divmonth.length; index++) {
+      //      const em = divmonth[index];
+      //     //   let divsmall = $('#'+em.id+' dayhot');
+      //     //   if(divsmall && divsmall.length >0){
+      //         $('#'+em.id).append("<div class='div-month-text-small'></div>")
+      //         $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+      //       // }
+      //   }
+      // }
       });
       let se = this;
       const event: any = await this.myCalendar.onDidDismiss();
@@ -4497,10 +4494,10 @@ async bookcombo() {
   }
   setCacheHotel() {
     var item: any ={};
-    item.adult=this.searchhotel.adult;
-    item.child=this.searchhotel.child;
+    item.adult=this.searchhotel.adult?this.searchhotel.adult:this.adults;
+    item.child=this.searchhotel.child?this.searchhotel.child:this.child;
     item.arrchild= this.searchhotel.arrchild;
-    item.roomnumber= this.searchhotel.roomnumber;
+    item.roomnumber= this.searchhotel.roomnumber?this.searchhotel.roomnumber:this.room;
     item.imageUrl = '';
     var checkInDate=new Date(this.searchhotel.CheckInDate);
     var checkOutDate=new Date(this.searchhotel.CheckOutDate);
