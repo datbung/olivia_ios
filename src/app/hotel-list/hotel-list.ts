@@ -570,6 +570,8 @@ export class HotelListPage implements OnInit{
               se.jsonhtprice.push(itemprice);
             }
           }
+
+         
           //Bind giá vào list ks đã search
             se.fillDataPrice().then((data)=>{
               se.json1 = data;
@@ -649,6 +651,9 @@ export class HotelListPage implements OnInit{
             se.nodata=false;
             break;
           }
+        }
+        if (se.ischeckAL && se.jsonhtprice.length ==0) {
+          se.nodata = true;
         }
         if(se.nodata)
         {
@@ -1014,6 +1019,8 @@ export class HotelListPage implements OnInit{
             setTimeout(() => {
               se.onEnter();
             },500);
+        }else if(event instanceof NavigationEnd && event.url ==='/hotellist/false'){
+          se.loadUserDataLike();
         }
       });
       //se.onEnter();
@@ -1499,5 +1506,55 @@ export class HotelListPage implements OnInit{
       this.searchhotel.ischeckAL=false;
       this.ischeckAL=false;
       this.loaddata(this.authService,this.searchhotel,0);
+  }
+
+  loadUserDataLike() {
+    var se = this;
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        var text = "Bearer " + auth_token;
+        var options = {
+          method: 'GET',
+          url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetFavouriteHotelByUser',
+          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+          headers:
+          {
+            authorization: text
+          }
+        };
+        request(options, function (error, response, body) {
+          if(response.statusCode != 200){
+            var objError ={
+                page: "hotel-list",
+                func: "pushdata",
+                message : response.statusMessage,
+                content : response.body,
+                type: "warning",
+                param: JSON.stringify(options)
+              };
+            C.writeErrorLog(objError,response);
+          }
+          if (error) {
+            error.page = "hotel-list";
+            error.func = "pushdata";
+            error.param = JSON.stringify(options);
+            C.writeErrorLog(error,response);
+            throw new Error(error)
+          }
+          else{
+            if(body){
+              se.zone.run(() => {
+                se.dataListLike = JSON.parse(body);
+                se.reloadDataLike();
+              });
+            }else{
+              //se.showConfirm();
+            }
+            
+          }
+          
+        });
+      }
+    });
   }
 }

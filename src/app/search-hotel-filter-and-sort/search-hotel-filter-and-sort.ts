@@ -104,7 +104,7 @@ export class SearchHotelFilterAndSortPage implements OnInit{
     //console.log(authService.regioncode);
     
     var se = this;
-    var code = se.searchhotel.gbmsg ?  (se.searchhotel.gbmsg.regionCode ? se.searchhotel.gbmsg.regionCode : se.searchhotel.gbmsg.RegionCode) : authService.regioncode;
+    var code = se.searchhotel.objRecent ? se.searchhotel.objRecent.code : (se.searchhotel.gbmsg ?  (se.searchhotel.gbmsg.regionCode ? se.searchhotel.gbmsg.regionCode : se.searchhotel.gbmsg.RegionCode) : authService.regioncode);
     var options = {
       method: 'POST',
       //url: 'https://beta-olivia.ivivu.com/mobile/OliviaApis/AddFavouriteHotel',
@@ -457,9 +457,12 @@ export class SearchHotelFilterAndSortPage implements OnInit{
       this.navCtrl.navigateForward('/hoteldetail:'+this.searchhotel.gbmsg.HotelId);
       //this.navCtrl.navigateForward(['/app/tabs/hoteldetail/'+this.searchhotel.gbmsg.HotelId]);
     } else {
-      this.authService.region = this.searchhotel.gbmsg.regionName;
-      this.authService.regionid = this.searchhotel.gbmsg.regionId;
-      this.authService.regioncode = this.searchhotel.gbmsg.regionCode;
+      if(this.searchhotel.gbmsg){
+        this.authService.region = this.searchhotel.gbmsg.regionName;
+        this.authService.regionid = this.searchhotel.gbmsg.regionId;
+        this.authService.regioncode = this.searchhotel.gbmsg.regionCode;
+      }
+      
       var sortOnly = (this.searchhotel.chuoi == "" && this.itemOrder);
       var id2 = {filteragain: true, sortOnly: sortOnly};
       //Build other filter

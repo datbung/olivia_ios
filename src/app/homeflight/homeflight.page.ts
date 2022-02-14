@@ -107,6 +107,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           })
             
             this.storage.get("itemFlightCache").then((data)=>{
+              console.log(data)
               if(data){
                 data = JSON.parse(data);
                 this._flightService.itemFlightCache = data;
@@ -1428,6 +1429,17 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 
           se._flightService.itemFlightCache.objSearch = se._flightService.objSearch;  
   
+          se.storage.get("itemFlightCache").then((data)=>{
+            if(data){
+              se.storage.remove("itemFlightCache").then(()=>{
+                se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+              })
+  
+            }else{
+              se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+            }
+          })
+
           se.navCtrl.navigateForward("/flightsearchresult");
          
         }

@@ -114,6 +114,7 @@ export class FlightsearchairportPage implements OnInit {
       if(this.valueGlobal.backValue == "flightchangeinfo"){
         this.modalCtrl.dismiss();
       }else{
+        $('.flightsearchairport-header').css('background', 'transparent');
         this.navCtrl.back();
       }
         
