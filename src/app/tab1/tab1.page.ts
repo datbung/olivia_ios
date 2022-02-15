@@ -2480,7 +2480,7 @@ export class Tab1Page implements OnInit {
         item.name=this.gbmsg.regionName;
         item.code = this.gbmsg.regionCode;
         item.isType=1;
-        
+        this.searchhotel.objRecent=item;
         this.gf.setCacheSearch(item,0);
         this.navCtrl.navigateForward('/hotellist/' + se.isrefreshlist);
         //this.navCtrl.navigateForward("/app/tabs/hotellist/true");
@@ -2657,6 +2657,7 @@ export class Tab1Page implements OnInit {
           item.name=this.gbitem.RegionName;
           item.code = this.gbitem.RegionCode;
           item.isType=1;
+          this.searchhotel.objRecent=item;
           this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward('/hotellist/' + se.isrefreshlist);
           this.gf.googleAnalytion(
@@ -2744,6 +2745,7 @@ export class Tab1Page implements OnInit {
             item.name=this.gbmsg.regionName;
             item.code = this.gbmsg.regionCode;
             item.isType=1;
+            this.searchhotel.objRecent=item;
             this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward("/hotellist/" + se.isrefreshlist);
           this.gf.googleAnalytion(

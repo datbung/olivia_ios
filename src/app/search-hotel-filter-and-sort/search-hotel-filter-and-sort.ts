@@ -104,7 +104,7 @@ export class SearchHotelFilterAndSortPage implements OnInit{
     //console.log(authService.regioncode);
     
     var se = this;
-    var code = se.searchhotel.objRecent ? se.searchhotel.objRecent.code : (se.searchhotel.gbmsg ?  (se.searchhotel.gbmsg.regionCode ? se.searchhotel.gbmsg.regionCode : se.searchhotel.gbmsg.RegionCode) : authService.regioncode);
+    var code = se.searchhotel.objRecent && se.searchhotel.objRecent.code ? se.searchhotel.objRecent.code : (se.searchhotel.gbmsg ?  (se.searchhotel.gbmsg.regionCode ? se.searchhotel.gbmsg.regionCode : se.searchhotel.gbmsg.RegionCode) : authService.regioncode);
     var options = {
       method: 'POST',
       //url: 'https://beta-olivia.ivivu.com/mobile/OliviaApis/AddFavouriteHotel',

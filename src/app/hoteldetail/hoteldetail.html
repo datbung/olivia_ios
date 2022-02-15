@@ -835,10 +835,8 @@
                             </ion-col>
                           </ion-row>
                           
-                          <div  [ngClass]="(mealtype.displayMealType && (itemindex==0 && gidx==0)) ? '' : 'div-border-bottom'"></div>
-                         
-                          <!-- Thêm trường hợp số trẻ em quá số lượng cho phép -->
-                          <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !hotelroom.MSG && mealtype.MSG">
+                           <!-- Thêm trường hợp số trẻ em quá số lượng cho phép -->
+                           <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !hotelroom.MSG && mealtype.MSG">
                             <ion-col style="text-align: right">
                               <ion-label style="color:#F79321;white-space: normal;padding-bottom: 16px;padding-right: 8px">
                                 {{ mealtype.MSG.toString().trim()}}</ion-label>
@@ -852,6 +850,10 @@
                               </span>
                               <span style="font-size:22px;font-weight: bold">Đăng nhập</span> để xem giá phòng</div>
                           </ion-row>
+                          
+                          <div  [ngClass]="(mealtype.displayMealType && (itemindex==0 && gidx==0)) ? '' : 'div-border-bottom'"></div>
+                         
+                         
                         </div>
                       </div>
                       <div class="cls-seemoreroomdetail div-show-{{itemindex}}" (click)="seemoreroomdetail(1, itemindex )"

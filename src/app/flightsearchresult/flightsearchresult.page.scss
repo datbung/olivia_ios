@@ -670,6 +670,15 @@
         display: block !important;
     }
 
+    @media (min-height:812px) and (max-width: 870px) {
+        .action-sheets-flightsearchresult-sort .action-sheet-wrapper.sc-ion-action-sheet-ios {
+            margin-bottom: 0;
+        }
+        .action-sheets-flightsearchresult-sort .action-sheet-group.sc-ion-action-sheet-ios:last-child {
+            padding-bottom: 40px;
+        }
+    }
+
     .btn-filter .sc-ion-action-sheet-ios{
         border: solid 1px #ec971f;
         border-radius: 4px;
@@ -861,3 +870,5 @@
         .top-15{
             top: 15px !important;
         }
+
+       

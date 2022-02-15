@@ -213,14 +213,14 @@ export class HotelDetailPage implements OnInit {
     public _mytripservice: MytripService,
     public _flightService: flightService
     ) {
-      this.loaddata();
+      this.loaddata(false);
       this.valueGlobal.notRefreshDetail = false;
       //this.getHotelSuggestDaily();
       // imgLoaderConfigService.enableSpinner(true);
       // imgLoaderConfigService.setConcurrency(10);
       this.platform.resume.subscribe(async()=>{
         this.zone.run(()=>{
-          this.loaddata();
+          this.loaddata(true);
         })
       })
     }
@@ -285,7 +285,7 @@ export class HotelDetailPage implements OnInit {
             se.updateLikeStatus();
           }
           se.valueGlobal.notRefreshDetail = false;
-          se.loaddata();
+          se.loaddata(false);
         }
         if (se.valueGlobal.backValue == 'popupinfobkg') {
           se.hotelRoomClasses=[];
@@ -294,7 +294,7 @@ export class HotelDetailPage implements OnInit {
           se.valueGlobal.notRefreshDetail = false;
           se.emptyroom = false;
           se.setCacheHotel();
-          se.loaddata();
+          se.loaddata(false);
         }
         //se.loaddata();
         // do your on enter page stuff here
@@ -303,7 +303,7 @@ export class HotelDetailPage implements OnInit {
         || se.searchhotel.CheckOutDate && new Date(se.cout).toLocaleDateString() != new Date(se.searchhotel.CheckOutDate).toLocaleDateString()
         || se.searchhotel.adult != se.adults || se.searchhotel.child != se.child)
         ){
-          se.loaddata();
+          se.loaddata(false);
           se.valueGlobal.backValue = '';
           se.valueGlobal.notRefreshDetail = false;
         }
@@ -324,7 +324,7 @@ export class HotelDetailPage implements OnInit {
         se.splashScreen.hide();
       }
 
-  loaddata(){
+  loaddata(isResume){
     //this.HotelID = this.bookCombo.Hotelid;
     this.storage.get('auth_token').then(auth_token => {
       this.loginuser = auth_token;
@@ -471,7 +471,7 @@ export class HotelDetailPage implements OnInit {
     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
     this.duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
     this.loadTopSale24h(null);
-    if(!this.valueGlobal.notRefreshDetail){
+    if(!this.valueGlobal.notRefreshDetail || isResume){
       this.presentLoading();
     }
     //Load all image reviews
@@ -528,7 +528,7 @@ export class HotelDetailPage implements OnInit {
         se.checkBODdone = false;
         // se.warningMaxPax="";
       });
-      se.loaddata();
+      se.loaddata(false);
     }
     //se.presentLoadingDetail();
     se.storage.get('email').then(email => {
@@ -4199,7 +4199,7 @@ async bookcombo() {
           // se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
           se.presentLoadingRelated(3000);
         
-          se.loaddata();
+          se.loaddata(false);
   
           setTimeout(()=>{
             let val = 1;

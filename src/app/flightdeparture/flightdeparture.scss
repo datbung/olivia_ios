@@ -219,6 +219,14 @@
               width: 92%;
           }
         
+          @media (min-height:812px) and (max-width: 870px) {
+            .action-sheets-flight-departure .action-sheet-wrapper.sc-ion-action-sheet-ios {
+                margin-bottom: 0;
+            }
+            .action-sheets-flight-departure .action-sheet-group.sc-ion-action-sheet-ios:last-child {
+                padding-bottom: 40px;
+            }
+        }
 
         ion-modal{ 
             transform:none !important; 

@@ -129,8 +129,18 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                   this.cin = moment(new Date()).add(7, 'days');
                   this.cout = this.flighttype == "twoway" ? moment(this.cin).add(2, 'days') : this.cin;
                 }else{
-                  this.cin = data.checkInDate;
-                  this.cout = data.checkOutDate;
+                  if(data.checkInDate){
+                    this.cin = data.checkInDate;
+                  }else{
+                    this.cin = moment(new Date()).add(1, 'days');
+                  }
+                  
+                  if(data.checkOutDate){
+                    this.cout = data.checkOutDate;
+                  }else{
+                    this.cout = moment(new Date()).add(2, 'days');
+                  }
+                  
                 }
                 
                 this.getDayName(this.cin, this.cout);
