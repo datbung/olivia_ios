@@ -1,306 +1,220 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[62],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/ion-reorder_2-ios.entry.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/ion-reorder_2-ios.entry.js ***!
-  \**********************************************************************/
-/*! exports provided: ion_reorder, ion_reorder_group */
+/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/gbcxupo7.sc.entry.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/gbcxupo7.sc.entry.js ***!
+  \*****************************************************************************/
+/*! exports provided: IonTabBar, IonTabButton */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_reorder", function() { return Reorder; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_reorder_group", function() { return ReorderGroup; });
-/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
-/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
-/* harmony import */ var _haptic_c8f1473e_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./haptic-c8f1473e.js */ "./node_modules/@ionic/core/dist/esm/haptic-c8f1473e.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonTabBar", function() { return TabBar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonTabButton", function() { return TabButton; });
+/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
+/* harmony import */ var _chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-2f96b3d2.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2f96b3d2.js");
 
 
 
 
-const Reorder = class {
-    constructor(hostRef) {
-        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+class TabBar {
+    constructor() {
+        this.keyboardVisible = false;
+        this.translucent = false;
+    }
+    selectedTabChanged() {
+        this.ionTabBarChanged.emit({
+            tab: this.selectedTab
+        });
+    }
+    onKeyboardWillHide() {
+        setTimeout(() => this.keyboardVisible = false, 50);
+    }
+    onKeyboardWillShow() {
+        if (this.el.getAttribute('slot') !== 'top') {
+            this.keyboardVisible = true;
+        }
+    }
+    componentWillLoad() {
+        this.selectedTabChanged();
+    }
+    hostData() {
+        const { color, translucent, keyboardVisible } = this;
+        return {
+            'role': 'tablist',
+            'aria-hidden': keyboardVisible ? 'true' : null,
+            class: Object.assign({}, Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__["c"])(color), { [`${this.mode}`]: true, 'tab-bar-translucent': translucent, 'tab-bar-hidden': keyboardVisible })
+        };
+    }
+    render() {
+        return (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null));
+    }
+    static get is() { return "ion-tab-bar"; }
+    static get encapsulation() { return "shadow"; }
+    static get properties() { return {
+        "color": {
+            "type": String,
+            "attr": "color"
+        },
+        "doc": {
+            "context": "document"
+        },
+        "el": {
+            "elementRef": true
+        },
+        "keyboardVisible": {
+            "state": true
+        },
+        "mode": {
+            "type": String,
+            "attr": "mode"
+        },
+        "queue": {
+            "context": "queue"
+        },
+        "selectedTab": {
+            "type": String,
+            "attr": "selected-tab",
+            "watchCallbacks": ["selectedTabChanged"]
+        },
+        "translucent": {
+            "type": Boolean,
+            "attr": "translucent"
+        }
+    }; }
+    static get events() { return [{
+            "name": "ionTabBarChanged",
+            "method": "ionTabBarChanged",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }]; }
+    static get listeners() { return [{
+            "name": "window:keyboardWillHide",
+            "method": "onKeyboardWillHide"
+        }, {
+            "name": "window:keyboardWillShow",
+            "method": "onKeyboardWillShow"
+        }]; }
+    static get style() { return ".sc-ion-tab-bar-md-h{padding-left:var(--ion-safe-area-left);padding-right:var(--ion-safe-area-right);display:-ms-flexbox;display:flex;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;width:auto;padding-bottom:var(--ion-safe-area-bottom,0);border-top:var(--border);background:var(--background);color:var(--color);text-align:center;contain:strict;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:10;-webkit-box-sizing:content-box!important;box-sizing:content-box!important}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.sc-ion-tab-bar-md-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--ion-safe-area-left);padding-inline-start:var(--ion-safe-area-left);-webkit-padding-end:var(--ion-safe-area-right);padding-inline-end:var(--ion-safe-area-right)}}.ion-color.sc-ion-tab-bar-md-h, .sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s > ion-tab-button{background:var(--ion-color-base);color:rgba(var(--ion-color-contrast-rgb),.7)}.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s > ion-tab-button{--background-focused:var(--ion-color-shade);--color-selected:var(--ion-color-contrast)}.sc-ion-tab-bar-md-h.ion-color .sc-ion-tab-bar-md-s > .tab-selected{color:var(--ion-color-contrast)}[slot=top].sc-ion-tab-bar-md-h{padding-bottom:0;border-top:0;border-bottom:var(--border)}.tab-bar-hidden.sc-ion-tab-bar-md-h{display:none!important}.sc-ion-tab-bar-md-h{--background:var(--ion-tab-bar-background,var(--ion-background-color,#fff));--background-focused:var(--ion-tab-bar-background-focused,#e0e0e0);--border:1px solid var(--ion-tab-bar-border-color,var(--ion-border-color,var(--ion-color-step-150,rgba(0,0,0,0.07))));--color:var(--ion-tab-bar-color,var(--ion-color-step-600,#666));--color-selected:var(--ion-tab-bar-color-activated,var(--ion-color-primary,#3880ff));height:56px}.sc-ion-tab-bar-md-h.tab-bar-translucent .sc-ion-tab-bar-md-s > ion-tab-button{background:transparent}"; }
+    static get styleMode() { return "md"; }
+}
+
+class TabButton {
+    constructor() {
+        this.selected = false;
+        this.disabled = false;
+    }
+    onTabBarChanged(ev) {
+        this.selected = this.tab === ev.detail.tab;
     }
     onClick(ev) {
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
+        if (this.tab !== undefined) {
+            if (!this.disabled) {
+                this.ionTabButtonClick.emit({
+                    tab: this.tab,
+                    href: this.href,
+                    selected: this.selected
+                });
+            }
+            ev.preventDefault();
+        }
+    }
+    componentWillLoad() {
+        if (this.layout === undefined) {
+            this.layout = this.config.get('tabButtonLayout', 'icon-top');
+        }
+    }
+    get hasLabel() {
+        return !!this.el.querySelector('ion-label');
+    }
+    get hasIcon() {
+        return !!this.el.querySelector('ion-icon');
+    }
+    hostData() {
+        const { disabled, hasIcon, hasLabel, layout, selected, tab } = this;
+        return {
+            'role': 'tab',
+            'aria-selected': selected ? 'true' : null,
+            'id': tab !== undefined ? `tab-button-${tab}` : null,
+            class: {
+                [`${this.mode}`]: true,
+                'tab-selected': selected,
+                'tab-disabled': disabled,
+                'tab-has-label': hasLabel,
+                'tab-has-icon': hasIcon,
+                'tab-has-label-only': hasLabel && !hasIcon,
+                'tab-has-icon-only': hasIcon && !hasLabel,
+                [`tab-layout-${layout}`]: true,
+                'ion-activatable': true,
+            }
+        };
     }
     render() {
-        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { class: Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this) }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-icon", { name: "reorder", lazy: false, class: "reorder-icon" }))));
+        const { mode, href } = this;
+        return (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("a", { href: href },
+            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", null),
+            mode === 'md' && Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-ripple-effect", { type: "unbounded" })));
     }
-    static get style() { return ":host([slot]){display:none;line-height:0;z-index:100}.reorder-icon{display:block;font-size:22px;font-size:34px;opacity:.4}"; }
-};
-
-const ReorderGroup = class {
-    constructor(hostRef) {
-        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
-        this.lastToIndex = -1;
-        this.cachedHeights = [];
-        this.scrollElTop = 0;
-        this.scrollElBottom = 0;
-        this.scrollElInitial = 0;
-        this.containerTop = 0;
-        this.containerBottom = 0;
-        this.state = 0 /* Idle */;
-        /**
-         * If `true`, the reorder will be hidden.
-         */
-        this.disabled = true;
-        this.ionItemReorder = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionItemReorder", 7);
-    }
-    disabledChanged() {
-        if (this.gesture) {
-            this.gesture.setDisabled(this.disabled);
+    static get is() { return "ion-tab-button"; }
+    static get encapsulation() { return "shadow"; }
+    static get properties() { return {
+        "config": {
+            "context": "config"
+        },
+        "disabled": {
+            "type": Boolean,
+            "attr": "disabled"
+        },
+        "doc": {
+            "context": "document"
+        },
+        "el": {
+            "elementRef": true
+        },
+        "href": {
+            "type": String,
+            "attr": "href"
+        },
+        "layout": {
+            "type": String,
+            "attr": "layout",
+            "mutable": true
+        },
+        "mode": {
+            "type": String,
+            "attr": "mode"
+        },
+        "queue": {
+            "context": "queue"
+        },
+        "selected": {
+            "type": Boolean,
+            "attr": "selected",
+            "mutable": true
+        },
+        "tab": {
+            "type": String,
+            "attr": "tab"
         }
-    }
-    async connectedCallback() {
-        const contentEl = this.el.closest('ion-content');
-        if (contentEl) {
-            this.scrollEl = await contentEl.getScrollElement();
-        }
-        this.gesture = (await Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ./index-624eea58.js */ "./node_modules/@ionic/core/dist/esm/index-624eea58.js"))).createGesture({
-            el: this.el,
-            gestureName: 'reorder',
-            gesturePriority: 110,
-            threshold: 0,
-            direction: 'y',
-            passive: false,
-            canStart: detail => this.canStart(detail),
-            onStart: ev => this.onStart(ev),
-            onMove: ev => this.onMove(ev),
-            onEnd: () => this.onEnd(),
-        });
-        this.disabledChanged();
-    }
-    disconnectedCallback() {
-        this.onEnd();
-        if (this.gesture) {
-            this.gesture.destroy();
-            this.gesture = undefined;
-        }
-    }
-    /**
-     * Completes the reorder operation. Must be called by the `ionItemReorder` event.
-     *
-     * If a list of items is passed, the list will be reordered and returned in the
-     * proper order.
-     *
-     * If no parameters are passed or if `true` is passed in, the reorder will complete
-     * and the item will remain in the position it was dragged to. If `false` is passed,
-     * the reorder will complete and the item will bounce back to its original position.
-     *
-     * @param listOrReorder A list of items to be sorted and returned in the new order or a
-     * boolean of whether or not the reorder should reposition the item.
-     */
-    complete(listOrReorder) {
-        return Promise.resolve(this.completeSync(listOrReorder));
-    }
-    canStart(ev) {
-        if (this.selectedItemEl || this.state !== 0 /* Idle */) {
-            return false;
-        }
-        const target = ev.event.target;
-        const reorderEl = target.closest('ion-reorder');
-        if (!reorderEl) {
-            return false;
-        }
-        const item = findReorderItem(reorderEl, this.el);
-        if (!item) {
-            return false;
-        }
-        ev.data = item;
-        return true;
-    }
-    onStart(ev) {
-        ev.event.preventDefault();
-        const item = this.selectedItemEl = ev.data;
-        const heights = this.cachedHeights;
-        heights.length = 0;
-        const el = this.el;
-        const children = el.children;
-        if (!children || children.length === 0) {
-            return;
-        }
-        let sum = 0;
-        for (let i = 0; i < children.length; i++) {
-            const child = children[i];
-            sum += child.offsetHeight;
-            heights.push(sum);
-            child.$ionIndex = i;
-        }
-        const box = el.getBoundingClientRect();
-        this.containerTop = box.top;
-        this.containerBottom = box.bottom;
-        if (this.scrollEl) {
-            const scrollBox = this.scrollEl.getBoundingClientRect();
-            this.scrollElInitial = this.scrollEl.scrollTop;
-            this.scrollElTop = scrollBox.top + AUTO_SCROLL_MARGIN;
-            this.scrollElBottom = scrollBox.bottom - AUTO_SCROLL_MARGIN;
-        }
-        else {
-            this.scrollElInitial = 0;
-            this.scrollElTop = 0;
-            this.scrollElBottom = 0;
-        }
-        this.lastToIndex = indexForItem(item);
-        this.selectedItemHeight = item.offsetHeight;
-        this.state = 1 /* Active */;
-        item.classList.add(ITEM_REORDER_SELECTED);
-        Object(_haptic_c8f1473e_js__WEBPACK_IMPORTED_MODULE_2__["a"])();
-    }
-    onMove(ev) {
-        const selectedItem = this.selectedItemEl;
-        if (!selectedItem) {
-            return;
-        }
-        // Scroll if we reach the scroll margins
-        const scroll = this.autoscroll(ev.currentY);
-        // // Get coordinate
-        const top = this.containerTop - scroll;
-        const bottom = this.containerBottom - scroll;
-        const currentY = Math.max(top, Math.min(ev.currentY, bottom));
-        const deltaY = scroll + currentY - ev.startY;
-        const normalizedY = currentY - top;
-        const toIndex = this.itemIndexForTop(normalizedY);
-        if (toIndex !== this.lastToIndex) {
-            const fromIndex = indexForItem(selectedItem);
-            this.lastToIndex = toIndex;
-            Object(_haptic_c8f1473e_js__WEBPACK_IMPORTED_MODULE_2__["b"])();
-            this.reorderMove(fromIndex, toIndex);
-        }
-        // Update selected item position
-        selectedItem.style.transform = `translateY(${deltaY}px)`;
-    }
-    onEnd() {
-        const selectedItemEl = this.selectedItemEl;
-        this.state = 2 /* Complete */;
-        if (!selectedItemEl) {
-            this.state = 0 /* Idle */;
-            return;
-        }
-        const toIndex = this.lastToIndex;
-        const fromIndex = indexForItem(selectedItemEl);
-        if (toIndex === fromIndex) {
-            this.completeSync();
-        }
-        else {
-            this.ionItemReorder.emit({
-                from: fromIndex,
-                to: toIndex,
-                complete: this.completeSync.bind(this)
-            });
-        }
-        Object(_haptic_c8f1473e_js__WEBPACK_IMPORTED_MODULE_2__["c"])();
-    }
-    completeSync(listOrReorder) {
-        const selectedItemEl = this.selectedItemEl;
-        if (selectedItemEl && this.state === 2 /* Complete */) {
-            const children = this.el.children;
-            const len = children.length;
-            const toIndex = this.lastToIndex;
-            const fromIndex = indexForItem(selectedItemEl);
-            if (toIndex !== fromIndex && (!listOrReorder || listOrReorder === true)) {
-                const ref = (fromIndex < toIndex)
-                    ? children[toIndex + 1]
-                    : children[toIndex];
-                this.el.insertBefore(selectedItemEl, ref);
-            }
-            if (Array.isArray(listOrReorder)) {
-                listOrReorder = reorderArray(listOrReorder, fromIndex, toIndex);
-            }
-            for (let i = 0; i < len; i++) {
-                children[i].style['transform'] = '';
-            }
-            selectedItemEl.style.transition = '';
-            selectedItemEl.classList.remove(ITEM_REORDER_SELECTED);
-            this.selectedItemEl = undefined;
-            this.state = 0 /* Idle */;
-        }
-        return listOrReorder;
-    }
-    itemIndexForTop(deltaY) {
-        const heights = this.cachedHeights;
-        let i = 0;
-        // TODO: since heights is a sorted array of integers, we can do
-        // speed up the search using binary search. Remember that linear-search is still
-        // faster than binary-search for small arrays (<64) due CPU branch misprediction.
-        for (i = 0; i < heights.length; i++) {
-            if (heights[i] > deltaY) {
-                break;
-            }
-        }
-        return i;
-    }
-    /********* DOM WRITE ********* */
-    reorderMove(fromIndex, toIndex) {
-        const itemHeight = this.selectedItemHeight;
-        const children = this.el.children;
-        for (let i = 0; i < children.length; i++) {
-            const style = children[i].style;
-            let value = '';
-            if (i > fromIndex && i <= toIndex) {
-                value = `translateY(${-itemHeight}px)`;
-            }
-            else if (i < fromIndex && i >= toIndex) {
-                value = `translateY(${itemHeight}px)`;
-            }
-            style['transform'] = value;
-        }
-    }
-    autoscroll(posY) {
-        if (!this.scrollEl) {
-            return 0;
-        }
-        let amount = 0;
-        if (posY < this.scrollElTop) {
-            amount = -SCROLL_JUMP;
-        }
-        else if (posY > this.scrollElBottom) {
-            amount = SCROLL_JUMP;
-        }
-        if (amount !== 0) {
-            this.scrollEl.scrollBy(0, amount);
-        }
-        return this.scrollEl.scrollTop - this.scrollElInitial;
-    }
-    render() {
-        const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
-        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { class: {
-                [mode]: true,
-                'reorder-enabled': !this.disabled,
-                'reorder-list-active': this.state !== 0 /* Idle */,
-            } }));
-    }
-    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
-    static get watchers() { return {
-        "disabled": ["disabledChanged"]
     }; }
-    static get style() { return ".reorder-list-active>*{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s;will-change:transform}.reorder-enabled{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.reorder-enabled ion-reorder{display:block;cursor:-webkit-grab;cursor:grab;pointer-events:all;-ms-touch-action:none;touch-action:none}.reorder-selected,.reorder-selected ion-reorder{cursor:-webkit-grabbing;cursor:grabbing}.reorder-selected{position:relative;-webkit-transition:none!important;transition:none!important;-webkit-box-shadow:0 0 10px rgba(0,0,0,.4);box-shadow:0 0 10px rgba(0,0,0,.4);opacity:.8;z-index:100}.reorder-visible ion-reorder .reorder-icon{-webkit-transform:translateZ(0);transform:translateZ(0)}"; }
-};
-const indexForItem = (element) => {
-    return element['$ionIndex'];
-};
-const findReorderItem = (node, container) => {
-    let parent;
-    while (node) {
-        parent = node.parentElement;
-        if (parent === container) {
-            return node;
-        }
-        node = parent;
-    }
-    return undefined;
-};
-const AUTO_SCROLL_MARGIN = 60;
-const SCROLL_JUMP = 10;
-const ITEM_REORDER_SELECTED = 'reorder-selected';
-const reorderArray = (array, from, to) => {
-    const element = array[from];
-    array.splice(from, 1);
-    array.splice(to, 0, element);
-    return array.slice();
-};
+    static get events() { return [{
+            "name": "ionTabButtonClick",
+            "method": "ionTabButtonClick",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }]; }
+    static get listeners() { return [{
+            "name": "parent:ionTabBarChanged",
+            "method": "onTabBarChanged"
+        }, {
+            "name": "click",
+            "method": "onClick"
+        }]; }
+    static get style() { return ".sc-ion-tab-button-md-h{--ripple-color:var(--color-selected);-ms-flex:1;flex:1;-ms-flex-direction:column;flex-direction:column;-ms-flex-align:center;align-items:center;-ms-flex-pack:center;justify-content:center;background:var(--background);color:var(--color)}.sc-ion-tab-button-md-h, a.sc-ion-tab-button-md{height:100%}a.sc-ion-tab-button-md{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;display:-ms-flexbox;display:flex;position:relative;-ms-flex-direction:inherit;flex-direction:inherit;-ms-flex-align:inherit;align-items:inherit;-ms-flex-pack:inherit;justify-content:inherit;width:100%;border:0;outline:none;background:transparent;text-decoration:none;cursor:pointer;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-drag:none}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){a.sc-ion-tab-button-md{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}a.sc-ion-tab-button-md:focus-visible{background:var(--background-focused)}\@media (any-hover:hover){a.sc-ion-tab-button-md:hover{color:var(--color-selected)}}.tab-selected.sc-ion-tab-button-md-h{color:var(--color-selected)}.tab-hidden.sc-ion-tab-button-md-h{display:none!important}.tab-disabled.sc-ion-tab-button-md-h{pointer-events:none;opacity:.4}.sc-ion-tab-button-md-s > ion-icon, .sc-ion-tab-button-md-s > ion-label{display:block;-ms-flex-item-align:center;align-self:center;max-width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box}.sc-ion-tab-button-md-s > ion-label{-ms-flex-order:0;order:0}.sc-ion-tab-button-md-s > ion-icon{-ms-flex-order:-1;order:-1;height:1em}.sc-ion-tab-button-md-h.tab-has-label-only .sc-ion-tab-button-md-s > ion-label{white-space:normal}.sc-ion-tab-button-md-s > ion-badge{-webkit-box-sizing:border-box;box-sizing:border-box;position:absolute;z-index:1}.tab-layout-icon-start.sc-ion-tab-button-md-h{-ms-flex-direction:row;flex-direction:row}.tab-layout-icon-end.sc-ion-tab-button-md-h{-ms-flex-direction:row-reverse;flex-direction:row-reverse}.tab-layout-icon-bottom.sc-ion-tab-button-md-h{-ms-flex-direction:column-reverse;flex-direction:column-reverse}.sc-ion-tab-button-md-h.tab-layout-icon-hide .sc-ion-tab-button-md-s > ion-icon, .sc-ion-tab-button-md-h.tab-layout-label-hide .sc-ion-tab-button-md-s > ion-label{display:none}ion-ripple-effect.sc-ion-tab-button-md{color:var(--ripple-color)}.sc-ion-tab-button-md-h{--padding-top:0;--padding-end:12px;--padding-bottom:0;--padding-start:12px;max-width:168px;font-size:12px;font-weight:400;letter-spacing:.03em}.sc-ion-tab-button-md-s > ion-label{margin-left:0;margin-right:0;margin-top:2px;margin-bottom:2px;text-transform:none}.sc-ion-tab-button-md-s > ion-icon{margin-left:0;margin-right:0;margin-top:16px;margin-bottom:16px;-webkit-transform-origin:center center;transform-origin:center center;font-size:22px}.sc-ion-tab-button-md-h[dir=rtl] .sc-ion-tab-button-md-s > ion-icon, [dir=rtl] .sc-ion-tab-button-md-h .sc-ion-tab-button-md-s > ion-icon{-webkit-transform-origin:calc(100% - center) center;transform-origin:calc(100% - center) center}.sc-ion-tab-button-md-s > ion-badge{border-radius:8px;padding-left:2px;padding-right:2px;padding-top:3px;padding-bottom:2px;left:calc(50% + 6px);top:8px;min-width:12px;font-size:8px;font-weight:400}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.sc-ion-tab-button-md-s > ion-badge{padding-left:unset;padding-right:unset;-webkit-padding-start:2px;padding-inline-start:2px;-webkit-padding-end:2px;padding-inline-end:2px}}.sc-ion-tab-button-md-h[dir=rtl] .sc-ion-tab-button-md-s > ion-badge, [dir=rtl] .sc-ion-tab-button-md-h .sc-ion-tab-button-md-s > ion-badge{right:calc(50% + 6px)}.sc-ion-tab-button-md-s > ion-badge:empty{display:block;min-width:8px;height:8px}.sc-ion-tab-button-md-h.tab-layout-icon-top .sc-ion-tab-button-md-s > ion-icon{margin-top:6px;margin-bottom:2px}.sc-ion-tab-button-md-h.tab-layout-icon-top .sc-ion-tab-button-md-s > ion-label{margin-top:0;margin-bottom:6px}.sc-ion-tab-button-md-h.tab-layout-icon-bottom .sc-ion-tab-button-md-s > ion-badge{left:70%;top:8px}.sc-ion-tab-button-md-h[dir=rtl].tab-layout-icon-bottom .sc-ion-tab-button-md-s > ion-badge{right:70%}.sc-ion-tab-button-md-h.tab-layout-icon-bottom .sc-ion-tab-button-md-s > ion-icon{margin-top:0;margin-bottom:6px}.sc-ion-tab-button-md-h.tab-layout-icon-bottom .sc-ion-tab-button-md-s > ion-label{margin-top:6px;margin-bottom:0}.sc-ion-tab-button-md-h.tab-layout-icon-end .sc-ion-tab-button-md-s > ion-badge, .sc-ion-tab-button-md-h.tab-layout-icon-start .sc-ion-tab-button-md-s > ion-badge{left:80%;top:16px}.sc-ion-tab-button-md-h[dir=rtl].tab-layout-icon-end .sc-ion-tab-button-md-s > ion-badge, .sc-ion-tab-button-md-h[dir=rtl].tab-layout-icon-start .sc-ion-tab-button-md-s > ion-badge{right:80%}.sc-ion-tab-button-md-h.tab-layout-icon-start .sc-ion-tab-button-md-s > ion-icon{margin-right:6px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.sc-ion-tab-button-md-h.tab-layout-icon-start .sc-ion-tab-button-md-s > ion-icon{margin-right:unset;-webkit-margin-end:6px;margin-inline-end:6px}}.sc-ion-tab-button-md-h.tab-layout-icon-end .sc-ion-tab-button-md-s > ion-icon{margin-left:6px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.sc-ion-tab-button-md-h.tab-layout-icon-end .sc-ion-tab-button-md-s > ion-icon{margin-left:unset;-webkit-margin-start:6px;margin-inline-start:6px}}.sc-ion-tab-button-md-h.tab-has-label-only .sc-ion-tab-button-md-s > ion-badge, .sc-ion-tab-button-md-h.tab-layout-icon-hide .sc-ion-tab-button-md-s > ion-badge{left:70%;top:16px}.sc-ion-tab-button-md-h[dir=rtl].tab-has-label-only .sc-ion-tab-button-md-s > ion-badge, .sc-ion-tab-button-md-h[dir=rtl].tab-layout-icon-hide .sc-ion-tab-button-md-s > ion-badge{right:70%}.sc-ion-tab-button-md-h.tab-has-label-only .sc-ion-tab-button-md-s > ion-label, .sc-ion-tab-button-md-h.tab-layout-icon-hide .sc-ion-tab-button-md-s > ion-label{margin-top:0;margin-bottom:0}.sc-ion-tab-button-md-h.tab-has-icon-only .sc-ion-tab-button-md-s > ion-badge, .sc-ion-tab-button-md-h.tab-layout-label-hide .sc-ion-tab-button-md-s > ion-badge{top:16px}.sc-ion-tab-button-md-h.tab-has-icon-only .sc-ion-tab-button-md-s > ion-icon, .sc-ion-tab-button-md-h.tab-layout-label-hide .sc-ion-tab-button-md-s > ion-icon{margin-top:0;margin-bottom:0;font-size:24px}"; }
+    static get styleMode() { return "md"; }
+}
 
 
 

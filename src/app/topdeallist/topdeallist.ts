@@ -166,7 +166,9 @@ export class TopDealListPage implements OnInit {
             }
           
           var item = { ischecked: 0, id: se.slideData[i].id, name: name[0], imageUrl: se.slideData[i].images[0].url, regionId: se.slideData[i].regionId, regionName: se.slideData[i].regionName, minPrice: minPrice, description: chuoi, rating: se.slideData[i].rating, priceshow: se.slideData[i].minPrice/1000 >= 1000 ? (se.slideData[i].minPrice/1000).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(',','.') : 0, topsale24Total: 0,Liked: false, url: se.slideData[i].url,priceFor:se.slideData[i].priceFor };
-          se.slideData1.push(item);
+          if(!se.gf.checkExistsItemInArray(se.slideData1, item, 'trip')){
+            se.slideData1.push(item);
+          }
         }
 
       }
@@ -207,8 +209,12 @@ export class TopDealListPage implements OnInit {
         error.param = JSON.stringify(options);
         C.writeErrorLog(error,response);
       };
-      se.slideData = JSON.parse(body);
-      se.storage.set('listtopdealdefault', se.slideData);
+      let data = JSON.parse(body);
+      if(data && data.length >0){
+        se.slideData = data;
+        se.storage.set('listtopdealdefault', se.slideData);
+      }
+      
       se.loadHotelDeal();
         if(se.myloader){
           se.myloader.dismiss();
@@ -321,8 +327,11 @@ export class TopDealListPage implements OnInit {
               }
           
           var item = { ischecked: 0, id: se.slideData[i].id, name: name[0], imageUrl: se.slideData[i].images[0].url, regionName: se.slideData[i].regionName, minPrice: minPrice, description: chuoi, rating: se.slideData[i].rating, priceshow: se.slideData[i].minPrice/1000 >= 1000 ? (se.slideData[i].minPrice/1000).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(',','.') : 0, topsale24Total: 0,Liked: false, url: se.slideData[i].url ,priceFor:se.slideData[i].priceFor};
-          se.slideData1.push(item);
-          listLoadTopSale.push(item);
+          if(!se.gf.checkExistsItemInArray(se.slideData1, item, 'trip')){
+            se.slideData1.push(item);
+            listLoadTopSale.push(item);
+          }
+         
         }
 
       }

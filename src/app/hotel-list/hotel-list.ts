@@ -546,8 +546,11 @@ export class HotelListPage implements OnInit{
         C.writeErrorLog(objError,response);
       }
       se.zone.run(() => {
-        se.jsonhtprice = [];
-        se.listHotelPrice=[];
+        if(se.page == 1){
+          se.jsonhtprice = [];
+          se.listHotelPrice=[];
+        } 
+        
         se.jsonhtprice1 = JSON.parse(body);
         if (se.jsonhtprice1.HotelListResponse) {
           se.jsonhtprice1 = se.jsonhtprice1.HotelListResponse.HotelList.HotelSummary;
@@ -570,9 +573,20 @@ export class HotelListPage implements OnInit{
               se.jsonhtprice.push(itemprice);
             }
           }
+
+         
           //Bind giá vào list ks đã search
             se.fillDataPrice().then((data)=>{
-              se.json1 = data;
+              if(se.json1 && se.json1.length > 0){
+                data.forEach(element => {
+                  if(!se.checkExistsItemInArray(se.json1, element, '')){
+                    se.json1.push(element);
+                  }
+                });
+              }else{
+                se.json1 = data;
+              }
+              
               //Check lại phòng có giá hay ko
               setTimeout(() => {
                 se.zone.run(()=>{
@@ -626,6 +640,7 @@ export class HotelListPage implements OnInit{
               element.HasCheckPrice = true;
             })
           }
+          se.loadpricedone = true;
         }
         setTimeout(() => {
           if (se.json1.length >0 && se.json1.length < 6 && se.page * 5 < se.totalData) {
@@ -649,6 +664,8 @@ export class HotelListPage implements OnInit{
             break;
           }
         }
+        let itemsprice = se.json1.some(item => item.MinPriceOTAStr && item.HasCheckPrice);
+        se.nodata = !itemsprice;
         if(se.nodata)
         {
           se.json1=[];
@@ -656,6 +673,12 @@ export class HotelListPage implements OnInit{
       })
     })
 
+  }
+
+  checkExistsItemInArray(arrays: any, item: any, type: any) {
+    var res = false;
+    res = arrays.some(r => r.HotelId == item.HotelId);
+    return res;
   }
 
   public checkItemPrice(array,item){
@@ -696,6 +719,7 @@ export class HotelListPage implements OnInit{
     return new Promise((resolve, reject) =>{
       se.zone.run(()=>{
           for (let index = 0; index < se.json1.length; index++) {
+            if(se.json1[index].HasCheckPrice) continue;
             se.json1[index].HasCheckPrice = true;
             for (let i = 0; i < se.listHotelPrice.length; i++) {
               //Chỉ bind lại giá cho hotel, combo bỏ qua
@@ -705,12 +729,14 @@ export class HotelListPage implements OnInit{
                 se.json1[index].RoomNameSubString = se.listHotelPrice[i].RoomNameSubString.replace('...','');
                 se.json1[index].PromotionDescription = se.listHotelPrice[i].PromotionDescription;
                 se.json1[index].PromotionDescriptionSubstring = se.listHotelPrice[i].PromotionDescriptionSubstring;
-                
+                se.json1[index].hasPrice = true;
               }
             }
         }
     
-        var arrid = se.listHotelPrice.map(x => x.HotelId);
+        //var arrid = se.listHotelPrice.map(x => x.HotelId);
+        let arrid = se.json1.filter((item) => {return item.hasPrice }).map(x => x.HotelId);
+
         if(arrid && arrid.length >0){
           //var arr = se.json1.filter((item) => {return item.name});
           var arr = se.json1.filter((item) => {return arrid.indexOf(item.HotelId) == -1 });
@@ -726,24 +752,27 @@ export class HotelListPage implements OnInit{
           }
         }
         if (se.ischeckAL) {
-          let jsontemp=se.json1;
-          se.json1=[];
+          let jsontemp= se.json1;
+          let json2 = []
+          
           for (let i = 0; i < jsontemp.length; i++) {
             const element = jsontemp[i];
             if(element.DealType) {
               if (element.DealPrice && element.HasCheckPrice && element.MinPriceOTAStr) {
-                se.json1.push(element);
+                json2.push(element);
               }
             }
             else{
               if (element.HasCheckPrice && element.MinPriceOTAStr) {
-                se.json1.push(element);
+                json2.push(element);
               }
             }
             
           }
+          resolve(json2);
+        }else{
+          resolve(se.json1);
         }
-        resolve(se.json1);
       })
       
     })
@@ -1013,6 +1042,8 @@ export class HotelListPage implements OnInit{
             setTimeout(() => {
               se.onEnter();
             },500);
+        }else if(event instanceof NavigationEnd && event.url ==='/hotellist/false'){
+          se.loadUserDataLike();
         }
       });
       //se.onEnter();
@@ -1498,5 +1529,55 @@ export class HotelListPage implements OnInit{
       this.searchhotel.ischeckAL=false;
       this.ischeckAL=false;
       this.loaddata(this.authService,this.searchhotel,0);
+  }
+
+  loadUserDataLike() {
+    var se = this;
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        var text = "Bearer " + auth_token;
+        var options = {
+          method: 'GET',
+          url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetFavouriteHotelByUser',
+          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+          headers:
+          {
+            authorization: text
+          }
+        };
+        request(options, function (error, response, body) {
+          if(response.statusCode != 200){
+            var objError ={
+                page: "hotel-list",
+                func: "pushdata",
+                message : response.statusMessage,
+                content : response.body,
+                type: "warning",
+                param: JSON.stringify(options)
+              };
+            C.writeErrorLog(objError,response);
+          }
+          if (error) {
+            error.page = "hotel-list";
+            error.func = "pushdata";
+            error.param = JSON.stringify(options);
+            C.writeErrorLog(error,response);
+            throw new Error(error)
+          }
+          else{
+            if(body){
+              se.zone.run(() => {
+                se.dataListLike = JSON.parse(body);
+                se.reloadDataLike();
+              });
+            }else{
+              //se.showConfirm();
+            }
+            
+          }
+          
+        });
+      }
+    });
   }
 }

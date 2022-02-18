@@ -138,7 +138,8 @@ export class FlightchangeinfoPage implements OnInit {
         }
 
         close(){
-            this.modalCtrl.dismiss();
+          this.search();
+            //this.modalCtrl.dismiss();
         }
 
         search(){
@@ -592,7 +593,8 @@ export class FlightchangeinfoPage implements OnInit {
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M') + ':  '+ this.valueGlobal.listlunar[j].description,
+            subTitle: this.valueGlobal.listlunar[j].name,
+            //subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M') + ':  '+ this.valueGlobal.listlunar[j].description,
             cssClass: 'lunarcalendar'
         })
         }
@@ -607,7 +609,7 @@ export class FlightchangeinfoPage implements OnInit {
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: ed,
+            defaultScrollTo: fromdate,
             defaultDateRange: { from: fromdate, to: todate },
             daysConfig: _daysConfig
             };
@@ -621,7 +623,7 @@ export class FlightchangeinfoPage implements OnInit {
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: ed,
+            defaultScrollTo: fromdate,
             defaultDate: fromdate,
             daysConfig: _daysConfig
             };
@@ -639,17 +641,7 @@ export class FlightchangeinfoPage implements OnInit {
         this.myCalendar.present().then(() => {
           this.allowclickcalendar = true;
         //$(".days-btn").click(e => this.clickedElement(e));
-        let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
-          this.storage.get(key).then((data)=>{
-            if(data){
-              if(this.flighttype == "twoway"){//2 chiều
-                this.renderCalenderPrice(1, data.departs, data.arrivals);
-              }else{//1 chiều
-                this.renderCalenderPrice(2, data.departs, null);
-              }
-            }
-          })
-          this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
+        
           setTimeout(()=>{
               //custom style lịch giá
               $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
@@ -720,7 +712,21 @@ export class FlightchangeinfoPage implements OnInit {
               //   }
               // }
 
+              let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
+            this.storage.get(key).then((data)=>{
+              if(data){
+                if(this.flighttype == "twoway"){//2 chiều
+                  this.renderCalenderPrice(1, data.departs, data.arrivals);
+                }else{//1 chiều
+                  this.renderCalenderPrice(2, data.departs, null);
+                }
+              }
+            })
+            this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
+            
           },10)
+
+          
         });
         var se = this;
         const event: any = await this.myCalendar.onDidDismiss();
@@ -1009,7 +1015,8 @@ export class FlightchangeinfoPage implements OnInit {
     }
 
     closecalendar(){
-      this.modalCtrl.dismiss();
+      this.search();
+      //this.modalCtrl.dismiss();
       
     }
 

@@ -151,7 +151,7 @@
               <p  class="h-line"></p>
             </div>
 
-            <div *ngIf="ischeckAL && msg.HasCheckPrice && msg.MinPriceOTAStr" class="row-item-hotellist">
+            <div *ngIf="ischeckAL && msg.HasCheckPrice && msg.MinPriceOTAStr && loadpricedone" class="row-item-hotellist">
               <!-- left image region-->
               <div class="col-img-hotellist">
                 <!-- <ion-thumbnail> -->
@@ -279,6 +279,29 @@
                     </div>
               </div>
               <p  class="h-line"></p>
+            </div>
+            <div *ngIf="ischeckAL && !loadpricedone" style="text-align: center">
+              <ion-item-group  *ngFor="let item of itemsSkeleton">
+                  <ion-row class="row-item-hotellist-sk">
+                      <ion-col size="4" class="col-img-hotellist-sk" >
+                          <ion-skeleton-text animated style="width:104px;height:104px;border-radius:6px"></ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="8" class="col-description-hotellist-sk" style="line-height: 18px;padding-top: 0">
+                          <div style="height: 100%">
+                            <h2 class="text-name-sk" >
+                                <ion-skeleton-text animated style="width: 100%;margin: 0"></ion-skeleton-text>
+                            </h2>
+                            <p class="p-sk">
+                                <ion-skeleton-text animated style="width: 50%;margin: 0"></ion-skeleton-text>
+                            </p>
+                            <div class="last-row-sk">
+                                <ion-skeleton-text animated style="width: 100%;margin: 0"></ion-skeleton-text>
+                            </div>
+                          </div>
+                        </ion-col>
+                  </ion-row>
+                  <p class="h-line-sk"></p>
+              </ion-item-group>
             </div>
           
           </div>

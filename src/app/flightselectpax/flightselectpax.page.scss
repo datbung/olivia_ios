@@ -1,4 +1,8 @@
-
+.flightselectpax-header{
+    ion-title {
+        padding-top: 0;
+    }
+}
     .button
     {
         background: #F79221;
@@ -18,6 +22,7 @@
         background-color: #fff;
         font-size: 2em;
         color: #828282;
+        padding:0;
     }
     .t-center{
         align-self: center;

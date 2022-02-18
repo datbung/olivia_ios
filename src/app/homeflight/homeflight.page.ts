@@ -107,6 +107,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           })
             
             this.storage.get("itemFlightCache").then((data)=>{
+              console.log(data)
               if(data){
                 data = JSON.parse(data);
                 this._flightService.itemFlightCache = data;
@@ -124,12 +125,22 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 this.returnCity = data.returnCity;
                 this.returnAirport = data.returnAirport;
                 let diffday = moment(data.checkInDate).diff(new Date(), 'days');
-                if(diffday <= 0){
+                if(diffday < 0){
                   this.cin = moment(new Date()).add(7, 'days');
                   this.cout = this.flighttype == "twoway" ? moment(this.cin).add(2, 'days') : this.cin;
                 }else{
-                  this.cin = data.checkInDate;
-                  this.cout = data.checkOutDate;
+                  if(data.checkInDate){
+                    this.cin = data.checkInDate;
+                  }else{
+                    this.cin = moment(new Date()).add(1, 'days');
+                  }
+                  
+                  if(data.checkOutDate){
+                    this.cout = data.checkOutDate;
+                  }else{
+                    this.cout = moment(new Date()).add(2, 'days');
+                  }
+                  
                 }
                 
                 this.getDayName(this.cin, this.cout);
@@ -710,6 +721,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
+                se._flightService.itemFlightCache.checkInDate = se.datecin;
+                se._flightService.itemFlightCache.checkOutDate = se.datecout;
               
               se.storage.get("itemFlightCache").then((data)=>{
                 if(data){
@@ -791,7 +804,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: ed,
+            defaultScrollTo: fromdate,
             defaultDate: fromdate,
             //defaultDateRange: { from: fromdate, to: todate },
             daysConfig: _daysConfig
@@ -812,17 +825,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         
         this.myCalendar.present().then(() => {
           this.allowclickcalendar = true;
-          let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
-          this.storage.get(key).then((data)=>{
-            if(data){
-              if(this.flighttype == "twoway"){//2 chiều
-                this.renderCalenderPrice(1, data.departs, data.arrivals);
-              }else{//1 chiều
-                this.renderCalenderPrice(2, data.departs, null);
-              }
-            }
-          })
-          this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
+          
           setTimeout(()=>{
               //custom style lịch giá
                $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
@@ -892,6 +895,18 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               //       }
               //   }
               // }
+
+              let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
+            this.storage.get(key).then((data)=>{
+              if(data){
+                if(this.flighttype == "twoway"){//2 chiều
+                  this.renderCalenderPrice(1, data.departs, data.arrivals);
+                }else{//1 chiều
+                  this.renderCalenderPrice(2, data.departs, null);
+                }
+              }
+            })
+            this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
           },10)
         });
         var se = this;
@@ -1424,6 +1439,17 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 
           se._flightService.itemFlightCache.objSearch = se._flightService.objSearch;  
   
+          se.storage.get("itemFlightCache").then((data)=>{
+            if(data){
+              se.storage.remove("itemFlightCache").then(()=>{
+                se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+              })
+  
+            }else{
+              se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+            }
+          })
+
           se.navCtrl.navigateForward("/flightsearchresult");
          
         }

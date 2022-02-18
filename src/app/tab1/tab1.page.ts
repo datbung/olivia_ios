@@ -1898,6 +1898,7 @@ export class Tab1Page implements OnInit {
       title: "Chọn ngày",
       monthFormat: "MM / YYYY",
       weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+      weekStart: 1,
       closeLabel: "Thoát",
       doneLabel: "",
       step: 0,
@@ -2477,7 +2478,9 @@ export class Tab1Page implements OnInit {
         item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
         item.id=this.gbmsg.regionId;
         item.name=this.gbmsg.regionName;
+        item.code = this.gbmsg.regionCode;
         item.isType=1;
+        this.searchhotel.objRecent=item;
         this.gf.setCacheSearch(item,0);
         this.navCtrl.navigateForward('/hotellist/' + se.isrefreshlist);
         //this.navCtrl.navigateForward("/app/tabs/hotellist/true");
@@ -2637,6 +2640,7 @@ export class Tab1Page implements OnInit {
           item.child=this.searchhotel.child;
           item.arrchild= this.searchhotel.arrchild;
           item.roomnumber= this.searchhotel.roomnumber;
+          
           if(this.gbitem.imageUrl){
             item.imageUrl = (this.gbitem.imageUrl.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + this.gbitem.imageUrl : this.gbitem.imageUrl;
           }
@@ -2651,7 +2655,9 @@ export class Tab1Page implements OnInit {
           item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
           item.id=this.gbitem.RegionId;
           item.name=this.gbitem.RegionName;
+          item.code = this.gbitem.RegionCode;
           item.isType=1;
+          this.searchhotel.objRecent=item;
           this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward('/hotellist/' + se.isrefreshlist);
           this.gf.googleAnalytion(
@@ -2737,7 +2743,9 @@ export class Tab1Page implements OnInit {
             item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
             item.id=this.gbmsg.regionId;
             item.name=this.gbmsg.regionName;
+            item.code = this.gbmsg.regionCode;
             item.isType=1;
+            this.searchhotel.objRecent=item;
             this.gf.setCacheSearch(item,0);
           this.navCtrl.navigateForward("/hotellist/" + se.isrefreshlist);
           this.gf.googleAnalytion(
@@ -3018,6 +3026,7 @@ export class Tab1Page implements OnInit {
         itemRecent.id=item.id;
         itemRecent.name=item.name;
         itemRecent.isType=1;
+        itemRecent.code = item.regionCode;
         this.gf.setCacheSearch(itemRecent,0);
     this.navCtrl.navigateForward("/hotellist/true");
     this.hideStatusBar();

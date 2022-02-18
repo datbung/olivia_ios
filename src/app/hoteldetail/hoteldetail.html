@@ -360,13 +360,13 @@
                 <ion-col class="flashsale-enddate-warning"><span>{{warningCombofs}}</span></ion-col>
               </ion-row>
               <!-- Text warning khi quá hạn flashsale -->
-              <ion-row *ngIf=" fs && flashSaleEndDate">
+              <ion-row class="cls-fs-warning" *ngIf="loadcomplete&& fs && flashSaleEndDate">
                 <ion-col><label class="flashsale-enddate-warning">Combo chỉ áp dụng đến ngày {{flashSaleEndDate}}</label>
                 </ion-col>
               </ion-row>
               <!-- Text warning BOD -->
-              <ion-row *ngIf="ischeckBOD && checkBODdone" >
-                <ion-col><label class="flashsale-enddate-warning">Phòng cuối cùng trong giai đoạn này vừa đặt xong</label>
+              <ion-row class="cls-fs-warning" *ngIf="loadcomplete && loaddonecombo && ischeckBOD && checkBODdone" >
+                <ion-col><label class="flashsale-enddate-warning">Phòng cuối cùng trong giai đoạn này vừa đặt xong. Vui lòng chọn ngày khác!</label>
                 </ion-col>
               </ion-row>
               <!-- Combo flashsale -->
@@ -408,11 +408,12 @@
                  class="button-combo">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(1,null,0)">Đặt Combo</button>
               </ion-row>
+             
             </div>
-            <ion-row *ngIf="!loaddonecombo" style="padding:0px 11px">
-              <ion-skeleton-text animated style="width:100%;height:48px;border-radius:6px">
-              </ion-skeleton-text>
-            </ion-row>
+            <ion-row
+            *ngIf="!loadcomplete || !loaddonecombo ||!checkBODdone" class="button-combo">
+            <ion-skeleton-text animated style="width: 100%;height: 48px;border-radius: 4px;margin:8px 0px 16px 0px"></ion-skeleton-text> 
+          </ion-row>
             <!-- Combo khác -->
             <ion-row *ngIf="nm && loadcomplete&&(!ischeckBOD && checkBODdone)">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(3,null,0)">Gửi yêu cầu</button>
@@ -795,7 +796,7 @@
                                     <ion-label class="cls-textconfirm">Xác nhận trong 60’</ion-label>
                                   </ion-col>
                                 </ion-row>
-                                <ion-row *ngIf="mealtype.Status=='AL' && (loginuser || mealtype.IsshowpricesOTA)" class="text-room-description">
+                                <ion-row *ngIf="mealtype.Status=='AL' && (loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG" class="text-room-description">
                                   <ion-col style="padding:0">
                                    
                                     <ion-label class="cls-textconfirm"> <span><img class="img-flash" src="./assets/imgs/flash_confirm.svg">
@@ -825,7 +826,7 @@
                               </ion-col>
                             </ion-row>
                           </ion-grid>
-                          <div  [ngClass]="(mealtype.displayMealType && (itemindex==0 && gidx==0)) ? '' : 'div-border-bottom'"></div>
+                         
                         
                           <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && hotelroom.MSG">
                             <ion-col style="text-align: right">
@@ -833,9 +834,9 @@
                                 {{ hotelroom.MSG.toString().trim()}}</ion-label>
                             </ion-col>
                           </ion-row>
-                         
-                          <!-- Thêm trường hợp số trẻ em quá số lượng cho phép -->
-                          <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !hotelroom.MSG && mealtype.MSG">
+                          
+                           <!-- Thêm trường hợp số trẻ em quá số lượng cho phép -->
+                           <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !hotelroom.MSG && mealtype.MSG">
                             <ion-col style="text-align: right">
                               <ion-label style="color:#F79321;white-space: normal;padding-bottom: 16px;padding-right: 8px">
                                 {{ mealtype.MSG.toString().trim()}}</ion-label>
@@ -849,6 +850,10 @@
                               </span>
                               <span style="font-size:22px;font-weight: bold">Đăng nhập</span> để xem giá phòng</div>
                           </ion-row>
+
+                          <div  [ngClass]="(mealtype.displayMealType && (itemindex==0 && gidx==0)) ? '' : 'div-border-bottom'"></div>
+                         
+                         
                         </div>
                       </div>
                       <div class="cls-seemoreroomdetail div-show-{{itemindex}}" (click)="seemoreroomdetail(1, itemindex )"

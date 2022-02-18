@@ -1,163 +1,607 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[85],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/ion-toggle-ios.entry.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/ion-toggle-ios.entry.js ***!
-  \*******************************************************************/
-/*! exports provided: ion_toggle */
+/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/j241fzpw.entry.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/j241fzpw.entry.js ***!
+  \**************************************************************************/
+/*! exports provided: IonSelect, IonSelectOption, IonSelectPopover */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_toggle", function() { return Toggle; });
-/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
-/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
-/* harmony import */ var _helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers-46f4a262.js */ "./node_modules/@ionic/core/dist/esm/helpers-46f4a262.js");
-/* harmony import */ var _theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./theme-18cbe2cc.js */ "./node_modules/@ionic/core/dist/esm/theme-18cbe2cc.js");
-/* harmony import */ var _haptic_c8f1473e_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./haptic-c8f1473e.js */ "./node_modules/@ionic/core/dist/esm/haptic-c8f1473e.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonSelect", function() { return Select; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonSelectOption", function() { return SelectOption; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonSelectPopover", function() { return SelectPopover; });
+/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
+/* harmony import */ var _chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-2f96b3d2.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2f96b3d2.js");
+/* harmony import */ var _chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6d7d2f8c.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-6d7d2f8c.js");
 
 
 
 
 
-
-const Toggle = class {
-    constructor(hostRef) {
-        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
-        this.inputId = `ion-tg-${toggleIds++}`;
-        this.lastDrag = 0;
-        this.activated = false;
-        /**
-         * The name of the control, which is submitted with the form data.
-         */
-        this.name = this.inputId;
-        /**
-         * If `true`, the toggle is selected.
-         */
-        this.checked = false;
-        /**
-         * If `true`, the user cannot interact with the toggle.
-         */
+class Select {
+    constructor() {
+        this.childOpts = [];
+        this.inputId = `ion-sel-${selectIds++}`;
+        this.didInit = false;
+        this.isExpanded = false;
         this.disabled = false;
-        /**
-         * The value of the toggle does not mean if it's checked or not, use the `checked`
-         * property for that.
-         *
-         * The value of a toggle is analogous to the value of a `<input type="checkbox">`,
-         * it's only used when the toggle participates in a native `<form>`.
-         */
-        this.value = 'on';
-        this.onClick = () => {
-            if (this.lastDrag + 300 < Date.now()) {
-                this.checked = !this.checked;
-            }
-        };
+        this.cancelText = 'Cancel';
+        this.okText = 'OK';
+        this.name = this.inputId;
+        this.multiple = false;
+        this.interface = 'alert';
+        this.interfaceOptions = {};
         this.onFocus = () => {
             this.ionFocus.emit();
         };
         this.onBlur = () => {
             this.ionBlur.emit();
         };
-        this.ionChange = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionChange", 7);
-        this.ionFocus = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionFocus", 7);
-        this.ionBlur = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionBlur", 7);
-        this.ionStyle = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionStyle", 7);
-    }
-    checkedChanged(isChecked) {
-        this.ionChange.emit({
-            checked: isChecked,
-            value: this.value
-        });
     }
     disabledChanged() {
         this.emitStyle();
-        if (this.gesture) {
-            this.gesture.setDisabled(this.disabled);
+    }
+    valueChanged() {
+        if (this.didInit) {
+            this.updateOptions();
+            this.ionChange.emit({
+                value: this.value,
+            });
+            this.emitStyle();
         }
     }
-    async connectedCallback() {
-        this.gesture = (await Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ./index-624eea58.js */ "./node_modules/@ionic/core/dist/esm/index-624eea58.js"))).createGesture({
-            el: this.el,
-            gestureName: 'toggle',
-            gesturePriority: 100,
-            threshold: 5,
-            passive: false,
-            onStart: () => this.onStart(),
-            onMove: ev => this.onMove(ev),
-            onEnd: ev => this.onEnd(ev),
-        });
-        this.disabledChanged();
-    }
-    disconnectedCallback() {
-        if (this.gesture) {
-            this.gesture.destroy();
-            this.gesture = undefined;
+    async selectOptionChanged() {
+        await this.loadOptions();
+        if (this.didInit) {
+            this.updateOptions();
+            this.updateOverlayOptions();
+            this.emitStyle();
+            if (this.value !== undefined) {
+                this.el.forceUpdate();
+            }
         }
     }
-    componentWillLoad() {
-        this.emitStyle();
-    }
-    emitStyle() {
-        this.ionStyle.emit({
-            'interactive-disabled': this.disabled,
-        });
-    }
-    onStart() {
-        this.activated = true;
-        // touch-action does not work in iOS
+    onClick(ev) {
         this.setFocus();
+        this.open(ev);
     }
-    onMove(detail) {
-        if (shouldToggle(document, this.checked, detail.deltaX, -10)) {
-            this.checked = !this.checked;
-            Object(_haptic_c8f1473e_js__WEBPACK_IMPORTED_MODULE_4__["h"])();
+    async componentDidLoad() {
+        await this.loadOptions();
+        if (this.value === undefined) {
+            if (this.multiple) {
+                const checked = this.childOpts.filter(o => o.selected);
+                this.value = checked.map(o => o.value);
+            }
+            else {
+                const checked = this.childOpts.find(o => o.selected);
+                if (checked) {
+                    this.value = checked.value;
+                }
+            }
+        }
+        this.updateOptions();
+        this.emitStyle();
+        this.el.forceUpdate();
+        this.didInit = true;
+    }
+    async open(event) {
+        if (this.disabled || this.isExpanded) {
+            return undefined;
+        }
+        const overlay = this.overlay = await this.createOverlay(event);
+        this.isExpanded = true;
+        overlay.onDidDismiss().then(() => {
+            this.overlay = undefined;
+            this.isExpanded = false;
+            this.setFocus();
+        });
+        await overlay.present();
+        return overlay;
+    }
+    createOverlay(ev) {
+        let selectInterface = this.interface;
+        if ((selectInterface === 'action-sheet' || selectInterface === 'popover') && this.multiple) {
+            console.warn(`Select interface cannot be "${selectInterface}" with a multi-value select. Using the "alert" interface instead.`);
+            selectInterface = 'alert';
+        }
+        if (selectInterface === 'popover' && !ev) {
+            console.warn('Select interface cannot be a "popover" without passing an event. Using the "alert" interface instead.');
+            selectInterface = 'alert';
+        }
+        if (selectInterface === 'popover') {
+            return this.openPopover(ev);
+        }
+        if (selectInterface === 'action-sheet') {
+            return this.openActionSheet();
+        }
+        return this.openAlert();
+    }
+    updateOverlayOptions() {
+        if (!this.overlay) {
+            return;
+        }
+        const overlay = this.overlay;
+        switch (this.interface) {
+            case 'action-sheet':
+                overlay.buttons = this.createActionSheetButtons(this.childOpts);
+                break;
+            case 'popover':
+                const popover = overlay.querySelector('ion-select-popover');
+                if (popover) {
+                    popover.options = this.createPopoverOptions(this.childOpts);
+                }
+                break;
+            default:
+                const inputType = (this.multiple ? 'checkbox' : 'radio');
+                overlay.inputs = this.createAlertInputs(this.childOpts, inputType);
+                break;
         }
     }
-    onEnd(ev) {
-        this.activated = false;
-        this.lastDrag = Date.now();
-        ev.event.preventDefault();
-        ev.event.stopImmediatePropagation();
+    createActionSheetButtons(data) {
+        const actionSheetButtons = data.map(option => {
+            return {
+                role: (option.selected ? 'selected' : ''),
+                text: option.textContent,
+                handler: () => {
+                    this.value = option.value;
+                }
+            };
+        });
+        actionSheetButtons.push({
+            text: this.cancelText,
+            role: 'cancel',
+            handler: () => {
+                this.ionCancel.emit();
+            }
+        });
+        return actionSheetButtons;
     }
-    getValue() {
-        return this.value || '';
+    createAlertInputs(data, inputType) {
+        return data.map(o => {
+            return {
+                type: inputType,
+                label: o.textContent,
+                value: o.value,
+                checked: o.selected,
+                disabled: o.disabled
+            };
+        });
+    }
+    createPopoverOptions(data) {
+        return data.map(o => {
+            return {
+                text: o.textContent,
+                value: o.value,
+                checked: o.selected,
+                disabled: o.disabled,
+                handler: () => {
+                    this.value = o.value;
+                    this.close();
+                }
+            };
+        });
+    }
+    async openPopover(ev) {
+        const interfaceOptions = this.interfaceOptions;
+        const popoverOpts = Object.assign({ mode: this.mode }, interfaceOptions, { component: 'ion-select-popover', cssClass: ['select-popover', interfaceOptions.cssClass], event: ev, componentProps: {
+                header: interfaceOptions.header,
+                subHeader: interfaceOptions.subHeader,
+                message: interfaceOptions.message,
+                value: this.value,
+                options: this.createPopoverOptions(this.childOpts)
+            } });
+        return this.popoverCtrl.create(popoverOpts);
+    }
+    async openActionSheet() {
+        const interfaceOptions = this.interfaceOptions;
+        const actionSheetOpts = Object.assign({ mode: this.mode }, interfaceOptions, { buttons: this.createActionSheetButtons(this.childOpts), cssClass: ['select-action-sheet', interfaceOptions.cssClass] });
+        return this.actionSheetCtrl.create(actionSheetOpts);
+    }
+    async openAlert() {
+        const label = this.getLabel();
+        const labelText = (label) ? label.textContent : null;
+        const interfaceOptions = this.interfaceOptions;
+        const inputType = (this.multiple ? 'checkbox' : 'radio');
+        const alertOpts = Object.assign({ mode: this.mode }, interfaceOptions, { header: interfaceOptions.header ? interfaceOptions.header : labelText, inputs: this.createAlertInputs(this.childOpts, inputType), buttons: [
+                {
+                    text: this.cancelText,
+                    role: 'cancel',
+                    handler: () => {
+                        this.ionCancel.emit();
+                    }
+                },
+                {
+                    text: this.okText,
+                    handler: (selectedValues) => {
+                        this.value = selectedValues;
+                    }
+                }
+            ], cssClass: ['select-alert', interfaceOptions.cssClass,
+                (this.multiple ? 'multiple-select-alert' : 'single-select-alert')] });
+        return this.alertCtrl.create(alertOpts);
+    }
+    close() {
+        if (!this.overlay) {
+            return Promise.resolve(false);
+        }
+        return this.overlay.dismiss();
+    }
+    async loadOptions() {
+        this.childOpts = await Promise.all(Array.from(this.el.querySelectorAll('ion-select-option')).map(o => o.componentOnReady()));
+    }
+    updateOptions() {
+        let canSelect = true;
+        for (const selectOption of this.childOpts) {
+            const selected = canSelect && isOptionSelected(this.value, selectOption.value, this.compareWith);
+            selectOption.selected = selected;
+            if (selected && !this.multiple) {
+                canSelect = false;
+            }
+        }
+    }
+    getLabel() {
+        return Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["d"])(this.el);
+    }
+    hasValue() {
+        return this.getText() !== '';
+    }
+    getText() {
+        const selectedText = this.selectedText;
+        if (selectedText != null && selectedText !== '') {
+            return selectedText;
+        }
+        return generateText(this.childOpts, this.value, this.compareWith);
     }
     setFocus() {
         if (this.buttonEl) {
             this.buttonEl.focus();
         }
     }
-    render() {
-        const { inputId, disabled, checked, activated, color, el } = this;
-        const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
-        const labelId = inputId + '-lbl';
-        const label = Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["f"])(el);
-        const value = this.getValue();
+    emitStyle() {
+        this.ionStyle.emit({
+            'interactive': true,
+            'select': true,
+            'has-placeholder': this.placeholder != null,
+            'has-value': this.hasValue(),
+            'interactive-disabled': this.disabled,
+            'select-disabled': this.disabled
+        });
+    }
+    hostData() {
+        const labelId = this.inputId + '-lbl';
+        const label = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["d"])(this.el);
         if (label) {
             label.id = labelId;
         }
-        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["a"])(true, el, this.name, (checked ? value : ''), disabled);
-        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onClick: this.onClick, role: "checkbox", "aria-disabled": disabled ? 'true' : null, "aria-checked": `${checked}`, "aria-labelledby": labelId, class: Object.assign(Object.assign({}, Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__["c"])(color)), { [mode]: true, 'in-item': Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__["h"])('ion-item', el), 'toggle-activated': activated, 'toggle-checked': checked, 'toggle-disabled': disabled, 'interactive': true }) }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "toggle-icon" }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "toggle-inner" })), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("button", { type: "button", onFocus: this.onFocus, onBlur: this.onBlur, disabled: disabled, ref: btnEl => this.buttonEl = btnEl })));
+        return {
+            'role': 'combobox',
+            'aria-disabled': this.disabled ? 'true' : null,
+            'aria-expanded': `${this.isExpanded}`,
+            'aria-haspopup': 'dialog',
+            'aria-labelledby': labelId,
+            class: {
+                [`${this.mode}`]: true,
+                'in-item': Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_1__["d"])('ion-item', this.el),
+                'select-disabled': this.disabled,
+            }
+        };
     }
-    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
-    static get watchers() { return {
-        "checked": ["checkedChanged"],
-        "disabled": ["disabledChanged"]
+    render() {
+        Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["e"])(true, this.el, this.name, parseValue(this.value), this.disabled);
+        const labelId = this.inputId + '-lbl';
+        const label = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_2__["d"])(this.el);
+        if (label) {
+            label.id = labelId;
+        }
+        let addPlaceholderClass = false;
+        let selectText = this.getText();
+        if (selectText === '' && this.placeholder != null) {
+            selectText = this.placeholder;
+            addPlaceholderClass = true;
+        }
+        const selectTextClasses = {
+            'select-text': true,
+            'select-placeholder': addPlaceholderClass
+        };
+        return [
+            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: selectTextClasses }, selectText),
+            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "select-icon", role: "presentation" },
+                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "select-icon-inner" })),
+            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("button", { type: "button", onFocus: this.onFocus, onBlur: this.onBlur, disabled: this.disabled, ref: (el => this.buttonEl = el) })
+        ];
+    }
+    static get is() { return "ion-select"; }
+    static get encapsulation() { return "shadow"; }
+    static get properties() { return {
+        "actionSheetCtrl": {
+            "connect": "ion-action-sheet-controller"
+        },
+        "alertCtrl": {
+            "connect": "ion-alert-controller"
+        },
+        "cancelText": {
+            "type": String,
+            "attr": "cancel-text"
+        },
+        "compareWith": {
+            "type": String,
+            "attr": "compare-with"
+        },
+        "disabled": {
+            "type": Boolean,
+            "attr": "disabled",
+            "watchCallbacks": ["disabledChanged"]
+        },
+        "el": {
+            "elementRef": true
+        },
+        "interface": {
+            "type": String,
+            "attr": "interface"
+        },
+        "interfaceOptions": {
+            "type": "Any",
+            "attr": "interface-options"
+        },
+        "isExpanded": {
+            "state": true
+        },
+        "mode": {
+            "type": String,
+            "attr": "mode"
+        },
+        "multiple": {
+            "type": Boolean,
+            "attr": "multiple"
+        },
+        "name": {
+            "type": String,
+            "attr": "name"
+        },
+        "okText": {
+            "type": String,
+            "attr": "ok-text"
+        },
+        "open": {
+            "method": true
+        },
+        "placeholder": {
+            "type": String,
+            "attr": "placeholder"
+        },
+        "popoverCtrl": {
+            "connect": "ion-popover-controller"
+        },
+        "selectedText": {
+            "type": String,
+            "attr": "selected-text"
+        },
+        "value": {
+            "type": "Any",
+            "attr": "value",
+            "mutable": true,
+            "watchCallbacks": ["valueChanged"]
+        }
     }; }
-    static get style() { return ":host{-webkit-box-sizing:content-box!important;box-sizing:content-box!important;display:inline-block;outline:none;contain:content;cursor:pointer;-ms-touch-action:none;touch-action:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:2}:host(.ion-focused) input{border:2px solid #5e9ed6}:host(.toggle-disabled){pointer-events:none}button{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;outline:none}:host-context([dir=rtl]) button,[dir=rtl] button{left:unset;right:unset;right:0}button::-moz-focus-inner{border:0}:host{--background:rgba(var(--ion-text-color-rgb,0,0,0),0.088);--background-checked:var(--ion-color-primary,#3880ff);--handle-background:#fff;--handle-background-checked:#fff;-webkit-box-sizing:content-box;box-sizing:content-box;position:relative;width:51px;height:32px;contain:strict}:host(.ion-color.toggle-checked) .toggle-icon{background:var(--ion-color-base)}.toggle-icon{border-radius:16px;display:block;position:relative;width:100%;height:100%;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-transition:background-color .3s;transition:background-color .3s;background:var(--background);overflow:hidden;pointer-events:none}.toggle-inner{left:2px;top:2px;border-radius:14px;position:absolute;width:28px;height:28px;-webkit-transition:width .12s ease-in-out 80ms,left .11s ease-in-out 80ms,right .11s ease-in-out 80ms,-webkit-transform .3s;transition:width .12s ease-in-out 80ms,left .11s ease-in-out 80ms,right .11s ease-in-out 80ms,-webkit-transform .3s;transition:transform .3s,width .12s ease-in-out 80ms,left .11s ease-in-out 80ms,right .11s ease-in-out 80ms;transition:transform .3s,width .12s ease-in-out 80ms,left .11s ease-in-out 80ms,right .11s ease-in-out 80ms,-webkit-transform .3s;background:var(--handle-background);-webkit-box-shadow:0 3px 12px rgba(0,0,0,.16),0 3px 1px rgba(0,0,0,.1);box-shadow:0 3px 12px rgba(0,0,0,.16),0 3px 1px rgba(0,0,0,.1);will-change:transform;contain:strict}:host-context([dir=rtl]) .toggle-inner,[dir=rtl] .toggle-inner{left:unset;right:unset;right:2px}:host(.toggle-checked) .toggle-icon{background:var(--background-checked)}:host(.toggle-activated) .toggle-icon:before,:host(.toggle-checked) .toggle-icon:before{-webkit-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}:host(.toggle-checked) .toggle-inner{-webkit-transform:translate3d(19px,0,0);transform:translate3d(19px,0,0);background:var(--handle-background-checked)}:host-context([dir=rtl]).toggle-checked .toggle-inner,:host-context([dir=rtl]):host(.toggle-checked) .toggle-inner{-webkit-transform:translate3d(calc(-1 * 19px),0,0);transform:translate3d(calc(-1 * 19px),0,0)}:host(.toggle-activated.toggle-checked) .toggle-inner:before{-webkit-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}:host(.toggle-activated) .toggle-inner{width:34px}:host(.toggle-activated.toggle-checked) .toggle-inner{left:-4px}:host-context([dir=rtl]).toggle-activated.toggle-checked .toggle-inner,:host-context([dir=rtl]):host(.toggle-activated.toggle-checked) .toggle-inner{left:unset;right:unset;right:-4px}:host(.toggle-disabled){opacity:.3}:host(.in-item[slot]){margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:16px;padding-right:8px;padding-top:6px;padding-bottom:5px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){:host(.in-item[slot]){padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:8px;padding-inline-end:8px}}:host(.in-item[slot=start]){padding-left:0;padding-right:16px;padding-top:6px;padding-bottom:5px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){:host(.in-item[slot=start]){padding-left:unset;padding-right:unset;-webkit-padding-start:0;padding-inline-start:0;-webkit-padding-end:16px;padding-inline-end:16px}}"; }
-};
-const shouldToggle = (doc, checked, deltaX, margin) => {
-    const isRTL = doc.dir === 'rtl';
-    if (checked) {
-        return (!isRTL && (margin > deltaX)) ||
-            (isRTL && (-margin < deltaX));
+    static get events() { return [{
+            "name": "ionChange",
+            "method": "ionChange",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }, {
+            "name": "ionCancel",
+            "method": "ionCancel",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }, {
+            "name": "ionFocus",
+            "method": "ionFocus",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }, {
+            "name": "ionBlur",
+            "method": "ionBlur",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }, {
+            "name": "ionStyle",
+            "method": "ionStyle",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }]; }
+    static get listeners() { return [{
+            "name": "ionSelectOptionDidLoad",
+            "method": "selectOptionChanged"
+        }, {
+            "name": "ionSelectOptionDidUnload",
+            "method": "selectOptionChanged"
+        }, {
+            "name": "click",
+            "method": "onClick"
+        }]; }
+    static get style() { return ":host{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:-ms-flexbox;display:flex;position:relative;font-family:var(--ion-font-family,inherit);overflow:hidden;z-index:2}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){:host{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}:host(.in-item){position:static;max-width:45%}:host(.select-disabled){opacity:.4;pointer-events:none}:host(.ion-focused) button{border:2px solid #5e9ed6}.select-placeholder{color:currentColor;opacity:.33}button{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;outline:none}:host-context([dir=rtl]) button{right:0}button::-moz-focus-inner{border:0}.select-icon{position:relative}.select-text{-ms-flex:1;flex:1;min-width:16px;font-size:inherit;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.select-icon-inner{left:5px;top:50%;margin-top:-3px;position:absolute;width:0;height:0;border-top:5px solid;border-right:5px solid transparent;border-left:5px solid transparent;color:currentColor;opacity:.33;pointer-events:none}:host-context([dir=rtl]) .select-icon-inner{right:5px}:host{--padding-top:10px;--padding-end:0;--padding-bottom:11px;--padding-start:16px}.select-icon{width:19px;height:19px}"; }
+    static get styleMode() { return "md"; }
+}
+function parseValue(value) {
+    if (value == null) {
+        return undefined;
+    }
+    if (Array.isArray(value)) {
+        return value.join(',');
+    }
+    return value.toString();
+}
+function isOptionSelected(currentValue, compareValue, compareWith) {
+    if (currentValue === undefined) {
+        return false;
+    }
+    if (Array.isArray(currentValue)) {
+        return currentValue.some(val => compareOptions(val, compareValue, compareWith));
     }
     else {
-        return (!isRTL && (-margin < deltaX)) ||
-            (isRTL && (margin > deltaX));
+        return compareOptions(currentValue, compareValue, compareWith);
     }
-};
-let toggleIds = 0;
+}
+function compareOptions(currentValue, compareValue, compareWith) {
+    if (typeof compareWith === 'function') {
+        return compareWith(currentValue, compareValue);
+    }
+    else if (typeof compareWith === 'string') {
+        return currentValue[compareWith] === compareValue[compareWith];
+    }
+    else {
+        return currentValue === compareValue;
+    }
+}
+function generateText(opts, value, compareWith) {
+    if (value === undefined) {
+        return '';
+    }
+    if (Array.isArray(value)) {
+        return value
+            .map(v => textForValue(opts, v, compareWith))
+            .filter(opt => opt !== null)
+            .join(', ');
+    }
+    else {
+        return textForValue(opts, value, compareWith) || '';
+    }
+}
+function textForValue(opts, value, compareWith) {
+    const selectOpt = opts.find(opt => {
+        return compareOptions(opt.value, value, compareWith);
+    });
+    return selectOpt
+        ? selectOpt.textContent
+        : null;
+}
+let selectIds = 0;
+
+class SelectOption {
+    constructor() {
+        this.inputId = `ion-selopt-${selectOptionIds++}`;
+        this.disabled = false;
+        this.selected = false;
+    }
+    componentWillLoad() {
+        if (this.value === undefined) {
+            this.value = this.el.textContent || '';
+        }
+    }
+    componentDidLoad() {
+        this.ionSelectOptionDidLoad.emit();
+    }
+    componentDidUnload() {
+        this.ionSelectOptionDidUnload.emit();
+    }
+    hostData() {
+        return {
+            'role': 'option',
+            'id': this.inputId,
+            class: {
+                [`${this.mode}`]: true,
+            }
+        };
+    }
+    static get is() { return "ion-select-option"; }
+    static get encapsulation() { return "shadow"; }
+    static get properties() { return {
+        "disabled": {
+            "type": Boolean,
+            "attr": "disabled"
+        },
+        "el": {
+            "elementRef": true
+        },
+        "selected": {
+            "type": Boolean,
+            "attr": "selected"
+        },
+        "value": {
+            "type": "Any",
+            "attr": "value",
+            "mutable": true
+        }
+    }; }
+    static get events() { return [{
+            "name": "ionSelectOptionDidLoad",
+            "method": "ionSelectOptionDidLoad",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }, {
+            "name": "ionSelectOptionDidUnload",
+            "method": "ionSelectOptionDidUnload",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true
+        }]; }
+    static get style() { return ":host{display:none}"; }
+}
+let selectOptionIds = 0;
+
+class SelectPopover {
+    constructor() {
+        this.options = [];
+    }
+    onSelect(ev) {
+        const option = this.options.find(o => o.value === ev.target.value);
+        if (option && option.handler) {
+            option.handler();
+        }
+    }
+    hostData() {
+        return {
+            class: {
+                [`${this.mode}`]: true,
+            }
+        };
+    }
+    render() {
+        return (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-list", null,
+            this.header !== undefined && Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-list-header", null, this.header),
+            (this.subHeader !== undefined || this.message !== undefined) &&
+                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-item", null,
+                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-label", { "text-wrap": true },
+                        this.subHeader !== undefined && Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("h3", null, this.subHeader),
+                        this.message !== undefined && Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("p", null, this.message))),
+            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-radio-group", null, this.options.map(option => Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-item", null,
+                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-label", null, option.text),
+                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-radio", { checked: option.checked, value: option.value, disabled: option.disabled }))))));
+    }
+    static get is() { return "ion-select-popover"; }
+    static get encapsulation() { return "scoped"; }
+    static get properties() { return {
+        "header": {
+            "type": String,
+            "attr": "header"
+        },
+        "message": {
+            "type": String,
+            "attr": "message"
+        },
+        "options": {
+            "type": "Any",
+            "attr": "options"
+        },
+        "subHeader": {
+            "type": String,
+            "attr": "sub-header"
+        }
+    }; }
+    static get listeners() { return [{
+            "name": "ionSelect",
+            "method": "onSelect"
+        }]; }
+    static get style() { return ".sc-ion-select-popover-h   ion-list.sc-ion-select-popover{margin-left:0;margin-right:0;margin-top:-1px;margin-bottom:-1px}.sc-ion-select-popover-h   ion-label.sc-ion-select-popover, .sc-ion-select-popover-h   ion-list-header.sc-ion-select-popover{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0}"; }
+}
 
 
 

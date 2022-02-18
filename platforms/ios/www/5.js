@@ -1,39 +1,59 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/status-tap-32c72c43.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/status-tap-32c72c43.js ***!
-  \******************************************************************/
-/*! exports provided: startStatusTap */
+/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-ca529fbc.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/chunk-ca529fbc.js ***!
+  \**************************************************************************/
+/*! exports provided: createSwipeBackGesture */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startStatusTap", function() { return startStatusTap; });
-/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
-/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSwipeBackGesture", function() { return createSwipeBackGesture; });
+/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
+/* harmony import */ var _chunk_f56eaea8_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-f56eaea8.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-f56eaea8.js");
 
 
 
-const startStatusTap = () => {
-    const win = window;
-    win.addEventListener('statusTap', () => {
-        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["f"])(() => {
-            const width = win.innerWidth;
-            const height = win.innerHeight;
-            const el = document.elementFromPoint(width / 2, height / 2);
-            if (!el) {
-                return;
-            }
-            const contentEl = el.closest('ion-content');
-            if (contentEl) {
-                contentEl.componentOnReady().then(() => {
-                    Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["w"])(() => contentEl.scrollToTop(300));
-                });
-            }
-        });
+
+function createSwipeBackGesture(el, queue, canStartHandler, onStartHandler, onMoveHandler, onEndHandler) {
+    const win = el.ownerDocument.defaultView;
+    function canStart(detail) {
+        return detail.startX <= 50 && canStartHandler();
+    }
+    function onMove(detail) {
+        const delta = detail.deltaX;
+        const stepValue = delta / win.innerWidth;
+        onMoveHandler(stepValue);
+    }
+    function onEnd(detail) {
+        const delta = detail.deltaX;
+        const width = win.innerWidth;
+        const stepValue = delta / width;
+        const velocity = detail.velocityX;
+        const z = width / 2.0;
+        const shouldComplete = velocity >= 0 && (velocity > 0.2 || detail.deltaX > z);
+        const missing = shouldComplete ? 1 - stepValue : stepValue;
+        const missingDistance = missing * width;
+        let realDur = 0;
+        if (missingDistance > 5) {
+            const dur = missingDistance / Math.abs(velocity);
+            realDur = Math.min(dur, 300);
+        }
+        onEndHandler(shouldComplete, stepValue, realDur);
+    }
+    return Object(_chunk_f56eaea8_js__WEBPACK_IMPORTED_MODULE_1__["createGesture"])({
+        el,
+        queue,
+        gestureName: 'goback-swipe',
+        gesturePriority: 40,
+        threshold: 10,
+        canStart,
+        onStart: onStartHandler,
+        onMove,
+        onEnd
     });
-};
+}
 
 
 

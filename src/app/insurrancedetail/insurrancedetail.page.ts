@@ -832,7 +832,8 @@ export class InsurrancedetailPage implements OnInit {
       doneLabel: '',
       monthFormat: 'MM / YYYY',
       defaultScrollTo: fromdate,
-      defaultDate: fromdate
+      defaultDate: fromdate,
+      weekStart: 1,
     };
 
     this.myCalendar = await this.modalCtrl.create({
