@@ -138,7 +138,8 @@ export class FlightchangeinfoPage implements OnInit {
         }
 
         close(){
-            this.modalCtrl.dismiss();
+          this.search();
+            //this.modalCtrl.dismiss();
         }
 
         search(){
@@ -1014,7 +1015,8 @@ export class FlightchangeinfoPage implements OnInit {
     }
 
     closecalendar(){
-      this.modalCtrl.dismiss();
+      this.search();
+      //this.modalCtrl.dismiss();
       
     }
 

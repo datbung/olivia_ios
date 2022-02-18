@@ -796,7 +796,7 @@
                                     <ion-label class="cls-textconfirm">Xác nhận trong 60’</ion-label>
                                   </ion-col>
                                 </ion-row>
-                                <ion-row *ngIf="mealtype.Status=='AL' && (loginuser || mealtype.IsshowpricesOTA)" class="text-room-description">
+                                <ion-row *ngIf="mealtype.Status=='AL' && (loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG" class="text-room-description">
                                   <ion-col style="padding:0">
                                    
                                     <ion-label class="cls-textconfirm"> <span><img class="img-flash" src="./assets/imgs/flash_confirm.svg">
@@ -850,7 +850,7 @@
                               </span>
                               <span style="font-size:22px;font-weight: bold">Đăng nhập</span> để xem giá phòng</div>
                           </ion-row>
-                          
+
                           <div  [ngClass]="(mealtype.displayMealType && (itemindex==0 && gidx==0)) ? '' : 'div-border-bottom'"></div>
                          
                          

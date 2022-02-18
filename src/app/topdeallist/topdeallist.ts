@@ -209,8 +209,12 @@ export class TopDealListPage implements OnInit {
         error.param = JSON.stringify(options);
         C.writeErrorLog(error,response);
       };
-      se.slideData = JSON.parse(body);
-      se.storage.set('listtopdealdefault', se.slideData);
+      let data = JSON.parse(body);
+      if(data && data.length >0){
+        se.slideData = data;
+        se.storage.set('listtopdealdefault', se.slideData);
+      }
+      
       se.loadHotelDeal();
         if(se.myloader){
           se.myloader.dismiss();
