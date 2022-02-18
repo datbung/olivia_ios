@@ -2586,7 +2586,7 @@ export class FlightComboReviewsPage implements OnInit{
     se.activityService.objFlightComboUpgrade.roomPriceSale = se.roomPriceSale;
     se.activityService.objFlightComboUpgrade.address = se.Address;
     se.valueGlobal.backValue = "flightcomboupgraderoom";
-    se.navCtrl.navigateForward('/flightcomboupgraderoom');
+    se.navCtrl.navigateForward('/flightcomboupgraderoom/0');
     // const modal: HTMLIonModalElement =
     //   await this.modalCtrl.create({
     //     component: FlightcomboupgraderoomPage

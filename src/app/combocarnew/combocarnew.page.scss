@@ -560,3 +560,26 @@
     margin-inline-start: 0px;
     margin-inline-end: 0px;
   }
+  .text-width-190{
+    width: 190px;
+  }
+.text-p
+{
+  font-size: 14px;
+  color: #4f4f4f;
+  letter-spacing: -0.4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+.margin-right-5{
+    margin-right: 5px;
+  }
+  .line-blue{
+    color: #26bed6;
+    right: 16px;
+    position: absolute;
+  }
+  .div-flex{
+    display: flex;
+  }

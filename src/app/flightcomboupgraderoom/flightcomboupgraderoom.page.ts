@@ -4,7 +4,7 @@ import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { Storage } from '@ionic/storage';
 import { ValueGlobal, Bookcombo } from '../providers/book-service';
 import { HotelRoomDetailPage } from '../hotelroomdetail/hotelroomdetail';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-flightcomboupgraderoom',
   templateUrl: './flightcomboupgraderoom.page.html',
@@ -19,13 +19,14 @@ export class FlightcomboupgraderoomPage implements OnInit {
   roomPriceSale: any;
   loginuser: any;
   hotelRoomClassestemp: any = [];
+  stt: string;
   constructor(private modalCtrl: ModalController, 
     public activityService: ActivityService, 
     private storage: Storage,
     public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     public gf: GlobalFunction,
-    public bookCombo: Bookcombo) { 
+    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute) { 
     var se = this;
     se.storage.get('username').then(name => {
       if (name !== null) {
@@ -76,18 +77,29 @@ export class FlightcomboupgraderoomPage implements OnInit {
   }
 
   ngOnInit() {
+    this.stt = this.activatedRoute.snapshot.paramMap.get('stt');
   }
 
   close(){
     //this.modalCtrl.dismiss();
-    this.navCtrl.navigateBack('/flightcomboreviews');
+    if(this.stt=='0'){
+      this.navCtrl.navigateBack('/flightcomboreviews');
+    }
+    else{
+      this.navCtrl.navigateBack('/combocarnew');
+    }
   }
 
   upgradeRoom(itemroom, itemmealtype,index){
     var se = this;
     se.bookCombo.upgradeRoomChange.emit({itemroom: itemroom, itemmealtype: itemmealtype,index});
-    se.navCtrl.navigateBack('/flightcomboreviews');
-    
+    // se.navCtrl.navigateBack('/flightcomboreviews');
+    if(this.stt=='0'){
+      this.navCtrl.navigateBack('/flightcomboreviews');
+    }
+    else{
+      this.navCtrl.navigateBack('/combocarnew');
+    }
     //se.modalCtrl.dismiss({itemroom: itemroom, itemmealtype: itemmealtype,index});
   }
   /*** Về trang login

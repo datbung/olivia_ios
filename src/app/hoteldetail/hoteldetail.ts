@@ -200,6 +200,8 @@ export class HotelDetailPage implements OnInit {
   comboDetailEndDate: any;
   ischeckwarn: boolean = false;
   loaddonecombo=false;
+
+  arrsuggest=[]
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -215,7 +217,7 @@ export class HotelDetailPage implements OnInit {
     ) {
       this.loaddata();
       this.valueGlobal.notRefreshDetail = false;
-      //this.getHotelSuggestDaily();
+      this.getHotelSuggestDaily();
       // imgLoaderConfigService.enableSpinner(true);
       // imgLoaderConfigService.setConcurrency(10);
       this.platform.resume.subscribe(async()=>{
@@ -243,7 +245,41 @@ export class HotelDetailPage implements OnInit {
       }
       if (response.statusCode == 200) {
         var res = JSON.parse(body);
-        se.valueGlobal.dayhot=res.data.daily;
+        se.valueGlobal.dayhot=res.data.promotionIsHot; 
+        se.valueGlobal.daily=res.data.daily;
+        se.valueGlobal.arrsuggest=[];
+        const json1 = new Map([
+          [1, '31/1/2022'],
+          [2, '28/2/2022'],
+          [3, '31/3/2022'],
+          [4,'30/4/2022'],
+          [5,'31/5/2022'],
+          [6,"30/6/2022"],
+          [7,"31/7/2022"],
+          [8,"31/8/2022"],
+          [9,"30/9/2022"],
+          [10,"31/10/2022"],
+          [11,"30/11/2022"],
+          [12,"31/12/2022"],
+        ])
+        
+        
+        let daystart = parseInt( moment(se.valueGlobal.daily[0]).format('DD')) ;
+        let mstart = parseInt( moment(se.valueGlobal.daily[0]).format('MM')) ;
+        let mend =  parseInt(moment(se.valueGlobal.daily.slice(-1)[0]).format('MM')) ;
+        for(let i = mstart; i<=mend; i++){
+          if(i == mstart){
+            se.valueGlobal.arrsuggest.push(daystart+" - "+json1.get(i))
+          }
+          else if(i == mend){
+            se.valueGlobal.arrsuggest.push('01 - '+moment(se.valueGlobal.daily.slice(-1)[0]).format('DD/MM/YYYY'))
+          }
+          else{
+            se.valueGlobal.arrsuggest.push('01 - '+json1.get(i))
+          }
+        }
+        // console.log(arr) 
+       
       }
     })
   }
@@ -1290,7 +1326,7 @@ export class HotelDetailPage implements OnInit {
         options = {
           method: 'POST',
           url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
-          timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+          timeout: 180000, maxAttempts: 3, retryDelay: 100000,
           async: true,
           headers:
             {},
@@ -1813,7 +1849,7 @@ async getdataroom() {
     options = {
       method: 'POST',
       url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
-      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      timeout: 10000, maxAttempts: 3, retryDelay: 10000,
       headers:
         {},
       form
@@ -3244,18 +3280,18 @@ async bookcombo() {
       this.myCalendar.present().then(()=>{
         se.allowclickcalendar = true;
         $('.days-btn').click(e => this.clickedElement(e));
-         //Custom ngày lễ
-      // let divmonth = $('.month-box');
-      // if(divmonth && divmonth.length >0){
-      //   for (let index = 0; index < divmonth.length; index++) {
-      //      const em = divmonth[index];
-      //     //   let divsmall = $('#'+em.id+' dayhot');
-      //     //   if(divsmall && divsmall.length >0){
-      //         $('#'+em.id).append("<div class='div-month-text-small'></div>")
-      //         $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
-      //       // }
-      //   }
-      // }
+        
+      let divmonth = $('.month-box');
+      if(divmonth && divmonth.length >0){
+        for (let index = 0; index < divmonth.length; index++) {
+           const em = divmonth[index];
+          //   let divsmall = $('#'+em.id+' dayhot');
+          //   if(divsmall && divsmall.length >0){
+              $('#'+em.id).append("<div class='div-month-text-small'></div>")
+              $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+            // }
+        }
+      }
       });
       let se = this;
       const event: any = await this.myCalendar.onDidDismiss();

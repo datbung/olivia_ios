@@ -176,7 +176,7 @@ export class MytripBookingDetailPage implements OnInit{
     options = {
       method: 'POST',
       url:  C.urls.baseUrl.urlContracting +'/api/contracting/HotelSearchReqContractAppV2',
-      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      timeout: 10000, maxAttempts: 3, retryDelay: 10000,
       headers:
         {},
       form

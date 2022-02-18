@@ -384,11 +384,17 @@
         </ion-col>
       </ion-row>
     </div>
-    <ion-row *ngIf="!PriceAvgPlusTAStr&&loadpricedone">
+    <!-- <ion-row *ngIf="!PriceAvgPlusTAStr&&loadpricedone">
         <ion-col style="padding:5px 0">
           <label class="text-note">Hiện tại không có phòng thoả điều kiện của quý khách, xin vui lòng gửi yêu cầu bên dưới để được nhân viên tư vấn chi tiết!</label>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
+      <div *ngIf="!PriceAvgPlusTAStr&&loadpricedone">
+        <div class="row-suggest">
+         <div ><span class="text-suggest color-red">Giai đoạn hết phòng.</span> <span (click)="changeDateInfo()" class="text-suggest color-blue"> Quý khách vui lòng chọn ngày khác</span></div> 
+         <div class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.arrsuggest}}</span> </div>  
+        </div>
+      </div>
 </ion-content>
 <ion-footer >
   <div style="background-color: #ffffff; text-align: center">

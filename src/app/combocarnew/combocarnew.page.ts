@@ -123,6 +123,10 @@ export class CombocarnewPage implements OnInit {
   allowclickcalendar: boolean = true;
   totalPriceDep: number=0;
   totalPriceRet: number=0;
+  index: any;
+  RoomType: any;
+  roomclass: any;
+
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -348,6 +352,11 @@ export class CombocarnewPage implements OnInit {
         });
       }
     }, 60000 * 15);
+    this.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{
+      if(dataRoomChange){
+          this.updateRoomChange(dataRoomChange);
+      }
+  })
   }
   getHotelContractPrice(data) {
     var se = this;
@@ -361,7 +370,7 @@ export class CombocarnewPage implements OnInit {
       var options = {
         method: 'POST',
         url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
-        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+        timeout: 10000, maxAttempts: 3, retryDelay: 10000,
         headers:
           {},
         form
@@ -389,6 +398,7 @@ export class CombocarnewPage implements OnInit {
 
           if (result.Hotels) {
             se.jsonroom = result.Hotels[0].RoomClasses;
+            se.calculateDiffPriceUnit();
             var element = se.checkElement(se.jsonroom);
             if (element) {
               se.nameroom = element.ClassName;
@@ -2185,4 +2195,111 @@ export class CombocarnewPage implements OnInit {
       }
     });
   }
+  async upgradeRoom(){
+    var se = this;
+    se.activityService.objFlightComboUpgrade = {};
+    se.activityService.objFlightComboUpgrade.Rooms = se.jsonroom;
+    se.activityService.objFlightComboUpgrade.CurrentRoom = se.elementMealtype;
+    se.activityService.objFlightComboUpgrade.roomPriceSale = se.roomPriceSale;
+    se.activityService.objFlightComboUpgrade.address = se.Address;
+    se.valueGlobal.backValue = "flightcomboupgraderoom";
+    se.navCtrl.navigateForward('/flightcomboupgraderoom/1');
+  }
+  calculateDiffPriceUnit() {
+    var se = this;
+
+    if(se.jsonroom && se.jsonroom.length >0){
+
+      se.jsonroom.forEach(room => {
+        room.MealTypeRates.forEach(element => {
+          //AdultOtherFee
+          let adultOtherFee = 0;
+          element.ExtraBedAndGalaDinerList.forEach(e => {
+            if (e.ChargeOn == 'Per Adult' && e.Code != 'EXBA') {
+              adultOtherFee += e.PriceOTA;
+            }
+          });
+          //ChildOtherFee
+          let childOtherFee = 0;
+          element.ExtraBedAndGalaDinerList.forEach(e => {
+            if (e.ChargeOn == 'Per Child' && e.Code != 'CWE' && e.Code != 'EXBC') {
+              childOtherFee += e.PriceOTA;
+            }
+          });
+          //ChildOtherFeeTotal
+          let childOtherFeeTotal = 0;
+          element.ExtraBedAndGalaDinerList.forEach(e => {
+            if (e.ChargeOn == 'Per Child' && e.Code != 'CWE' && e.Code != 'EXBC') {
+              childOtherFeeTotal += e.PriceOTA * e.Quantity.value;
+            }
+          });
+          let adultCombo = room.Rooms[0].IncludeAdults * element.TotalRoom;
+          adultCombo = adultCombo > se.totalAdult ? se.totalAdult : adultCombo;
+
+          adultOtherFee = adultOtherFee * (room.Rooms[0].IncludeAdults * se.roomnumber) / adultCombo;
+          element.PriceDiffUnit = adultOtherFee + ((element.PriceAvgDefaultTA * se.roomnumber) * se.TotalNight / adultCombo) - se.roomPriceSale;
+          element.PriceDiffUnit = Math.round(element.PriceDiffUnit);
+        });
+      });
+      
+      //se.ComboPriceDiff.RoomDiff.Total = se.elementMealtype.PriceAvgPlusTotalTA - (se.roomPriceSale * se.AdultCombo) //- totalExtraBedAndGalaDinerListTA;
+      //se.ComboPriceDiff.RoomDiff.AdultUnit = se.PriceDiffUnit;
+
+      }
+    
+  }
+  updateRoomChange(data){
+    var se = this;
+    if (data) {
+          se.zone.run(() => {
+            let itemroom = data.itemroom;
+            let itemmealtype = data.itemmealtype;
+            se.index=data.index;
+            se.RoomType=itemroom.RoomType;
+            if(itemmealtype.Name != null && itemmealtype.Notes.length==0){
+              se.breakfast = itemmealtype.Name;
+            }
+            else if(itemmealtype.Name != null && itemmealtype.Notes.length!=0 && itemmealtype.Notes[0].length == itemmealtype.Name.length)
+            {
+              se.breakfast = itemmealtype.Notes.join(', ')
+              itemmealtype.Name = itemmealtype.Notes.join(', ');
+            }
+            else if(itemmealtype.Name != null && itemmealtype.Notes.length!=0 && itemmealtype.Notes[0].length != itemmealtype.Name.length)
+            {
+              se.breakfast = itemmealtype.Name  +", " +itemmealtype.Notes.join(', ');
+              itemmealtype.Name = itemmealtype.Name  +", " +itemmealtype.Notes.join(', ');
+            }
+            se.elementMealtype = itemmealtype;
+            se.bookCombo.MealTypeName=se.breakfast 
+            //se.breakfast = itemmealtype.Name;
+            se.Roomif.arrroom = [];
+            se.Roomif.arrroom.push(itemroom);
+            if(itemroom && itemmealtype){
+              se.callSummaryPriceAfterUpgradeRoom(itemroom, itemmealtype)
+            }
+          })
+        }
+  }
+  callSummaryPriceAfterUpgradeRoom(itemroom, itemmealtype) {
+    var se = this;
+    if (itemroom && !itemroom.MSGCode) {
+      // Giá nhà cung cấp
+      se.TravPaxPrices = itemmealtype.PriceAvgPlusNet * se.roomnumber * se.TotalNight;
+
+      se.roomclass = itemroom;
+      se.nameroom = itemroom.ClassName;
+      se.elementMealtype = itemmealtype;
+
+      se.AdultCombo = itemroom.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
+      se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
+
+      se.totalAdultExtrabed = se.totalAdult - se.AdultCombo;
+      se.total = se.total - se.PriceAvgPlusTA;
+      se.PriceAvgPlusTA = itemroom.MealTypeRates[0].PriceAvgPlusTotalTA;
+      se.total= se.total + se.PriceAvgPlusTA;
+      se.PriceAvgPlusTAStr = se.total;
+      se.PriceAvgPlusTAStr = se.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    }
+  }
+  
 }

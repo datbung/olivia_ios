@@ -269,8 +269,16 @@
         lớn |
         {{childrendisplay}} trẻ em {{textage}}
       </div>
-      <div class="text-regular p-top-15">
+      <!-- <div class="text-regular p-top-15">
         <img class="image-card" *ngIf="breakfast" src="./assets/ic_facility/ic_food_b.svg"> {{breakfast}}
+      </div> -->
+      <div class="div-flex">
+        <p class="text-p text-width-190" text-wrap>
+          <img src="./assets/ic_facility/ic_food_b.svg"> {{breakfast}}
+        </p>
+        <p *ngIf="PriceAvgPlusTAStr" class="text-p line-blue">
+          <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
+        </p>
       </div>
       <hr class="cls-hr">
     </div>

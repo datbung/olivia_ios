@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, Platform, ModalController, ToastController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { ComboPrice} from '../providers/comboPrice';
-import { Bookcombo, SearchHotel } from '../providers/book-service';
+import { Bookcombo, SearchHotel,ValueGlobal } from '../providers/book-service';
 import { C } from './../providers/constants';
 import { GlobalFunction } from './../providers/globalfunction';
 import * as moment from 'moment';
@@ -31,7 +31,7 @@ export class DepartureCalendarPage {
   public enddate; arrBOD;ischeckBOD
   constructor(public platform: Platform, public navCtrl: NavController, public comboPrice: ComboPrice, public modalCtrl: ModalController,
     public bookCombo: Bookcombo, public searchhotel: SearchHotel, private activatedRoute: ActivatedRoute, public zone: NgZone,
-    private gf: GlobalFunction, public toastCtrl: ToastController) {
+    private gf: GlobalFunction, public toastCtrl: ToastController,public valueGlobal:ValueGlobal) {
     //Xử lý nút back của dt
     platform.ready().then(() => {
       this.platform.backButton.subscribe(() => {
@@ -187,7 +187,7 @@ export class DepartureCalendarPage {
     var firstDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
     var curmonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getMonth();
     var prevNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth(), 0).getDate();
-    for (var i = prevNumOfDays - (firstDayThisMonth - 2); i <= prevNumOfDays; i++) {
+    for (var i = prevNumOfDays - (firstDayThisMonth - 1); i <= prevNumOfDays; i++) {
       //var d = new Date(this.date.getFullYear(), (this.date.getMonth() === new Date().getMonth() ? curmonth : curmonth - 1), i);
       var d = new Date(this.date.getFullYear(), curmonth - 1, i);
       var obj = this.listPriceDate.filter((cp: ComboPrice) => new Date(cp.day).toDateString() == d.toDateString());
@@ -286,6 +286,17 @@ export class DepartureCalendarPage {
             }
           }
         }
+        for (let i = 0; i < this.daysInThisMonth.length; i++) {
+          var date = this.daysInThisMonth[i].addday
+          this.daysInThisMonth[i].dayhot = false;
+          for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
+            if (date == this.valueGlobal.dayhot[j]) {
+              this.daysInThisMonth[i].dayhot = true;
+              break;
+            }
+          }
+        }
+
       }
       if (this.daysInLastMonth && this.daysInLastMonth.length > 0) {
         for (let i = 0; i < this.daysInLastMonth.length; i++) {

@@ -1243,14 +1243,14 @@ body{
       color:  #e52822 !important;
     }
   }
-  // .dayhot
-  // {
+  .dayhot
+  {
     
-  //   background-image: url('../../assets/imgs/ic_fire.svg');
-  //   background-repeat: no-repeat;
-  //   background-position: 27px 0px;
-  //   width: 40px !important;
-  // }
+    background-image: url('../../assets/imgs/ic_fire.svg');
+    background-repeat: no-repeat;
+    background-position: 27px 0px;
+    border-radius: 0px !important;
+  }
   .days
   {
     margin-bottom: 20px !important;
@@ -1260,16 +1260,21 @@ body{
   {
     border-radius: 0 !important;
     border: 0 !important;
+    // width: 40px !important;
   }
 }
 .startSelection {
   .days-btn 
   {
+    border-radius: 40px !important;
     border: 0 !important;
     p{
       color: #fff !important;
     }
   }
+}
+.on-selected{
+  border-radius: 40px !important;
 }
 .endSelection {
   .days-btn
@@ -1277,6 +1282,7 @@ body{
     p{
       color: #fff !important;
     }
+    border-radius: 40px !important;
     border: 0 !important;
   }
 }

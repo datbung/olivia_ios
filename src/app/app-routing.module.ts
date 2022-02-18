@@ -160,7 +160,7 @@ const routes: Routes = [
   { path: 'flightpaymenttimeout/:stt', loadChildren: './flightpaymenttimeout/flightpaymenttimeout.module#FlightpaymenttimeoutPageModule' },
   { path: 'flightcomboaddluggage', loadChildren: './flightcomboaddluggage/flightcomboaddluggage.module#FlightcomboaddluggagePageModule' },
   { path: 'flightcomboinfoluggage', loadChildren: './flightcomboinfoluggage/flightcomboinfoluggage.module#FlightcomboinfoluggagePageModule' },
-  { path: 'flightcomboupgraderoom', loadChildren: './flightcomboupgraderoom/flightcomboupgraderoom.module#FlightcomboupgraderoomPageModule' },
+  { path: 'flightcomboupgraderoom/:stt', loadChildren: './flightcomboupgraderoom/flightcomboupgraderoom.module#FlightcomboupgraderoomPageModule' },
 
 
   { path: 'combocarpaymentpayoo/:code/:stt', loadChildren: './combocarpaymentpayoo/combocarpaymentpayoo.module#CombocarpaymentpayooPageModule' },
