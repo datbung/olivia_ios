@@ -201,6 +201,7 @@ const routes: Routes = [
   { path: 'userlinkprofile', loadChildren: './userlinkprofile/userlinkprofile.module#UserLinkProfilePageModule', },
   { path: 'userprivacypolicy', loadChildren: './userprivacypolicy/userprivacypolicy.module#UserPrivacyPolicyPageModule', },
   { path: 'usercondition', loadChildren: './usercondition/usercondition.module#UserConditionPageModule', },
+  { path: 'hotelupgraderoom', loadChildren: './hotelupgraderoom/hotelupgraderoom.module#HotelupgraderoomPageModule' },
 ];
 @NgModule({
   imports:

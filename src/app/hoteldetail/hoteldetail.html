@@ -333,9 +333,16 @@
                       class="text-price-unit">đ</span>
                   </ion-label>
                   </div>
-                  <div class="textroomCombo">
-                    {{roomCombo}}
-                    </div>
+                  <div class="div-flex">
+                    <div class="textroomCombo">
+                      {{roomCombo}}
+                      </div>
+                      <div class="margin-left-5" *ngIf="ischeckupgrade" >
+                            <img (click)="upgradeRoom()" src="https://res.ivivu.com/img/upgrade.svg" />
+                        </div>
+                  </div>
+                 
+                  
                 </ion-col>
                 <ion-col *ngIf="warningCombofsIP" size="7" style="color: #ff9500;">
                   <span>{{warningCombofsIP}}</span> 

@@ -202,6 +202,10 @@ export class HotelDetailPage implements OnInit {
   loaddonecombo=false;
 
   arrsuggest=[]
+  elementMealtype: any;
+  hotelupgrade: any;
+  ischeckupgrade: boolean;
+  ischeckUpgrade: any;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -617,6 +621,23 @@ export class HotelDetailPage implements OnInit {
       }else if(se.fc && !se.ischeckBOD && !se.checkBODdone && se.comboDetail && se.comboid){
         se.getDetailCombo(se.comboid);
       }
+      se.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{
+        if(dataRoomChange){
+            se.ischeckUpgrade=true;
+            se.updateRoomChange(dataRoomChange);
+        }
+    })
+  }
+  updateRoomChange(dataRoomChange) {
+    var se = this;
+    this.objroomfsale=[];
+    se.comboprice=dataRoomChange.itemroom.MealTypeRates[0].PriceAvgPlusTAStr;
+    se.roomCombo = dataRoomChange.itemroom.ClassName;
+    se.bookCombo.roomNb = dataRoomChange.itemroom.TotalRoom;
+    se.elementMealtype=dataRoomChange.itemroom.MealTypeRates[0];
+    this.objroomfsale.push(dataRoomChange.itemroom.MealTypeRates[0]);
+    this.arrroom = [];
+    this.arrroom.push(dataRoomChange.itemroom);
   }
 
   ionViewDidLoad() {
@@ -1509,6 +1530,7 @@ export class HotelDetailPage implements OnInit {
     var se = this;
     se.ischeckcbcarhide=false;
     se.loaddonecombo=false;
+    se.ischeckUpgrade=false;
     var optionscombo = {
       method: 'GET',
       url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/ComboDetailList?comboId=' + (comboid ? comboid : se.comboid) + '&checkin=' + moment(this.cin).format('DD-MM-YYYY') + '&checkout=' + moment(this.cout).format('DD-MM-YYYY'),
@@ -2212,7 +2234,7 @@ excuteLoadHotelRoom(data){
     se.ischeckcbfs=false;
     se.warningCombofs='';
     //se.loaddonecombo = false;
-    se.checkRoomDefaultFsale(se.comboDetail.comboDetail.roomId, se.ListRoomClasses).then((check) => {
+    se.checkRoomDefaultFsale(se.comboDetail.comboDetail.roomId,  se.ListRoomClasses).then((check) => {
       if (check) {
         if (se.objroomfsale[0].Status == 'AL') {
           se.ischeckcbfs = true;
@@ -2237,6 +2259,7 @@ excuteLoadHotelRoom(data){
                se.comboprice=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].PriceAvgPlusTAStr;
                 se.roomCombo = se.hotelRoomClasses[i].ClassName;
                 se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
+                se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]
                 // check status IP thi k show gia
                 if (se.hotelRoomClasses[i].Status == 'IP') {
                   setTimeout(()=>{
@@ -2271,6 +2294,7 @@ excuteLoadHotelRoom(data){
            se.comboprice=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].PriceAvgPlusTAStr;
            se.roomCombo=se.hotelRoomClasses[i].ClassName;
            se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
+           se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]
              // check status IP thi k show gia
           if(se.hotelRoomClasses[i].Status == 'IP'){
               setTimeout(()=>{
@@ -2289,7 +2313,19 @@ excuteLoadHotelRoom(data){
           },1000)
          
         }
-       
+     
+      }
+      se.hotelupgrade=[];
+      se.ischeckupgrade=false;;
+      for (let i = 0; i < se.hotelRoomClasses.length; i++) {
+        const element = se.hotelRoomClasses[i];
+        if (element.IsFlashSale) {
+          se.hotelupgrade.push(element);
+        }
+        
+      }
+      if (se.hotelupgrade.length>1) {
+        se.ischeckupgrade=true;
       }
       se.loadpricecombodone = true;
       //se.loaddonecombo=true;
@@ -2331,6 +2367,7 @@ excuteLoadHotelRoom(data){
           this.comboprice = this.objroomfsale[0].PriceAvgPlusTAStr;
           this.roomCombo = this.objroomfsale[0].RoomName;
           this.bookCombo.roomNb = this.objroomfsale[0].TotalRoom;
+          this.elementMealtype=this.objroomfsale[0];
         }
       
       }
@@ -3805,15 +3842,17 @@ async bookcombo() {
           this.roomvalue = MealTypeRates.TotalRoom;
       
           //this.roomvalue = this.room;
-      
-          this.arrroom = [];
-          for (let i = 0; i < self.hotelRoomClasses.length; i++) {
-            if (id == self.hotelRoomClasses[i].Rooms[0].RoomID) {
-              this.arrroom.push(self.hotelRoomClasses[i]);
-              this.indexroom = i;
-              break;
+          if (!self.ischeckUpgrade) {
+            this.arrroom = [];
+            for (let i = 0; i < self.hotelRoomClasses.length; i++) {
+              if (id == self.hotelRoomClasses[i].Rooms[0].RoomID) {
+                this.arrroom.push(self.hotelRoomClasses[i]);
+                this.indexroom = i;
+                break;
+              }
             }
           }
+         
           for (let i = 0; i < this.arrroom[0].MealTypeRates.length; i++) {
             var Meal=this.arrroom[0].MealTypeRates[i];
             if (Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL') && Meal.PromotionNote != '') {
@@ -3864,9 +3903,6 @@ async bookcombo() {
           self.bookCombo.ComboTitle = self.titlecombo;
           self.bookCombo.ComboId = self.comboid ? self.comboid:null;
           self.navCtrl.navigateForward('/roomdetailreview')
-        }
-        else if (value == 5 && !this.usermail) {
-
         }
       
   }
@@ -4552,5 +4588,14 @@ async bookcombo() {
     item.name=this.hotelname;
     item.isType=0;
     this.gf.setCacheSearch(item,1);
+  }
+  async upgradeRoom(){
+    var se = this;
+    se.activityService.objFlightComboUpgrade = {};
+    se.activityService.objFlightComboUpgrade.Rooms = se.hotelupgrade;
+    se.activityService.objFlightComboUpgrade.CurrentRoom = se.elementMealtype;
+    se.valueGlobal.backValue = "hotelupgraderoom";
+    se.valueGlobal.notRefreshDetail=true;
+    se.navCtrl.navigateForward('/hotelupgraderoom');
   }
 }
