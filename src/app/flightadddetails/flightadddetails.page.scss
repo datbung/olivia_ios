@@ -245,6 +245,12 @@
         border-bottom: solid 0.2px #cdcdcd;
         padding-top: 16px;margin-top: -16px;
     }
+
+    .text-sub{
+        font-size: 12px;
+        text-align: left;
+        color: #828282;
+    }
 }
 .cls-error{
     color: #e52822 !important;
@@ -457,3 +463,7 @@
     padding: 12px;
     text-align: center;
   }
+
+  .p-top-6{
+    padding-top: 6px;
+}

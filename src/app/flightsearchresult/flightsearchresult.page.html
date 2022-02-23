@@ -325,7 +325,8 @@
           </div>
           <div class="div-best-choice" *ngIf="(bestpricedepart && bestpricedepart.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == bestpricedepart.length-1 ? 'div-item-flight': (idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8') "  *ngFor="let item of bestpricedepart; let idx = index">
-                <div class="div-first d-flex"  >
+               <div *ngIf="item">
+                 <div class="div-first d-flex"  >
                   <div (click)="select(1,item)">
                       <div class="d-flex">
                         <div class="div-time">{{item.departTimeDisplay}}</div>
@@ -410,6 +411,27 @@
                   </div>
                 </div>
                 <div *ngIf="item.operatedBy" class="text-operatedBy">{{item.operatedBy}}</div>
+              </div> 
+              <div *ngIf="!item">
+                <div class='div-item-flight-other' style="height: 80px">
+                  <div class="div-first d-flex">
+                    <div >
+                      <ion-skeleton-text animated style="width: 150px;height: 22px;margin-bottom: 8px;border-radius: 16px;"></ion-skeleton-text>
+                        <div class="d-flex">
+                          <ion-skeleton-text animated style="width: 16px;height: 16px; border-radius: 16px;margin-right: 8px"></ion-skeleton-text>
+      
+                          <ion-skeleton-text animated style="width: 150px;height: 16px; border-radius: 16px;"></ion-skeleton-text>
+                        </div>
+                      </div>
+                  </div>
+      
+                  <div class="div-second d-flex p-top-8" style="margin-top: 0">
+                    <div class="div-button">
+                      <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -555,7 +577,8 @@
 
           <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listReturnFilter && listReturnFilter.length >0 && (count >=1 || stoprequest) ) else noreturnFilterEmpty">
             <div [ngClass]="idx == listReturnFilter.length-1 ? 'div-item-flight':'div-item-flight m-b-8'"  *ngFor="let item of listReturnFilter; let idx = index">
-                <div class="div-first d-flex"  >
+              <div *ngIf="item"> 
+              <div class="div-first d-flex"  >
                   <div (click)="select(2,item)">
                       <div class="d-flex">
                         <div class="div-time">{{item.departTimeDisplay}}</div>
@@ -640,7 +663,28 @@
                 </div>
 
                 <div *ngIf="item.operatedBy" class="text-operatedBy">{{item.operatedBy}}</div>
-              
+              </div>
+
+              <div *ngIf="!item">
+                <div class='div-item-flight-other' style="height: 80px">
+                  <div class="div-first d-flex">
+                    <div >
+                      <ion-skeleton-text animated style="width: 150px;height: 22px;margin-bottom: 8px;border-radius: 16px;"></ion-skeleton-text>
+                        <div class="d-flex">
+                          <ion-skeleton-text animated style="width: 16px;height: 16px; border-radius: 16px;margin-right: 8px"></ion-skeleton-text>
+      
+                          <ion-skeleton-text animated style="width: 150px;height: 16px; border-radius: 16px;"></ion-skeleton-text>
+                        </div>
+                      </div>
+                  </div>
+      
+                  <div class="div-second d-flex p-top-8" style="margin-top: 0">
+                    <div class="div-button">
+                      <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <ng-template #noreturnFilterEmpty> 
@@ -673,7 +717,8 @@
 
           <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listReturn && listReturn.length >0 && (count >=1 || stoprequest) ) else noreturnEmpty">
             <div [ngClass]="idx == listReturn.length-1 ? 'div-item-flight':'div-item-flight m-b-8'"  *ngFor="let item of listReturn; let idx = index">
-                <div class="div-first d-flex"  >
+              <div *ngIf="item">
+              <div class="div-first d-flex"  >
                   <div (click)="select(2,item)">
                       <div class="d-flex">
                         <div class="div-time">{{item.departTimeDisplay}}</div>
@@ -760,6 +805,28 @@
 
                 <div *ngIf="item.operatedBy" class="text-operatedBy">{{item.operatedBy}}</div>
               
+                </div>
+
+                <div *ngIf="!item">
+                  <div class='div-item-flight-other' style="height: 80px">
+                    <div class="div-first d-flex">
+                      <div >
+                        <ion-skeleton-text animated style="width: 150px;height: 22px;margin-bottom: 8px;border-radius: 16px;"></ion-skeleton-text>
+                          <div class="d-flex">
+                            <ion-skeleton-text animated style="width: 16px;height: 16px; border-radius: 16px;margin-right: 8px"></ion-skeleton-text>
+        
+                            <ion-skeleton-text animated style="width: 150px;height: 16px; border-radius: 16px;"></ion-skeleton-text>
+                          </div>
+                        </div>
+                    </div>
+        
+                    <div class="div-second d-flex p-top-8" style="margin-top: 0">
+                      <div class="div-button">
+                        <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <ng-template #noreturnEmpty> 
@@ -792,6 +859,7 @@
         </div>
         <div class="div-best-choice" *ngIf="(bestpricereturn && bestpricereturn.length >0 && (count >=1 || stoprequest) )">
           <div [ngClass]="idx == bestpricereturn.length-1 ? 'div-item-flight':(idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8')"  *ngFor="let item of bestpricereturn; let idx = index">
+            <div *ngIf="item">
               <div class="div-first d-flex"  >
                 <div (click)="select(2,item)">
                     <div class="d-flex">
@@ -834,48 +902,70 @@
                   <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                 </div>
                 
-              </div>
-    
-              <div [ngClass]="item.operatedBy ? 'div-second d-flex p-top-8 m-top-6' : 'div-second d-flex p-top-8' ">
-               
-                <div class="div-logo"  (click)="select(2,item)">
-                  <img class="img-logo logo-vj" *ngIf="item.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
-                  <img class="img-logo" *ngIf="item.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
-                  <img class="img-logo logo-vna" *ngIf="item.airlineCode == 'VietnamAirlines' && !item.operatedBy"src="./assets/ic_airticket/logo_vna.png">
-                  <img class="img-logo logo-vna" *ngIf="item.operatedBy && item.urlLogo" [src]="item.urlLogo">
-                  <img class="img-logo" *ngIf="item.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                 </div>
-    
-                <div class="flight-type p-l-8 d-flex"  (click)="select(2,item)">
-                    <div>{{item.ticketType}}</div>
-                </div>
-
-                <div class="icon-detail" *ngIf="item && item.ticketCondition && (!item.ticketCondition.luggageSigned || (item.addon && !item.addon.powerSupply)  || !item.addon) && (item.airlineCode == 'VietJetAir' || item.airlineCode == 'BambooAirways') ">
-                  <img class="img-detail" src="./assets/ic_flight/ic_lug_add.svg">
-                </div>
-                  <div class="icon-detail" *ngIf="item && item.ticketCondition && item.ticketCondition.luggageSigned">
-                    <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 20" src="./assets/ic_flight/case20.svg">
-                      <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 23" src="./assets/ic_flight/case23.svg">
-                      <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 30" src="./assets/ic_flight/case30.svg">
-                      <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 32" src="./assets/ic_flight/case32.svg">
-                      <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 15" src="./assets/ic_flight/case15.svg">
-                      <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 40" src="./assets/ic_flight/case40.svg">
+      
+                <div [ngClass]="item.operatedBy ? 'div-second d-flex p-top-8 m-top-6' : 'div-second d-flex p-top-8' ">
+                
+                  <div class="div-logo"  (click)="select(2,item)">
+                    <img class="img-logo logo-vj" *ngIf="item.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                    <img class="img-logo" *ngIf="item.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                    <img class="img-logo logo-vna" *ngIf="item.airlineCode == 'VietnamAirlines' && !item.operatedBy"src="./assets/ic_airticket/logo_vna.png">
+                    <img class="img-logo logo-vna" *ngIf="item.operatedBy && item.urlLogo" [src]="item.urlLogo">
+                    <img class="img-logo" *ngIf="item.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                   </div>
-                  <div class="icon-detail" *ngIf="item && item.addon && item.addon.powerSupply">
-                    <img class="img-detail" src="./assets/ic_flight/ic_charge_tealish.svg">
+      
+                  <div class="flight-type p-l-8 d-flex"  (click)="select(2,item)">
+                      <div>{{item.ticketType}}</div>
                   </div>
 
-                <div class="p-l-4"  (click)="showFlightDetail(item, 2)">
-                  <img class="img-down ic-down" src="./assets/ic_flight/icon_down.svg">
-                </div>
+                  <div class="icon-detail" *ngIf="item && item.ticketCondition && (!item.ticketCondition.luggageSigned || (item.addon && !item.addon.powerSupply)  || !item.addon) && (item.airlineCode == 'VietJetAir' || item.airlineCode == 'BambooAirways') ">
+                    <img class="img-detail" src="./assets/ic_flight/ic_lug_add.svg">
+                  </div>
+                    <div class="icon-detail" *ngIf="item && item.ticketCondition && item.ticketCondition.luggageSigned">
+                      <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 20" src="./assets/ic_flight/case20.svg">
+                        <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 23" src="./assets/ic_flight/case23.svg">
+                        <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 30" src="./assets/ic_flight/case30.svg">
+                        <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 32" src="./assets/ic_flight/case32.svg">
+                        <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 15" src="./assets/ic_flight/case15.svg">
+                        <img class="img-detail m-top-3" *ngIf="item.ticketCondition.luggageSigned == 40" src="./assets/ic_flight/case40.svg">
+                    </div>
+                    <div class="icon-detail" *ngIf="item && item.addon && item.addon.powerSupply">
+                      <img class="img-detail" src="./assets/ic_flight/ic_charge_tealish.svg">
+                    </div>
 
-                <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(2,item)">
-                  <button ion-button round class="button btn-select" clear>
-                    Chọn
-                  </button>
+                  <div class="p-l-4"  (click)="showFlightDetail(item, 2)">
+                    <img class="img-down ic-down" src="./assets/ic_flight/icon_down.svg">
+                  </div>
+
+                  <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(2,item)">
+                    <button ion-button round class="button btn-select" clear>
+                      Chọn
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="item.operatedBy" class="text-operatedBy">{{item.operatedBy}}</div>
+              </div>
+
+              <div *ngIf="!item">
+                <div class='div-item-flight-other' style="height: 80px">
+                  <div class="div-first d-flex">
+                    <div >
+                      <ion-skeleton-text animated style="width: 150px;height: 22px;margin-bottom: 8px;border-radius: 16px;"></ion-skeleton-text>
+                        <div class="d-flex">
+                          <ion-skeleton-text animated style="width: 16px;height: 16px; border-radius: 16px;margin-right: 8px"></ion-skeleton-text>
+      
+                          <ion-skeleton-text animated style="width: 150px;height: 16px; border-radius: 16px;"></ion-skeleton-text>
+                        </div>
+                      </div>
+                  </div>
+      
+                  <div class="div-second d-flex p-top-8" style="margin-top: 0">
+                    <div class="div-button">
+                      <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div *ngIf="item.operatedBy" class="text-operatedBy">{{item.operatedBy}}</div>
           </div>
         </div>
 

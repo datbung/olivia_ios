@@ -123,6 +123,10 @@
                         </div>
                     </div>
 
+                    <div class="p-top-6">
+                        <ion-label class="text-sub">Điền đầy đủ Họ tên như trên giấy tờ tùy thân dùng để thực hiện chuyến bay</ion-label>
+                    </div>
+
                     <div *ngIf="showLotusPoint && !itemAdult.airlineMemberCode" class="text-lotus-point" (click)="openLotusPointSave(itemAdult)">Nhập thẻ bông sen vàng <img class="img-vector" src="./assets/imgs/vector.svg" /></div>
                     <div *ngIf="showLotusPoint && itemAdult.airlineMemberCode" class="text-lotus-code" (click)="openLotusPointSave(itemAdult)">Thẻ bông sen vàng: {{ itemAdult.airlineMemberCode }}</div>
 
@@ -243,6 +247,10 @@
                         
                         
                     </div>
+                    </div>
+
+                    <div class="p-top-6">
+                        <ion-label class="text-sub">Điền đầy đủ Họ tên như trên giấy tờ tùy thân dùng để thực hiện chuyến bay</ion-label>
                     </div>
                     <div *ngIf="!(isExtenal && showLotusPoint)" class=" d-flex m-top-8 ">
                         <div class="div-left no-border"></div>
@@ -416,7 +424,7 @@
                     <div [ngClass]="((hasinput && !sodienthoai) || sodienthoaiinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
                         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
                             <ion-label class="sub-label m-bottom-6 f-13" position="floating">Số điện thoại</ion-label>
-                            <ion-input [(ngModel)]="sodienthoai" maxlength=10 type="tel" required  (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
+                            <ion-input [(ngModel)]="sodienthoai" maxlength=11 required  (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
                         </ion-item>
                     </div>
     

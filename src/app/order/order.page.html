@@ -1188,11 +1188,11 @@
 
  
                  
-            <div *ngIf="trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9)" class="div-btn-payment m-top-27">
+            <div *ngIf="trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" class="div-btn-payment m-top-27">
               <div class="div-split-panel"></div>
               <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
           </div>
-            <div *ngIf="trip.delivery_payment_date_display&&!(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10)&& !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9)" class="m-top-27">
+            <div *ngIf="trip.delivery_payment_date_display&&!(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10)&& !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" class="m-top-27">
               <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
                 <div class="div-payment-combo-flight">
                   <div class="div-payment-left">

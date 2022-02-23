@@ -47,6 +47,9 @@
           <div class="text-right" *ngIf="m.genderdisplay && m.hoten" (click)= "editPaxInfo(m, 1)">Xóa</div>
         </div>
       </div>
+      <div class="p-top-6">
+        <ion-label class="text-sub-name">Điền đầy đủ Họ tên như trên giấy tờ tùy thân dùng để thực hiện chuyến bay</ion-label>
+    </div>
       <div *ngIf="showLotusPoint && !m.airlineMemberCode" class="text-lotus-point" (click)="openLotusPointSave(m)">Nhập thẻ bông sen vàng <img class="img-vector" src="./assets/imgs/vector.svg" /></div>
       <div *ngIf="showLotusPoint && m.airlineMemberCode" class="text-lotus-code" (click)="openLotusPointSave(m)">Thẻ bông sen vàng: {{ m.airlineMemberCode }}</div>
 
@@ -122,6 +125,9 @@
               <div class="text-right" *ngIf="itemChild.genderdisplay && itemChild.hoten" (click)= "editPaxInfo(itemChild, 2)">Xóa</div>
           </div>
         </div>
+        <div class="p-top-6">
+          <ion-label class="text-sub-name">Điền đầy đủ Họ tên như trên giấy tờ tùy thân dùng để thực hiện chuyến bay</ion-label>
+      </div>
         <div class="d-flex m-top-8">
           <div class="div-left no-border"></div>
           <div [ngClass]="((itemChild.errorTextBirthday || itemChild.errorBirthday1) || (itemChild.errorInfo && !itemChild.BirthDay)) ? 'div-right cls-error' : 'div-right'">
@@ -199,7 +205,7 @@
       <div [ngClass]=" ( (hasinput && !phone) || sodienthoaiinvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
           <ion-label class="sub-label m-bottom-6 f-13" position="floating">Số điện thoại</ion-label>
-          <ion-input [(ngModel)]="phone" maxlength=10 type="tel" required (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
+          <ion-input [(ngModel)]="phone" maxlength=11 required (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
         </ion-item>
       </div>
 
