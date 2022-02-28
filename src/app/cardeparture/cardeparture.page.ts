@@ -87,6 +87,8 @@ export class CardeparturePage implements OnInit {
           this.listcarname.push(item);
         }
       }
+      this.sort("sortByTimeDepartEarly");
+      this.sort("priceup");
     }
   }
 

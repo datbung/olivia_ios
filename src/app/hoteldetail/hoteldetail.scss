@@ -1292,9 +1292,9 @@
         padding: 20px 56px;
     }
     .btn-change-hotel,.btn-change-date{
-        border: solid 1px #f79221 !important;
-        color: #f79221;
-        background: #fff;
+        border: solid 1px #f59233;
+        color: #ffffff;
+        background: #f59233;
         width: 100%;
         height: 48px;
         text-transform: none !important;
@@ -2342,6 +2342,9 @@ a.progressive {
 .text-suggest{
     line-height: 1.4;
     font-size: 14px;
+}
+.text-underline{
+    text-decoration: underline;
 }
 .div-suggest
 {

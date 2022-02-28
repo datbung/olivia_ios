@@ -337,7 +337,7 @@
                     <div class="textroomCombo">
                       {{roomCombo}}
                       </div>
-                      <div class="margin-left-5" *ngIf="ischeckupgrade" >
+                      <div class="margin-left-5" *ngIf="ischeckShowupgrade" >
                             <img (click)="upgradeRoom()" src="https://res.ivivu.com/img/upgrade.svg" />
                         </div>
                   </div>
@@ -917,25 +917,19 @@
           </div>
       </div>
       </div>
-      <!-- <div *ngIf="loadcomplete && hotelRoomClasses && hotelRoomClasses.length == 0" class="div-empty-room">
-          <ion-row *ngIf="emptyroom">
-            <ion-col><div class="empty-room"><img src="./assets/empty/ic_outofroom.png"></div></ion-col>
-          </ion-row>
-          <ion-row>
-            <label *ngIf="emptyroom else notmatchroom" class="label-empty-room">Xin lỗi, không còn phòng trống trong khoảng thời gian này</label>
-            <ng-template #notmatchroom><label class="label-empty-room">Rấc tiếc, iVIVU không tìm thấy phòng thoả yêu cầu của bạn. Vui lòng chọn lại số lượng phòng!</label></ng-template>
-          </ion-row>
-          <ion-row>
-            <ion-col class="btn-empty-left"><button ion-button round outline class="button btn-change-hotel" (click)="changeHotel()">Đổi khách sạn</button></ion-col>
-            <ion-col class="btn-empty-right"><button ion-button round outline class="button btn-change-date" (click)="changeDate()">Đổi ngày</button></ion-col>
-          </ion-row>
-      </div> -->
+    
       <div *ngIf="loadcomplete && hotelRoomClasses && hotelRoomClasses.length == 0"  class="div-suggest">
         <div class="row-suggest">
-         <div ><span class="text-suggest color-red">Giai đoạn hết phòng.</span> <span (click)="changeDate()" class="text-suggest color-blue"> Quý khách vui lòng chọn ngày khác</span></div> 
-         <div class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.arrsuggest}}</span> </div>  
+         <div ><span class="text-suggest color-red">Giai đoạn hết phòng.</span> <span *ngIf="valueGlobal.arrsuggest.length>0" (click)="changeDate()" class="text-suggest color-blue text-underline"> Quý khách vui lòng chọn ngày khác</span></div> 
+         <div *ngIf="valueGlobal.arrsuggest.length>0" class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.arrsuggest}}</span> </div>  
+                  <div *ngIf="valueGlobal.arrsuggest.length==0" (click)="changeHotel()" class="text-suggest color-blue text-underline">Xem qua các chỗ nghỉ tương tự khác </div> 
         </div>
       </div>
+        <!-- <div *ngIf="loadcomplete && hotelRoomClasses && hotelRoomClasses.length == 0" class="div-empty-room">
+          <ion-row *ngIf="valueGlobal.arrsuggest.length==0">
+            <ion-col ><button ion-button round outline class="button btn-change-hotel" (click)="changeHotel()">Đổi khách sạn</button></ion-col>
+          </ion-row>
+      </div> -->
       <div class="div-split"></div>
       <!-- End Vùng Detail Room -->
 

@@ -355,6 +355,10 @@ export class RequestCombo1Page implements OnInit{
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday);
             if(fromdate && todate && moment(todate).diff(fromdate,'days') > 0){
+              if (moment(todate).diff(fromdate, "days") > 30) {
+                this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+                return;
+              }
               setTimeout(()=>{
                 se.modalCtrl.dismiss();
               },50)
@@ -713,5 +717,13 @@ export class RequestCombo1Page implements OnInit{
                     })
               }
             }
+          }
+          async presentToastwarming(msg) {
+            const toast = await this.toastCtrl.create({
+              message: msg,
+              duration: 3000,
+              position: 'top',
+            });
+            toast.present();
           }
 }

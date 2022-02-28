@@ -5103,6 +5103,10 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
           var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           if (fromdate && todate && moment(todate).diff(fromdate, "days") > 0) {
+            if (moment(todate).diff(fromdate, "days") > 30) {
+              this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+              return;
+            }
             var se = this;
             setTimeout(() => {
               se.modalCtrl.dismiss();

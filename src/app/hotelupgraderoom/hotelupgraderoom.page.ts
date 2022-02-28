@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,NgZone } from '@angular/core';
 import { NavController, ModalController } from '@ionic/angular';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { Storage } from '@ionic/storage';
 import { ValueGlobal, Bookcombo } from '../providers/book-service';
-import { HotelRoomDetailPage } from '../hotelroomdetail/hotelroomdetail';
 import { ActivatedRoute } from '@angular/router';
-
+import { C } from './../providers/constants';
+import * as request from 'requestretry';
 @Component({
   selector: 'app-hotelupgraderoom',
   templateUrl: './hotelupgraderoom.page.html',
@@ -19,13 +19,15 @@ export class HotelupgraderoomPage implements OnInit {
   email: any;
   roomPriceSale: any;
   loginuser: any;
+  ListRoomClassestemp: any[];
+  jsonroom: any;
   constructor(private modalCtrl: ModalController, 
     public activityService: ActivityService, 
     private storage: Storage,
     public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     public gf: GlobalFunction,
-    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute) { 
+    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute,private zone: NgZone) { 
     var se = this;
     se.storage.get('username').then(name => {
       if (name !== null) {
@@ -37,10 +39,71 @@ export class HotelupgraderoomPage implements OnInit {
         this.email = e;
       }
     })
-    se.hotelRoomClasses=se.activityService.objFlightComboUpgrade.Rooms;
-    se.currentRoomSelect = se.activityService.objFlightComboUpgrade.CurrentRoom;
-  }
+   
 
+    this.getHotelContractPrice( this.bookCombo.FormParam );
+  }
+  getHotelContractPrice(data) {
+    var se = this;
+    if (data) {
+      var form = data;
+      var options = {
+        method: 'POST',
+        url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
+        timeout: 10000, maxAttempts: 3, retryDelay: 10000,
+        headers:
+          {},
+        form
+      };
+      request(options, function (error, response, body) {
+        if (response.statusCode != 200) {
+          var objError = {
+            page: "carcombo",
+            func: "getHotelContractPrice",
+            message: response.statusMessage,
+            content: response.body,
+            type: "warning",
+            param: JSON.stringify(options)
+          };
+          C.writeErrorLog(objError, response);
+        }
+        if (error) {
+          error.page = "carcombo";
+          error.func = "getHotelContractPrice";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(error, response);
+        };
+        se.zone.run(() => {
+          var result = JSON.parse(body);
+
+          if (result.Hotels) {
+            se.ListRoomClassestemp = result.Hotels[0].RoomClasses;
+            se.checkRoomFsale();
+          }
+        })
+       
+      })
+    }
+  }
+  checkRoomFsale(){
+     this.hotelRoomClasses=[];
+    for (var i = 0; i < this.ListRoomClassestemp.length; i++) {
+      for (let j = 0; j < this.ListRoomClassestemp[i].MealTypeRates.length; j++) {
+        const element = this.ListRoomClassestemp[i].MealTypeRates[j];
+        if (element.IsFlashSale == true && element.Status != 'IP') {
+         this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
+        }
+        
+      }
+    }
+    for (var i = 0; i <this.hotelRoomClasses.length; i++) {
+      //lọc mealType là promotion và Internal
+    this.hotelRoomClasses[i].MealTypeRates = this.hotelRoomClasses[i].MealTypeRates.filter((Meal) => {
+      return  Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL') && Meal.PromotionNote != '';
+    })
+    }
+    this.currentRoomSelect = this.activityService.objFlightComboUpgrade.CurrentRoom;
+  }
   ngOnInit() {
    
   }

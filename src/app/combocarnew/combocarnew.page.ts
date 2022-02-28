@@ -126,7 +126,7 @@ export class CombocarnewPage implements OnInit {
   index: any;
   RoomType: any;
   roomclass: any;
-
+  column: any;
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -566,26 +566,20 @@ export class CombocarnewPage implements OnInit {
         se.gf.RequestApi('GET', url, {}, {}, 'carcombo', 'get-transfer-data').then((data: any) => {
           if (data.data.length > 0) {
             var listDeparttemp = data.data;
+            se.listDepartTransfers=[];
             for (let i = 0; i < listDeparttemp.length; i++) {
               if (listDeparttemp[i].route.schedules[0].available_seats >= se.totalAdult) {
+                listDeparttemp[i].priceorder=listDeparttemp[i].route.schedules[0].fare.price;
+                listDeparttemp[i].sortByTime=listDeparttemp[i].route.pickup_time;
                 se.listDepartTransfers.push(listDeparttemp[i]);
               }
             }
             // se.storage.set('listDepartTransfers_' + se.comboId + '_' + se.cin + '_' + se.adults + '_' + se.children + '_' + se.textagepost, data);
-            // se.listkeys.push('listDepartTransfers_' + se.comboId + '_' + se.cin + '_' + se.adults + '_' + se.children + '_' + se.textagepost);
-            se.getBestTransfer(data, 1);
+            this.sort("sortByTimeDepartEarly",1);
+            this.sort("priceup",1);
+            se.getBestTransfer(1);
+            
             se.getTransferData(false);
-            // se.storage.get('listReturnTransfers_' + se.comboId + '_' + se.cout + '_' + se.adults + '_' + se.children + '_' + se.textagepost).then((data) => {
-            //   if (data) {
-            //     se.listReturnTransfers = data.data;
-            //     se.getBestTransfer(data, 0);
-            //     se.loadTransferInfo(se.departTime, se.returnTime);
-            //   } else {
-            //     //Chưa có list xe về thì mới gọi lại api lấy
-            //     if (!se.listReturnTransfers || se.listReturnTransfers.length <= 0)
-            //       se.getTransferData(false);
-            //   }
-            // })
           }
           else {
             se.loadpricedone = true;
@@ -603,14 +597,17 @@ export class CombocarnewPage implements OnInit {
         se.gf.RequestApi('GET', url, {}, {}, 'carcombo', 'get-transfer-data').then((data: any) => {
           if (data.data.length > 0) {
             var listReturntemp = data.data;
+            se.listReturnTransfers=[];
             for (let i = 0; i < listReturntemp.length; i++) {
               if (listReturntemp[i].route.schedules[0].available_seats >= se.totalAdult) {
+                listReturntemp[i].priceorder=listReturntemp[i].route.schedules[0].fare.price;
+                listReturntemp[i].sortByTime=listReturntemp[i].route.pickup_time;
                 se.listReturnTransfers.push(listReturntemp[i]);
               }
             }
-            // se.storage.set('listReturnTransfers_' + se.comboId + '_' + se.cout + '_' + se.adults + '_' + se.children + '_' + se.textagepost, data);
-            // se.listkeys.push('listReturnTransfers_' + se.comboId + '_' + se.cout + '_' + se.adults + '_' + se.children + '_' + se.textagepost);
-            se.getBestTransfer(data, 0);
+            this.sort("sortByTimeDepartEarly",0);
+            this.sort("priceup",0);
+            se.getBestTransfer(0);
             this.loadTransferInfo(this.departTime, this.returnTime, 0, 0);
           }
           else {
@@ -629,39 +626,45 @@ export class CombocarnewPage implements OnInit {
    * @param list - Danh sách chuyến xe
    * @param isDepart - biến xác định chiều đi/về (=1 là chiều đi/ =0 là chiều về)
    */
-  getBestTransfer(list, isDepart) {
+   getBestTransfer(isDepart) {
     // var Hour; var Minute; var kq;
     // var good = [];
     var home = [];
     var away = [];
     var other = [];
-    for (let i = 0; i < list.data.length; i++) {
+    var list;
+    if(isDepart==1){
+      list=this.listDepartTransfers;
+    }else{
+      list=this.listReturnTransfers;
+    }
+    for (let i = 0; i < list.length; i++) {
       var Hour; var Minute; var kq;
-      var time = list.data[i].route.pickup_time;
+      var time = list[i].route.pickup_time;
       Hour = time.toString().split(':')[0];
       Minute = time.toString().split(':')[1];
       kq = Hour * 60 + Number(Minute);
       if (isDepart == 1) {
         if (kq >= 480 && kq <= 840) {
-          if (list.data[i].sort_order != 999) {
-            home.push(list.data[i]);
+          if (list[i].sort_order != 999) {
+            home.push(list[i]);
           }
           else {
-            away.push(list.data[i]);
+            away.push(list[i]);
           }
         }
-        other.push(list.data[i]);
+        other.push(list[i]);
       }
       else {
         if (kq >= 600 && kq <= 1080) {
-          if (list.data[i].sort_order != 999) {
-            home.push(list.data[i]);
+          if (list[i].sort_order != 999) {
+            home.push(list[i]);
           }
           else {
-            away.push(list.data[i]);
+            away.push(list[i]);
           }
         }
-        other.push(list.data[i]);
+        other.push(list[i]);
       }
     }
     if (isDepart == 1) {
@@ -1974,6 +1977,10 @@ export class CombocarnewPage implements OnInit {
     let newdatecout = new Date(arr1[2], arr1[1] - 1, arr1[0]);
     let fromdate = new Date(moment(newdatecin).format('YYYY-MM-DD'));
     let todate = new Date(moment(newdatecout).format('YYYY-MM-DD'));
+
+    let Year=new Date().getFullYear()
+    let Month=new Date().getMonth()
+    let Day=new Date().getDate()
     const options: CalendarModalOptions = {
       pickMode: 'range',
       title: 'Chọn ngày',
@@ -1986,6 +1993,7 @@ export class CombocarnewPage implements OnInit {
       defaultScrollTo: fromdate,
       defaultDateRange: { from: fromdate, to: todate },
       daysConfig: se._daysConfig,
+      to: new Date(Year+1, Month, Day),
     };
 
     this.myCalendar = await this.modalCtrl.create({
@@ -2055,6 +2063,10 @@ export class CombocarnewPage implements OnInit {
           var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           if (fromdate && todate && moment(todate).diff(fromdate, 'days') > 0) {
+            if (moment(todate).diff(fromdate, "days") > 30) {
+              this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+              return;
+            }
             var se = this;
             se.booking.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
             se.booking.CheckOutDate = moment(todate).format('YYYY-MM-DD');
@@ -2301,5 +2313,54 @@ export class CombocarnewPage implements OnInit {
       se.PriceAvgPlusTAStr = se.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     }
   }
-  
+   sort(property,stt) {
+    var se = this;
+    se.column = property;
+    if(stt==1){
+      se.zone.run(() => se.listDepartTransfers.sort(function (a, b) {
+        let direction = -1;
+        if (property == "priceup") {
+          let col = 'priceorder';
+          if (a[col] * 1 < b[col] * 1) {
+            return 1 * direction;
+          }
+          else if (a[col] * 1 > b[col] * 1) {
+            return -1 * direction;
+          }
+        } else {
+          let direction = (property == "sortByTimeDepartEarly" || property == "sortByTimeLandingEarly") ? -1 : 1;
+          let columnname = "sortByTime";
+          if (a[columnname] < b[columnname]) {
+            return 1 * direction;
+          }
+          else if (a[columnname] > b[columnname]) {
+            return -1 * direction;
+          }
+        }
+      }));
+    }
+    else{
+      se.zone.run(() => se.listReturnTransfers.sort(function (a, b) {
+        let direction = -1;
+        if (property == "priceup") {
+          let col = 'priceorder';
+          if (a[col] * 1 < b[col] * 1) {
+            return 1 * direction;
+          }
+          else if (a[col] * 1 > b[col] * 1) {
+            return -1 * direction;
+          }
+        } else {
+          let direction = (property == "sortByTimeDepartEarly" || property == "sortByTimeLandingEarly") ? -1 : 1;
+          let columnname = "sortByTime";
+          if (a[columnname] < b[columnname]) {
+            return 1 * direction;
+          }
+          else if (a[columnname] > b[columnname]) {
+            return -1 * direction;
+          }
+        }
+      }));
+    }
+  };
 }

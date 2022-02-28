@@ -204,8 +204,9 @@ export class HotelDetailPage implements OnInit {
   arrsuggest=[]
   elementMealtype: any;
   hotelupgrade: any;
-  ischeckupgrade: boolean;
+  ischeckShowupgrade: boolean;
   ischeckUpgrade: any;
+  ListRoomClassestemp: any[];
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -249,37 +250,44 @@ export class HotelDetailPage implements OnInit {
       }
       if (response.statusCode == 200) {
         var res = JSON.parse(body);
-        se.valueGlobal.dayhot=res.data.promotionIsHot; 
-        se.valueGlobal.daily=res.data.daily;
+        se.valueGlobal.dayhot=[]; 
+        se.valueGlobal.daily=[];
         se.valueGlobal.arrsuggest=[];
-        const json1 = new Map([
-          [1, '31/1/2022'],
-          [2, '28/2/2022'],
-          [3, '31/3/2022'],
-          [4,'30/4/2022'],
-          [5,'31/5/2022'],
-          [6,"30/6/2022"],
-          [7,"31/7/2022"],
-          [8,"31/8/2022"],
-          [9,"30/9/2022"],
-          [10,"31/10/2022"],
-          [11,"30/11/2022"],
-          [12,"31/12/2022"],
-        ])
-        
-        
-        let daystart = parseInt( moment(se.valueGlobal.daily[0]).format('DD')) ;
-        let mstart = parseInt( moment(se.valueGlobal.daily[0]).format('MM')) ;
-        let mend =  parseInt(moment(se.valueGlobal.daily.slice(-1)[0]).format('MM')) ;
-        for(let i = mstart; i<=mend; i++){
-          if(i == mstart){
-            se.valueGlobal.arrsuggest.push(daystart+" - "+json1.get(i))
-          }
-          else if(i == mend){
-            se.valueGlobal.arrsuggest.push('01 - '+moment(se.valueGlobal.daily.slice(-1)[0]).format('DD/MM/YYYY'))
-          }
-          else{
-            se.valueGlobal.arrsuggest.push('01 - '+json1.get(i))
+        if (res.data) {
+          se.valueGlobal.dayhot=res.data.promotionIsHot; 
+          se.valueGlobal.daily=res.data.daily;
+          se.valueGlobal.arrsuggest=[];
+          if (se.valueGlobal.daily.length>0) {
+            const json1 = new Map([
+              [1, '31/1/2022'],
+              [2, '28/2/2022'],
+              [3, '31/3/2022'],
+              [4,'30/4/2022'],
+              [5,'31/5/2022'],
+              [6,"30/6/2022"],
+              [7,"31/7/2022"],
+              [8,"31/8/2022"],
+              [9,"30/9/2022"],
+              [10,"31/10/2022"],
+              [11,"30/11/2022"],
+              [12,"31/12/2022"],
+            ])
+            
+            
+            let daystart = parseInt( moment(se.valueGlobal.daily[0]).format('DD')) ;
+            let mstart = parseInt( moment(se.valueGlobal.daily[0]).format('MM')) ;
+            let mend =  parseInt(moment(se.valueGlobal.daily.slice(-1)[0]).format('MM')) ;
+            for(let i = mstart; i<=mend; i++){
+              if(i == mstart){
+                se.valueGlobal.arrsuggest.push(daystart+" - "+json1.get(i))
+              }
+              else if(i == mend){
+                se.valueGlobal.arrsuggest.push('01 - '+moment(se.valueGlobal.daily.slice(-1)[0]).format('DD/MM/YYYY'))
+              }
+              else{
+                se.valueGlobal.arrsuggest.push('01 - '+json1.get(i))
+              }
+            }
           }
         }
         // console.log(arr) 
@@ -621,7 +629,7 @@ export class HotelDetailPage implements OnInit {
       }else if(se.fc && !se.ischeckBOD && !se.checkBODdone && se.comboDetail && se.comboid){
         se.getDetailCombo(se.comboid);
       }
-      se.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{
+      se.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{         
         if(dataRoomChange){
             se.ischeckUpgrade=true;
             se.updateRoomChange(dataRoomChange);
@@ -2315,18 +2323,25 @@ excuteLoadHotelRoom(data){
         }
      
       }
-      se.hotelupgrade=[];
-      se.ischeckupgrade=false;;
-      for (let i = 0; i < se.hotelRoomClasses.length; i++) {
-        const element = se.hotelRoomClasses[i];
-        if (element.IsFlashSale) {
-          se.hotelupgrade.push(element);
-        }
-        
-      }
-      if (se.hotelupgrade.length>1) {
-        se.ischeckupgrade=true;
-      }
+      // se.hotelupgrade=[];
+      // se.ischeckupgrade=false;;
+      // var hoteltemp=se.hotelRoomClasses;
+      // for (let i = 0; i < hoteltemp.length; i++) {
+      //   const element = hoteltemp[i];
+      //   for (let j = 0; j < element.MealTypeRates.length; j++) {
+      //     const elementMeal = element.MealTypeRates[j];
+      //     if (elementMeal.IsFlashSale) {
+      //       var objelement=element;
+      //       objelement.MealTypeRates=[[]]
+      //       objelement.MealTypeRates.push(element.MealTypeRates[j]);
+      //       se.hotelupgrade.push(objelement);
+      //     }    
+      //   }
+      // }
+      this.checkRoomFsale();
+      // if (se.hotelupgrade.length>1) {
+       
+      // }
       se.loadpricecombodone = true;
       //se.loaddonecombo=true;
      
@@ -3183,9 +3198,14 @@ async bookcombo() {
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday);
           if(fromdate && todate && moment(todate).diff(fromdate,'days') > 0){
+            if (moment(todate).diff(fromdate, "days") > 30) {
+              this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+              return;
+            }
             setTimeout(()=>{
               this.modalCtrl.dismiss();
             },300)
+          
             var se = this;
                 se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
                 se.searchhotel.CheckOutDate = moment(todate).format('YYYY-MM-DD');
@@ -3295,7 +3315,9 @@ async bookcombo() {
      }
      
     //  var day : any="2022-02-16";
-   
+    let Year=new Date().getFullYear()
+    let Month=new Date().getMonth()
+    let Day=new Date().getDate()
       const options: CalendarModalOptions = {
         pickMode: 'range',
         title: 'Chọn ngày',
@@ -3308,6 +3330,7 @@ async bookcombo() {
         defaultScrollTo: fromdate,
         defaultDateRange: {from: fromdate, to: todate},
         daysConfig: _daysConfig,
+        to: new Date(Year+1, Month, Day),
       };
   
        this.myCalendar = await this.modalCtrl.create({
@@ -4592,10 +4615,27 @@ async bookcombo() {
   async upgradeRoom(){
     var se = this;
     se.activityService.objFlightComboUpgrade = {};
-    se.activityService.objFlightComboUpgrade.Rooms = se.hotelupgrade;
+    // se.activityService.objFlightComboUpgrade.Rooms =this.jsonroom2.Hotels[0].RoomClasses;
     se.activityService.objFlightComboUpgrade.CurrentRoom = se.elementMealtype;
+    this.bookCombo.FormParam = this.formParam;
     se.valueGlobal.backValue = "hotelupgraderoom";
     se.valueGlobal.notRefreshDetail=true;
     se.navCtrl.navigateForward('/hotelupgraderoom');
+  }
+  checkRoomFsale(){
+    let ListRoomClassestemp=[];
+ 
+    for (var i = 0; i < this.hotelRoomClasses.length; i++) {
+      for (let j = 0; j < this.hotelRoomClasses[i].MealTypeRates.length; j++) {
+        const element = this.hotelRoomClasses[i].MealTypeRates[j];
+        if (element.IsFlashSale == true && element.Status != 'IP') {
+         ListRoomClassestemp.push(this.hotelRoomClasses[i]);
+        }
+        
+      }
+    }
+    if (ListRoomClassestemp.length>0) {
+      this.ischeckShowupgrade=true;
+    }
   }
 }

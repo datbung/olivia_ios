@@ -1841,7 +1841,11 @@ export class Tab1Page implements OnInit {
           yearenddate = objTextMonthEndDate.split("/")[1];
           var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
           var todate = new Date(yearenddate, monthenddate - 1, tday);
-          if (fromdate && todate && moment(todate).diff(fromdate, "days") > 0) {
+          if (fromdate && todate && moment(todate).diff(fromdate, "days") > 0 ) {
+            if (moment(todate).diff(fromdate, "days") > 30) {
+              this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+              return;
+            }
             var se = this;
             setTimeout(() => {
               se.modalCtrl.dismiss();
@@ -1892,7 +1896,10 @@ export class Tab1Page implements OnInit {
         cssClass: 'lunarcalendar'
       })
     }
-    
+
+    let Year=new Date().getFullYear()
+    let Month=new Date().getMonth()
+    let Day=new Date().getDate()
     const options: CalendarModalOptions = {
       pickMode: "range",
       title: "Chọn ngày",
@@ -1904,7 +1911,8 @@ export class Tab1Page implements OnInit {
       step: 0,
       defaultScrollTo: fromdate,
       defaultDateRange: { from: fromdate, to: todate },
-      daysConfig: _daysConfig
+      daysConfig: _daysConfig,
+      to: new Date(Year+1, Month, Day),
     };
 
     this.myCalendar = await this.modalCtrl.create({

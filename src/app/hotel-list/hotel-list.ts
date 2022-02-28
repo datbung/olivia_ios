@@ -1516,6 +1516,7 @@ export class HotelListPage implements OnInit{
   }
   changeinfo() {
     this.searchhotel.changeInfoFromPage = 'hotellist';
+    this.valueGlobal.dayhot=[];
     this.navCtrl.navigateForward('/popupinfobkg');
   }
 

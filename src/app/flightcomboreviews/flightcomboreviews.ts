@@ -2737,6 +2737,10 @@ export class FlightComboReviewsPage implements OnInit{
     let newdatecout = new Date(arr1[2], arr1[1] - 1, arr1[0]);
     let fromdate = new Date(moment(newdatecin).format('YYYY-MM-DD'));
     let todate = new Date(moment(newdatecout).format('YYYY-MM-DD'));
+
+    let Year=new Date().getFullYear()
+    let Month=new Date().getMonth()
+    let Day=new Date().getDate()
     const options: CalendarModalOptions = {
       pickMode: 'range',
       title: 'Chọn ngày',
@@ -2749,6 +2753,7 @@ export class FlightComboReviewsPage implements OnInit{
       defaultScrollTo: fromdate,
       defaultDateRange: { from: fromdate, to: todate },
       daysConfig: this._daysConfig,
+      to: new Date(Year+1, Month, Day),
     };
 
     this.myCalendar = await this.modalCtrl.create({
@@ -2839,6 +2844,10 @@ export class FlightComboReviewsPage implements OnInit{
       return;
     }
           if (fromdate && todate && moment(todate).diff(fromdate, 'days') > 0) {
+            if (moment(todate).diff(fromdate, "days") > 30) {
+              this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+              return;
+            }
             var se = this;
             //Nếu chọn duration = 1 thì tự cộng thêm 1 ngày cho = duration combo
             let _duration = moment(todate).diff( moment(fromdate), 'days');

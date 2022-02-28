@@ -1,5 +1,5 @@
 import { SearchHotel, ValueGlobal } from './../providers/book-service';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController,ToastController } from '@ionic/angular';
 import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from "moment";
 import * as $ from 'jquery';
@@ -27,7 +27,7 @@ export class PopupinfobkgPage implements OnInit {
   allowclickcalendar: boolean = true;
   constructor(public modalCtrl: ModalController, public zone: NgZone,public searchhotel:SearchHotel,public valueGlobal:ValueGlobal,public navCtrl:NavController,
     public gf: GlobalFunction,
-    private storage: Storage) {
+    private storage: Storage, private toastCtrl: ToastController) {
    }
   ngOnInit() {
 
@@ -98,6 +98,19 @@ export class PopupinfobkgPage implements OnInit {
     this.allowclickcalendar = false;
     let fromdate = new Date(this.cin);
     let todate = new Date(this.cout);
+    let _daysConfig: DayConfig[] = [];
+ 
+    if(this.valueGlobal.dayhot.length>0){
+     for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
+       _daysConfig.push({
+         date: this.valueGlobal.dayhot[j],
+         cssClass: 'dayhot'
+       })
+     }
+    }
+    let Year=new Date().getFullYear()
+    let Month=new Date().getMonth()
+    let Day=new Date().getDate()
     const options: CalendarModalOptions = {
       pickMode: 'range',
       title: 'Chọn ngày',
@@ -109,7 +122,8 @@ export class PopupinfobkgPage implements OnInit {
       step: 0,
       defaultScrollTo: fromdate,
       defaultDateRange: { from: fromdate, to: todate },
-      daysConfig: this._daysConfig,
+      daysConfig: _daysConfig,
+      to: new Date(Year+1, Month, Day),
     };
 
     this.myCalendar = await this.modalCtrl.create({
@@ -122,7 +136,17 @@ export class PopupinfobkgPage implements OnInit {
     this.myCalendar.present().then(() => {
       this.allowclickcalendar = true;
       $('.days-btn').click(e => this.clickedElement(e));
-
+      let divmonth = $('.month-box');
+      if(divmonth && divmonth.length >0){
+        for (let index = 0; index < divmonth.length; index++) {
+           const em = divmonth[index];
+          //   let divsmall = $('#'+em.id+' dayhot');
+          //   if(divsmall && divsmall.length >0){
+              $('#'+em.id).append("<div class='div-month-text-small'></div>")
+              $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price' style='margin-left: 0px !important'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+            // }
+        }
+      }
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
@@ -212,6 +236,10 @@ export class PopupinfobkgPage implements OnInit {
           var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           if (fromdate && todate && moment(todate).diff(fromdate, 'days') > 0) {
+            if (moment(todate).diff(fromdate, "days") > 30) {
+              this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
+              return;
+            }
             var se = this;
             setTimeout(() => {
               se.modalCtrl.dismiss();
@@ -350,5 +378,13 @@ export class PopupinfobkgPage implements OnInit {
   }
   checklunar(s) {
     return s.indexOf('Mùng') >= 0;
+  }
+  async presentToastwarming(msg) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top',
+    });
+    toast.present();
   }
 }

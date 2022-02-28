@@ -392,6 +392,7 @@ export class RequestComboPage implements OnInit{
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday);
             if(fromdate && todate && moment(todate).diff(fromdate,'days') > 0){
+              
               setTimeout(()=>{
                 se.modalCtrl.dismiss();
               },50)
