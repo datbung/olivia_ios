@@ -68,20 +68,21 @@ export class FlightselecttimepriorityPage implements OnInit {
 
   timeChange(type, e){
       if(type ==1){
-        this.storage.remove('timedepartpriorityconfig');
-        this.storage.set('timedepartpriorityconfig', e.detail.value);
         this.timedepart = e.detail.value;
       }else{
-        this.storage.remove('timereturnpriorityconfig');
-        this.storage.set('timereturnpriorityconfig', e.detail.value);
+       
         this.timereturn = e.detail.value;
       }
   }
 
   filter(){
-      // obj.timeDepartPriority = data.data.timeDepartPriority;
-      //obj.timeReturnPriority = data.data.timeReturnPriority;
+      this.storage.set('timedepartpriorityconfig', this.timedepart);
+      this.storage.set('timereturnpriorityconfig', this.timereturn);
+
       this.modalCtrl.dismiss({ timeDepartPriority: this.timedepart, timeReturnPriority: this.timereturn});
+      
+      
+
       this._flightService.itemTimePriorityChange.emit(1);
   }
   

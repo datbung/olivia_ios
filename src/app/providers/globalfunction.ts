@@ -2965,10 +2965,25 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
                           '088', '091', '094', '083', '084', '085', '081', '082', //vinaphone
                           '092', '056', '058', //vietnammobile
                           '089', '090', '093', '070', '079', '077', '076', '078', //mobilephonephone
-                          '099', '059' //gmobile
+                          '099', '059', //gmobile
+                          '087',
+                          '071', '072', '073', '074', '075', //add them
+                          '030', '031',
+                          '020', '021', '022', '023', '024', '025', '026', '027', '028', '029'
                           ];
-    let beginnum = input.substring(0, 3);
-    return arrBeginNumber.indexOf(beginnum) == -1;
+    //let beginnum = input.substring(0, 3);
+    //return arrBeginNumber.indexOf(beginnum) == -1;
+    if(input && input*1 && input.length ==10 && input.startsWith('0'))
+    {
+        return false;
+    }
+    else if(input && input*1 && input.length ==11 && input.startsWith('84'))
+    {
+        return false;
+    }
+    else {
+      return true;
+    }
   }
 
   updatePaymentMethodForCombo(bookingCode, paymentType){

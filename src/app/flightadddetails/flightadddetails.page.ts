@@ -1450,7 +1450,7 @@ export class FlightadddetailsPage implements OnInit {
                     //se.gf.showToastWarning("Số điện thoại không được để trống. Vui lòng kiểm tra lại!");
                     return;
                 }
-                else if(se.sodienthoai && (!se.phonevalid(se.sodienthoai) || se.gf.checkPhoneInValidFormat(se.sodienthoai) )){
+                else if(se.sodienthoai && se.gf.checkPhoneInValidFormat(se.sodienthoai)){
                   //se.gf.showToastWarning("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
                   se.sodienthoaiinvalid = true;
                   return;
@@ -1580,7 +1580,7 @@ export class FlightadddetailsPage implements OnInit {
             })
           }
           if(type == 2){
-            if(se.gf.checkPhoneInValidFormat(se.sodienthoai) || se.sodienthoai.length <10){
+            if(se.gf.checkPhoneInValidFormat(se.sodienthoai)){
               se.sodienthoaiinvalid = true; 
             }else{
               se.sodienthoaiinvalid = false; 

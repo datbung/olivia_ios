@@ -703,7 +703,7 @@ export class FlightComboAddDetailsPage implements OnInit {
         var checktext = this.hasWhiteSpace(this.hoten);
         if (checktext) {
           if (this.phone) {
-            if (!this.phonenumber(this.phone) || this.gf.checkPhoneInValidFormat(this.phone)) {
+            if (this.gf.checkPhoneInValidFormat(this.phone)) {
               this.sodienthoaiinvalid = true;
               //this.presentToastPhone();
               return;
@@ -2095,7 +2095,7 @@ async openLotusPointSave(itemAdult){
           })
         }
         if(type == 2){
-          if(se.gf.checkPhoneInValidFormat(se.phone) || se.phone.length <10){
+          if(se.gf.checkPhoneInValidFormat(se.phone)){
             se.sodienthoaiinvalid = true; 
           }else{
             se.sodienthoaiinvalid = false; 

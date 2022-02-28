@@ -193,6 +193,12 @@ export class FlightsearchresultPage implements OnInit {
         this.titlereturn = obj.titleReturn;
         this.subtitlereturn = obj.subtitleReturn;
       }
+      else {
+        this._flightService.itemTabFlightActive.emit(true);
+        this._flightService.itemFlightReloadInfo.emit(1);
+        this.valueGlobal.backValue = "homeflight";
+        this.navCtrl.navigateBack('/tabs/tab1');
+      }
 
       this.storage.get('flightfilterobject').then((data)=>{
         if(data){
@@ -1619,7 +1625,7 @@ export class FlightsearchresultPage implements OnInit {
                   
                   if(se.listDepart && se.listDepart.length >0)
                   {
-                    se.loadpricedone = true;
+                      se.loadpricedone = true;
                   }
                     se.zone.run(()=>{
                       se.progressbarloading = 1;
@@ -1676,7 +1682,10 @@ export class FlightsearchresultPage implements OnInit {
             
             if(se.listDepart && se.listDepart.length >0)
                     {
-                      se.loadpricedone = true;
+                      setTimeout(()=>{
+                        se.loadpricedone = true;
+                      }, 200);
+                      
                     }
           }
         }
@@ -1897,10 +1906,10 @@ export class FlightsearchresultPage implements OnInit {
         if(good.length>0)
         {
           this.sortFlightsByTime(good,1);
-          let otherlist = [...good.splice(3,good.length),...other];
+          let otherlist = [...good.splice(good.length > 2 ? 3 : 2,good.length),...other];
           //this.sortFlightsByTime(otherlist,1);
           this.sortFlights('priceorder', otherlist);
-          this.listDepart = [...good.splice(0,3),...otherlist];
+          this.listDepart = [...good.splice(0,good.length > 2 ? 3 : 2),...otherlist];
         }
         else{
           this.sortFlightsByTime(other,1);
@@ -1984,10 +1993,10 @@ export class FlightsearchresultPage implements OnInit {
         if(good.length>0)
             {
               this.sortFlightsByTime(good,2);
-              let otherlist = [...good.splice(3,good.length),...other];
+              let otherlist = [...good.splice(good.length > 2 ? 3 : 2,good.length),...other];
               //this.sortFlightsByTime(otherlist,1);
               this.sortFlights('priceorder', otherlist);
-              this.listReturn = [...good.splice(0,3),...otherlist];
+              this.listReturn = [...good.splice(0,good.length > 2 ? 3 : 2),...otherlist];
             }
             else{
               this.sortFlightsByTime(other,2);
@@ -3138,9 +3147,12 @@ export class FlightsearchresultPage implements OnInit {
           se.listDepartConditions = [];
           se.listReturnConditions = [];
           se.enableFlightFilter = false;
+          se.enableFlightFilterReturn = false;
           se.canselect = true;
           se.listDepartAirlines=[];
           se.listReturnAirlines=[];
+          se.listDepartAirlinesReturn = [];
+          se.listReturnAirlinesReturn = [];
           se.listDepartNoFilter=[];
           se.listReturnNoFilter=[];
           se.listDepartFilter = [];
@@ -3163,6 +3175,9 @@ export class FlightsearchresultPage implements OnInit {
           se._flightService.itemFlightCache.departFlight = null;
           se._flightService.itemFlightCache.returnFlight = null;
           se._flightService.itemFlightCache.step = 2;
+          se._flightService.objectFilter = null;
+          se._flightService.objectFilterReturn = null;
+
 
           if(se._flightService && se._flightService.objSearch){
             let obj = se._flightService.objSearch;
@@ -3310,6 +3325,14 @@ export class FlightsearchresultPage implements OnInit {
       }
     })
 
+    let cindayofweek = this.gf.getDayOfWeek(fromdate).daynameshort;
+        let cindaydisplay = moment(fromdate).format('DD');
+        let cinmonthdisplay = 'Thg ' + moment(fromdate).format('M');
+
+        let coutdayofweek = this.gf.getDayOfWeek(todate).daynameshort;
+        let coutdaydisplay = moment(todate).format('DD');
+        let coutmonthdisplay = 'Thg ' + moment(todate).format('M');
+
     let countday = moment(todate).diff(moment(fromdate),'days');
     this.countdaydisplay = this._flightService.itemFlightCache.roundTrip ? (countday +1) : 1;
 
@@ -3377,22 +3400,21 @@ export class FlightsearchresultPage implements OnInit {
             //custom style lịch giá
            
             $('.flight-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
-            
-            if(this.countdaydisplay >0){
-              $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
-            }else{
-              $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'><img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
-            }
+            // if(this.countdaydisplay >0){
+            //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'>${this.countdaydisplay} ngày <img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
+            // }else{
+            //   $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex bg-f2'><div class='div-width-100'> <div class='text-header-normal'>Giá ${ this.roundtriptext}</div> </div> <div class='text-header-normal div-width-100 text-right div-calendar-cincout'>Hành trình <span class='text-tealish p-l-4'><img class='img-down' src='./assets/imgs/ic_down.svg'></span></div></div>`);
+            // }
             if(this._flightService.itemFlightCache.roundTrip){
-              $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div class='div-width-100'> <div class='text-date-normal'>Ngày đi</div><div class='text-flight-datetime'>${ this.checkInDisplayMonth } </div></div> <div class='div-width-100'><div class='text-date-normal p-l-8'>Ngày về</div> <div class='text-flight-datetime p-l-8 border-left' *ngIf='flighttype=='twoway''>${ this.checkOutDisplayMonth } </div></div></div>`);
+              $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <img class='img-arrow' src='./assets/ic_flight/icon_arrow_calendar.svg'> </div> <div ><div class='text-date-normal'>Bay về</div> <div class='d-flex' *ngIf='flighttype=='twoway'> <div class='f-36'>${coutdaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${coutdayofweek}</div> <div>${coutmonthdisplay}</div> </div> </div> </div></div>`);
             }else{
-              $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div class='div-width-100'> <div class='text-date-normal'>Ngày đi</div><div class='text-flight-datetime'>${ this.checkInDisplayMonth } </div></div> </div>`);
+              $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <ion-icon class='ico-arrow' name="remove"></ion-icon> </div> <div class='text-date-normal div-cout-oneway'>Bay về</div> </div>`);
             }
             //add div show giá thấp nhất
             if(this.showlowestprice){
-              $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice" checked></ion-toggle></div> </div>`);
+              $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' (ionChange)="showLowestPrice($event)" [(ngModel)]="showlowestprice" checked></ion-toggle></div> </div>`);
             }else{
-              $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice" ></ion-toggle></div> </div>`);
+              $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice"></ion-toggle></div> </div>`);
             }
             
             //add event cho button show price

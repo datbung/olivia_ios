@@ -102,7 +102,6 @@ export class FlightchangeinfoPage implements OnInit {
                   this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
                   this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
                   this.bindlunar();
-
                   storage.get('timedepartpriorityconfig').then((data) => {
                     if(data){
                       this.zone.run(() => {
