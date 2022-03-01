@@ -53,8 +53,8 @@ export class FlightpaymentatofficePage implements OnInit{
     se.gf.showLoading();
     se.gf.updatePaymentMethod(se._flightService.itemFlightCache,8, se.paymentMethod, "").then(data => {
       if (data && data.isHoldSuccess) {
-        se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-        se._flightService.itemFlightCache.ischeckpayment = 0;
+        // se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+        // se._flightService.itemFlightCache.ischeckpayment = 0;
          //Có chọn khách sạn thì gọi thêm updatepayment theo luồng check ks
          if(se._flightService.itemFlightCache.objHotelCitySelected){
           se.gf.updatePaymentMethodForCombo(se.bookingCode, se.paymentMethod);
@@ -88,15 +88,23 @@ export class FlightpaymentatofficePage implements OnInit{
                //Có chọn khách sạn thì gọi thêm updatepayment theo luồng check ks
               if(se._flightService.itemFlightCache.objHotelCitySelected){
                 se.gf.hideLoading();
-                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone;
+                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
                   se.gf.CreatePayoo(url).then(dataoffice => {
+                    let data = JSON.parse(dataoffice);
+                    se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+                    se._flightService.itemFlightCache.ischeckpayment = 0;
+
                   se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
                   
                 })
               }else{
                 //se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone;
-                se.gf.CreatePayoo(url).then(() => {
+                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
+                se.gf.CreatePayoo(url).then((dataoffice) => {
+                  let data = JSON.parse(dataoffice);
+                  se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+                    se._flightService.itemFlightCache.ischeckpayment = 0;
+
                   se.gf.hideLoading();
               se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
               })

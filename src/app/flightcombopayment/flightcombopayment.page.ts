@@ -223,6 +223,12 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
                           }
                         }
                       }
+                      else{
+                        if (se.loader) {
+                          se.loader.dismiss();
+                        }
+                        alert('Gặp sự cố, vui lòng thử lại')
+                      }
                     })
                   } else {
                     alert('Gặp sự cố, vui lòng thử lại')
@@ -546,7 +552,11 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
           }
         }
       }
-
+      else{
+        if (se.loader) {
+          se.loader.dismiss();
+        }
+      }
     })
 
   }

@@ -255,6 +255,7 @@ export class HotelDetailPage implements OnInit {
         se.valueGlobal.arrsuggest=[];
         if (res.data) {
           se.valueGlobal.dayhot=res.data.promotionIsHot; 
+          //se.valueGlobal.dayhot=res.data.daily; 
           se.valueGlobal.daily=res.data.daily;
           se.valueGlobal.arrsuggest=[];
           if (se.valueGlobal.daily.length>0) {

@@ -1,6 +1,6 @@
 <div class="div-flight-content" *ngIf="flightTabActive == 1">
     <!-- <div [ngClass]="isNotice ? 'background mb50' : 'background'"> -->
-        <div [ngClass]="isNotice ? (flighttype == 'twoway' ? 'background mb50 cls-bg-twoway' : 'background mb50 cls-bg-oneway') : (flighttype == 'twoway' ? 'background cls-bg-twoway' : 'background cls-bg-oneway') ">
+        <div [ngClass]="isNotice ? (flighttype == 'twoway' ? 'background cls-bg-twoway' : 'background cls-bg-oneway') : (flighttype == 'twoway' ? 'background cls-bg-twoway' : 'background cls-bg-oneway') ">
         <!-- <img [ngClass]="isNotice ? 'img-background-notice' : 'img-background'"  src="./assets/ic_flight/flight_bg.jpg"> -->
         <img [ngClass]="isNotice ? (flighttype == 'twoway' ? 'img-background-notice cls-bg-twoway' : 'img-background-notice cls-bg-oneway') : (flighttype == 'twoway' ? 'img-background cls-bg-twoway' : 'img-background cls-bg-oneway') " src="./assets/ic_flight/flight_bg.jpg">
         <div class="div-wrap-background"></div>

@@ -240,14 +240,16 @@ export class FlightpaymentchoosebankPage implements OnInit {
     let itemcache = this._flightService.itemFlightCache;
     se.gf.updatePaymentMethod(se._flightService.itemFlightCache, 2, se.bankid,"").then((data)=>{
       if(data && data.isHoldSuccess){
-        se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+        // se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
 
-        var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ? itemcache.pnr.bookingCode :  itemcache.pnr.resNo) + '&buyerPhone=' + itemcache.phone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+        var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ? itemcache.pnr.bookingCode :  itemcache.pnr.resNo) + '&buyerPhone=' + itemcache.phone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
         se.gf.CreatePayoo(url).then(datapayoo => {
           se.hideLoading();
           se.gf.hideLoading();
         datapayoo = JSON.parse(datapayoo);
         if(datapayoo.success){
+          se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
+
           se.openWebpage(datapayoo.returnUrl);
           se.zone.run(()=>{
             se.setinterval(null);

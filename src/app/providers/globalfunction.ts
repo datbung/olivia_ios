@@ -1856,6 +1856,14 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
       (await (this.loader)).dismiss();
     }
 
+    /**
+     * pdanh 82-02-2022: Đổi luồng do api build-link đã gọi luôn hàm giữ vé nên không dùng hàm này để check giữ VMB nữa
+     * @param data 
+     * @param paymentMethod 
+     * @param bankId 
+     * @param BanksTranfer 
+     * @returns 
+     */
     updatePaymentMethod(data, paymentMethod, bankId, BanksTranfer):Promise<any>{
       let param = {
       "paymentMethod": paymentMethod,
@@ -1864,68 +1872,71 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
       "bankTransfer": BanksTranfer
     };
     return new Promise((resolve, reject) => {
-      var options = {
-        method: 'POST',
-        url: C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentSave/"+data.reservationId,
-        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
-        headers: {
-          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-        body: JSON.stringify(param)
-      };
-      request(options, function (error, response, body) {
-        if (error) {
-          error.page = "globalfunction";
-          error.func = "updatePaymentMethod";
-          error.param = JSON.stringify(options);
-        }
-        if (response.statusCode == 200) {
-          let result = JSON.parse(body);
-          if(!result.error){
-            resolve(result);
-          }else{
-            resolve(false);
-          }
-        }
-      })
+      // var options = {
+      //   method: 'POST',
+      //   url: C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentSave/"+data.reservationId,
+      //   timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+      //   headers: {
+      //     "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+      //     'Content-Type': 'application/json; charset=utf-8',
+      //   },
+      //   body: JSON.stringify(param)
+      // };
+      // request(options, function (error, response, body) {
+      //   if (error) {
+      //     error.page = "globalfunction";
+      //     error.func = "updatePaymentMethod";
+      //     error.param = JSON.stringify(options);
+      //   }
+      //   if (response.statusCode == 200) {
+      //     let result = JSON.parse(body);
+      //     if(!result.error){
+      //       resolve(result);
+      //     }else{
+      //       resolve(false);
+      //     }
+      //   }
+      // })
+      resolve({isHoldSuccess: true});
     })
   }
   //thanh toán lại
   updatePaymentMethodNew(bookingCode, paymentMethod, bankId, BanksTranfer):Promise<any>{
-    let param = {
-    "paymentMethod": paymentMethod,
-    "userToken": "",
-    "bankId": bankId,
-    "bankTransfer": BanksTranfer
-  };
-  return new Promise((resolve, reject) => {
-    var options = {
-      method: 'POST',
-      url: C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentSave/"+bookingCode,
-      timeout: 180000, maxAttempts: 5, retryDelay: 20000,
-      headers: {
-        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      body: JSON.stringify(param)
-    };
-    request(options, function (error, response, body) {
-      if (error) {
-        error.page = "globalfunction";
-        error.func = "updatePaymentMethod";
-        error.param = JSON.stringify(options);
-      }
-      if (response.statusCode == 200) {
-        let result = JSON.parse(body);
-        if(!result.error){
-          resolve(result);
-        }else{
-          resolve(false);
-        }
-      }
-    })
-  })
+  //   let param = {
+  //   "paymentMethod": paymentMethod,
+  //   "userToken": "",
+  //   "bankId": bankId,
+  //   "bankTransfer": BanksTranfer
+  // };
+   return new Promise((resolve, reject) => {
+  //   var options = {
+  //     method: 'POST',
+  //     url: C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentSave/"+bookingCode,
+  //     timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+  //     headers: {
+  //       "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+  //       'Content-Type': 'application/json; charset=utf-8',
+  //     },
+  //     body: JSON.stringify(param)
+  //   };
+  //   request(options, function (error, response, body) {
+  //     if (error) {
+  //       error.page = "globalfunction";
+  //       error.func = "updatePaymentMethod";
+  //       error.param = JSON.stringify(options);
+  //     }
+  //     if (response.statusCode == 200) {
+  //       let result = JSON.parse(body);
+  //       if(!result.error){
+  //         resolve(result);
+  //       }else{
+  //         resolve(false);
+  //       }
+  //     }
+  //   })
+    resolve({isHoldSuccess: true});
+   })
+  
 }
   checkHoldTicket(data){
     var se = this, res = false;

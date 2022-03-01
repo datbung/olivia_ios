@@ -175,7 +175,7 @@ export class MytripaymentflightselectPage implements OnInit {
     }else{
       se.gf.updatePaymentMethodNew(se.bookingCode, 3, "","").then(datatype => {
         if (datatype && datatype.isHoldSuccess) {
-          se._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
+          // se._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
             se.buildLinkPaymentVisa();
           }else{
             se.gf.showAlertOutOfTicketFromMytrip(se._flightService.itemFlightCache, 2);
@@ -226,6 +226,7 @@ export class MytripaymentflightselectPage implements OnInit {
                 this.gf.CreatePayoo(url).then(datapayoo => {
                   datapayoo = JSON.parse(datapayoo);
                   if (datapayoo.success) {
+                    this._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
                     this.openWebpage(datapayoo.returnUrl.payUrl);
                     this.zone.run(()=>{
                       this.setinterval(null);
@@ -253,7 +254,7 @@ export class MytripaymentflightselectPage implements OnInit {
           clearInterval(this.intervalID);
             this.gf.updatePaymentMethodNew(this.bookingCode, 4, "","").then(datatype => {
               if (datatype && datatype.isHoldSuccess) {
-                this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
+                // this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
                   this.buildLinkPayment('momo');
                 }else{
                   this.gf.showAlertOutOfTicketFromMytrip(this._flightService.itemFlightCache, 2);
@@ -266,7 +267,7 @@ export class MytripaymentflightselectPage implements OnInit {
               if(check){
                     this.gf.updatePaymentMethodNew(this.bookingCode, 4, "","").then(datatype => {
                       if (datatype && datatype.isHoldSuccess) {
-                        this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
+                        // this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
                         this.buildLinkPayment('momo');
                         }else{
                           this.gf.showAlertOutOfTicketFromMytrip(this._flightService.itemFlightCache, 2);
@@ -480,6 +481,7 @@ export class MytripaymentflightselectPage implements OnInit {
     se.gf.CreatePayoo(url).then(datapayoo => {
     datapayoo = JSON.parse(datapayoo);
     if(datapayoo.success){
+      se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
       se._flightService.itemFlightCache.ischeckpayment = 1;
       se.openWebpage(datapayoo.returnUrl);
       se.setinterval(null);
@@ -502,7 +504,7 @@ export class MytripaymentflightselectPage implements OnInit {
       }else{
         se.gf.updatePaymentMethodNew(se.bookingCode, 3, "","").then(datatype => {
           if (datatype && datatype.isHoldSuccess) {
-            se._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
+            // se._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
               se.buildLinkPaymentVisa();
             }else{
               se.gf.showAlertOutOfTicketFromMytrip(se._flightService.itemFlightCache, 2);
