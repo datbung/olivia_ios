@@ -426,7 +426,7 @@
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(3,null,0)">Gửi yêu cầu</button>
             </ion-row>
             <ion-row
-            *ngIf="valueGlobal.arrsuggest.length>0 && hotelRoomClasses.length == 0 && !nm && !fc && !fcbcar && (loadcomplete || loaddonecombo ||checkBODdone)"
+            *ngIf="valueGlobal.arrsuggest.length>0 && hotelRoomClasses.length == 0 && !nm && !fc && !fcbcar && loadcomplete"
              class="button-combo">
             <button ion-button round outline class="button btn-book" (click)="sendRequestCombo()">Gửi yêu cầu</button>
           </ion-row>
