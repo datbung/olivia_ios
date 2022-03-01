@@ -391,7 +391,7 @@ export class CardeparturePage implements OnInit {
           this.listcarname.push(item);
         }
       }
-      this.sortAirline(null);
+      //this.sortAirline(null);
     })
   }
 } 

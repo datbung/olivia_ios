@@ -254,6 +254,14 @@ export class HotelDetailPage implements OnInit {
         se.valueGlobal.daily=[];
         se.valueGlobal.arrsuggest=[];
         if (res.data) {
+          // res.data.promotionIsHot=[
+          //   "2022-03-01",
+          //   "2022-03-03",
+          //   "2022-03-05",
+          //   "2022-03-06",
+          //   "2022-03-08",
+          //   "2022-03-10"
+          //   ]
           se.valueGlobal.dayhot=res.data.promotionIsHot; 
           se.valueGlobal.daily=res.data.daily;
           se.valueGlobal.arrsuggest=[];

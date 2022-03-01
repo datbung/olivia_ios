@@ -564,7 +564,7 @@ export class CombocarnewPage implements OnInit {
         //Lấy danh sách chuyến xe chiều đi
         var url = C.urls.baseUrl.urlMobile + '/get-transfer-data?cid=' + se.comboId + '&from=' + se.fromId + '&to=' + se.toId + '&date=' + se.cin + '&an=' + se.adults + '&cn=' + se.children + '&cas=' + se.textagepost;
         se.gf.RequestApi('GET', url, {}, {}, 'carcombo', 'get-transfer-data').then((data: any) => {
-          if (data.data.length > 0) {
+          if (data.data && data.data.length > 0) {
             var listDeparttemp = data.data;
             se.listDepartTransfers=[];
             for (let i = 0; i < listDeparttemp.length; i++) {
@@ -595,7 +595,7 @@ export class CombocarnewPage implements OnInit {
         //Lấy danh sách chuyến xe chiều về
         var url = C.urls.baseUrl.urlMobile + '/get-transfer-data?cid=' + se.comboId + '&from=' + se.toId + '&to=' + se.fromId + '&date=' + se.cout + '&an=' + se.adults + '&cn=' + se.children + '&cas=' + se.textagepost;
         se.gf.RequestApi('GET', url, {}, {}, 'carcombo', 'get-transfer-data').then((data: any) => {
-          if (data.data.length > 0) {
+          if (data.data && data.data.length > 0) {
             var listReturntemp = data.data;
             se.listReturnTransfers=[];
             for (let i = 0; i < listReturntemp.length; i++) {
