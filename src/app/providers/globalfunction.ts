@@ -1967,6 +1967,33 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
     })
    
   }
+
+  getSummaryBooking(data) : Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject) => {
+      var options = {
+        method: 'GET',
+        url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+data.pnr.resNo,
+        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+        headers: {
+          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      };
+      request(options, function (error, response, body) {
+        if (error) {
+          error.page = "flightpaymentselect";
+          error.func = "getSummaryBooking";
+          error.param = JSON.stringify(options);
+        }
+        if (response.statusCode == 200) {
+          let result = JSON.parse(body);
+          resolve(result);
+        }
+      })
+    })
+  }
+  
 //giữ vé combo vmb
 holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   var se = this;

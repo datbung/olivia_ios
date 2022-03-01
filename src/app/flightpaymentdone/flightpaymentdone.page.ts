@@ -56,12 +56,15 @@ export class FlightpaymentdonePage implements OnInit {
     
   }
 
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
     this.code = this.activatedRoute.snapshot.paramMap.get('code');
     this.startdate = moment(this.activatedRoute.snapshot.paramMap.get('startdate')).format('DD/MM');
     this.enddate = moment(this.activatedRoute.snapshot.paramMap.get('enddate')).format('DD/MM');
     this.stt = this._flightService.itemFlightCache.ischeckpayment;
-    let date = this._flightService.itemFlightCache.periodPaymentDate;
+
+    let dataSummary = await se.gf.getSummaryBooking(se._flightService.itemFlightCache);
+    console.log(dataSummary);
+    let date = dataSummary.periodPaymentDate;
     if(date){
       this.text= moment(date).format("HH:mm") + " " + this.gf.getDayOfWeek(date).dayname +", "+ moment(date).format("DD") + " thg " + moment(date).format("MM");
     }

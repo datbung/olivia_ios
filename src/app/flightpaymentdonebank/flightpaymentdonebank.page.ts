@@ -59,12 +59,16 @@ export class FlightpaymentdonebankPage implements OnInit {
 
   ngOnInit() {
   }
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.code = this.activatedRoute.snapshot.paramMap.get('code');
     this.startdate = moment(this.activatedRoute.snapshot.paramMap.get('startdate')).format('DD/MM');
     this.enddate = moment(this.activatedRoute.snapshot.paramMap.get('enddate')).format('DD/MM');
     this.stt = this._flightService.itemFlightCache.ischeckpayment;
-    let date = this._flightService.itemFlightCache.periodPaymentDate;
+    let dataSummary = await se.gf.getSummaryBooking(se._flightService.itemFlightCache);
+    console.log(dataSummary);
+    let date = dataSummary.periodPaymentDate;
+
+    //let date = this._flightService.itemFlightCache.periodPaymentDate;
     if (this._flightService.itemFlightCache.departFlight && this._flightService.itemFlightCache.departFlight.operatedBy) {
       this.pacificVNA = this._flightService.itemFlightCache.departFlight.operatedBy;
     }
