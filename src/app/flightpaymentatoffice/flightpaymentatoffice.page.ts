@@ -137,8 +137,8 @@ export class FlightpaymentatofficePage implements OnInit{
       let itemcache = se._flightService.itemFlightCache;
       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
                   se.gf.CreatePayoo(url).then(datapayoo => {
-                    datapayoo = JSON.parse(datapayoo);
-                        resolve(datapayoo.success);
+                    let data = JSON.parse(datapayoo);
+                        resolve(data.success);
                 })
     })
   }
