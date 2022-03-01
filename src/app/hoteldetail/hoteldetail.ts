@@ -3332,7 +3332,7 @@ async bookcombo() {
         monthFormat: 'MM / YYYY', 
         weekdays:['CN','T2','T3','T4','T5','T6','T7'],
         weekStart: 1,
-        closeLabel:'Thoát',
+        closeLabel:'',
         doneLabel: '',
         step: 0,
         defaultScrollTo: fromdate,
@@ -3343,14 +3343,17 @@ async bookcombo() {
   
        this.myCalendar = await this.modalCtrl.create({
         component: CalendarModal,
-        componentProps: { options }
+        componentProps: { options },
+        cssClass: 'hotel-calendar-custom',
 
       });
   
       this.myCalendar.present().then(()=>{
         se.allowclickcalendar = true;
         $('.days-btn').click(e => this.clickedElement(e));
-        
+        $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+        //add event close header
+        $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
       let divmonth = $('.month-box');
       if(divmonth && divmonth.length >0){
         for (let index = 0; index < divmonth.length; index++) {
@@ -3424,7 +3427,9 @@ async bookcombo() {
     //google analytic
     se.gf.googleAnalytion('hoteldetail','changedate','');
   }
-
+  closecalendar(){
+    this.modalCtrl.dismiss();
+  }
   changeHotel() {
     this.goback();
   }
