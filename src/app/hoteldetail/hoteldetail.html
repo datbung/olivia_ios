@@ -409,7 +409,7 @@
                  class="button-combo">
                 <button ion-button round outline class="button btn-book" (click)="sendRequestCombo()">Gửi yêu cầu</button>
               </ion-row>
-  
+           
               <ion-row
                 *ngIf="fc && loadcomplete && loginuser && usermail && allowbookcombofc && hotelRoomClasses.length > 0 && (!ischeckBOD && checkBODdone) && guest <=9"
                  class="button-combo">
@@ -425,7 +425,11 @@
             <ion-row *ngIf="nm && loadcomplete&&(!ischeckBOD && checkBODdone)">
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(3,null,0)">Gửi yêu cầu</button>
             </ion-row>
-          
+            <ion-row
+            *ngIf="valueGlobal.arrsuggest.length>0 && hotelRoomClasses.length == 0 && !nm && !fc && !fcbcar && (loadcomplete || loaddonecombo ||checkBODdone)"
+             class="button-combo">
+            <button ion-button round outline class="button btn-book" (click)="sendRequestCombo()">Gửi yêu cầu</button>
+          </ion-row>
           </div>
         </div>
       </div>

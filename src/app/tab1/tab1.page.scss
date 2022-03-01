@@ -1251,6 +1251,14 @@ body{
     background-position: 27px 0px;
     border-radius: 0px !important;
   }
+  .dayhot.is-first.on-selected, .startSelection .dayhot.on-selected, .endSelection .dayhot
+  {
+    background-position: 19px 0 !important;
+  }
+  
+  .days.between .dayhot {
+    background-position: 38px 0 !important;
+  }
   .days
   {
     margin-bottom: 20px !important;
