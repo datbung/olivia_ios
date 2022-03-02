@@ -2737,7 +2737,14 @@ export class FlightComboReviewsPage implements OnInit{
     let newdatecout = new Date(arr1[2], arr1[1] - 1, arr1[0]);
     let fromdate = new Date(moment(newdatecin).format('YYYY-MM-DD'));
     let todate = new Date(moment(newdatecout).format('YYYY-MM-DD'));
-
+    if(this.valueGlobal.dayhot){
+      for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
+        this._daysConfig.push({
+          date: this.valueGlobal.dayhot[j],
+          cssClass: 'dayhot'
+        })
+      }
+     }
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()
