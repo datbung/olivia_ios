@@ -1963,7 +1963,7 @@ export class CombocarnewPage implements OnInit {
 
   async changeDateInfo() {
     var se = this;
-    if (!se.loadpricedone) {
+    if(!this.PriceAvgPlusTAStr&&!this.loadpricedone){
       se.presentToastwarming('Đang tìm vé xe tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
       return;
     }
@@ -2004,13 +2004,18 @@ export class CombocarnewPage implements OnInit {
     });
 
     this.myCalendar.present().then(() => {
-      $('.days-btn').click(e => this.clickedElement(e));
       this.allowclickcalendar = true;
+      $('.days-btn').click(e => this.clickedElement(e));
+  
 
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
               //add event close header
               $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
     });
+    const event: any = await this.myCalendar.onDidDismiss();
+    if(event){
+      se.allowclickcalendar = true;
+    }
   }
   async clickedElement(e: any) {
     var obj: any = e.currentTarget;
@@ -2362,5 +2367,6 @@ export class CombocarnewPage implements OnInit {
         }
       }));
     }
-  };
+  }
+  
 }

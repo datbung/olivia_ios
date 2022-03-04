@@ -127,6 +127,7 @@ export class ValueGlobal {
   backpageCathay:string;
   dayhot:any;
   daily:any;
+  promotionPackage:any;
   refreshFBAccessToken: any;
   arrsuggest: any;
 }
