@@ -495,9 +495,14 @@
       </ion-row>
     </div>
     <ion-row *ngIf="!PriceAvgPlusTAStr && loadpricedone">
-      <ion-col style="padding:5px 0">
+      <!-- <ion-col style="padding:5px 0">
         <label style="font-size:14px;color:#828282;font-style: italic">{{msgwrn}}</label>
-      </ion-col>
+      </ion-col> -->
+      <div class="row-suggest">
+        <div ><span class="text-suggest color-red">Giai đoạn hết phòng.</span> <span *ngIf="valueGlobal.promotionPackage.length>0" (click)="changeDateInfo()" class="text-suggest color-blue text-underline"> Quý khách vui lòng chọn ngày khác</span></div> 
+        <div *ngIf="valueGlobal.promotionPackage.length>0" class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.promotionPackage}}</span> </div>  
+                 <div *ngIf="valueGlobal.promotionPackage.length==0" (click)="changeHotel()" class="text-suggest color-blue text-underline">Xem qua các chỗ nghỉ tương tự khác </div> 
+       </div>
     </ion-row>
   </div>
 </ion-content>
