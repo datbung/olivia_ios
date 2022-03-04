@@ -224,7 +224,7 @@ export class MytripaymentflightselectPage implements OnInit {
     var totalPrice=this.totalpricedisplay.toString().replace(/\./g, '').replace(/\,/g, '');
     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+type+'&source=app&amount=' + totalPrice + '&orderCode=' + this.bookingCode + '&buyerPhone=' + this.cus_phone + '&memberId=' + this.jti+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight';
                 this.gf.CreatePayoo(url).then(datapayoo => {
-                  datapayoo = JSON.parse(datapayoo);
+                  //datapayoo = JSON.parse(datapayoo);
                   if (datapayoo.success) {
                     this._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
                     this.openWebpage(datapayoo.returnUrl.payUrl);
@@ -291,7 +291,7 @@ export class MytripaymentflightselectPage implements OnInit {
     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + totalPrice + '&orderCode=' + this.bookingCode + '&buyerPhone=' + this.cus_phone+ '&memberId=' + this.jti;
                 this.gf.CreatePayoo(url).then(datapayoo => {
                   this.hideLoading();
-                  datapayoo = JSON.parse(datapayoo);
+                  //datapayoo = JSON.parse(datapayoo);
                   if (datapayoo.success) {
                     this._flightService.itemFlightCache.qrimg = datapayoo.payooQrData.QRCodeUrl;
                     this.navCtrl.navigateForward('mytripaymentflightpayoo/' + this.bookingCode + '/1');
@@ -479,7 +479,7 @@ export class MytripaymentflightselectPage implements OnInit {
     var totalPrice=se.totalpricedisplay.toString().replace(/\./g, '').replace(/\,/g, '');
     let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.cus_phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
     se.gf.CreatePayoo(url).then(datapayoo => {
-    datapayoo = JSON.parse(datapayoo);
+    //datapayoo = JSON.parse(datapayoo);
     if(datapayoo.success){
       se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
       se._flightService.itemFlightCache.ischeckpayment = 1;
@@ -803,7 +803,7 @@ export class MytripaymentflightselectPage implements OnInit {
     let url;
       url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + this.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.cus_phone + '&memberId=' + se.jti +'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
       se.gf.CreateUrl(url).then(dataBuildLink => {
-        dataBuildLink = JSON.parse(dataBuildLink);
+        //dataBuildLink = JSON.parse(dataBuildLink);
         if (dataBuildLink.success) {
           se.gf.hideLoading();
           resolve(true);

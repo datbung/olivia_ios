@@ -84,6 +84,9 @@ export class FlightpaymentatofficePage implements OnInit{
             if(check){
               se._flightService.itemFlightCache.ischeckpayment = 0;
               let itemcache = se._flightService.itemFlightCache;
+              if(se._flightService.itemFlightCache.objHotelCitySelected){
+              }
+              se.gf.hideLoading();
               se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
               
               // //se.gf.createFlightTransaction(se._flightService.itemFlightCache);
@@ -135,9 +138,11 @@ export class FlightpaymentatofficePage implements OnInit{
     var se = this;
     return new Promise((resolve, reject) => {
       let itemcache = se._flightService.itemFlightCache;
+      itemcache.ischeckpayment = 0;
       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
-                  se.gf.CreatePayoo(url).then(datapayoo => {
-                    let data = JSON.parse(datapayoo);
+                  se.gf.CreatePayoo(url).then((data) => {
+                    //console.log(data);
+                    //var data = JSON.parse(datapayoo);
                         resolve(data.success);
                 })
     })

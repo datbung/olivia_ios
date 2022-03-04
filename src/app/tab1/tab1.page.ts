@@ -204,7 +204,7 @@ export class Tab1Page implements OnInit {
   ) {
     //this.splashScreen.hide();
     //this.gf.refreshToken();
-    bizTravelService.isCompany = true;
+    //bizTravelService.isCompany = true;
 
     this.storage.get('jti').then((memberid) => {
       this.storage.get('deviceToken').then((devicetoken) => {

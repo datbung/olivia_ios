@@ -494,8 +494,8 @@ export class FlightPaymentSelectPage implements OnInit {
             // this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
               let itemcache = this._flightService.itemFlightCache;
               var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=momo&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode +'&rememberToken='+this.isremember+ '&buyerPhone=' + itemcache.phone +'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight'+ '&memberId=' + this.jti+'&version=2';
-              this.gf.CreatePayoo(url).then(datapayoo => {
-                let data = JSON.parse(datapayoo);
+              this.gf.CreatePayoo(url).then((data) => {
+                //let data = JSON.parse(datapayoo);
                 if (data.success) {
                   this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                   this.openWebpage(data.returnUrl.payUrl);
@@ -523,8 +523,8 @@ export class FlightPaymentSelectPage implements OnInit {
                   //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
                     let itemcache = this._flightService.itemFlightCache;
                     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=momo&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&buyerPhone=' + itemcache.phone +'&rememberToken='+this.isremember+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight'+ '&memberId=' + this.jti+'&version=2';
-                    this.gf.CreatePayoo(url).then(datapayoo => {
-                      let data = JSON.parse(datapayoo);
+                    this.gf.CreatePayoo(url).then((data) => {
+                      //let data = JSON.parse(datapayoo);
                       if (data.success) {
                         this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                         this.openWebpage(data.returnUrl.payUrl);
@@ -748,8 +748,8 @@ export class FlightPaymentSelectPage implements OnInit {
               //se._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
               let itemcache = se._flightService.itemFlightCache;
                   let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookingCode + '&buyerPhone=' +itemcache.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
-                  se.gf.CreatePayoo(url).then(datapayoo => {
-                    let data = JSON.parse(datapayoo);
+                  se.gf.CreatePayoo(url).then((data) => {
+                    //let data = JSON.parse(datapayoo);
                     if(data.success){
                       se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                         se._flightService.itemFlightCache.ischeckpayment = 1;
@@ -800,9 +800,9 @@ export class FlightPaymentSelectPage implements OnInit {
               
                   let itemcache = this._flightService.itemFlightCache;
                     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
-                    this.gf.CreatePayoo(url).then(datapayoo => {
+                    this.gf.CreatePayoo(url).then((data) => {
                       this.hideLoading();
-                      let data = JSON.parse(datapayoo);
+                      //let data = JSON.parse(datapayoo);
                       if (data.success) {
                         this._flightService.itemFlightCache.BillingCode = data.payooStoreData.BillingCode;
                         this._flightService.itemFlightCache.periodPaymentDate = data.payooStoreData.periodPayment;
@@ -843,9 +843,9 @@ export class FlightPaymentSelectPage implements OnInit {
             let itemcache = this._flightService.itemFlightCache;
             //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
-            this.gf.CreatePayoo(url).then(datapayoo => {
+            this.gf.CreatePayoo(url).then((data) => {
               this.hideLoading();
-              let data = JSON.parse(datapayoo);
+              //let data = JSON.parse(datapayoo);
               if (data.success) {
                 this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                 this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
@@ -871,9 +871,9 @@ export class FlightPaymentSelectPage implements OnInit {
                       let itemcache = this._flightService.itemFlightCache;
                       //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
                       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
-                      this.gf.CreatePayoo(url).then(datapayoo => {
+                      this.gf.CreatePayoo(url).then((data) => {
                         this.hideLoading();
-                        let data = JSON.parse(datapayoo);
+                        //let data = JSON.parse(datapayoo);
                         if (data.success) {
                           this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                           this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
@@ -1138,8 +1138,8 @@ export class FlightPaymentSelectPage implements OnInit {
           if(check){
                   let itemcache = this._flightService.itemFlightCache;
                   var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&buyerPhone=' + itemcache.phone +'&memberId='+this.jti+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
-                  this.gf.CreatePayoo(url).then(datapayoo => {
-                    let data = JSON.parse(datapayoo);
+                  this.gf.CreatePayoo(url).then((data) => {
+                    //let data = JSON.parse(datapayoo);
                     if (data.success) {
                       this.hideLoading();
                       resolve(true);

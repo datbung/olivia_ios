@@ -757,6 +757,9 @@ export class FlightaddservicePage implements OnInit {
                 }
                 
               }
+              if(totalprice*1 <0){
+                totalprice = 0;
+              }
               this.totalPriceDisplay = this.gf.convertNumberToString(totalprice);
               this._flightService.itemFlightCache.totalPrice = totalprice;
               this._flightService.itemFlightCache.totalPriceDisplay = this.totalPriceDisplay;
@@ -1744,6 +1747,10 @@ export class FlightaddservicePage implements OnInit {
 
     confirm(){
       var se = this;
+      if(!(se.loadHotelCityDone || (se._flightService.itemFlightCache.itemsFlightCityHotel && se._flightService.itemFlightCache.itemsFlightCityHotel.length >0))){
+        se.gf.showToastWarning('Đang tải dữ liệu. Xin vui lòng đợi trong giây lát!')
+        return;
+      }
         if(se._flightService.itemFlightCache.backtochoiceseat){
           if(!se.checkseat){
             se.showAlertChoiceSeat();

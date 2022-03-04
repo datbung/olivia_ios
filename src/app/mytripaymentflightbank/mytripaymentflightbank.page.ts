@@ -325,7 +325,7 @@ export class MytripaymentflightbankPage implements OnInit {
       se._flightService.itemFlightCache.periodPaymentDate = se.activityService.objPaymentMytrip.trip.delivery_payment_date;
           var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + se.cus_phone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
           se.gf.CreatePayoo(url).then(datapayoo => {
-          datapayoo = JSON.parse(datapayoo);
+          //datapayoo = JSON.parse(datapayoo);
           if(datapayoo.success){
             se.openWebpage(datapayoo.returnUrl);
             se.zone.run(()=>{
@@ -345,7 +345,7 @@ export class MytripaymentflightbankPage implements OnInit {
 
           var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + totalPrice + '&orderCode=' + this.bookingCode + '&buyerPhone=' + this.cus_phone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
           se.gf.CreatePayoo(url).then(datapayoo => {
-          datapayoo = JSON.parse(datapayoo);
+          //datapayoo = JSON.parse(datapayoo);
           if(datapayoo.success){
             se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
             se.openWebpage(datapayoo.returnUrl);

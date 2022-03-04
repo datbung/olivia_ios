@@ -950,12 +950,12 @@ async checkAllowPayment(bookingCode): Promise<any>{
         'method': 'POST',
         'url': url,
         'headers': {
-          'Cookie': 'ASP.NET_SessionId=1zuyjhynxivxfmups4llel5v'
         }
       };
       request(options, function (error, response) { 
         if (error) throw new Error(error);
-        resolve(response.body);
+        //console.log(JSON.parse(response.body));
+        resolve(JSON.parse(response.body));
       });
     })
   }

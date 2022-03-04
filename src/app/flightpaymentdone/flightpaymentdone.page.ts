@@ -62,7 +62,7 @@ export class FlightpaymentdonePage implements OnInit {
     this.enddate = moment(this.activatedRoute.snapshot.paramMap.get('enddate')).format('DD/MM');
     this.stt = this._flightService.itemFlightCache.ischeckpayment;
 
-    let dataSummary = await se.gf.getSummaryBooking(se._flightService.itemFlightCache);
+    let dataSummary = await this.gf.getSummaryBooking(this._flightService.itemFlightCache);
     console.log(dataSummary);
     let date = dataSummary.periodPaymentDate;
     if(date){

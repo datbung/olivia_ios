@@ -246,7 +246,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
         se.gf.CreatePayoo(url).then(datapayoo => {
           se.hideLoading();
           se.gf.hideLoading();
-        datapayoo = JSON.parse(datapayoo);
+        //datapayoo = JSON.parse(datapayoo);
         if(datapayoo.success){
           se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
 

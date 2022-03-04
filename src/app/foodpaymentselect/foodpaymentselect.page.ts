@@ -171,7 +171,7 @@ export class FoodpaymentselectPage implements OnInit {
             this.foodService.PeriodPaymentDate = data.response.periodPaymentDate;
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay?paymentType=payoo_store&source=app&amount=' + this.foodService.totalPrice + '&orderCode=' + data.response.bookingCode + '&buyerPhone=' + this.foodService.objBooking.CustomerPhone + ''
             this.gf.CreatePayoo(url).then(datapayoo => {
-              datapayoo = JSON.parse(datapayoo);
+              //datapayoo = JSON.parse(datapayoo);
               if (datapayoo.success) {
                 this.foodService.BillingCode = datapayoo.payooStoreData.BillingCode;
                 if (this.loader) {
@@ -198,7 +198,7 @@ export class FoodpaymentselectPage implements OnInit {
             this.foodService.PeriodPaymentDate = data.response.periodPaymentDate;
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay?paymentType=payoo_qr&source=app&amount=' + this.foodService.totalPrice + '&orderCode=' + data.response.bookingCode + '&buyerPhone=' + this.foodService.objBooking.CustomerPhone + ''
             this.gf.CreatePayoo(url).then(datapayoo => {
-              datapayoo = JSON.parse(datapayoo);
+              //datapayoo = JSON.parse(datapayoo);
               if (datapayoo.success) {
                 this.foodService.qrimg = datapayoo.payooQrData.QRCodeUrl;
                 if (this.loader) {
@@ -284,7 +284,7 @@ export class FoodpaymentselectPage implements OnInit {
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay?paymentType=visa&source=app&amount=' + this.foodService.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + this.foodService.objBooking.CustomerPhone + '&memberId=' + se.jti + '&TokenId='+this.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+C.urls.baseUrl.urlPayment+'/Home/BlankFoodOpenPay';
             //&callbackUrl=ivivuapp%3A%2F%2Fapp%2Ffoodpaymentdone%2F'+ se.bookingCode + '%2F' + se.startDate + '%2F' + se.endDate;
             this.gf.CreatePayoo(url).then(datapayoo => {
-              datapayoo = JSON.parse(datapayoo);
+              //datapayoo = JSON.parse(datapayoo);
               se.openWebpage(datapayoo.returnUrl);
               //se.setintervalvisa();
               //window.open(datapayoo.returnUrl, '_system');
@@ -301,7 +301,7 @@ export class FoodpaymentselectPage implements OnInit {
         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay?paymentType=visa&source=app&amount=' + this.foodService.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + this.foodService.objBooking.CustomerPhone + '&memberId=' + se.jti + '&TokenId='+this.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+C.urls.baseUrl.urlPayment+'/Home/BlankFoodOpenPay';
         //&callbackUrl=ivivuapp%3A%2F%2Fapp%2Ffoodpaymentdone%2F'+ se.bookingCode + '%2F' + se.startDate + '%2F' + se.endDate;
         this.gf.CreatePayoo(url).then(datapayoo => {
-          datapayoo = JSON.parse(datapayoo);
+          //datapayoo = JSON.parse(datapayoo);
           se.openWebpage(datapayoo.returnUrl);
           //se.setintervalvisa();
           //window.open(datapayoo.returnUrl, '_system');
@@ -379,7 +379,7 @@ export class FoodpaymentselectPage implements OnInit {
             this.foodService.PeriodPaymentDate = data.response.periodPaymentDate;
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay?paymentType=momo&source=app&amount=' + this.foodService.totalPrice + '&orderCode=' + data.response.bookingCode + '&buyerPhone=' + this.foodService.objBooking.CustomerPhone +'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomefood';
             this.gf.CreatePayoo(url).then(datapayoo => {
-              datapayoo = JSON.parse(datapayoo);
+              //datapayoo = JSON.parse(datapayoo);
               if (datapayoo.success) {
                 window.open(datapayoo.returnUrl.payUrl, '_system');
                 this.zone.run(()=>{
@@ -396,7 +396,7 @@ export class FoodpaymentselectPage implements OnInit {
   {
     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay?paymentType=momo&source=app&amount=' + this.foodService.totalPrice + '&orderCode=' + this.bookingCode + '&buyerPhone=' + this.foodService.objBooking.CustomerPhone +'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomefood';
     this.gf.CreatePayoo(url).then(datapayoo => {
-      datapayoo = JSON.parse(datapayoo);
+      //datapayoo = JSON.parse(datapayoo);
       if (datapayoo.success) {
         window.open(datapayoo.returnUrl.payUrl, '_system');
         this.zone.run(()=>{

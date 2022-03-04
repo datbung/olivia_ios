@@ -268,7 +268,7 @@ export class AppComponent {
           }
           //console.log('Successfully matched route', JSON.stringify(match));
         }, nomatch => {
-          console.error('Got a deeplink that didn\'t match', nomatch);
+          //console.error('Got a deeplink that didn\'t match', nomatch);
       });
       
       //test 
