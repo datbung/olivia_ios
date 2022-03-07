@@ -426,7 +426,7 @@
                 <button ion-button round outline class="button btn-book" (click)="requestCombo(3,null,0)">Gửi yêu cầu</button>
             </ion-row>
             <ion-row
-            *ngIf="valueGlobal.arrsuggest.length>0 && hotelRoomClasses.length == 0 && !nm && !fc && !fcbcar && loadcomplete"
+            *ngIf="hotelRoomClasses.length == 0 && !nm && !fc && !fcbcar && loadcomplete"
              class="button-combo">
             <button ion-button round outline class="button btn-book" (click)="sendRequestCombo()">Gửi yêu cầu</button>
           </ion-row>
@@ -924,9 +924,9 @@
     
       <div *ngIf="loadcomplete && hotelRoomClasses && hotelRoomClasses.length == 0"  class="div-suggest">
         <div class="row-suggest">
-         <div ><span class="text-suggest color-red">Giai đoạn hết phòng.</span> <span *ngIf="valueGlobal.arrsuggest.length>0" (click)="changeDate()" class="text-suggest color-blue text-underline"> Quý khách vui lòng chọn ngày khác</span></div> 
-         <div *ngIf="valueGlobal.arrsuggest.length>0" class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.arrsuggest}}</span> </div>  
-                  <div *ngIf="valueGlobal.arrsuggest.length==0" (click)="changeHotel()" class="text-suggest color-blue text-underline">Xem qua các chỗ nghỉ tương tự khác </div> 
+         <div ><span class="text-suggest color-red">Giai đoạn hết phòng.</span> <span  (click)="changeDate()" class="text-suggest color-blue text-underline"> Quý khách vui lòng chọn ngày khác</span></div> 
+         <!-- <div *ngIf="valueGlobal.arrsuggest.length>0" class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.arrsuggest}}</span> </div>  
+                  <div *ngIf="valueGlobal.arrsuggest.length==0" (click)="changeHotel()" class="text-suggest color-blue text-underline">Xem qua các chỗ nghỉ tương tự khác </div>  -->
         </div>
       </div>
         <!-- <div *ngIf="loadcomplete && hotelRoomClasses && hotelRoomClasses.length == 0" class="div-empty-room">
