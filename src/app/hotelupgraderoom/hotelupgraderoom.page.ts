@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,NgZone } from '@angular/core';
-import { NavController, ModalController } from '@ionic/angular';
+import { NavController, ModalController,LoadingController } from '@ionic/angular';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { Storage } from '@ionic/storage';
 import { ValueGlobal, Bookcombo } from '../providers/book-service';
@@ -21,13 +21,14 @@ export class HotelupgraderoomPage implements OnInit {
   loginuser: any;
   ListRoomClassestemp: any[];
   jsonroom: any;
+  loader: any;
   constructor(private modalCtrl: ModalController, 
     public activityService: ActivityService, 
     private storage: Storage,
     public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     public gf: GlobalFunction,
-    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute,private zone: NgZone) { 
+    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute,private zone: NgZone,private loadingCtrl: LoadingController) { 
     var se = this;
     se.storage.get('username').then(name => {
       if (name !== null) {
@@ -47,6 +48,7 @@ export class HotelupgraderoomPage implements OnInit {
     var se = this;
     if (data) {
       var form = data;
+      se.presentLoading();
       var options = {
         method: 'POST',
         url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
@@ -75,7 +77,7 @@ export class HotelupgraderoomPage implements OnInit {
         };
         se.zone.run(() => {
           var result = JSON.parse(body);
-
+          se.loader.dismiss();
           if (result.Hotels) {
             se.ListRoomClassestemp = result.Hotels[0].RoomClasses;
             se.checkRoomFsale();
@@ -131,5 +133,9 @@ export class HotelupgraderoomPage implements OnInit {
       }
     });
   }
- 
+  async presentLoading() {
+    this.loader = await this.loadingCtrl.create({
+   });
+   this.loader.present();
+ }
 }

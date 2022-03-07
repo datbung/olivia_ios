@@ -2856,6 +2856,8 @@ export class FlightComboReviewsPage implements OnInit{
               return;
             }
             var se = this;
+            se.PriceAvgPlusTAStr = 0;
+            se.loadflightpricedone=false
             //Nếu chọn duration = 1 thì tự cộng thêm 1 ngày cho = duration combo
             let _duration = moment(todate).diff( moment(fromdate), 'days');
             if(_duration == 1){
@@ -2921,8 +2923,6 @@ export class FlightComboReviewsPage implements OnInit{
 
   checkComboAfterChangedate(){
     var se = this;
-    //se.PriceAvgPlusTAStr = 0;
-   
     var cb;
     se.loadComboData(cb);
     this.roomPriceSale = this.basepricesale;
