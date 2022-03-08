@@ -2745,14 +2745,14 @@ export class FlightComboReviewsPage implements OnInit{
         })
       }
      }
-    //  if(this.valueGlobal.dayhot){
-    //   for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
-    //     this._daysConfig.push({
-    //       date: this.valueGlobal.dayhot[j],
-    //       cssClass: 'strikethrough'
-    //     })
-    //   }
-    //  }
+     if(this.valueGlobal.notSuggestDailyCB){
+      for (let j = 0; j < this.valueGlobal.notSuggestDailyCB.length; j++) {
+        this._daysConfig.push({
+          date: this.valueGlobal.notSuggestDailyCB[j],
+          cssClass: 'strikethrough'
+        })
+      }
+     }
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()

@@ -253,42 +253,43 @@ export class HotelDetailPage implements OnInit {
       if (response.statusCode == 200) {
         var res = JSON.parse(body);
         if (value=='package') {
-          var promotionPackage : any;
-          se.valueGlobal.promotionPackage=[];
+          // var promotionPackage : any;
+          se.valueGlobal.notSuggestDailyCB=[];
           if (res.data) {
-            promotionPackage=res.data.promotionPackage;
-            if (promotionPackage && promotionPackage.length>0) {
-              const json1 = new Map([
-                [1, '31/1/2022'],
-                [2, '28/2/2022'],
-                [3, '31/3/2022'],
-                [4,'30/4/2022'],
-                [5,'31/5/2022'],
-                [6,"30/6/2022"],
-                [7,"31/7/2022"],
-                [8,"31/8/2022"],
-                [9,"30/9/2022"],
-                [10,"31/10/2022"],
-                [11,"30/11/2022"],
-                [12,"31/12/2022"],
-              ])
+            se.valueGlobal.notSuggestDailyCB=res.data.notSuggestDaily;
+            // promotionPackage=res.data.promotionPackage;
+            // if (promotionPackage && promotionPackage.length>0) {
+            //   const json1 = new Map([
+            //     [1, '31/1/2022'],
+            //     [2, '28/2/2022'],
+            //     [3, '31/3/2022'],
+            //     [4,'30/4/2022'],
+            //     [5,'31/5/2022'],
+            //     [6,"30/6/2022"],
+            //     [7,"31/7/2022"],
+            //     [8,"31/8/2022"],
+            //     [9,"30/9/2022"],
+            //     [10,"31/10/2022"],
+            //     [11,"30/11/2022"],
+            //     [12,"31/12/2022"],
+            //   ])
               
               
-              let daystart = parseInt( moment(promotionPackage[0]).format('DD')) ;
-              let mstart = parseInt( moment(promotionPackage[0]).format('MM')) ;
-              let mend =  parseInt(moment(promotionPackage.slice(-1)[0]).format('MM')) ;
-              for(let i = mstart; i<=mend; i++){
-                if(i == mstart){
-                  se.valueGlobal.promotionPackage.push(daystart+" - "+json1.get(i))
-                }
-                else if(i == mend){
-                  se.valueGlobal.promotionPackage.push('01 - '+moment(promotionPackage.slice(-1)[0]).format('DD/MM/YYYY'))
-                }
-                else{
-                  se.valueGlobal.promotionPackage.push('01 - '+json1.get(i))
-                }
-              }
-            }
+            //   let daystart = parseInt( moment(promotionPackage[0]).format('DD')) ;
+            //   let mstart = parseInt( moment(promotionPackage[0]).format('MM')) ;
+            //   let mend =  parseInt(moment(promotionPackage.slice(-1)[0]).format('MM')) ;
+            //   for(let i = mstart; i<=mend; i++){
+            //     if(i == mstart){
+            //       se.valueGlobal.promotionPackage.push(daystart+" - "+json1.get(i))
+            //     }
+            //     else if(i == mend){
+            //       se.valueGlobal.promotionPackage.push('01 - '+moment(promotionPackage.slice(-1)[0]).format('DD/MM/YYYY'))
+            //     }
+            //     else{
+            //       se.valueGlobal.promotionPackage.push('01 - '+json1.get(i))
+            //     }
+            //   }
+            // }
           }
         }else{
           se.valueGlobal.dayhot=[]; 
@@ -304,40 +305,41 @@ export class HotelDetailPage implements OnInit {
             //   "2022-03-10"
             //   ]
             se.valueGlobal.dayhot=res.data.promotionIsHot; 
+            se.valueGlobal.notSuggestDaily=res.data.notSuggestDaily;
             se.valueGlobal.daily=res.data.daily;
             se.valueGlobal.arrsuggest=[];
-            if (se.valueGlobal.daily.length>0) {
-              const json1 = new Map([
-                [1, '31/1/2022'],
-                [2, '28/2/2022'],
-                [3, '31/3/2022'],
-                [4,'30/4/2022'],
-                [5,'31/5/2022'],
-                [6,"30/6/2022"],
-                [7,"31/7/2022"],
-                [8,"31/8/2022"],
-                [9,"30/9/2022"],
-                [10,"31/10/2022"],
-                [11,"30/11/2022"],
-                [12,"31/12/2022"],
-              ])
+            // if (se.valueGlobal.daily.length>0) {
+            //   const json1 = new Map([
+            //     [1, '31/1/2022'],
+            //     [2, '28/2/2022'],
+            //     [3, '31/3/2022'],
+            //     [4,'30/4/2022'],
+            //     [5,'31/5/2022'],
+            //     [6,"30/6/2022"],
+            //     [7,"31/7/2022"],
+            //     [8,"31/8/2022"],
+            //     [9,"30/9/2022"],
+            //     [10,"31/10/2022"],
+            //     [11,"30/11/2022"],
+            //     [12,"31/12/2022"],
+            //   ])
               
               
-              let daystart = parseInt( moment(se.valueGlobal.daily[0]).format('DD')) ;
-              let mstart = parseInt( moment(se.valueGlobal.daily[0]).format('MM')) ;
-              let mend =  parseInt(moment(se.valueGlobal.daily.slice(-1)[0]).format('MM')) ;
-              for(let i = mstart; i<=mend; i++){
-                if(i == mstart){
-                  se.valueGlobal.arrsuggest.push(daystart+" - "+json1.get(i))
-                }
-                else if(i == mend){
-                  se.valueGlobal.arrsuggest.push('01 - '+moment(se.valueGlobal.daily.slice(-1)[0]).format('DD/MM/YYYY'))
-                }
-                else{
-                  se.valueGlobal.arrsuggest.push('01 - '+json1.get(i))
-                }
-              }
-            }
+            //   let daystart = parseInt( moment(se.valueGlobal.daily[0]).format('DD')) ;
+            //   let mstart = parseInt( moment(se.valueGlobal.daily[0]).format('MM')) ;
+            //   let mend =  parseInt(moment(se.valueGlobal.daily.slice(-1)[0]).format('MM')) ;
+            //   for(let i = mstart; i<=mend; i++){
+            //     if(i == mstart){
+            //       se.valueGlobal.arrsuggest.push(daystart+" - "+json1.get(i))
+            //     }
+            //     else if(i == mend){
+            //       se.valueGlobal.arrsuggest.push('01 - '+moment(se.valueGlobal.daily.slice(-1)[0]).format('DD/MM/YYYY'))
+            //     }
+            //     else{
+            //       se.valueGlobal.arrsuggest.push('01 - '+json1.get(i))
+            //     }
+            //   }
+            // }
           }
         }
       
@@ -3376,14 +3378,14 @@ async bookcombo() {
         })
       }
      }
-    //  if(this.valueGlobal.daily){
-    //   for (let j = 0; j < this.valueGlobal.daily.length; j++) {
-    //     _daysConfig.push({
-    //       date: this.valueGlobal.daily[j],
-    //       cssClass: 'strikethrough'
-    //     })
-    //   }
-    //  }
+     if(this.valueGlobal.notSuggestDaily){
+      for (let j = 0; j < this.valueGlobal.notSuggestDaily.length; j++) {
+        _daysConfig.push({
+          date: this.valueGlobal.notSuggestDaily[j],
+          cssClass: 'strikethrough'
+        })
+      }
+     }
     //  var day : any="2022-02-16";
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
