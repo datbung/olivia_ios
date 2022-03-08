@@ -295,6 +295,7 @@ export class HotelDetailPage implements OnInit {
           se.valueGlobal.dayhot=[]; 
           se.valueGlobal.daily=[];
           se.valueGlobal.arrsuggest=[];
+          se.valueGlobal.notSuggestDaily=[];
           if (res.data) {
             // res.data.promotionIsHot=[
             //   "2022-03-01",
