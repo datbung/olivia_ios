@@ -128,6 +128,8 @@ export class ValueGlobal {
   dayhot:any;
   daily:any;
   promotionPackage:any;
+  notSuggestDaily:any;
+  notSuggestDailyCB:any;
   refreshFBAccessToken: any;
   arrsuggest: any;
 }
