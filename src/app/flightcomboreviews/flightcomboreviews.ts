@@ -346,13 +346,13 @@ export class FlightComboReviewsPage implements OnInit{
       se.cofdate = 0;
       se.cotdate = 0;
       se.bindlunar();
-      for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
-      se._daysConfig.push({
-        date: se.valueGlobal.listlunar[j].date,
-        subTitle: se.valueGlobal.listlunar[j].name,
-        cssClass: 'lunarcalendar'
-      })
-      }
+      // for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
+      // se._daysConfig.push({
+      //   date: se.valueGlobal.listlunar[j].date,
+      //   subTitle: se.valueGlobal.listlunar[j].name,
+      //   cssClass: 'lunarcalendar'
+      // })
+      // }
     }
     
   }
@@ -471,15 +471,7 @@ export class FlightComboReviewsPage implements OnInit{
     }
     else{
       if(se.valueGlobal.backValue != "flightcombopaymentbreakdown"){
-        if(this.valueGlobal.listlunar){
-          for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-            this._daysConfig.push({
-              date: this.valueGlobal.listlunar[j].date,
-              subTitle: this.valueGlobal.listlunar[j].name,
-              cssClass: 'lunarcalendar'
-            })
-          }
-        }
+        
         se.ischangefly = true;
         se.bookCombo.Luggage = 0;
         se.ischeck=false;
@@ -1434,10 +1426,11 @@ export class FlightComboReviewsPage implements OnInit{
       se.callSummaryPrice(se.roomclass,se.index);
     }
     setTimeout(() => {
-      se.ischeckwaitlug=true;;
+      se.ischeckwaitlug=true;
     }, 10 *1000)
-
-    se.loadflightpricedone = true;
+    setTimeout(() => {
+      se.loadflightpricedone = true;
+    },4000)
   }
 
   getDayOfWeek(date): string {
@@ -2753,6 +2746,15 @@ export class FlightComboReviewsPage implements OnInit{
         })
       }
      }
+     if(this.valueGlobal.listlunar){
+      for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+        this._daysConfig.push({
+          date: this.valueGlobal.listlunar[j].date,
+          subTitle: this.valueGlobal.listlunar[j].name,
+          cssClass: 'lunarcalendar'
+        })
+      }
+    }
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()
@@ -2784,6 +2786,19 @@ export class FlightComboReviewsPage implements OnInit{
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
+        if(se.valueGlobal.dayhot.length>0){
+          let divmonth = $('.month-box');
+          if(divmonth && divmonth.length >0){
+            for (let index = 0; index < divmonth.length; index++) {
+               const em = divmonth[index];
+              //   let divsmall = $('#'+em.id+' dayhot');
+              //   if(divsmall && divsmall.length >0){
+                  $('#'+em.id).append("<div class='div-month-text-small'></div>")
+                  $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+                // }
+            }
+          }
+        }
     });
   }
   async clickedElement(e: any) {

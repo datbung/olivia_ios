@@ -237,13 +237,13 @@ export class CombocarnewPage implements OnInit {
       se.cofdate = 0;
       se.cotdate = 0;
       se.bindlunar();
-      for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
-      se._daysConfig.push({
-        date: se.valueGlobal.listlunar[j].date,
-        subTitle: se.valueGlobal.listlunar[j].name,
-        cssClass: 'lunarcalendar'
-      })
-      }
+      // for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
+      // se._daysConfig.push({
+      //   date: se.valueGlobal.listlunar[j].date,
+      //   subTitle: se.valueGlobal.listlunar[j].name,
+      //   cssClass: 'lunarcalendar'
+      // })
+      // }
     }
     
   }
@@ -1993,6 +1993,13 @@ export class CombocarnewPage implements OnInit {
         })
       }
      }
+       for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
+      se._daysConfig.push({
+        date: se.valueGlobal.listlunar[j].date,
+        subTitle: se.valueGlobal.listlunar[j].name,
+        cssClass: 'lunarcalendar'
+      })
+      }
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()
@@ -2026,6 +2033,19 @@ export class CombocarnewPage implements OnInit {
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
               //add event close header
               $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
+              if(se.valueGlobal.dayhot.length>0){
+                let divmonth = $('.month-box');
+                if(divmonth && divmonth.length >0){
+                  for (let index = 0; index < divmonth.length; index++) {
+                     const em = divmonth[index];
+                    //   let divsmall = $('#'+em.id+' dayhot');
+                    //   if(divsmall && divsmall.length >0){
+                        $('#'+em.id).append("<div class='div-month-text-small'></div>")
+                        $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+                      // }
+                  }
+                }
+              }
     });
     const event: any = await this.myCalendar.onDidDismiss();
     if(event){

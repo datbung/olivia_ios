@@ -158,6 +158,7 @@ export class PopupinfobkgPage implements OnInit {
         }
       }
      
+   
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));

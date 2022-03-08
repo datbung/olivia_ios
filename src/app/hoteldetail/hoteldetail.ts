@@ -3362,15 +3362,6 @@ async bookcombo() {
     let todate = new Date(this.searchhotel.CheckOutDate ? this.searchhotel.CheckOutDate : this.cout);
      //check âm lịch
      let _daysConfig: DayConfig[] = [];
-     if(this.valueGlobal.listlunar){
-      for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-        _daysConfig.push({
-          date: this.valueGlobal.listlunar[j].date,
-          subTitle: this.valueGlobal.listlunar[j].name,
-          cssClass:'lunarcalendar'
-        })
-      }
-     }
      if(this.valueGlobal.dayhot){
       for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
         _daysConfig.push({
@@ -3387,6 +3378,16 @@ async bookcombo() {
         })
       }
      }
+     if(this.valueGlobal.listlunar){
+      for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+        _daysConfig.push({
+          date: this.valueGlobal.listlunar[j].date,
+          subTitle: this.valueGlobal.listlunar[j].name,
+          cssClass:'lunarcalendar'
+        })
+      }
+     }
+   
     //  var day : any="2022-02-16";
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
