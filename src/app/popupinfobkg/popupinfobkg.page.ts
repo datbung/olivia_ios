@@ -144,17 +144,20 @@ export class PopupinfobkgPage implements OnInit {
     this.myCalendar.present().then(() => {
       this.allowclickcalendar = true;
       $('.days-btn').click(e => this.clickedElement(e));
-      let divmonth = $('.month-box');
-      if(divmonth && divmonth.length >0){
-        for (let index = 0; index < divmonth.length; index++) {
-           const em = divmonth[index];
-          //   let divsmall = $('#'+em.id+' dayhot');
-          //   if(divsmall && divsmall.length >0){
-              $('#'+em.id).append("<div class='div-month-text-small'></div>")
-              $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price' style='margin-left: 0px !important'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
-            // }
+      if(se.valueGlobal.dayhot.length>0){
+        let divmonth = $('.month-box');
+        if(divmonth && divmonth.length >0){
+          for (let index = 0; index < divmonth.length; index++) {
+             const em = divmonth[index];
+            //   let divsmall = $('#'+em.id+' dayhot');
+            //   if(divsmall && divsmall.length >0){
+                $('#'+em.id).append("<div class='div-month-text-small'></div>")
+                $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price' style='margin-left: 0px !important'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+              // }
+          }
         }
       }
+   
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
