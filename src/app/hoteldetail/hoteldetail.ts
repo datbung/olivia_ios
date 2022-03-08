@@ -3376,14 +3376,14 @@ async bookcombo() {
         })
       }
      }
-     if(this.valueGlobal.daily){
-      for (let j = 0; j < this.valueGlobal.daily.length; j++) {
-        _daysConfig.push({
-          date: this.valueGlobal.daily[j],
-          cssClass: 'notRoom'
-        })
-      }
-     }
+    //  if(this.valueGlobal.daily){
+    //   for (let j = 0; j < this.valueGlobal.daily.length; j++) {
+    //     _daysConfig.push({
+    //       date: this.valueGlobal.daily[j],
+    //       cssClass: 'strikethrough'
+    //     })
+    //   }
+    //  }
     //  var day : any="2022-02-16";
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
