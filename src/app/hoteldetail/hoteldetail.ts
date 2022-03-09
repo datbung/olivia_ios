@@ -232,6 +232,16 @@ export class HotelDetailPage implements OnInit {
           this.loaddata(true);
         })
       })
+
+      this.networkProvider.getNetworkStatus().subscribe((connected: boolean) => {
+        if(!connected){
+          this.gf.showWarning(
+            "Không có kết nối mạng",
+            "Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng",
+            "Đóng"
+          );
+        }
+      })
     }
   getHotelSuggestDaily(value) {
     var se = this;
@@ -257,39 +267,6 @@ export class HotelDetailPage implements OnInit {
           se.valueGlobal.notSuggestDailyCB=[];
           if (res.data) {
             se.valueGlobal.notSuggestDailyCB=res.data.notSuggestDaily;
-            // promotionPackage=res.data.promotionPackage;
-            // if (promotionPackage && promotionPackage.length>0) {
-            //   const json1 = new Map([
-            //     [1, '31/1/2022'],
-            //     [2, '28/2/2022'],
-            //     [3, '31/3/2022'],
-            //     [4,'30/4/2022'],
-            //     [5,'31/5/2022'],
-            //     [6,"30/6/2022"],
-            //     [7,"31/7/2022"],
-            //     [8,"31/8/2022"],
-            //     [9,"30/9/2022"],
-            //     [10,"31/10/2022"],
-            //     [11,"30/11/2022"],
-            //     [12,"31/12/2022"],
-            //   ])
-              
-              
-            //   let daystart = parseInt( moment(promotionPackage[0]).format('DD')) ;
-            //   let mstart = parseInt( moment(promotionPackage[0]).format('MM')) ;
-            //   let mend =  parseInt(moment(promotionPackage.slice(-1)[0]).format('MM')) ;
-            //   for(let i = mstart; i<=mend; i++){
-            //     if(i == mstart){
-            //       se.valueGlobal.promotionPackage.push(daystart+" - "+json1.get(i))
-            //     }
-            //     else if(i == mend){
-            //       se.valueGlobal.promotionPackage.push('01 - '+moment(promotionPackage.slice(-1)[0]).format('DD/MM/YYYY'))
-            //     }
-            //     else{
-            //       se.valueGlobal.promotionPackage.push('01 - '+json1.get(i))
-            //     }
-            //   }
-            // }
           }
         }else{
           se.valueGlobal.dayhot=[]; 
@@ -297,50 +274,10 @@ export class HotelDetailPage implements OnInit {
           se.valueGlobal.arrsuggest=[];
           se.valueGlobal.notSuggestDaily=[];
           if (res.data) {
-            // res.data.promotionIsHot=[
-            //   "2022-03-01",
-            //   "2022-03-03",
-            //   "2022-03-05",
-            //   "2022-03-06",
-            //   "2022-03-08",
-            //   "2022-03-10"
-            //   ]
             se.valueGlobal.dayhot=res.data.promotionIsHot; 
             se.valueGlobal.notSuggestDaily=res.data.notSuggestDaily;
             se.valueGlobal.daily=res.data.daily;
             se.valueGlobal.arrsuggest=[];
-            // if (se.valueGlobal.daily.length>0) {
-            //   const json1 = new Map([
-            //     [1, '31/1/2022'],
-            //     [2, '28/2/2022'],
-            //     [3, '31/3/2022'],
-            //     [4,'30/4/2022'],
-            //     [5,'31/5/2022'],
-            //     [6,"30/6/2022"],
-            //     [7,"31/7/2022"],
-            //     [8,"31/8/2022"],
-            //     [9,"30/9/2022"],
-            //     [10,"31/10/2022"],
-            //     [11,"30/11/2022"],
-            //     [12,"31/12/2022"],
-            //   ])
-              
-              
-            //   let daystart = parseInt( moment(se.valueGlobal.daily[0]).format('DD')) ;
-            //   let mstart = parseInt( moment(se.valueGlobal.daily[0]).format('MM')) ;
-            //   let mend =  parseInt(moment(se.valueGlobal.daily.slice(-1)[0]).format('MM')) ;
-            //   for(let i = mstart; i<=mend; i++){
-            //     if(i == mstart){
-            //       se.valueGlobal.arrsuggest.push(daystart+" - "+json1.get(i))
-            //     }
-            //     else if(i == mend){
-            //       se.valueGlobal.arrsuggest.push('01 - '+moment(se.valueGlobal.daily.slice(-1)[0]).format('DD/MM/YYYY'))
-            //     }
-            //     else{
-            //       se.valueGlobal.arrsuggest.push('01 - '+json1.get(i))
-            //     }
-            //   }
-            // }
           }
         }
       
@@ -1413,7 +1350,8 @@ export class HotelDetailPage implements OnInit {
         options = {
           method: 'POST',
           url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
-          timeout: 180000, maxAttempts: 3, retryDelay: 100000,
+          timeout: 180000,
+          //maxAttempts: 3, retryDelay: 100000,
           async: true,
           headers:
             {},
@@ -1438,6 +1376,15 @@ export class HotelDetailPage implements OnInit {
             error.param = JSON.stringify(options);
             C.writeErrorLog(error,response);
             result = false;
+            se.networkProvider.getNetworkStatus().subscribe((connected: boolean) => {
+              if(!connected){
+                se.gf.showWarning(
+                  "Không có kết nối mạng",
+                  "Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng",
+                  "Đóng"
+                );
+              }
+            })
           };
             let jsonhtprice1 = JSON.parse(body);
             let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0");

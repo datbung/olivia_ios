@@ -161,6 +161,7 @@ export class FlightComboReviewsPage implements OnInit{
   ischeckBOD=false;
   allowclickcalendar: boolean = true;
   ischeckwaitlug=false;
+  msgEmptyFlight: any='';
   constructor(public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,private loadingCtrl: LoadingController,
     public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
     public bookCombo: Bookcombo, public searchhotel: SearchHotel,
@@ -847,6 +848,7 @@ export class FlightComboReviewsPage implements OnInit{
         se.PriceAvgPlusTAStr = 0;
         se.loadflightpricedone=true;
         se.ischeckwaitlug=true;
+        se.msgEmptyFlight = se.listDepart.length == 0 && se.listReturn.length == 0 ? 'Vé máy bay không có.' : (se.listDepart.length == 0 ? 'Vé máy bay chiều đi không có.' : 'Vé máy bay chiều về không có.');
       }
     }, 50 * 1000);
 
@@ -2723,7 +2725,7 @@ export class FlightComboReviewsPage implements OnInit{
       return;
     }
     this.allowclickcalendar = false;
-    
+    this.msgEmptyFlight = '';
     let arr = se.cin.split('-');
     let arr1 = se.cout.split('-');
     let newdatecin = new Date(arr[2], arr[1] - 1, arr[0]);
