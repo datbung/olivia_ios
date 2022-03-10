@@ -391,9 +391,9 @@
       </ion-row> -->
       <div *ngIf="!PriceAvgPlusTAStr&&loadpricedone&&loadflightpricedone">
         <div class="row-suggest">
-          <div *ngIf="!msgEmptyFlight else emptyflight"><span class="text-suggest color-red">Giai đoạn hết giá.</span> <span  (click)="changeDateInfo()" class="text-suggest color-blue text-underline"> Quý khách vui lòng chọn ngày khác</span></div> 
+          <div *ngIf="!msgEmptyFlight else emptyflight"><span class="text-suggest color-red">Giai đoạn hết giá.</span> <span style="margin-left: 5px;"  (click)="changeDateInfo()" class="text-suggest color-blue text-underline">Quý khách vui lòng chọn ngày khác</span></div> 
           <ng-template #emptyflight>
-            <div (click)="changeDateInfo()" ><span class="text-suggest color-red">{{msgEmptyFlight}}</span> <span  class="text-suggest color-blue text-underline"> Quý khách vui lòng chọn ngày khác!</span></div> 
+            <div (click)="changeDateInfo()" ><span class="text-suggest color-red">{{msgEmptyFlight}}</span> <span style="margin-left: 5px;"  class="text-suggest color-blue text-underline">Quý khách vui lòng chọn ngày khác!</span></div> 
           </ng-template>
           <!-- <div *ngIf="valueGlobal.promotionPackage.length>0" class="text-suggest mt-3"> <span>Ngày còn phòng từ </span><span class="text-weight-suggest"> {{valueGlobal.promotionPackage}}</span> </div>  
                    <div *ngIf="valueGlobal.promotionPackage.length==0" (click)="changeHotel()" class="text-suggest color-blue text-underline">Xem qua các chỗ nghỉ tương tự khác </div>  -->

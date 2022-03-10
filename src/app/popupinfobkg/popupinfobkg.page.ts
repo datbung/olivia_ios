@@ -108,10 +108,10 @@ export class PopupinfobkgPage implements OnInit {
        })
      }
     }
-    if(this.valueGlobal.notSuggestDailyCB){
-      for (let j = 0; j < this.valueGlobal.notSuggestDailyCB.length; j++) {
+    if(this.valueGlobal.notSuggestDaily){
+      for (let j = 0; j < this.valueGlobal.notSuggestDaily.length; j++) {
         _daysConfig.push({
-          date: this.valueGlobal.notSuggestDailyCB[j],
+          date: this.valueGlobal.notSuggestDaily[j],
           cssClass: 'strikethrough'
         })
       }
