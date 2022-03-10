@@ -109,8 +109,7 @@
     </div>
   </div>
   <hr class="cls-hr">
-  <div *ngIf="PriceAvgPlusTAStr">
-
+  <div>
     <ion-row *ngIf="!loadflightpricedone" style="height: 100px">
       <ion-col style="text-align: center;align-self: center">
         <ion-spinner style="height: 84px" name="bubbles" class="spinner-bubbles hydrated"></ion-spinner>
@@ -121,7 +120,8 @@
         <label>Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!</label>
       </ion-col>
     </ion-row>
-
+  </div>
+  <div *ngIf="PriceAvgPlusTAStr">
     <div class="m-top-16 m-bottom-16" *ngIf="loadflightpricedone">
       <div class="div-flex">
         <label class="div-flight-label">
