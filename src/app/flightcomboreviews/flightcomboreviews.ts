@@ -890,7 +890,7 @@ export class FlightComboReviewsPage implements OnInit{
           "roundTrip": true
         },
         "roundTrip": true,
-        "noCache": hascache
+        "noCache": true
       }
 
       var options = {

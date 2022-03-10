@@ -66,7 +66,7 @@
             <div style="font-size: 11px" >Hết phòng</div>
         </div> -->
       </ion-col>
-      <ion-col class="current-month" size="1" *ngFor="let day of daysInThisMonth"   [ngClass]="day.dayhot ? 'dayhot': ''">
+      <ion-col class="current-month" size="1" *ngFor="let day of daysInThisMonth"  class="last-month">
         <div  *ngIf="!day.BOD">
             <label (click)="changeDateCombo(day)" class="currentDate" *ngIf="day.price && currentDate === day.day;" [ngClass]="day.price >0 ? 'cls-orange' : 'cls-green' ">{{day.dateDisplay}}</label>
             <label (click)="changeDateCombo(day)" class="currentDate no-price" *ngIf="!day.price && currentDate === day.day;">{{day.dateDisplay}}</label>
