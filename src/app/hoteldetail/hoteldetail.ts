@@ -2386,28 +2386,8 @@ excuteLoadHotelRoom(data){
         }
      
       }
-      // se.hotelupgrade=[];
-      // se.ischeckupgrade=false;;
-      // var hoteltemp=se.hotelRoomClasses;
-      // for (let i = 0; i < hoteltemp.length; i++) {
-      //   const element = hoteltemp[i];
-      //   for (let j = 0; j < element.MealTypeRates.length; j++) {
-      //     const elementMeal = element.MealTypeRates[j];
-      //     if (elementMeal.IsFlashSale) {
-      //       var objelement=element;
-      //       objelement.MealTypeRates=[[]]
-      //       objelement.MealTypeRates.push(element.MealTypeRates[j]);
-      //       se.hotelupgrade.push(objelement);
-      //     }    
-      //   }
-      // }
       this.checkRoomFsale();
-      // if (se.hotelupgrade.length>1) {
-       
-      // }
       se.loadpricecombodone = true;
-      //se.loaddonecombo=true;
-     
     })
   }
   }
