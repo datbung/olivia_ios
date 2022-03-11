@@ -95,7 +95,7 @@ export class DepartureCalendarPage {
     var se = this;
     var options = {
       method: 'GET',
-      url: 'https://gate.ivivu.com/get-blackout-date',
+      url: C.urls.baseUrl.urlGate + '/get-blackout-date',
       qs: { hotelId: this.searchhotel.hotelID, roomId: this.searchhotel.roomID },
       headers:
       {
@@ -109,19 +109,6 @@ export class DepartureCalendarPage {
         var BOD = JSON.parse(body);
         console.log(BOD);
         se.arrBOD = BOD.BlackOutDates;
-        //  if (arrBOD.length>0) {
-        //    for (let i = 0; i < se.listPriceDate.length; i++) {
-        //      var date=moment(se.listPriceDate[i].comboDate).format('YYYY-MM-DD');
-        //      se.listPriceDate[i].BOD=false;
-        //      for (let j = 0; j < arrBOD.length; j++) {
-        //        if (date==arrBOD[j]) {
-        //          se.listPriceDate[i].BOD=true;
-        //          break;
-        //        }
-        //      }
-        //    }
-        //  }
-        // console.log(se.listPriceDate);
         se.getDaysOfMonth();
 
       })

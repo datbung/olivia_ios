@@ -162,6 +162,7 @@ export class FlightComboReviewsPage implements OnInit{
   allowclickcalendar: boolean = true;
   ischeckwaitlug=false;
   msgEmptyFlight: any='';
+  arrBOD: any;
   constructor(public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,private loadingCtrl: LoadingController,
     public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
     public bookCombo: Bookcombo, public searchhotel: SearchHotel,
@@ -741,10 +742,12 @@ export class FlightComboReviewsPage implements OnInit{
   
                 se.nameroom = element.ClassName;
                 se.RoomType = element.RoomType;
+
                 //se.breakfast = element.element.MealTypeRates[0].Name;
                 se.roomnumber = element.TotalRoom;
                 se.index=index;
                 se.callSummaryPrice(element,index);
+                se.getBOD(element.MealTypeRates[0].RoomId);
               } else {
                 se.loadpricedone = true;
               }
@@ -2740,6 +2743,14 @@ export class FlightComboReviewsPage implements OnInit{
         })
       }
      }
+     if(this.arrBOD && this.arrBOD.length>0){
+      for (let j = 0; j < this.arrBOD.length; j++) {
+        this._daysConfig.push({
+          date: this.arrBOD[j],
+          cssClass: 'strikethroughCB'
+        })
+      }
+    }
      if(this.valueGlobal.listlunar){
       for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         this._daysConfig.push({
@@ -2749,6 +2760,7 @@ export class FlightComboReviewsPage implements OnInit{
         })
       }
     }
+    
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()
@@ -3011,7 +3023,7 @@ export class FlightComboReviewsPage implements OnInit{
     return new Promise((resolve, reject) =>{
       var options = {
         method: 'GET',
-        url: 'https://gate.ivivu.com/get-blackout-date',
+        url: C.urls.baseUrl.urlGate + '/get-blackout-date',
         qs: { hotelId: se.booking.HotelId ? se.booking.HotelId : se.searchhotel.hotelID, roomId: roomid },
         headers:
         {
@@ -3083,5 +3095,29 @@ export class FlightComboReviewsPage implements OnInit{
   buyLuggage() {
     this.next(2);
   }
-  
+  getBOD(roomid)
+  {
+    var se=this;
+    this.ischeckBOD=false;
+    var options = {
+      method: 'GET',
+      url: C.urls.baseUrl.urlGate + '/get-blackout-date',
+      qs: { hotelId: this.booking.HotelId, roomId: roomid },
+      headers:
+      {
+        'postman-token': '86c67bdc-5fcd-0240-5549-f3ea2b31faf8',
+        'cache-control': 'no-cache'
+      }
+    };
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+      var BOD=JSON.parse(body);
+      se.arrBOD=BOD.BlackOutDates;
+      if (se.arrBOD) {
+        if (se.arrBOD.length>0) {
+          console.log(se.arrBOD.length);
+        }
+      }
+    })
+  }
 }

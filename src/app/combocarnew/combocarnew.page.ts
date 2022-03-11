@@ -127,6 +127,7 @@ export class CombocarnewPage implements OnInit {
   RoomType: any;
   roomclass: any;
   column: any;
+  arrBOD: any;
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -408,6 +409,7 @@ export class CombocarnewPage implements OnInit {
               se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
               se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
               se.getTransferData(true);
+              se.getBOD(element.MealTypeRates[0].RoomId);
               // se.storage.get('listDepartTransfers_' + se.comboId + '_' + se.cin + '_' + se.adults + '_' + se.children + '_' + se.textagepost).then((data) => {
               //   if (data) {
               //     se.listDepartTransfers = data.data;
@@ -1993,6 +1995,14 @@ export class CombocarnewPage implements OnInit {
         })
       }
      }
+     if(this.arrBOD && this.arrBOD.length>0){
+      for (let j = 0; j < this.arrBOD.length; j++) {
+        this._daysConfig.push({
+          date: this.arrBOD[j],
+          cssClass: 'strikethroughCB'
+        })
+      }
+    }
        for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
       se._daysConfig.push({
         date: se.valueGlobal.listlunar[j].date,
@@ -2183,7 +2193,7 @@ export class CombocarnewPage implements OnInit {
     return new Promise((resolve, reject) =>{
       var options = {
         method: 'GET',
-        url: 'https://gate.ivivu.com/get-blackout-date',
+        url: C.urls.baseUrl.urlGate + '/get-blackout-date',
         qs: { hotelId: se.booking.HotelId ? se.booking.HotelId : se.searchhotel.hotelID, roomId: roomid },
         headers:
         {
@@ -2403,5 +2413,28 @@ export class CombocarnewPage implements OnInit {
       }));
     }
   }
-  
+  getBOD(roomid)
+  {
+    var se=this;
+    var options = {
+      method: 'GET',
+      url: C.urls.baseUrl.urlGate + '/get-blackout-date',
+      qs: { hotelId: this.booking.HotelId, roomId: roomid },
+      headers:
+      {
+        'postman-token': '86c67bdc-5fcd-0240-5549-f3ea2b31faf8',
+        'cache-control': 'no-cache'
+      }
+    };
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+      var BOD=JSON.parse(body);
+      se.arrBOD=BOD.BlackOutDates;
+      if (se.arrBOD) {
+        if (se.arrBOD.length>0) {
+          console.log(se.arrBOD.length);
+        }
+      }
+    })
+  }
 }

@@ -4442,7 +4442,7 @@ async bookcombo() {
     this.ischeckBOD=false;
     var options = {
       method: 'GET',
-      url: 'https://gate.ivivu.com/get-blackout-date',
+      url: C.urls.baseUrl.urlGate + '/get-blackout-date',
       qs: { hotelId: se.HotelID ? se.HotelID : se.searchhotel.hotelID, roomId: roomid },
       headers:
       {

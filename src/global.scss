@@ -1282,3 +1282,24 @@ height: 18px !important;
   line-height: 1.4;
   color: #3f3b3b;
 }
+.strikethroughCB {
+  position: relative;
+  p{
+    color: #D4D3D2 !important;
+  }
+}
+.strikethroughCB:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  right: 0;
+  border-top: 1px solid #D4D3D2;
+  transform: rotate(-5deg);
+
+  -webkit-transform:rotate(-5deg);
+  -moz-transform:rotate(-5deg);
+  -ms-transform:rotate(-5deg);
+  -o-transform:rotate(-5deg);
+  transform:rotate(-5deg);
+}
