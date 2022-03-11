@@ -637,7 +637,9 @@ export class HotelDetailPage implements OnInit {
     se.bookCombo.roomNb = dataRoomChange.itemroom.TotalRoom;
     se.elementMealtype=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index];
     this.objroomfsale.push(dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index]);
-     if (se.objroomfsale[0].Status == 'AL') {
+     if (se.objroomfsale[0].Status == 'RQ' || se.objroomfsale[0].Supplier == 'B2B') {
+          se.ischeckcbfs = false;
+        }else{
           se.ischeckcbfs = true;
         }
     this.indexMealTypeRates=dataRoomChange.index;
