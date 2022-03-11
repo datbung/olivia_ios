@@ -208,6 +208,8 @@ export class HotelDetailPage implements OnInit {
   ischeckUpgrade: any;
   ListRoomClassestemp: any[];
   hotelRoomClassesFS: any;
+  indexMealTypeRates=0;
+  arrroomFS: any[];
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -630,13 +632,17 @@ export class HotelDetailPage implements OnInit {
   updateRoomChange(dataRoomChange) {
     var se = this;
     this.objroomfsale=[];
-    se.comboprice=dataRoomChange.itemroom.MealTypeRates[0].PriceAvgPlusTAStr;
+    se.comboprice=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index].PriceAvgPlusTAStr;
     se.roomCombo = dataRoomChange.itemroom.ClassName;
     se.bookCombo.roomNb = dataRoomChange.itemroom.TotalRoom;
-    se.elementMealtype=dataRoomChange.itemroom.MealTypeRates[0];
-    this.objroomfsale.push(dataRoomChange.itemroom.MealTypeRates[0]);
-    this.arrroom = [];
-    this.arrroom.push(dataRoomChange.itemroom);
+    se.elementMealtype=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index];
+    this.objroomfsale.push(dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index]);
+     if (se.objroomfsale[0].Status == 'AL') {
+          se.ischeckcbfs = true;
+        }
+    this.indexMealTypeRates=dataRoomChange.index;
+    this.arrroomFS = [];
+    this.arrroomFS.push(dataRoomChange.itemroom);
   }
 
   ionViewDidLoad() {
@@ -2251,6 +2257,7 @@ excuteLoadHotelRoom(data){
     se.roomCombo='';
     se.ischeckcbfs=false;
     se.warningCombofs='';
+    se.indexMealTypeRates=0;
     //se.loaddonecombo = false;
     se.checkRoomDefaultFsale(se.comboDetail.comboDetail.roomId,  se.ListRoomClasses).then((check) => {
       if (check) {
@@ -2277,7 +2284,8 @@ excuteLoadHotelRoom(data){
                se.comboprice=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].PriceAvgPlusTAStr;
                 se.roomCombo = se.hotelRoomClasses[i].ClassName;
                 se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
-                se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]
+                se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates];
+                se.indexMealTypeRates=jMealTypeRates;
                 // check status IP thi k show gia
                 if (se.hotelRoomClasses[i].Status == 'IP') {
                   setTimeout(()=>{
@@ -2313,6 +2321,7 @@ excuteLoadHotelRoom(data){
            se.roomCombo=se.hotelRoomClasses[i].ClassName;
            se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
            se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]
+           se.indexMealTypeRates=jMealTypeRates;
              // check status IP thi k show gia
           if(se.hotelRoomClasses[i].Status == 'IP'){
               setTimeout(()=>{
@@ -2345,7 +2354,7 @@ excuteLoadHotelRoom(data){
       var objmap;
       roomClass.forEach((el) => {
          objmap = el.MealTypeRates.filter((Meal) => {
-          return Meal.RoomId == roomId && Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL') && Meal.PromotionNote != '';
+          return Meal.RoomId == roomId && Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL'|| Meal.Supplier == 'B2B'|| Meal.Supplier == 'SMD') && Meal.PromotionNote != '';
         })
         // if (objmap && objmap.length > 0) {
         //   this.objroomfsale=objmap;
@@ -2373,6 +2382,8 @@ excuteLoadHotelRoom(data){
           this.roomCombo = this.objroomfsale[0].RoomName;
           this.bookCombo.roomNb = this.objroomfsale[0].TotalRoom;
           this.elementMealtype=this.objroomfsale[0];
+          this.indexMealTypeRates=0;
+          
         }
       
       }
@@ -3876,23 +3887,22 @@ async bookcombo() {
       
           //this.roomvalue = this.room;
           if (!self.ischeckUpgrade) {
-            this.arrroom = [];
+            this.arrroomFS = [];
             for (let i = 0; i < self.hotelRoomClasses.length; i++) {
               if (id == self.hotelRoomClasses[i].Rooms[0].RoomID) {
-                this.arrroom.push(self.hotelRoomClasses[i]);
+                this.arrroomFS.push(self.hotelRoomClasses[i]);
                 this.indexroom = i;
                 break;
               }
             }
           }
-         
-          for (let i = 0; i < this.arrroom[0].MealTypeRates.length; i++) {
-            var Meal=this.arrroom[0].MealTypeRates[i];
-            if (Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL') && Meal.PromotionNote != '') {
-              this.indexmeal=i;
-              break;
-            }
-          }
+          // for (let i = 0; i < this.arrroom[0].MealTypeRates.length; i++) {
+          //   var Meal=this.arrroom[0].MealTypeRates[i];
+          //   if (Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL'|| Meal.Supplier == 'B2B') && Meal.PromotionNote != '') {
+          //     this.indexmeal=i;
+          //     break;
+          //   }
+          // }
           var date1 = new Date(self.cin);
           var date2 = new Date(self.cout);
           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -3908,22 +3918,22 @@ async bookcombo() {
             self.booking.CEmail = self.usermail,
             self.booking.cost = MealTypeRates.PriceAvgPlusTAStr,
             self.booking.indexroom = self.indexroom,
-            self.booking.indexmealtype = this.indexmeal,
+            self.booking.indexmealtype = this.indexMealTypeRates,
             self.booking.HotelId = self.HotelID,
             self.Roomif.RoomId = id,
             self.booking.HotelName = self.name,
             self.booking.RoomName = "roomName",
             self.Roomif.Address = self.Address,
             self.Roomif.dur = self.duration,
-            self.Roomif.arrroom = self.arrroom,
+            self.Roomif.arrroom = self.arrroomFS,
             self.Roomif.roomnumber = MealTypeRates.TotalRoom,
             self.Roomif.roomtype = MealTypeRates,
             self.Roomif.jsonroom = self.jsonroom2.Hotels[0],
             self.Roomif.imgHotel = self.imgHotel;
           self.Roomif.objMealType = MealTypeRates;
-          self.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(self.arrroom[0].HotelRoomHBedReservationRequest);
+          self.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(self.arrroomFS[0].HotelRoomHBedReservationRequest);
           self.Roomif.arrrbed = [];
-          self.Roomif.imgRoom = self.arrroom[0].Rooms[0].ImagesMaxWidth320;
+          self.Roomif.imgRoom = self.arrroomFS[0].Rooms[0].ImagesMaxWidth320;
           self.searchhotel.adult = self.adults;
           self.searchhotel.child = self.child;
           self.searchhotel.roomnumber = self.room;
@@ -4629,6 +4639,7 @@ async bookcombo() {
     se.activityService.objFlightComboUpgrade = {};
     // se.activityService.objFlightComboUpgrade.Rooms =this.jsonroom2.Hotels[0].RoomClasses;
     se.activityService.objFlightComboUpgrade.CurrentRoom = se.elementMealtype;
+    se.activityService.objFlightComboUpgrade.CurrentRoomIndex = se.indexMealTypeRates;
     this.bookCombo.FormParam = this.formParam;
     se.valueGlobal.backValue = "hotelupgraderoom";
     se.valueGlobal.notRefreshDetail=true;
