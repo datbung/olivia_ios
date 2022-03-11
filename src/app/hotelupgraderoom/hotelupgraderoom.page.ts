@@ -22,6 +22,7 @@ export class HotelupgraderoomPage implements OnInit {
   ListRoomClassestemp: any[];
   jsonroom: any;
   loader: any;
+  indexMeal: any;
   constructor(private modalCtrl: ModalController, 
     public activityService: ActivityService, 
     private storage: Storage,
@@ -88,23 +89,38 @@ export class HotelupgraderoomPage implements OnInit {
     }
   }
   checkRoomFsale(){
+    this.currentRoomSelect = this.activityService.objFlightComboUpgrade.CurrentRoom;
+    this.indexMeal = this.activityService.objFlightComboUpgrade.CurrentRoomIndex;
      this.hotelRoomClasses=[];
     for (var i = 0; i < this.ListRoomClassestemp.length; i++) {
-      for (let j = 0; j < this.ListRoomClassestemp[i].MealTypeRates.length; j++) {
-        const element = this.ListRoomClassestemp[i].MealTypeRates[j];
+   
+        const element = this.ListRoomClassestemp[i];
         if (element.IsFlashSale == true && element.Status != 'IP') {
-         this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
-        }
+          this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
+         }
         
-      }
+      
     }
     for (var i = 0; i <this.hotelRoomClasses.length; i++) {
       //lọc mealType là promotion và Internal
     this.hotelRoomClasses[i].MealTypeRates = this.hotelRoomClasses[i].MealTypeRates.filter((Meal) => {
-      return  Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL') && Meal.PromotionNote != '';
+      return  Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL' || Meal.Supplier == 'B2B'|| Meal.Supplier == 'SMD') && Meal.PromotionNote != '';
     })
     }
-    this.currentRoomSelect = this.activityService.objFlightComboUpgrade.CurrentRoom;
+    for (let i = 0; i < this.hotelRoomClasses.length; i++) {
+      for (let j = 0; j <  this.hotelRoomClasses[i].MealTypeRates.length; j++) {
+        const elementmeal = this.hotelRoomClasses[i].MealTypeRates[j];
+        var checkmeal=''+elementmeal.RoomId+elementmeal.Code+j;
+        if (checkmeal==''+this.currentRoomSelect.RoomId+this.currentRoomSelect.Code+this.indexMeal) {
+          this.hotelRoomClasses[i].MealTypeRates[j].elementmeal=true;
+        }else{
+          this.hotelRoomClasses[i].MealTypeRates[j].elementmeal=false;
+        }
+        
+      }
+      
+    }
+  
   }
   ngOnInit() {
    

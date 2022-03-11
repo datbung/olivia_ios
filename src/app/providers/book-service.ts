@@ -14,7 +14,7 @@ export class Booking {
     CPhone: string;
     cost: string;
     indexroom: string;
-    indexmealtype: string;
+    indexmealtype: any;
     ChildAge: Array<string>;
     HotelId: string;
     timestamp: string;
