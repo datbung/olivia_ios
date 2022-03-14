@@ -1288,6 +1288,9 @@ height: 18px !important;
     color: #D4D3D2 !important;
   }
 }
+.days-btn.strikethroughCB {
+  width: 24px !important;
+}
 .strikethroughCB:before {
   position: absolute;
   content: "";
@@ -1302,4 +1305,20 @@ height: 18px !important;
   -ms-transform:rotate(-5deg);
   -o-transform:rotate(-5deg);
   transform:rotate(-5deg);
+}
+
+.strikethrough {
+  position: relative;
+  p{
+    color:  #bdbdbd !important;
+  }
+}
+.strikethrough:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  right: 0;
+  border-top: 0.5px solid #bdbdbd;
+  transform: rotate(-45deg);
 }

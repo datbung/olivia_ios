@@ -190,9 +190,13 @@ export class HotelListPage implements OnInit{
     this.loadpricedone = false;
    
     var se = this;
+    
     var options = {
       method: 'GET',
       url: strurl,
+      headers:
+        {"Access-Control-Allow-Credentials": true,
+        },
       timeout: 180000, maxAttempts: 5, retryDelay: 2000,
     };
     request(options, function (error, response, body) {

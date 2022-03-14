@@ -1243,21 +1243,7 @@ body{
       color:  #e52822 !important;
     }
   }
-  .strikethrough {
-    position: relative;
-    p{
-      color:  #bdbdbd !important;
-    }
-  }
-  .strikethrough:before {
-    position: absolute;
-    content: "";
-    left: 0;
-    top: 50%;
-    right: 0;
-    border-top: 0.5px solid #bdbdbd;
-    transform: rotate(-45deg);
-  }
+  
   .dayhot
   {
     

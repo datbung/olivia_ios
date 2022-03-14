@@ -25,7 +25,7 @@
               <!-- left image region-->
               <div class="col-img-hotellist">
                 <!-- <ion-thumbnail> -->
-                  <img  class="img-radius" src={{msg.Avatar}} style="position:relative" (click)="itemSelected(msg)">
+                  <img  class="img-radius" [src]="msg.Avatar" style="position:relative" (click)="itemSelected(msg)">
                 <!-- </ion-thumbnail> -->
                   
                   <div *ngIf="msg.Liked" class="img-heart" (click)="unlikeItem(msg.HotelId)">

@@ -524,7 +524,7 @@
                             </ion-col>
                           </ion-row>
                           <ion-row
-                          *ngIf="!hotelroom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile && hotelroom.Rooms[0].BedTypes.length >0">
+                          *ngIf="!hotelroom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile && hotelroom.Rooms[0].BedTypes && hotelroom.Rooms[0].BedTypes.length >0">
                           <ion-col size="1" class="no-padding room-class-icon">
                             <img class="icon-detail-fix" src="./assets/ic_hoteldetail/ic_bed.svg">
                           </ion-col>

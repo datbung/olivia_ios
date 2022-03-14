@@ -30,7 +30,7 @@
         padding: 0.6em 0;
         margin: 0;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
         height: 50px;
         letter-spacing: -0.14px;
       }
@@ -45,8 +45,8 @@
       }
       .calendar-header {
         background-color: #fff;
-        color: #4f4f4f;
-        font-size: 14px;
+        color: #333333;
+        font-size: 16px;
         font-weight: bold;
         letter-spacing: 1.4px;
       }
@@ -80,16 +80,16 @@
           font-weight: bold;
           background-color: #fff;
           color: #828282;
-          font-size:12px;
+          font-size: 16px;
           letter-spacing: 1.2px;
         }
       }
       .cls-orange{
-          color: #ec971f;
+          color: #f79321;
           font-weight:bold;
       }
       .cls-green{
-          color: #477a00;
+          color: #219653;
           font-weight:bold;
       }
       // .col-weekend{
@@ -98,7 +98,7 @@
       // }
       .no-price{
         font-weight:bold;
-        color: #D4D3D2;
+        color: #bdbdbd;
         font-weight: bold;
         background: transparent;
       }
@@ -106,13 +106,13 @@
           text-align: left;
           padding-top: 12px;
           font-weight: 300;
-          font-size: 14px;
+          font-size: 16px;
           padding: 0;
           line-height: 17px;
           letter-spacing: -0.4px;
       }
       .good-price{
-          color: #477a00;
+          color: #9fc43a;
       }
       .not-good-price{
         color: #ec971f;
@@ -139,25 +139,28 @@
     :host{
       --ion-grid-columns:7;
     }
-    .strikethrough {
-      position: relative;
-    }
-    .strikethrough:before {
-      position: absolute;
-      content: "";
-      left: 0;
-      top: 50%;
-      right: 0;
-      border-top: 2px solid;
-      border-color: inherit;
+    // .strikethrough {
+    //   position: relative;
+    // }
+    // .strikethrough:before {
+    //   position: absolute;
+    //   content: "";
+    //   left: 0;
+    //   top: 50%;
+    //   right: 0;
+    //   border-top: 2px solid;
+    //   border-color: inherit;
     
-      -webkit-transform:rotate(-5deg);
-      -moz-transform:rotate(-5deg);
-      -ms-transform:rotate(-5deg);
-      -o-transform:rotate(-5deg);
-      transform:rotate(-5deg);
+    //   -webkit-transform:rotate(-5deg);
+    //   -moz-transform:rotate(-5deg);
+    //   -ms-transform:rotate(-5deg);
+    //   -o-transform:rotate(-5deg);
+    //   transform:rotate(-5deg);
+    // }
+    .strikethrough:before {
+      left: -11px !important;
+      width: 36px !important;
     }
-
 .m-left-9{
   margin-left: -9px;
 }
@@ -170,4 +173,21 @@
     background-image: url('../../assets/imgs/ic_fire.svg');
     background-repeat: no-repeat;
     background-position: 36px 0px;
+  }
+
+  .p-16 {
+    --padding-start: 16px;
+    --padding-bottom: 16px;
+    --padding-end: 16px;
+    --padding-top: 16px;
+  }
+  .p-top-0{
+    padding-top: 0 !important;
+  }
+
+  .no-padding-left {
+    padding-left: 0;
+  }
+  .no-padding-right {
+    padding-right: 0;
   }
