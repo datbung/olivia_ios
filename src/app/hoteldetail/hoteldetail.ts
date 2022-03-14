@@ -225,8 +225,6 @@ export class HotelDetailPage implements OnInit {
     ) {
       this.loaddata(false);
       this.valueGlobal.notRefreshDetail = false;
-      this.getHotelSuggestDaily('');
-      this.getHotelSuggestDaily('package');
       // imgLoaderConfigService.enableSpinner(true);
       // imgLoaderConfigService.setConcurrency(10);
       this.platform.resume.subscribe(async()=>{
@@ -1395,6 +1393,15 @@ export class HotelDetailPage implements OnInit {
             })
           };
             let jsonhtprice1 = JSON.parse(body);
+            se.valueGlobal.dayhot=[]; 
+            se.valueGlobal.daily=[];
+            se.valueGlobal.arrsuggest=[];
+            se.valueGlobal.notSuggestDaily=[];
+            se.valueGlobal.notSuggestDailyCB=[];
+            if (jsonhtprice1.Hotels[0] && jsonhtprice1.Hotels[0].Prefered) {
+              se.getHotelSuggestDaily('');
+              se.getHotelSuggestDaily('package');
+            }
             let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0");
             se.activityService.HotelSearchReqContract = { id: key, value: JSON.parse(body)};
             if (jsonhtprice1.Hotels) {
@@ -1936,6 +1943,16 @@ excuteLoadHotelRoom(data){
       //Load roomdetail
       var result = data;
       if (result.Hotels) {
+        //neu Prefered = true goi ham suggest
+        se.valueGlobal.dayhot=[]; 
+        se.valueGlobal.daily=[];
+        se.valueGlobal.arrsuggest=[];
+        se.valueGlobal.notSuggestDaily=[];
+        se.valueGlobal.notSuggestDailyCB=[];
+        if (result.Hotels[0] && result.Hotels[0].Prefered) {
+          se.getHotelSuggestDaily('');
+          se.getHotelSuggestDaily('package');
+        }
         self.emptyroom = false;
         self.hotelRooms = [];
         self.hotelRoomClasses = [];
