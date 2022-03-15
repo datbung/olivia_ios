@@ -62,13 +62,13 @@
       </ion-col>
       <ion-col class="current-month" size="1" *ngFor="let day of daysInThisMonth"  class="last-month">
         <div  *ngIf="!day.BOD">
-            <label (click)="changeDateCombo(day)" class="currentDate" *ngIf="day.price && currentDate === day.day;" [ngClass]="day.price >0 ? 'cls-orange' : 'cls-green' ">{{day.dateDisplay}}</label>
-            <label (click)="changeDateCombo(day)" class="currentDate no-price" *ngIf="!day.price && currentDate === day.day;">{{day.dateDisplay}}</label>
-            <label (click)="changeDateCombo(day)" *ngIf="day.price && currentDate !== day.day;" [ngClass]="day.price >0 ? 'cls-orange' : 'cls-green' ">{{day.dateDisplay}}</label>
-            <label (click)="changeDateCombo(day)" *ngIf="!day.price && currentDate !== day.day;" class=" no-price">{{day.dateDisplay}}</label>
+            <div (click)="changeDateCombo(day)" class="div-days currentDate" *ngIf="day.price && currentDate === day.day;" [ngClass]="day.price >0 ? 'cls-orange' : 'cls-green' ">{{day.dateDisplay}}</div>
+            <div (click)="changeDateCombo(day)" class="div-days currentDate no-price" *ngIf="!day.price && currentDate === day.day;">{{day.dateDisplay}}</div>
+            <div (click)="changeDateCombo(day)" *ngIf="day.price && currentDate !== day.day;" [ngClass]="day.price >0 ? 'div-days cls-orange' : 'div-days cls-green' ">{{day.dateDisplay}}</div>
+            <div (click)="changeDateCombo(day)" *ngIf="!day.price && currentDate !== day.day;" class="div-days no-price">{{day.dateDisplay}}</div>
         </div>
         <div *ngIf="day.BOD">
-            <label  class="strikethrough">{{day.dateDisplay}}</label>
+            <div class="div-days strikethrough">{{day.dateDisplay}}</div>
           </div>
       </ion-col>
       <ion-col size="1" *ngFor="let nextDay of daysInNextMonth" >
