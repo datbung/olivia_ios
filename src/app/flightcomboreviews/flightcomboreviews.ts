@@ -216,8 +216,6 @@ export class FlightComboReviewsPage implements OnInit{
       }
       this.totalChild = booking.Child;
       this.roomtype = Roomif.roomtype;
-      //this.indexme = booking.indexmealtype;
-      //this.indexroom = booking.indexroom;
       this.jsonroom = Roomif.jsonroom;
       this.room = Roomif.arrroom;
       var chuoicin = this.cin.split('-');
@@ -225,31 +223,14 @@ export class FlightComboReviewsPage implements OnInit{
       this.cin = chuoicin[2] + "-" + chuoicin[1] + "-" + chuoicin[0];
       this.cout = chuoicout[2] + "-" + chuoicout[1] + "-" + chuoicout[0];
       this.nameroom = this.room[0].ClassName;
-      //this.roomcancel = this.room[0].MealTypeRates[this.indexme];
       this.breakfast = this.bookCombo.MealTypeName;
-      //this.PriceAvgPlusTAStr = this.booking.cost.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
       this.value.flagreview = 1;
       this.titlecombo = this.bookCombo.ComboTitle;
       this.hotelcode = this.bookCombo.HotelCode;
       this.objInsurranceFee = this.bookCombo.objInsurranceFee;
       this.hasInsurrance = this.bookCombo.hasInsurrance;
       this.showInsurranceText = this.hasInsurrance ? this.hasInsurrance : (this.bookCombo.checkInsurranceFee ? true : false);
-      // if(this.bookCombo.ComboTitle.length >0){
-      //   let arr = this.bookCombo.ComboTitle.split('+');
-      //   this.titlecomboshort='';
-      //   if(arr.length >1){
-      //     let arr1 = arr[0].split(' ');
-      //     if(arr1.length >1){
-      //       this.titlecomboshort += arr1[1];
-      //       this.titlecomboshort += "+Vé máy bay";
-      //     }else{
-      //       this.titlecomboshort += arr1[0];
-      //       this.titlecomboshort += "+Vé máy bay";
-      //     }
-      //   }else{
-      //     this.titlecomboshort = this.titlecombo;
-      //   }
-      // }
+      
       this.titlecombo=this.valueGlobal.titlecombo;
       this.bookCombo.tileComboShort = this.titlecombo;
       var cb;
@@ -330,15 +311,6 @@ export class FlightComboReviewsPage implements OnInit{
         }
       });
     }, 350)
-    //Bỏ cache khi tích hợp api jetstar
-    //clear cache sau 15p
-    // this.intervalID = setInterval(() => {
-    //   if (this.listkeys.length > 0) {
-    //     this.listkeys.forEach(key => {
-    //       this.storage.remove(key);
-    //     });
-    //   }
-    // }, 60000 * 15);
     this.loadLunar();
   }
 
@@ -348,13 +320,6 @@ export class FlightComboReviewsPage implements OnInit{
       se.cofdate = 0;
       se.cotdate = 0;
       se.bindlunar();
-      // for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
-      // se._daysConfig.push({
-      //   date: se.valueGlobal.listlunar[j].date,
-      //   subTitle: se.valueGlobal.listlunar[j].name,
-      //   cssClass: 'lunarcalendar'
-      // })
-      // }
     }
     
   }
@@ -973,7 +938,6 @@ export class FlightComboReviewsPage implements OnInit{
         }
         if (result) {
           if (result.data && result.data.length > 0) {
-            console.log(result.data);
             result.data.forEach(element => {
               var arrfly=[];
               for (let i = 0; i < element.flights.length; i++) {
@@ -1020,12 +984,10 @@ export class FlightComboReviewsPage implements OnInit{
       if (type == 'depart') {
         if (!se.listDepart || (se.listDepart && se.listDepart.length == 0)) {
           se.listDepart = jsondata;
-          //se.listDepartNoFilter = jsondata;
         }
         else {
           if (se.listDepart && se.listDepart.length > 0) {
             se.listDepart = [...se.listDepart, ...jsondata];
-            //se.listDepartNoFilter = [...se.listDepart,...jsondata];
           }
         }
       }
@@ -1033,12 +995,10 @@ export class FlightComboReviewsPage implements OnInit{
       if (type == 'return') {
         if (!se.listReturn || (se.listReturn && se.listReturn.length == 0)) {
           se.listReturn = jsondata;
-          //se.listReturnNoFilter = jsondata;
         }
         else {
           if (se.listReturn && se.listReturn.length > 0) {
             se.listReturn = [...se.listReturn, ...jsondata];
-            //se.listReturnNoFilter = [...se.listReturn,...jsondata];
           }
         }
       }
@@ -1048,7 +1008,6 @@ export class FlightComboReviewsPage implements OnInit{
   getdata() {
     var se = this;
     se.loadpricedone = true;
-    // se.storage.set('listflight_' + se.booking.HotelId + '_' + se.booking.CheckInDate + '_' + se.booking.CheckOutDate + '_' + se.bookCombo.ComboDetail.departureCode + '_' + se.bookCombo.arrivalCode + '_' + se.adults + '_' + se.children + '_' + se.infant, jsondata);
     se.zone.run(() => {
       if (se.listDepart && se.listDepart.length > 0) {
         se.listDepart.forEach(element => {
@@ -1101,10 +1060,10 @@ export class FlightComboReviewsPage implements OnInit{
       }
       se.loadFlightData(se.departfi, se.returnfi);
     })
-
-    if (se.listDepart.length == 0 || se.listReturn.length == 0) {
-      se.PriceAvgPlusTAStr = 0;
-    }
+    //tạm rem
+    // if (se.listDepart.length == 0 || se.listReturn.length == 0) {
+    //   se.PriceAvgPlusTAStr = 0;
+    // }
   }
 
   //Hàm check VMB giá thấp nhất trong khung giờ chấp nhận được
@@ -2585,43 +2544,7 @@ export class FlightComboReviewsPage implements OnInit{
     se.activityService.objFlightComboUpgrade.address = se.Address;
     se.valueGlobal.backValue = "flightcomboupgraderoom";
     se.navCtrl.navigateForward('/flightcomboupgraderoom/0');
-    // const modal: HTMLIonModalElement =
-    //   await this.modalCtrl.create({
-    //     component: FlightcomboupgraderoomPage
-    //   });
-    // modal.present();
-
-    // modal.onDidDismiss().then((data: OverlayEventDetail) => {
-    //   if (data.data) {
-    //     se.zone.run(() => {
-    //       let itemroom = data.data.itemroom;
-    //       let itemmealtype = data.data.itemmealtype;
-    //       se.index=data.data.index;
-    //       se.RoomType=itemroom.RoomType;
-    //       if(itemmealtype.Name != null && itemmealtype.Notes.length==0){
-    //         se.breakfast = itemmealtype.Name;
-    //       }
-    //       else if(itemmealtype.Name != null && itemmealtype.Notes.length!=0 && itemmealtype.Notes[0].length == itemmealtype.Name.length)
-    //       {
-    //         se.breakfast = itemmealtype.Notes.join(', ')
-    //         itemmealtype.Name = itemmealtype.Notes.join(', ');
-    //       }
-    //       else if(itemmealtype.Name != null && itemmealtype.Notes.length!=0 && itemmealtype.Notes[0].length != itemmealtype.Name.length)
-    //       {
-    //         se.breakfast = itemmealtype.Name  +", " +itemmealtype.Notes.join(', ');
-    //         itemmealtype.Name = itemmealtype.Name  +", " +itemmealtype.Notes.join(', ');
-    //       }
-    //       se.elementMealtype = itemmealtype;
-    //       se.bookCombo.MealTypeName=se.breakfast 
-    //       //se.breakfast = itemmealtype.Name;
-    //       se.Roomif.arrroom = [];
-    //       se.Roomif.arrroom.push(itemroom);
-    //       if(itemroom && itemmealtype){
-    //         se.callSummaryPriceAfterUpgradeRoom(itemroom, itemmealtype)
-    //       }
-    //     })
-    //   }
-    // })
+   
   }
 
   /**

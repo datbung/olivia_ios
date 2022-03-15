@@ -82,6 +82,8 @@
           color: #828282;
           font-size: 16px;
           letter-spacing: 1.2px;
+          margin-bottom: 16px;
+          margin-top: 10px;
         }
       }
       .cls-orange{
@@ -139,6 +141,10 @@
     :host{
       --ion-grid-columns:7;
     }
+    .div-days {
+      width: 36px;
+      margin: 0 10px;
+    }
     // .strikethrough {
     //   position: relative;
     // }
@@ -157,10 +163,7 @@
     //   -o-transform:rotate(-5deg);
     //   transform:rotate(-5deg);
     // }
-    .strikethrough:before {
-      left: -11px !important;
-      width: 36px !important;
-    }
+    
 .m-left-9{
   margin-left: -9px;
 }
