@@ -310,6 +310,44 @@ export class DepartureCalendarPage {
         }
       }
     }
+    if(this.valueGlobal.notSuggestDailyCB.length>0){
+      if (this.daysInThisMonth.length > 0) {
+        for (let i = 0; i < this.daysInThisMonth.length; i++) {
+          var date = this.daysInThisMonth[i].addday
+          this.daysInThisMonth[i].BOD = false;
+          for (let j = 0; j < this.valueGlobal.notSuggestDailyCB.length; j++) {
+            if (date == this.valueGlobal.notSuggestDailyCB[j]) {
+              this.daysInThisMonth[i].BOD = true;
+              break;
+            }
+          }
+        }
+      }
+      if (this.daysInLastMonth && this.daysInLastMonth.length > 0) {
+        for (let i = 0; i < this.daysInLastMonth.length; i++) {
+          var date = this.daysInLastMonth[i].addday
+          this.daysInLastMonth[i].BOD = false;
+          for (let j = 0; j < this.valueGlobal.notSuggestDailyCB.length; j++) {
+            if (date == this.valueGlobal.notSuggestDailyCB[j]) {
+              this.daysInLastMonth[i].BOD = true;
+              break;
+            }
+          }
+        }
+      }
+      if (this.daysInNextMonth && this.daysInNextMonth.length > 0) {
+        for (let i = 0; i < this.daysInNextMonth.length; i++) {
+          var date = this.daysInNextMonth[i].addday
+          this.daysInNextMonth[i].BOD = false;
+          for (let j = 0; j < this.valueGlobal.notSuggestDailyCB.length; j++) {
+            if (date == this.valueGlobal.notSuggestDailyCB[j]) {
+              this.daysInNextMonth[i].BOD = true;
+              break;
+            }
+          }
+        }
+      }
+    }
 
   }
 
