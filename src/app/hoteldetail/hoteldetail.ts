@@ -1019,6 +1019,16 @@ export class HotelDetailPage implements OnInit {
           
           let jsondata = JSON.parse(body);
           se.hotelcode = jsondata.Code;
+                  //neu Prefered = true goi ham suggest
+        se.valueGlobal.dayhot=[]; 
+        se.valueGlobal.daily=[];
+        se.valueGlobal.arrsuggest=[];
+        se.valueGlobal.notSuggestDaily=[];
+        se.valueGlobal.notSuggestDailyCB=[];
+        if (jsondata && jsondata.Prefered) {
+          se.getHotelSuggestDaily('');
+          se.getHotelSuggestDaily('package');
+        }
           //Có cache thì xóa đi load mới nhất
           se.storage.get('hoteldetail_' + se.HotelID+"_"+se.cindisplay+"_"+se.coutdisplay).then((data) => {
             if(data){
@@ -1049,6 +1059,15 @@ export class HotelDetailPage implements OnInit {
 
   loadHotelDetail(jsondata, isloaddata){
     var se = this;
+    if (jsondata && jsondata.Prefered) {
+      se.valueGlobal.dayhot=[]; 
+      se.valueGlobal.daily=[];
+      se.valueGlobal.arrsuggest=[];
+      se.valueGlobal.notSuggestDaily=[];
+      se.valueGlobal.notSuggestDailyCB=[];
+      se.getHotelSuggestDaily('');
+      se.getHotelSuggestDaily('package');
+    }
           se.hotelcode = jsondata.Code;
           se.ChildAgeTo = jsondata.ChildAgeTo;
           if(jsondata.Combos)
@@ -1393,15 +1412,6 @@ export class HotelDetailPage implements OnInit {
             })
           };
             let jsonhtprice1 = JSON.parse(body);
-            se.valueGlobal.dayhot=[]; 
-            se.valueGlobal.daily=[];
-            se.valueGlobal.arrsuggest=[];
-            se.valueGlobal.notSuggestDaily=[];
-            se.valueGlobal.notSuggestDailyCB=[];
-            if (jsonhtprice1.Hotels &&jsonhtprice1.Hotels[0] && jsonhtprice1.Hotels[0].Prefered) {
-              se.getHotelSuggestDaily('');
-              se.getHotelSuggestDaily('package');
-            }
             let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0");
             se.activityService.HotelSearchReqContract = { id: key, value: JSON.parse(body)};
             if (jsonhtprice1.Hotels) {
@@ -1943,16 +1953,6 @@ excuteLoadHotelRoom(data){
       //Load roomdetail
       var result = data;
       if (result.Hotels) {
-        //neu Prefered = true goi ham suggest
-        se.valueGlobal.dayhot=[]; 
-        se.valueGlobal.daily=[];
-        se.valueGlobal.arrsuggest=[];
-        se.valueGlobal.notSuggestDaily=[];
-        se.valueGlobal.notSuggestDailyCB=[];
-        if (result.Hotels[0] && result.Hotels[0].Prefered) {
-          se.getHotelSuggestDaily('');
-          se.getHotelSuggestDaily('package');
-        }
         self.emptyroom = false;
         self.hotelRooms = [];
         self.hotelRoomClasses = [];
