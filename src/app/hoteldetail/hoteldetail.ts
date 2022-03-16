@@ -1383,7 +1383,7 @@ export class HotelDetailPage implements OnInit {
           form
         };
         request(options, function (error, response, body) {
-          if (response.statusCode != 200) {
+          if (response && response.statusCode != 200) {
             var objError = {
               page: "hoteldetail",
               func: "checkPriceHotelDetail",

@@ -2935,6 +2935,7 @@ alert.present();
               }
   
               //trẻ em 
+              let adultIndex = 0;
               for (let index = 0; index < se.childs.length; index++) {
                 const element = se.childs[index];
                 
@@ -3229,7 +3230,10 @@ alert.present();
                     
                   }
                 }
-                let adultindex = index < 2 ? 0 : (Math.ceil(index/2) <= se.adults.length) ? Math.ceil(index/2) : se.adults.length;
+                
+                if(element.isInfant){
+                  adultIndex++;
+                }
                 element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
                 element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
 
@@ -3253,7 +3257,7 @@ alert.present();
                     "airlineMemberCode": "", 
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
-                    "adultIndex": adultindex, 
+                    "adultIndex": element.isInfant ? adultIndex -1 : 0, 
                     "ancillaryJson": (objAncilary.length >0 ? JSON.stringify(objAncilary): ""),
                     "ancillaryReturnJson": (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn) : "")
                   })

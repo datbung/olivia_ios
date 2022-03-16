@@ -158,6 +158,9 @@
                                             <img class="seat-icon" src="./assets/ic_flight/icon_seat_gray.svg" *ngIf=" itemseat.type == 5 || itemseat.type == 6">
                                             <img class="seat-icon new-seat-disabled" src="./assets/ic_flight/icon_seat_gray.svg" *ngIf=" itemseat.type == -1 && idx !=  3 && idx != 7">
                                             <div class="seat-icon div-number-center" *ngIf="itemseat.type == -1 && (idx1 ==  3 || idx1 == 7)">{{itemnormal.row}}</div>
+
+                                            <img class="seat-icon new-seat-disabled" src="./assets/ic_flight/icon_seat_gray.svg" *ngIf=" itemseat.type == -2 && idx !=  3 && idx != 7">
+                                            <div class="seat-icon div-number-center" *ngIf="itemseat.type == -2 && (idx1 ==  3 || idx1 == 7)">{{itemnormal.row}}</div>
                                         </div>
                                         <ng-template #seatbooked>
                                             <div class="div-seat-icon">

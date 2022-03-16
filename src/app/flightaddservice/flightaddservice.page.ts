@@ -1489,210 +1489,317 @@ export class FlightaddservicePage implements OnInit {
           }
         }
               //Tạo object chọn ghế cho vietjetair
-              else{
+              //Tạo object chọn ghế cho vietjetair
+        else {
+
+          if (jsondata.departSeats && jsondata.departSeats.length > 0) {
+            se.hasdepartseat = true;
+            se.allowchoiceseat = true;
+            let data = jsondata.departSeats[0];
+            let listSeatNameLeft = [], listSeatNameRight = [], listSeatNormal = [], itemLeft = [], itemRight = [], itemnormal;
+            let itemfirstrow = data.rows[0];
+            let numofcolumnleft = itemfirstrow.seatOptions.length / 2, numofcolumnright = itemfirstrow.seatOptions.length / 2;
+
+            let maxseatlen = Math.max(...data.rows.map((item) => {return item.seatOptions.length}));
+
+            let listrows = [];
+            let listSeatName = [];
+            //case máy bay thân rộng Airbus330
+            if (maxseatlen == 9) {
+              for (let index = 0; index < data.rows.length; index++) {
+                let itemnormal = [];
+                const elementRow = data.rows[index];
+                listSeatName =  ['A','B','C','-1','D','F','G','-1','H','J','K'];
+                for (let indexCol = 0; indexCol < listSeatName.length; indexCol++) {
+                  const elementSeatName = listSeatName[indexCol];
+                  let elementseat = elementRow.seatOptions.filter(c => c.seatMapCell.seatIdentifier == elementSeatName);
+                  if(elementseat && elementseat.length >0){
+                      let element = elementseat[0];
+                      element.show = true;
+                      element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
+                      element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
+                      element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
+                      element.type = 1;
+                      if (element.seatMapCell.seatQualifiers.seatFront || element.seatMapCell.seatQualifiers.bulkheadFront) {//ghế phía trước
+                        element.type = 2;
+                      }
+                      if (element.seatMapCell.seatQualifiers.emergencyExit) {//ghế gần cửa exit
+                        element.type = 3;
+                      }
+                      if (element.seatMapCell.rowIdentifier <= 3 && !element.selectionValidity.available) {//ghế hạn chế
+                        element.type = 6;
+                      }
+                      if (!element.selectionValidity.available) {//ghế đã chọn
+                        if (!element.seatMapCell.seatQualifiers.emergencyExit) {
+                          element.type = 5;
+                        }
+                      }
+                      itemnormal.push(element);
+                  }else{
+                    let fakeitem = { name: 'noname', type: -2, show: false };
+                    itemnormal.push(fakeitem);
+                  }
+                }
                 
-                if(jsondata.departSeats && jsondata.departSeats.length >0){
-                    se.hasdepartseat = true;
-                    se.allowchoiceseat = true;
-                    let data = jsondata.departSeats[0];
-                    let listSeatNameLeft = [],listSeatNameRight=[],listSeatNormal=[], itemLeft =[], itemRight=[],itemnormal;
-                    let itemfirstrow = data.rows[0];
-                    let numofcolumnleft = itemfirstrow.seatOptions.length/2, numofcolumnright = itemfirstrow.seatOptions.length/2;
-                    for (let index = 0; index < numofcolumnleft; index++) {
-                        let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
-                        listSeatNameLeft.push(seatname);
-                    }
-                    for (let index = numofcolumnleft ; index < itemfirstrow.seatOptions.length; index++) {
-                        let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
-                        listSeatNameRight.push(seatname);
-                    }
-                    data.rows.sort((a,b)=>{
-                        a.rowNumber < b.rowNumber ? -1 : 1;
-                    })
-                    for (let index = 0; index < data.rows.length; index++) {
-                        let itemLeft =[], itemRight =[],itemnormal;
-                        const elementRow = data.rows[index];
-                        if(elementRow.seatOptions.length == 4){
-                            let fakeitem = {name: 'noname', type: -1, show: false};
-                            itemLeft.push(fakeitem);
-                        }
-                        numofcolumnleft = elementRow.seatOptions.length/2;
-                        numofcolumnright = elementRow.seatOptions.length/2;
-                        
-                        for (let index = 0; index < numofcolumnleft; index++) {
-                            const element = elementRow.seatOptions[index];
-                            if(!element){
-                              continue;
-                            }
-                            element.show = true;
-                            element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.name =  element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
-                            element.type =1;
-                                if(element.seatMapCell.seatQualifiers.seatFront){//ghế phía trước
-                                    element.type = 2;
-                                }
-                                if(element.seatMapCell.seatQualifiers.emergencyExit){//ghế gần cửa exit
-                                    element.type = 3;
-                                }
-                                if(element.seatMapCell.rowIdentifier <= 3){//ghế hạn chế
-                                    element.type = 6;
-                                }
-                                if(!element.selectionValidity.available){//ghế đã chọn
-                                    if(!element.seatMapCell.seatQualifiers.emergencyExit){
-                                        element.type = 5;
-                                    }
-                                }
-                                itemLeft.push(element);
-                        }
-                        for (let index = numofcolumnright; index < elementRow.seatOptions.length; index++) {
-                            const element = elementRow.seatOptions[index];
-                            if(!element){
-                              continue;
-                            }
-                            element.show = true;
-                            element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
-                            element.type =1;
-                                if(element.seatMapCell.seatQualifiers.seatFront){//ghế phía trước
-                                    element.type = 2;
-                                }
-                                if(element.seatMapCell.seatQualifiers.emergencyExit){//ghế gần cửa exit
-                                    element.type = 3;
-                                }
-                                if(element.seatMapCell.rowIdentifier <= 3){
-                                    element.type = 6;
-                                }
-                                if(!element.selectionValidity.available){//ghế đã chọn
-                                    if(!element.seatMapCell.seatQualifiers.emergencyExit){
-                                        element.type = 5;
-                                    }
-                                }
-                                
-                            itemRight.push(element);
-                        }
-                        if(elementRow.seatOptions.length == 4 && itemRight.length == 2){
-                            let fakeitem = {name: 'noname', type: -1, show: false};
-                            itemRight.push(fakeitem);
-                        }
-
-                        itemnormal = {itemsLeft: itemLeft, itemsRight: itemRight, row: elementRow.rowNumber};
-                        listSeatNormal.push(itemnormal);
-                    }
-                    
-                    
-                    if(indexdepart == 1 || indexdepart == 3){
-                        se._flightService.itemFlightCache.listSeatNameLeft = listSeatNameLeft;
-                        se._flightService.itemFlightCache.listSeatNameRight = listSeatNameRight;
-                        se._flightService.itemFlightCache.listSeatNormal = listSeatNormal;
-                    }
-                }else{
-                    se.hasdepartseat = false;
-                }
-
-                if(jsondata.returnSeats && jsondata.returnSeats.length >0){
-                    se.hasreturnseat = true;
-                    se.allowchoiceseat = true;
-                    let data = jsondata.returnSeats[0];
-                    let listReturnSeatNameLeft = [],listReturnSeatNameRight=[],listReturnSeatNormal=[],itemnormal;
-
-                    let listSeatNameLeft = [],listSeatNameRight=[],listSeatNormal=[], itemLeft =[], itemRight=[];
-                    let itemfirstrow = data.rows[0];
-                    let numofcolumnleft = itemfirstrow.seatOptions.length/2, numofcolumnright = itemfirstrow.seatOptions.length/2;
-                    for (let index = 0; index < numofcolumnleft; index++) {
-                        let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
-                        listReturnSeatNameLeft.push(seatname);
-                    }
-                    for (let index = numofcolumnleft ; index < itemfirstrow.seatOptions.length; index++) {
-                        let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
-                        listReturnSeatNameRight.push(seatname);
-                    }
-                    data.rows.sort((a,b)=>{
-                        a.rowNumber < b.rowNumber ? -1 : 1;
-                    })
-                    for (let index = 0; index < data.rows.length; index++) {
-                        let itemLeft =[], itemRight =[],itemnormal;
-                        const elementRow = data.rows[index];
-                        if(elementRow.seatOptions.length == 4){
-                            let fakeitem = {name: 'noname', type: -1, show: false};
-                            itemLeft.push(fakeitem);
-                        }
-                        numofcolumnleft = elementRow.seatOptions.length/2;
-                        numofcolumnright = elementRow.seatOptions.length/2;
-                        for (let index = 0; index < numofcolumnleft; index++) {
-                            const element = elementRow.seatOptions[index];
-                            if(!element){
-                              continue;
-                            }
-                            element.show = true;
-                            element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
-                            element.type =1;
-                                if(element.seatMapCell.seatQualifiers.seatFront){//ghế phía trước
-                                    element.type = 2;
-                                }
-                                if(element.seatMapCell.seatQualifiers.emergencyExit){//ghế gần cửa exit
-                                    element.type = 3;
-                                }
-                                if(element.seatMapCell.rowIdentifier <= 3){
-                                    element.type = 6;
-                                }
-                                if(!element.selectionValidity.available){//ghế đã chọn
-                                    if(!element.seatMapCell.seatQualifiers.emergencyExit){
-                                        element.type = 5;
-                                    }
-                                }
-                              
-                                itemLeft.push(element);
-                        }
-                        for (let index = numofcolumnright; index < elementRow.seatOptions.length; index++) {
-                            const element = elementRow.seatOptions[index];
-                            if(!element){
-                              continue;
-                            }
-                            element.show = true;
-                            element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
-                            element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
-                            element.type =1;
-                                if(element.seatMapCell.seatQualifiers.seatFront){//ghế phía trước
-                                    element.type = 2;
-                                }
-                                if(element.seatMapCell.seatQualifiers.emergencyExit){//ghế gần cửa exit
-                                    element.type = 3;
-                                }
-                                if(element.seatMapCell.rowIdentifier <= 3){
-                                    element.type = 6;
-                                }
-                                if(!element.selectionValidity.available){//ghế đã chọn
-                                    if(!element.seatMapCell.seatQualifiers.emergencyExit){
-                                        element.type = 5;
-                                    }
-                                }
-                               
-                            itemRight.push(element);
-                        }
-                        if(elementRow.seatOptions.length == 4 && itemRight.length == 2){
-                            let fakeitem = {name: 'noname', type: -1, show: false};
-                            itemRight.push(fakeitem);
-                        }
-
-                        itemnormal = {itemsLeft: itemLeft, itemsRight: itemRight, row: elementRow.rowNumber};
-                        listReturnSeatNormal.push(itemnormal);
-                    }
-                    if(indexdepart == 2 || indexdepart == 3){
-                        se._flightService.itemFlightCache.listReturnSeatNameLeft = listReturnSeatNameLeft;
-                        se._flightService.itemFlightCache.listReturnSeatNameRight = listReturnSeatNameRight;
-                        se._flightService.itemFlightCache.listReturnSeatNormal = listReturnSeatNormal;
-                    }
-                    
-                }else{
-                    se.hasreturnseat = false;
-                }
-
+                  let itemnm = { itemsNormal: itemnormal, row: elementRow.rowNumber };
+                  listrows.push(itemnm);
               }
+
+            }
+            else{
+
+              for (let index = 0; index < numofcolumnleft; index++) {
+                let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
+                listSeatNameLeft.push(seatname);
+              }
+              for (let index = numofcolumnleft; index < itemfirstrow.seatOptions.length; index++) {
+                let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
+                listSeatNameRight.push(seatname);
+              }
+              data.rows.sort((a, b) => {
+                a.rowNumber < b.rowNumber ? -1 : 1;
+              })
+              for (let index = 0; index < data.rows.length; index++) {
+                let itemLeft = [], itemRight = [], itemnormal;
+                const elementRow = data.rows[index];
+                if (elementRow.seatOptions.length == 4) {
+                  let fakeitem = { name: 'noname', type: -1, show: false };
+                  itemLeft.push(fakeitem);
+                }
+                numofcolumnleft = elementRow.seatOptions.length / 2;
+                numofcolumnright = elementRow.seatOptions.length / 2;
+  
+                for (let index = 0; index < numofcolumnleft; index++) {
+                  const element = elementRow.seatOptions[index];
+  
+                  element.show = true;
+                  element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
+                  element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
+                  element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
+                  element.type = 1;
+                  if (element.seatMapCell.seatQualifiers.seatFront || element.seatMapCell.seatQualifiers.bulkheadFront) {//ghế phía trước
+                    element.type = 2;
+                  }
+                  if (element.seatMapCell.seatQualifiers.emergencyExit) {//ghế gần cửa exit
+                    element.type = 3;
+                  }
+                  if (element.seatMapCell.rowIdentifier <= 3 && !element.selectionValidity.available) {//ghế hạn chế
+                    element.type = 6;
+                  }
+                  if (!element.selectionValidity.available) {//ghế đã chọn
+                    if (!element.seatMapCell.seatQualifiers.emergencyExit) {
+                      element.type = 5;
+                    }
+                  }
+                  itemLeft.push(element);
+                }
+                for (let index = numofcolumnright; index < elementRow.seatOptions.length; index++) {
+                  const element = elementRow.seatOptions[index];
+                  element.show = true;
+                  element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
+                  element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
+                  element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
+                  element.type = 1;
+                  if (element.seatMapCell.seatQualifiers.seatFront || element.seatMapCell.seatQualifiers.bulkheadFront) {//ghế phía trước
+                    element.type = 2;
+                  }
+                  if (element.seatMapCell.seatQualifiers.emergencyExit) {//ghế gần cửa exit
+                    element.type = 3;
+                  }
+                  if (element.seatMapCell.rowIdentifier <= 3 && !element.selectionValidity.available) {
+                    element.type = 6;
+                  }
+                  if (!element.selectionValidity.available) {//ghế đã chọn
+                    if (!element.seatMapCell.seatQualifiers.emergencyExit) {
+                      element.type = 5;
+                    }
+                  }
+  
+                  itemRight.push(element);
+                }
+                if (elementRow.seatOptions.length == 4 && itemRight.length == 2) {
+                  let fakeitem = { name: 'noname', type: -1, show: false };
+                  itemRight.push(fakeitem);
+                }
+  
+                itemnormal = { itemsLeft: itemLeft, itemsRight: itemRight, row: elementRow.rowNumber };
+                listSeatNormal.push(itemnormal);
+              }
+            }
+
+
+            if (indexdepart == 1 || indexdepart == 3) {
+              if (maxseatlen == 9) {
+                se._flightService.itemFlightCache.listSeatName = listSeatName;
+                se._flightService.itemFlightCache.listSeatNormal = listrows;
+                se._flightService.itemFlightCache.isnewmodelseat = true;
+              } else {
+                se._flightService.itemFlightCache.listSeatNameLeft = listSeatNameLeft;
+                se._flightService.itemFlightCache.listSeatNameRight = listSeatNameRight;
+                se._flightService.itemFlightCache.listSeatNormal = listSeatNormal;
+              }
+
+              
+            }
+          } else {
+            se.hasdepartseat = false;
+          }
+
+          if (jsondata.returnSeats && jsondata.returnSeats.length > 0) {
+            se.hasreturnseat = true;
+            se.allowchoiceseat = true;
+            let data = jsondata.returnSeats[0];
+            let listReturnSeatNameLeft = [], listReturnSeatNameRight = [], listReturnSeatNormal = [], itemnormal;
+            let listSeatNameLeft = [], listSeatNameRight = [], listSeatNormal = [], itemLeft = [], itemRight = [];
+            let itemfirstrow = data.rows[0];
+            let numofcolumnleft = itemfirstrow.seatOptions.length / 2, numofcolumnright = itemfirstrow.seatOptions.length / 2;
+
+            let maxseatlen = Math.max(...data.rows.map((item) => {return item.seatOptions.length}));
+            let listrows = [];
+            let listSeatName = [];
+            //case máy bay thân rộng Airbus330
+            if (maxseatlen == 9) {
+              for (let index = 0; index < data.rows.length; index++) {
+                let itemnormal = [];
+                const elementRow = data.rows[index];
+                listSeatName =  ['A','B','C','-1','D','F','G','-1','H','J','K'];
+                for (let indexCol = 0; indexCol < listSeatName.length; indexCol++) {
+                  const elementSeatName = listSeatName[indexCol];
+                  let elementseat = elementRow.seatOptions.filter(c => c.seatMapCell.seatIdentifier == elementSeatName);
+                  if(elementseat && elementseat.length >0){
+                      let element = elementseat[0];
+                      element.show = true;
+                      element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
+                      element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
+                      element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
+                      element.type = 1;
+                      if (element.seatMapCell.seatQualifiers.seatFront || element.seatMapCell.seatQualifiers.bulkheadFront) {//ghế phía trước
+                        element.type = 2;
+                      }
+                      if (element.seatMapCell.seatQualifiers.emergencyExit) {//ghế gần cửa exit
+                        element.type = 3;
+                      }
+                      if (element.seatMapCell.rowIdentifier <= 3 && !element.selectionValidity.available) {//ghế hạn chế
+                        element.type = 6;
+                      }
+                      if (!element.selectionValidity.available) {//ghế đã chọn
+                        if (!element.seatMapCell.seatQualifiers.emergencyExit) {
+                          element.type = 5;
+                        }
+                      }
+                      itemnormal.push(element);
+                  }else{
+                    let fakeitem = { name: 'noname', type: -2, show: false };
+                    itemnormal.push(fakeitem);
+                  }
+                }
+                  
+                  let itemnm = { itemsNormal: itemnormal, row: elementRow.rowNumber };
+                  listrows.push(itemnm);
+              }
+
+            }
+            else{
+
+            for (let index = 0; index < numofcolumnleft; index++) {
+              let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
+              listReturnSeatNameLeft.push(seatname);
+            }
+            for (let index = numofcolumnleft; index < itemfirstrow.seatOptions.length; index++) {
+              let seatname = itemfirstrow.seatOptions[index].seatMapCell.seatIdentifier;
+              listReturnSeatNameRight.push(seatname);
+            }
+            data.rows.sort((a, b) => {
+              a.rowNumber < b.rowNumber ? -1 : 1;
+            })
+            for (let index = 0; index < data.rows.length; index++) {
+              let itemLeft = [], itemRight = [], itemnormal;
+              const elementRow = data.rows[index];
+              if (elementRow.seatOptions.length == 4) {
+                let fakeitem = { name: 'noname', type: -1, show: false };
+                itemLeft.push(fakeitem);
+              }
+              numofcolumnleft = elementRow.seatOptions.length / 2;
+              numofcolumnright = elementRow.seatOptions.length / 2;
+              for (let index = 0; index < numofcolumnleft; index++) {
+                const element = elementRow.seatOptions[index];
+                element.show = true;
+                element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
+                element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
+                element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
+                element.type = 1;
+                if (element.seatMapCell.seatQualifiers.seatFront || element.seatMapCell.seatQualifiers.bulkheadFront) {//ghế phía trước
+                  element.type = 2;
+                }
+                if (element.seatMapCell.seatQualifiers.emergencyExit) {//ghế gần cửa exit
+                  element.type = 3;
+                }
+                if (element.seatMapCell.rowIdentifier <= 3 && !element.selectionValidity.available) {
+                  element.type = 6;
+                }
+                if (!element.selectionValidity.available) {//ghế đã chọn
+                  if (!element.seatMapCell.seatQualifiers.emergencyExit) {
+                    element.type = 5;
+                  }
+                }
+
+                itemLeft.push(element);
+              }
+              for (let index = numofcolumnright; index < elementRow.seatOptions.length; index++) {
+                const element = elementRow.seatOptions[index];
+                element.show = true;
+                element.amount = element.seatCharges[0].currencyAmounts[0].totalAmount;
+                element.netPrice = element.seatCharges[0].currencyAmounts[0].netPrice ? element.seatCharges[0].currencyAmounts[0].netPrice : element.seatCharges[0].currencyAmounts[0].totalAmount;
+                element.name = element.seatMapCell.rowIdentifier + element.seatMapCell.seatIdentifier;
+                element.type = 1;
+                if (element.seatMapCell.seatQualifiers.seatFront || element.seatMapCell.seatQualifiers.bulkheadFront) {//ghế phía trước
+                  element.type = 2;
+                }
+                if (element.seatMapCell.seatQualifiers.emergencyExit) {//ghế gần cửa exit
+                  element.type = 3;
+                }
+                if (element.seatMapCell.rowIdentifier <= 3 && !element.selectionValidity.available) {
+                  element.type = 6;
+                }
+                if (!element.selectionValidity.available) {//ghế đã chọn
+                  if (!element.seatMapCell.seatQualifiers.emergencyExit) {
+                    element.type = 5;
+                  }
+                }
+
+                itemRight.push(element);
+              }
+              if (elementRow.seatOptions.length == 4 && itemRight.length == 2) {
+                let fakeitem = { name: 'noname', type: -1, show: false };
+                itemRight.push(fakeitem);
+              }
+
+              itemnormal = { itemsLeft: itemLeft, itemsRight: itemRight, row: elementRow.rowNumber };
+              listReturnSeatNormal.push(itemnormal);
+            }
+
+          }
+            if (indexdepart == 2 || indexdepart == 3) {
+              if (maxseatlen == 9) {
+                se._flightService.itemFlightCache.listReturnSeatName = listSeatName;
+                se._flightService.itemFlightCache.listReturnSeatNormal = listrows;
+                se._flightService.itemFlightCache.isnewmodelreturnseat = true;
+              } else {
+                se._flightService.itemFlightCache.listReturnSeatNameLeft = listReturnSeatNameLeft;
+                se._flightService.itemFlightCache.listReturnSeatNameRight = listReturnSeatNameRight;
+                se._flightService.itemFlightCache.listReturnSeatNormal = listReturnSeatNormal;
+              }
+
+              // se._flightService.itemFlightCache.listReturnSeatNameLeft = listReturnSeatNameLeft;
+              // se._flightService.itemFlightCache.listReturnSeatNameRight = listReturnSeatNameRight;
+              // se._flightService.itemFlightCache.listReturnSeatNormal = listReturnSeatNormal;
+            }
+
+          } else {
+            se.hasreturnseat = false;
+          }
+
+        }
               
             }
           })
@@ -2266,6 +2373,7 @@ export class FlightaddservicePage implements OnInit {
               })
           }
 
+          let adultindex = 0;
           //trẻ em 
           for (let index = 0; index < data.childs.length; index++) {
             const element = data.childs[index];
@@ -2566,7 +2674,10 @@ export class FlightaddservicePage implements OnInit {
             element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
 
             
-            let adultindex = element.isInfant ? (element.iddisplay*1 - 1) : 0;
+            //let adultindex = element.isInfant ? (element.iddisplay*1 - 1) : 0;
+            if(element.isInfant){
+              adultindex++;
+            }
               listpassenger.push({
                 "passengerType": element.isInfant ? 2 : 1,
                 "gender": element.gender,
@@ -2587,7 +2698,7 @@ export class FlightaddservicePage implements OnInit {
                 "airlineMemberCode": "", 
                 "departMealPlan": "", 
                 "returnMealPlan": "",  
-                "adultIndex": adultindex, 
+                "adultIndex": element.isInfant ? adultindex -1 : 0, 
                 "ancillaryJson": (objAncilary.length >0 ? JSON.stringify(objAncilary): ""),
                 "ancillaryReturnJson": (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn) : "")
               })

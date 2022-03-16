@@ -670,6 +670,7 @@ unlikeItem(id) {
     item.name=msg.name;
     item.isType=0;
     this.gf.setCacheSearch(item,0);
+    this.searchhotel.hotelID = item.id;
     this.valueGlobal.logingoback='/hoteldetail/' + item.id;
     //this.navCtrl.navigateForward(['/app/tabs/hoteldetail/' + item.id]);
     this.navCtrl.navigateForward('/hoteldetail/'+ item.id);
