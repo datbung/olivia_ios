@@ -261,9 +261,14 @@
     <div class="div-split sp-ci-co"></div>
     <!-- Thông tin phòng -->
     <div *ngIf="PriceAvgPlusTAStr" class="room-info">
-      <label class="combo-title">
-        {{nameroom}}
-      </label>
+      <div class="div-flex">
+        <label class="combo-title">
+          {{nameroom}}
+        </label>
+        <label *ngIf="PriceAvgPlusTAStr" class="text-p line-blue">
+          <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
+        </label>
+      </div>
       <div class="text-regular p-top-8" text-wrap>
         <img class="image-card" src="./assets/ic_facility/ic_people.svg"> {{roomnumber}} phòng | {{adulsdisplay}} người
         lớn |
@@ -276,9 +281,9 @@
         <p class="text-p text-width-190" text-wrap>
           <img src="./assets/ic_facility/ic_food_b.svg"> {{breakfast}}
         </p>
-        <p *ngIf="PriceAvgPlusTAStr" class="text-p line-blue">
+        <!-- <p *ngIf="PriceAvgPlusTAStr" class="text-p line-blue">
           <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
-        </p>
+        </p> -->
       </div>
       <hr class="cls-hr">
     </div>

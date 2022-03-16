@@ -3033,11 +3033,6 @@ export class FlightComboReviewsPage implements OnInit{
       if (error) throw new Error(error);
       var BOD=JSON.parse(body);
       se.arrBOD=BOD.BlackOutDates;
-      if (se.arrBOD) {
-        if (se.arrBOD.length>0) {
-          console.log(se.arrBOD.length);
-        }
-      }
     })
   }
 }
