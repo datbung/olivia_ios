@@ -92,14 +92,12 @@ export class HotelupgraderoomPage implements OnInit {
     this.currentRoomSelect = this.activityService.objFlightComboUpgrade.CurrentRoom;
     this.indexMeal = this.activityService.objFlightComboUpgrade.CurrentRoomIndex;
      this.hotelRoomClasses=[];
-    for (var i = 0; i < this.ListRoomClassestemp.length; i++) {
-   
-        const element = this.ListRoomClassestemp[i];
-        if (element.IsFlashSale == true && element.Status != 'IP') {
-          this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
-         }
-        
-      
+     for (var i = 0; i < this.ListRoomClassestemp.length; i++) {
+      const element = this.ListRoomClassestemp[i];
+      if (element.MealTypeRates.filter((e) => { return e.IsFlashSale == true && e.Status != 'IP' }).length > 0)
+      {
+        this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
+      }
     }
     for (var i = 0; i <this.hotelRoomClasses.length; i++) {
       //lọc mealType là promotion và Internal

@@ -1548,6 +1548,7 @@ export class CombocarnewPage implements OnInit {
   //load lại data
   loadData(Transfer, ischeck) {
     var se = this;
+    this.loadpricedone=false;
     if (ischeck) {
       //bind thông tin chiều đi
       if (Transfer && Transfer.length > 0) {
