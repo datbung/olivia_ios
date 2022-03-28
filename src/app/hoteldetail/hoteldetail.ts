@@ -1020,15 +1020,12 @@ export class HotelDetailPage implements OnInit {
           let jsondata = JSON.parse(body);
           se.hotelcode = jsondata.Code;
                   //neu Prefered = true goi ham suggest
-        se.valueGlobal.dayhot=[]; 
-        se.valueGlobal.daily=[];
-        se.valueGlobal.arrsuggest=[];
-        se.valueGlobal.notSuggestDaily=[];
-        se.valueGlobal.notSuggestDailyCB=[];
-        if (jsondata && jsondata.Prefered) {
-          se.getHotelSuggestDaily('');
-          se.getHotelSuggestDaily('package');
-        }
+        // se.valueGlobal.dayhot=[]; 
+        // se.valueGlobal.daily=[];
+        // se.valueGlobal.arrsuggest=[];
+        // se.valueGlobal.notSuggestDaily=[];
+        // se.valueGlobal.notSuggestDailyCB=[];
+      
           //Có cache thì xóa đi load mới nhất
           se.storage.get('hoteldetail_' + se.HotelID+"_"+se.cindisplay+"_"+se.coutdisplay).then((data) => {
             if(data){
