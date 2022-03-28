@@ -3,7 +3,7 @@ import { NavController,LoadingController } from '@ionic/angular';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from './../providers/constants';
-// import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {  ActivityService} from './../providers/globalfunction';
 
 @Component({
@@ -13,8 +13,8 @@ import {  ActivityService} from './../providers/globalfunction';
 })
 export class OrdersupportPage implements OnInit {
   booking_id="";cus_email;cus_name;cus_phone;note="";requestType;
-  public loader: any;
-  constructor(public navCtrl: NavController, private storage: Storage,public loadingCtrl: LoadingController,public activityService: ActivityService) { 
+  public loader: any;stt
+  constructor(public navCtrl: NavController, private storage: Storage,public loadingCtrl: LoadingController,public activityService: ActivityService , private activatedRoute: ActivatedRoute) { 
     this.booking_id=this.activityService.objPaymentMytrip.trip.booking_id;
     this.cus_email=this.activityService.objPaymentMytrip.trip.cus_email;
     this.cus_name=this.activityService.objPaymentMytrip.trip.cus_name;
@@ -22,7 +22,7 @@ export class OrdersupportPage implements OnInit {
   }
 
   ngOnInit() {
-    // this.booking_id = this.activatedRoute.snapshot.paramMap.get('code');
+    this.stt = this.activatedRoute.snapshot.paramMap.get('stt');
   }
   goback() {
   

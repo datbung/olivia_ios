@@ -492,7 +492,11 @@ export class BookingDetailPage implements OnInit {
   }
   nextSupport(trip){
     this.activityService.objPaymentMytrip = { trip: trip };
-    this.navCtrl.navigateForward('/ordersupport');
+    if (!trip.isRequestTrip && trip.isFlyBooking) {
+      this.navCtrl.navigateForward('/ordersupport/1');
+    }else{
+      this.navCtrl.navigateForward('/ordersupport/0');
+    }
   }
   requestCathay(name,trip,gender){
     if(gender.indexOf('Bé') == 0){

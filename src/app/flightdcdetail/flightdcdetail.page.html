@@ -18,7 +18,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item class="ion-item margin-top-10">
+  <ion-item *ngIf="_flightService.itemFlightCache.isAirportFirst" class="ion-item margin-top-10">
     <label slot="start" class="text-title">Đón tiễn tại {{_flightService.itemFlightCache.departCity}}</label>
     <ion-toggle mode="ios" class="margin-right-16" slot="end" [(ngModel)]="isblocktextDepart" (ionChange)="toggleChangeDepart($event)" 
       color="success"></ion-toggle>
@@ -198,7 +198,7 @@
   </ion-col>
 </ion-row>
   <!-- return -->
-  <ion-item class="ion-item">
+  <ion-item *ngIf="_flightService.itemFlightCache.isAirportSecond" class="ion-item">
     <label slot="start" class="text-title">Đón tiễn tại {{_flightService.itemFlightCache.returnCity}}</label>
     <ion-toggle mode="ios" class="margin-right-16" slot="end" [(ngModel)]="isblocktextReturn" (ionChange)="toggleChangeReturn($event)" name="kiwi"
       color="success"></ion-toggle>

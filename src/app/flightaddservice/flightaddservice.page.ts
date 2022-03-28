@@ -73,6 +73,7 @@ export class FlightaddservicePage implements OnInit {
   isCathay: any;
   alert: any;
   isExtenal: any;
+  ischeckShowDC=0;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -124,6 +125,7 @@ export class FlightaddservicePage implements OnInit {
             this.isExtenal=_flightService.itemFlightCache.isExtenal;
             //get price cathay
             this.getpriceCathay();
+            this.getCheckAirportDiChung();
                 if(this.departFlight && this.departFlight.ticketCondition){
                     this.departConditionInfo = this.departFlight.ticketCondition;
                 }
@@ -3232,4 +3234,35 @@ export class FlightaddservicePage implements OnInit {
    let dtStr = dateObj[1] + "/" + dateObj[0] + "/" + dateObj[2] + " " + time;
    return new Date(dtStr);
  }
+ getCheckAirportDiChung() {
+  var se = this;
+    var options = {
+      method: 'GET',
+      url: C.urls.baseUrl.urlMobile+'/api/Dashboard/CheckAirportDiChung?airportCode_First='+this._flightService.itemFlightCache.departCode+'&airportCode_Second='+this._flightService.itemFlightCache.returnCode+'',
+      timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+      headers: {
+      }
+    };
+    request(options, function (error, response, body) {
+      let objError = {
+        page: "flightsearchresult",
+        func: "selectTicket",
+        message: response.statusMessage,
+        content: response.body,
+        type: "warning",
+        param: JSON.stringify(options)
+      };
+      if (error) {
+        error.page = "flightsearchresult";
+        error.func = "selectTicket";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(objError, response);
+      }
+      if (response.statusCode == 200) {
+        let jsondata = JSON.parse(body);
+        se._flightService.itemFlightCache.isAirportFirst=jsondata.data.isAirportFirst;
+        se._flightService.itemFlightCache.isAirportSecond=jsondata.data.isAirportSecond;
+      }
+  })
+}
 }

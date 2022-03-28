@@ -267,7 +267,7 @@ export class FlightdcdetailPage implements OnInit {
     var se = this;
     if (stt == 0) {
       se.PhaseGo = data;
-      if (se.PhaseGo != undefined) {
+      if (se.PhaseGo != undefined &&  se.PhaseGo.pickUpTime) {
         se.selectedTimePhaseGo =
           [{ name: se.PhaseGo.pickUpTime.text, value: se.PhaseGo.pickUpTime.value },
           { name: moment(se.PhaseGo.pickUpTime.text, 'HH:mm').add(-15, 'minutes').format('HH:mm'), value: (se.PhaseGo.pickUpTime.value - 900000) },
@@ -276,14 +276,17 @@ export class FlightdcdetailPage implements OnInit {
           ];
         let DateGo = moment(se._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
         let TimeGo = moment(DateGo).add(se.PhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
-        this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.departDCPlace.place_id, se._flightService.itemFlightCache.departDCAirport, se._flightService.itemFlightCache.pax, "transfer_service", "dichungtaxi", "price").then(data => {
+        this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.departDCPlace.place_id, se._flightService.itemFlightCache.departDCAirport, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Go").then(data => {
           se.GetListProductGo(data.data, stt);
         })
 
+      }else{
+        this.loaddonedepart =true;
+        this.departTotalPrice  =0;
       }
     } else {
       se.returnPhaseGo = data;
-      if (se.returnPhaseGo != undefined) {
+      if (se.returnPhaseGo != undefined &&  se.returnPhaseGo.pickUpTime) {
         se.selectedTimeReturnPhaseGo =
           [{ name: se.returnPhaseGo.pickUpTime.text, value: se.returnPhaseGo.pickUpTime.value },
           { name: moment(se.returnPhaseGo.pickUpTime.text, 'HH:mm').add(-15, 'minutes').format('HH:mm'), value: (se.returnPhaseGo.pickUpTime.value - 900000) },
@@ -292,10 +295,13 @@ export class FlightdcdetailPage implements OnInit {
           ];
         let DateGo = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
         let TimeGo = moment(DateGo).add(se.returnPhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
-        this.gf.GetListProduct(TimeGo, this._flightService.itemFlightCache.returnDCAirport, this._flightService.itemFlightCache.returnDCPlace.place_id, se._flightService.itemFlightCache.pax, "transfer_service", "dichungtaxi", "price").then(data => {
+        this.gf.GetListProduct(TimeGo, this._flightService.itemFlightCache.returnDCAirport, this._flightService.itemFlightCache.returnDCPlace.place_id, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Go_RoundTrip").then(data => {
           se.GetListProductGo(data.data, stt);
         })
 
+      }else{
+        this.loaddonereturn =true;
+        this.returnTotalPrice  =0;
       }
     }
 
@@ -304,7 +310,7 @@ export class FlightdcdetailPage implements OnInit {
     var se = this;
     if (stt == 0) {
       se.PhaseReturn = data;
-      if (se.PhaseReturn != undefined) {
+      if (se.PhaseReturn != undefined && se.PhaseReturn.pickUpTime) {
         se.selectedTimePhaseTo =
           [{ name: se.PhaseReturn.pickUpTime.text, value: se.PhaseReturn.pickUpTime.value },
           { name: moment(se.PhaseReturn.pickUpTime.text, 'HH:mm').add(-15, 'minutes').format('HH:mm'), value: (se.PhaseReturn.pickUpTime.value - 900000) },
@@ -313,14 +319,18 @@ export class FlightdcdetailPage implements OnInit {
           ];
         let DateGo = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
         let TimeGo = moment(DateGo).add(se.PhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
-        this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.departDCAirport, se._flightService.itemFlightCache.departDCPlace.place_id, se._flightService.itemFlightCache.pax, "transfer_service", "dichungtaxi", "price").then(data => {
+        this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.departDCAirport, se._flightService.itemFlightCache.departDCPlace.place_id, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Return").then(data => {
           se.GetListProductReturn(data.data, stt);
         })
 
       }
+      else{
+        this.loaddonedepart =true;
+        this.departTotalPrice  =0;
+      }
     } else {
       se.returnPhaseReturn = data;
-      if (se.returnPhaseReturn != undefined) {
+      if (se.returnPhaseReturn != undefined && se.returnPhaseReturn.pickUpTime) {
         se.selectedTimeReturnPhaseTo =
           [{ name: se.returnPhaseReturn.pickUpTime.text, value: se.returnPhaseReturn.pickUpTime.value },
           { name: moment(se.returnPhaseReturn.pickUpTime.text, 'HH:mm').add(-15, 'minutes').format('HH:mm'), value: (se.returnPhaseReturn.pickUpTime.value - 900000) },
@@ -329,10 +339,14 @@ export class FlightdcdetailPage implements OnInit {
           ];
         let DateGo = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
         let TimeGo = moment(DateGo).add(se.returnPhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
-        this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.returnDCPlace.place_id, se._flightService.itemFlightCache.returnDCAirport, se._flightService.itemFlightCache.pax, "transfer_service", "dichungtaxi", "price").then(data => {
+        this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.returnDCPlace.place_id, se._flightService.itemFlightCache.returnDCAirport, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Return_RoundTrip").then(data => {
           se.GetListProductReturn(data.data, stt);
         })
 
+      }
+      else{
+        this.loaddonereturn =true;
+        this.returnTotalPrice  =0;
       }
     }
 
@@ -341,14 +355,14 @@ export class FlightdcdetailPage implements OnInit {
     var se = this;
     if (stt == 0) {
       if (Product != undefined) {
-        this.CountTrip++;
         let dataGet = Product;
         this.ListProductsGo = Product;
         se.InfoGo = dataGet.info;
         se.SendGo = dataGet.send;
-        se.departPriceGo = se.RoundPrice((se.InfoGo != undefined && se.InfoGo.hasOwnProperty('price') == true ? se.InfoGo.price : 0) * 1.1);
+        se.departPriceGo = this.RoundPrice((this.InfoGo != undefined && this.InfoGo.price  ? this.InfoGo.price.value : 0) * 1.1);
         if (se.InfoGo != undefined && se.InfoGo.hasOwnProperty('price')) {
-          se.Vehicle_Go = se.SendGo != undefined ? se.SendGo.vehicle.name.search("Xe") != -1 ? se.SendGo.vehicle.name.slice(3) : se.SendGo.vehicle.name : "";
+          this.CountTrip++;
+          se.Vehicle_Go = se.SendGo != undefined ? se.SendGo.vehicle.type.search("Xe") != -1 ? se.SendGo.vehicle.type.slice(3) : se.SendGo.vehicle.type : "";
         }
         else {
           se.PhaseGo = null;
@@ -367,13 +381,14 @@ export class FlightdcdetailPage implements OnInit {
       }
     } else {
       if (Product != undefined) {
-        this.CountTrip++;
+ 
         let dataGet = Product
         se.ListProductsReturn = Product;
         se.returnInfoGo = dataGet.info;
         se.returnSendGo = dataGet.send;
-        se.returnPriceGo = se.RoundPrice((se.returnInfoGo != undefined && se.returnInfoGo.hasOwnProperty('price') == true ? se.returnInfoGo.price : 0) * 1.1);
+        se.returnPriceGo = se.RoundPrice((se.returnInfoGo != undefined && se.returnInfoGo.price ? se.returnInfoGo.price.value : 0) * 1.1);
         if (se.returnInfoGo != undefined && se.returnInfoGo.hasOwnProperty('price')) {
+          this.CountTrip++;
           se.returnVehicle_Go = se.returnSendGo != undefined ? se.returnSendGo.vehicle.name.search("Xe") != -1 ? se.returnSendGo.vehicle.name.slice(3) : se.returnSendGo.vehicle.name : "";
         }
         else {
@@ -398,18 +413,17 @@ export class FlightdcdetailPage implements OnInit {
     var se = this;
     if (stt == 0) {
       if (Product != undefined) {
-        this.CountTrip++;
         let dataGet = Product
         this.ListProductsGo_RoundTrip = Product;
         se.InfoReturn = dataGet.info;
         se.SendReturn = dataGet.send;
-        se.departPriceTo = se.RoundPrice((se.InfoReturn != undefined && se.InfoReturn.hasOwnProperty('price') == true ? se.InfoReturn.price : 0) * 1.1);
+        se.departPriceTo = se.RoundPrice((se.InfoReturn != undefined && se.InfoReturn.price ? se.InfoReturn.price.value : 0) * 1.1);
         if (se.departPriceTo==0) {
-          se
           se.funcTotalPrice(stt);
         }
         if (se.InfoReturn != undefined && se.InfoReturn.hasOwnProperty('price')) {
-          se.Vehicle_Return = se.SendReturn != undefined ? se.SendReturn.vehicle.name.search("Xe") != -1 ? se.SendReturn.vehicle.name.slice(3) : se.SendReturn.vehicle.name : "";
+          this.CountTrip++;
+          se.Vehicle_Return = se.SendReturn != undefined ? se.SendReturn.vehicle.type.search("Xe") != -1 ? se.SendReturn.vehicle.type.slice(3) : se.SendReturn.vehicle.type : "";
         }
         else {
           se.PhaseReturn = null;
@@ -420,13 +434,14 @@ export class FlightdcdetailPage implements OnInit {
       }
     } else {
       if (Product != undefined) {
-        this.CountTrip++;
+  
         let dataGet = Product;
         this.ListProductsReturn_RoundTrip = Product;
         se.returnInfoReturn = dataGet.info;
         se.returnSendReturn = dataGet.send;
-        se.returnPriceTo = se.RoundPrice((se.returnInfoReturn != undefined && se.returnInfoReturn.hasOwnProperty('price') == true ? se.returnInfoReturn.price : 0) * 1.1);
+        se.returnPriceTo = se.RoundPrice((se.returnInfoReturn != undefined && se.returnInfoReturn.price ? se.returnInfoReturn.price.value : 0) * 1.1);
         if (se.returnInfoReturn != undefined && se.returnInfoReturn.hasOwnProperty('price')) {
+          this.CountTrip++;
           se.returnVehicle_Return = se.returnSendReturn != undefined ? se.returnSendReturn.vehicle.name.search("Xe") != -1 ? se.returnSendReturn.vehicle.name.slice(3) : se.returnSendReturn.vehicle.name : "";
         }
         else {
@@ -443,7 +458,7 @@ export class FlightdcdetailPage implements OnInit {
     this.TotalPrice = 0;
     this.departTotalPrice = 0;
     this.returnTotalPrice = 0;
-    this.funcCountTrip();
+
     if (this._flightService.itemFlightCache.roundTrip) {
       if (this.departPriceGo==0|| this.departPriceTo==0) {
         this.departTotalPrice =0
@@ -471,6 +486,7 @@ export class FlightdcdetailPage implements OnInit {
         this.TotalPrice = this.returnTotalPrice;
       }
     }
+    this.funcCountTrip();
     if (stt == 0) {
       this.loaddonedepart = true;
     } else {
@@ -483,19 +499,29 @@ export class FlightdcdetailPage implements OnInit {
     this.CountReturn = 0;
     if (this.isblocktextDepart) {
       if (this._flightService.itemFlightCache.roundTrip == true) {
-        this.CountGo = 2;
+        if (this.departTotalPrice!=0) {
+          this.CountGo = 2;
+        }
       }
       else {
-        this.CountGo = 1;
+        if (this.departTotalPrice!=0) {
+          this.CountGo = 1;
+        }
       }
     }
 
     if (this.isblocktextReturn) {
       if (this._flightService.itemFlightCache.roundTrip == true) {
-        this.CountReturn = 2;
+        if (this.returnTotalPrice!=0) {
+          this.CountReturn = 2;
+        }
+      
       }
       else {
-        this.CountReturn = 1;
+        if (this.returnTotalPrice!=0) {
+          this.CountReturn = 1;
+        }
+      
       }
     }
     this.CountTrip = this.CountGo + this.CountReturn;

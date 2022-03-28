@@ -1290,12 +1290,12 @@ alert.present();
        
       }
     }
-    public GetListProduct(bookingTime, startPlace, endPlace, slot, productType, provider, sort): Promise<any>{
+    public GetListProduct(bookingTime, startPlace, endPlace, slot, productType, provider, sort,routeName): Promise<any>{
       {
         return new Promise((resolve, reject) => {
           var options = {
             method: 'GET',
-            url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetListProducts?bookingTime=' + bookingTime + '&startPlace=' + startPlace + '&endPlace=' + endPlace + '&slot=' + slot + '&productType=' + productType + '&provider=' + provider + '&sort=' + sort,
+            url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetListProducts?reservationNo='+this._flightService.itemFlightCache.dataBooking.reservationNo+'&routeName='+routeName+'&bookingTime=' + bookingTime + '&startPlace=' + startPlace + '&endPlace=' + endPlace + '&slot=' + slot + '&productType=' + productType + '&provider=' + provider + '&sort=' + sort,
             timeout: 10000, maxAttempts: 5, retryDelay: 2000,
             headers:
             {

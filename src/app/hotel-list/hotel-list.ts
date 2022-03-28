@@ -194,9 +194,6 @@ export class HotelListPage implements OnInit{
     var options = {
       method: 'GET',
       url: strurl,
-      headers:
-        {"Access-Control-Allow-Credentials": true,
-        },
       timeout: 180000, maxAttempts: 5, retryDelay: 2000,
     };
     request(options, function (error, response, body) {

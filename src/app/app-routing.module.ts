@@ -186,7 +186,7 @@ const routes: Routes = [
   { path: 'flightdcpickaddressinput', loadChildren: './flightdcpickaddressinput/flightdcpickaddressinput.module#FlightdcpickaddressinputPageModule' },
   { path: 'flightdcdetail/:isDepart/:isReturn', loadChildren: './flightdcdetail/flightdcdetail.module#FlightdcdetailPageModule' },
   { path: 'cooperateverifyotp', loadChildren: './cooperateverifyotp/cooperateverifyotp.module#CooperateverifyotpPageModule' },
-  { path: 'ordersupport', loadChildren: './ordersupport/ordersupport.module#OrdersupportPageModule' },
+  { path: 'ordersupport/:stt', loadChildren: './ordersupport/ordersupport.module#OrdersupportPageModule' },
   { path: 'ordersupportdone', loadChildren: './ordersupportdone/ordersupportdone.module#OrdersupportdonePageModule' },
   { path: 'mytripcathay/:bookingid', loadChildren: './mytripcathay/mytripcathay.module#MytripcathayPageModule' },
 
