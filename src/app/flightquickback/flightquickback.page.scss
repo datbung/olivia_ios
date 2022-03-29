@@ -8,16 +8,21 @@
   letter-spacing: -0.14px;
   color: #828282;
 
-  width: 400%;
-  text-align: left;
-  padding-left: 11px;
+  width: 400% !important;
+  text-align: right;
+  padding-right: 11px;
+  z-index: 1 !important;
+  position: relative !important;
 }
 
 .div-button-close{
-  width: 100%;
-  text-align: right;
-  padding-right: 11px;
-
+  width: 50%;
+  .header-img-close {
+    width: 36px;
+  }
+}
+.d-flex {
+  display: flex;
 }
 
 .div-text-close{

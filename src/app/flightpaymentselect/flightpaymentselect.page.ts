@@ -168,18 +168,21 @@ export class FlightPaymentSelectPage implements OnInit {
   }
   gobackpage(){
     this._flightService.itemFlightCache.backtochoiceseat = false;
+    this.gf.hideLoading();
     this.navCtrl.navigateBack('flightadddetails');
   }
   gotoaddservicepage(){
     //this.showAlertChoiceSeat();
     this._flightService.itemFlightCache.backtochoiceseat =  true;
     this._flightService.itemResetCheckSeat.emit(1);
+    this.gf.hideLoading();
     this.navCtrl.navigateBack('flightadddetails');
   }
 
   goback()
   {
     var se = this;
+    se.gf.showLoading();
     se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
     se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
       let data = se._flightService.itemFlightCache;

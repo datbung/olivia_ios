@@ -4,13 +4,16 @@
     <ion-row>
       <ion-col class="col-header">
         <div class="d-flex">
+          <div class="div-button-close" (click)="close()">
+            <div class="div-text-close">
+              <img class="header-img-close" src="./assets/imgs/ios-arrow-round-back.svg" >
+            </div>
+        </div>
           <div class="div-header-title">
                 <div class="div-text-version">{{ currentVersion }}</div>
           </div>
 
-          <div class="div-button-close" (click)="close()">
-                <div class="div-text-close">Đóng</div>
-            </div>
+         
         </div>
       </ion-col>
     </ion-row>

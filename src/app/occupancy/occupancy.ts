@@ -81,6 +81,7 @@ export class OccupancyPage implements OnInit {
     this.searchhotel.arrchild= this.arrchild;
 
     if(this.showpopupfromrequestcombo){
+      this.gf.setParams(false,'requestcombo');
       this.modalCtrl.dismiss();
     }else{
       this.navCtrl.back();

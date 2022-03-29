@@ -5,8 +5,8 @@
             <div><label class="text-title">{{isdepart ? 'Đi từ' : 'Về từ'}} {{fromplace}}</label></div>
             <div><label style="font-size: 11px;color: #828282">{{daytitle}}</label></div>
 
-            <div style="position: absolute;height: 60px;width: 54px;right: 2px;text-align: right;top: -2px;">
-                  <ion-icon style="height: 32px;width: 48px;padding: 12px;" name="close"  (click)="goback()"></ion-icon>
+            <div class="div-close t-0" (click)="goback()">
+                <img class="header-img-close" src="./assets/imgs/ios-arrow-round-back.svg" >
               </div> 
           </div>
         </ion-col>

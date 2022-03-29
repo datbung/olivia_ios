@@ -18,7 +18,7 @@ import * as request from 'requestretry';
   styleUrls: ['./flightsearchairport.page.scss'],
 })
 export class FlightsearchairportPage implements OnInit {
-
+  @ViewChild('ipSearchAiport') ipSearchAiport ;
   loadpricedone = false;
   items: any = [];
   itemsfull: any = [];
@@ -71,7 +71,11 @@ export class FlightsearchairportPage implements OnInit {
     ngOnInit(){
 
     }
-
+    ionViewDidEnter() {
+      setTimeout(() => {
+        this.ipSearchAiport.setFocus();
+      }, 150);
+    }
     loadLocation(){
         var se = this;
         //let urlPath = "https://www.ivivu.com/ve-may-bay/data/allplace.json";
