@@ -4853,7 +4853,12 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
           }
           nextSupport(trip){
             this.activityService.objPaymentMytrip = { trip: trip };
-            this.navCtrl.navigateForward('/ordersupport');
+            if (!trip.isRequestTrip && trip.isFlyBooking) {
+              this.navCtrl.navigateForward('/ordersupport/1');
+            }else{
+              this.navCtrl.navigateForward('/ordersupport/0');
+            }
+        
           }
 
           getCathayClaimInfo(bkgid): Promise<any>{

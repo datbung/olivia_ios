@@ -374,6 +374,9 @@ export class MytripaymentselectPage implements OnInit {
   }
   goMytrip(){
     alert("Booking không thoả thời hạn thanh toán. Vui lòng tạo booking mới hoặc liên hệ nhân viên tư vấn để được hỗ trợ");
+    if (this.loader) {
+      this.loader.dismiss();
+    }
     clearInterval(this.intervalID);
     this.navCtrl.back();
   }

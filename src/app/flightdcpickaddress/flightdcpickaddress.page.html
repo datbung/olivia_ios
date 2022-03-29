@@ -17,61 +17,67 @@
 </ion-header>
 
 <ion-content>
-  <div class="div-title div-flex margin-top-10">
-    <div class="text-title div-width-80">
-      Đón tiễn tại {{_flightService.itemFlightCache.departCity}}
-    </div>
-    <div class="div-width-20 text-right">
-      <ion-toggle mode="ios"  [(ngModel)]="isblocktextDepart" (ionChange)="toggleChangeDepart($event)" name="kiwi" color="success"></ion-toggle>
-    </div>
-    
-  </div>
-  <ion-row  class="row-search">
-    <ion-col (click)="searchDepart()" size="1" class="align-self">
-      <div>
-        <img *ngIf="isblocktextDepart" src="./assets/ic_flight/icfilght_location.svg">
-        <img *ngIf="!isblocktextDepart" src="./assets/ic_flight/location_block.svg">
+  <div *ngIf="_flightService.itemFlightCache.isAirportFirst">
+    <div class="div-title div-flex margin-top-10">
+      <div class="text-title div-width-80">
+        Đón tiễn tại {{_flightService.itemFlightCache.departCity}}
       </div>
-    </ion-col>
-    <ion-col  (click)="searchDepart()" size="11" class="align-self">
-      <div class="div-title-place">
-        <label class="text-place" [ngClass]="!isblocktextDepart?'text-block':''">
-          {{inputFrom}} 
-         </label>
+      <div class="div-width-20 text-right">
+        <ion-toggle mode="ios"  [(ngModel)]="isblocktextDepart" (ionChange)="toggleChangeDepart($event)" name="kiwi" color="success"></ion-toggle>
       </div>
-     
-    </ion-col>
-  </ion-row>
-  <!-- return -->
-  <div class="div-title div-flex margin-top-26">
-    <div class="text-title div-width-80">
-      Đón tiễn tại {{_flightService.itemFlightCache.returnCity}}
+      
     </div>
-    <div class="div-width-20 text-right">
-      <ion-toggle mode="ios"  [(ngModel)]="isblocktextReturn" (ionChange)="toggleChangeReturn($event)" name="kiwi" color="success"></ion-toggle>
-    </div>
+    <ion-row  class="row-search">
+      <ion-col (click)="searchDepart()" size="1" class="align-self">
+        <div>
+          <img *ngIf="isblocktextDepart" src="./assets/ic_flight/icfilght_location.svg">
+          <img *ngIf="!isblocktextDepart" src="./assets/ic_flight/location_block.svg">
+        </div>
+      </ion-col>
+      <ion-col  (click)="searchDepart()" size="11" class="align-self">
+        <div class="div-title-place">
+          <label class="text-place" [ngClass]="!isblocktextDepart?'text-block':''">
+            {{inputFrom}} 
+           </label>
+        </div>
+       
+      </ion-col>
+    </ion-row>
   </div>
   
-  <!-- <ion-item class="ion-item margin-top-26">
-    <label slot="start" class="text-title">Đón tiễn tại {{_flightService.itemFlightCache.returnCity}}</label>
-    <ion-toggle mode="ios" slot="end" [(ngModel)]="isblocktextReturn" (ionChange)="toggleChangeReturn($event)" name="kiwi" color="success"></ion-toggle>
-  </ion-item> -->
-  <ion-row  class="row-search">
-    <ion-col (click)="searchReturn()" size="1" class="align-self">
-      <div>
-        <img *ngIf="isblocktextReturn" src="./assets/ic_flight/icfilght_location.svg">
-        <img *ngIf="!isblocktextReturn"  src="./assets/ic_flight/location_block.svg">
+  <!-- return -->
+  <div *ngIf="_flightService.itemFlightCache.isAirportSecond">
+    <div class="div-title div-flex margin-top-26">
+      <div class="text-title div-width-80">
+        Đón tiễn tại {{_flightService.itemFlightCache.returnCity}}
       </div>
-    </ion-col>
-    <ion-col (click)="searchReturn()" size="11" class="align-self">
-      <div class="div-title-place">
-        <label class="text-place" [ngClass]="!isblocktextReturn?'text-block':''">
-          {{inputTo}} 
-        </label>
+      <div class="div-width-20 text-right">
+        <ion-toggle mode="ios"  [(ngModel)]="isblocktextReturn" (ionChange)="toggleChangeReturn($event)" name="kiwi" color="success"></ion-toggle>
+      </div>
+    </div>
+    
+    <!-- <ion-item class="ion-item margin-top-26">
+      <label slot="start" class="text-title">Đón tiễn tại {{_flightService.itemFlightCache.returnCity}}</label>
+      <ion-toggle mode="ios" slot="end" [(ngModel)]="isblocktextReturn" (ionChange)="toggleChangeReturn($event)" name="kiwi" color="success"></ion-toggle>
+    </ion-item> -->
+    <ion-row  class="row-search">
+      <ion-col (click)="searchReturn()" size="1" class="align-self">
+        <div>
+          <img *ngIf="isblocktextReturn" src="./assets/ic_flight/icfilght_location.svg">
+          <img *ngIf="!isblocktextReturn"  src="./assets/ic_flight/location_block.svg">
         </div>
-     
-    </ion-col>
-  </ion-row>
+      </ion-col>
+      <ion-col (click)="searchReturn()" size="11" class="align-self">
+        <div class="div-title-place">
+          <label class="text-place" [ngClass]="!isblocktextReturn?'text-block':''">
+            {{inputTo}} 
+          </label>
+          </div>
+       
+      </ion-col>
+    </ion-row>
+  </div>
+  
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
