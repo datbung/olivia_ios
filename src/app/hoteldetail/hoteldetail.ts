@@ -211,6 +211,7 @@ export class HotelDetailPage implements OnInit {
   indexMealTypeRates=0;
   arrroomFS: any[];
   alert: HTMLIonAlertElement;
+  textMSG: any;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -1415,6 +1416,7 @@ export class HotelDetailPage implements OnInit {
               result =  true;
             }else{
               result = false;
+              se.textMSG=jsonhtprice1.MSG;
               if(se.loader){
                 se.loader.dismiss();
               }
@@ -2172,6 +2174,7 @@ excuteLoadHotelRoom(data){
         self.hotelRoomClasses = [];
         self.hotelRoomClassesFS = [];
         self.emptyroom = true;
+        self.textMSG=result.MSG;
       }
 
       // if(se.objectsearch){
