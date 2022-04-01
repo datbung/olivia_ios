@@ -1066,10 +1066,10 @@ export class HotelDetailPage implements OnInit {
       se.valueGlobal.arrsuggest=[];
       se.valueGlobal.notSuggestDaily=[];
       se.valueGlobal.notSuggestDailyCB=[];
-    if (jsondata && jsondata.Prefered) {
-      se.getHotelSuggestDaily('');
-      se.getHotelSuggestDaily('package');
-    }
+      if (jsondata && jsondata.IsExtranet) {
+        se.getHotelSuggestDaily('');
+        se.getHotelSuggestDaily('package');
+      }
           se.hotelcode = jsondata.Code;
           se.ChildAgeTo = jsondata.ChildAgeTo;
           if(jsondata.Combos)
@@ -4407,44 +4407,61 @@ async bookcombo() {
   {
     var se=this;
     this.ischeckBOD=false;
-    var options = {
-      method: 'GET',
-      url: C.urls.baseUrl.urlGate + '/get-blackout-date',
-      qs: { hotelId: se.HotelID ? se.HotelID : se.searchhotel.hotelID, roomId: roomid },
-      headers:
-      {
-        'postman-token': '86c67bdc-5fcd-0240-5549-f3ea2b31faf8',
-        'cache-control': 'no-cache'
-      }
-    };
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-      var BOD=JSON.parse(body);
-      var arrBOD=BOD.BlackOutDates;
-      if (arrBOD) {
-        if (arrBOD.length>0) {
+
+      let arrBOD= se.valueGlobal.notSuggestDailyCB;
+      if (arrBOD && arrBOD.length>0) {
           var checkcintemp = new Date(se.cin);
           var checkdatecout = new Date(se.cout);
           var checkcin=moment(checkcintemp).format('YYYYMMDD');
           var checkcout=moment(checkdatecout).format('YYYYMMDD');
-          for (let i = 0; i < arrBOD.length; i++) {
-            var checkBODtemp = new Date(arrBOD[i]);
-            var checkBOD=moment(checkBODtemp).format('YYYYMMDD');
-            if (checkcin<=checkBOD&&checkBOD<checkcout) {
-              se.ischeckBOD=true;
-              break;
-            }
-          }
-        }
-      }
 
-        se.zone.run(()=>{
-          se.checkBODdone = true;
-          se.loaddonecombo = true;
-        })
+          let objcheckbod = arrBOD.filter((bod) => { return checkcin<= moment(bod).format('YYYYMMDD') && moment(bod).format('YYYYMMDD') <checkcout });
+          if(objcheckbod && objcheckbod.length >0){
+            se.ischeckBOD=true;
+          }
+      }
+      se.zone.run(()=>{
+        se.checkBODdone = true;
+        se.loaddonecombo = true;
+      })
+    // var options = {
+    //   method: 'GET',
+    //   url: C.urls.baseUrl.urlGate + '/get-blackout-date',
+    //   qs: { hotelId: se.HotelID ? se.HotelID : se.searchhotel.hotelID, roomId: roomid },
+    //   headers:
+    //   {
+    //     'postman-token': '86c67bdc-5fcd-0240-5549-f3ea2b31faf8',
+    //     'cache-control': 'no-cache'
+    //   }
+    // };
+    // request(options, function (error, response, body) {
+    //   if (error) throw new Error(error);
+    //   var BOD=JSON.parse(body);
+    //   var arrBOD=BOD.BlackOutDates;
+    //   if (arrBOD) {
+    //     if (arrBOD.length>0) {
+    //       var checkcintemp = new Date(se.cin);
+    //       var checkdatecout = new Date(se.cout);
+    //       var checkcin=moment(checkcintemp).format('YYYYMMDD');
+    //       var checkcout=moment(checkdatecout).format('YYYYMMDD');
+    //       for (let i = 0; i < arrBOD.length; i++) {
+    //         var checkBODtemp = new Date(arrBOD[i]);
+    //         var checkBOD=moment(checkBODtemp).format('YYYYMMDD');
+    //         if (checkcin<=checkBOD&&checkBOD<checkcout) {
+    //           se.ischeckBOD=true;
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   }
+
+    //     se.zone.run(()=>{
+    //       se.checkBODdone = true;
+    //       se.loaddonecombo = true;
+    //     })
      
-      //se.checkCombo();
-    })
+    //   //se.checkCombo();
+    // })
   }
   ionViewWillLeave(){
     this.searchhotel.isRefreshDetail = false;
