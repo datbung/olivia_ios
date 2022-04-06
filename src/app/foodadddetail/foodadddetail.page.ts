@@ -832,7 +832,7 @@ funcshipTime(){
         this.texttimeFood = timeShip.food;
       }
       else{
-        this.texttimeFood = "11h15 - 11h30";
+        this.texttimeFood = "11h - 12h";
       }
       if (timeShip.dinner) {
         this.texttimeDinner = timeShip.dinner;
@@ -842,7 +842,7 @@ funcshipTime(){
       }
     }
     else{
-      this.texttimeFood = "11h15 - 11h30";
+      this.texttimeFood = "11h - 12h";
       this.texttimeDinner = "16h00 - 16h30";
       // if (this.isDinner && this.isFood) {
       //   this.note="Giao bữa trưa: 11h30 - 12h00 | Giao bữa tối: 16h30 - 17h00";
