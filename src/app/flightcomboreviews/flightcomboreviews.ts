@@ -712,7 +712,8 @@ export class FlightComboReviewsPage implements OnInit{
                 se.roomnumber = element.TotalRoom;
                 se.index=index;
                 se.callSummaryPrice(element,index);
-                se.getBOD(element.MealTypeRates[0].RoomId);
+                //se.getBOD(element.MealTypeRates[0].RoomId);
+                se.arrBOD =  se.valueGlobal.notSuggestDaily;
               } else {
                 se.loadpricedone = true;
               }

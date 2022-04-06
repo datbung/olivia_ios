@@ -80,6 +80,7 @@ export class FoodplaceotherPage implements OnInit {
     const actionSheet = await this.actionSheetController.create({
       header: 'Tỉnh / Thành phố',
       buttons: arrbtnCity,
+      mode: 'md'
     });
     await actionSheet.present();
   }
@@ -97,6 +98,7 @@ export class FoodplaceotherPage implements OnInit {
     const actionSheet = await this.actionSheetController.create({
       header: 'Quận/Huyện',
       buttons: arrbtnDist,
+      mode: 'md'
     });
     await actionSheet.present();
   }

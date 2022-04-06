@@ -19,7 +19,7 @@ body{
     background: transparent;
     // background-size: cover;
     //margin-top: env(safe-area-inset-top);
-    margin-bottom: env(safe-area-inset-bottom);
+    //margin-bottom: env(safe-area-inset-bottom);
 }
 .ion-bar {
     background-color: #fff;
@@ -1081,8 +1081,14 @@ ion-toolbar{
 .m-top-16{
   margin-top: 16px;
 }
+.m-top-12 {
+  margin-top: 12px;
+}
 .m-top-8{
   margin-top: 8px;
+}
+.m-top-6{
+  margin-top: 6px;
 }
 .m-top-4{
   margin-top: 4px;

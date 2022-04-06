@@ -254,7 +254,11 @@
       overflow-y: auto;
       scroll-behavior: smooth;
   }
-  .sc-ion-action-sheet-ios-h.cssdistrict{ 
+  .sc-ion-action-sheet-ios-h .cssdistrict { 
+    margin-top: calc(env(safe-area-inset-top) + 50px);
+    --height: 90%;
+  }
+  .sc-ion-action-sheet-md-h .cssdistrict {
     margin-top: calc(env(safe-area-inset-top) + 50px);
     --height: 90%;
   }

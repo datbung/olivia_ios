@@ -73,7 +73,7 @@
 
 .div-flight-mytrip-content,.card-background-page-history-trips{
     height: auto;
-    padding: calc( env(safe-area-inset-bottom) + 94px) 0px;
+    padding: 94px 0px;
     position: -webkit-sticky;
 
     .div-flight-mytrip{
@@ -662,7 +662,7 @@ h2{
 }
 //Style triphistory
 .card-background-page-history-trips {
-    padding: calc( env(safe-area-inset-bottom) + 54px) 0px;
+    padding: 54px 0px;
     .text-left{
         font-size:13px;
     }
@@ -1087,7 +1087,7 @@ ion-list{
     background-color: #ffffff !important;
     position: absolute;
     width: 100%;
-    bottom: calc( env(safe-area-inset-bottom) + 120px);
+    bottom: 120px;
 }
 
 ion-content{

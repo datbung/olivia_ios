@@ -819,19 +819,19 @@
 
         @media (min-width:412px) and (max-width: 420px) {
             .action-sheets-flight-promo .action-sheet-button.ion-activatable.sc-ion-action-sheet-md{
-                padding-bottom: calc( env(safe-area-inset-bottom) + 16px) !important;
+                padding-bottom: 16px !important;
             }
 
             .action-sheets-flight-promo .div-close-promo{
-                bottom: calc( env(safe-area-inset-bottom) + 134px) !important;
+                bottom: 134px !important;
             }
 
             .action-sheets-flight-promo.height-194 .action-sheet-button.ion-activatable.sc-ion-action-sheet-md{
-                padding-bottom: calc( env(safe-area-inset-bottom) + 16px) !important;
+                padding-bottom: 16px !important;
                 min-height: 194px !important;
             }
             .action-sheets-flight-promo.height-194 .div-close-promo{
-                bottom: calc( env(safe-area-inset-bottom) + 214px) !important;
+                bottom: 214px !important;
             }
         }
         .action-sheets-flight-promo ion-backdrop{

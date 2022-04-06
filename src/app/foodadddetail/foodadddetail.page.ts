@@ -400,6 +400,7 @@ export class FoodadddetailPage implements OnInit {
     const actionSheet = await this.actionSheetController.create({
       header: 'Tỉnh / Thành phố',
       buttons: arrbtnCity,
+      mode: 'md',
     });
     await actionSheet.present();
   }
@@ -424,6 +425,7 @@ export class FoodadddetailPage implements OnInit {
       header: 'Quận/Huyện',
       buttons: arrbtnDist,
       cssClass:'cssdistrict',
+      mode: 'md'
     });
     await this.actionSheetDistrict.present();
   }
@@ -450,7 +452,8 @@ export class FoodadddetailPage implements OnInit {
     this.actionSheetWard = await this.actionSheetController.create({
       header: 'Phường/Xã',
       buttons: arrbtnWard,
-      cssClass:'cssdistrict'
+      cssClass:'cssdistrict',
+      mode: 'md',
     });
     await this.actionSheetWard.present();
   }

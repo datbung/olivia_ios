@@ -1654,7 +1654,7 @@
                 justify-content: left;
             }
             .action-sheets-basic-page .action-sheet-button.sc-ion-action-sheet-ios{
-                font-size: 14px;
+                font-size: 16px;
                 color: #828282;
                 height: 60px;
                 text-align: left;
@@ -2351,10 +2351,13 @@ a.progressive {
 }
 .text-suggest{
     line-height: 1.4;
-    font-size: 14px;
+    font-size: 16px;
 }
 .text-underline{
-    text-decoration: underline;
+    -webkit-text-decoration:  underline solid 1px;
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration: underline solid 1px;
+    text-decoration-skip-ink: none;
 }
 .div-suggest
 {
@@ -2384,5 +2387,23 @@ a.progressive {
 
 .f-14 {
     font-size: 14px !important;
+}
+.div-background-empty{
+    background: #f2f2f2;
+    padding: 8px;
+    padding-bottom: 17px;
+
+    .div-empty-price {
+        text-align: center;
+        padding: 24px 16px 22px 16px;
+        background-color: #ffffff;
+    }
+}
+
+.m-bottom-14 {
+    margin-bottom: 14px;
+}
+.m-bottom-12 {
+    margin-bottom: 12px;
 }
   //////

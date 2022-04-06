@@ -214,6 +214,7 @@ export class HotelDetailPage implements OnInit {
   alert: HTMLIonAlertElement;
   isLoadingData = false;
   isLoadingPrice: boolean;
+  textMSG: any;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -265,11 +266,12 @@ export class HotelDetailPage implements OnInit {
       }
       if (response.statusCode == 200) {
         var res = JSON.parse(body);
-        if (value=='package') {
+        if (value) {
           // var promotionPackage : any;
           se.valueGlobal.notSuggestDailyCB=[];
           if (res.data) {
             se.valueGlobal.notSuggestDailyCB=res.data.notSuggestDaily;
+            se.getBOD('');
           }
         }else{
           se.valueGlobal.dayhot=[]; 
@@ -1068,7 +1070,7 @@ export class HotelDetailPage implements OnInit {
       se.valueGlobal.notSuggestDailyCB=[];
       if (jsondata && jsondata.IsExtranet) {
         se.getHotelSuggestDaily('');
-        se.getHotelSuggestDaily('package');
+        //se.getHotelSuggestDaily('package');
       }
           se.hotelcode = jsondata.Code;
           se.ChildAgeTo = jsondata.ChildAgeTo;
@@ -1420,6 +1422,7 @@ export class HotelDetailPage implements OnInit {
               result =  true;
             }else{
               result = false;
+              se.textMSG=jsonhtprice1.MSG;
               if(se.loader){
                 se.loader.dismiss();
               }
@@ -1611,6 +1614,11 @@ export class HotelDetailPage implements OnInit {
             se.fs = (item.comboType == "2");
             se.fcbcar = item.comboType == "3";
             se.nm = (item.comboType == null);
+            if (se.fs) {
+              se.getHotelSuggestDaily('flashsale');
+            }else {
+              se.getHotelSuggestDaily('package');
+            }
             if (se.fs && item.availableTo) {
               let dateEnd = new Date(item.availableTo.toLocaleString());
               let y:any = moment(se.searchhotel.CheckInDate).format('YYYY'),
@@ -1749,13 +1757,13 @@ export class HotelDetailPage implements OnInit {
         C.writeErrorLog(objError,response);
       }
       se.searchhotel.roomID=se.RoomID;
-      if((item && item.roomId) || se.searchhotel.hotelID ) {
-        se.getBOD( (item && item.roomId)? item.roomId : '' ) ;
-      }else{
-        se.zone.run(()=>{
-          se.checkBODdone = true;
-          })
-      }
+      // if((item && item.roomId) || se.searchhotel.hotelID ) {
+      //   se.getBOD( (item && item.roomId)? item.roomId : '' ) ;
+      // }else{
+      //   se.zone.run(()=>{
+      //     se.checkBODdone = true;
+      //     })
+      // }
       se.getInsurranceFee(comboid).then((data)=>{
         //console.log(data);
         if(data.data){
@@ -2185,6 +2193,7 @@ excuteLoadHotelRoom(data){
         self.hotelRoomClassesFS = [];
         self.emptyroom = true;
         self.loadpricecombodone = true;
+        self.textMSG=result.MSG;
       }
   });
   se.resetShowHidePanel();
