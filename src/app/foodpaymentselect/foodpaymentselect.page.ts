@@ -415,9 +415,8 @@ export class FoodpaymentselectPage implements OnInit {
       //let url = C.urls.baseUrl.urlContracting + "/check-paymented?code="+this.bookingCode;
       let url = C.urls.baseUrl.urlFood + '/api/FOBooking/GetBookingByCode?bookingCode=' + this.bookingCode + '';
       this.zone.run(()=>{
-        this.gf.CheckpaymentFood(url).then((data) => {
-          var checkpay=data
-          if (checkpay=="true") {
+        this.checkBooking().then((data) => {
+          if (data) {
             clearInterval(this.intervalID);
             this.foodService.ischeckpayment='1';
             window.close();
@@ -428,7 +427,7 @@ export class FoodpaymentselectPage implements OnInit {
     }, 1000 * 1);
     setTimeout(() => {
       clearInterval(this.intervalID);
-    }, 60000);
+    }, 600000);
   }
 
   setintervalvisa()
@@ -450,7 +449,7 @@ export class FoodpaymentselectPage implements OnInit {
     }, 1000 * 1);
     setTimeout(() => {
       clearInterval(this.intervalID);
-    }, 60000);
+    }, 600000 );
   }
   rememberCard(){
     this.isremember=!this.isremember
