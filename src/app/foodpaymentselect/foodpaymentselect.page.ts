@@ -427,7 +427,7 @@ export class FoodpaymentselectPage implements OnInit {
     }, 1000 * 1);
     setTimeout(() => {
       clearInterval(this.intervalID);
-    }, 600000);
+    }, 900000);
   }
 
   setintervalvisa()

@@ -470,76 +470,7 @@ export class ComboadddetailsPage implements OnInit {
       if (body.status == 0) {
         var json = body.data;
         if (json.length > 0) {
-          se.listcars.TransferBooking.departTransfer.ReservedTickets = JSON.stringify(json[0].data.reserve_Tickets);
-          se.listcars.TransferBooking.returnTransfer.ReservedTickets = JSON.stringify(json[1].data.reserve_Tickets);
-          var Seatsde = json[0].data.seats;
-          var Seatsre = json[1].data.seats;
-          var seatstextde = "";
-          var seatstextre = "";
-          for (let i = 0; i < Seatsde.length; i++) {
-            if (i == Seatsde.length - 1) {
-              seatstextde = seatstextde + Seatsde[i].seat_code;
-            }
-            else {
-              seatstextde = seatstextde + Seatsde[i].seat_code + ',';
-            }
-          }
-          for (let i = 0; i < Seatsre.length; i++) {
-            if (i == Seatsre.length - 1) {
-              seatstextre = seatstextre + Seatsre[i].seat_code;
-            }
-            else {
-              seatstextre = seatstextre + Seatsre[i].seat_code + ',';
-            }
-          }
-          se.listcars.TransferBooking.departTransfer.Seats = seatstextde;
-          se.listcars.TransferBooking.returnTransfer.Seats = seatstextre;
-          // se.listcars.TransferBooking.departTransfer.CancelPolicy = seatstextde;
-          // se.listcars.TransferBooking.returnTransfer.CancelPolicy = seatstextre;
-          var textfullname = se.hoten.split(' ')
-          var FirstName;
-          var LastName;
-          if (textfullname.length > 2) {
-            let name = '';
-            for (let i = 1; i < textfullname.length; i++) {
-              if (i == 1) {
-                name += textfullname[i];
-              } else {
-                name += ' ' + textfullname[i];
-              }
-            }
-            FirstName = textfullname[0];
-            LastName = name;
-          } else if (textfullname.length > 1) {
-            FirstName = textfullname[0];
-            LastName = textfullname[1];
-          }
-          else if (textfullname.length == 1) {
-            FirstName = textfullname[0];
-            LastName = "";
-          }
-          se.listcars.TransferBooking.passengerInfo.FirstName = FirstName;
-          se.listcars.TransferBooking.passengerInfo.LastName = LastName;
-          se.listcars.TransferBooking.passengerInfo.Email = se.email;
-          se.listcars.TransferBooking.passengerInfo.MobileNumber = se.phone;
-          se.listcars.HotelBooking.CPhone = se.phone;
-          se.listcars.HotelBooking.CName = se.hoten;
-          se.listcars.HotelBooking.LeadingName = se.hoten;
-          se.listcars.HotelBooking.LeadingEmail = se.email;
-          se.listcars.HotelBooking.LeadingPhone = se.phone;
-          se.storage.set("email", se.email);
-          if (se.priceshow > 0) {
-            se.loader.dismiss();
-            if (this.Roomif.payment == "AL") {
-              this.Roomif.bookingCode="";
-              this.navCtrl.navigateForward("combopayment");
-            }
-            else {
-              this.postapibook();
-            }
-          } else {
-            se.insertbooking();
-          }
+          // se.postapibook2();
 
         } else {
           se.loader.dismiss();
@@ -572,8 +503,8 @@ export class ComboadddetailsPage implements OnInit {
           total_seats: this.Bookcombo.totalseatsdep,
           total_price: this.Bookcombo.pricedep,
           code: '',
-          dropoff_place: "",
-          pickup_place: ""
+          dropoff_place: this.listcars.TransferBooking.departTransfer.DropoffPlaceName,
+          pickup_place: this.listcars.TransferBooking.departTransfer.PickupPlaceName
         },
         returnParams:
         {
@@ -581,8 +512,8 @@ export class ComboadddetailsPage implements OnInit {
           total_seats: this.Bookcombo.totalseatsret,
           total_price: this.Bookcombo.priceret,
           code: '',
-          pickup_place: '',
-          dropoff_place: ''
+          pickup_place: this.listcars.TransferBooking.returnTransfer.PickupPlaceName,
+          dropoff_place:  this.listcars.TransferBooking.returnTransfer.DropoffPlaceName
         },
         customer_phone: this.phone,
         customer_name: this.hoten,

@@ -3,7 +3,7 @@ import { NavController, ModalController, AlertController, Platform, LoadingContr
 import {Bookcombo, Booking, ValueGlobal, RoomInfo, SearchHotel } from '../providers/book-service';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
-import { GlobalFunction } from '../providers/globalfunction';
+import { GlobalFunction ,ActivityService} from '../providers/globalfunction';
 import * as request from 'requestretry';
 import jwt_decode from 'jwt-decode';
 import { OverlayEventDetail } from '@ionic/core';
@@ -32,9 +32,13 @@ export class RoomdetailreviewPage implements OnInit {
   nameroomEAN: string ="";
   nameroomHBED: string ="";
   specialCheckInInstructions : string = "";
+  objroomfsale: any[];
+  elementMealtype: any;
+  indexMealTypeRates: any;
+  arrroomFS: any[];
   constructor(public searchhotel: SearchHotel, public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,
     public booking: Booking,public bookCombo: Bookcombo, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,public loadingCtrl: LoadingController,
-    private fb: Facebook) {
+    private fb: Facebook,private activityService: ActivityService) {
 
     
       this.ischeckpayment=Roomif.ischeckpayment;
@@ -113,6 +117,12 @@ export class RoomdetailreviewPage implements OnInit {
     //   this.loaddatadone = true;
     // }, 150)  
     this.loaddatadone = true;
+    if( this.activityService.objFlightComboUpgrade){
+      this.elementMealtype = this.activityService.objFlightComboUpgrade.CurrentRoom;
+      this.indexMealTypeRates = this.activityService.objFlightComboUpgrade.CurrentRoomIndex;
+    }
+  
+    
     //google analytic
     //gf.googleAnalytion('roomdetailreview', 'add_to_cart', this.booking.code + '|' + this.booking.CheckInDate + '|' + this.booking.CheckOutDate + '|' + this.adults + '|' + this.children + '|' + this.roomnumber + '|' + this.PriceAvgPlusTAStr);
     
@@ -200,6 +210,11 @@ export class RoomdetailreviewPage implements OnInit {
     this.ischeckbtnpromo=false;
     this.ischeckpromo=false;
     this.msg="";
+    this.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{         
+      if(dataRoomChange){
+        this.updateRoomChange(dataRoomChange);
+      }
+  })
     this.GetUserInfo();
   }
   GetUserInfo() {
@@ -557,4 +572,35 @@ export class RoomdetailreviewPage implements OnInit {
     })
     }
   }
+  async upgradeRoom(){
+    var se = this;
+    se.activityService.objFlightComboUpgrade = {};
+    se.activityService.objFlightComboUpgrade.CurrentRoom = se.elementMealtype;
+    se.activityService.objFlightComboUpgrade.CurrentRoomIndex = se.indexMealTypeRates;
+    se.valueGlobal.backValue = "hotelupgraderoom";
+    se.valueGlobal.notRefreshDetail=true;
+    se.navCtrl.navigateForward('/hotelupgraderoom');
+  }
+  updateRoomChange(dataRoomChange) {
+    var se = this;
+    this.objroomfsale=[];
+    se.PriceAvgPlusTAStr=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index].PriceAvgPlusTAStr;
+    se.nameroom = dataRoomChange.itemroom.ClassName;
+    se.bookCombo.roomNb = dataRoomChange.itemroom.TotalRoom;
+    se.elementMealtype=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index];
+    this.objroomfsale.push(dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index]);
+     if (se.objroomfsale[0].Status == 'RQ' || se.objroomfsale[0].Supplier == 'B2B') {
+          se.Roomif.payment = "RQ";
+        }else{
+          se.Roomif.payment = "AL";
+        }
+    this.indexMealTypeRates=dataRoomChange.index;
+    this.arrroomFS = [];
+    this.arrroomFS.push(dataRoomChange.itemroom);
+    this.Roomif.roomtype = this.objroomfsale[0];
+    this.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(this.arrroomFS[0].HotelRoomHBedReservationRequest);
+    this.Roomif.arrroom = this.arrroomFS;
+    this.Roomif.imgRoom = this.arrroomFS[0].Rooms[0].ImagesMaxWidth320;
+  }
+  
 }

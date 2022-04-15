@@ -163,6 +163,7 @@ export class FlightComboReviewsPage implements OnInit{
   ischeckwaitlug=false;
   msgEmptyFlight: any='';
   arrBOD: any;
+  elementRooom: any;
   constructor(public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,private loadingCtrl: LoadingController,
     public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
     public bookCombo: Bookcombo, public searchhotel: SearchHotel,
@@ -714,7 +715,41 @@ export class FlightComboReviewsPage implements OnInit{
                 se.callSummaryPrice(element,index);
                 se.getBOD(element.MealTypeRates[0].RoomId);
               } else {
-                se.loadpricedone = true;
+                se.jsonroom = result.Hotels[0].RoomClassesRecomments;
+                let cbp = se.bookcombodetail;
+                var element = se.checkElement(se.jsonroom);
+                se.elementRooom=element;
+                //check lấy theo meal
+                if (element) {
+                  var index = 0;
+                  for (let i = 0; i < element.MealTypeRates.length; i++) {
+                    if (element.MealTypeRates[i].Code == se.bookCombo.MealTypeCode) {
+                      index = i;
+                      break;
+                    }
+                  }
+                  if (element) {
+                    se.nameroom = element.ClassName;
+                    se.roomnumber = element.TotalRoom;
+                    se.RoomType = element.RoomType;
+                    se.index = index;
+                    se.callSummaryPrice(element, index);
+                    se.getBOD(element.MealTypeRates[0].RoomId);
+                  } else {
+                    se.loadpricedone = true;
+                  }
+                  //Hàm tính tiền chênh khi nâng cấp phòng
+                  se.calculateDiffPriceUnit();
+                  resolve(true);
+                }
+                else {
+                  se.loadpricedone = true;
+                  //Không valid thì hiển thị gửi yêu cầu
+                  se.loadflightpricedone = true;
+                  se.PriceAvgPlusTAStr = 0;
+                  se.TotalPrice = 0;
+                  resolve(false);
+                }
               }
               resolve(true);
             } else {
