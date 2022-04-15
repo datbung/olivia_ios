@@ -629,15 +629,7 @@ export class HotelDetailPage implements OnInit {
           se.getdataroom();
           })
       }
-      // else if(se.fc && !se.ischeckBOD && !se.checkBODdone && se.comboDetail && se.comboid){
-      //   se.getDetailCombo(se.comboid);
-      // }
-      se.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{         
-        if(dataRoomChange){
-            se.ischeckUpgrade=true;
-            se.updateRoomChange(dataRoomChange);
-        }
-    })
+     
   }
   updateRoomChange(dataRoomChange) {
     var se = this;
@@ -2538,7 +2530,8 @@ excuteLoadHotelRoom(data){
         this.bookCombo.ComboTitle="";
         this.bookCombo.ComboId=null;
         self.Roomif.textcancel="";
-        self.Roomif.ExcludeVAT=self.ExcludeVAT
+        self.Roomif.ExcludeVAT=self.ExcludeVAT;
+        this.bookCombo.ischeckShowupgrade=false;
         if (this.arrroom[0].MealTypeRates[indexme].Supplier == 'Internal') {
           var options = {
             method: 'GET',
@@ -3938,6 +3931,10 @@ async bookcombo() {
           self.Roomif.roomcancelhbed = 1;
           self.bookCombo.ComboTitle = self.titlecombo;
           self.bookCombo.ComboId = self.comboid ? self.comboid:null;
+          self.activityService.objFlightComboUpgrade = {};
+          self.activityService.objFlightComboUpgrade.CurrentRoom = self.elementMealtype;
+          self.activityService.objFlightComboUpgrade.CurrentRoomIndex = self.indexMealTypeRates;
+          this.bookCombo.FormParam = this.formParam;
           self.navCtrl.navigateForward('/roomdetailreview')
         }
       
@@ -4642,18 +4639,16 @@ async bookcombo() {
   }
   checkRoomFsale(){
     let ListRoomClassestemp=[];
-    this.ischeckShowupgrade=false;
+    this.bookCombo.ischeckShowupgrade=false;
     for (var i = 0; i < this.hotelRoomClasses.length; i++) {
-      for (let j = 0; j < this.hotelRoomClasses[i].MealTypeRates.length; j++) {
-        const element = this.hotelRoomClasses[i].MealTypeRates[j];
-        if (element.IsFlashSale == true && element.Status != 'IP') {
-         ListRoomClassestemp.push(this.hotelRoomClasses[i]);
-        }
-        
+      const element = this.hotelRoomClasses[i];
+      if (element.MealTypeRates.filter((e) => { return e.IsFlashSale == true && e.Status != 'IP' }).length > 0)
+      {
+        ListRoomClassestemp.push(this.hotelRoomClasses[i]);
       }
     }
     if (ListRoomClassestemp.length>1) {
-      this.ischeckShowupgrade=true;
+      this.bookCombo.ischeckShowupgrade=true;
     }
   }
 }

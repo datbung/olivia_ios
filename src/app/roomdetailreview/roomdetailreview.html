@@ -83,9 +83,15 @@
   </div>
   <hr>
   <div>
-    <label class="text-name">
-      {{nameroom}}
-    </label>
+    <div class="div-flex">
+      <label class="text-name">
+        {{nameroom}}
+      </label>
+      <label *ngIf="bookCombo.ischeckShowupgrade" class="text-p line-blue">
+        <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
+      </label>
+    </div>
+    
     <p style="color: #666;font-size: 14px" text-wrap>
       <img class="image-card" src="./assets/ic_facility/ic_people.svg"> {{roomnumber}} {{RoomType}} | {{adults}} người lớn |
       {{children}} trẻ em {{textage}}

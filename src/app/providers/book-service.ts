@@ -408,6 +408,7 @@ export class Bookcombo {
        returnConditionInfo: any;
        itemFlightLuggagePriceChange = new EventEmitter(); 
        upgradeRoomChange = new EventEmitter();
+  ischeckShowupgrade: boolean;
 }
 export class childAge {
     numage: string;

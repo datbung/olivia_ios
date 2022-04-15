@@ -172,8 +172,8 @@ export class CombocarlivePage implements OnInit {
             total_seats: this.bookCombo.totalseatsdep,
             total_price: this.bookCombo.pricedep,
             code: '',
-            dropoff_place: "",
-            pickup_place: ""
+            dropoff_place: this.listcars.TransferBooking.departTransfer.DropoffPlaceName,
+            pickup_place: this.listcars.TransferBooking.departTransfer.PickupPlaceName
           },
           returnParams:
           {
@@ -181,8 +181,8 @@ export class CombocarlivePage implements OnInit {
             total_seats: this.bookCombo.totalseatsret,
             total_price: this.bookCombo.priceret,
             code: '',
-            pickup_place: '',
-            dropoff_place: ''
+            pickup_place: this.listcars.TransferBooking.returnTransfer.PickupPlaceName,
+            dropoff_place: this.listcars.TransferBooking.returnTransfer.DropoffPlaceName
           },
           customer_phone: se.phone,
           customer_name: se.hoten,
