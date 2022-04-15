@@ -4,7 +4,7 @@
         <ion-title *ngIf="username" class="title-header">Chào {{username}}</ion-title>
     </ion-row>
 </ion-header>
-    <div class="foodaccount-content no-margin-bottom" *ngIf="isConnected">
+    <div class="foodaccount-content no-margin-bottom">
         <div  *ngIf="loginuser">
                 <ion-row>
                         <ion-col class="text-center" style="padding:0">
@@ -214,12 +214,12 @@
             </ion-row>
         </div>
         <!-- div hiển thị không có kết nối -->
-        <div class="no-margin-bottom" *ngIf="!isConnected" style="text-align: center;margin-top: 55px">
+        <!-- <div class="no-margin-bottom" *ngIf="!isConnected" style="text-align: center;margin-top: 55px">
             <img src="./assets/imgs/empty.svg">
             <div>
               <p class="text-empty">Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng.</p>
             </div>
 
-        </div>
+        </div> -->
     </div>
         

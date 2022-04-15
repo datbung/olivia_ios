@@ -276,6 +276,7 @@ export class RoompaymentselectPage implements OnInit{
                 // se.Roomif.promocode="";
                
               }
+              clearInterval(se.intervalID);
             }
             clearInterval(se.intervalID);
             this.intervalID = setInterval(() => {

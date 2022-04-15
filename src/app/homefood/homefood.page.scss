@@ -696,6 +696,16 @@
         width: 92%;
     }
 
+    @media (min-height:812px) and (max-width: 870px) {
+        .action-sheets-filter-food .action-sheet-wrapper.sc-ion-action-sheet-ios {
+            margin-bottom: 0;
+        }
+       
+        .sc-ion-action-sheet-ios-h.sc-ion-action-sheet-ios-s.ios.action-sheets-filter-food {
+            position: absolute;
+        }
+    }
+
     ion-modal{ 
         transform:none !important; 
         -webkit-transform:none !important; 

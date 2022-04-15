@@ -2864,7 +2864,7 @@ export class FlightComboReviewsPage implements OnInit{
         var arr = combodetail.endDate.split('-');
         var newdate = new Date(arr[2], arr[1] - 1, arr[0]);
         var d = moment(newdate).format('YYYY-MM-DD');
-        resolve(moment(se.searchhotel.CheckOutDate).diff(moment(d), 'days') > 0 ? false : true);
+        resolve(moment(se.searchhotel.CheckOutDate).diff(moment(d), 'days') > 1 ? false : true);
       }else{
         resolve(true);
       }

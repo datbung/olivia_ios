@@ -1600,6 +1600,9 @@ export class HotelDetailPage implements OnInit {
         }else{
           se.allowbookcombofc = false;
           se.allowbookcombofx = false;
+          se.loaddonecombo = true;
+          se.loadpricecombodone = true;
+          se.checkBODdone = true;
         }
         var item = obj.comboDetail;
         var itemList = obj.list;
@@ -2350,6 +2353,15 @@ excuteLoadHotelRoom(data){
                 se.ischeckcbfs = false;
              // },1000)
           
+          }
+          else if(se.hotelRoomClasses[i].Status == 'AL'){
+            se.objroomfsale.push(se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]);
+            se.ischeckcbfs = true;
+            //nếu map dc phòng cho book thì bật biên auto update rooom = true
+            se.ischeckUpgrade=true;
+            this.arrroomFS = [];
+            this.arrroomFS.push(se.hotelRoomClasses[i]);
+       
           }
            cocheckCombofs=true;
            break;
