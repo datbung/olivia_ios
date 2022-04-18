@@ -27,7 +27,7 @@
   <!-- <div (click)="clearText()" class="div-img-close">
     <img src="./assets/ic_flight/ic_close_text.svg">
   </div> -->
-  <div *ngIf="listInput.length>0" >
+  <div *ngIf="listInput && listInput.length>0" >
     <div class="div-result"  *ngFor="let item of listInput" (click)="clickText(item)">
       <label class="label-text-search">
         {{item.description}}

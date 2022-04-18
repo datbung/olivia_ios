@@ -421,9 +421,9 @@
         font-weight: bold;
         color: #000;
     }
-    .sc-ion-action-sheet-md-h.action-sheets-flightselectgender{
-        margin-bottom: env(safe-area-inset-bottom);
-    }
+    // .sc-ion-action-sheet-md-h.action-sheets-flightselectgender{
+    //     margin-bottom: env(safe-area-inset-bottom);
+    // }
 
     .loading-wrapper.sc-ion-loading-ios{
         -webkit-padding-start: 20px;
@@ -451,6 +451,11 @@
         border-bottom: none;
         --inner-border-width: 0 0 0px 0;
     }
+
+
+    .sc-ion-action-sheet-md-h.sc-ion-action-sheet-md-s.md.action-sheets-flightselectgender {
+        position: absolute;
+      }
 }
 
 .div-close-paxhint{

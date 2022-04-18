@@ -1,12 +1,12 @@
 <ion-header class="flightselectpax-header">
   <ion-toolbar style="min-height: 56px;text-align: center">
-      <!-- <ion-row style="height: 56px;text-align: center"> -->
+    <ion-buttons start class="div-close">
+      <button routerDirection="root" class="btn-close" (click)="closeModal()">
+        <img style="max-width: 150%" src="./assets/imgs/ios-arrow-round-back.svg" >
+      </button>
+    </ion-buttons>
         <ion-title>Thêm hành khách</ion-title>
-        <ion-buttons start style="position: absolute;right: 8px;top:-6px">
-          <button routerDirection="root" class="btn-close" (click)="closeModal()">
-            <img style="max-width: 150%" src="./assets/ic_close.svg" >
-          </button>
-        </ion-buttons>
+      
     <!-- </ion-row> -->
   </ion-toolbar>
 </ion-header>

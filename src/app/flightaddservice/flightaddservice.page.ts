@@ -1410,6 +1410,9 @@ export class FlightaddservicePage implements OnInit {
               for (let index = 0; index < data.cabin.row.length; index++) {
                 let itemLeft = [], itemRight = [], itemnormal;
                 const elementRow = data.cabin.row[index];
+                if(elementRow.seat && elementRow.seat.length ==0){
+                  continue;
+                }
                 if (elementRow.seat.length == 4) {
                   let fakeitem = { name: 'noname', type: -1, show: false };
                   itemLeft.push(fakeitem);

@@ -80,7 +80,16 @@ export class OccupancyPage implements OnInit {
     this.searchhotel.roomnumber=this.room;
     this.searchhotel.arrchild= this.arrchild;
 
+    for (let i = 0; i < this.arrchild.length; i++) {
+      const element = this.arrchild[i];
+      if(!element.numage)
+      {
+        alert('Vui lòng chọn tuổi trẻ em');
+        return;
+      }
+    }
     if(this.showpopupfromrequestcombo){
+      this.gf.setParams(false,'requestcombo');
       this.modalCtrl.dismiss();
     }else{
       this.navCtrl.back();

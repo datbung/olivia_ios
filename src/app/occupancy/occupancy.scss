@@ -16,14 +16,14 @@
     } 
     .btn-close{
         position: absolute;
-        right:0px;
-        top: 4px;
+        left: 0px;
+        top: -22px;
         width: 48px;
         height: 48px;
         background-color: #fff;
         font-size: 2em;
         color: #828282;
-        padding:0;
+        padding: 6px;
     }
     .t-center{
         align-self: center;
@@ -143,8 +143,8 @@
         .action-sheets-select-age {
             .picker-wrapper.sc-ion-picker-ios{
                 height: 332px;
-                margin-bottom: calc(env(safe-area-inset-bottom) + 0px);
-                position: fixed;
+                margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
+                position: absolute;
             }
             .picker-toolbar-button.sc-ion-picker-ios{
                 text-align: center;

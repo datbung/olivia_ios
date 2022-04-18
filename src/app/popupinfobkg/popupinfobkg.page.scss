@@ -11,9 +11,10 @@
     max-width: 150%;
   }
   .cls-button{
-    position: absolute;right: -4px;top: 0;
     .btn-close{
       background: #ffffff;
+      left: -2px !important;
+      padding: 0 !important;
     }
   }
 }

@@ -2,6 +2,11 @@
     ion-title {
         padding-top: 0;
     }
+    .div-close{
+        position: absolute;
+        left: 8px;top:0;
+        width: 36px;
+    }
 }
     .button
     {
@@ -15,10 +20,9 @@
     } 
     .btn-close{
         position: absolute;
-        right:0px;
-        top: 4px;
-        width: 48px;
-        height: 48px;
+        top: 10px;
+        width: 36px;
+        height: 36px;
         background-color: #fff;
         font-size: 2em;
         color: #828282;

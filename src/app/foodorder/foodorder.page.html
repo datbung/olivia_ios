@@ -71,7 +71,7 @@
             </ion-label>
           </div>
         </div>
-        <div style="background-color: #ffffff; text-align: center; display: flex;">
+        <div style="background-color: #ffffff; text-align: center; display: flex;margin-bottom: env(safe-area-inset-bottom);">
           <button (click)="addToCart()" ion-button round outline class="button button2" *ngIf="!isBook else btnbook">Thêm giỏ hàng</button>
           <ng-template #btnbook>
               <button (click)="addToCart()" ion-button round outline class="button button2">Đặt ngay</button>

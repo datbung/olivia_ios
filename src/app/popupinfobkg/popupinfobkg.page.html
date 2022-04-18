@@ -1,11 +1,12 @@
 <ion-header class="header-infobkg">
   <ion-toolbar class="toolbar-infobkg">
+    <ion-buttons start class="cls-button">
+      <button slot="primary" routerDirection="root" class="btn-close div-close" (click)="closeModal()">
+        <img class="header-img-close" src="./assets/imgs/ios-arrow-round-back.svg" >
+      </button>
+    </ion-buttons>
         <ion-title class="title-infobkg">Thông tin đặt phòng</ion-title>
-        <ion-buttons start class="cls-button">
-          <button slot="primary" routerDirection="root" class="btn-close" (click)="closeModal()">
-            <img class="img-close" src="./assets/ic_close.svg" >
-          </button>
-        </ion-buttons>
+       
   </ion-toolbar>
 </ion-header>
 

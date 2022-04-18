@@ -197,10 +197,14 @@
                 border-top: none !important;
             }
             
-          .sc-ion-action-sheet-md-h.action-sheets-flightselectgender{
-              margin-bottom: env(safe-area-inset-bottom);
-          }
+        //   .sc-ion-action-sheet-md-h.action-sheets-flightselectgender{
+        //       margin-bottom: env(safe-area-inset-bottom);
+        //   }
       
+        .sc-ion-action-sheet-md-h.sc-ion-action-sheet-md-s.md.action-sheets-flightselectgender {
+            position: absolute;
+          }
+          
           //style android
           .cls-input-custom .native-input.sc-ion-input-md{
               padding: 0;

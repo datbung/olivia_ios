@@ -450,7 +450,7 @@ export class FoodadddetailPage implements OnInit {
     this.actionSheetWard = await this.actionSheetController.create({
       header: 'Phường/Xã',
       buttons: arrbtnWard,
-      cssClass:'cssdistrict'
+      cssClass:'cssdistrict',
     });
     await this.actionSheetWard.present();
   }

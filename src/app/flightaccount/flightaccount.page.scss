@@ -107,7 +107,7 @@
         position: fixed;
     }
     .flightaccount-content{
-        padding: calc( env(safe-area-inset-bottom) + 80px) 16px 90px 11px;
+        padding: calc(env(safe-area-inset-top) + 80px) 16px 90px 11px;
         position: -webkit-sticky;
     }
 //////////////

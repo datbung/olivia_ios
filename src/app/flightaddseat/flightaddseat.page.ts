@@ -95,6 +95,7 @@ export class FlightaddseatPage implements OnInit {
         }
 
         this.listSeatNormal = this._flightService.itemFlightCache.listSeatNormal;
+       
         if(this._flightService.itemFlightCache.isnewmodelreturnseat){
           this.listReturnSeatName = this._flightService.itemFlightCache.listReturnSeatName;
           if(this.listReturnSeatName && this.listReturnSeatName.indexOf('-1') == -1){
@@ -131,7 +132,10 @@ export class FlightaddseatPage implements OnInit {
         this.totalreturnpricedisplay = this.gf.convertNumberToString(this.totalreturnprice) +"đ";
        
     }
-   
+
+    (this.listSeatNormal as any).sort((a, b) => {
+      a.row < b.row ? -1 : 1;
+    })
   }
 
   ngOnInit() {
@@ -352,7 +356,7 @@ export class FlightaddseatPage implements OnInit {
         return;
       }
       //Loại item ảo
-      if(seat.type == -1){
+      if(seat.type == -1 || seat.type == -2){
         return;
       }
       this.zone.run(()=>{

@@ -25,7 +25,7 @@
         align-items: flex-end;
         --background: url("../../assets/ic_close_w.svg") none;
         position: fixed;
-        padding-bottom: env(safe-area-inset-bottom);
+        padding-bottom: 0;
     }
     @media (min-height: 812px) and (max-height: 840px){
         .sc-ion-modal-ios-h.cls-order{

@@ -100,7 +100,7 @@ export class PopupinfobkgPage implements OnInit {
     let todate = new Date(this.cout);
     let _daysConfig: DayConfig[] = [];
  
-    if(this.valueGlobal.dayhot.length>0){
+    if(this.valueGlobal.dayhot && this.valueGlobal.dayhot.length>0){
      for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
        _daysConfig.push({
          date: this.valueGlobal.dayhot[j],
@@ -116,6 +116,17 @@ export class PopupinfobkgPage implements OnInit {
         })
       }
      }
+
+     if(this.valueGlobal.listlunar){
+      for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+        _daysConfig.push({
+          date: this.valueGlobal.listlunar[j].date,
+          subTitle: this.valueGlobal.listlunar[j].name,
+          cssClass:'lunarcalendar'
+        })
+      }
+     }
+     
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()

@@ -3,6 +3,7 @@
         color: #26bed6;
         padding-left: 5px;
         font-weight: bold;
+        text-align: center;
     }
     .hotel-request-combo-content{
         padding: calc(env(safe-area-inset-top) + 15px) 15px 15px 15px;
@@ -109,11 +110,18 @@
         color: #26bed6;
     }
     .div-icon-close{
-        float: right;
+        float: left;
         opacity: 0.6;
-        padding: calc(env(safe-area-inset-top) + 20px) 16px 10px 16px;
-        opacity: 0.6;
+        padding: 0;
         font-size: 30px;
+        padding-top: calc(env(safe-area-inset-top));
+
+        .header-img-close{
+            width: 36px;
+            margin-top: 30px;
+            margin-right: 16px;
+            margin-left: 8px;
+        }
     }
     .btn-disable{
         opacity: 0.5;
