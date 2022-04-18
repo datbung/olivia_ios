@@ -2262,6 +2262,7 @@ excuteLoadHotelRoom(data){
     }
    //check combo flash sale
    if (se.fs) {
+    se.activityService.objFlightComboUpgrade = {};
     se.ListRoomClasses = [];
     for (let i = 0; i < se.hotelRoomClassesFS.length; i++) {
       if (se.hotelRoomClassesFS[i].Rooms[0].RoomID == se.comboDetail.comboDetail.roomId) {
@@ -2302,6 +2303,7 @@ excuteLoadHotelRoom(data){
                 se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
                 se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates];
                 se.indexMealTypeRates=jMealTypeRates;
+                se.activityService.objFlightComboUpgrade.CurrentRoomIndex=jMealTypeRates;
                 // check status IP thi k show gia
                 if (se.hotelRoomClasses[i].Status == 'IP') {
                   //setTimeout(()=>{
@@ -2338,6 +2340,7 @@ excuteLoadHotelRoom(data){
            se.bookCombo.roomNb = se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates].TotalRoom;
            se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]
            se.indexMealTypeRates=jMealTypeRates;
+           se.activityService.objFlightComboUpgrade.CurrentRoomIndex=jMealTypeRates;
              // check status IP thi k show gia
           if(se.hotelRoomClasses[i].Status == 'IP'){
              // setTimeout(()=>{
@@ -2398,6 +2401,7 @@ excuteLoadHotelRoom(data){
         if (objmap.length > 1) {
           for (let i = 0; i < objmap.length; i++) {
             if (objmap[i].Code == this.comboDetail.comboDetail.mealTypeNote) {
+              this.activityService.objFlightComboUpgrade.CurrentRoomIndex=i;
               this.objroomfsale.push(objmap[i]);
               break;
             }
@@ -2413,8 +2417,17 @@ excuteLoadHotelRoom(data){
           this.comboprice = this.objroomfsale[0].PriceAvgPlusTAStr;
           this.roomCombo = this.objroomfsale[0].RoomName;
           this.bookCombo.roomNb = this.objroomfsale[0].TotalRoom;
-          this.elementMealtype=this.objroomfsale[0];
-          this.indexMealTypeRates=0;
+           this.elementMealtype=this.objroomfsale[0];
+          // check lại index metaltype
+          for (let i = 0; i < roomClass[0].MealTypeRates.length; i++) {
+            const element = roomClass[0].MealTypeRates[i];
+            if (this.objroomfsale[0].guidId==element.guidId){
+              this.indexMealTypeRates=i;
+              break;
+            }
+            
+          }
+          // this.indexMealTypeRates=0;
           
         }
       
@@ -3931,9 +3944,8 @@ async bookcombo() {
           self.Roomif.roomcancelhbed = 1;
           self.bookCombo.ComboTitle = self.titlecombo;
           self.bookCombo.ComboId = self.comboid ? self.comboid:null;
-          self.activityService.objFlightComboUpgrade = {};
           self.activityService.objFlightComboUpgrade.CurrentRoom = self.elementMealtype;
-          self.activityService.objFlightComboUpgrade.CurrentRoomIndex = self.indexMealTypeRates;
+          // self.activityService.objFlightComboUpgrade.CurrentRoomIndex = self.indexMealTypeRates;
           this.bookCombo.FormParam = this.formParam;
           self.navCtrl.navigateForward('/roomdetailreview')
         }

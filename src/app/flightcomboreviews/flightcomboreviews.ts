@@ -693,7 +693,7 @@ export class FlightComboReviewsPage implements OnInit{
             if (result.Hotels) {
               se.jsonroom = result.Hotels[0].RoomClasses;
               //Hàm tính tiền chênh khi nâng cấp phòng
-              se.calculateDiffPriceUnit();
+             
               let cbp = se.bookcombodetail;
               var element = se.checkElement(se.jsonroom);
               if (element) {
@@ -712,14 +712,18 @@ export class FlightComboReviewsPage implements OnInit{
                 //se.breakfast = element.element.MealTypeRates[0].Name;
                 se.roomnumber = element.TotalRoom;
                 se.index=index;
+                se.calculateDiffPriceUnit();
                 se.callSummaryPrice(element,index);
                 //se.getBOD(element.MealTypeRates[0].RoomId);
                 se.arrBOD =  se.valueGlobal.notSuggestDaily;
               } else {
                 se.jsonroom = result.Hotels[0].RoomClassesRecomments;
+                  //Hàm tính tiền chênh khi nâng cấp phòng
+                 
                 let cbp = se.bookcombodetail;
                 var element = se.checkElement(se.jsonroom);
                 se.elementRooom=element;
+                
                 //check lấy theo meal
                 if (element) {
                   var index = 0;
@@ -734,13 +738,13 @@ export class FlightComboReviewsPage implements OnInit{
                     se.roomnumber = element.TotalRoom;
                     se.RoomType = element.RoomType;
                     se.index = index;
+                    se.calculateDiffPriceUnit();
                     se.callSummaryPrice(element, index);
                     se.getBOD(element.MealTypeRates[0].RoomId);
                   } else {
                     se.loadpricedone = true;
                   }
-                  //Hàm tính tiền chênh khi nâng cấp phòng
-                  se.calculateDiffPriceUnit();
+                
                   resolve(true);
                 }
                 else {

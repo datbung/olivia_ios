@@ -71,11 +71,13 @@ export class FlightsearchairportPage implements OnInit {
     ngOnInit(){
 
     }
+
     ionViewDidEnter() {
       setTimeout(() => {
         this.ipSearchAiport.setFocus();
       }, 150);
     }
+
     loadLocation(){
         var se = this;
         //let urlPath = "https://www.ivivu.com/ve-may-bay/data/allplace.json";
