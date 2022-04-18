@@ -26,7 +26,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 export class SearchHotelPage implements OnInit{
   ngOnInit() {
   }
-  @ViewChild('input') myInput ;
+  @ViewChild('ipSearchHotel') myInput ;
   json; input; child1 = 0; child = 0;
   fieldName1: any;
   adults1 = 2; adults = 2;
@@ -93,7 +93,11 @@ export class SearchHotelPage implements OnInit{
       })
     })
   }
-
+  ionViewDidEnter() {
+    setTimeout(() => {
+      this.myInput.setFocus();
+    }, 150);
+  }
   change() {
     // this.ischeck = true;
     this.showpopup = false;

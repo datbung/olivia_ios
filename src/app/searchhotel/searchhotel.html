@@ -19,7 +19,7 @@
         src="./assets/imgs/icon_back.svg">
     </div>
     <div class="div-search">
-      <ion-input  [(ngModel)]="inputText" (ionChange)="getItems($event)" [ngClass]="inputText ? 'cls-input-search-text' : 'cls-input-search'" placeholder="Nhập tên khách sạn,thành phố..."></ion-input>
+      <ion-input  #ipSearchHotel [(ngModel)]="inputText" (ionChange)="getItems($event)" [ngClass]="inputText ? 'cls-input-search-text' : 'cls-input-search'" placeholder="Nhập tên khách sạn,thành phố..."></ion-input>
     </div>
     <div *ngIf="inputText"  class="img-close" >
       <img (click)="clearText()"
