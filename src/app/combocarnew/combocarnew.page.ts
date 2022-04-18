@@ -2319,6 +2319,8 @@ export class CombocarnewPage implements OnInit {
             let itemmealtype = data.itemmealtype;
             se.index=data.index;
             se.RoomType=itemroom.RoomType;
+            se.Roomif.payment = itemmealtype.Status;
+            se.bookCombo.ComboDetail.comboDetail.roomId=itemroom.Rooms[0].RoomID;
             if(itemmealtype.Name != null && itemmealtype.Notes.length==0){
               se.breakfast = itemmealtype.Name;
             }

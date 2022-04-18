@@ -99,12 +99,12 @@ export class HotelupgraderoomPage implements OnInit {
         this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
       }
     }
-    for (var i = 0; i <this.hotelRoomClasses.length; i++) {
-      //lọc mealType là promotion và Internal
-    this.hotelRoomClasses[i].MealTypeRates = this.hotelRoomClasses[i].MealTypeRates.filter((Meal) => {
-      return  Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL' || Meal.Supplier == 'B2B'|| Meal.Supplier == 'SMD') && Meal.PromotionNote != '';
-    })
-    }
+    // for (var i = 0; i <this.hotelRoomClasses.length; i++) {
+    //   //lọc mealType là promotion và Internal
+    // this.hotelRoomClasses[i].MealTypeRates = this.hotelRoomClasses[i].MealTypeRates.filter((Meal) => {
+    //   return  Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL' || Meal.Supplier == 'B2B'|| Meal.Supplier == 'SMD') && Meal.PromotionNote != '';
+    // })
+    // }
     for (let i = 0; i < this.hotelRoomClasses.length; i++) {
       for (let j = 0; j <  this.hotelRoomClasses[i].MealTypeRates.length; j++) {
         const elementmeal = this.hotelRoomClasses[i].MealTypeRates[j];
@@ -130,6 +130,17 @@ export class HotelupgraderoomPage implements OnInit {
 
   upgradeRoom(itemroom, itemmealtype,index){
     var se = this;
+    // var indexmeal;
+    // var roomtemp= this.ListRoomClassestemp.filter((item) => {
+    //   return  itemroom.Rooms[0].RoomID==item.Rooms[0].RoomID;
+    // })
+    // for (let i = 0; i < roomtemp[0].MealTypeRates.length; i++) {
+    //   const element = roomtemp[0].MealTypeRates[i];
+    //   if (itemmealtype.guidId==element.guidId){
+    //     indexmeal=i;
+    //     break;
+    //   }
+    // }
     se.bookCombo.upgradeRoomChange.emit({itemroom: itemroom, itemmealtype: itemmealtype,index});
     this.navCtrl.back();
 
