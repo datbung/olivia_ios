@@ -2341,12 +2341,9 @@ excuteLoadHotelRoom(data){
            se.elementMealtype=se.hotelRoomClasses[i].MealTypeRates[jMealTypeRates]
            se.indexMealTypeRates=jMealTypeRates;
            se.activityService.objFlightComboUpgrade.CurrentRoomIndex=jMealTypeRates;
-             // check status IP thi k show gia
           if(se.hotelRoomClasses[i].Status == 'IP'){
-             // setTimeout(()=>{
                 se.warningCombofsIP='Phòng cuối vừa được đặt. Vui lòng chọn ngày khác!';
                 se.ischeckcbfs = false;
-             // },1000)
           
           }
           else if(se.hotelRoomClasses[i].Status == 'AL'){
