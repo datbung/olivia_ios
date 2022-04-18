@@ -585,6 +585,7 @@ export class RoomdetailreviewPage implements OnInit {
     var se = this;
     this.objroomfsale=[];
     se.PriceAvgPlusTAStr=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index].PriceAvgPlusTAStr;
+    this.booking.indexmealtype=dataRoomChange.index;
     se.nameroom = dataRoomChange.itemroom.ClassName;
     se.bookCombo.roomNb = dataRoomChange.itemroom.TotalRoom;
     se.elementMealtype=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index];

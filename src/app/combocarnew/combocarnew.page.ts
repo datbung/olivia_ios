@@ -399,40 +399,40 @@ export class CombocarnewPage implements OnInit {
 
           if (result.Hotels) {
             se.jsonroom = result.Hotels[0].RoomClasses;
-            se.calculateDiffPriceUnit();
+         
             var element = se.checkElement(se.jsonroom);
             if (element) {
               se.nameroom = element.ClassName;
               se.PriceAvgPlusTA = element.MealTypeRates[0].PriceAvgPlusTotalTA;
               se.elementMealtype = element.MealTypeRates[0];
+              se.roomnumber =se.elementMealtype.TotalRoom;
               se.TravPaxPrices = element.MealTypeRates[0].PriceAvgPlusNet * se.roomnumber * se.TotalNight;
               se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
               se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
+              se.calculateDiffPriceUnit();
               se.getTransferData(true);
               se.getBOD(element.MealTypeRates[0].RoomId);
-              // se.storage.get('listDepartTransfers_' + se.comboId + '_' + se.cin + '_' + se.adults + '_' + se.children + '_' + se.textagepost).then((data) => {
-              //   if (data) {
-              //     se.listDepartTransfers = data.data;
-              //     se.getBestTransfer(data, 1);
-              //     se.storage.get('listReturnTransfers_' + se.comboId + '_' + se.cout + '_' + se.adults + '_' + se.children + '_' + se.textagepost).then((data) => {
-              //       if (data) {
-              //         se.listReturnTransfers = data.data;
-              //         se.getBestTransfer(data, 0);
-              //         se.loadTransferInfo(se.departTime, se.returnTime);
-              //       } else {
-              //         //Chưa có list xe về thì mới gọi lại api lấy
-              //         if (!se.listReturnTransfers || se.listReturnTransfers.length <= 0)
-              //           se.getTransferData(false);
-              //       }
-              //     })
-              //   } else {
-              //     se.getTransferData(true);
-              //   }
-              // })
             } else {
-              se.departDateTimeStr = "không có vé";
-              se.msgwrn = "Hiện tại không có phòng thoả điều kiện của quy khách, xin vui lòng gửi yêu cầu bên dưới để được nhân viên tư vấn chi tiết!"
-              se.loadpricedone = true
+              se.jsonroom = result.Hotels[0].RoomClassesRecomments;
+              var element = se.checkElement(se.jsonroom);
+              if (element) {
+           
+                se.nameroom = element.ClassName;
+                se.PriceAvgPlusTA = element.MealTypeRates[0].PriceAvgPlusTotalTA;
+                se.elementMealtype = element.MealTypeRates[0];
+                se.roomnumber =se.elementMealtype.TotalRoom;
+                se.TravPaxPrices = element.MealTypeRates[0].PriceAvgPlusNet * se.roomnumber * se.TotalNight;
+                se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
+                se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
+                se.calculateDiffPriceUnit();
+                se.getTransferData(true);
+                se.getBOD(element.MealTypeRates[0].RoomId);
+              }else{
+                se.departDateTimeStr = "không có vé";
+                se.msgwrn = "Hiện tại không có phòng thoả điều kiện của quy khách, xin vui lòng gửi yêu cầu bên dưới để được nhân viên tư vấn chi tiết!"
+                se.loadpricedone = true
+              }
+           
             }
           }
           else {
