@@ -518,6 +518,7 @@ export class FlightComboReviewsPage implements OnInit{
             let itemmealtype = data.itemmealtype;
             se.index=data.index;
             se.RoomType=itemroom.RoomType;
+            se.roomnumber=itemmealtype.TotalRoom;
             if(itemmealtype.Name != null && itemmealtype.Notes.length==0){
               se.breakfast = itemmealtype.Name;
             }
