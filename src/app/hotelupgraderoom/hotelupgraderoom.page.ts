@@ -2,7 +2,7 @@ import { Component, OnInit, Input,NgZone } from '@angular/core';
 import { NavController, ModalController,LoadingController } from '@ionic/angular';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { Storage } from '@ionic/storage';
-import { ValueGlobal, Bookcombo } from '../providers/book-service';
+import { ValueGlobal, Bookcombo,RoomInfo } from '../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import { C } from './../providers/constants';
 import * as request from 'requestretry';
@@ -29,27 +29,26 @@ export class HotelupgraderoomPage implements OnInit {
     public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     public gf: GlobalFunction,
-    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute,private zone: NgZone,private loadingCtrl: LoadingController) { 
-    var se = this;
-    se.storage.get('username').then(name => {
-      if (name !== null) {
-        this.username = name;
-      }
-    })
-    se.storage.get('email').then(e => {
-      if (e !== null) {
-        this.email = e;
-      }
-    })
-   
-
-    this.getHotelContractPrice( this.bookCombo.FormParam );
+    public bookCombo: Bookcombo,public activatedRoute: ActivatedRoute,private zone: NgZone,private loadingCtrl: LoadingController
+    , private Roomif: RoomInfo) { 
+    //  this.getHotelContractPrice( this.bookCombo.FormParam );
+    this.jsonroom=this.Roomif.jsonroom
+    this.ListRoomClassestemp=[];
+    for (let i = 0; i < this.jsonroom.RoomClasses.length; i++) {
+      const element = this.jsonroom.RoomClasses[i];
+      this.ListRoomClassestemp.push(element);
+    }
+    for (let i = 0; i < this.jsonroom.RoomClassesRecomments.length; i++) {
+      const element = this.jsonroom.RoomClassesRecomments[i];
+      this.ListRoomClassestemp.push(element);
+    }
+    this.checkRoomFsale();
   }
   getHotelContractPrice(data) {
     var se = this;
     if (data) {
       var form = data;
-      se.presentLoading();
+      //se.presentLoading();
       var options = {
         method: 'POST',
         url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
@@ -78,7 +77,7 @@ export class HotelupgraderoomPage implements OnInit {
         };
         se.zone.run(() => {
           var result = JSON.parse(body);
-          se.loader.dismiss();
+          //se.loader.dismiss();
           if (result.Hotels) {
             se.ListRoomClassestemp = result.Hotels[0].RoomClasses;
             se.checkRoomFsale();
@@ -92,12 +91,12 @@ export class HotelupgraderoomPage implements OnInit {
     this.currentRoomSelect = this.activityService.objFlightComboUpgrade.CurrentRoom;
     this.indexMeal = this.activityService.objFlightComboUpgrade.CurrentRoomIndex;
      this.hotelRoomClasses=[];
-     for (var i = 0; i < this.ListRoomClassestemp.length; i++) {
-      const element = this.ListRoomClassestemp[i];
-      if (element.MealTypeRates.filter((e) => { return e.IsFlashSale == true && e.Status != 'IP' }).length > 0)
-      {
-        this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
-      }
+    for (var i = 0; i < this.ListRoomClassestemp.length; i++) {
+        const element = this.ListRoomClassestemp[i];
+        if (element.MealTypeRates.filter((e) => { return e.IsFlashSale == true && e.Status != 'IP' }).length > 0)
+        {
+          this.hotelRoomClasses.push(this.ListRoomClassestemp[i]);
+        }
     }
     // for (var i = 0; i <this.hotelRoomClasses.length; i++) {
     //   //lọc mealType là promotion và Internal
@@ -130,17 +129,6 @@ export class HotelupgraderoomPage implements OnInit {
 
   upgradeRoom(itemroom, itemmealtype,index){
     var se = this;
-    // var indexmeal;
-    // var roomtemp= this.ListRoomClassestemp.filter((item) => {
-    //   return  itemroom.Rooms[0].RoomID==item.Rooms[0].RoomID;
-    // })
-    // for (let i = 0; i < roomtemp[0].MealTypeRates.length; i++) {
-    //   const element = roomtemp[0].MealTypeRates[i];
-    //   if (itemmealtype.guidId==element.guidId){
-    //     indexmeal=i;
-    //     break;
-    //   }
-    // }
     se.bookCombo.upgradeRoomChange.emit({itemroom: itemroom, itemmealtype: itemmealtype,index});
     this.navCtrl.back();
 
