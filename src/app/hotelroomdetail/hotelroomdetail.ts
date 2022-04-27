@@ -1,5 +1,5 @@
-import { Component, NgZone, OnInit } from '@angular/core';
-import { NavController, ModalController, Platform, LoadingController } from '@ionic/angular';
+import { Component, NgZone, OnInit,ViewChild } from '@angular/core';
+import { NavController, ModalController, Platform, LoadingController,IonSlides } from '@ionic/angular';
 import { C } from './../providers/constants';
 import { GlobalFunction } from './../providers/globalfunction';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import * as request from 'requestretry';
 })
 
 export class HotelRoomDetailPage implements OnInit {
+  @ViewChild('mySlider') slider: IonSlides;
   roomdetail = null;
   roomdetailarr = [];
   imgurl = null;
@@ -24,6 +25,10 @@ export class HotelRoomDetailPage implements OnInit {
   duration: any;
   indexroom: any;
   notAllowBook: boolean = false;
+  slideData=[];
+  nameRoom: any;
+  countslide=1
+  RoomDescription: any;
   constructor(public platform: Platform, public modalCtrl: ModalController, public navCtrl: NavController,
     public gf: GlobalFunction, private activatedRoute: ActivatedRoute, public zone: NgZone, private storage: Storage,
     public searchhotel: SearchHotel,
@@ -33,6 +38,13 @@ export class HotelRoomDetailPage implements OnInit {
     public valueGlobal: ValueGlobal) {
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
     this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
+    this.nameRoom=this.roomdetail.ClassName;
+    this.slideData=this.roomdetail.Rooms[0].RoomInfomations.RoomImageList;
+    this.RoomDescription=this.roomdetail.Rooms[0].RoomInfomations.RoomDescription;
+    for (let i = 0; i < this.slideData.length; i++) {
+      const element = this.slideData[i];
+      element.Url = (element.Url.toLocaleString().trim().indexOf("http") != -1) ? element.Url : 'https:' + element.Url;
+    }
     this.storage.get('auth_token').then(auth_token => {
       if (auth_token) {
         this.loginuser = auth_token;
@@ -262,6 +274,31 @@ export class HotelRoomDetailPage implements OnInit {
       else {
         alert("Đã hết phòng, vui lòng chọn lại phòng khác!");
       }
+    });
+  }
+  imgDetail(){
+    this.navCtrl.navigateForward('roomimagedetail');
+  }
+  nextslide()
+  {
+    if (this.countslide<this.slideData.length) {
+      this.countslide= this.countslide+1;
+      this.slider.slideTo(this.countslide-1);
+    }
+
+  }
+  backslide()
+  {
+    if (this.countslide-1>0) {
+      this.countslide= this.countslide-1;
+      this.slider.slideTo(this.countslide-1);
+    }
+
+  }
+  ionSlideDidChange()
+  {
+    this.slider.getActiveIndex().then(index => {
+      this.countslide = index + 1;
     });
   }
 }

@@ -37,7 +37,7 @@ export class RoomInfo {
     dur:string;
     arrroom:Array<string>;
     roomnumber:string;
-    roomtype:string;
+    roomtype:any;
     jsonroom:Array<string>;
     imgRoom: string;
     ho: string;

@@ -202,6 +202,7 @@ const routes: Routes = [
   { path: 'userprivacypolicy', loadChildren: './userprivacypolicy/userprivacypolicy.module#UserPrivacyPolicyPageModule', },
   { path: 'usercondition', loadChildren: './usercondition/usercondition.module#UserConditionPageModule', },
   { path: 'hotelupgraderoom', loadChildren: './hotelupgraderoom/hotelupgraderoom.module#HotelupgraderoomPageModule' },
+  { path: 'roomimagedetail', loadChildren: './roomimagedetail/roomimagedetail.module#RoomimagedetailPageModule' },
 ];
 @NgModule({
   imports:
