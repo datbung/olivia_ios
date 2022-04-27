@@ -29,6 +29,7 @@ export class HotelRoomDetailPage implements OnInit {
   nameRoom: any;
   countslide=1
   RoomDescription: any;
+  ischeck=false;
   constructor(public platform: Platform, public modalCtrl: ModalController, public navCtrl: NavController,
     public gf: GlobalFunction, private activatedRoute: ActivatedRoute, public zone: NgZone, private storage: Storage,
     public searchhotel: SearchHotel,
@@ -36,6 +37,9 @@ export class HotelRoomDetailPage implements OnInit {
     private loadingCtrl: LoadingController,
     public Roomif: RoomInfo,
     public valueGlobal: ValueGlobal) {
+      setTimeout(()=>{
+        this.ischeck = true;
+      },600)
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
     this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
     this.nameRoom=this.roomdetail.ClassName;
@@ -81,6 +85,7 @@ export class HotelRoomDetailPage implements OnInit {
     })
     //google analytic
     gf.googleAnalytion('hotelroomdetail', 'load', '');
+
   }
 
   ngOnInit() {
