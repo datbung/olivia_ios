@@ -21,7 +21,8 @@
     <ion-slides (ionSlideDidChange)="ionSlideDidChange()" #mySlider>
         <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
         
-        <img [src]="slide.Url" style="height: 230px;width: 100%" class="preview" alt="image"/>
+        <!-- <img [src]="slide.Url" style="height: 195px;width: 100%" class="preview" alt="image"/> -->
+           <img-loader [src]="slide.Url" style="height: 195px;width: 100%" class="preview" [spinner]="true" useImg  style="width: 100%;"></img-loader>
           <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
           <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
         </ion-slide>
