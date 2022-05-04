@@ -18,17 +18,17 @@
 <ion-content *ngFor="let objectRoom of roomdetailarr">
     <!-- <img-loader *ngIf="slideData.length==0" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader> -->
     
-    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" #mySlider>
+    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="ischeck" #mySlider>
         <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
         
-        <!-- <img [src]="slide.Url" style="height: 195px;width: 100%" class="preview" alt="image"/> -->
-           <img-loader [src]="slide.Url" style="height: 195px;width: 100%" class="preview" [spinner]="true" useImg  style="width: 100%;"></img-loader>
+        <img [src]="slide.Url" style="height: 195px;width: 100%" alt="image"/>
+           <!-- <img-loader [src]="slide.Url" style="width: 100%" class="preview" [spinner]="true" useImg  style="width: 100%;"></img-loader> -->
           <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
           <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
         </ion-slide>
       </ion-slides>
     
-        <div class="div-sk-image" *ngIf="slideData.length==0" >
+        <div *ngIf="!ischeck" class="div-sk-image" >
             <ion-skeleton-text  animated style="width:100%;height:197px"></ion-skeleton-text>
         </div>
     

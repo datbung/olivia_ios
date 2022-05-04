@@ -30,6 +30,7 @@ export class HotelRoomDetailPage implements OnInit {
   nameRoom: any;
   countslide=1
   RoomDescription: any;
+  ischeck: boolean = false;
   constructor(public platform: Platform, public modalCtrl: ModalController, public navCtrl: NavController,
     public gf: GlobalFunction, private activatedRoute: ActivatedRoute, public zone: NgZone, private storage: Storage,
     public searchhotel: SearchHotel,
@@ -37,9 +38,9 @@ export class HotelRoomDetailPage implements OnInit {
     private loadingCtrl: LoadingController,
     public Roomif: RoomInfo,
     public valueGlobal: ValueGlobal) {
-      // setTimeout(()=>{
-      //   //this.ischeck = true;
-      // },600)
+      setTimeout(()=>{
+        this.ischeck = true;
+      },2000)
       this.zone.run(()=>{
         this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
         this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
@@ -74,8 +75,9 @@ export class HotelRoomDetailPage implements OnInit {
       
         this.roomdetailarr = [];
         this.roomdetailarr.push(this.roomdetail);
+        // this.clearBlurEffect();
       })
-      this.clearBlurEffect();
+     
     if(this.valueGlobal.backValue && this.valueGlobal.backValue == "flightcomboupgrade"){
       this.notAllowBook = true;
     }
