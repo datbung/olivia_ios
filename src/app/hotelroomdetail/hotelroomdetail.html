@@ -64,7 +64,7 @@
                 <img class="icon-detail-fix" src="./assets/ic_hoteldetail/ic_bed.svg">
             </div>
             <div class="room-class-info">
-                <div *ngIf="objectRoom.Rooms[0].RoomInfomations.SubRoomHotels.length>0">1 phòng ngủ </div>
+                <div *ngIf="objectRoom.Rooms[0].RoomInfomations.SubRoomHotels.length>0">{{objectRoom.Rooms[0].RoomInfomations.SubRoomHotels[0].Quantity}} phòng ngủ </div>
                 <div *ngIf="objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile">{{objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile.join(' | ')}}</div>
                 <div *ngIf="!objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile && objectRoom.Rooms[0].BedTypes.length >0">{{objectRoom.Rooms[0].BedTypes[0].description}}</div>
             </div>
