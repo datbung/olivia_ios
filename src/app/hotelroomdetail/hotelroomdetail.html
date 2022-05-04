@@ -16,8 +16,8 @@
     </ion-toolbar>
   </ion-header>
 <ion-content *ngFor="let objectRoom of roomdetailarr">
-    <img-loader *ngIf="slideData.length==0 && ischeck" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader>
-    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="slideData.length>0 && ischeck" #mySlider>
+    <img-loader *ngIf="slideData.length==1 && ischeck" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader>
+    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="slideData.length>1 && ischeck" #mySlider>
         <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
         
           <img [src]="slide.Url" />
@@ -32,10 +32,10 @@
      <div *ngIf="!ischeck" class="div-sk-image">
         <ion-skeleton-text  animated style="width:100%;height:197px"></ion-skeleton-text>
     </div>
-     <div *ngIf="slideData.length>0" class="div-navigation-back">
+     <div *ngIf="slideData.length>1" class="div-navigation-back">
         <img (click)="backslide()" class="img-navigation-back" src="./assets/imgs/ic_navigation_back.svg" >
      </div>
-     <div *ngIf="slideData.length>0" class="div-navigation-forward">
+     <div *ngIf="slideData.length>1" class="div-navigation-forward">
         <img (click)="nextslide()" class="img-navigation-forward" src="./assets/imgs/ic_navigation_forward.svg" >
      </div>
     <div class="hotel-room-detail-content">
