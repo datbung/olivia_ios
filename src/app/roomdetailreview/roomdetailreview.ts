@@ -163,6 +163,9 @@ export class RoomdetailreviewPage implements OnInit {
         this.Roomif.point = null;
       }
     }
+    else{
+      this.Roomif.priceshow = this.PriceAvgPlusTAStr;
+    }
     if (this.ischeckbtnpromo) {
       this.Roomif.promocode= this.promocode;
       this.Roomif.priceshow = this.Pricepointshow;

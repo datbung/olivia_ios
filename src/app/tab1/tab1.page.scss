@@ -2343,3 +2343,43 @@ body{
     margin-top: 16px;
     overflow-y: hidden;
 }
+
+
+////style ipad ipadd 12.9"
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .div-info-cover-auto-width {
+    height: 208px !important;
+  }
+
+  .cls-row2-col1 {
+    flex: 0 0 calc(calc(3.85 / var(--ion-grid-columns, 12)) * 100%) !important;
+    width: calc(calc(3.85 / var(--ion-grid-columns, 12)) * 100%) !important;
+    max-width: calc(calc(3.85 / var(--ion-grid-columns, 12)) * 100%) !important;
+  }
+}
+
+////style ipad ipadd 10.5"
+@media (min-width: 820px) and (max-width: 1023px) {
+  .div-info-cover-auto-width {
+    height: 208px !important;
+  }
+
+  .cls-row2-col1 {
+    flex: 0 0 calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
+    width: calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
+    max-width: calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
+  }
+}
+
+////style ipad ipadd 7.9"
+@media (min-width: 768px) and (max-width: 819px) {
+  .div-info-cover-auto-width {
+    height: 129px !important;
+  }
+
+  .cls-row2-col1 {
+    flex: 0 0 calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
+    width: calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
+    max-width: calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
+  }
+}

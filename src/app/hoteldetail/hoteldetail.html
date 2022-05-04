@@ -313,7 +313,7 @@
                 </ion-row>
               </div>
             </div>
-            <div class="div-split-fsale" *ngIf=" loadpricecombodone && comboDetailList.length ==0 && !warningMaxPax && !flashSaleEndDate && !warningCombofs || (checkBODdone && ischeckBOD)"></div>
+            <div class="div-split-fsale" *ngIf=" loadpricecombodone && loaddonecombo"></div>
             <div *ngIf="loaddonecombo">
               
               <div *ngIf="loadpricecombodone">
@@ -371,7 +371,7 @@
                   </ion-col>
                 </ion-row>
                  <!-- Text warning BOD -->
-                <ion-row class="cls-fs-warning" *ngIf="loadcomplete && loaddonecombo && checkBODdone && ischeckBOD" >
+                <ion-row class="cls-fs-warning" *ngIf="!fcbcar && loadcomplete && loaddonecombo && checkBODdone && ischeckBOD" >
                   <ion-col class="no-padding">
                     <div class="text-suggest color-red">Giai đoạn hết phòng combo</div>
                     <div class="text-suggest color-blue text-underline m-top-4 m-bottom-14" (click)="changeDate()">Quý khách vui lòng chọn ngày khác</div>
@@ -383,7 +383,13 @@
                 </ion-row> -->
 
                 <!-- Combo vxr --> 
-                <ion-row *ngIf="ischeckcbcarhide&& !ischeckBOD && checkBODdone"
+                <ion-row class="cls-fs-warning" *ngIf="fcbcar && ischeckcbcarhide && ((ischeckBOD && checkBODdone) || hotelRoomClasses.length ==0)" >
+                  <ion-col class="no-padding">
+                    <div class="text-suggest color-red">Giai đoạn hết phòng combo</div>
+                    <div class="text-suggest color-blue text-underline m-top-4 m-bottom-14" (click)="changeDate()">Quý khách vui lòng chọn ngày khác</div>
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngIf="fcbcar && ischeckcbcarhide && !ischeckBOD && checkBODdone && hotelRoomClasses.length >0"
                 class="button-combo">
                 <button ion-button round outline class="button btn-book" *ngIf="ischeckcbcar"  (click)="requestCombo(2,null,0)">Đặt combo</button>
                 <button ion-button round outline class="button btn-book"  *ngIf="!ischeckcbcar && loadcomplete && !ischeckBOD && checkBODdone"  (click)="requestCombo(4,null,0)">Gửi yêu cầu</button>
@@ -641,7 +647,8 @@
                       <!-- Facilitys -->
                       <ion-row style="width:100%;align-items: center;"
                         *ngFor="let fac of hotelroom.Rooms[0].RoomInfomations.Facilitys">
-                        <ion-row style="width:100%;padding-top: 4px" *ngIf="!mealtype.PromotionInclusions || (mealtype.PromotionInclusions && mealtype.PromotionInclusions.length <= 3)">
+                        <ion-row style="width:100%;padding-top: 4px"
+                          *ngIf="((!mealtype.PromotionInclusions || (mealtype.PromotionInclusions && mealtype.PromotionInclusions.length <= 3)) && (mealtype.Supplier == 'VINPEARL' || mealtype.Supplier == 'Internal' || mealtype.Supplier == 'B2B' || (mealtype.Supplier == 'SMD' && hotelroom.IsInternalRate)))">
                           <img *ngIf="fac.Name.indexOf('Đưa đón') == -1 && fac.Name.indexOf('Wifi') == -1"
                             class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_check_green.svg">
                           <img *ngIf="fac.Name.indexOf('Wifi') != -1" class="icon-detail-green-fix"

@@ -244,3 +244,9 @@ p {
 .div-flex{
   display: flex;
 }
+.text-name-room{
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 300px;
+}

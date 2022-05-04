@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { SearchHotel, Booking, RoomInfo, ValueGlobal } from '../providers/book-service';
 import * as request from 'requestretry';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-hotelroomdetail',
@@ -29,7 +30,6 @@ export class HotelRoomDetailPage implements OnInit {
   nameRoom: any;
   countslide=1
   RoomDescription: any;
-  ischeck=false;
   constructor(public platform: Platform, public modalCtrl: ModalController, public navCtrl: NavController,
     public gf: GlobalFunction, private activatedRoute: ActivatedRoute, public zone: NgZone, private storage: Storage,
     public searchhotel: SearchHotel,
@@ -37,55 +37,61 @@ export class HotelRoomDetailPage implements OnInit {
     private loadingCtrl: LoadingController,
     public Roomif: RoomInfo,
     public valueGlobal: ValueGlobal) {
-      setTimeout(()=>{
-        this.ischeck = true;
-      },600)
-    this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
-    this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
-    this.nameRoom=this.roomdetail.ClassName;
-    this.slideData=this.roomdetail.Rooms[0].RoomInfomations.RoomImageList;
-    this.RoomDescription=this.roomdetail.Rooms[0].RoomInfomations.RoomDescription;
-    for (let i = 0; i < this.slideData.length; i++) {
-      const element = this.slideData[i];
-      element.Url = (element.Url.toLocaleString().trim().indexOf("http") != -1) ? element.Url : 'https:' + element.Url;
-    }
-    this.storage.get('auth_token').then(auth_token => {
-      if (auth_token) {
-        this.loginuser = auth_token;
-      }
-    });
-    if (this.roomdetail && this.roomdetail.Rooms[0].ImagesMaxWidth500) {
-     
-      var str = this.roomdetail.Rooms[0].ImagesMaxWidth500;
-      var res = str.substr(0, 4);
-      if (res != "http") {
-        this.imgurl="https:"+str;
-      }
-      else
-      {
-        this.imgurl=str;
-      }
-      if (str.indexOf('noimage') != -1) {
-        this.imgurl = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x110.jpg";
-      }
-      // this.imgurl = this.roomdetail.Rooms[0].ImagesMaxWidth500 ? "https:"+ this.roomdetail.Rooms[0].ImagesMaxWidth500 : 'https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage.png';
-      this.roomdetailarr = [];
-      this.roomdetailarr.push(this.roomdetail);
-    }
-
+      // setTimeout(()=>{
+      //   //this.ischeck = true;
+      // },600)
+      this.zone.run(()=>{
+        this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
+        this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
+        this.nameRoom=this.roomdetail.ClassName;
+        this.slideData=this.roomdetail.Rooms[0].RoomInfomations.RoomImageList;
+        this.RoomDescription=this.roomdetail.Rooms[0].RoomInfomations.RoomDescription;
+        if (this.roomdetail && this.roomdetail.Rooms[0].ImagesMaxWidth500) {
+         
+          var str = this.roomdetail.Rooms[0].ImagesMaxWidth500;
+          var res = str.substr(0, 4);
+          if (res != "http") {
+            this.imgurl="https:"+str;
+          }
+          else
+          {
+            this.imgurl=str;
+          }
+          
+          if (str.indexOf('noimage') != -1) {
+            this.imgurl = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x110.jpg";
+          }
+          if(this.slideData && this.slideData.length == 0){
+            this.slideData.push({Url: this.imgurl});
+          }
+          this.imgurl = this.roomdetail.Rooms[0].ImagesMaxWidth500 ? "https:"+ this.roomdetail.Rooms[0].ImagesMaxWidth500 : 'https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage.png';
+         
+        }
+        for (let i = 0; i < this.slideData.length; i++) {
+          const element = this.slideData[i];
+          element.Url = (element.Url.toLocaleString().trim().indexOf("http") != -1) ? element.Url : 'https:' + element.Url;
+        }
+      
+        this.roomdetailarr = [];
+        this.roomdetailarr.push(this.roomdetail);
+      })
+      this.clearBlurEffect();
     if(this.valueGlobal.backValue && this.valueGlobal.backValue == "flightcomboupgrade"){
       this.notAllowBook = true;
     }
 
-    //Xử lý nút back của dt
-    this.platform.ready().then(() => {
-      this.platform.backButton.subscribe(() => {
-        this.navCtrl.navigateBack('/hoteldetail/' + this.HotelID);
-      })
-    })
+  
     //google analytic
     gf.googleAnalytion('hotelroomdetail', 'load', '');
 
+  }
+
+  clearBlurEffect(){
+    //$('img.preview').removeClass('preview').addClass('reveal');
+    setTimeout(()=>{
+      $('img.preview').removeClass('preview');
+    },500)
+    
   }
 
   ngOnInit() {
@@ -282,7 +288,10 @@ export class HotelRoomDetailPage implements OnInit {
     });
   }
   imgDetail(){
-    this.navCtrl.navigateForward('roomimagedetail');
+    if(this.slideData.length>1){
+      this.navCtrl.navigateForward('roomimagedetail');
+    }
+  
   }
   nextslide()
   {

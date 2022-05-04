@@ -16,22 +16,22 @@
     </ion-toolbar>
   </ion-header>
 <ion-content *ngFor="let objectRoom of roomdetailarr">
-    <img-loader *ngIf="slideData.length==1 && ischeck" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader>
-    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="slideData.length>1 && ischeck" #mySlider>
+    <!-- <img-loader *ngIf="slideData.length==0" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader> -->
+    
+    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" #mySlider>
         <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
         
-          <img [src]="slide.Url" />
+        <img [src]="slide.Url" style="height: 230px;width: 100%" class="preview" alt="image"/>
           <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
           <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
         </ion-slide>
       </ion-slides>
-    <!-- <div class="div-go-back" (click)="goback()">
-        <img class="img-back" src="./assets/imgs/ios-arrow-round-back-white.svg" (click)="goback()">
-        <div class="div-img-background div-goback-background"></div>
-     </div> -->
-     <div *ngIf="!ischeck" class="div-sk-image">
-        <ion-skeleton-text  animated style="width:100%;height:197px"></ion-skeleton-text>
-    </div>
+    
+        <div class="div-sk-image" *ngIf="slideData.length==0" >
+            <ion-skeleton-text  animated style="width:100%;height:197px"></ion-skeleton-text>
+        </div>
+    
+    
      <div *ngIf="slideData.length>1" class="div-navigation-back">
         <img (click)="backslide()" class="img-navigation-back" src="./assets/imgs/ic_navigation_back.svg" >
      </div>

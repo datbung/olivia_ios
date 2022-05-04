@@ -1315,15 +1315,18 @@ export class HotelDetailPage implements OnInit {
                   se.getdataroom();
                // }, 0)
               } else {
-                se.hotelRoomClasses = [];
-                se.hotelRoomClassesFS = [];
-                se.emptyroom = true;
-                se.ischeckoutofroom = false;
-                se.loadcomplete = true;
-                se.loadpricecombodone = true;
-                se.ischeck = true;
-                se.allowbookcombofc = false;
-                se.allowbookcombofx = false;
+                se.zone.run(()=> {
+                  se.hotelRoomClasses = [];
+                  se.hotelRoomClassesFS = [];
+                  se.emptyroom = true;
+                  se.ischeckoutofroom = false;
+                  se.loadcomplete = true;
+                  se.loadpricecombodone = true;
+                  se.ischeck = true;
+                  se.allowbookcombofc = false;
+                  se.allowbookcombofx = false;
+                })
+                
               }
             });
           }
@@ -2368,14 +2371,20 @@ excuteLoadHotelRoom(data){
      
       }
       this.checkRoomFsale();
-      se.loadpricecombodone = true;
+      se.zone.run(()=> {
+        se.loadpricecombodone = true;
+      })
     })
     }
     if(se.fc){
-      se.loadpricecombodone = true;
+      se.zone.run(()=> {
+        se.loadpricecombodone = true;
+      })
     }
     setTimeout(()=> {
-      se.loadpricecombodone = true;
+      se.zone.run(()=> {
+        se.loadpricecombodone = true;
+      })
     },100)
       
   }
