@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar style="min-height: 0px;text-align: center">
+    <ion-toolbar style="min-height: 0px;text-align: center; height: 56px">
       <ion-row>
         <ion-col style="text-align: center">
           <div style="align-self: center">
@@ -21,8 +21,8 @@
     <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="ischeck" #mySlider>
         <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
         
-        <img [src]="slide.Url" style="height: 195px;width: 100%" alt="image"/>
-           <!-- <img-loader [src]="slide.Url" style="width: 100%" class="preview" [spinner]="true" useImg  style="width: 100%;"></img-loader> -->
+        <!-- <img [src]="slide.Url" style="height: 195px;width: 100%" alt="image"/> -->
+           <img-loader [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" backgroundSize="cover" class="preview" [spinner]="true" useImg ></img-loader>
           <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
           <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
         </ion-slide>

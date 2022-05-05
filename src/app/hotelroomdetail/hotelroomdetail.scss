@@ -317,13 +317,7 @@
         margin-top: calc(env(safe-area-inset-bottom) - -60px);
 
         }
-        ::ng-deep {
-            p {
-                margin: 0 0 10px;
-            }
-            
-              
-        }
+       
         .div-img-caption-grad{
             position: absolute;
             color: #ffffff;
@@ -400,3 +394,13 @@ a.progressive {
     width:100%;
     height:197px
   }
+  ::ng-deep {
+    p {
+        margin: 0 0 10px;
+    }
+    
+    img-loader > img {
+        width: 100% !important;
+    }
+}
+  

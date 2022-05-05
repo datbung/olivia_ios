@@ -38,9 +38,7 @@ export class HotelRoomDetailPage implements OnInit {
     private loadingCtrl: LoadingController,
     public Roomif: RoomInfo,
     public valueGlobal: ValueGlobal) {
-      setTimeout(()=>{
-        this.ischeck = true;
-      },2000)
+      
       this.zone.run(()=>{
         this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
         this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
@@ -75,6 +73,9 @@ export class HotelRoomDetailPage implements OnInit {
       
         this.roomdetailarr = [];
         this.roomdetailarr.push(this.roomdetail);
+        setTimeout(()=>{
+          this.ischeck = true;
+        },3000)
         // this.clearBlurEffect();
       })
      
