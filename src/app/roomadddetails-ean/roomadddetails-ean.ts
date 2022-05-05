@@ -528,7 +528,7 @@ export class RoomadddetailsEanPage implements OnInit {
                             if (!this.checkchangeemail) {
                                 if (this.Roomif.payment == 'true') {
                                     this.paymentnotAL();
-                                } else { // this.navCtrl.navigateForward("roompaymentselect-ean");
+                                } else {
                                     if (value == 0) {
                                       if(this.room[0].MealTypeRates[this.booking.indexmealtype].Supplier == 'HBED'){
                                         if (this.Roomif.roomtype.HotelRoomHBedReservationRequest.rooms[0].rateType == 'RECHECK') {
@@ -628,7 +628,7 @@ export class RoomadddetailsEanPage implements OnInit {
                         if (!this.checkchangeemail) {
                             if (this.Roomif.payment == 'true') {
                                 this.paymentnotAL();
-                            } else { // this.navCtrl.navigateForward("roompaymentselect-ean");
+                            } else {
                                 if (value == 0) {
                                   if(this.room[0].MealTypeRates[this.booking.indexmealtype].Supplier == 'HBED'){
                                     if (this.Roomif.roomtype.HotelRoomHBedReservationRequest.rooms[0].rateType == 'RECHECK') {

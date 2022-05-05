@@ -44,6 +44,9 @@ export class HotelRoomDetailPage implements OnInit {
         this.roomdetail = this.gf.getParams('hotelroomdetail').objroom;
         this.nameRoom=this.roomdetail.ClassName;
         this.slideData=this.roomdetail.Rooms[0].RoomInfomations.RoomImageList;
+        if(!this.slideData){
+          this.slideData=[];
+        }
         this.RoomDescription=this.roomdetail.Rooms[0].RoomInfomations.RoomDescription;
         if (this.roomdetail && this.roomdetail.Rooms[0].ImagesMaxWidth500) {
          
@@ -66,10 +69,13 @@ export class HotelRoomDetailPage implements OnInit {
           this.imgurl = this.roomdetail.Rooms[0].ImagesMaxWidth500 ? "https:"+ this.roomdetail.Rooms[0].ImagesMaxWidth500 : 'https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage.png';
          
         }
-        for (let i = 0; i < this.slideData.length; i++) {
-          const element = this.slideData[i];
-          element.Url = (element.Url.toLocaleString().trim().indexOf("http") != -1) ? element.Url : 'https:' + element.Url;
+        if(this.slideData && this.slideData.length >0 ){
+          for (let i = 0; i < this.slideData.length; i++) {
+            const element = this.slideData[i];
+            element.Url = (element.Url.toLocaleString().trim().indexOf("http") != -1) ? element.Url : 'https:' + element.Url;
+          }
         }
+      
       
         this.roomdetailarr = [];
         this.roomdetailarr.push(this.roomdetail);
