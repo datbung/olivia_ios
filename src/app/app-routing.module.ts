@@ -203,6 +203,7 @@ const routes: Routes = [
   { path: 'usercondition', loadChildren: './usercondition/usercondition.module#UserConditionPageModule', },
   { path: 'hotelupgraderoom', loadChildren: './hotelupgraderoom/hotelupgraderoom.module#HotelupgraderoomPageModule' },
   { path: 'roomimagedetail', loadChildren: './roomimagedetail/roomimagedetail.module#RoomimagedetailPageModule' },
+  { path: 'confirmemailaccount', loadChildren: './confirmemailaccount/confirmemailaccount.module#ConfirmemailaccountPageModule' },
 ];
 @NgModule({
   imports:
