@@ -1,7 +1,7 @@
 
 import { Bookcombo } from './../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
-import {  NavController ,LoadingController,Platform, ToastController} from '@ionic/angular';
+import {  NavController ,LoadingController,Platform, ToastController, AlertController} from '@ionic/angular';
 import { Booking, RoomInfo } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -44,7 +44,7 @@ export class RoompaymentbankPage implements OnInit{
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    
+    public alertCtrl: AlertController,
     public clipboard: Clipboard,
     private safariViewController: SafariViewController
     ) {
@@ -581,8 +581,25 @@ export class RoompaymentbankPage implements OnInit{
               }
               else{
                 se.loader.dismiss();
-                alert(body.Msg);
-  
+                //alert(body.Msg);
+                se.storage.get('jti').then((memberid) => {
+                  if(memberid){
+                    se.storage.get('deviceToken').then((devicetoken) => {
+                      if(devicetoken){
+                        se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                          setTimeout(()=>{
+                            se.auth_token = token;
+                          },100)
+                        });
+                      }else{
+                        se.showAlertMessageOnly(body.Msg);
+                      }
+                    })
+                  }else{
+                    se.showAlertMessageOnly(body.Msg);
+                  }
+                  
+                })
               }
             }
             else{
@@ -654,6 +671,25 @@ export class RoompaymentbankPage implements OnInit{
       se.navCtrl.navigateForward('/roompaymentdoneean/' + code + '/' + se.totalPrice + '/' + 1);
     }
     
+  }  
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
   }
   refreshToken() {
     var se = this;

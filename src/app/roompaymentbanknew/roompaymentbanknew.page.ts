@@ -1,6 +1,6 @@
 import { Bookcombo } from './../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
-import {  NavController ,LoadingController,Platform, ToastController} from '@ionic/angular';
+import {  NavController ,LoadingController,Platform, ToastController, AlertController} from '@ionic/angular';
 import { Booking, RoomInfo } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -36,7 +36,7 @@ export class RoompaymentbanknewPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    
+    public alertCtrl: AlertController,
     public clipboard: Clipboard) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
@@ -659,11 +659,29 @@ export class RoompaymentbanknewPage implements OnInit {
               }
               else{
                 se.loader.dismiss();
-                alert(body.Msg);
-                if(se.Roomif.point &&  se.Roomif.bookingCode)
-                {
-                  se.navCtrl.navigateBack('/roomdetailreview');
-                }
+                // alert(body.Msg);
+                // if(se.Roomif.point &&  se.Roomif.bookingCode)
+                // {
+                //   se.navCtrl.navigateBack('/roomdetailreview');
+                // }
+                se.storage.get('jti').then((memberid) => {
+                  if(memberid){
+                    se.storage.get('deviceToken').then((devicetoken) => {
+                      if(devicetoken){
+                        se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                          setTimeout(()=>{
+                            se.auth_token = token;
+                          },100)
+                        });
+                      }else{
+                        se.showAlertMessageOnly(body.Msg);
+                      }
+                    })
+                  }else{
+                    se.showAlertMessageOnly(body.Msg);
+                  }
+                  
+                })
               }
             }
             else{
@@ -680,6 +698,27 @@ export class RoompaymentbanknewPage implements OnInit {
           se.presentToastr('Email không hợp lệ. Vui lòng kiểm tra lại.');
         }
   }
+
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+
   clearClonePage(pagename) {
     //Xóa clone do push page
     let elements = [];

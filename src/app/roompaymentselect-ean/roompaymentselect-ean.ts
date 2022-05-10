@@ -629,15 +629,33 @@ export class RoompaymentselectEanPage implements OnInit{
           if(se.loader){
             se.loader.dismiss();
           }
-          alert(databook.Msg);
-          if(this.Roomif.point &&  this.Roomif.bookingCode)
-          {
-            this.navCtrl.navigateBack('/roomdetailreview');
-          }
-          if(this.Roomif.promocode &&  this.Roomif.bookingCode)
-          {
-            this.navCtrl.navigateBack('/roomdetailreview');
-          }
+          se.storage.get('jti').then((memberid) => {
+            if(memberid){
+              se.storage.get('deviceToken').then((devicetoken) => {
+                if(devicetoken){
+                  se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                    setTimeout(()=>{
+                      se.auth_token = token;
+                    },100)
+                  });
+                }else{
+                  se.showAlertMessageOnly(databook.Msg);
+                }
+              })
+            }else{
+              se.showAlertMessageOnly(databook.Msg);
+            }
+            
+          })
+          // alert(databook.Msg);
+          // if(this.Roomif.point &&  this.Roomif.bookingCode)
+          // {
+          //   this.navCtrl.navigateBack('/roomdetailreview');
+          // }
+          // if(this.Roomif.promocode &&  this.Roomif.bookingCode)
+          // {
+          //   this.navCtrl.navigateBack('/roomdetailreview');
+          // }
           //se.navCtrl.navigateBack('/hoteldetail/' + se.booking.HotelId);
         }
       }
@@ -649,6 +667,27 @@ export class RoompaymentselectEanPage implements OnInit{
       }
     })
   }
+
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+  
   //Tạo booking phòng
   CreateBookingRoom(paymentMethod): Promise<any>{
     var Invoice = 0;
