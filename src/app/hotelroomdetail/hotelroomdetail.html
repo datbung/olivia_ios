@@ -15,13 +15,13 @@
       </ion-row>
     </ion-toolbar>
   </ion-header>
-<ion-content *ngFor="let objectRoom of roomdetailarr">
+<ion-content *ngFor="let objectRoom of roomdetailarr" #container>
     <!-- <img-loader *ngIf="slideData.length==0" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader> -->
     
     <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="ischeck" #mySlider>
         <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
         
-        <!-- <img [src]="slide.Url" style="height: 195px;width: 100%" alt="image"/> -->
+        <!-- <img [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" [defaultImage]="defaultImage" [lazyLoad]="slide.Url" /> -->
            <img-loader [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" backgroundSize="cover" class="preview" [spinner]="true" useImg ></img-loader>
           <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
           <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>

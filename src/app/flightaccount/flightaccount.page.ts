@@ -21,7 +21,9 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CuspointsPage } from '../cuspoints/cuspoints';
 import { UserTravelHobbyPage } from '../usertravelhobby/usertravelhobby';
 import { BizTravelService } from '../providers/bizTravelService';
-
+import { OverlayEventDetail } from '@ionic/core';
+import { ConfirmemailaccountPage } from '../confirmemailaccount/confirmemailaccount.page';
+import { AppVersion } from '@ionic-native/app-version/ngx';
 @Component({
   selector: 'app-flightaccount',
   templateUrl: './flightaccount.page.html',
@@ -41,6 +43,7 @@ export class FlightaccountPage {
   croppedImagefilename: any;
   fileType: any;
   linkfb: any;
+  version: any;
   constructor(public platform: Platform,public navCtrl: NavController, public storage: Storage,public modalCtrl: ModalController,private router: Router,private callNumber: CallNumber,
     public valueGlobal:ValueGlobal,public zone : NgZone,public alertCtrl: AlertController,public gf: GlobalFunction,public loadingCtrl: LoadingController,
     public network: Network,
@@ -51,8 +54,14 @@ export class FlightaccountPage {
     private file: File,
     private fcm: FCM,
     public _flightService: flightService,
-    public bizTravelService: BizTravelService){
+    public bizTravelService: BizTravelService, private appVersion: AppVersion){
       this.point = 0;
+      this.appVersion.getVersionNumber().then((version) => {
+        this.zone.run(()=>{
+          this.version = version;
+        })
+       
+      })
     storage.get('auth_token').then(auth_token => {
       this.loginuser = auth_token;
      });
@@ -271,6 +280,7 @@ export class FlightaccountPage {
     var se = this;
     se.point = 0;
     this.loginuser = null;
+
     se.storage.get('auth_token').then(auth_token => {
       this.loginuser = auth_token;
      });
@@ -1178,4 +1188,123 @@ export class FlightaccountPage {
           });
          
         }
-}
+        deleteAcc() {
+          var se=this;
+            // this.storage.get('email').then(email => {
+            //     if (email) {
+            //         var checkappleemail = (email.includes("appleid") || email.includes('vivumember.info'));
+            //         if (checkappleemail) {
+            //           this.showConfirmEmail(1);
+            //         }
+            //     } else {
+            //       this.showConfirmEmail(1);
+            //     }
+            // })
+            se.storage.get('jti').then((memberid) => {
+              var options = {
+                method: 'GET',
+                url: C.urls.baseUrl.urlMobile + '/api/Dashboard/getActiveBookingByMemberID?memberid='+memberid+'&pageIndex=1&pageSize=100',
+                timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+                headers:
+                {
+                 
+                }
+              };
+              request(options, function (error, response, body) {
+                if (error) {
+                  error.page = "roomdetailreview";
+                  error.func = "GetUserInfo";
+                  error.param = JSON.stringify(options);
+                  C.writeErrorLog(error, response);
+                } else {
+                  if (body) {
+                    var data = JSON.parse(body);
+                    if (data.status==0) {
+                      se.showConfirmEmail();
+                    }else if(data.status==1){
+                      alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư để hoàn tất việc xóa tài khoản của bạn');
+                    } else if (data.status==2) {
+                      alert('Tài khoản của quý khách đang có booking sắp đi. Vui lòng thử lại sau');
+                    }else if(data.status==-2){
+                      alert('Tài khoản của quý khách không tồn tại');
+                    }else if(data.status==-1){
+                      alert('Gửi mail bị lỗi. Vui lòng thử lại sau');
+                    }
+                    console.log(data.status);
+                  }
+      
+                }
+              });
+             
+          })
+         
+    
+        }
+        public async showConfirmEmail(){
+          let alert = await this.alertCtrl.create({
+            message: "Vui lòng cập nhật địa chỉ email để đảm bảo quý khách nhận được thông tin từ iVIVU!",
+            cssClass: "cls-alert-showmore",
+            buttons: [
+              {
+              text: 'Đổi email',
+              role: 'OK',
+              handler: () => {
+                this.showChangeEmail();
+              }
+            }
+          ]
+        });
+        alert.present();
+      }
+      async showChangeEmail(){
+        var se = this;
+        const modal: HTMLIonModalElement =
+                await se.modalCtrl.create({
+                  component: ConfirmemailaccountPage,
+                  componentProps: {
+                    aParameter: true,
+                  }
+                });
+              modal.present();
+              modal.onDidDismiss().then((data: OverlayEventDetail) => {
+                if(data && data.data && data.data.email){
+                  if(data.data.email){
+                    se.storage.get('jti').then((memberid) => {
+                      var options = {
+                        method: 'GET',
+                        url: C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateEmailMemberUser?userid='+memberid+'&email='+data.data.email,
+                        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+                        headers:
+                        {
+                         
+                        }
+                      };
+                      request(options, function (error, response, body) {
+                        if (error) {
+                          error.page = "roomdetailreview";
+                          error.func = "GetUserInfo";
+                          error.param = JSON.stringify(options);
+                          C.writeErrorLog(error, response);
+                        } else {
+                          if (body) {
+                            var data = JSON.parse(body);
+                            if (data.status==1) {
+                              se.deleteAcc();
+                            }else if(data.status==-1){
+                              alert('Gửi mail bị lỗi. Vui lòng thử lại sau');
+                            }
+    
+                          }
+              
+                        }
+                      });
+                     
+                  })
+                  }
+                }
+                
+               
+              })
+        }
+    }
+    

@@ -110,11 +110,12 @@ import { IDFAService } from './providers/IDFATrackingService.service';
 import { FlightdcpickaddressinputPageModule } from './flightdcpickaddressinput/flightdcpickaddressinput.module';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { FileOpener } from  '@ionic-native/file-opener/ngx';
-
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { ConfirmemailaccountPageModule } from './confirmemailaccount/confirmemailaccount.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule,HttpClientModule,IonicModule.forRoot(),IonicStorageModule.forRoot(), IonicImageLoader.forRoot(),
+  imports: [BrowserModule, LazyLoadImageModule,HttpClientModule,IonicModule.forRoot(),IonicStorageModule.forRoot(), IonicImageLoader.forRoot(),
     AppRoutingModule,
     DepartureCalendarPageModule,
     PickupCalendarPageModule,
@@ -162,6 +163,7 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
     FlightselecttimepriorityPageModule,
     HotellistmoodfilterPageModule,
     FlightdcpickaddressinputPageModule,
+    ConfirmemailaccountPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

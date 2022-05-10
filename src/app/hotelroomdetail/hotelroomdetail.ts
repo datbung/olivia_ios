@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit,ViewChild } from '@angular/core';
-import { NavController, ModalController, Platform, LoadingController,IonSlides } from '@ionic/angular';
+import { NavController, ModalController, Platform, LoadingController,IonSlides, IonContent } from '@ionic/angular';
 import { C } from './../providers/constants';
 import { GlobalFunction } from './../providers/globalfunction';
 import { ActivatedRoute } from '@angular/router';
@@ -16,6 +16,7 @@ import * as $ from 'jquery';
 
 export class HotelRoomDetailPage implements OnInit {
   @ViewChild('mySlider') slider: IonSlides;
+  @ViewChild('mySlider') container: IonContent;
   roomdetail = null;
   roomdetailarr = [];
   imgurl = null;
@@ -31,6 +32,7 @@ export class HotelRoomDetailPage implements OnInit {
   countslide=1
   RoomDescription: any;
   ischeck: boolean = false;
+  defaultImage = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-375x195.jpg";
   constructor(public platform: Platform, public modalCtrl: ModalController, public navCtrl: NavController,
     public gf: GlobalFunction, private activatedRoute: ActivatedRoute, public zone: NgZone, private storage: Storage,
     public searchhotel: SearchHotel,
@@ -320,8 +322,8 @@ export class HotelRoomDetailPage implements OnInit {
   }
   ionSlideDidChange()
   {
-    this.slider.getActiveIndex().then(index => {
-      this.countslide = index + 1;
-    });
+      this.slider.getActiveIndex().then(index => {
+        this.countslide = index + 1;
+      });
   }
 }
