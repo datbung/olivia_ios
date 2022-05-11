@@ -240,12 +240,58 @@ export class Tab5Page implements OnInit {
 
     ionViewDidLoad() {
         this.enabledTabbar();
+    
         // Xử lý nút back của dt
         this.platform.ready().then(() => {
             this.platform.backButton.subscribe(() => { // code that is executed when the user pressed the back button
                 this.navCtrl.navigateRoot('/');
             })
         })
+    }
+    ionViewDidLeave(){
+      this.gf.checkLogout().then((data) => {
+        console.log(data)
+        if(!data)
+        {
+          this.storage.remove('auth_token');
+          this.storage.remove('email');
+          this.storage.remove('username');
+          this.storage.remove('jti');
+          this.storage.remove('userInfoData');
+          this.storage.remove('userRewardData');
+          this.storage.remove('weatherInfo');
+          this.storage.remove('point');
+          this.storage.remove('infocus');
+          this.gf.setParams(true, 'resetBlogTrips');
+          this.storage.remove('listblogtripdefault');
+          this.storage.remove('listmytrips');
+          this.storage.clear();
+          this.croppedImagepath = null;
+          this.avatar = null;
+          this.valueGlobal.backValue = 'tab5';
+          this.zone.run(() => {
+              this.point = 0;
+              this.loginuser = null;
+              this.username = "";
+              this.valueGlobal.countNotifi = 0;
+              this.isShowConfirm = false;
+              this.bizTravelService.bizAccount = null;
+              this.bizTravelService.actionHistory = null;
+              this.bizTravelService.isCompany = false;
+          })
+          this.bizTravelService.accountBizTravelChange.emit(2);
+          // Xóa token device khi logout
+          this.fcm.getToken().then(token => {
+            this.storage.get('auth_token').then(id_token => {
+              if (id_token !== null) {
+                this.gf.DeleteTokenOfUser(token, id_token, this.gf.getAppVersion());
+              }
+          });
+
+          });
+          this.valueGlobal.refreshUserToken.emit(1);
+        }
+      })
     }
     ionViewWillEnter() {
         var se = this;
@@ -1255,16 +1301,7 @@ export class Tab5Page implements OnInit {
     }
     deleteAcc() {
       var se=this;
-        // this.storage.get('email').then(email => {
-        //     if (email) {
-        //         var checkappleemail = (email.includes("appleid") || email.includes('vivumember.info'));
-        //         if (checkappleemail) {
-        //           this.showConfirmEmail(1);
-        //         }
-        //     } else {
-        //       this.showConfirmEmail(1);
-        //     }
-        // })
+
         se.storage.get('jti').then((memberid) => {
           var options = {
             method: 'GET',
@@ -1371,4 +1408,5 @@ export class Tab5Page implements OnInit {
            
           })
     }
+  
 }

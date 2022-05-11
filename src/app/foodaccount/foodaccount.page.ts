@@ -1217,5 +1217,50 @@ export class FoodAccountPage {
                
               })
         }
+        ionViewDidLeave(){
+          this.gf.checkLogout().then((data) => {
+            console.log(data)
+            if(!data)
+            {
+              this.storage.remove('auth_token');
+              this.storage.remove('email');
+              this.storage.remove('username');
+              this.storage.remove('jti');
+              this.storage.remove('userInfoData');
+              this.storage.remove('userRewardData');
+              this.storage.remove('weatherInfo');
+              this.storage.remove('point');
+              this.storage.remove('infocus');
+              this.gf.setParams(true, 'resetBlogTrips');
+              this.storage.remove('listblogtripdefault');
+              this.storage.remove('listmytrips');
+              this.storage.clear();
+              this.croppedImagepath = null;
+              this.avatar = null;
+              this.valueGlobal.backValue = 'tab5';
+              this.zone.run(() => {
+                  this.point = 0;
+                  this.loginuser = null;
+                  this.username = "";
+                  this.valueGlobal.countNotifi = 0;
+                  this.isShowConfirm = false;
+                  this.bizTravelService.bizAccount = null;
+                  this.bizTravelService.actionHistory = null;
+                  this.bizTravelService.isCompany = false;
+              })
+              this.bizTravelService.accountBizTravelChange.emit(2);
+              // Xóa token device khi logout
+              this.fcm.getToken().then(token => {
+                this.storage.get('auth_token').then(id_token => {
+                  if (id_token !== null) {
+                    this.gf.DeleteTokenOfUser(token, id_token, this.gf.getAppVersion());
+                  }
+              });
+    
+              });
+              this.valueGlobal.refreshUserToken.emit(1);
+            }
+          })
+        }
     }
     
