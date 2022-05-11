@@ -3192,6 +3192,45 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     })
    
   }
+  checkLogout(): Promise<any> {
+    var se=this;
+    return new Promise((resolve, reject) => {
+      se.storage.get('jti').then((memberid) => {
+        if(memberid){
+          var options = {
+            method: 'GET',
+            url: C.urls.baseUrl.urlMobile + '/api/Dashboard/CheckUserActive?memberId='+memberid,
+            timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+            headers:
+            {
+             
+            }
+          };
+          request(options, function (error, response, body) {
+            if (error) {
+              error.page = "roomdetailreview";
+              error.func = "GetUserInfo";
+              error.param = JSON.stringify(options);
+              C.writeErrorLog(error, response);
+            } else {
+              if (body) {
+                var data = JSON.parse(body);
+                if (data.status==1) {
+                  resolve(true);
+                }else if(data.status==-1){
+                  resolve(false);
+                }
+              }
+    
+            }
+          });
+        }
+      
+       
+    })
+    })
+   
+  }
 }
 
 
