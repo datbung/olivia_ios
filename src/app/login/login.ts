@@ -664,16 +664,15 @@ export class LoginPage implements OnInit{
       // https://developer.apple.com/documentation/signinwithapplerestapi/verifying_a_user
       console.log(res);
       if (res ) {
-        // se.checkExistUser(res).then((data)=> {
-        //   if(data.result){
-        //     se.postDataApple(res);
-        //   }
-        //   else {
-        //     //se.presentPromptApple(res);
-        //     se.showConfirmEmail(res);
-        //   }
-        // })
-        //se.showConfirmEmail(res);
+        //THEM email appid tra ve
+        var decoded = jwt_decode(res.identityToken);
+        var objAppid = {
+          "identityToken":  res.identityToken,
+          "authorizationCode":res.authorizationCode
+        }
+        se.storage.set("objAppid", objAppid);
+        
+        se.storage.set("email", decoded.email);
         se.postDataApple(res);
       } 
     })
@@ -729,7 +728,6 @@ export class LoginPage implements OnInit{
 
   postDataApple(res) {
     var se = this;
-    console.log(res);
     //alert("test");
     var options = {
       method: 'POST',
@@ -781,7 +779,7 @@ export class LoginPage implements OnInit{
       if (body.result) {
         var decoded = jwt_decode(body.auth_token);
         se.refreshTokenTimer=decoded.refreshTokenTimer;
-        se.storage.set("email", se.validateEmail(decoded.email) ? decoded.email : "");
+        //se.storage.set("email", se.validateEmail(decoded.email) ? decoded.email : "");
         se.storage.remove("auth_token");
         se.storage.set("auth_token", body.auth_token);
         se.storage.set("username", decoded.fullname);

@@ -195,9 +195,15 @@
     <ion-checkbox [disabled]="isdisable" (ionChange)="rememberCard()"  class="ion-checkbox" checked="isremember" color="secondary"></ion-checkbox>
     <ion-label class="label-input" >Lưu và bảo mật thẻ để đặt dịch vụ nhanh hơn lần sau</ion-label>
   </div>
+  <div class="div-DK">
+    <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkKDk()"></ion-checkbox>
+    <div class="text-DK">
+      Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
+    </div>
+  </div>
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Thanh toán ngay</button>
+    <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Thanh toán ngay</button>
   </div>
 </ion-footer>

@@ -154,9 +154,15 @@
       <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
     </ion-item>
   </ion-list>
+  <div class="div-DK">
+    <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkKDk()"></ion-checkbox>
+    <div class="text-DK">
+      Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
+    </div>
+  </div>
 </ion-content>
 <ion-footer *ngIf="isbtn&&checkpayment=='AL'">
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Thanh toán và hoàn thành</button>
+    <button (click)="next()" ion-button round outline [disabled]="!ischeckedDK" [ngClass]="ischeckedDK?'button2':'btn-disabled'" class="button button2">Thanh toán và hoàn thành</button>
   </div>
 </ion-footer>

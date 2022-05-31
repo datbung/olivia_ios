@@ -213,10 +213,16 @@
               target="_blank">điều khoản</a> đặt phòng và hủy phòng của khách sạn và iVIVU.com</ion-label>
         </ion-col>
   </ion-row> -->
+  <div class="div-DK">
+    <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkKDk()"></ion-checkbox>
+    <div class="text-DK">
+      Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
+    </div>
+  </div>
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Thanh toán và đặt phòng
+    <button [disabled]="!ischeckedDK" (click)="next()" ion-button round outline [ngClass]="ischeckedDK?'button2':'btn-disabled'" class="button button2">Thanh toán và đặt phòng
       ngay</button>
   </div>
 </ion-footer>

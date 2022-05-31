@@ -24,6 +24,7 @@ export class MytripaymentselectPage implements OnInit {
   roomnumber; adults=2; children=0; breakfast; PriceAvgPlusTAStr;priceshow;totalPaxStr;
   auth_token: any = '';  bookingCode = ""; jti; arrbankrmb = []; tokenid; isbtn = false;
   isremember=true;totalPrice: any;
+  ischeckedDK=true;
 ;ischeckvisa = false;cus_phone="";isdisable=false;stt
   constructor(public navCtrl: NavController,  public activatedRoute: ActivatedRoute, public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public _mytripservice: MytripService,
     public bizTravelService: BizTravelService,
@@ -446,6 +447,39 @@ export class MytripaymentselectPage implements OnInit {
               })
          
        
+  }
+  checkKDk(){
+    this.ischeckedDK=!this.ischeckedDK;
+  }
+  openWebpageDK(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
   }
 }
 

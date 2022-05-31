@@ -49,6 +49,7 @@ export class FlightPaymentSelectPage implements OnInit {
   checkOutDisplay: string;
   totalPaxStr: string;
   totalRoom: string;
+  ischeckedDK=true;
   constructor(private navCtrl:NavController,public _flightService: flightService
     ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel,private safariViewController: SafariViewController, public storage: Storage,
@@ -1193,5 +1194,39 @@ export class FlightPaymentSelectPage implements OnInit {
     });
     alert.present();
     }
-    
-}
+    checkKDk(){
+      this.ischeckedDK=!this.ischeckedDK;
+    }
+    openWebpageDK(url: string) {
+      this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          this.safariViewController.show({
+            url: url,
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+          .subscribe((result: any) => {
+              if(result.event === 'opened') console.log('Opened');
+              else if(result.event === 'loaded') console.log('Loaded');
+              else if(result.event === 'closed') 
+              {
+                
+              }
+          
+            },
+            (error: any) => console.error(error)
+          );
+  
+        } else {
+          // use fallback browser, example InAppBrowser
+        }
+      }
+    );
+    }
+  }
+  
+  

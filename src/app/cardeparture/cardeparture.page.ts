@@ -365,7 +365,7 @@ export class CardeparturePage implements OnInit {
   {
     this.zone.run(() => {
       this.ischeckseemore=false;
-      this.listcardisplay=[];
+      // this.listcardisplay=[];
       for (let i = 0; i < this.listcar.length; i++) {
         this.listcar[i].sortByTime = this.listcar[i].route.pickup_time
         this.listcar[i].cartime = this.listcar[i].route.pickup_time + ' → ' + this.listcar[i].route.arrival_time;
@@ -382,7 +382,9 @@ export class CardeparturePage implements OnInit {
           this.listcar[i].checkdiscountdepart = false;
         }
         this.listcar[i].priceshow = price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-        this.listcardisplay.push(this.listcar[i]);
+        if (this.listcar[i].sort_order == 999) {
+          this.listcardisplay.push(this.listcar[i]);
+        }
       }
        for (let i = 0; i < this.listcardisplay.length; i++) {
         var ischeck = this.checkitem(this.listcardisplay[i].company.id);

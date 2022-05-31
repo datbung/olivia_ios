@@ -207,9 +207,15 @@
           <div class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
         </ion-item>
       </ion-list>
+      <div class="div-DK">
+        <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkKDk()"></ion-checkbox>
+        <div class="text-DK">
+          Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
+        </div>
+      </div>
 </ion-content>
 <ion-footer *ngIf="isbtn && !blockPayCard">
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Thanh toán và xuất vé</button>
+    <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Thanh toán và xuất vé</button>
   </div>
 </ion-footer>

@@ -36,6 +36,7 @@ export class MytripaymentflightselectPage implements OnInit {
   ischeckvisa = false;
   isremember=true;isdisable=false;cus_phone;stt
   totalPrice: any;
+  ischeckedDK=true;
   constructor(public activityService: ActivityService,public gf: GlobalFunction,private navCtrl:NavController,public storage: Storage,public loadingCtrl: LoadingController,private _flightService: flightService,
     private safariViewController: SafariViewController,private zone: NgZone, public activatedRoute: ActivatedRoute,
     public _mytripService: MytripService,
@@ -813,5 +814,38 @@ export class MytripaymentflightselectPage implements OnInit {
         }
       })
     })
+  }
+  checkKDk(){
+    this.ischeckedDK=!this.ischeckedDK;
+  }
+  openWebpageDK(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
   }
 }

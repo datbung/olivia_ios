@@ -2826,20 +2826,25 @@ export class FlightComboReviewsPage implements OnInit{
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           //theem phan check ngay bat dau va ket thuc combo
           //pdanh 14-03-2022: Sửa lại rule cho giống page detail
-          var diffday = 1;
-          var diffdaystart =1;
-          if(this.bookCombo.objComboDetail && this.bookCombo.objComboDetail.comboDetail && this.bookCombo.objComboDetail.comboDetail.stayTo){
-            diffday = moment(todate).diff(moment(this.bookCombo.objComboDetail.comboDetail.stayTo),'days');
-          }
-          if(this.bookCombo.objComboDetail && this.bookCombo.objComboDetail.comboDetail && this.bookCombo.objComboDetail.comboDetail.stayFrom){
-            diffdaystart = moment(fromdate).diff(moment(this.bookCombo.objComboDetail.comboDetail.stayFrom),'days');
-          }
-          //Combo vé máy bay
-          if(diffday >1 || diffdaystart<0){
-            this.presentToastwarming('Combo bắt đầu từ '+ moment(this.bookCombo.objComboDetail.comboDetail.stayFrom).format('DD-MM-YYYY') +' đến '+ moment(this.bookCombo.objComboDetail.comboDetail.stayTo).format('DD-MM-YYYY')+', Xin vui lòng chọn lại ngày khởi hành.');
+          // var diffday = 1;
+          // var diffdaystart =1;
+          // if(this.bookCombo.objComboDetail && this.bookCombo.objComboDetail.comboDetail && this.bookCombo.objComboDetail.comboDetail.stayTo){
+          //   diffday = moment(todate).diff(moment(this.bookCombo.objComboDetail.comboDetail.stayTo),'days');
+          // }
+          // if(this.bookCombo.objComboDetail && this.bookCombo.objComboDetail.comboDetail && this.bookCombo.objComboDetail.comboDetail.stayFrom){
+          //   diffdaystart = moment(fromdate).diff(moment(this.bookCombo.objComboDetail.comboDetail.stayFrom),'days');
+          // }
+          // //Combo vé máy bay
+          // if(diffday >1 || diffdaystart<0){
+          //   this.presentToastwarming('Combo bắt đầu từ '+ moment(this.bookCombo.objComboDetail.comboDetail.stayFrom).format('DD-MM-YYYY') +' đến '+ moment(this.bookCombo.objComboDetail.comboDetail.stayTo).format('DD-MM-YYYY')+', Xin vui lòng chọn lại ngày khởi hành.');
+          //   return;
+          // }
+          let arr_ed = this.bookCombo.objComboDetail.endDate.split('-');
+          let ed = new Date(arr_ed[2], arr_ed[1] - 1, arr_ed[0]);
+          if (moment(fromdate).diff(ed, 'days') > 0) {
+            this.presentToastwarming('Combo chỉ áp dụng trong khoảng ' + this.bookCombo.objComboDetail.startDate + ' đến ' + this.bookCombo.objComboDetail.endDate + '. Vui lòng chọn lại.');
             return;
           }
-   
           if (fromdate && todate && moment(todate).diff(fromdate, 'days') > 0) {
             if (moment(todate).diff(fromdate, "days") > 30) {
               this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');

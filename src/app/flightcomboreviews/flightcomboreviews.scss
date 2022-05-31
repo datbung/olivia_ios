@@ -913,3 +913,11 @@ p {
 .text-underline{
   text-decoration: underline;
 }
+.div-title{
+  padding-top: 11px;
+    font-size: 20px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
