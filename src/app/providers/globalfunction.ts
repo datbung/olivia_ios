@@ -2315,6 +2315,29 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   alert.present();
   }
 
+  async showAlertPaymentFail(){
+    var se = this;
+    let msg = 'Đã có lỗi xảy ra. Vui lòng thử lại sau!';
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      header: 'Rất tiếc, thanh toán không thành công',
+      cssClass: "cls-alert-refreshPrice",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this._flightService.itemTabFlightActive.emit(true);
+          this.valueGlobal.backValue = 'homeflight';
+          this._flightService.itemMenuFlightClick.emit(2);
+          this.navCtrl.navigateBack('/tabs/tab1');
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
 
   goToSearchFlight(){
     this._flightService.itemFlightCache.step = 2;
@@ -3256,5 +3279,6 @@ export class ActivityService {
   objCarComboPaymentBreakDown: any;
   installmentPriceStr: string;
   backValue: string;
+  objRequestAddLuggage: { bookingCode: any; totalPrice: number; totalPriceDisplay: any; departWeight: any; returnWeight: any; objectDepartLuggage: any; objectReturnLuggage: any; };
   //abortSearch: boolean;
 }

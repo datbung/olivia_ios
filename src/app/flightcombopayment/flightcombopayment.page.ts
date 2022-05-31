@@ -195,6 +195,9 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
                         if (paymentType == 'visa') {
                           se.openWebpage(dataBuildLink.returnUrl);
                           se.setinterval();
+                          if (se.loader) {
+                            se.loader.dismiss();
+                          }
                         }
                         else if (paymentType == 'payoo_store') {
                           se.Roomif.BillingCode = dataBuildLink.payooStoreData.BillingCode;
@@ -339,6 +342,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
             se.Roomif.priceshowtt = se.priceshow;
             se.safariViewController.hide();
             clearInterval(se.intervalID);
+            se.loader.dismiss();
             se.navCtrl.navigateForward('/flightcombodoneprepay/' + id + '/' + total + '/' + ischeck)
           }
           else if (rs.StatusBooking == 9 || rs.StatusBooking == 2) {
@@ -365,6 +369,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
             se.Roomif.priceshowtt = se.priceshow;
             se.safariViewController.hide();
             clearInterval(se.intervalID);
+            se.loader.dismiss();
             se.navCtrl.navigateForward('/flightcombodoneprepay/' + id + '/' + total + '/' + ischeck)
           }
           else  {
@@ -524,6 +529,9 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
         if (paymentType == 'visa') {
           se.openWebpage(dataBuildLink.returnUrl);
           se.setinterval();
+          if (se.loader) {
+            se.loader.dismiss();
+          }
         }
         else if (paymentType == 'payoo_store') {
           this.Roomif.BillingCode = dataBuildLink.payooStoreData.BillingCode;

@@ -296,27 +296,27 @@
   .div-navigation-back{
     z-index: 100;
     position: absolute;
-      top: 2%;
+      top: 38%;
       left: 10px;
       color: #ffffff;
       width: 48px;
       display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 186px;
+            height: 48px;
             background: rgba(0,0,0, 0.05);
     }
     .div-navigation-forward{
         z-index: 100;
         position: absolute;
-          top: 2%;
-          right: -8px;
+          top: 38%;
+          right: 8px;
           color: #ffffff;
           width: 48px;
           display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 186px;
+            height: 48px;
             background: rgba(0,0,0, 0.05);
         }
     
@@ -397,6 +397,9 @@ a.progressive {
     width:100%;
     height:197px
   }
+.div-relative{
+    position: relative;
+}
   ::ng-deep {
     p {
         margin: 0 0 10px;
@@ -405,5 +408,6 @@ a.progressive {
     img-loader > img {
         width: 100% !important;
     }
+
 }
   

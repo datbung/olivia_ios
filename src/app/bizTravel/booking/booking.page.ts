@@ -1173,6 +1173,39 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
           
                           });
                         }
+                        //chiều về
+                        if (element.bookingsComboData && element.bookingsComboData[1] && element.bookingsComboData[1].passengers && element.bookingsComboData[1].passengers.length > 0) {
+      
+                          element.bookingsComboData[1].passengers.forEach((elementlug, index) => {
+                            let yearold = 18;
+                            if (elementlug.dob) {
+                              let arr = [];
+                              if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
+                                arr = elementlug.dob.split('/');
+                              }
+                              else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
+                                arr = elementlug.dob.split('-');
+                              }
+      
+                              if (arr.length > 0) {
+                                let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+                                yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
+                              }
+      
+                              elementlug.isAdult = yearold > 12 ? true : false;
+                              if (elementlug.isAdult) {
+                              // element.adult += 1;
+                              } else {
+                                if (yearold < 2) {
+                                  elementlug.isInfant = true;
+                                } 
+                              }
+      
+                            }
+      
+                          });
+      
+                        }
                       }
                       if(element.delivery_payment_date){
                         let arrpaymentdate = element.delivery_payment_date.split("T");
@@ -1884,6 +1917,39 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
                           }
                         }
         
+                      });
+                    }
+
+                    //chiều về
+                    if (elementHis.bookingsComboData && elementHis.bookingsComboData[1] && elementHis.bookingsComboData[1].passengers && elementHis.bookingsComboData[1].passengers.length > 0) {
+
+                      elementHis.bookingsComboData[1].passengers.forEach((elementHislug, index) => {
+                        let yearold = 18;
+                        let arr = [];
+                        if (elementHislug.dob) {
+                          if (elementHislug.dob && elementHislug.dob.indexOf('/') != -1) {
+                            arr = elementHislug.dob.split('/');
+                          }
+                          else if (elementHislug.dob && elementHislug.dob.indexOf('-') != -1) {
+                            arr = elementHislug.dob.split('-');
+                          }
+
+                          if (arr.length > 0) {
+                            let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+                            yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
+                          }
+
+                          elementHislug.isAdult = yearold > 12 ? true : false;
+                          if (elementHislug.isAdult) {
+                            //elementHis.adult += 1;
+                          } else {
+                            if (yearold < 2) {
+                              elementHislug.isInfant = true;
+                            } 
+                          }
+
+                        }
+
                       });
                     }
                   }
@@ -4888,10 +4954,16 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
               })
           }
           nextSupport(trip){
+            // this.activityService.objPaymentMytrip = { trip: trip };
+            // if (!trip.isRequestTrip && trip.isFlyBooking) {
+            //   this.navCtrl.navigateForward('/ordersupport/1');
+            // }else{
+            //   this.navCtrl.navigateForward('/ordersupport/0');
+            // }
             this.activityService.objPaymentMytrip = { trip: trip };
             if (!trip.isRequestTrip && trip.isFlyBooking) {
-              this.navCtrl.navigateForward('/ordersupport/1');
-            }else{
+              this.navCtrl.navigateForward('/orderrequestsupport');
+            } else {
               this.navCtrl.navigateForward('/ordersupport/0');
             }
           }

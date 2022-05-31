@@ -98,7 +98,7 @@
                   <ion-item-group>
 
                     <ion-row class="row-bkg-id">
-                      <ion-col size="8" class="col-bookingid" *ngIf="!isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
+                      <ion-col size="8" class="col-bookingid" *ngIf="!trip.isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
                             class="bkg-id">{{trip.booking_id}}</span></label>
                       </ion-col>
                             <ng-template #flybooking>
@@ -106,7 +106,7 @@
                            </ng-template> 
     
                       <ion-col size="4" class="col-bkg-status p-r-0"
-                        *ngIf="!isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
+                        *ngIf="!trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
                         <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">
                           <div><label class="label-text-paymented">Đã thanh toán</label></div>
                           <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.approve_date">(Chờ xử lý)</label></div>
@@ -116,7 +116,7 @@
                           <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-paymented">Chờ thanh toán</label></ng-template>
                         </ng-template>
                       </ion-col>
-                      <ion-col size="4" class="col-bkg-status"  *ngIf="isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
+                      <ion-col size="4" class="col-bkg-status"  *ngIf="trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
                         <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
                             <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                             <ng-template #notpayment>
@@ -692,7 +692,7 @@
                 <div [ngClass]="i == 0 ? 'first-content m-top-42' : 'first-content'">
                   <ion-item-group>
                     <ion-row class="row-bkg-id">
-                      <ion-col size="8" class="col-bookingid" *ngIf="!isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
+                      <ion-col size="8" class="col-bookingid" *ngIf="!trip.isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
                             class="bkg-id">{{trip.booking_id}}</span></label>
                       </ion-col>
                             <ng-template #flybooking>
@@ -700,14 +700,14 @@
                            </ng-template> 
     
                         <ion-col size="4" class="col-bkg-status p-r-0"
-                          *ngIf="!isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
+                          *ngIf="!trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
                           <label *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment" class="label-text-paymented">Đã thanh toán</label>
                           <ng-template #waitpayment>
                             <label *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-paymented">Chờ thanh toán</label>
                             <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-paymented">Chờ thanh toán</label></ng-template>
                           </ng-template>
                         </ion-col>
-                        <ion-col size="4" class="col-bkg-status"  *ngIf="isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
+                        <ion-col size="4" class="col-bkg-status"  *ngIf="trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
                           <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
                               <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                               <ng-template #notpayment>

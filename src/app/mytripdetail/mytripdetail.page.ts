@@ -487,10 +487,16 @@ export class MytripdetailPage implements OnInit {
     this.gf.googleAnalytion('mytrips', 'Search', 'callsupport');
   }
   nextSupport(trip){
+    // this.activityService.objPaymentMytrip = { trip: trip };
+    // if (!trip.isRequestTrip && trip.isFlyBooking) {
+    //   this.navCtrl.navigateForward('/ordersupport/1');
+    // }else{
+    //   this.navCtrl.navigateForward('/ordersupport/0');
+    // }
     this.activityService.objPaymentMytrip = { trip: trip };
     if (!trip.isRequestTrip && trip.isFlyBooking) {
-      this.navCtrl.navigateForward('/ordersupport/1');
-    }else{
+      this.navCtrl.navigateForward('/orderrequestsupport');
+    } else {
       this.navCtrl.navigateForward('/ordersupport/0');
     }
   }

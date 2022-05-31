@@ -204,6 +204,16 @@ const routes: Routes = [
   { path: 'hotelupgraderoom', loadChildren: './hotelupgraderoom/hotelupgraderoom.module#HotelupgraderoomPageModule' },
   { path: 'roomimagedetail', loadChildren: './roomimagedetail/roomimagedetail.module#RoomimagedetailPageModule' },
   { path: 'confirmemailaccount', loadChildren: './confirmemailaccount/confirmemailaccount.module#ConfirmemailaccountPageModule' },
+
+  { path: 'orderrequestsupport', loadChildren: './orderrequestsupport/orderrequestsupport/orderrequestsupport.module#OrderRequestSupportPageModule' },
+  { path: 'orderrequestaddluggage', loadChildren: './orderrequestsupport/orderrequestaddluggage/orderrequestaddluggage.module#OrderRequestAddluggagePageModule' },
+  { path: 'orderrequestaddluggagepaymentselect', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentselect/orderrequestaddluggagepaymentselect.module#OrderRequestAddluggagePaymentSelectPageModule' },
+  { path: 'orderrequestaddluggagepaymentdone', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentdone/orderrequestaddluggagepaymentdone.module#OrderRequestAddluggagePaymentDonePageModule' },
+
+  { path: 'orderrequestaddluggagepaymentatoffice', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentatoffice/orderrequestaddluggagepaymentatoffice.module#OrderRequestAddluggagePaymentAtOfficePageModule' },
+  { path: 'orderrequestaddluggagepaymentbank', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentbank/orderrequestaddluggagepaymentbank.module#OrderRequestAddluggagePaymentBankPageModule' },
+  { path: 'orderrequestaddluggagepaymentchoosebank', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentchoosebank/orderrequestaddluggagepaymentchoosebank.module#OrderRequestAddluggagePaymentChooseBankPageModule' },
+  { path: 'orderrequestaddluggagepaymentpayoo/:code/:stt', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentpayoo/orderrequestaddluggagepaymentpayoo.module#OrderRequestAddluggagePaymentPayooPageModule' },
 ];
 @NgModule({
   imports:

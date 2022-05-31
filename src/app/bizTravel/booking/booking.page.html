@@ -155,14 +155,20 @@
                         <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
                             <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                             <ng-template #notpayment>
-                              <label class="label-text-paymented" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">Đã thanh toán</label>
+                              <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
+                                <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                                <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
+                              </div>
                               <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
                             </ng-template>
                         </div>
                         <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length == 1">
                             <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                             <ng-template #notpayment>
-                              <label class="label-text-paymented" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">Đã thanh toán</label>
+                              <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
+                                <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                                <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
+                              </div>
                               <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
                             </ng-template>
                         </div>
@@ -739,14 +745,20 @@
                           <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
                               <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                               <ng-template #notpayment>
-                                <label class="label-text-paymented" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">Đã thanh toán</label>
+                                <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
+                                  <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                                  <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
+                                </div>
                                 <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
                               </ng-template>
                           </div>
                           <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length == 1">
                               <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                               <ng-template #notpayment>
-                                <label class="label-text-paymented" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">Đã thanh toán</label>
+                                <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
+                                  <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                                  <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
+                                </div>
                                 <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
                               </ng-template>
                           </div>
@@ -1358,14 +1370,20 @@
                         <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
                             <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-paymented">Đã xuất vé</label>
                             <ng-template #notpayment>
-                                <label class="label-text-paymented" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">Đã thanh toán</label>
+                              <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
+                                <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                                <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
+                              </div>
                                 <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
                             </ng-template>
                         </div>
                         <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length == 1">
                             <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' ) else notpayment" class="label-text-paymented">Đã xuất vé</label>
                             <ng-template #notpayment>
-                                <label class="label-text-paymented" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">Đã thanh toán</label>
+                              <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
+                                <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                                <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
+                              </div>
                                 <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
                             </ng-template>
                         </div>

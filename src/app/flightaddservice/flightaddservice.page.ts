@@ -850,6 +850,7 @@ export class FlightaddservicePage implements OnInit {
                                               const element = rowseat.seatOptions[idx];
                                               element.show = true;
                                               element.amount = element.seatAssignMentFee.amount;
+                                              element.netPrice = element.seatAssignMentFee.netPrice;
                                               element.name = element.seatNumber;
                                               element.type =1;
                                               
@@ -914,6 +915,7 @@ export class FlightaddservicePage implements OnInit {
                                               const element = rowseat.seatOptions[idx];
                                               element.show = true;
                                               element.amount = element.seatAssignMentFee.amount;
+                                              element.netPrice = element.seatAssignMentFee.netPrice;
                                               element.name = element.seatNumber;
                                               element.type =1;
                                               
@@ -943,6 +945,7 @@ export class FlightaddservicePage implements OnInit {
                                         const element = rowseat.seatOptions[idx];
                                         element.show = true;
                                         element.amount = element.seatAssignMentFee.amount;
+                                        element.netPrice = element.seatAssignMentFee.netPrice;
                                         element.name = element.seatNumber;
                                         element.type =1;
                                         
@@ -1026,6 +1029,7 @@ export class FlightaddservicePage implements OnInit {
                                                   const element = rowseat.seatOptions[idx];
                                                   element.show = true;
                                                   element.amount = element.seatAssignMentFee.amount;
+                                                  element.netPrice = element.seatAssignMentFee.netPrice;
                                                   element.name = element.seatNumber;
                                                   element.type =1;
                                                   
@@ -1119,6 +1123,7 @@ export class FlightaddservicePage implements OnInit {
                                           element.show = true;
                                           
                                           element.amount = element.seatAssignMentFee.amount;
+                                          element.netPrice = element.seatAssignMentFee.netPrice;
                                           element.name = element.seatNumber;
                                           element.type =1;
                                           if(element.seatQualifiers.seatFront){//ghế phía trước
@@ -1195,7 +1200,7 @@ export class FlightaddservicePage implements OnInit {
               listSeatName.push(colname);
             }
 
-            if (data.equipment.indexOf('787') != -1) {
+            if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
               for (let index = 0; index < data.cabin.row.length; index++) {
                 let cabinRows = data.cabin.row[index];
 
@@ -1316,7 +1321,7 @@ export class FlightaddservicePage implements OnInit {
             }
 
             if (indexdepart == 1 || indexdepart == 3) {
-              if (data.equipment.indexOf('787') != -1) {
+              if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
                 se._flightService.itemFlightCache.listSeatName = listSeatName;
                 se._flightService.itemFlightCache.listSeatNormal = listrows;
                 se._flightService.itemFlightCache.isnewmodelseat = true;
@@ -1344,7 +1349,7 @@ export class FlightaddservicePage implements OnInit {
             let listrows = [];
             let listSeatName = [];
 
-            if (data.equipment.indexOf('787') != -1) {
+            if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
 
               for (let index = 0; index < data.cabin.column.length; index++) {
                 let colname = data.cabin.column[index].column1;
@@ -1478,7 +1483,7 @@ export class FlightaddservicePage implements OnInit {
             }
             
             if (indexdepart == 2 || indexdepart == 3) {
-              if (data.equipment.indexOf('787') != -1) {
+              if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
                 se._flightService.itemFlightCache.listReturnSeatName = listSeatName;
                 se._flightService.itemFlightCache.listReturnSeatNormal = listrows;
                 se._flightService.itemFlightCache.isnewmodelreturnseat = true;

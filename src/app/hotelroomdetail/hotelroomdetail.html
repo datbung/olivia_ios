@@ -17,28 +17,32 @@
   </ion-header>
 <ion-content *ngFor="let objectRoom of roomdetailarr" #container>
     <!-- <img-loader *ngIf="slideData.length==0" [spinner]="true" useImg [src]="imgurl" class="img-hotel-detail" style="width: 100%;"></img-loader> -->
-    
-    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="ischeck" #mySlider>
-        <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
+    <div class="div-relative">
+        <ion-slides (ionSlideDidChange)="ionSlideDidChange()" *ngIf="ischeck" #mySlider class="cls-slide-room-detail-image">
+            <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
+            
+            <!-- <img [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" [defaultImage]="defaultImage" [lazyLoad]="slide.Url" /> -->
+               <img-loader [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" backgroundSize="cover" class="preview" [spinner]="true" useImg ></img-loader>
+              <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
+              <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
+            </ion-slide>
+          </ion-slides>
         
-        <!-- <img [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" [defaultImage]="defaultImage" [lazyLoad]="slide.Url" /> -->
-           <img-loader [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" backgroundSize="cover" class="preview" [spinner]="true" useImg ></img-loader>
-          <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
-          <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
-        </ion-slide>
-      </ion-slides>
+            <div *ngIf="!ischeck" class="div-sk-image" >
+                <ion-skeleton-text  animated style="width:100%;height:197px"></ion-skeleton-text>
+            </div>
+
+            <div *ngIf="slideData.length>1" class="div-navigation-back">
+                <img (click)="backslide()" class="img-navigation-back" src="./assets/imgs/ic_navigation_back.svg" >
+             </div>
+             <div *ngIf="slideData.length>1" class="div-navigation-forward">
+                <img (click)="nextslide()" class="img-navigation-forward" src="./assets/imgs/ic_navigation_forward.svg" >
+             </div>
+    </div>
+   
     
-        <div *ngIf="!ischeck" class="div-sk-image" >
-            <ion-skeleton-text  animated style="width:100%;height:197px"></ion-skeleton-text>
-        </div>
     
-    
-     <div *ngIf="slideData.length>1" class="div-navigation-back">
-        <img (click)="backslide()" class="img-navigation-back" src="./assets/imgs/ic_navigation_back.svg" >
-     </div>
-     <div *ngIf="slideData.length>1" class="div-navigation-forward">
-        <img (click)="nextslide()" class="img-navigation-forward" src="./assets/imgs/ic_navigation_forward.svg" >
-     </div>
+     
     <div class="hotel-room-detail-content">
         <!-- <h2 class="room-class-name">{{objectRoom.ClassName}}</h2> -->
         <!-- Số khách -->
