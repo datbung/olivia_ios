@@ -25,6 +25,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   scheckvisa = false; returnUrl; arrbankrmb = []; tokenid; startDate; endDate; ischeckpay = true; isbtn = false; ischeckvisa = false;
   intervalID: any; ischeckTransaction = false;
   _inAppBrowser: any;isremember=true;isdisable=false;
+  ischeckedDK=true;
   constructor(public platform: Platform, public searchhotel: SearchHotel, public navCtrl: NavController,
     public storage: Storage, public Roomif: RoomInfo,  public booking1: Booking,
     public booking: Booking, public authService: AuthService, public modalCtrl: ModalController, public loadingCtrl: LoadingController,
@@ -733,6 +734,42 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
         }
       })
     })
+  }
+  checkKDk(){
+    this.zone.run(()=>{
+      this.ischeckedDK=!this.ischeckedDK;
+    })
+
+  }
+  openWebpageDK(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
   }
 }
 

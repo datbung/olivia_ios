@@ -572,6 +572,7 @@ export class Tab5Page implements OnInit {
                         this.gf.setParams(true, 'resetBlogTrips');
                         this.storage.remove('listblogtripdefault');
                         this.storage.remove('listmytrips');
+                        this.storage.remove('objAppid');
                         this.storage.clear();
                         this.croppedImagepath = null;
                         this.avatar = null;
@@ -1136,7 +1137,13 @@ export class Tab5Page implements OnInit {
                                     phone: data.phone
                                 }
                                 se.storage.set("infocus", info);
-                            } se.storage.set("email", data.email);
+                            } 
+                            let checkappleemail=(data.email.includes("appleid") || data.email.includes('vivumember.info'));
+                            if (!checkappleemail) {
+                              se.storage.set("email", data.email);
+                            }
+                           
+                         
                             se.storage.set("jti", data.memberId);
                             // se.storage.set("auth_token", body.auth_token);
                             se.storage.set("username", data.fullname);
@@ -1241,7 +1248,11 @@ export class Tab5Page implements OnInit {
                                 phone: data.phone
                             }
                             se.storage.set("infocus", info);
-                        } se.storage.set("email", data.email);
+                        }   
+                        let checkappleemail=(data.email.includes("appleid") || data.email.includes('vivumember.info'));
+                        if (!checkappleemail) {
+                          se.storage.set("email", data.email);
+                        }
                         se.storage.set("jti", data.memberId);
                         // se.storage.set("auth_token", body.auth_token);
                         se.storage.set("username", data.fullname);
@@ -1332,6 +1343,11 @@ export class Tab5Page implements OnInit {
                 }else if(data.status==-1){
                   alert('Gửi mail bị lỗi. Vui lòng thử lại sau');
                 }
+                se.storage.get('objAppid').then(objAppid => {
+                  //Invalidate the tokens and associated user authorizations for a user when they are no longer associated with your app.
+                  se.postRevokeTokens(objAppid)
+
+                })
                 console.log(data.status);
               }
   
@@ -1342,6 +1358,24 @@ export class Tab5Page implements OnInit {
      
 
     }
+  postRevokeTokens(objAppid) {
+    var options = {
+      'method': 'POST',
+      'url': 'https://appleid.apple.com/auth/revoke',
+      'headers': {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      form: {
+        'client_id': '1464844301',
+        'client_secret': objAppid.identityToken,
+        'token': objAppid.authorizationCode
+      }
+    };
+    request(options, function (error, response) {
+      if (error) throw new Error(error);
+      console.log(response.body);
+    });
+  }
     public async showConfirmEmail(){
       let alert = await this.alertCtrl.create({
         message: "Vui lòng cập nhật địa chỉ email để đảm bảo quý khách nhận được thông tin từ iVIVU!",

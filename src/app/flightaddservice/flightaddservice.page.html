@@ -268,15 +268,15 @@
             </div>
              <!-- thêm bao hiem -->
         <div *ngIf="returnFlight">
-            <div *ngIf="priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !returnFlight.stops" class="div-item-service div-seat m-top-16">
+            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !returnFlight.stops" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
                     <div class="div-icon p-right-12">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
                     </div>
                     <div (click)="showinfoCathay()" class="div-title div-width-100">Bảo hiểm trễ chuyến</div>
                   </div>
-                <div  class="div-desc">
-                    Có thêm quyền lợi khi chuyến bay bị thay đổi trễ hoặc hủy chuyến. <u  class="text-seen" (click)="noteCathay()">Xem quy định</u> 
+                <div  class="div-desc font-weight-600">
+                    Quyền lợi trễ chuyến bay từ 350.000vnđ/lần. Yêu cầu bồi thường trực tuyến nhanh chóng tức thời <u  class="text-seen" (click)="noteCathay()">Xem quy định</u> 
                 </div>
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>
@@ -289,15 +289,15 @@
             </div>
         </div>
         <div *ngIf="!returnFlight">
-            <div *ngIf="priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops" class="div-item-service div-seat m-top-16">
+            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
                     <div class="div-icon p-right-12">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
                     </div>
                     <div (click)="showinfoCathay()" class="div-title div-width-100">Bảo hiểm trễ chuyến</div>
                   </div>
-                <div  class="div-desc">
-                    Có thêm quyền lợi khi chuyến bay bị thay đổi trễ hoặc hủy chuyến. <u (click)="noteCathay()" class="text-seen">Xem quy định</u> 
+                <div  class="div-desc font-weight-600">
+                    Quyền lợi trễ chuyến bay từ 350.000vnđ/lần. Yêu cầu bồi thường trực tuyến nhanh chóng tức thời <u (click)="noteCathay()" class="text-seen">Xem quy định</u> 
                 </div>
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>

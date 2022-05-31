@@ -77,6 +77,7 @@ export class FlightpaymentdonePage implements OnInit {
       this.pacificVNAReturn = this._flightService.itemFlightCache.returnFlight.operatedBy;
     }
     var se = this;
+    se.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'flights', start_date: moment(se._flightService.itemFlightCache.checkInDate).format("YYYY-MM-DD"), end_date:moment(se._flightService.itemFlightCache.checkOutDate).format("YYYY-MM-DD") , item_name: se._flightService.itemFlightCache.departCity+'-'+se._flightService.itemFlightCache.returnCity, item_id: se._flightService.itemFlightCache.departCode, value: se._flightService.itemFlightCache.totalPrice, currency: "VND" });
     //se.gf.googleAnalytionCustom('ecommerce_purchase',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
     if( this._flightService.itemFlightCache.roundTrip){
       this.gf.googleAnalytionCustom('purchase', { items: [ 

@@ -151,17 +151,21 @@ export class UserProfilePage implements OnInit {
      */
     bindFormGroup(data) {
         var se = this;
-        se.phone = data.phone;
-        se.name = data.name;
-        se.userProfileData = se.formBuilder.group({
-            name: [data.fullname || '', Validators.compose([Validators.required])],
-            phone: [data.phone || '', Validators.compose([Validators.required, Validators.pattern("0[9|8|1|7|3|5]([0-9]|\s|-|\.){8,12}")])],
-            email: [data.email || '', Validators.compose([Validators.required])],
-            oldpassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-            newpassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-            confirmnewpassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-            otp: ['', Validators.compose([Validators.required])],
+        se.storage.get('email').then(email => {
+            se.phone = data.phone;
+            se.name = data.name;
+            se.userProfileData = se.formBuilder.group({
+                name: [data.fullname || '', Validators.compose([Validators.required])],
+                phone: [data.phone || '', Validators.compose([Validators.required, Validators.pattern("0[9|8|1|7|3|5]([0-9]|\s|-|\.){8,12}")])],
+                email: [email || '', Validators.compose([Validators.required])],
+                oldpassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+                newpassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+                confirmnewpassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+                otp: ['', Validators.compose([Validators.required])],
+            });
         });
+
+      
     }
 
     changePass() {

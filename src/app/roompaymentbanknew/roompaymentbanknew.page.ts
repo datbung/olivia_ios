@@ -6,7 +6,7 @@ import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
 import { GlobalFunction, ActivityService } from '../providers/globalfunction';
-
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 
 @Component({
@@ -32,12 +32,13 @@ export class RoompaymentbanknewPage implements OnInit {
   accountNumber: string;
   bankBranch: string;
   jti: any;
+  ischeckedDK=true;
   constructor(public platform: Platform,public Roomif: RoomInfo, public zone: NgZone, public storage: Storage, 
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
     
-    public clipboard: Clipboard) {
+    public clipboard: Clipboard,private safariViewController: SafariViewController) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
     this.ischecktechcom = true;
@@ -725,4 +726,39 @@ export class RoompaymentbanknewPage implements OnInit {
     });
     toast.present();
   }
+  checkKDk(){
+    this.ischeckedDK=!this.ischeckedDK;
+  }
+  openWebpageDK(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
+  }
 }
+
+

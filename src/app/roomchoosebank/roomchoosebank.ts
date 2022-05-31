@@ -29,7 +29,7 @@ export class RoomchoosebankPage implements OnInit{
   imgroom; roomtype; indexme; indexroom; cin1; cout1; checkpayment; book; id; pricetemp; hotelid
   public loader: any
   auth_token: any = '';arrbankrmb=[];totalPrice=0;bookingCode;isckb = false; TokenId;bankid="";jti;intervalID: NodeJS.Timeout;
-  _inAppBrowser: any;  isremember=true;stt;isdisable=false;isshowRemember=false;
+  _inAppBrowser: any;  isremember=true;stt;isdisable=false;isshowRemember=false;ischeckedDK=true;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,  public alertCtrl: AlertController,
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,private safariViewController: SafariViewController,private activatedRoute: ActivatedRoute,public activityService: ActivityService) {
@@ -626,5 +626,38 @@ export class RoomchoosebankPage implements OnInit{
       ]
     });
     alert.present();
+  }
+  checkKDk(){
+    this.ischeckedDK=!this.ischeckedDK;
+  }
+  openWebpageDK(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
   }
 }

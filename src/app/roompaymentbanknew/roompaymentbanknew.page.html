@@ -119,9 +119,16 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- <div class="div-DK">
+    <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkKDk()"></ion-checkbox>
+    <div class="text-DK">
+      Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
+    </div>
+  </div> -->
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
+    <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
   </div>
 </ion-footer>

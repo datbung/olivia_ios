@@ -34,6 +34,7 @@ export class MytripaymentcarcomboPage implements OnInit {
   roomnumber; breakfast; PriceAvgPlusTAStr;priceshow;totalPaxStr;
   auth_token: any = '';  bookingCode = "";cus_phone="";Avatar;nameroom;stt
   totalPrice: any;
+  ischeckedDK=true;
   constructor(public navCtrl: NavController,  public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public activatedRoute: ActivatedRoute,
     public bizTravelService: BizTravelService,
     public zone: NgZone) { 
@@ -489,4 +490,39 @@ export class MytripaymentcarcomboPage implements OnInit {
       })
     })
   }
+  checkKDk(){
+    this.ischeckedDK=!this.ischeckedDK;
+  }
+  openWebpageDK(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
+  }
 }
+
+

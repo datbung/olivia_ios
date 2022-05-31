@@ -23,6 +23,7 @@ export class CombochoosebankPage implements OnInit {
   intervalID: NodeJS.Timeout;
   _inAppBrowser: any;
   isremember=true;isdisable=false;
+  ischeckedDK=true;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, 
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,public alertCtrl: AlertController,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction, public bookCombo: Bookcombo,private safariViewController:SafariViewController) {
@@ -608,6 +609,39 @@ async showInfo(msg) {
     ]
   });
   alert.present();
+}
+checkKDk(){
+  this.ischeckedDK=!this.ischeckedDK;
+}
+openWebpageDK(url: string) {
+  this.safariViewController.isAvailable()
+.then((available: boolean) => {
+    if (available) {
+      this.safariViewController.show({
+        url: url,
+        hidden: false,
+        animated: false,
+        transition: 'curl',
+        enterReaderModeIfAvailable: true,
+        tintColor: '#23BFD8'
+      })
+      .subscribe((result: any) => {
+          if(result.event === 'opened') console.log('Opened');
+          else if(result.event === 'loaded') console.log('Loaded');
+          else if(result.event === 'closed') 
+          {
+            
+          }
+      
+        },
+        (error: any) => console.error(error)
+      );
+
+    } else {
+      // use fallback browser, example InAppBrowser
+    }
+  }
+);
 }
 }
 

@@ -1376,7 +1376,7 @@ export class HotelDetailPage implements OnInit {
           url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
           timeout: 180000,
           //maxAttempts: 3, retryDelay: 100000,
-          async: true,
+          // async: true,
           headers:
             {},
           form
