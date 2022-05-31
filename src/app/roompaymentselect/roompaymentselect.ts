@@ -606,6 +606,28 @@ export class RoompaymentselectPage implements OnInit{
       });
     });
   }
+
+
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+
   setinterval()
   {
     clearInterval(this.intervalID);
@@ -777,15 +799,33 @@ export class RoompaymentselectPage implements OnInit{
             }
             else {
               se.gf.hideLoading();
-              alert(databook.Msg );
-              if(se.Roomif.point &&  se.Roomif.bookingCode)
-              {
-                se.navCtrl.navigateBack('/roomdetailreview');
-              }
-              if(se.Roomif.promocode &&  se.Roomif.bookingCode)
-              {
-                se.navCtrl.navigateBack('/roomdetailreview');
-              }
+              se.storage.get('jti').then((memberid) => {
+                if(memberid){
+                  se.storage.get('deviceToken').then((devicetoken) => {
+                    if(devicetoken){
+                      se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                        setTimeout(()=>{
+                          se.auth_token = token;
+                        },100)
+                      });
+                    }else{
+                      se.showAlertMessageOnly(databook.Msg);
+                    }
+                  })
+                }else{
+                  se.showAlertMessageOnly(databook.Msg);
+                }
+                
+              })
+              // alert(databook.Msg );
+              // if(se.Roomif.point &&  se.Roomif.bookingCode)
+              // {
+              //   se.navCtrl.navigateBack('/roomdetailreview');
+              // }
+              // if(se.Roomif.promocode &&  se.Roomif.bookingCode)
+              // {
+              //   se.navCtrl.navigateBack('/roomdetailreview');
+              // }
             }
           }
           else {

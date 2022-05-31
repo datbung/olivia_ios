@@ -1527,7 +1527,25 @@ export class RoomadddetailsEanPage implements OnInit {
                     se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
                 } else {
                     se.loader.dismiss();
-                    alert(body.Msg);
+                    //alert(body.Msg);
+                    se.storage.get('jti').then((memberid) => {
+                        if(memberid){
+                          se.storage.get('deviceToken').then((devicetoken) => {
+                            if(devicetoken){
+                              se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                                setTimeout(()=>{
+                                  se.auth_token = token;
+                                },100)
+                              });
+                            }else{
+                              se.showAlertMessageOnly(body.Msg);
+                            }
+                          })
+                        }else{
+                          se.showAlertMessageOnly(body.Msg);
+                        }
+                        
+                      })
                 }
             } else {
                 error.page = "roomadddetails-ean";
@@ -1792,10 +1810,24 @@ export class RoomadddetailsEanPage implements OnInit {
                     // se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
                 } else {
                     se.loader.dismiss();
-                    alert(body.Msg);
-                    // se.refreshToken();
-                    // se.navCtrl.popToRoot();
-                    // se.app.getRootNav().getActiveChildNav().select(0);
+                    se.storage.get('jti').then((memberid) => {
+                        if(memberid){
+                          se.storage.get('deviceToken').then((devicetoken) => {
+                            if(devicetoken){
+                              se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                                setTimeout(()=>{
+                                  se.auth_token = token;
+                                },100)
+                              });
+                            }else{
+                              se.showAlertMessageOnly(body.Msg);
+                            }
+                          })
+                        }else{
+                          se.showAlertMessageOnly(body.Msg);
+                        }
+                        
+                      })
                 }
             } else {
                 error.page = "roomadddetails-ean";
@@ -1810,6 +1842,27 @@ export class RoomadddetailsEanPage implements OnInit {
 
 
     }
+
+    
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
 
     validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

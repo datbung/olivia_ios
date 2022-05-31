@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HotelRoomDetailPage } from './hotelroomdetail';
 import { IonicImageLoader } from 'ionic-image-loader';
-import { LazyLoadImageModule } from 'ng-lazyload-image';
 @NgModule({
   declarations: [
     HotelRoomDetailPage,
@@ -16,7 +15,6 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
     FormsModule,
     IonicModule,
     IonicImageLoader,
-    LazyLoadImageModule,
     RouterModule.forChild([
       {
         path: '',

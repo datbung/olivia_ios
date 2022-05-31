@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import {  NavController, LoadingController,Platform, ToastController } from '@ionic/angular';
+import {  NavController, LoadingController,Platform, ToastController, AlertController } from '@ionic/angular';
 import { Booking, RoomInfo,Bookcombo } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -23,7 +23,8 @@ export class RoompaymentlivePage implements OnInit{
   text; isenabled = true; ischeck; timestamp; paymentMethod;auth_token: any;
   jti: any;
 ; room; jsonroom;loader:any;stt;booking_type
-  constructor(public activityService: ActivityService,public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,private activatedRoute: ActivatedRoute) {
+  constructor(public activityService: ActivityService,public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,private activatedRoute: ActivatedRoute,
+    public alertCtrl: AlertController,) {
    
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -154,11 +155,29 @@ export class RoompaymentlivePage implements OnInit{
             }
             else{
               se.loader.dismiss();
-              alert(body.Msg);
-              if(se.Roomif.point &&  se.Roomif.bookingCode)
-              {
-                se.navCtrl.navigateBack('/roomdetailreview');
-              }
+              se.storage.get('jti').then((memberid) => {
+                if(memberid){
+                  se.storage.get('deviceToken').then((devicetoken) => {
+                    if(devicetoken){
+                      se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                        setTimeout(()=>{
+                          se.auth_token = token;
+                        },100)
+                      });
+                    }else{
+                      se.showAlertMessageOnly(body.Msg);
+                    }
+                  })
+                }else{
+                  se.showAlertMessageOnly(body.Msg);
+                }
+                
+              })
+              // alert(body.Msg);
+              // if(se.Roomif.point &&  se.Roomif.bookingCode)
+              // {
+              //   se.navCtrl.navigateBack('/roomdetailreview');
+              // }
               //se.refreshToken();
               // se.navCtrl.popToRoot();
               // se.app.getRootNav().getActiveChildNav().select(0);
@@ -183,6 +202,28 @@ export class RoompaymentlivePage implements OnInit{
     //})
 
   }
+
+
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+  
   refreshToken() {
     var se = this;
     se.storage.get('auth_token').then(auth_token => {

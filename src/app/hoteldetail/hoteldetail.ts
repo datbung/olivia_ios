@@ -2682,6 +2682,10 @@ excuteLoadHotelRoom(data){
     request(options, function (error, response, body) {
       if (error) throw new Error(error);
       var json=JSON.parse(body);
+      if (json.totalNetTa && json.totalNetTa > MealTypeRates.PriceAvgPlusTotalTA) {
+        self.gf.showAlertMessage("Giá đã thay đổi, vui lòng thực hiện lại booking !", '');
+        return;
+      }
       if (json.cancelPolicy) {
         self.Roomif.payment = json.cancelPolicy[0].IsPenaltyFree;
         self.Roomif.ischeckpayment = true;
