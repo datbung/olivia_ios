@@ -765,7 +765,7 @@ export class RoompaymentbanknewPage implements OnInit {
     });
     toast.present();
   }
-  checkKDk(){
+  checkDk(){
     this.ischeckedDK=!this.ischeckedDK;
   }
   openWebpageDK(url: string) {

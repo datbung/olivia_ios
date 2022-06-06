@@ -854,7 +854,7 @@ export class RoompaymentselectPage implements OnInit{
     });
     alert.present();
   }
-  checkKDk(){
+  checkDk(){
     this.ischeckedDK=!this.ischeckedDK;
   }
   openWebpageDK(url: string) {

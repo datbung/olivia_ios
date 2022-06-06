@@ -104,6 +104,10 @@ export class UserProfilePage implements OnInit {
                             var data = JSON.parse(body);
                             se.zone.run(() => {
                                 se.userInfoData = data;
+                                let checkappleemail=(data.email.includes("appleid") || data.email.includes('vivumember.info'));
+                                if (!checkappleemail) {
+                                  se.storage.set("email", data.email);
+                                }
                                 se.bindFormGroup(se.userInfoData);
                             })
                             se.storage.set('userInfoData', data);

@@ -735,7 +735,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
       })
     })
   }
-  checkKDk(){
+  checkDk(){
     this.zone.run(()=>{
       this.ischeckedDK=!this.ischeckedDK;
     })

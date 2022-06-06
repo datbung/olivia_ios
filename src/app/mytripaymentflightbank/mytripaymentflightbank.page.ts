@@ -742,7 +742,7 @@ export class MytripaymentflightbankPage implements OnInit {
   rememberCard(){
     this.isremember=!this.isremember
   }
-  checkKDk(){
+  checkDk(){
     this.ischeckedDK=!this.ischeckedDK;
   }
   openWebpageDK(url: string) {

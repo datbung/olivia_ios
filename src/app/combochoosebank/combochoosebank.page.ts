@@ -610,7 +610,7 @@ async showInfo(msg) {
   });
   alert.present();
 }
-checkKDk(){
+checkDk(){
   this.ischeckedDK=!this.ischeckedDK;
 }
 openWebpageDK(url: string) {
