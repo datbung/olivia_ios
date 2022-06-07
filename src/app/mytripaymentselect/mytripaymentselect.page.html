@@ -180,13 +180,13 @@
         </ion-item>
     </ion-list>
     <div class="div-DK">
-      <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkKDk()"></ion-checkbox>
+      <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkDk()"></ion-checkbox>
       <div class="text-DK">
         Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
       </div>
     </div>
 </ion-content>
-<ion-footer >
+<ion-footer *ngIf="isbtn">
   <div style="background-color: #ffffff; text-align: center">
     <button (click)="next()" ion-button round outline [disabled]="!ischeckedDK" [ngClass]="ischeckedDK?'button2':'btn-disabled'" class="button button2">Thanh toán và hoàn thành</button>
   </div>

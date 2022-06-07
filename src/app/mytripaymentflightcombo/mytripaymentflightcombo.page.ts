@@ -446,7 +446,7 @@ export class MytripaymentflightcomboPage implements OnInit {
       })
     })
   }
-  checkKDk(){
+  checkDk(){
     this.ischeckedDK=!this.ischeckedDK;
   }
   openWebpageDK(url: string) {
