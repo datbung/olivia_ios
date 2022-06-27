@@ -3916,12 +3916,12 @@ export class Tab1Page implements OnInit {
       this.valueGlobal.activeTab = currentIndex;
     }
     
-    if ( currentIndex === 3 ) {//Food
-      this.countcart = this.foodService.listItemsCart.length;
-      this.getAddress();
-      this.valueGlobal.backValue = "";
-      this._mytripservice.rootPage = "homefood";
-      this.navCtrl.navigateForward('/homefood');
+    if ( currentIndex === 3 ) {//blog
+      // this.countcart = this.foodService.listItemsCart.length;
+      // this.getAddress();
+      this.valueGlobal.backValue = "bloglist";
+      this._mytripservice.rootPage = "bloglist";
+      this.navCtrl.navigateForward('/bloglist');
     }
     else if ( currentIndex === 2 ) {//Combo
         this.valueGlobal.backValue = "";
