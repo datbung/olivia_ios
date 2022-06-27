@@ -309,17 +309,28 @@ export class CombopaymentPage implements OnInit {
     request(options, function (error, response, body) {
       var obj = JSON.parse(body);
       se.bookingCode = obj.Code;
-      se.CreateBuildLink(paymentType);
-      // se.book = {
-      //   code: obj.Code,
-      //   timestamp: se.timestamp,
-      //   cost: se.priceshow,
-      //   paymentType: "0",
-      //   DepartATCode: obj.TransferReserveCode.DepartReserveCode,
-      //   ReturnATCode: obj.TransferReserveCode.ReturnReserveCode
-      // }
-      // var url = C.urls.baseUrl.urlPayment + "/Home/PaymentAppCombo?info=" + JSON.stringify(se.book);
-      // se.openWebpage(url);
+      if(this.bookCombo.mealTypeRates.Supplier == 'SERI' && this.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+        //Check allotment trước khi book
+        this.gf.checkAllotmentSeri(
+          this.booking.HotelId,
+          this.bookCombo.mealTypeRates.RoomId,
+          this.booking.CheckInDate,
+          this.booking.CheckOutDate,
+          this.bookCombo.mealTypeRates.TotalRoom,
+          'SERI', this.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+          ).then((allow)=> {
+            if(allow){
+              se.CreateBuildLink(paymentType);
+            }else{
+              if (se.loader) {
+                se.loader.dismiss();
+              }
+              this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+            }
+          })
+      }else{
+        se.CreateBuildLink(paymentType);
+      }
     })
   }
   openWebpage(url: string) {

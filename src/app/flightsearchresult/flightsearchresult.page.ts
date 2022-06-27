@@ -124,6 +124,7 @@ export class FlightsearchresultPage implements OnInit {
   allowclickcalendar: boolean = true;
   
   VJSaverTicket = ['E1_Eco','A_Eco'];
+  listReturnSeri = [];
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -287,6 +288,7 @@ export class FlightsearchresultPage implements OnInit {
         if(this._flightService.objectFilter){
           this.filterItem();
         }
+        this.listReturnSeri = [];
       })
     }else{
       this._flightService.itemTabFlightActive.emit(true);
@@ -348,9 +350,20 @@ export class FlightsearchresultPage implements OnInit {
       
       if(se._flightService.objSearch.roundTrip){
         se._flightService.itemFlightCache.step = 3;
-        if(se._flightService.objectFilter){
-          se.filterItem();
+        //Lọc vé seri chiều về theo availId
+        if(item.id && item.id.indexOf('__seri') != -1){
+          se.listReturnSeri = se.filterSeriItem(item);
+        }else{
+          if(se._flightService.objectFilter){
+            se.filterItem();
+          }
+
+          se.filterNotSeriItem();
         }
+
+        // if(se._flightService.objectFilter){
+        //   se.filterItem();
+        // }
         se.zone.run(()=>{
           se.step = 3;
           se.content.scrollToTop(300);
@@ -377,12 +390,23 @@ export class FlightsearchresultPage implements OnInit {
           }else{
             item.returnTimeDisplayFull = se._flightService.itemFlightCache.returnTimeDisplay;
             se._flightService.itemFlightCache.returnFlight = se._flightService.objSearch.roundTrip ? item : null; 
-            if(se.canselect){
-              se.choiceTicket(type, item);
+            // if(se.canselect){
+            //   se.choiceTicket(type, item);
+            // }
+            // se._flightService.itemFlightCache.hasChoiceLuggage = false;
+            // se._flightService.itemFlightCache.departLuggage = [];
+            // se._flightService.itemFlightCache.returnLuggage = [];
+            if(!se.checkMapSeriFlight()){
+              se.showAlert('Một chặng bay đang chọn hạng vé Seri, vui lòng chọn vé Seri cho chặng bay còn lại');
+              return;
+            }else{
+              if(se.canselect){
+                se.choiceTicket(type, item);
+              }
+              se._flightService.itemFlightCache.hasChoiceLuggage = false;
+              se._flightService.itemFlightCache.departLuggage = [];
+              se._flightService.itemFlightCache.returnLuggage = [];
             }
-            se._flightService.itemFlightCache.hasChoiceLuggage = false;
-            se._flightService.itemFlightCache.departLuggage = [];
-            se._flightService.itemFlightCache.returnLuggage = [];
           }
         })
       }else{
@@ -397,6 +421,39 @@ export class FlightsearchresultPage implements OnInit {
       
     }
     
+  }
+
+  filterSeriItem(itemseri){
+    var se = this;
+    let listFilter = [...se.listReturn];
+    let filterSeri = listFilter.filter((filterSeriItem) => {
+        return filterSeriItem.id && filterSeriItem.id.indexOf('__seri') != -1 && filterSeriItem.availId == itemseri.availId;
+      })
+      listFilter = [...filterSeri];
+      return listFilter;
+  }
+  filterNotSeriItem(){
+    var se = this;
+    let listFilter = [...se.listReturn];
+    let filterSeri = listFilter.filter((filterSeriItem) => {
+        return filterSeriItem.id && filterSeriItem.id.indexOf('__seri') == -1;
+      })
+      listFilter = [...filterSeri];
+      return listFilter;
+  }
+  /**
+   * Trả về true nếu ko chọn seri cả chiều đi, chiều về hoặc có chọn seri chiều đi và vé seri chiều đi & chiều về cùng cặp
+   * Ngược lại trả về false
+   * @returns 
+   */
+  checkMapSeriFlight(){
+    var se = this, res = true;
+    if(se._flightService.itemFlightCache.departFlight && se._flightService.itemFlightCache.returnFlight){
+      res = (se._flightService.itemFlightCache.departFlight.id.indexOf('__seri') == -1 && se._flightService.itemFlightCache.returnFlight.id.indexOf('__seri') == -1)
+      || (se._flightService.itemFlightCache.departFlight.id.indexOf('__seri') != -1 && se._flightService.itemFlightCache.returnFlight.id.indexOf('__seri') != -1 
+      && se._flightService.itemFlightCache.departFlight.availId == se._flightService.itemFlightCache.returnFlight.availId)
+    }
+    return res;
   }
 
   choiceTicket(type, item){
@@ -759,14 +816,27 @@ export class FlightsearchresultPage implements OnInit {
   checkLoadCacheData(obj, hascache): Promise<any>{
     var se = this;
     se.stoprequest = true;
+    let _darr:any = moment(obj.departDate).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday =  _darr[0].split('-'),
+    _darrhour =  _darr[1].split(':');
+    let _darr_return:any = moment(obj.returnDate).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday_return =  _darr_return[0].split('-'),
+    _darrhour_return =  _darr_return[1].split(':');
+    let _d =new Date(Date.UTC(_darrday[0], _darrday[1] -1, _darrday[2], _darrhour[0], _darrhour[1], _darrhour[2])), final = (_d.getTime() + Math.abs((_d.getTimezoneOffset()))*2 );
+    let _dReturn = new Date(Date.UTC(_darrday_return[0], _darrday_return[1] -1, _darrday_return[2], _darrhour_return[0], _darrhour_return[1], _darrhour_return[2])), final_return = (_dReturn.getTime() + Math.abs((_dReturn.getTimezoneOffset()))*2);
+    let _isoDate = new Date(final).toISOString().replace('Z','');
+    let _isoDate_return = new Date(final_return).toISOString().replace('Z','');
+
     return new Promise((resolve, reject) => {
       let objjson = 
       {
         "requestFrom": {
           "fromPlace": obj.departCode,
           "toPlace": obj.arrivalCode,
-          "departDate": moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-          "returnDate": moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          // "departDate": moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          // "returnDate": moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "departDate": _isoDate,
+          "returnDate": _isoDate,
           "adult": obj.adult,
           "child": obj.child,
           "infant": obj.infant ? obj.infant : 0,
@@ -777,8 +847,10 @@ export class FlightsearchresultPage implements OnInit {
         "requestTo": {
           "fromPlace": obj.arrivalCode,
           "toPlace": obj.departCode,
-          "departDate": moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-          "returnDate": moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          // "departDate": moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          // "returnDate": moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "departDate": _isoDate_return,
+          "returnDate": _isoDate_return,
           "adult": obj.adult,
           "child": obj.child,
           "infant": obj.infant ? obj.infant : 0,
@@ -787,7 +859,8 @@ export class FlightsearchresultPage implements OnInit {
           "roundTrip": obj.roundTrip
         },
         "roundTrip": obj.roundTrip,
-        "noCache": true
+        "noCache": true,
+        'tcincharge': "89311",
         //"noCache": se._flightService.bookingSuccess ? true : (hascache ? hascache : false)
       }
       
@@ -822,11 +895,23 @@ export class FlightsearchresultPage implements OnInit {
     }
     let urlfindflightincache = type == "depart" ? C.urls.baseUrl.urlFlight + "gate/apiv1/GetFlightDepart" : C.urls.baseUrl.urlFlight + "gate/apiv1/GetFlightReturn";
     //let urlfindflightincache = type == "depart" ? "http://localhost:30304/gate/apiv1/GetFlightDepart" : "http://localhost:30304/gate/apiv1/GetFlightReturn";
+    let _darr:any = moment(obj.departDate).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday =  _darr[0].split('-'),
+    _darrhour =  _darr[1].split(':');
+  let _darr_return:any = moment(obj.returnDate).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday_return =  _darr_return[0].split('-'),
+    _darrhour_return =  _darr_return[1].split(':');
+  let _d =new Date(Date.UTC(_darrday[0], _darrday[1] -1, _darrday[2], _darrhour[0], _darrhour[1], _darrhour[2])), final = (_d.getTime() + Math.abs((_d.getTimezoneOffset()))*2);
+  let _dReturn = new Date(Date.UTC(_darrday_return[0], _darrday_return[1] -1, _darrday_return[2], _darrhour_return[0], _darrhour_return[1], _darrhour_return[2])), final_return = (_dReturn.getTime() + Math.abs((_dReturn.getTimezoneOffset()))*2);
+  let _isoDate = new Date(final).toISOString().replace('Z','');
+  let _isoDate_return = new Date(final_return).toISOString().replace('Z','');
     let objbody = {
           "fromPlace": type =='depart' ?  obj.departCode : obj.arrivalCode,
           "toPlace": type =='depart' ? obj.arrivalCode : obj.departCode,
-          "departDate": type =='depart' ? moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-          "returnDate": type =='depart' ? moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          // "departDate": type =='depart' ? moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          // "returnDate": type =='depart' ? moment(new Date(moment(obj.departDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(moment(obj.returnDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "departDate": type =='depart' ? _isoDate : _isoDate_return,
+          "returnDate": type =='depart' ? _isoDate : _isoDate_return,
           "adult": obj.adult,
           "child": obj.child,
           "infant": obj.infant ? obj.infant : 0,

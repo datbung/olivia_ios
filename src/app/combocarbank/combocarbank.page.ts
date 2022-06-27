@@ -762,7 +762,29 @@ export class CombocarbankPage implements OnInit {
           se.listcars.HotelBooking.LeadingName = se.hoten;
           se.listcars.HotelBooking.LeadingEmail = se.email;
           se.listcars.HotelBooking.LeadingPhone = se.phone;
-          se.next();
+          //se.next();
+          if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+            //Check allotment trước khi book
+            se.gf.checkAllotmentSeri(
+              se.booking.HotelId,
+              se.bookCombo.mealTypeRates.RoomId,
+              se.booking.CheckInDate,
+              se.booking.CheckOutDate,
+              se.bookCombo.mealTypeRates.TotalRoom,
+              'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+              ).then((allow)=> {
+                if(allow){
+                  se.next();
+                }else{
+                  if (se.loader) {
+                    se.loader.dismiss();
+                  }
+                  se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+                }
+              })
+          }else{
+            se.next();
+          }
         } else {
           se.loader.dismiss();
           alert("Không còn ghế xe, vui lòng chọn Nhà xe khác!");

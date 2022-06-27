@@ -1455,136 +1455,160 @@ alert.present();
     if(obj.indexOf('à') != -1 || obj.indexOf('À') != -1){
         obj = obj.replace(/\à/g,'a').replace(/\À/g,'A');
       }
-    
+      if(obj.indexOf('ả') != -1 || obj.indexOf('Ả') != -1){
+        obj = obj.replace(/\ả/g,'a').replace(/\Ả/g,'A');
+      }
+      if(obj.indexOf('ẳ') != -1 || obj.indexOf('Ẳ') != -1){
+        obj = obj.replace(/\ẳ/g,'a').replace(/\Ẳ/g,'A');
+      }
+      if(obj.indexOf('ẩ') != -1 || obj.indexOf('Ẩ') != -1){
+        obj = obj.replace(/\ẩ/g,'a').replace(/\Ẩ/g,'A');
+      }
+      if(obj.indexOf('ã') != -1 || obj.indexOf('Ã') != -1){
+        obj = obj.replace(/\ã/g,'a').replace(/\Ã/g,'A');
+      }
+      if(obj.indexOf('ẵ') != -1 || obj.indexOf('Ẵ') != -1){
+        obj = obj.replace(/\ẵ/g,'a').replace(/\Ẵ/g,'A');
+      }
+      if(obj.indexOf('ẫ') != -1 || obj.indexOf('Ẫ') != -1){
+        obj = obj.replace(/\ẫ/g,'a').replace(/\Ẫ/g,'A');
+      }
+
     if(obj.indexOf('ê') != -1 || obj.indexOf('Ê') != -1){
-      obj = obj.replace(/\ê/g,'e').replace(/\Ê/g,'E');
-    }
-    if(obj.indexOf('é') != -1 || obj.indexOf('É') != -1){
-      obj = obj.replace(/\é/g,'e').replace(/\É/g,'E');
-    }
-    if(obj.indexOf('è') != -1 || obj.indexOf('È') != -1){
-      obj = obj.replace(/\è/g,'e').replace(/\È/g,'E');
-    }
-    if(obj.indexOf('ẻ') != -1 || obj.indexOf('Ẻ') != -1){
-      obj = obj.replace(/\ẻ/g,'e').replace(/\Ẻ/g,'E');
-    }
-    if(obj.indexOf('ẽ') != -1 || obj.indexOf('Ẽ') != -1){
-      obj = obj.replace(/\ẽ/g,'e').replace(/\Ẽ/g,'E');
-    }
-    if(obj.indexOf('ệ') != -1 || obj.indexOf('Ệ') != -1){
-      obj = obj.replace(/\ệ/g,'e').replace(/\Ệ/g,'E');
-    }
-    if(obj.indexOf('ễ') != -1 || obj.indexOf('Ễ') != -1){
-      obj = obj.replace(/\ễ/g,'e').replace(/\Ễ/g,'E');
-    }
-    if(obj.indexOf('ẹ') != -1 || obj.indexOf('Ẹ') != -1){
-      obj = obj.replace(/\ẹ/g,'e').replace(/\Ẹ/g,'E');
-    }
-    if(obj.indexOf('ế') != -1 || obj.indexOf('Ế') != -1){
-      obj = obj.replace(/\ế/g,'e').replace(/\Ế/g,'E');
-    }
-    if(obj.indexOf('ể') != -1 || obj.indexOf('Ể') != -1){
-      obj = obj.replace(/\ể/g,'e').replace(/\Ể/g,'E');
-    }
-    if(obj.indexOf('ề') != -1 || obj.indexOf('Ề') != -1){
-      obj = obj.replace(/\ề/g,'e').replace(/\Ề/g,'E');
-    }
-
-    if(obj.indexOf('ô') != -1 || obj.indexOf('Ô') != -1){
-      obj = obj.replace(/\ô/g,'o').replace(/\Ô/g,'O');
-    }
-    if(obj.indexOf('ồ') != -1 || obj.indexOf('Ồ') != -1){
-      obj = obj.replace(/\ồ/g,'o').replace(/\Ồ/g,'O');
-    }
-    if(obj.indexOf('ố') != -1 || obj.indexOf('Ố') != -1){
-      obj = obj.replace(/\ố/g,'o').replace(/\Ố/g,'O');
-    }
-    if(obj.indexOf('ổ') != -1 || obj.indexOf('Ổ') != -1){
-      obj = obj.replace(/\ổ/g,'o').replace(/\Ổ/g,'O');
-    }
-    if(obj.indexOf('ộ') != -1 || obj.indexOf('Ộ') != -1){
-      obj = obj.replace(/\ộ/g,'o').replace(/\Ộ/g,'O');
-    }
-    if(obj.indexOf('ỗ') != -1 || obj.indexOf('Ỗ') != -1){
-      obj = obj.replace(/\ỗ/g,'o').replace(/\Ỗ/g,'O');
-    }
-    if(obj.indexOf('ọ') != -1 || obj.indexOf('Ọ') != -1){
-      obj = obj.replace(/\ọ/g,'o').replace(/\Ọ/g,'O');
-    }
-    if(obj.indexOf('ò') != -1 || obj.indexOf('Ò') != -1){
-      obj = obj.replace(/\ò/g,'o').replace(/\Ò/g,'O');
-    }
-    if(obj.indexOf('õ') != -1 || obj.indexOf('Õ') != -1){
-      obj = obj.replace(/\õ/g,'o').replace(/\Õ/g,'O');
-    }
-    if(obj.indexOf('ơ') != -1 || obj.indexOf('Ơ') != -1){
-      obj = obj.replace(/\ơ/g,'o').replace(/\Ơ/g,'O');
-    }
-    if(obj.indexOf('ờ') != -1 || obj.indexOf('Ờ') != -1){
-      obj = obj.replace(/\ờ/g,'o').replace(/\Ờ/g,'O');
-    }
-    if(obj.indexOf('ớ') != -1 || obj.indexOf('Ớ') != -1){
-      obj = obj.replace(/\ớ/g,'o').replace(/\Ớ/g,'O');
-    }
-    if(obj.indexOf('ở') != -1 || obj.indexOf('Ở') != -1){
-      obj = obj.replace(/\ở/g,'o').replace(/\Ở/g,'O');
-    }
-    if(obj.indexOf('ợ') != -1 || obj.indexOf('Ợ') != -1){
-      obj = obj.replace(/\ợ/g,'o').replace(/\Ợ/g,'O');
-    }
-    if(obj.indexOf('ỡ') != -1 || obj.indexOf('Ỡ') != -1){
-      obj = obj.replace(/\ỡ/g,'o').replace(/\Ỡ/g,'O');
-    }
-
-    if(obj.indexOf('ú') != -1 || obj.indexOf('Ú') != -1){
-      obj = obj.replace(/\ú/g,'u').replace(/\Ú/g,'U');
-    }
-    if(obj.indexOf('ù') != -1 || obj.indexOf('Ù') != -1){
-      obj = obj.replace(/\ù/g,'u').replace(/\Ù/g,'U');
-    }
-    if(obj.indexOf('ủ') != -1 || obj.indexOf('Ủ') != -1){
-      obj = obj.replace(/\ủ/g,'u').replace(/\Ủ/g,'U');
-    }
-    if(obj.indexOf('ũ') != -1 || obj.indexOf('Ũ') != -1){
-      obj = obj.replace(/\ũ/g,'u').replace(/\Ũ/g,'U');
-    }
-    if(obj.indexOf('ụ') != -1 || obj.indexOf('Ụ') != -1){
-      obj = obj.replace(/\ụ/g,'u').replace(/\Ụ/g,'U');
-    }
-    if(obj.indexOf('ư') != -1 || obj.indexOf('Ư') != -1){
-      obj = obj.replace(/\ư/g,'u').replace(/\Ư/g,'U');
-    }
-    if(obj.indexOf('ừ') != -1 || obj.indexOf('Ừ') != -1){
-      obj = obj.replace(/\ừ/g,'u').replace(/\Ừ/g,'U');
-    }
-    if(obj.indexOf('ứ') != -1 || obj.indexOf('Ứ') != -1){
-      obj = obj.replace(/\ứ/g,'u').replace(/\Ứ/g,'U');
-    }
-    if(obj.indexOf('ử') != -1 || obj.indexOf('Ử') != -1){
-      obj = obj.replace(/\ử/g,'u').replace(/\Ử/g,'U');
-    }
-    if(obj.indexOf('ự') != -1 || obj.indexOf('Ự') != -1){
-      obj = obj.replace(/\ự/g,'u').replace(/\Ự/g,'U');
-    }
-    if(obj.indexOf('ữ') != -1 || obj.indexOf('Ữ') != -1){
-      obj = obj.replace(/\ữ/g,'u').replace(/\Ữ/g,'U');
-    }
-
-    if(obj.indexOf('í') != -1 || obj.indexOf('Í') != -1){
-      obj = obj.replace(/\í/g,'i').replace(/\Í/g,'I');
-    }
-    if(obj.indexOf('ì') != -1 || obj.indexOf('Ì') != -1){
-      obj = obj.replace(/\ì/g,'i').replace(/\Ì/g,'I');
-    }
-    if(obj.indexOf('ỉ') != -1 || obj.indexOf('Ỉ') != -1){
-      obj = obj.replace(/\ỉ/g,'i').replace(/\Ỉ/g,'I');
-    }
-    if(obj.indexOf('ĩ') != -1 || obj.indexOf('Ĩ') != -1){
-      obj = obj.replace(/\ĩ/g,'i').replace(/\Ĩ/g,'I');
-    }
-    if(obj.indexOf('ị') != -1 || obj.indexOf('Ị') != -1){
-      obj = obj.replace(/\ị/g,'i').replace(/\Ị/g,'I');
-    }
+            obj = obj.replace(/\ê/g,'e').replace(/\Ê/g,'E');
+          }
+          if(obj.indexOf('é') != -1 || obj.indexOf('É') != -1){
+            obj = obj.replace(/\é/g,'e').replace(/\É/g,'E');
+          }
+          if(obj.indexOf('è') != -1 || obj.indexOf('È') != -1){
+            obj = obj.replace(/\è/g,'e').replace(/\È/g,'E');
+          }
+          if(obj.indexOf('ẻ') != -1 || obj.indexOf('Ẻ') != -1){
+            obj = obj.replace(/\ẻ/g,'e').replace(/\Ẻ/g,'E');
+          }
+          if(obj.indexOf('ẽ') != -1 || obj.indexOf('Ẽ') != -1){
+            obj = obj.replace(/\ẽ/g,'e').replace(/\Ẽ/g,'E');
+          }
+          if(obj.indexOf('ẹ') != -1 || obj.indexOf('Ẹ') != -1){
+            obj = obj.replace(/\ẹ/g,'e').replace(/\Ẹ/g,'E');
+          }
+          if(obj.indexOf('ệ') != -1 || obj.indexOf('Ệ') != -1){
+            obj = obj.replace(/\ệ/g,'e').replace(/\Ệ/g,'E');
+          }
+          if(obj.indexOf('ễ') != -1 || obj.indexOf('Ễ') != -1){
+            obj = obj.replace(/\ễ/g,'e').replace(/\Ễ/g,'E');
+          }
+          if(obj.indexOf('ẹ') != -1 || obj.indexOf('Ẹ') != -1){
+            obj = obj.replace(/\ẹ/g,'e').replace(/\Ẹ/g,'E');
+          }
+          if(obj.indexOf('ế') != -1 || obj.indexOf('Ế') != -1){
+            obj = obj.replace(/\ế/g,'e').replace(/\Ế/g,'E');
+          }
+          if(obj.indexOf('ể') != -1 || obj.indexOf('Ể') != -1){
+            obj = obj.replace(/\ể/g,'e').replace(/\Ể/g,'E');
+          }
+          if(obj.indexOf('ề') != -1 || obj.indexOf('Ề') != -1){
+            obj = obj.replace(/\ề/g,'e').replace(/\Ề/g,'E');
+          }
+      
+          if(obj.indexOf('ô') != -1 || obj.indexOf('Ô') != -1){
+            obj = obj.replace(/\ô/g,'o').replace(/\Ô/g,'O');
+          }
+          if(obj.indexOf('ồ') != -1 || obj.indexOf('Ồ') != -1){
+            obj = obj.replace(/\ồ/g,'o').replace(/\Ồ/g,'O');
+          }
+          if(obj.indexOf('ố') != -1 || obj.indexOf('Ố') != -1){
+            obj = obj.replace(/\ố/g,'o').replace(/\Ố/g,'O');
+          }
+          if(obj.indexOf('ổ') != -1 || obj.indexOf('Ổ') != -1){
+            obj = obj.replace(/\ổ/g,'o').replace(/\Ổ/g,'O');
+          }
+          if(obj.indexOf('ộ') != -1 || obj.indexOf('Ộ') != -1){
+            obj = obj.replace(/\ộ/g,'o').replace(/\Ộ/g,'O');
+          }
+          if(obj.indexOf('ỗ') != -1 || obj.indexOf('Ỗ') != -1){
+            obj = obj.replace(/\ỗ/g,'o').replace(/\Ỗ/g,'O');
+          }
+          if(obj.indexOf('ọ') != -1 || obj.indexOf('Ọ') != -1){
+            obj = obj.replace(/\ọ/g,'o').replace(/\Ọ/g,'O');
+          }
+          if(obj.indexOf('ò') != -1 || obj.indexOf('Ò') != -1){
+            obj = obj.replace(/\ò/g,'o').replace(/\Ò/g,'O');
+          }
+          if(obj.indexOf('ỏ') != -1 || obj.indexOf('Ỏ') != -1){
+            obj = obj.replace(/\ỏ/g,'o').replace(/\Ỏ/g,'O');
+          }
+          if(obj.indexOf('õ') != -1 || obj.indexOf('Õ') != -1){
+            obj = obj.replace(/\õ/g,'o').replace(/\Õ/g,'O');
+          }
+          if(obj.indexOf('ơ') != -1 || obj.indexOf('Ơ') != -1){
+            obj = obj.replace(/\ơ/g,'o').replace(/\Ơ/g,'O');
+          }
+          if(obj.indexOf('ờ') != -1 || obj.indexOf('Ờ') != -1){
+            obj = obj.replace(/\ờ/g,'o').replace(/\Ờ/g,'O');
+          }
+          if(obj.indexOf('ớ') != -1 || obj.indexOf('Ớ') != -1){
+            obj = obj.replace(/\ớ/g,'o').replace(/\Ớ/g,'O');
+          }
+          if(obj.indexOf('ở') != -1 || obj.indexOf('Ở') != -1){
+            obj = obj.replace(/\ở/g,'o').replace(/\Ở/g,'O');
+          }
+          if(obj.indexOf('ợ') != -1 || obj.indexOf('Ợ') != -1){
+            obj = obj.replace(/\ợ/g,'o').replace(/\Ợ/g,'O');
+          }
+          if(obj.indexOf('ỡ') != -1 || obj.indexOf('Ỡ') != -1){
+            obj = obj.replace(/\ỡ/g,'o').replace(/\Ỡ/g,'O');
+          }
+      
+          if(obj.indexOf('ú') != -1 || obj.indexOf('Ú') != -1){
+            obj = obj.replace(/\ú/g,'u').replace(/\Ú/g,'U');
+          }
+          if(obj.indexOf('ù') != -1 || obj.indexOf('Ù') != -1){
+            obj = obj.replace(/\ù/g,'u').replace(/\Ù/g,'U');
+          }
+          if(obj.indexOf('ủ') != -1 || obj.indexOf('Ủ') != -1){
+            obj = obj.replace(/\ủ/g,'u').replace(/\Ủ/g,'U');
+          }
+          if(obj.indexOf('ũ') != -1 || obj.indexOf('Ũ') != -1){
+            obj = obj.replace(/\ũ/g,'u').replace(/\Ũ/g,'U');
+          }
+          if(obj.indexOf('ụ') != -1 || obj.indexOf('Ụ') != -1){
+            obj = obj.replace(/\ụ/g,'u').replace(/\Ụ/g,'U');
+          }
+          if(obj.indexOf('ư') != -1 || obj.indexOf('Ư') != -1){
+            obj = obj.replace(/\ư/g,'u').replace(/\Ư/g,'U');
+          }
+          if(obj.indexOf('ừ') != -1 || obj.indexOf('Ừ') != -1){
+            obj = obj.replace(/\ừ/g,'u').replace(/\Ừ/g,'U');
+          }
+          if(obj.indexOf('ứ') != -1 || obj.indexOf('Ứ') != -1){
+            obj = obj.replace(/\ứ/g,'u').replace(/\Ứ/g,'U');
+          }
+          if(obj.indexOf('ử') != -1 || obj.indexOf('Ử') != -1){
+            obj = obj.replace(/\ử/g,'u').replace(/\Ử/g,'U');
+          }
+          if(obj.indexOf('ự') != -1 || obj.indexOf('Ự') != -1){
+            obj = obj.replace(/\ự/g,'u').replace(/\Ự/g,'U');
+          }
+          if(obj.indexOf('ữ') != -1 || obj.indexOf('Ữ') != -1){
+            obj = obj.replace(/\ữ/g,'u').replace(/\Ữ/g,'U');
+          }
+      
+          if(obj.indexOf('í') != -1 || obj.indexOf('Í') != -1){
+            obj = obj.replace(/\í/g,'i').replace(/\Í/g,'I');
+          }
+          if(obj.indexOf('ì') != -1 || obj.indexOf('Ì') != -1){
+            obj = obj.replace(/\ì/g,'i').replace(/\Ì/g,'I');
+          }
+          if(obj.indexOf('ỉ') != -1 || obj.indexOf('Ỉ') != -1){
+            obj = obj.replace(/\ỉ/g,'i').replace(/\Ỉ/g,'I');
+          }
+          if(obj.indexOf('ĩ') != -1 || obj.indexOf('Ĩ') != -1){
+            obj = obj.replace(/\ĩ/g,'i').replace(/\Ĩ/g,'I');
+          }
+          if(obj.indexOf('ị') != -1 || obj.indexOf('Ị') != -1){
+            obj = obj.replace(/\ị/g,'i').replace(/\Ị/g,'I');
+          }
     
 
     return obj;
@@ -3253,6 +3277,81 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     })
     })
    
+  }
+
+  getIsoDate(cin, cout){
+    let _darr:any = moment(cin).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday =  _darr[0].split('-'),
+    _darrhour =  _darr[1].split(':');
+    let _darr_return:any = moment(cout).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday_return =  _darr_return[0].split('-'),
+    _darrhour_return =  _darr_return[1].split(':');
+    let _d =new Date(Date.UTC(_darrday[0], _darrday[1] -1, _darrday[2], _darrhour[0], _darrhour[1], _darrhour[2])), final = (_d.getTime() + Math.abs((_d.getTimezoneOffset()))*2 );
+    let _dReturn = new Date(Date.UTC(_darrday_return[0], _darrday_return[1] -1, _darrday_return[2], _darrhour_return[0], _darrhour_return[1], _darrhour_return[2])), final_return = (_dReturn.getTime() + Math.abs((_dReturn.getTimezoneOffset()))*2);
+    let _isoDate = new Date(final).toISOString().replace('Z','');
+    let _isoDate_return = new Date(final_return).toISOString().replace('Z','');
+    return { cin: _isoDate, cout: _isoDate_return};
+  }
+
+  getCinIsoDate(cin){
+    let _darr:any = moment(cin).format('YYYY-MM-DD hh:mm:ss').split(' '),
+    _darrday =  _darr[0].split('-'),
+    _darrhour =  _darr[1].split(':');
+    let _d =new Date(Date.UTC(_darrday[0], _darrday[1] -1, _darrday[2], _darrhour[0], _darrhour[1], _darrhour[2])), final = (_d.getTime() + Math.abs((_d.getTimezoneOffset()))*2 );
+    let _isoDate = new Date(final).toISOString().replace('Z','');
+    return _isoDate;
+  }
+
+  checkAllotmentSeri(hotelId, roomId, cin, cout, roomNumber, supplier, token) :Promise<any> {
+    return new Promise((resolve, reject) => {
+      var options = {
+        method: 'GET',
+        url: C.urls.baseUrl.urlContracting + '/api/toolsapi/CheckAllotment',
+        qs:
+        {
+          token: '3b760e5dcf038878925b5613c32615ea3',
+          hotelcode: hotelId,
+          roomcode: roomId,
+          checkin: cin,
+          checkout: cout,
+          totalroom: roomNumber,
+          supplier: supplier,
+          bookingRequestXml: token
+        },
+        headers:
+          {}
+      };
+      request(options, function (error, response, body) {
+        if (response.statusCode != 200) {
+          var objError = {
+            page: "hoteldetail",
+            func: "book",
+            message: response.statusMessage,
+            content: response.body,
+            type: "warning",
+            param: JSON.stringify(options)
+          };
+          C.writeErrorLog(objError, response);
+        }
+        if (error) {
+          error.page = "hoteldetail";
+          error.func = "book";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(error, response);
+          throw new Error(error)
+        };
+        var rs = JSON.parse(body);
+        resolve(rs.Msg == "AL");
+      });
+    })
+    
+  }
+
+  removeString(input){
+    input = input.replace('MASTER','').replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','');
+    input = input.replace('master','').replace('mstr','').replace('miss','').replace('mr','').replace('mrs','').replace('ms','');
+    input = input.replace('Master','').replace('Mstr','').replace('Miss','').replace('Mr','').replace('Mrs','').replace('Ms','');
+    return input.toLowerCase().trim();
   }
 }
 

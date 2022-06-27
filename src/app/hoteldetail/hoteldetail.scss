@@ -2399,7 +2399,9 @@ a.progressive {
         background-color: #ffffff;
     }
 }
-
+.m-top-4 {
+    margin-top: 4px;
+}
 .m-bottom-14 {
     margin-bottom: 14px;
 }
@@ -2407,3 +2409,62 @@ a.progressive {
     margin-bottom: 12px;
 }
   //////
+
+  ///style hide price hotel
+  .div-notshowprice {
+    
+    margin-bottom: 8px;
+  }
+  .d-flex {
+    display: flex;
+}
+.width-100 {
+    width: 100%;
+}
+.width-70 {
+    width: 70%;
+}
+.width-30 {
+    width: 30%;
+}
+.m-right-8 {
+    margin-right: 8px;
+}
+.m-right-2 {
+    margin-right: 2px;
+}
+.m-left-5 {
+    margin-left: 5px;
+}
+.m-right-5 {
+    margin-right: 5px;
+}
+.div-button-email {
+    padding: 7px 5px 5px 5px;
+    border-radius: 4px;
+    border: dotted 1px var(--ion-color-primary);;
+    background-color: rgba(38, 190, 214, 0.08);
+}
+.text-email {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.32px;
+    color: var(--ion-color-primary);
+}
+.text-email-sub {
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: -0.28px;
+    color: var(--ion-color-primary);
+}
+.btn-request-room {
+    width: 100%;
+    height: 34px !important;
+    padding: 0;
+}
+.align-item-center {
+    display: flex;
+    align-items: center;
+}
+/// 

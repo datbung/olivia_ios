@@ -507,12 +507,12 @@ export class FlightchangeinfoPage implements OnInit {
           yearstartdate = objTextMonthStartDate.trim().split(" ")[1];
           monthenddate = objTextMonthEndDate.trim().split(" ")[0];
           yearenddate = objTextMonthEndDate.trim().split(" ")[1];
-          var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
-          var todate = new Date(yearenddate, monthenddate - 1, tday);
+          var fromdate = this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
+          var todate = this.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday));
           let diffday =moment(todate).diff(fromdate, "days");
           this.countdaydisplay = diffday +1;
 
-          let difftodate = moment(fromdate).diff(moment(new Date()).format("YYYY-MM-DD"), 'days');
+          let difftodate = moment(fromdate).diff(moment(this.gf.getCinIsoDate(new Date())).format("YYYY-MM-DD"), 'days');
           // if(difftodate <1){
           //   let d = moment(fromdate);
           //   this.gf.showToastWarning('Ngày khởi hành phải lớn hơn ' + d.format('DD') + ' thg ' + d.format('MM') + '. Vui lòng chọn lại!');
@@ -528,12 +528,12 @@ export class FlightchangeinfoPage implements OnInit {
             se.cin = moment(fromdate).format("YYYY-MM-DD");
             se.cout = moment(todate).format("YYYY-MM-DD");
             se.zone.run(() => {
-              se.datecin = new Date(se.cin);
-              se.datecout = new Date(se.cout);
-              se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
-              se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-              se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
-              se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+              //se.datecin = this.gf.getCinIsoDate(se.cin);
+              //se.datecout = this.gf.getCinIsoDate(se.cout);
+              se.cindisplay = moment(se.cin).format("DD-MM-YYYY");
+              se.coutdisplay = moment(se.cout).format("DD-MM-YYYY");
+              se.cindisplaymonth = moment(se.cin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+              se.coutdisplaymonth = moment(se.cout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
 
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
               se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
@@ -564,8 +564,8 @@ export class FlightchangeinfoPage implements OnInit {
           return;
         }
         this.allowclickcalendar = false;
-        let fromdate = new Date(moment(this.cin).format('YYYY-MM-DD'));
-        let todate = new Date(moment(this.cout).format('YYYY-MM-DD'));
+        let fromdate = new Date(this.gf.getCinIsoDate(moment(this.cin).format('YYYY-MM-DD')));
+        let todate = new Date(this.gf.getCinIsoDate(moment(this.cout).format('YYYY-MM-DD')));
 
         let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
         this.storage.get(key).then((data)=>{
@@ -576,9 +576,9 @@ export class FlightchangeinfoPage implements OnInit {
         
         let countday = moment(todate).diff(moment(fromdate),'days');
         this.countdaydisplay = (this.flighttype == "twoway") ? (countday +1) : 1;
-        let fd = new Date(moment(this.cout).year(), moment(this.cout).month() +1, 1);
-        let ed = new Date(moment(moment(fd).subtract(1, 'days')).format('YYYY-MM-DD'));
-        let monthed = todate.getMonth();
+        let fd = this.gf.getCinIsoDate(new Date(moment(this.cout).year(), moment(this.cout).month() +1, 1));
+        let ed = this.gf.getCinIsoDate(new Date(moment(moment(fd).subtract(1, 'days')).format('YYYY-MM-DD')));
+        //let monthed = todate.getMonth();
         let cindayofweek = this.gf.getDayOfWeek(this.cin).daynameshort;
         let cindaydisplay = moment(this.cin).format('DD');
         let cinmonthdisplay = 'Thg ' + moment(this.cin).format('M');
@@ -736,8 +736,8 @@ export class FlightchangeinfoPage implements OnInit {
         se.cin = moment(from.dateObj).format("YYYY-MM-DD");
         se.cout = moment(to.dateObj).format("YYYY-MM-DD");
         se.zone.run(() => {
-            se.datecin = new Date(se.cin);
-            se.datecout = new Date(se.cout);
+            se.datecin = this.gf.getCinIsoDate(new Date(se.cin));
+            se.datecout = this.gf.getCinIsoDate(new Date(se.cout));
             se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
             se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
             se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
@@ -912,14 +912,14 @@ export class FlightchangeinfoPage implements OnInit {
 
     reloadInfo(){
         if(this._flightService.objSearch.departDate){
-            this.cin = this._flightService.objSearch.departDate;
+            this.cin = this.gf.getCinIsoDate(this._flightService.objSearch.departDate);
         }else{
-            this.cin = new Date();
+            this.cin = this.gf.getCinIsoDate(new Date());
         }
         if(this._flightService.objSearch.returnDate){
             this.cout = this._flightService.objSearch.returnDate;
         }else{
-            this.cout = moment(new Date()).add(1,'days');
+            this.cout = moment(this.gf.getCinIsoDate(new Date())).add(1,'days');
         }
         if(this._flightService.itemFlightCache.adult){
             this.adult = this._flightService.itemFlightCache.adult;
@@ -1068,7 +1068,7 @@ export class FlightchangeinfoPage implements OnInit {
             let objtextmonth = elementMonth.children[0].textContent.replace('Tháng ','');
             let monthstartdate:any = objtextmonth.trim().split(" ")[0];
             let yearstartdate:any = objtextmonth.trim().split(" ")[1];
-            let textmonth = moment(new Date(yearstartdate, monthstartdate - 1, 1)).format('YYYY-MM');
+            let textmonth = moment(this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, 1))).format('YYYY-MM');
             
             if(objtextmonth && objtextmonth.length >0){
               let listdepartinmonth = departs.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
@@ -1086,7 +1086,7 @@ export class FlightchangeinfoPage implements OnInit {
                     if(elementday && elementday.textContent){
                       //let fday:any = elementday.textContent;
                       let fday:any = elementday.children[0].children[0].textContent;
-                      let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
+                      let fromdate = moment(this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday))).format('YYYY-MM-DD');
                       let todate = moment(fromdate).add(diffday ,'days').format('YYYY-MM-DD');
                       if(fromdate){
                           if(type ==1){

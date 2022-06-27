@@ -45,7 +45,7 @@ export class OrderRequestSupportPage implements OnInit {
             this.allowBuyMoreLuggage = this.activityService.objPaymentMytrip.trip.bookingsComboData[0].issueTicketDate && this.activityService.objPaymentMytrip.trip.approve_date;
           }
           if(this.allowBuyMoreLuggage){
-            this.allowBuyMoreLuggage = this.activityService.objPaymentMytrip.trip.booking_type != 'CB_FLY_HOTEL';
+            this.allowBuyMoreLuggage = this.activityService.objPaymentMytrip.trip.booking_type != 'CB_FLY_HOTEL' && this.activityService.objPaymentMytrip.trip.hotel_name.indexOf('VMB QT') == -1 ;
             if(this.allowBuyMoreLuggage){
               //check các rule khác
               this.allowBuyMoreLuggage = this.checkBeforeAddLuggage();

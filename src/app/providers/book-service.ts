@@ -30,6 +30,11 @@ export class Booking {
      //thời gian check in/out
      CheckinTime:string;
      CheckoutTime:string;
+  OriginalRoomClass: any;
+  HotelLink: any;
+  Avatar: any;
+  RegionId: any;
+  Address: any;
 }
 export class RoomInfo {
     Address: string;
@@ -87,6 +92,7 @@ export class RoomInfo {
     bookingCode:string;
     PeriodPaymentDate:string;
     ExcludeVAT:any;
+  RoomClass: any;
 }
 export class ValueGlobal {
     checksendcb:boolean;
@@ -409,6 +415,7 @@ export class Bookcombo {
        itemFlightLuggagePriceChange = new EventEmitter(); 
        upgradeRoomChange = new EventEmitter();
   ischeckShowupgrade: boolean;
+  mealTypeRates: any;
 }
 export class childAge {
     numage: string;

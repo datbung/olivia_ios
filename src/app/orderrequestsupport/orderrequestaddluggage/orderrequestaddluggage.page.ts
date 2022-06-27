@@ -195,7 +195,7 @@ export class OrderRequestAddluggagePage implements OnInit {
   mapPassenger(airlineCode, type){
     if(type == 1){
       this.listPass.forEach((p) => {
-        let itemmap = this.departPass.filter((f) => {return f.lastName.toLowerCase().trim() + " " + f.firstName.replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','').toLowerCase().trim() == p.name.toLowerCase().trim() });
+        let itemmap = this.departPass.filter((f) => {return this.gf.convertFontVNI(f.lastName.toLowerCase().trim()) + " " + this.gf.convertFontVNI(this.gf.removeString(f.firstName)) == this.gf.convertFontVNI(p.name.toLowerCase().trim()) });
         if(itemmap && itemmap.length >0){
           if(airlineCode == 'BB' || airlineCode == 'VJ'){
             p.lastName = itemmap[0].lastName;
@@ -219,7 +219,7 @@ export class OrderRequestAddluggagePage implements OnInit {
       });
     }else{
       this.listPassReturn.forEach((p) => {
-        let itemmap = this.returnPass.filter((f) => {return f.lastName.toLowerCase().trim() + " " + f.firstName.replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','').toLowerCase().trim() == p.name.toLowerCase().trim() });
+        let itemmap = this.returnPass.filter((f) => {return this.gf.convertFontVNI(f.lastName.toLowerCase().trim()) + " " + this.gf.convertFontVNI(this.gf.removeString(f.firstName)) == this.gf.convertFontVNI(p.name.toLowerCase().trim()) });
         if(itemmap && itemmap.length >0){
           if(airlineCode == 'BB'|| airlineCode == 'VJ'){
             p.lastName = itemmap[0].lastName;
@@ -311,7 +311,7 @@ export class OrderRequestAddluggagePage implements OnInit {
       obj.startDate = moment(this.activityService.objPaymentMytrip.trip.checkInDate).format('YYYY-MM-DD')+'T'+itemd.departureTime+':00';
       obj.items = [];
       this.listPass.forEach((p) => {
-        if(p.departLuggage){
+        if(p.departLuggage && p.firstName && p.lastName){
           obj.items.push({
             "nameId": p.paxid,
             "firstName": p.firstName,
@@ -335,7 +335,7 @@ export class OrderRequestAddluggagePage implements OnInit {
       objreturn.startDate = moment(this.activityService.objPaymentMytrip.trip.checkOutDate).format('YYYY-MM-DD')+'T'+itemr.departureTime+':00';
       objreturn.items = [];
       this.listPassReturn.forEach((p) => {
-        if(p.returnLuggage){
+        if(p.returnLuggage && p.firstName && p.lastName){
           objreturn.items.push({
             "nameId": p.paxid,
             "firstName": p.firstName,

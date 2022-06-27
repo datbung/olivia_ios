@@ -50,30 +50,75 @@ export class FlightcombolivePage implements OnInit {
     };
     request(options, function (error, response) { 
       if (error) throw new Error(error);
-      se.gf.holdflight(se.bookCombo.FlightCode, se.bookCombo.iddepart, se.bookCombo.idreturn).then(datafly => {
-        se.gf.createTransactionCombo(se.bookCombo.bookingcode, se.bookCombo.FlightCode, datafly.depcode, datafly.retcode).then(data => {
-          if (data) {
-            if (se.loader) {
-              se.loader.dismiss();
+      if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+        //Check allotment trước khi book
+        se.gf.checkAllotmentSeri(
+          se.booking.HotelId,
+          se.bookCombo.mealTypeRates.RoomId,
+          se.booking.CheckInDate,
+          se.booking.CheckOutDate,
+          se.bookCombo.mealTypeRates.TotalRoom,
+          'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+          ).then((allow)=> {
+            if(allow){
+              se.gf.holdflight(se.bookCombo.FlightCode, se.bookCombo.iddepart, se.bookCombo.idreturn).then(datafly => {
+                se.gf.createTransactionCombo(se.bookCombo.bookingcode, se.bookCombo.FlightCode, datafly.depcode, datafly.retcode).then(data => {
+                  if (data) {
+                    if (se.loader) {
+                      se.loader.dismiss();
+                    }
+                    if(se.jti){
+                      var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
+                      se.gf.CreatePayoo(url);
+                    }
+                    
+                    se.gf.createFlightTransactionCombo(se.bookCombo.FlightCode);
+                    if(se.Roomif.payment=='AL' && datafly.depcode && datafly.retcode){
+                      se.navCtrl.navigateForward('/flightcombopaymentdone/AL');
+                    }
+                    else{
+                      se.navCtrl.navigateForward('/flightcombopaymentdone/RQ');
+                    }
+                 
+                  } else {
+                    alert('Gặp sự cố, vui lòng thử lại')
+                  }
+                })
+              })
+            }else{
+              if (se.loader) {
+                se.loader.dismiss();
+              }
+              se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
             }
-            if(se.jti){
-              var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
-              se.gf.CreatePayoo(url);
-            }
-            
-            se.gf.createFlightTransactionCombo(se.bookCombo.FlightCode);
-            if(se.Roomif.payment=='AL' && datafly.depcode && datafly.retcode){
-              se.navCtrl.navigateForward('/flightcombopaymentdone/AL');
-            }
-            else{
-              se.navCtrl.navigateForward('/flightcombopaymentdone/RQ');
-            }
-         
-          } else {
-            alert('Gặp sự cố, vui lòng thử lại')
+          })
+          }else{
+            se.gf.holdflight(se.bookCombo.FlightCode, se.bookCombo.iddepart, se.bookCombo.idreturn).then(datafly => {
+              se.gf.createTransactionCombo(se.bookCombo.bookingcode, se.bookCombo.FlightCode, datafly.depcode, datafly.retcode).then(data => {
+                if (data) {
+                  if (se.loader) {
+                    se.loader.dismiss();
+                  }
+                  if(se.jti){
+                    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
+                    se.gf.CreatePayoo(url);
+                  }
+                  
+                  se.gf.createFlightTransactionCombo(se.bookCombo.FlightCode);
+                  if(se.Roomif.payment=='AL' && datafly.depcode && datafly.retcode){
+                    se.navCtrl.navigateForward('/flightcombopaymentdone/AL');
+                  }
+                  else{
+                    se.navCtrl.navigateForward('/flightcombopaymentdone/RQ');
+                  }
+               
+                } else {
+                  alert('Gặp sự cố, vui lòng thử lại')
+                }
+              })
+            })
           }
-        })
-      })
+        
     });
    
 

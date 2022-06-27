@@ -85,6 +85,13 @@ export class HotelListPage implements OnInit{
 
   public async ngOnInit(){
     var se = this;
+    await se.onEnter();
+    se.subscription = se.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd && (event.url ==='searchhotelfilterandsort' || event.url ==='searchhotelfilterandsort' || event.url ==='searchhotelfilteragain' || event.url ==='/hotellist/true' || event.url === '/app/tabs/hotellist/true') ) {
+            se.onEnter();
+        }
+      });
+
      se.searchhotel.changeInfoHotelList.pipe().subscribe((data)=>{
        if(data){
         var item: any ={};
@@ -1035,18 +1042,18 @@ export class HotelListPage implements OnInit{
   }
   async ionViewDidEnter() {
     var se = this;
-    await se.onEnter();
+    // await se.onEnter();
 
-    se.subscription = se.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd && (event.url ==='searchhotelfilterandsort' || event.url ==='searchhotelfilteragain' || event.url ==='/hotellist/true' || event.url === '/app/tabs/hotellist/true') ) {
-            se.onEnter();
-            setTimeout(() => {
-              se.onEnter();
-            },500);
-        }else if(event instanceof NavigationEnd && event.url ==='/hotellist/false'){
-          se.loadUserDataLike();
-        }
-      });
+    // se.subscription = se.router.events.subscribe((event) => {
+    //     if (event instanceof NavigationEnd && (event.url ==='searchhotelfilterandsort' || event.url ==='searchhotelfilteragain' || event.url ==='/hotellist/true' || event.url === '/app/tabs/hotellist/true') ) {
+    //         se.onEnter();
+    //         setTimeout(() => {
+    //           se.onEnter();
+    //         },500);
+    //     }else if(event instanceof NavigationEnd && event.url ==='/hotellist/false'){
+    //       se.loadUserDataLike();
+    //     }
+    //   });
       //se.onEnter();
     }
 
@@ -1203,7 +1210,7 @@ export class HotelListPage implements OnInit{
    * PDANH  29/01/2018
    */
   goToLogin() {
-    this.valueGlobal.logingoback = "/hotellist/false";
+    this.valueGlobal.logingoback = "/hotellist/true";
     this.navCtrl.navigateForward('/login');
   }
   /*** Set like item

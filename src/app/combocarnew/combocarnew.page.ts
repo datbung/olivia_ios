@@ -409,6 +409,7 @@ export class CombocarnewPage implements OnInit {
               se.TravPaxPrices = element.MealTypeRates[0].PriceAvgPlusNet * se.roomnumber * se.TotalNight;
               se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
               se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
+              se.bookCombo.mealTypeRates = se.elementMealtype;
               se.calculateDiffPriceUnit();
               se.getTransferData(true);
               se.getBOD(element.MealTypeRates[0].RoomId);
@@ -719,6 +720,28 @@ export class CombocarnewPage implements OnInit {
     return coutthu;
   }
   next() {
+    if(this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal){
+      //Check allotment trước khi book
+      this.gf.checkAllotmentSeri(
+        this.booking.HotelId,
+        this.elementMealtype.RoomId,
+        this.booking.CheckInDate,
+        this.booking.CheckOutDate,
+        this.roomnumber,
+        'SERI', this.elementMealtype.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            this.continueBook();
+          }else{
+            this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      this.continueBook();
+    }
+  }
+
+  continueBook(){
     var self = this;
     //this.presentLoading();
     if (this.point > 0) {
@@ -937,7 +960,8 @@ export class CombocarnewPage implements OnInit {
             promotionCode: self.promocode,
             SupplierName: self.elementMealtype.Supplier,
             HotelCheckDetailTokenVinHms: self.elementMealtype.HotelCheckDetailTokenVinHms ? self.elementMealtype.HotelCheckDetailTokenVinHms : "",
-            HotelCheckPriceTokenSMD: self.elementMealtype.HotelCheckPriceTokenSMD ? self.elementMealtype.HotelCheckPriceTokenSMD : ""
+            HotelCheckPriceTokenSMD: self.elementMealtype.HotelCheckPriceTokenSMD ? self.elementMealtype.HotelCheckPriceTokenSMD : "",
+            HotelCheckDetailTokenInternal: self.elementMealtype.Supplier == 'SERI' && self.elementMealtype.HotelCheckDetailTokenInternal ? self.elementMealtype.HotelCheckDetailTokenInternal : "",
           },
         }
         self.bookCombo.totalAdult = self.totalAdult;

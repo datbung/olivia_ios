@@ -3044,6 +3044,7 @@ export class FlightaddservicePage implements OnInit {
                   PromotionNote: mealtype.PromotionNote,
                   HotelCheckDetailTokenVinHms: mealtype.HotelCheckDetailTokenVinHms,
                   HotelCheckPriceTokenSMD: mealtype.HotelCheckPriceTokenSMD,
+                  HotelCheckDetailTokenInternal: mealtype.Supplier == 'SERI' && mealtype.HotelCheckDetailTokenInternal ? mealtype.HotelCheckDetailTokenInternal : "",
                   Supplier: mealtype.IsHoliday ? "Holiday" : mealtype.Supplier,
                   AllomentBreak: mealtype.AllomentBreak,
                   IsPromotionAllotment: mealtype.IsPromotionAllotment,

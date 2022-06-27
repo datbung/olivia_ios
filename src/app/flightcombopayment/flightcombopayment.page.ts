@@ -151,6 +151,32 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   }
   postapibook(paymentType) {
     var se = this;
+    if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+      //Check allotment trÆ°á»›c khi book
+      se.gf.checkAllotmentSeri(
+        se.booking.HotelId,
+        se.bookCombo.mealTypeRates.RoomId,
+        se.booking.CheckInDate,
+        se.booking.CheckOutDate,
+        se.bookCombo.mealTypeRates.TotalRoom,
+        'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            se.continueBook(paymentType);
+          }else{
+            if (se.loader) {
+              se.loader.dismiss();
+            }
+            se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      se.continueBook(paymentType);
+    }
+  }
+
+  continueBook(paymentType){
+    var se = this;
     se.presentLoading();
     this.gf.CheckPaymentDate(this.bookCombo.bookingcode).then(data => {
       var paymentMethod = se.gf.funcpaymentMethod(paymentType);

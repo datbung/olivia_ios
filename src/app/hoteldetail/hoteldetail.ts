@@ -43,6 +43,7 @@ import { ImageLoaderConfigService } from 'ionic-image-loader';
 import { MytripService } from '../providers/mytrip-service.service';
 import { flightService } from '../providers/flightService';
 import { resolve } from 'dns';
+import { RequestRoomPage } from '../requestroom/requestroom';
 
 @Component({
   selector: 'app-hoteldetail',
@@ -215,6 +216,8 @@ export class HotelDetailPage implements OnInit {
   isLoadingData = false;
   isLoadingPrice: boolean;
   textMSG: any;
+  isShowPrice: boolean = true;
+  isShowPriceHotel: boolean;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -364,6 +367,7 @@ export class HotelDetailPage implements OnInit {
         }
 
         se.splashScreen.hide();
+        se.loadUserInfo();
       }
 
   loaddata(isResume){
@@ -1066,6 +1070,7 @@ export class HotelDetailPage implements OnInit {
       }
           se.hotelcode = jsondata.Code;
           se.ChildAgeTo = jsondata.ChildAgeTo;
+          se.isShowPriceHotel = (jsondata.IsShowPrice ==2 || jsondata.IsShowPrice ==0) ? false : true;//=2 ks luôn ẩn giá
           if(jsondata.Combos)
           {
             se.valueGlobal.titlecombo=jsondata.Combos.MiniTitle
@@ -1091,6 +1096,12 @@ export class HotelDetailPage implements OnInit {
           se.bookCombo.Hotelid = se.HotelID;
           se.booking.CheckinTime = jsondata.CheckinTime;
           se.booking.CheckoutTime = jsondata.CheckoutTime;
+
+          se.booking.HotelLink = se.hotelurl;
+          se.booking.Avatar = se.hotelAvatar;
+          se.booking.RegionId = se.regionId;
+          se.booking.Address = jsondata.Address;
+
           se.id1 = { id: se.HotelID };
           if(!isloaddata){
             if (jsondata.HotelImages.length > 0 && (!se.slideData || se.slideData.length ==0) ) {
@@ -1363,7 +1374,8 @@ export class HotelDetailPage implements OnInit {
           IsFenced: se.loginuser ? true : false,
           GetVinHms: 1,
           GetSMD: 1,
-          IsB2B: true
+          IsB2B: true,
+          IsSeri: true
         };
         if (se.searchhotel.arrchild) {
           for (var i = 0; i < se.searchhotel.arrchild.length; i++) {
@@ -1902,7 +1914,8 @@ async getdataroom() {
     IsFenced: self.loginuser ? true : false,
     GetVinHms: 1,
     GetSMD: 1,
-    IsB2B: true
+    IsB2B: true,
+    IsSeri: true
   };
   if (self.searchhotel.arrchild) {
     self.arrchild1 = [];
@@ -1982,6 +1995,7 @@ excuteLoadHotelRoom(data){
         else {
           self.ischeckwarn = false;
         }
+        se.booking.OriginalRoomClass = result.Hotels[0].RoomClasses;
         result.Hotels[0].RoomClasses.forEach((element, index) => {
           var groupMealType = 0;
           var indexMealTypeHidden = 0;
@@ -2395,7 +2409,7 @@ excuteLoadHotelRoom(data){
       var objmap;
       roomClass.forEach((el) => {
          objmap = el.MealTypeRates.filter((Meal) => {
-          return Meal.RoomId == roomId && Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL'|| Meal.Supplier == 'B2B'|| Meal.Supplier == 'SMD') && Meal.PromotionNote != '';
+          return Meal.RoomId == roomId && Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL' || Meal.Supplier == 'VINPEARL' || Meal.Supplier == 'B2B'|| Meal.Supplier == 'SMD') && Meal.PromotionNote != '';
         })
         // if (objmap && objmap.length > 0) {
         //   this.objroomfsale=objmap;
@@ -2645,6 +2659,26 @@ excuteLoadHotelRoom(data){
           self.Roomif.roomcancelhbed=0;
           self.Roomif.ischeckpayment=true;
             self.navCtrl.navigateForward('/roomdetailreview')
+        }
+        else if(MealTypeRates.Supplier == 'SERI') {
+          //Check allotment trước khi book
+          self.gf.checkAllotmentSeri(
+          self.booking.HotelId,
+          self.Roomif.RoomId,
+          self.booking.CheckInDate,
+          self.booking.CheckOutDate,
+          self.Roomif.roomnumber,
+          'SERI', self.Roomif.roomtype.HotelCheckDetailTokenInternal
+          ).then((allow)=> {
+            if(allow){
+              self.Roomif.payment = "AL";
+              self.Roomif.roomcancelhbed = 0;
+              self.Roomif.ischeckpayment = true;
+              self.navCtrl.navigateForward('/roomdetailreview');
+            }else{
+              self.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+            }
+          })
         }
         else if(MealTypeRates.Supplier == 'B2B'){
           self.Roomif.payment = "RQ";
@@ -3258,8 +3292,10 @@ async bookcombo() {
             var se = this;
                 se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
                 se.searchhotel.CheckOutDate = moment(todate).format('YYYY-MM-DD');
-                se.bookCombo.CheckInDate = se.searchhotel.CheckInDate
-                se.bookCombo.CheckOutDate = se.searchhotel.CheckOutDate
+                se.bookCombo.CheckInDate = se.searchhotel.CheckInDate;
+                se.bookCombo.CheckOutDate = se.searchhotel.CheckOutDate;
+                se.booking.CheckInDate = se.searchhotel.CheckInDate;
+                se.booking.CheckOutDate = se.searchhotel.CheckOutDate;
                 se.zone.run(()=>{
                   if(se.searchhotel.CheckInDate && se.searchhotel.CheckOutDate){
                     se.cin = se.searchhotel.CheckInDate;
@@ -4673,4 +4709,252 @@ async bookcombo() {
       this.bookCombo.ischeckShowupgrade=true;
     }
   }
+
+  /**
+   * Load thông tin user
+   */
+   loadUserInfo() {
+    var se = this;
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        var text = "Bearer " + auth_token;
+        var options = {
+          method: 'GET',
+          url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetUserInfo',
+          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+          headers:
+          {
+            'cache-control': 'no-cache',
+            'content-type': 'application/json',
+            authorization: text
+          }
+        };
+        request(options, function (error, response, body) {
+          if (error) {
+            error.page = "userprofile";
+            error.func = "loadUserInfo";
+            error.param = JSON.stringify(options);
+            C.writeErrorLog(error, response);
+          } 
+          else if (response.statusCode == 401) {
+            se.storage.get('jti').then((memberid) => {
+              se.storage.get('deviceToken').then((devicetoken) => {
+                se.gf.refreshToken(memberid, devicetoken).then((token) =>{
+                  setTimeout(()=>{
+                    se.loadUserInfoRefresh(token);
+                  },100)
+                });
+
+              })
+            })
+          }
+          else {
+            if (body) {
+              var data = JSON.parse(body);
+              se.zone.run(() => {
+                se.isShowPrice = data.showPrice;
+                se.storage.set('userInfoData', data);
+              })
+            }
+          }
+        });
+      }else{
+        se.zone.run(()=>{
+          se.loginuser = null;
+        })
+      }
+    })
+  }
+
+  loadUserInfoRefresh(token) {
+    var se = this;
+        if (token) {
+            var text = "Bearer " + token;
+            var options = {
+                method: 'GET',
+                url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetUserInfo',
+                timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+                headers:
+                {
+                    'cache-control': 'no-cache',
+                    'content-type': 'application/json',
+                    authorization: text
+                }
+            };
+            request(options, function (error, response, body) {
+                if (response.statusCode != 200) {
+                    var objError = {
+                        page: "userprofile",
+                        func: "loadUserInfo",
+                        message: response.statusMessage,
+                        content: response.body,
+                        type: "warning",
+                        param: JSON.stringify(options)
+                    };
+                    C.writeErrorLog(objError,response);
+                }
+                if (error) {
+                    error.page = "userprofile";
+                    error.func = "loadUserInfo";
+                    error.param = JSON.stringify(options);
+                    C.writeErrorLog(error,response);
+                } 
+                else {
+                    if (body) {
+                        var data = JSON.parse(body);
+                        se.storage.remove('userInfoData').then(()=>{
+                          se.storage.set('userInfoData', data);
+                        });
+                    }
+                }
+            });
+        } 
+}
+/*** Xử lý gửi yêu cầu
+   * PDANH  18/06/2022
+   */
+ async requestRoom(id, MealTypeRates, indexme, roomName, RoomType, roomClass) {
+  var se = this;
+  if(MealTypeRates.MSG) {
+    se.gf.showToastWarning(MealTypeRates.MSG);
+    return;
+  }
+  se.valueGlobal.notRefreshDetail = true;
+  //Lấy số phòng theo số room từ api trả về
+  se.roomvalue = MealTypeRates.TotalRoom;
+  se.arrroom = [];
+  for (let i = 0; i < se.hotelRoomClasses.length; i++) {
+    if (id == se.hotelRoomClasses[i].Rooms[0].RoomID && MealTypeRates.TotalRoom == se.hotelRoomClasses[i].TotalRoom) {
+      se.arrroom.push(se.hotelRoomClasses[i]);
+      se.indexroom = i;
+      break;
+    }
+  }
+  
+  var date1 = new Date(se.cin);
+  var date2 = new Date(se.cout);
+  var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+  se.duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  se.booking.CheckInDate = se.cin;
+  se.booking.CheckOutDate = se.cout,
+    se.booking.roomNb = se.room,
+    se.booking.Adults = se.adults,
+    se.booking.Child = se.child,
+    se.booking.CName = '',
+    se.booking.CEmail = se.usermail,
+    se.booking.cost = MealTypeRates.PriceAvgPlusTAStr,
+    se.booking.indexroom = se.indexroom,
+    se.booking.indexmealtype = indexme,
+    se.booking.HotelId = se.HotelID,
+    se.Roomif.RoomId = id,
+    se.booking.HotelName = se.name,
+    se.booking.RoomName = roomName,
+    se.Roomif.Address = se.Address,
+    se.Roomif.dur = se.duration,
+    se.Roomif.arrroom = se.arrroom,
+    se.Roomif.roomnumber = MealTypeRates.TotalRoom,
+    se.Roomif.roomtype = MealTypeRates,
+    se.Roomif.jsonroom = se.jsonroom2.Hotels[0],
+    se.Roomif.imgHotel = se.imgHotel;
+    se.Roomif.objMealType = MealTypeRates;
+    se.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(se.arrroom[0].HotelRoomHBedReservationRequest);
+    se.Roomif.arrrbed = [];
+    se.Roomif.imgRoom = se.arrroom[0].Rooms[0].ImagesMaxWidth320;
+    se.Roomif.RoomClass = roomClass;
+    se.searchhotel.adult = se.adults;
+    se.searchhotel.child = se.child;
+    se.searchhotel.roomnumber = se.room;
+    se.searchhotel.CheckInDate = se.cin;
+    se.searchhotel.CheckOutDate = se.cout;
+    se.booking.code = se.hotelcode;
+    se.bookCombo.ComboId = null;
+    se.bookCombo.ComboTitle = "";
+    se.Roomif.textcancel = "";
+    se.Roomif.ExcludeVAT = se.ExcludeVAT;
+    se.bookCombo.ischeckShowupgrade=false;
+
+    if (!this.ischeckBOD) {
+      const modal: HTMLIonModalElement =
+        await this.modalCtrl.create({
+          component: RequestRoomPage
+        });
+      modal.present();
+
+      modal.onDidDismiss().then((data: OverlayEventDetail) => {
+        var se = this;
+       
+            //this.getDetailCombo(null);
+            se.cin = se.searchhotel.CheckInDate;
+            se.cout = se.searchhotel.CheckOutDate;
+            se.datecin = new Date(se.searchhotel.CheckInDate);
+            se.datecout = new Date(se.searchhotel.CheckOutDate);
+            se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
+            se.coutdisplay = moment(se.datecout).format('DD-MM-YYYY');
+            se.cindisplayhr = moment(se.datecin).format('DD/MM');
+            se.coutdisplayhr = moment(se.datecout).format('DD/MM');
+            if (se.searchhotel.child) {
+              se.child = se.searchhotel.child;
+            }
+            se.changedate = true;
+            se.hasComboRoom = false;
+            se.comboprice = se.combopriceontitle;
+            se.showpopup = true;
+            se.ischeck = true;
+            se.loadcomplete = false;
+            se.hotelRoomClasses = [];
+            se.hotelRoomClassesFS = [];
+            se.emptyroom = false;
+            se.guest = se.searchhotel.adult + se.searchhotel.child;
+            se.room = se.searchhotel.roomnumber ? se.searchhotel.roomnumber : se.room;
+            se.child = se.searchhotel.child;
+            se.adults = se.searchhotel.adult;
+            if (se.searchhotel.CheckInDate) {
+              var date1 = new Date(se.searchhotel.CheckInDate);
+              var date2 = new Date(se.searchhotel.CheckOutDate);
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              se.duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            }
+            //se.scrollToTopwithvalue1();
+            if (se.comboid) {
+              se.getDetailCombo(se.comboid);
+            }
+            //se.getdataroom();
+            se.checkPriceHotelDetail().then((check) => {
+              if (check) {
+                se.getdataroom();
+              } else {
+                se.hotelRoomClasses = [];
+                se.hotelRoomClassesFS = [];
+                se.emptyroom = true;
+                se.ischeckoutofroom = false;
+                se.loadcomplete = true;
+                se.loadpricecombodone = true;
+                se.loaddonecombo = true;
+                se.ischeck = true;
+                se.allowbookcombofc = false;
+                se.allowbookcombofx = false;
+              }
+            });
+          })
+        } else {
+          if (se.searchhotel.adult) {
+            se.guest = se.searchhotel.adult + se.searchhotel.child;
+            se.adults = se.searchhotel.adult;
+          }
+
+          if (se.searchhotel.roomnumber) {
+            se.room = se.searchhotel.roomnumber;
+          }
+
+          if (se.searchhotel.CheckInDate) {
+            se.loadcomplete = true;
+            var date1 = new Date(se.searchhotel.CheckInDate);
+            var date2 = new Date(se.searchhotel.CheckOutDate);
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            se.duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          }
+       
+    }
+ }
 }

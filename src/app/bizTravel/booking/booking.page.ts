@@ -267,14 +267,12 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
             if (se.networkProvider.isOnline()) {
               se.getdata(null, false);
               se.getdata(null, true);
-              se.loadOrder();
             }
             else{
               se.isConnected = false;
               se.storage.get('listmytrips').then(data => {
                 if (data) {
                   se.loadMytrip(data, false);
-                  se.loadOrder();
                 }
               })
             }
@@ -311,7 +309,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
           setTimeout(()=>{
             se.getdata(null, true);
           },1000)
-          se.loadOrder();
           if (se.activityService.insurranceBookingId) {
             se.refreshInsurranceInfo();
           }
@@ -546,7 +543,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
                     se.gf.refreshToken(memberid, devicetoken).then((token) => {
                       setTimeout(() => {
                         se.getdatanewtoken(token, ishistory);
-                        se.loadOrder();
                       }, 100)
                     });
     
@@ -2048,25 +2044,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
        
         
         se.hideloader();
-        
-        if(!ishistory){
-          se.storage.get('jti').then((uid: any) => {
-            if(uid){
-                se.memberid = uid;
-                se.gf.getCurrentPeriod().then(data => {
-                    if(data){
-                      se.listWeek.push({ id: 1, weekname: "Tuần " + moment(data.periodStartDate).format("DD.MM") + " - " + moment(data.periodEndDate).format("DD.MM"), startDate: data.periodStartDate, endDate: data.periodEndDate });
-                      se.listWeek.push({ id: 2, weekname: "Tuần " + moment(data.periodStartDateNextWeek).format("DD.MM") + " - " + moment(data.periodEndDateNextWeek).format("DD.MM"), startDate: data.periodStartDateNextWeek, endDate: data.periodEndDateNextWeek });
-                      
-                      se.loadOrder();
-                    }
-                })
-            }else{
-                se.mylistOrders = [];
-            }
-          })
-        }
-        
       }
     
       checkishistorytrip() {
@@ -2777,7 +2754,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         if (document.querySelector(".tabbar")) {
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
-        this.loadOrder();
         this.loadUserReviews();
       }
 
@@ -2787,7 +2763,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
 
-        this.loadOrder();
         this.loadUserReviews();
       }
     
@@ -3934,14 +3909,12 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         se.storage.get('auth_token').then(auth_token => {
           se.loginuser = auth_token;
         });
-        se.loadOrder();
       }
     
       refreshData() {
         var se = this;
         se.presentLoadingData();
         se.getdata(null, false);
-        se.loadOrder();
       }
     
       showPolicy(trip) {
@@ -4151,77 +4124,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         }
       }
     
-      loadOrder(){
-        var se = this;
-        if(!se.isConnected){
-          return;
-        }
-            var options = {
-                method: 'GET',
-                url: C.urls.baseUrl.urlFood + "/api/FOBooking/GetBookingByMember?memberid="+ se.memberid,
-                timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-                headers:
-                {
-                  token: "584f470f-7a45-4793-a136-0084fadea81c",
-                }
-              };
-              request(options, function (error, response, body) {
-                if(body){
-                    var result = JSON.parse(body);
-                    if(result.response){
-                      se.loadReviewMember();
-                     
-                        se.mylistOrders = result.response;
-                        if(se.mylistOrders && se.mylistOrders.length >0){
-                            
-                            se.executeBindDetailOrder(se.mylistOrders).then(()=>{
-                                
-                                se.zone.run(() => se.mylistOrders.sort(function (a, b) {
-                                  let fcount = se.mylistOrders.filter((o) => o.isActive).length;
-                                    let itemf = se.mylistOrders.filter((o) => o.isActive);
-                                    if(itemf.length ==1){
-                                      se.showOnlyOne = itemf[0].detailBooking.length ==1 ? true : false;
-                                    }else{
-                                      se.showOnlyOne = false;
-                                    }
-                                    se.foodtextorder = fcount > 0 ? (' ('+fcount+') ') : '';
-                                    if(se.showOnlyOne == 1){
-                                      let item = se.mylistOrders.filter((o) => o.isActive);
-                                      se.getFoodDetail(item[0]);
-                                    }
-                                    let direction = -1;
-                                    if (moment(a["bookingDate"]).diff(moment(b["bookingDate"]),'minutes') >0) {
-                                        return 1 * direction;
-                                      }
-                                      else {
-                                        return -1 * direction;
-                                      }
-                                    })
-                                )
-                                setTimeout(()=>{
-                                    se.loaddatadone = true;
-                                    se._mytripservice.mylistOrders = se.mylistOrders;
-                                },100)
-                               
-                            })
-                            
-                            
-                        }else{
-                            se.mylistOrders = [];
-                            se.loaddatadone = true;
-                            se.foodtextorder = "";
-                        }
-                    }else{
-                      se.zone.run(()=>{
-                        se.mylistOrders = [];
-                        se.loaddatadone = true;
-                      })
-                     
-                  }
-                }
-              })
-        
-    }
     
     executeBindDetailOrder(listorder):Promise<any>{
         var se = this;
