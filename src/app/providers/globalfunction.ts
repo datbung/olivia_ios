@@ -1089,6 +1089,25 @@ async showAlertMessage(msg,title){
 });
 alert.present();
 }
+async showAlertMessageOnly(msg){
+  var se = this;
+  let alert = await this.alertCtrl.create({
+    header: '',
+    message: msg,
+    cssClass: "cls-alert-message",
+    backdropDismiss: false,
+    buttons: [
+    {
+      text: 'OK',
+      role: 'OK',
+      handler: () => {
+        alert.dismiss();
+      }
+    }
+  ]
+});
+alert.present();
+}
 
   public getNetworkStatus() {
     return this.isOnline;
@@ -1351,6 +1370,92 @@ alert.present();
       
     return true;
   }
+
+  convertUnicodeCharactor(input) {
+    input = input.replace(/\à/g,'a').replace(/\À/g,'A');
+    input = input.replace(/\á/g,'a').replace(/\Á/g,'A');
+    input = input.replace(/\ạ/g,'a').replace(/\Ạ/g,'A');
+    input = input.replace(/\ả/g,'a').replace(/\Ả/g,'A');
+    input = input.replace(/\ã/g,'a').replace(/\Ã/g,'A');
+    input = input.replace(/\â/g,'a').replace(/\Â/g,'A');
+    input = input.replace(/\ầ/g,'a').replace(/\Ầ/g,'A');
+    input = input.replace(/\ấ/g,'a').replace(/\Ấ/g,'A');
+    input = input.replace(/\ậ/g,'a').replace(/\Ậ/g,'A');
+    input = input.replace(/\ẫ/g,'a').replace(/\Ẫ/g,'A');
+    input = input.replace(/\ẩ/g,'a').replace(/\Ẩ/g,'A');
+    input = input.replace(/\ă/g,'a').replace(/\Ă/g,'A');
+    input = input.replace(/\ắ/g,'a').replace(/\Ắ/g,'A');
+    input = input.replace(/\ằ/g,'a').replace(/\Ằ/g,'A');
+    input = input.replace(/\ặ/g,'a').replace(/\Ặ/g,'A');
+    input = input.replace(/\ẳ/g,'a').replace(/\Ẳ/g,'A');
+    input = input.replace(/\ẵ/g,'a').replace(/\Ẵ/g,'A');
+
+    input = input.replace(/\è/g,'e').replace(/\È/g,'E');
+    input = input.replace(/\é/g,'e').replace(/\É/g,'E');
+    input = input.replace(/\ẹ/g,'e').replace(/\Ẹ/g,'E');
+    input = input.replace(/\ẻ/g,'e').replace(/\Ẻ/g,'E');
+    input = input.replace(/\ẽ/g,'e').replace(/\Ẽ/g,'E');
+    input = input.replace(/\ê/g,'e').replace(/\Ê/g,'E');
+    input = input.replace(/\ề/g,'e').replace(/\Ề/g,'E');
+    input = input.replace(/\ế/g,'e').replace(/\Ế/g,'E');
+    input = input.replace(/\ệ/g,'e').replace(/\Ệ/g,'E');
+    input = input.replace(/\ể/g,'e').replace(/\Ể/g,'E');
+    input = input.replace(/\ễ/g,'e').replace(/\Ễ/g,'E');
+
+    input = input.replace(/\ì/g,'i').replace(/\Ì/g,'I');
+    input = input.replace(/\í/g,'i').replace(/\Í/g,'I');
+    input = input.replace(/\ị/g,'i').replace(/\Ị/g,'I');
+    input = input.replace(/\ỉ/g,'i').replace(/\Ỉ/g,'I');
+    input = input.replace(/\ĩ/g,'i').replace(/\Ĩ/g,'I');
+
+    input = input.replace(/\ò/g,'o').replace(/\Ò/g,'O');
+    input = input.replace(/\ó/g,'o').replace(/\Ó/g,'O');
+    input = input.replace(/\ọ/g,'o').replace(/\Ọ/g,'O');
+    input = input.replace(/\ỏ/g,'o').replace(/\Ỏ/g,'O');
+    input = input.replace(/\õ/g,'o').replace(/\Õ/g,'O');
+    input = input.replace(/\ô/g,'o').replace(/\Ô/g,'O');
+    input = input.replace(/\ồ/g,'o').replace(/\Ồ/g,'O');
+    input = input.replace(/\ố/g,'o').replace(/\Ố/g,'O');
+    input = input.replace(/\ộ/g,'o').replace(/\Ộ/g,'O');
+    input = input.replace(/\ổ/g,'o').replace(/\Ổ/g,'O');
+    input = input.replace(/\ỗ/g,'o').replace(/\Ỗ/g,'O');
+    input = input.replace(/\ơ/g,'o').replace(/\Ơ/g,'O');
+    input = input.replace(/\ờ/g,'o').replace(/\Ờ/g,'O');
+    input = input.replace(/\ớ/g,'o').replace(/\Ớ/g,'O');
+    input = input.replace(/\ợ/g,'o').replace(/\Ợ/g,'O');
+    input = input.replace(/\ở/g,'o').replace(/\Ở/g,'O');
+    input = input.replace(/\ỡ/g,'o').replace(/\Ỡ/g,'O');
+
+    input = input.replace(/\ù/g,'u').replace(/\Ù/g,'U');
+    input = input.replace(/\ú/g,'u').replace(/\Ú/g,'U');
+    input = input.replace(/\ụ/g,'u').replace(/\Ụ/g,'U');
+    input = input.replace(/\ủ/g,'u').replace(/\Ủ/g,'U');
+    input = input.replace(/\ũ/g,'u').replace(/\Ũ/g,'U');
+    input = input.replace(/\ư/g,'u').replace(/\Ư/g,'U');
+    input = input.replace(/\ừ/g,'u').replace(/\Ừ/g,'U');
+    input = input.replace(/\ứ/g,'u').replace(/\Ứ/g,'U');
+    input = input.replace(/\ự/g,'u').replace(/\Ự/g,'U');
+    input = input.replace(/\ử/g,'u').replace(/\Ử/g,'U');
+    input = input.replace(/\ữ/g,'u').replace(/\Ữ/g,'U');
+
+    input = input.replace(/\ỳ/g,'y').replace(/\Ỳ/g,'Y');
+    input = input.replace(/\ý/g,'y').replace(/\Ý/g,'Y');
+    input = input.replace(/\ỵ/g,'y').replace(/\Ỵ/g,'Y');
+    input = input.replace(/\ỷ/g,'y').replace(/\Ỷ/g,'Y');
+    input = input.replace(/\ỹ/g,'y').replace(/\Ỹ/g,'Y');
+
+    input = input.replace(/\đ/g,'d').replace(/\Đ/g,'D');
+    input = input.replace(/\u0300/g,'o');
+    input = input.replace(/\u0301/g,'o');
+    input = input.replace(/\u0303/g,'o');
+    input = input.replace(/\u0309/g,'o');
+    input = input.replace(/\u0323/g,'o');
+
+    input = input.replace(/\u02C6/g,'o');
+    input = input.replace(/\u0323/g,'o');
+    input = input.replace(/\u031B/g,'o');
+  return input;
+}
 
   async getMultipleFiles(filePaths: string[]): Promise<File[]> {
     // Get FileEntry array from the array of image paths

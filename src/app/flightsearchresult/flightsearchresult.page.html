@@ -6,13 +6,13 @@
             <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
         </div>
         <div class="div-header-title" *ngIf="step==2 else returntitle" (click)="showChangeInfo()">
-          <div class="div-title"><span class="cls-text-tealish">Chiều Đi</span> {{ title }}</div>
-          <div class="div-subtitle">{{ subtitle }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_2.svg"></span></div>
+          <div class="div-title">{{ title }}</div>
+          <div class="div-subtitle"><span class="cls-text-tealish">{{dayDisplay}}</span> {{ subtitle }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_orange.svg"></span></div>
         </div>
         <ng-template #returntitle>
           <div class="div-header-title" (click)="showChangeInfo()">
-            <div class="div-title"><span class="cls-text-tealish">Chiều Về</span> {{ titlereturn }}</div>
-            <div class="div-subtitle">{{ subtitlereturn }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_2.svg"></span></div>
+            <div class="div-title">{{ titlereturn }}</div>
+            <div class="div-subtitle"><span class="cls-text-tealish">{{dayReturnDisplay}}</span> {{ subtitlereturn }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_orange.svg"></span></div>
           </div>
         </ng-template>
         
@@ -82,7 +82,7 @@
           <div *ngIf="enableFlightFilter else nodepartFilter">
          
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listDepartFilter && listDepartFilter.length >0)">
-              <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Chọn chuyến bay đi</div>
+              <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Lựa chọn chuyến đi tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 div-width-150" >{{textsort}}</div>
               <div class="text-refresh m-top-4 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
             </div>
@@ -200,7 +200,7 @@
 
           <ng-template #nodepartFilter>
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listDepart && listDepart.length >0)">
-              <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Chọn chuyến bay đi</div>
+              <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Lựa chọn chuyến đi tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 div-width-150" >{{textsort}}</div>
               <div class="text-refresh m-top-4 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
             </div>
@@ -456,8 +456,8 @@
           </div>
 
           <div class="div-other-choice-title div-title-content p-bottom-8 p-top-32 d-flex" *ngIf="(otherpricedepart && otherpricedepart.length >0)">
-            <div class="">Các lựa chọn khác</div>
-            <div class="text-other-choice p-l-8">({{ otherpricedepart.length }} lựa chọn khác)</div>
+            <div class="">Các lựa chọn chuyến đi khác</div>
+            <!-- <div class="text-other-choice p-l-8">({{ otherpricedepart.length }} lựa chọn khác)</div> -->
           </div>
           <div class="div-other-choice" *ngIf="(otherpricedepart && otherpricedepart.length >0) else nodatabestpricedepartother">
             <div [ngClass]="dx == otherpricedepart.length-1? 'div-item-flight-other':'div-item-flight-other m-b-8'" *ngFor="let itemother of otherpricedepart; let idx = index">
@@ -556,22 +556,25 @@
       <!-- Chuyến về -->
     <ng-template #returnFlight>
       <div *ngIf="listReturnSeri.length == 0 else returnSeri">
-        <div class="div-depart-flight-choice d-flex">
-          <div class="div-icon-flight v-align-center">
+        <div class="div-depart-flight-choice">
+          <div class="div-border-choice d-flex">
+            <div class="div-icon-flight v-align-center">
               <img src="./assets/ic_flight/flight_cin.svg">
+            </div>
+            <div class="div-flight-info">
+                <div class="div-time-and-price">{{departFlight.timeDisplay}}   ·  {{departFlight.priceDisplay}}</div>
+                <div class="div-code">{{departFlight.airlineCode}}   ·  {{departFlight.from}} - {{departFlight.to}}</div>
+            </div>
+            <div class="div-text-change v-align-center" (click)="goback()">Thay đổi</div>
           </div>
-          <div class="div-flight-info">
-              <div class="div-time-and-price">{{departFlight.timeDisplay}}   ·  {{departFlight.priceDisplay}}</div>
-              <div class="div-code">{{departFlight.airlineCode}}   ·  {{departFlight.from}} - {{departFlight.to}}</div>
-          </div>
-          <div class="div-text-change v-align-center" (click)="goback()">Thay đổi</div>
+         
         </div>
         <div *ngIf="(sortairline && !buttoniVIVUSelected) else nosortreturn">
   
           <div *ngIf="enableFlightFilterReturn else noreturnFilter">
          
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturnFilter && listReturnFilter.length >0)">
-              <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Chọn chuyến bay về</div>
+              <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn chuyến về tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >{{textsort}}</div>
               <div class="text-refresh m-top-58 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
             </div>
@@ -689,7 +692,7 @@
   
           <ng-template #noreturnFilter>
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturn && listReturn.length >0)">
-              <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Chọn chuyến bay về</div>
+              <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn chuyến về tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >{{textsort}}</div>
               <div class="text-refresh m-top-58 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
             </div>
@@ -923,8 +926,8 @@
           </div>
   
           <div class="div-other-choice-title div-title-content p-bottom-8 p-top-32 d-flex" *ngIf="(otherpricereturn && otherpricereturn.length >0)">
-            <div class="">Các lựa chọn khác</div>
-            <div class="text-other-choice p-l-8">({{ otherpricereturn.length }} lựa chọn khác)</div>
+            <div class="">Các lựa chọn chuyến về khác</div>
+            <!-- <div class="text-other-choice p-l-8">({{ otherpricereturn.length }} lựa chọn khác)</div> -->
           </div>
           <div class="div-other-choice" *ngIf="(otherpricereturn && otherpricereturn.length >0) else nodataotherpricereturn">
             <div [ngClass]="dx == otherpricereturn.length-1? 'div-item-flight-other':'div-item-flight-other m-b-8'" *ngFor="let itemother of otherpricereturn; let idx = index">

@@ -151,10 +151,12 @@ export class FlightchangeinfoPage implements OnInit {
                 adult: se.adult,
                 child: se.child ? se.child : 0,
                 infant: se.infant ? se.infant : 0,
-                title: "Đi " + se.departCity +" - " + se.returnCity,
-                subtitle : se.cinthu + ", " +moment(se.cin).format("DD") + " thg " +moment(se.cin).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
-                titleReturn: "Về " + se.returnCity +" - " + se.departCity,
-                subtitleReturn : se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
+                title: "Đi " + se.departCity +" → " + se.returnCity,
+                dayDisplay: se.cinthu + ", " +moment(se.cin).format("DD") + " thg " +moment(se.cin).format("M"),
+                subtitle :  " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
+                titleReturn: "Về " + se.returnCity +" → " + se.departCity,
+                dayReturnDisplay: se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") ,
+                subtitleReturn : " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
                 // itemSameCity: se.itemSameCity,
                 // itemDepartSameCity: se.itemDepartSameCity,
                 // itemReturnSameCity: se.itemReturnSameCity,
@@ -188,8 +190,8 @@ export class FlightchangeinfoPage implements OnInit {
             se._flightService.itemFlightCache.departInfoDisplay = "Chiều đi" + " · " + se.cinthu + ", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
             se._flightService.itemFlightCache.returnInfoDisplay = "Chiều về" + " · " + se.coutthu + ", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
     
-            se._flightService.itemFlightCache.departPaymentTitleDisplay = se.cinthushort + ", " + moment(se.cin).format("DD-MM")+ " · " + se.departCode + " - " +se.returnCode+ " · ";
-            se._flightService.itemFlightCache.returnPaymentTitleDisplay = se.coutthushort + ", " + moment(se.cout).format("DD-MM")+ " · "+ se.returnCode + " - " +se.departCode+ " · ";
+            se._flightService.itemFlightCache.departPaymentTitleDisplay = se.cinthushort + ", " + moment(se.cin).format("DD-MM")+ " · " + se.departCode + " → " +se.returnCode+ " · ";
+            se._flightService.itemFlightCache.returnPaymentTitleDisplay = se.coutthushort + ", " + moment(se.cout).format("DD-MM")+ " · "+ se.returnCode + " → " +se.departCode+ " · ";
 
             se._flightService.itemFlightCache.checkInDisplay = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
             se._flightService.itemFlightCache.checkOutDisplay = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");

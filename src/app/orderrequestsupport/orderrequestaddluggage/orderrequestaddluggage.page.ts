@@ -68,6 +68,8 @@ export class OrderRequestAddluggagePage implements OnInit {
   returnPass= [];
   hadBuyLuggageDepart: boolean = false;
   hadBuyLuggageReturn: boolean = false;
+  emptyLuggage: boolean = false;
+  emptyLuggageReturn: boolean = false;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -195,7 +197,8 @@ export class OrderRequestAddluggagePage implements OnInit {
   mapPassenger(airlineCode, type){
     if(type == 1){
       this.listPass.forEach((p) => {
-        let itemmap = this.departPass.filter((f) => {return this.gf.convertFontVNI(f.lastName.toLowerCase().trim()) + " " + this.gf.convertFontVNI(this.gf.removeString(f.firstName)) == this.gf.convertFontVNI(p.name.toLowerCase().trim()) });
+        //let itemmap = this.departPass.filter((f) => {return this.gf.convertFontVNI(f.lastName.toLowerCase().trim()) + " " + this.gf.convertFontVNI(this.gf.removeString(f.firstName)) == this.gf.convertFontVNI(p.name.toLowerCase().trim()) });
+        let itemmap = this.departPass.filter((f) => {return this.gf.convertUnicodeCharactor(f.lastName.toLowerCase().trim()) + " " + this.gf.convertUnicodeCharactor(this.gf.removeString(f.firstName)) == this.gf.convertUnicodeCharactor(p.name.toLowerCase().trim()) });
         if(itemmap && itemmap.length >0){
           if(airlineCode == 'BB' || airlineCode == 'VJ'){
             p.lastName = itemmap[0].lastName;
@@ -219,7 +222,8 @@ export class OrderRequestAddluggagePage implements OnInit {
       });
     }else{
       this.listPassReturn.forEach((p) => {
-        let itemmap = this.returnPass.filter((f) => {return this.gf.convertFontVNI(f.lastName.toLowerCase().trim()) + " " + this.gf.convertFontVNI(this.gf.removeString(f.firstName)) == this.gf.convertFontVNI(p.name.toLowerCase().trim()) });
+        //let itemmap = this.returnPass.filter((f) => {return this.gf.convertFontVNI(f.lastName.toLowerCase().trim()) + " " + this.gf.convertFontVNI(this.gf.removeString(f.firstName)) == this.gf.convertFontVNI(p.name.toLowerCase().trim()) });
+        let itemmap = this.returnPass.filter((f) => {return this.gf.convertUnicodeCharactor(f.lastName.toLowerCase().trim()) + " " + this.gf.convertUnicodeCharactor(this.gf.removeString(f.firstName)) == this.gf.convertUnicodeCharactor(p.name.toLowerCase().trim()) });
         if(itemmap && itemmap.length >0){
           if(airlineCode == 'BB'|| airlineCode == 'VJ'){
             p.lastName = itemmap[0].lastName;
@@ -303,6 +307,8 @@ export class OrderRequestAddluggagePage implements OnInit {
     let obj:any = {}, objreturn:any = {};
     obj.bookingCode = this.activityService.objPaymentMytrip.trip.booking_id;
     objreturn.bookingCode = this.activityService.objPaymentMytrip.trip.booking_id;
+    this.emptyLuggage = false;
+    this.emptyLuggageReturn = false;
    
     if(this.listPass && this.listPass.some((p) => {return p.departLuggage && p.departLuggage.amount >0 })){
       let itemd = this.activityService.objPaymentMytrip.trip.itemdepart;
@@ -326,6 +332,8 @@ export class OrderRequestAddluggagePage implements OnInit {
           })
         }
       })
+    }else{
+      this.emptyLuggage = true;
     }
 
     if(this.listPassReturn && this.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
@@ -350,81 +358,88 @@ export class OrderRequestAddluggagePage implements OnInit {
           })
         }
       })
+    }else{
+      this.emptyLuggageReturn = true;
     }
 
-    if(!obj.items && !objreturn.items){
+    if(this.emptyLuggage && this.emptyLuggageReturn){
       this.gf.showAlertMessage('Bạn chưa chọn gói hành lý nào. Vui lòng kiểm tra lại!','');
+      return;
+    }else if((!obj.items || obj.items.length ==0 )&& (!objreturn.items || objreturn.items.length ==0)){
+      this.gf.showAlertMessage('Đã có lỗi xảy ra. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!','');
       return;
     }
 
-    try {
-      this.activityService.objRequestAddLuggage = {
-        bookingCode: this.activityService.objPaymentMytrip.trip.booking_id,
-        totalPrice: this.totalprice,
-        totalPriceDisplay: this.totalpricedisplay,
-        departWeight: this.listPass.reduce((totalweight,p) => { return totalweight + (p.departLuggage ? p.departLuggage.weight : 0); }, 0),
-        returnWeight: this.listPassReturn.reduce((totalweight,p) => { return totalweight + (p.returnLuggage ? p.returnLuggage.weight : 0); }, 0),
-        objectDepartLuggage: obj,
-        objectReturnLuggage: objreturn
-      }
-      
-      this.gf.showLoading();
-      if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage.items){
-        let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
-        let  headers = {
-          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-          'Content-Type': 'application/json; charset=utf-8',
-        };
-        let body = this.activityService.objRequestAddLuggage.objectDepartLuggage;
-        this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data) => {
-          if(data){
-  
-            if(this.listPassReturn && this.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
-              let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
-              let  headers = {
-                "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                'Content-Type': 'application/json; charset=utf-8',
-              };
-              let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
-              this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
-                if(data1){
-                  this.gf.hideLoading();
-                  this.navCtrl.navigateForward('/orderrequestaddluggagepaymentselect');
-                }
-              })
-            }else{
-              this.gf.hideLoading();
-              this.navCtrl.navigateForward('/orderrequestaddluggagepaymentselect');
-            }
-          }
-          else{
-            this.gf.hideLoading();
-          }
-          
-        })
-      }
-      else if(this.listPassReturn && this.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
-        let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
-        let  headers = {
-          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-          'Content-Type': 'application/json; charset=utf-8',
-        };
-        let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
-        this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
-          if(data1){
-            this.gf.hideLoading();
-            this.navCtrl.navigateForward('/orderrequestaddluggagepaymentselect');
+    this.activityService.objRequestAddLuggage = {
+      bookingCode: this.activityService.objPaymentMytrip.trip.booking_id,
+      totalPrice: this.totalprice,
+      totalPriceDisplay: this.totalpricedisplay,
+      departWeight: this.listPass.reduce((totalweight,p) => { return totalweight + (p.departLuggage ? p.departLuggage.weight : 0); }, 0),
+      returnWeight: this.listPassReturn.reduce((totalweight,p) => { return totalweight + (p.returnLuggage ? p.returnLuggage.weight : 0); }, 0),
+      objectDepartLuggage: obj,
+      objectReturnLuggage: objreturn
+    }
+
+    //console.log(this.activityService.objRequestAddLuggage.objectDepartLuggage);
+    //console.log(this.activityService.objRequestAddLuggage.objectReturnLuggage);
+    //return;
+    this.gf.showLoading();
+    if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage){
+      let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+      let  headers = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+      let body = this.activityService.objRequestAddLuggage.objectDepartLuggage;
+      this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data) => {
+        if(data && data == "success"){
+
+          if(this.listPassReturn && this.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+            let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+            let  headers = {
+              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+              'Content-Type': 'application/json; charset=utf-8',
+            };
+            let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+            this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
+              if(data1 && data1 == "success"){
+                this.gf.hideLoading();
+                this.navCtrl.navigateForward('/orderrequestaddluggagepaymentselect');
+              }else{
+                this.gf.hideLoading();
+                this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+              }
+            })
           }else{
             this.gf.hideLoading();
+            this.navCtrl.navigateForward('/orderrequestaddluggagepaymentselect');
           }
-        })
-      }else{
-        this.gf.hideLoading();
-      } 
-    } catch (error) {
-      this.gf.hideLoading();
+        } else{
+          this.gf.hideLoading();
+          this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+        }
+        
+      })
     }
-    
+    else if(this.listPassReturn && this.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+      let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+      let  headers = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+      let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+      this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
+        if(data1 && data1 == "success"){
+          this.gf.hideLoading();
+          this.navCtrl.navigateForward('/orderrequestaddluggagepaymentselect');
+        } else{
+          this.gf.hideLoading();
+          this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+        }
+      })
+    }else{
+      this.gf.hideLoading();
+    } 
     
   }
 
