@@ -74,7 +74,7 @@
   <div>
     <div class="div-hotel-info">
       <div class="div-wrapimg">
-        <img class="img-hotel-avatar" src={{Avatar}}>
+        <img [ngClass]="bookCombo.isshuttlebus.length>0 ? 'img-hotel-avatar-123' : 'img-hotel-avatar'" src={{Avatar}}>
       </div>
       <div class="div-hotel-name">
         <div class="div-hotel-name-1">
@@ -86,29 +86,47 @@
 
         </div>
         <div>
-          <div class="div-flex" text-wrap>
+          <div *ngIf="bookCombo.isshuttlebus.length>0" class="div-flex" text-wrap>
             <div  text-wrap>
-              <img src="./assets/ic_hoteldetail/ic_bed.svg">
+              <img src="./assets/ic_review/ic_bus.svg">
+            </div>
+            <div (click)="nextShuttlebus()" class="text-p text-width-190 margin-left-3 color-blue" text-wrap>
+              <span >Lịch trình Shuttle Bus</span>
+            </div>
+        
+          </div>
+          <div class="div-flex margin-top-3" text-wrap>
+            <div  text-wrap>
+              <img src="./assets/ic_review/ic_bed.svg">
             </div>
             <div class="text-p text-width-190 margin-left-3" text-wrap>
               <span >{{roomnumber}} {{RoomType}} | {{nameroom}}</span>
             </div>
         
           </div>
-          <div class="div-flex">
-            <p class="text-p text-width-190" text-wrap>
-              <img src="./assets/ic_facility/ic_food_b.svg"> {{breakfast}}
-            </p>
-            <p *ngIf="PriceAvgPlusTAStr && loadflightpricedone" class="text-p line-blue">
-              <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
-            </p>
+          <div class="div-flex margin-top-3">
+            <span class="text-p text-width-190" text-wrap>
+              <img src="./assets/ic_review/ic_food.svg"> {{breakfast}}
+            </span>
+           
           </div>
-
+          <div *ngIf="PriceAvgPlusTAStr && loadflightpricedone" class="div-flex margin-top-3" style="margin-left: -2px;" text-wrap>
+            <div  text-wrap>
+              <img src="./assets/iconaccount/info.svg">
+            </div>
+            <div  class="text-p text-width-190 margin-left-3 color-blue" text-wrap>
+              <span *ngIf="statusRoom=='AL'" >Xác nhận ngay</span>
+              <span *ngIf="statusRoom!='AL'" >Xác nhận trong 60 phút</span>
+            </div>
+            <span  style="right: 0px;" class="text-change mtt-2">
+              <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
+            </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <hr class="cls-hr">
+  <hr class="cls-hr" style="margin-top:22px">
   <div>
     <ion-row *ngIf="!loadflightpricedone" style="height: 100px">
       <ion-col style="text-align: center;align-self: center">

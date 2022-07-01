@@ -204,6 +204,7 @@ const routes: Routes = [
   { path: 'hotelupgraderoom', loadChildren: './hotelupgraderoom/hotelupgraderoom.module#HotelupgraderoomPageModule' },
   { path: 'roomimagedetail', loadChildren: './roomimagedetail/roomimagedetail.module#RoomimagedetailPageModule' },
   { path: 'confirmemailaccount', loadChildren: './confirmemailaccount/confirmemailaccount.module#ConfirmemailaccountPageModule' },
+  { path: 'shuttlebusnote', loadChildren: './shuttlebusnote/shuttlebusnote.module#ShuttlebusnotePageModule' },
 ];
 @NgModule({
   imports:

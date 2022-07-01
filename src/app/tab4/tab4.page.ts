@@ -38,6 +38,10 @@ export class Tab4Page implements OnInit{
   pageIndex: any = 1;
   pageSize: any = 50;
   loadend = false;
+  isAll=true;isProduct=false;isOrder=false;isOther=false;
+  objnotication: any;
+  textnotifyType="";
+  countNoti: number;
   constructor(public platform: Platform,public navCtrl: NavController,public gf: GlobalFunction,
     private storage: Storage,
     private zone: NgZone,
@@ -72,6 +76,11 @@ export class Tab4Page implements OnInit{
     if(document.querySelector(".tabbar")){
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
+    this.storage.get('objnotication').then(data =>{
+      if(data){
+        this.objnotication = data;
+      }
+    })
     //19/07/2019: Load thông tin notification
     //this.loadUserNotification();
     se.storage.get('listUserNotification').then((data)=> {
@@ -135,6 +144,10 @@ export class Tab4Page implements OnInit{
               }else{
                   if(body && body != "[]"){
                       var data = JSON.parse(body);
+                      for (let i = 0; i < se.objnotication.length; i++) {
+                        const element = se.objnotication[i];
+                        data.push(element);
+                      }
                       se.loadDataNotify(data);
                   }else{
                     se.zone.run(()=>{
@@ -250,6 +263,9 @@ export class Tab4Page implements OnInit{
         se.zone.run(()=>{
           if(!element.status){
             element.status = 1;
+            if(element.dataLink){
+              se.navCtrl.navigateForward(element.dataLink);
+            }
             //update status xuống db
             se.valueGlobal.countNotifi--;
             se.callUpdateStatus(element);
@@ -567,5 +583,37 @@ export class Tab4Page implements OnInit{
     
     }
    
+  }
+  funcAll(){
+    this.isAll=true;
+    this.isProduct=false;
+    this.isOrder=false;
+    this.isOther=false;
+    this.textnotifyType="";
+  }
+  funcProduct(){
+    this.isAll=false;
+    this.isProduct=true;
+    this.isOrder=false;
+    this.isOther=false;
+    this.textnotifyType="product";
+    this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
+
+  }
+  funcOrder(){
+    this.isAll=false;
+    this.isProduct=false;
+    this.isOrder=true;
+    this.isOther=false;
+    this.textnotifyType="booking";
+    this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
+  }
+  funcOther(){
+    this.isAll=false;
+    this.isProduct=false;
+    this.isOrder=false;
+    this.isOther=true;
+    this.textnotifyType="other";
+    this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
   }
 }

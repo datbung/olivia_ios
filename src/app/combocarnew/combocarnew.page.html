@@ -43,8 +43,27 @@
           <div class="text-address text-thin">
             <ion-label>{{Address}}</ion-label>
           </div>
+          
         </div>
-
+        <div *ngIf="bookCombo.isshuttlebus.length>0" class="div-address p-top-13">
+          <div class="div-location">
+            <img class="img-location" src="./assets/ic_hoteldetail/bus.svg">
+          </div>
+             <div (click)="nextShuttlebus()" class="text-address text-thin color-blue">
+              <ion-label>Lịch trình Shuttle Bus</ion-label>
+            </div>
+        </div>
+     
+          
+        <div *ngIf="PriceAvgPlusTAStr" class="div-address p-top-13">
+          <div class="div-location">
+            <img class="img-location" src="./assets/iconaccount/info.svg">
+          </div>
+             <div class="text-address text-thin color-blue">
+              <ion-label  *ngIf="statusRoom=='AL'" >Xác nhận ngay</ion-label>
+              <ion-label  *ngIf="statusRoom!='AL'" >Xác nhận trong 60 phút</ion-label>
+            </div>
+        </div>
       </div>
     </div>
     <div class="div-split sp-info-hotel"></div>
