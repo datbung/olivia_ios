@@ -164,6 +164,7 @@ export class FlightComboReviewsPage implements OnInit{
   msgEmptyFlight: any='';
   arrBOD: any;
   elementRooom: any;
+  statusRoom: any;
   constructor(public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,private loadingCtrl: LoadingController,
     public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
     public bookCombo: Bookcombo, public searchhotel: SearchHotel,
@@ -519,6 +520,7 @@ export class FlightComboReviewsPage implements OnInit{
             se.index=data.index;
             se.RoomType=itemroom.RoomType;
             se.roomnumber=itemmealtype.TotalRoom;
+            se.statusRoom=itemmealtype.Status;
             if(itemmealtype.Name != null && itemmealtype.Notes.length==0){
               se.breakfast = itemmealtype.Name;
             }
@@ -804,6 +806,7 @@ export class FlightComboReviewsPage implements OnInit{
       se.bookCombo.mealTypeRates = element.MealTypeRates[index];
       se.elementMealtype = element.MealTypeRates[index];
       se.breakfast= element.MealTypeRates[index].Name;
+      se.statusRoom=element.MealTypeRates[index].Status;
       this.index=index;
       se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
       se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
@@ -3139,5 +3142,8 @@ export class FlightComboReviewsPage implements OnInit{
       var BOD=JSON.parse(body);
       se.arrBOD=BOD.BlackOutDates;
     })
+  }
+  nextShuttlebus(){
+    this.navCtrl.navigateForward("/shuttlebusnote");
   }
 }

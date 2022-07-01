@@ -11,7 +11,7 @@
           <div class="div-button-menu" (click)="menuFlightClick(3)">
               <ion-icon [ngClass]="menuindex ==3 ? 'icon-flight-menu activated' : 'icon-flight-menu'" name="text"></ion-icon>
               <div [ngClass]="menuindex ==3 ? 'text-menu activated' : 'text-menu'">Thông báo</div>
-              <ion-badge *ngIf="countflight" color="danger">{{countflight}}</ion-badge>
+              <ion-badge class="cls-badge" *ngIf="valueGlobal.countNotifi" color="danger">{{valueGlobal.countNotifi}}</ion-badge>
           </div>
           <div class="div-button-menu" (click)="menuFlightClick(4)">
               <ion-icon [ngClass]="menuindex ==4 ? 'icon-flight-menu activated' : 'icon-flight-menu'" name="contact"></ion-icon>

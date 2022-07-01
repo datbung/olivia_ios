@@ -214,6 +214,7 @@ const routes: Routes = [
   { path: 'orderrequestaddluggagepaymentbank', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentbank/orderrequestaddluggagepaymentbank.module#OrderRequestAddluggagePaymentBankPageModule' },
   { path: 'orderrequestaddluggagepaymentchoosebank', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentchoosebank/orderrequestaddluggagepaymentchoosebank.module#OrderRequestAddluggagePaymentChooseBankPageModule' },
   { path: 'orderrequestaddluggagepaymentpayoo/:code/:stt', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentpayoo/orderrequestaddluggagepaymentpayoo.module#OrderRequestAddluggagePaymentPayooPageModule' },
+  { path: 'shuttlebusnote', loadChildren: './shuttlebusnote/shuttlebusnote.module#ShuttlebusnotePageModule' },
 ];
 @NgModule({
   imports:

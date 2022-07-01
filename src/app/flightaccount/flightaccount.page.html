@@ -28,7 +28,7 @@
                 </ion-col>
             </ion-row> -->
             <div (click)="goToLogin()" class="div-flex">
-                <img class="icon-style" src="./assets/imgs/ic_login.svg">
+                <img class="icon-style" src="./assets/iconaccount/login.svg">
                 <span class="item-list margin-left-4">Đăng nhập/Đăng ký</span>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 Tài khoản của tôi
             </div>
             <div (click)="Point()" class="div-flex">
-                <img class="icon-style" src="./assets/imgs/ic_i_p.svg">
+                <img class="icon-style" src="./assets/iconaccount/ivvpoint.svg">
                 <span  class="item-list margin-left-4">iVIVUPoint</span>
                 <div class="text-color text-right">
                      {{ point }} điểm
@@ -47,7 +47,7 @@
         </div>
         <div class="div-item" >
             <div class="div-flex">
-                <img class="icon-style" src="./assets/imgs/ic_people.svg">
+                <img class="icon-style" src="./assets/iconaccount/user.svg">
                 <span (click)="showUserProfile()" class="item-list margin-left-4">Hồ sơ của tôi</span>
             </div>
         </div>
@@ -71,7 +71,7 @@
                 <div class="label-header padding-bottom-16">Nhân viên hỗ trợ</div>
 
         <div class="div-flex div-item" >
-                    <img class="icon-style" src="./assets/imgs/ic_callcenter.svg">
+                    <img class="icon-style" src="./assets/iconaccount/support.svg">
             <div class="text-color margin-left-4"  (click)="makeCallSupport(1)">
                   iVIVU Hà Nội - 19002045
             </div>
@@ -80,7 +80,7 @@
             </div>
         <div class="div-flex div-item"  >
          
-                        <img class="icon-style" src="./assets/imgs/ic_callcenter.svg">
+                        <img class="icon-style" src="./assets/iconaccount/support.svg">
           
                 <div class="text-color margin-left-4" (click)="makeCallSupport(2)">
                         iVIVU Hồ Chí Minh - 19001870
@@ -91,7 +91,7 @@
           
             <div class="div-flex div-item"  >
                     
-                            <img class="icon-style" src="./assets/imgs/ic_callcenter.svg">
+                            <img class="icon-style" src="./assets/iconaccount/support.svg">
                  
                     <div (click)="makeCallSupport(3)" class="text-color margin-left-4">
                              iVIVU Cần Thơ - 19002087
@@ -108,7 +108,7 @@
                             <div class="div-flex div-item" *ngIf="sp.isStaffOnline && sp.phone">
                                         
                                         
-                                                    <img *ngIf="sp.isStaffOnline && sp.phone" class="icon-style" src="./assets/imgs/ic_callcenter.svg">
+                                                    <img *ngIf="sp.isStaffOnline && sp.phone" class="icon-style" src="./assets/iconaccount/support.svg">
                                
                                             <div class="text-color margin-left-4" *ngIf="sp.phone && sp.isStaffOnline">
                                                {{sp.name}}
@@ -121,7 +121,7 @@
                         </div>
                         <div class="div-flex div-item" >
                             <div>
-                                    <img class="icon-style" src="./assets/imgs/ic_callcenter.svg">
+                                    <img class="icon-style" src="./assets/iconaccount/support.svg">
                             </div>
                             <div class="support-text margin-left-4" (click)="makeCallSupport(2)">
                                     <span class="text-color">iViVu -19001870</span>
@@ -133,7 +133,7 @@
                             <div class="div-flex div-item" *ngIf="!sp.isStaffOnline && sp.phone">
                           
                                         
-                                                    <img class="icon-style" src="./assets/imgs/ic_callcenter.svg">
+                                                    <img class="icon-style" src="./assets/iconaccount/support.svg">
                                
                                             
                                             <div class="support-text-offline margin-left-4" *ngIf="!sp.phone || !sp.isStaffOnline">
@@ -158,7 +158,7 @@
         <div class="div-item">
   
             <div  class="div-flex">
-                <img class="icon-style" src="./assets/imgs/alert-circle-outline.svg">
+                <img class="icon-style" src="./assets/iconaccount/info.svg">
                 <span  class="item-list margin-left-4">Phiên bản</span>
                 <div class="text-right">
                     {{ version }} 
@@ -169,14 +169,14 @@
         <div class="div-item">
   
             <div (click)="showCondition()" class="div-flex">
-                <img class="icon-style" src="./assets/imgs/alert-circle-outline.svg">
+                <img class="icon-style" src="./assets/iconaccount/info.svg">
                 <span  class="item-list margin-left-4">Điều khoản và điều kiện</span>
             </div>
         </div>
         <div class="div-item">
          
             <div (click)="showPrivacyPolicy()" class="div-flex">
-                <img class="icon-style" src="./assets/imgs/lock-closed-outline.svg">
+                <img class="icon-style" src="./assets/iconaccount/shield.svg">
                 <span  class="item-list margin-left-4">Chính sách quyền riêng tư</span>
             </div>
         </div>

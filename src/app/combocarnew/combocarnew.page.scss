@@ -112,7 +112,7 @@
 
                 .div-location{
                     position: absolute;
-                    margin-top: -2px;
+                    margin-top: -1px;
                 }
                 .img-location{
                     height: 12px;
@@ -120,7 +120,7 @@
                 .text-address{
                     position: relative;
                     line-height: 16px;
-                    padding-left: 12px;
+                    padding-left: 15px;
                 }
             }
             
@@ -614,4 +614,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 290px;
+}
+.color-blue{
+  color: #26bed6 !important
 }

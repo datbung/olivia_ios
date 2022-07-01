@@ -416,6 +416,7 @@ export class Bookcombo {
        upgradeRoomChange = new EventEmitter();
   ischeckShowupgrade: boolean;
   mealTypeRates: any;
+  isshuttlebus: any;
 }
 export class childAge {
     numage: string;

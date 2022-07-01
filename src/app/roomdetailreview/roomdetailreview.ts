@@ -606,5 +606,7 @@ export class RoomdetailreviewPage implements OnInit {
     this.Roomif.arrroom = this.arrroomFS;
     this.Roomif.imgRoom = this.arrroomFS[0].Rooms[0].ImagesMaxWidth320;
   }
-  
+  nextShuttlebus(){
+    this.navCtrl.navigateForward("/shuttlebusnote");
+  }
 }

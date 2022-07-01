@@ -6,6 +6,7 @@ import { flightService } from '../providers/flightService';
 import { C } from './../providers/constants';
 import { FoodfilterPage } from '../foodfilter/foodfilter.page';
 import { OverlayEventDetail } from '@ionic/core';
+import {  ValueGlobal } from './../providers/book-service';
 
 @Component({
   selector: 'app-flightmenufooter',
@@ -20,7 +21,7 @@ export class FlightMenuFooterPage {
         public _flightService: flightService,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
-        private zone: NgZone) {
+        private zone: NgZone,public valueGlobal:ValueGlobal) {
 
         }
 

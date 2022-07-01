@@ -250,3 +250,10 @@ p {
     white-space: nowrap;
     width: 300px;
 }
+.text-address{
+  font-size: 14px;
+    color: #4f4f4f;
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

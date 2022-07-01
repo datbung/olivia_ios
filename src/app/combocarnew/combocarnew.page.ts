@@ -128,6 +128,7 @@ export class CombocarnewPage implements OnInit {
   roomclass: any;
   column: any;
   arrBOD: any;
+  statusRoom: any;
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -410,6 +411,7 @@ export class CombocarnewPage implements OnInit {
               se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
               se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
               se.bookCombo.mealTypeRates = se.elementMealtype;
+              se.statusRoom=element.MealTypeRates[0].Status;
               se.calculateDiffPriceUnit();
               se.getTransferData(true);
               se.getBOD(element.MealTypeRates[0].RoomId);
@@ -425,6 +427,7 @@ export class CombocarnewPage implements OnInit {
                 se.TravPaxPrices = element.MealTypeRates[0].PriceAvgPlusNet * se.roomnumber * se.TotalNight;
                 se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
                 se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
+                se.statusRoom=element.MealTypeRates[0].Status;
                 se.calculateDiffPriceUnit();
                 se.getTransferData(true);
                 se.getBOD(element.MealTypeRates[0].RoomId);
@@ -2359,7 +2362,8 @@ export class CombocarnewPage implements OnInit {
               itemmealtype.Name = itemmealtype.Name  +", " +itemmealtype.Notes.join(', ');
             }
             se.elementMealtype = itemmealtype;
-            se.bookCombo.MealTypeName=se.breakfast 
+            se.bookCombo.MealTypeName=se.breakfast ;
+            se.statusRoom=itemmealtype.Status;
             //se.breakfast = itemmealtype.Name;
             se.Roomif.arrroom = [];
             se.Roomif.arrroom.push(itemroom);
@@ -2463,5 +2467,8 @@ export class CombocarnewPage implements OnInit {
         }
       }
     })
+  }
+  nextShuttlebus(){
+    this.navCtrl.navigateForward("/shuttlebusnote");
   }
 }

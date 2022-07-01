@@ -1286,9 +1286,15 @@ alert.present();
     public getDirection(Origin_Placeid,Destination_Placeid,Time,IsDeparture): Promise<any>{
       {
         return new Promise((resolve, reject) => {
+          var IsInternational;
+          if (this._flightService.itemFlightCache.dataBooking.fromPlace.internal==0||this._flightService.itemFlightCache.dataBooking.toPlace.internal==0) {
+            IsInternational=true;
+          }else{
+            IsInternational=false;
+          }
           var options = {
             method: 'GET',
-            url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetDirection?Origin_Placeid=' + Origin_Placeid + '&Destination_Placeid=' + Destination_Placeid + '&Time=' + Time + '&IsDeparture='+IsDeparture,
+            url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetDirection?Origin_Placeid=' + Origin_Placeid + '&Destination_Placeid=' + Destination_Placeid + '&Time=' + Time + '&IsDeparture='+IsDeparture+ '&IsInternational='+IsInternational,
             timeout: 10000, maxAttempts: 5, retryDelay: 2000,
             headers:
             {

@@ -1307,6 +1307,9 @@ export class HotelDetailPage implements OnInit {
               return a['SortOrder'] - b['SortOrder'];
             }))
           };
+          se.bookCombo.isshuttlebus = jsondata.HotelPolicies.filter(item => {
+            return item.Key=='Lịch trình Shuttle Bus'});
+         
           if (se.loader) {
             se.loader.dismiss();
           }

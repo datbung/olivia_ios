@@ -528,6 +528,10 @@ hr
       width: 104px;
       height: 104px;
 
+      .img-hotel-avatar-123{
+        height: 123px;
+        border-radius: 6px;
+      }
       .img-hotel-avatar{
         height: 104px;
         border-radius: 6px;
@@ -763,7 +767,7 @@ p {
   margin-right: 5px;
 }
 .div-hotel-name-1{
-  min-height: 60px;
+  min-height: 45px;
 }
 .text-charge{
   right: 17px;
@@ -920,4 +924,16 @@ p {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+.margin-top-3{
+  margin-top: 3px;
+}
+.color-blue{
+  color: #26bed6
+}
+.text-cfr{
+  color: #26bed6;
+  font-size: 12px;
+  background-color: #f2f2f2 !important;
+  width: 85px;
 }

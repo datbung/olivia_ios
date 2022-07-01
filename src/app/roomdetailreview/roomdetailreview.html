@@ -40,9 +40,12 @@
       <div style="margin-left: 3px">
         <h2 class="text-name" style="margin-top: 0" text-wrap>{{Name}}
         </h2>
-        <p style="font-size: 14px;color: #4f4f4f" text-wrap>
+        <p class="text-address" text-wrap>
           <img src="./assets/ic_facility/Group.svg"> {{Address}}
         </p>
+        <p *ngIf="bookCombo.isshuttlebus.length>0 && titlecombo" (click)="nextShuttlebus()" style="color: #26bed6;font-size: 14px">
+          <img class="image-card" src="./assets/ic_hoteldetail/bus.svg"> Lịch trình Shuttle Bus
+          <p>
       </div>
     </ion-col>
   </ion-row>
@@ -91,7 +94,7 @@
         <span (click)="upgradeRoom()" class="margin-right-5">Đổi</span> <img src="./assets/imgs/vector.svg">
       </label>
     </div>
-    
+   
     <p style="color: #666;font-size: 14px" text-wrap>
       <img class="image-card" src="./assets/ic_facility/ic_people.svg"> {{roomnumber}} {{RoomType}} | {{adults}} người lớn |
       {{children}} trẻ em {{textage}}
