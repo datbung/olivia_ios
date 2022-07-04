@@ -447,13 +447,13 @@ export class TabsPage implements OnInit {
     //chuyển qua tab mytrip
     if(data && data.BookingCode && data.notifyAction != "cancel"){
       if(data.notifyAction == "sharereviewofhotel"){
-        this.setNotification(data,"other");
+        this.setNotification(data,"product");
         this.navCtrl.navigateForward(['/app/tabs/tab3']);
         this.gf.setParams(data.BookingCode,'notifiBookingCode');
         this.gf.setParams(2,'selectedTab3');
       }
       else if(data.NotifyType == "blog" && data.notifyAction == "blogofmytrip"){
-        this.setNotification(data,"other");
+        this.setNotification(data,"product");
         this.valueGlobal.backValue = "tab4";
         this.navCtrl.navigateForward("/blog/" + data.BookingCode);
       }
@@ -472,7 +472,7 @@ export class TabsPage implements OnInit {
     }else{
       //show notifi
       if(data.updateNewVersion){
-        this.setNotification(data,"other");
+        this.setNotification(data,"product");
         this.gotoAppStore();
       }
       else if(data.activeTab){
@@ -543,7 +543,7 @@ export class TabsPage implements OnInit {
       iconStr = 'ic_bus2';
     }else if(data.NotifyType == 'blog' || data.notifyAction == 'blogofmytrip')
     {
-      se.setNotification(data,"other");
+      se.setNotification(data,"product");
       iconStr = 'ic_message';
     }
     else if(data.notifyAction == 'bookingbegoingcombofly' || data.notifyAction == 'flychangeinfo')
@@ -670,6 +670,26 @@ export class TabsPage implements OnInit {
   }
 
   ionViewWillEnter(){
+    //  let datatest = {title: 'Đặt phòng thành công!',
+    // notifyAction: 'paymentConfirm',
+    // message: 'Bạn đã thanh toán 2.100.000đ cho mã nhận phòng IVIVU755884 tại khu nghỉ dưỡng The Grand Hồ Tràm Strip Vũng Tàu. Xác nhận đặt phòng sẽ gửi đến email Quý khách.'
+    // };
+    // this.showActionSheetNoti(datatest);
+
+    //Count noti
+    var obj={
+      "title":"🌟 Du Xuân Đón Tết - Đặt Ngay Kẻo Hết 🌟",
+      "message": "Sau một năm làm việc vất vả, đến lúc tự thưởng cho bản thân và gia đình kỳ nghỉ dịp Tết này. Truy cập ngay App iVIVU.com để xem các ưu đãi hấp dẫn.", 
+      "dataLink": "/hoteldetail/577390",
+      "created":moment().format(),
+      "status":0,
+      "id":Date.now(),
+      "notifyType":"product"
+   
+    }
+    var datanoti=[];
+    datanoti.push(obj);
+    this.storage.set("objnotication",datanoti);
     this.loadUserNotification();
     
     var el = document.getElementsByClassName('tab-button');
