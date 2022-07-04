@@ -151,10 +151,10 @@ export class FlightchangeinfoPage implements OnInit {
                 adult: se.adult,
                 child: se.child ? se.child : 0,
                 infant: se.infant ? se.infant : 0,
-                title: "Đi " + se.departCity +" → " + se.returnCity,
+                title:  se.departCity +" → " + se.returnCity,
                 dayDisplay: se.cinthu + ", " +moment(se.cin).format("DD") + " thg " +moment(se.cin).format("M"),
                 subtitle :  " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
-                titleReturn: "Về " + se.returnCity +" → " + se.departCity,
+                titleReturn: se.returnCity +" → " + se.departCity,
                 dayReturnDisplay: se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") ,
                 subtitleReturn : " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
                 // itemSameCity: se.itemSameCity,
@@ -542,6 +542,7 @@ export class FlightchangeinfoPage implements OnInit {
 
               se._flightService.objSearch.departDate = se.cin;
               se._flightService.objSearch.returnDate = se.cout;
+              se.getDayName(se.cin, se.cout);
               se.storage.get("itemFlightCache").then((data)=>{
                 if(data){
                   se.storage.remove("itemFlightCache").then(()=>{

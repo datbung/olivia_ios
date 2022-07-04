@@ -352,7 +352,7 @@ export class FlightsearchresultPage implements OnInit {
 
       se._flightService.itemFlightCache.departFlight = item; 
       se.departFlight = item;
-      
+      //se.departFlight.timeDisplay = se.departFlight.timeDisplay.replace('-', '→');
       if(se._flightService.objSearch.roundTrip){
         se._flightService.itemFlightCache.step = 3;
         //Lọc vé seri chiều về theo availId
@@ -1158,7 +1158,7 @@ export class FlightsearchresultPage implements OnInit {
           let priceFlightChild = 0;
           let priceFlightInfant = 0;
           
-          element.timeDisplay = moment(element.departTime).format("HH:mm") + " - " + moment(element.landingTime).format("HH:mm");
+          element.timeDisplay = moment(element.departTime).format("HH:mm") + " → " + moment(element.landingTime).format("HH:mm");
           let hours:any = Math.floor(element.flightDuration/60);
           let minutes:any = element.flightDuration*1 - (hours*60);
           if(hours < 10){
@@ -3404,7 +3404,6 @@ export class FlightsearchresultPage implements OnInit {
           var todate = new Date(yearenddate, monthenddate - 1, tday);
           let diffday =moment(todate).diff(fromdate, "days");
           this.countdaydisplay = diffday +1;
-          
           var se = this;
           let allowseach = (diffday >=0 ? true : false);
           if (fromdate && todate && allowseach) {
@@ -3696,26 +3695,19 @@ export class FlightsearchresultPage implements OnInit {
 
      public scrollSearchFlight = (event: any) => {
         var se = this;
-          let el = document.getElementsByClassName('div-other-choice-title');
-          let el1 = document.getElementsByClassName('div-depart-flight-choice');
+          let el = document.getElementsByClassName('div-depart-flight-choice');
+          //let el1 = document.getElementsByClassName('div-depart-flight-choice');
           if(el.length >0){
             //console.log(event.detail.scrollTop)
            
-              if(event.detail.scrollTop > 448){
-                if(se.step ==2){
-                  if(!el[0].classList.contains("float-enabled")){
-                    el[0].classList.add('float-enabled');
-                  }
-                }else{
-                  if(!el[0].classList.contains("float-enabled")){
-                    el[0].classList.add('float-enabled');
-                    el[0].classList.add('top-124');
+              if(event.detail.scrollTop > 100){
+                if(se.step ==3){
+                  if(!el[0].classList.contains("stick-css")){
+                    el[0].classList.add('stick-css');
                   }
                 }
-                
               }else{
-                el[0].classList.remove('float-enabled');
-                el[0].classList.remove('top-124');
+                el[0].classList.remove('stick-css');
               }
           }
       }

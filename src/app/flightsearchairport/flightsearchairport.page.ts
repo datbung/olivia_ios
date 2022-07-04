@@ -52,15 +52,15 @@ export class FlightsearchairportPage implements OnInit {
             
             this.itemsfull.forEach(element => {
               element.show = true;
-              if(this._flightService.searchDepartCode){
-                if(this._flightService.itemFlightCache.returnCode){
-                  element.show = element.code != this._flightService.itemFlightCache.returnCode;
-                }
-              }else{
-                if(this._flightService.itemFlightCache.departCode){
-                  element.show = element.code != this._flightService.itemFlightCache.departCode;
-                }
-              }
+              // if(this._flightService.searchDepartCode){
+              //   if(this._flightService.itemFlightCache.returnCode){
+              //     element.show = element.code != this._flightService.itemFlightCache.returnCode;
+              //   }
+              // }else{
+              //   if(this._flightService.itemFlightCache.departCode){
+              //     element.show = element.code != this._flightService.itemFlightCache.departCode;
+              //   }
+              // }
               
             });
         })

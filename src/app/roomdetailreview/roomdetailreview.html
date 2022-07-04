@@ -44,7 +44,7 @@
           <img src="./assets/ic_facility/Group.svg"> {{Address}}
         </p>
         <p *ngIf="bookCombo.isshuttlebus.length>0 && titlecombo" (click)="nextShuttlebus()" style="color: #26bed6;font-size: 14px">
-          <img class="image-card" src="./assets/ic_hoteldetail/bus.svg"> Lịch trình Shuttle Bus
+          <img class="image-card" src="./assets/ic_review/ic_bus.svg"> Lịch trình Shuttle Bus
           <p>
       </div>
     </ion-col>
@@ -102,6 +102,16 @@
         <p style="color: #666;font-size: 14px">
           <img class="image-card" *ngIf="breakfast" src="./assets/ic_facility/ic_food_b.svg"> {{breakfast}}
           <p>
+
+            <div *ngIf="PriceAvgPlusTAStr && bookCombo.ComboId" class="div-address">
+              <div class="div-location">
+                <img class="img-location" src="./assets/iconaccount/info.svg">
+              </div>
+              <div class="text-address text-thin color-blue">
+                <ion-label  *ngIf="statusRoom=='AL'" >Xác nhận ngay</ion-label>
+                <ion-label  *ngIf="statusRoom!='AL'" >Xác nhận trong 60 phút</ion-label>
+              </div>
+            </div>
   </div>
   <hr  *ngIf="ischeckroom!='Internal'"class="cls-hr">
    <div *ngIf="ischeckroom!='Internal'">

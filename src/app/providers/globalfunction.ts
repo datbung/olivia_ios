@@ -1378,88 +1378,92 @@ alert.present();
   }
 
   convertUnicodeCharactor(input) {
-    input = input.replace(/\à/g,'a').replace(/\À/g,'A');
-    input = input.replace(/\á/g,'a').replace(/\Á/g,'A');
-    input = input.replace(/\ạ/g,'a').replace(/\Ạ/g,'A');
-    input = input.replace(/\ả/g,'a').replace(/\Ả/g,'A');
-    input = input.replace(/\ã/g,'a').replace(/\Ã/g,'A');
-    input = input.replace(/\â/g,'a').replace(/\Â/g,'A');
-    input = input.replace(/\ầ/g,'a').replace(/\Ầ/g,'A');
-    input = input.replace(/\ấ/g,'a').replace(/\Ấ/g,'A');
-    input = input.replace(/\ậ/g,'a').replace(/\Ậ/g,'A');
-    input = input.replace(/\ẫ/g,'a').replace(/\Ẫ/g,'A');
-    input = input.replace(/\ẩ/g,'a').replace(/\Ẩ/g,'A');
-    input = input.replace(/\ă/g,'a').replace(/\Ă/g,'A');
-    input = input.replace(/\ắ/g,'a').replace(/\Ắ/g,'A');
-    input = input.replace(/\ằ/g,'a').replace(/\Ằ/g,'A');
-    input = input.replace(/\ặ/g,'a').replace(/\Ặ/g,'A');
-    input = input.replace(/\ẳ/g,'a').replace(/\Ẳ/g,'A');
-    input = input.replace(/\ẵ/g,'a').replace(/\Ẵ/g,'A');
+    for(var i=0; i< input.length; i++) {
+      input = input.replace('à','a').replace('À','A');
+      input = input.replace('á','a').replace('Á','A');
+      input = input.replace('ạ','a').replace('Ạ','A');
+      input = input.replace('ả','a').replace('Ả','A');
+      input = input.replace('ã','a').replace('Ã','A');
+      input = input.replace('â','a').replace('Â','A');
+      input = input.replace('ầ','a').replace('Ầ','A');
+      input = input.replace('ấ','a').replace('Ấ','A');
+      input = input.replace('ậ','a').replace('Ậ','A');
+      input = input.replace('ẫ','a').replace('Ẫ','A');
+      input = input.replace('ẩ','a').replace('Ẩ','A');
+      input = input.replace('ă','a').replace('Ă','A');
+      input = input.replace('ắ','a').replace('Ắ','A');
+      input = input.replace('ằ','a').replace('Ằ','A');
+      input = input.replace('ặ','a').replace('Ặ','A');
+      input = input.replace('ẳ','a').replace('Ẳ','A');
+      input = input.replace('ẵ','a').replace('Ẵ','A');
 
-    input = input.replace(/\è/g,'e').replace(/\È/g,'E');
-    input = input.replace(/\é/g,'e').replace(/\É/g,'E');
-    input = input.replace(/\ẹ/g,'e').replace(/\Ẹ/g,'E');
-    input = input.replace(/\ẻ/g,'e').replace(/\Ẻ/g,'E');
-    input = input.replace(/\ẽ/g,'e').replace(/\Ẽ/g,'E');
-    input = input.replace(/\ê/g,'e').replace(/\Ê/g,'E');
-    input = input.replace(/\ề/g,'e').replace(/\Ề/g,'E');
-    input = input.replace(/\ế/g,'e').replace(/\Ế/g,'E');
-    input = input.replace(/\ệ/g,'e').replace(/\Ệ/g,'E');
-    input = input.replace(/\ể/g,'e').replace(/\Ể/g,'E');
-    input = input.replace(/\ễ/g,'e').replace(/\Ễ/g,'E');
+      input = input.replace('è','e').replace('È','E');
+      input = input.replace('é','e').replace('É','E');
+      input = input.replace('ẹ','e').replace('Ẹ','E');
+      input = input.replace('ẻ','e').replace('Ẻ','E');
+      input = input.replace('ẽ','e').replace('Ẽ','E');
+      input = input.replace('ê','e').replace('Ê','E');
+      input = input.replace('ề','e').replace('Ề','E');
+      input = input.replace('ế','e').replace('Ế','E');
+      input = input.replace('ệ','e').replace('Ệ','E');
+      input = input.replace('ể','e').replace('Ể','E');
+      input = input.replace('ễ','e').replace('Ễ','E');
 
-    input = input.replace(/\ì/g,'i').replace(/\Ì/g,'I');
-    input = input.replace(/\í/g,'i').replace(/\Í/g,'I');
-    input = input.replace(/\ị/g,'i').replace(/\Ị/g,'I');
-    input = input.replace(/\ỉ/g,'i').replace(/\Ỉ/g,'I');
-    input = input.replace(/\ĩ/g,'i').replace(/\Ĩ/g,'I');
+      input = input.replace('ì','i').replace('Ì','I');
+      input = input.replace('í','i').replace('Í','I');
+      input = input.replace('ị','i').replace('Ị','I');
+      input = input.replace('ỉ','i').replace('Ỉ','I');
+      input = input.replace('ĩ','i').replace('Ĩ','I');
 
-    input = input.replace(/\ò/g,'o').replace(/\Ò/g,'O');
-    input = input.replace(/\ó/g,'o').replace(/\Ó/g,'O');
-    input = input.replace(/\ọ/g,'o').replace(/\Ọ/g,'O');
-    input = input.replace(/\ỏ/g,'o').replace(/\Ỏ/g,'O');
-    input = input.replace(/\õ/g,'o').replace(/\Õ/g,'O');
-    input = input.replace(/\ô/g,'o').replace(/\Ô/g,'O');
-    input = input.replace(/\ồ/g,'o').replace(/\Ồ/g,'O');
-    input = input.replace(/\ố/g,'o').replace(/\Ố/g,'O');
-    input = input.replace(/\ộ/g,'o').replace(/\Ộ/g,'O');
-    input = input.replace(/\ổ/g,'o').replace(/\Ổ/g,'O');
-    input = input.replace(/\ỗ/g,'o').replace(/\Ỗ/g,'O');
-    input = input.replace(/\ơ/g,'o').replace(/\Ơ/g,'O');
-    input = input.replace(/\ờ/g,'o').replace(/\Ờ/g,'O');
-    input = input.replace(/\ớ/g,'o').replace(/\Ớ/g,'O');
-    input = input.replace(/\ợ/g,'o').replace(/\Ợ/g,'O');
-    input = input.replace(/\ở/g,'o').replace(/\Ở/g,'O');
-    input = input.replace(/\ỡ/g,'o').replace(/\Ỡ/g,'O');
+      input = input.replace('ò','o').replace('Ò','O');
+      input = input.replace('ó','o').replace('Ó','O');
+      input = input.replace('ọ','o').replace('Ọ','O');
+      input = input.replace('ỏ','o').replace('Ỏ','O');
+      input = input.replace('õ','o').replace('Õ','O');
+      input = input.replace('ô','o').replace('Ô','O');
+      input = input.replace('ồ','o').replace('Ồ','O');
+      input = input.replace('ố','o').replace('Ố','O');
+      input = input.replace('ộ','o').replace('Ộ','O');
+      input = input.replace('ổ','o').replace('Ổ','O');
+      input = input.replace('ỗ','o').replace('Ỗ','O');
+      input = input.replace('ơ','o').replace('Ơ','O');
+      input = input.replace('ờ','o').replace('Ờ','O');
+      input = input.replace('ớ','o').replace('Ớ','O');
+      input = input.replace('ợ','o').replace('Ợ','O');
+      input = input.replace('ở','o').replace('Ở','O');
+      input = input.replace('ỡ','o').replace('Ỡ','O');
 
-    input = input.replace(/\ù/g,'u').replace(/\Ù/g,'U');
-    input = input.replace(/\ú/g,'u').replace(/\Ú/g,'U');
-    input = input.replace(/\ụ/g,'u').replace(/\Ụ/g,'U');
-    input = input.replace(/\ủ/g,'u').replace(/\Ủ/g,'U');
-    input = input.replace(/\ũ/g,'u').replace(/\Ũ/g,'U');
-    input = input.replace(/\ư/g,'u').replace(/\Ư/g,'U');
-    input = input.replace(/\ừ/g,'u').replace(/\Ừ/g,'U');
-    input = input.replace(/\ứ/g,'u').replace(/\Ứ/g,'U');
-    input = input.replace(/\ự/g,'u').replace(/\Ự/g,'U');
-    input = input.replace(/\ử/g,'u').replace(/\Ử/g,'U');
-    input = input.replace(/\ữ/g,'u').replace(/\Ữ/g,'U');
+      input = input.replace('ù','u').replace('Ù','U');
+      input = input.replace('ú','u').replace('Ú','U');
+      input = input.replace('ụ','u').replace('Ụ','U');
+      input = input.replace('ủ','u').replace('Ủ','U');
+      input = input.replace('ũ','u').replace('Ũ','U');
+      input = input.replace('ư','u').replace('Ư','U');
+      input = input.replace('ừ','u').replace('Ừ','U');
+      input = input.replace('ứ','u').replace('Ứ','U');
+      input = input.replace('ự','u').replace('Ự','U');
+      input = input.replace('ử','u').replace('Ử','U');
+      input = input.replace('ữ','u').replace('Ữ','U');
 
-    input = input.replace(/\ỳ/g,'y').replace(/\Ỳ/g,'Y');
-    input = input.replace(/\ý/g,'y').replace(/\Ý/g,'Y');
-    input = input.replace(/\ỵ/g,'y').replace(/\Ỵ/g,'Y');
-    input = input.replace(/\ỷ/g,'y').replace(/\Ỷ/g,'Y');
-    input = input.replace(/\ỹ/g,'y').replace(/\Ỹ/g,'Y');
+      input = input.replace('ỳ','y').replace('Ỳ','Y');
+      input = input.replace('ý','y').replace('Ý','Y');
+      input = input.replace('ỵ','y').replace('Ỵ','Y');
+      input = input.replace('ỷ','y').replace('Ỷ','Y');
+      input = input.replace('ỹ','y').replace('Ỹ','Y');
 
-    input = input.replace(/\đ/g,'d').replace(/\Đ/g,'D');
-    input = input.replace(/\u0300/g,'o');
-    input = input.replace(/\u0301/g,'o');
-    input = input.replace(/\u0303/g,'o');
-    input = input.replace(/\u0309/g,'o');
-    input = input.replace(/\u0323/g,'o');
+      input = input.replace('đ','d').replace('Đ','D');
+      input = input.replace('\u0300','o');
+      input = input.replace('\u0301','o');
+      input = input.replace('\u0303','o');
+      input = input.replace('\u0309','o');
+      input = input.replace('\u0323','o');
 
-    input = input.replace(/\u02C6/g,'o');
-    input = input.replace(/\u0323/g,'o');
-    input = input.replace(/\u031B/g,'o');
+      input = input.replace('\u02C6','o');
+      input = input.replace('\u0323','o');
+      input = input.replace('\u031B','o');
+    }
+   
+    
   return input;
 }
 

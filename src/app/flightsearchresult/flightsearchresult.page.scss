@@ -15,11 +15,11 @@
 }
 
 .m-top-54{
-    margin-top: 64px;
+    margin-top: 78px;
 }
 
 .m-top-58{
-    margin-top: 68px;
+    margin-top: 82px;
 }
 .p-left-24{
     padding-left: 24px;
@@ -529,8 +529,7 @@
 
   .div-depart-flight-choice{
     height: 54px;
-    background-color: #f9f9f9;
-    margin: -6px -16px 16px -16px;
+    margin: 0px -16px 16px -16px;
     padding: 0 16px;
     position: fixed;
     width: 100%;
@@ -552,7 +551,7 @@
         margin-top: 10px;
     }
     .div-time-and-price{
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 600;
         line-height: 1.5;
         letter-spacing: -0.36px;
@@ -560,11 +559,11 @@
     }
 
     .div-code{
-        font-size: 10px;
+        font-size: 14px;
         font-weight: 300;
         line-height: 1.67;
         letter-spacing: -0.54px;
-        color: #828282;
+        color: #6d6e71;
     }
     .div-text-change{
         font-size: 14px;
@@ -703,6 +702,9 @@
         font-weight: bold;
       }
 
+      .cls-hidden-filter {
+        opacity: 0;
+      }
     ion-modal{ 
         transform:none !important; 
         -webkit-transform:none !important; 
@@ -880,4 +882,7 @@
             top: 15px !important;
         }
 
-       
+        .stick-css {
+            transition: top 0.5s ease-out;
+            margin-top: -16px !important;
+        }

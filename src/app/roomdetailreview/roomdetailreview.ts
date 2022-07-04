@@ -36,6 +36,7 @@ export class RoomdetailreviewPage implements OnInit {
   elementMealtype: any;
   indexMealTypeRates: any;
   arrroomFS: any[];
+  statusRoom: any;
   constructor(public searchhotel: SearchHotel, public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,
     public booking: Booking,public bookCombo: Bookcombo, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,public loadingCtrl: LoadingController,
     private fb: Facebook,private activityService: ActivityService) {
@@ -75,6 +76,7 @@ export class RoomdetailreviewPage implements OnInit {
           this.breakfast = this.Roomif.objMealType.Notes[0];
         }
       }
+      this.statusRoom=this.room[0].MealTypeRates[this.indexme].Status;
       this.PriceAvgPlusTAStr = this.roomtype.PriceAvgPlusTAStr;
       this.value.flagreview = 1;
       this.titlecombo = this.bookCombo.ComboTitle;
@@ -588,6 +590,7 @@ export class RoomdetailreviewPage implements OnInit {
     var se = this;
     this.objroomfsale=[];
     se.PriceAvgPlusTAStr=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index].PriceAvgPlusTAStr;
+    this.statusRoom=dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index].Status;
     this.booking.indexmealtype=dataRoomChange.index;
     se.nameroom = dataRoomChange.itemroom.ClassName;
     se.bookCombo.roomNb = dataRoomChange.itemroom.TotalRoom;

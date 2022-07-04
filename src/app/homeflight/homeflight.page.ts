@@ -144,7 +144,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 }
                 let _cin = this.gf.getCinIsoDate(this.cin);
                 let _cout = this.gf.getCinIsoDate(this.cout);
-                this.getDayName(this.cin, this.cout);
+                this.getDayName(_cin, _cout);
                 this.adult = data.adult;
                 this.child = data.child;
                 this.infant = data.infant ? data.infant : 0;
@@ -724,7 +724,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
                 se._flightService.itemFlightCache.checkInDate = se.cin;
                 se._flightService.itemFlightCache.checkOutDate = se.cout;
-              
+              se.getDayName(se.cin, se.cout);
               se.storage.get("itemFlightCache").then((data)=>{
                 if(data){
                   se.storage.remove("itemFlightCache").then(()=>{
@@ -911,7 +911,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           },10)
         });
         var se = this;
-        const event: any = await this.myCalendar.onDidDismiss();
+        const event: any = await se.myCalendar.onDidDismiss();
         const date = event.data;
         if (event.data) {
         const from: CalendarResult = date.from;
@@ -922,12 +922,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         se.zone.run(() => {
             // se.searchhotel.CheckInDate = se.cin;
             // se.searchhotel.CheckOutDate = se.cout;
-            se.datecin = this.gf.getCinIsoDate(se.cin);
-            se.datecout = this.gf.getCinIsoDate(se.cout);
+            se.datecin = se.gf.getCinIsoDate(se.cin);
+            se.datecout = se.gf.getCinIsoDate(se.cout);
             se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
             se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
-            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(se.cin).format("YYYY");
+            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(se.cout).format("YYYY");
             se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
 
@@ -996,7 +996,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                     }
                 }
                 else{
-                    this.getDayName(this.datecin, this.datecout);
+                    se.getDayName(se.cin, se.cout);
                 }
                 if (checkdate==se.cout) {
                     se.cotdate = 1;
@@ -1012,14 +1012,14 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                     }
                 }
                 else{
-                    this.getDayName(this.datecin, this.datecout);
+                    se.getDayName(se.cin, se.cout);
                 }
                 }
         }
         
     }
     getDayName(datecin, datecout) {
-        if (!this.cinthu || !this.cinthushort) {
+        if (datecin) {
           this.cinthu = moment(datecin).format('dddd');
           switch (this.cinthu) {
             case "Monday":
@@ -1052,7 +1052,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               break;
           }
         }
-        if (!this.coutthu || !this.coutthushort) {
+        if (datecout) {
           this.coutthu = moment(datecout).format('dddd');
           switch (this.coutthu) {
             case "Monday":

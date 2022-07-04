@@ -2165,7 +2165,7 @@ export class CombocarnewPage implements OnInit {
               se.modalCtrl.dismiss();
             }, 100)
 
-            
+            se.searchhotel.changeInfoHotelList.emit(1);
           }
         }
       }

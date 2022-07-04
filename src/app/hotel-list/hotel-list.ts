@@ -109,6 +109,11 @@ export class HotelListPage implements OnInit{
         item.id=this.searchhotel.objRecent.id;
         item.name=this.searchhotel.objRecent.name;
         item.isType=this.searchhotel.objRecent.isType;
+        this.datecin = new Date(this.searchhotel.CheckInDate);
+        this.datecout = new Date(this.searchhotel.CheckOutDate);
+        this.cindisplayhr = moment(this.datecin).format('DD/MM');
+        this.coutdisplayhr = moment(this.datecout).format('DD/MM');
+        this.guest = this.searchhotel.child + this.searchhotel.adult;
         this.gf.setCacheSearch(item,1);
          se.doRefresh();
        }

@@ -2947,13 +2947,14 @@ export class FlightComboReviewsPage implements OnInit{
             se.coutthudisplay = se.getDayOfWeek(se.searchhotel.CheckOutDate);
             se.ischangefly = true;
             se.bookCombo.Luggage = 0;
+            se.getDayName(se.cin, se.cout);
             se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
             se.storage.set('hasChangeDate', true);
             se.checkComboAfterChangedate();
             setTimeout(() => {
               se.modalCtrl.dismiss();
             }, 100)
-            
+            se.searchhotel.changeInfoHotelList.emit(1);
           }
         }
       }

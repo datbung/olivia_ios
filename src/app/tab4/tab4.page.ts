@@ -83,13 +83,21 @@ export class Tab4Page implements OnInit{
     })
     //19/07/2019: Load thông tin notification
     //this.loadUserNotification();
-    se.storage.get('listUserNotification').then((data)=> {
-      if(data){
-        se.loadDataNotify(data);
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        se.storage.get('listUserNotification').then((data)=> {
+          if(data){
+           se.loadDataNotify(data);
+          }else{
+            se.loadUserNotification();
+          }
+        })
       }else{
-        se.loadUserNotification();
+        se.items = [];
+        se.loaddatadone = true;
       }
     })
+    
   }
 
   async handleSplashScreen(): Promise<void> {

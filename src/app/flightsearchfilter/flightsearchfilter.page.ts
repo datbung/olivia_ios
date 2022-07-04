@@ -76,6 +76,7 @@ export class FlightsearchfilterPage implements OnInit {
   listReturnFacility=[];
 
   VJSaverTicket = ['E1_Eco','A_Eco'];
+  hasfilter: boolean;
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -114,7 +115,45 @@ export class FlightsearchfilterPage implements OnInit {
             this.priceobject = { lower: this.minvalue.toString(), upper: this.maxvalue.toString() };
             this.minpricedisplay = this.gf.convertNumberToString(minValue) + "đ"; 
             this.maxpricedisplay = this.gf.convertNumberToString(maxValue) + "đ";
-            this.countFilter = this._flightService.listAllFlightDepart.length;
+            if(this._flightService.objectFilter){
+              if(this._flightService.objectFilter.departTimeRange && this._flightService.objectFilter.departTimeRange.length >0){
+                this.departTimeRange = this._flightService.objectFilter.departTimeRange;
+                this.hasfilter = true;
+              }
+        
+              if(this._flightService.objectFilter.returnTimeRange && this._flightService.objectFilter.returnTimeRange.length >0){
+                this.returnTimeRange = this._flightService.objectFilter.returnTimeRange;
+                this.hasfilter = true;
+              }
+    
+              if(this._flightService.objectFilter.airlineSelected && this._flightService.objectFilter.airlineSelected.length >0){
+                this.airlineSelected = this._flightService.objectFilter.airlineSelected;
+                this.hasfilter = true;
+              }
+    
+              if(this._flightService.objectFilter.classSelected && this._flightService.objectFilter.classSelected.length>0){
+                this.classSelected = this._flightService.objectFilter.classSelected;
+                this.hasfilter = true;
+              }
+    
+              if(this._flightService.objectFilter.stopSelected && this._flightService.objectFilter.stopSelected.length>0){
+                this.stopSelected = this._flightService.objectFilter.stopSelected;
+                this.hasfilter = true;
+              }
+    
+              if(this._flightService.objectFilter.facilitySelected && this._flightService.objectFilter.facilitySelected.length>0){
+                this.facilitySelected = this._flightService.objectFilter.facilitySelected;
+                this.hasfilter = true;
+              }
+  
+              if(this.hasfilter){
+                this.countFilter = this._flightService.listflightDepartFilter.length;
+              }else{
+                this.countFilter = this._flightService.listAllFlightDepart.length;
+              }
+            }
+           
+            
            
           }
       })

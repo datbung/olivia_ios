@@ -24,7 +24,7 @@
   </ion-row>
 </ion-header>
 
-<ion-content [scrollEvents]="true" #scrollArea>
+<ion-content [scrollEvents]="true" #scrollArea (ionScroll)="scrollSearchFlight($event)">
   <ion-progress-bar style="color: #003c71;height: 2px;" *ngIf="!loadpricedone" [value]="progressbarloading" [buffer]="progressbarbuffer"></ion-progress-bar>
   <div class="flightsearchresult-content">
     
@@ -1135,9 +1135,9 @@
       <ion-col (click)="openFilterFlight()">
               <div class="flightdeparture-button-filter">
                   <img class="img-filter" src="./assets/imgs/ic_filter.svg">
-                  <ion-badge class="cls-badge-filter" *ngIf="(step==2 && enableFlightFilter) else badgestep3">{{enableFlightFilter}}</ion-badge>
+                  <ion-badge class="cls-badge-filter" *ngIf="(step==2 && enableFlightFilter) else badgestep3"><span class="cls-hidden-filter">{{enableFlightFilter}}</span></ion-badge>
                   <ng-template #badgestep3>
-                    <ion-badge *ngIf="step==3 && enableFlightFilterReturn" class="cls-badge-filter">{{enableFlightFilterReturn}}</ion-badge>
+                    <ion-badge *ngIf="step==3 && enableFlightFilterReturn" class="cls-badge-filter"><span class="cls-hidden-filter">{{enableFlightFilterReturn}}</span></ion-badge>
                   </ng-template>
                   
                   <ion-label class="text-sort-and-filter label-filter" >Lọc</ion-label>
