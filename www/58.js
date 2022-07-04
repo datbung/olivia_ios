@@ -1,1513 +1,401 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[58],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/ftij5hee.sc.entry.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/ftij5hee.sc.entry.js ***!
-  \*****************************************************************************/
-/*! exports provided: IonDatetime, IonPicker, IonPickerColumn, IonPickerController */
+/***/ "./node_modules/@ionic/core/dist/esm/ion-range-ios.entry.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/ion-range-ios.entry.js ***!
+  \******************************************************************/
+/*! exports provided: ion_range */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonDatetime", function() { return Datetime; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonPicker", function() { return Picker; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonPickerColumn", function() { return PickerColumnCmp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IonPickerController", function() { return PickerController; });
-/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
-/* harmony import */ var _chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-9a4a967d.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-9a4a967d.js");
-/* harmony import */ var _chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-2f96b3d2.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2f96b3d2.js");
-/* harmony import */ var _chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-6d7d2f8c.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-6d7d2f8c.js");
-/* harmony import */ var _chunk_81780b86_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-81780b86.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-81780b86.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ion_range", function() { return Range; });
+/* harmony import */ var _core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core-feeeff0d.js */ "./node_modules/@ionic/core/dist/esm/core-feeeff0d.js");
+/* harmony import */ var _config_3c7f3790_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config-3c7f3790.js */ "./node_modules/@ionic/core/dist/esm/config-3c7f3790.js");
+/* harmony import */ var _helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers-46f4a262.js */ "./node_modules/@ionic/core/dist/esm/helpers-46f4a262.js");
+/* harmony import */ var _theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./theme-18cbe2cc.js */ "./node_modules/@ionic/core/dist/esm/theme-18cbe2cc.js");
 
 
 
 
 
-
-
-function getDateValue(date, format) {
-    const getValue = getValueFromFormat(date, format);
-    if (getValue !== undefined) {
-        return getValue;
-    }
-    const defaultDate = parseDate(new Date().toISOString());
-    return getValueFromFormat(defaultDate, format);
-}
-function renderDatetime(template, value, locale) {
-    if (value === undefined) {
-        return undefined;
-    }
-    const tokens = [];
-    let hasText = false;
-    FORMAT_KEYS.forEach((format, index) => {
-        if (template.indexOf(format.f) > -1) {
-            const token = '{' + index + '}';
-            const text = renderTextFormat(format.f, value[format.k], value, locale);
-            if (!hasText && text !== undefined && value[format.k] != null) {
-                hasText = true;
-            }
-            tokens.push(token, text || '');
-            template = template.replace(format.f, token);
-        }
-    });
-    if (!hasText) {
-        return undefined;
-    }
-    for (let i = 0; i < tokens.length; i += 2) {
-        template = template.replace(tokens[i], tokens[i + 1]);
-    }
-    return template;
-}
-function renderTextFormat(format, value, date, locale) {
-    if ((format === FORMAT_DDDD || format === FORMAT_DDD)) {
-        try {
-            value = (new Date(date.year, date.month - 1, date.day)).getDay();
-            if (format === FORMAT_DDDD) {
-                return (locale.dayNames ? locale.dayNames : DAY_NAMES)[value];
-            }
-            return (locale.dayShortNames ? locale.dayShortNames : DAY_SHORT_NAMES)[value];
-        }
-        catch (e) {
-        }
-        return undefined;
-    }
-    if (format === FORMAT_A) {
-        return date !== undefined && date.hour !== undefined
-            ? (date.hour < 12 ? 'AM' : 'PM')
-            : value ? value.toUpperCase() : '';
-    }
-    if (format === FORMAT_a) {
-        return date !== undefined && date.hour !== undefined
-            ? (date.hour < 12 ? 'am' : 'pm')
-            : value || '';
-    }
-    if (value == null) {
-        return '';
-    }
-    if (format === FORMAT_YY || format === FORMAT_MM ||
-        format === FORMAT_DD || format === FORMAT_HH ||
-        format === FORMAT_mm || format === FORMAT_ss) {
-        return twoDigit(value);
-    }
-    if (format === FORMAT_YYYY) {
-        return fourDigit(value);
-    }
-    if (format === FORMAT_MMMM) {
-        return (locale.monthNames ? locale.monthNames : MONTH_NAMES)[value - 1];
-    }
-    if (format === FORMAT_MMM) {
-        return (locale.monthShortNames ? locale.monthShortNames : MONTH_SHORT_NAMES)[value - 1];
-    }
-    if (format === FORMAT_hh || format === FORMAT_h) {
-        if (value === 0) {
-            return '12';
-        }
-        if (value > 12) {
-            value -= 12;
-        }
-        if (format === FORMAT_hh && value < 10) {
-            return ('0' + value);
-        }
-    }
-    return value.toString();
-}
-function dateValueRange(format, min, max) {
-    const opts = [];
-    if (format === FORMAT_YYYY || format === FORMAT_YY) {
-        if (max.year === undefined || min.year === undefined) {
-            throw new Error('min and max year is undefined');
-        }
-        for (let i = max.year; i >= min.year; i--) {
-            opts.push(i);
-        }
-    }
-    else if (format === FORMAT_MMMM || format === FORMAT_MMM ||
-        format === FORMAT_MM || format === FORMAT_M ||
-        format === FORMAT_hh || format === FORMAT_h) {
-        for (let i = 1; i < 13; i++) {
-            opts.push(i);
-        }
-    }
-    else if (format === FORMAT_DDDD || format === FORMAT_DDD ||
-        format === FORMAT_DD || format === FORMAT_D) {
-        for (let i = 1; i < 32; i++) {
-            opts.push(i);
-        }
-    }
-    else if (format === FORMAT_HH || format === FORMAT_H) {
-        for (let i = 0; i < 24; i++) {
-            opts.push(i);
-        }
-    }
-    else if (format === FORMAT_mm || format === FORMAT_m) {
-        for (let i = 0; i < 60; i++) {
-            opts.push(i);
-        }
-    }
-    else if (format === FORMAT_ss || format === FORMAT_s) {
-        for (let i = 0; i < 60; i++) {
-            opts.push(i);
-        }
-    }
-    else if (format === FORMAT_A || format === FORMAT_a) {
-        opts.push('am', 'pm');
-    }
-    return opts;
-}
-function dateSortValue(year, month, day, hour = 0, minute = 0) {
-    return parseInt(`1${fourDigit(year)}${twoDigit(month)}${twoDigit(day)}${twoDigit(hour)}${twoDigit(minute)}`, 10);
-}
-function dateDataSortValue(data) {
-    return dateSortValue(data.year, data.month, data.day, data.hour, data.minute);
-}
-function daysInMonth(month, year) {
-    return (month === 4 || month === 6 || month === 9 || month === 11) ? 30 : (month === 2) ? isLeapYear(year) ? 29 : 28 : 31;
-}
-function isLeapYear(year) {
-    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
-}
-const ISO_8601_REGEXP = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
-const TIME_REGEXP = /^((\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/;
-function parseDate(val) {
-    let parse = null;
-    if (val != null && val !== '') {
-        parse = TIME_REGEXP.exec(val);
-        if (parse) {
-            parse.unshift(undefined, undefined);
-            parse[2] = parse[3] = undefined;
-        }
-        else {
-            parse = ISO_8601_REGEXP.exec(val);
-        }
-    }
-    if (parse === null) {
-        return undefined;
-    }
-    for (let i = 1; i < 8; i++) {
-        parse[i] = parse[i] !== undefined ? parseInt(parse[i], 10) : undefined;
-    }
-    let tzOffset = 0;
-    if (parse[9] && parse[10]) {
-        tzOffset = parseInt(parse[10], 10) * 60;
-        if (parse[11]) {
-            tzOffset += parseInt(parse[11], 10);
-        }
-        if (parse[9] === '-') {
-            tzOffset *= -1;
-        }
-    }
-    return {
-        year: parse[1],
-        month: parse[2],
-        day: parse[3],
-        hour: parse[4],
-        minute: parse[5],
-        second: parse[6],
-        millisecond: parse[7],
-        tzOffset,
-    };
-}
-const getLocalDateTime = (dateString = '') => {
-    if (dateString === undefined || dateString === null) {
-        dateString = '';
-    }
-    if (dateString.length === 10 ||
-        dateString.length === 7) {
-        dateString += ' ';
-    }
-    const date = (typeof dateString === 'string' && dateString.length > 0) ? new Date(dateString) : new Date();
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-};
-function updateDate(existingData, newData) {
-    if (!newData || typeof newData === 'string') {
-        const localDateTime = getLocalDateTime(newData);
-        if (!Number.isNaN(localDateTime.getTime())) {
-            newData = localDateTime.toISOString();
-        }
-    }
-    if (newData && newData !== '') {
-        if (typeof newData === 'string') {
-            newData = parseDate(newData);
-            if (newData) {
-                Object.assign(existingData, newData);
-                return true;
-            }
-        }
-        else if ((newData.year || newData.hour || newData.month || newData.day || newData.minute || newData.second)) {
-            if (newData.ampm && newData.hour) {
-                newData.hour.value = (newData.ampm.value === 'pm')
-                    ? (newData.hour.value === 12 ? 12 : newData.hour.value + 12)
-                    : (newData.hour.value === 12 ? 0 : newData.hour.value);
-            }
-            for (const key of Object.keys(newData)) {
-                existingData[key] = newData[key].value;
-            }
-            return true;
-        }
-        console.warn(`Error parsing date: "${newData}". Please provide a valid ISO 8601 datetime format: https://www.w3.org/TR/NOTE-datetime`);
-    }
-    else {
-        for (const k in existingData) {
-            if (existingData.hasOwnProperty(k)) {
-                delete existingData[k];
-            }
-        }
-    }
-    return false;
-}
-function parseTemplate(template) {
-    const formats = [];
-    template = template.replace(/[^\w\s]/gi, ' ');
-    FORMAT_KEYS.forEach(format => {
-        if (format.f.length > 1 && template.indexOf(format.f) > -1 && template.indexOf(format.f + format.f.charAt(0)) < 0) {
-            template = template.replace(format.f, ' ' + format.f + ' ');
-        }
-    });
-    const words = template.split(' ').filter(w => w.length > 0);
-    words.forEach((word, i) => {
-        FORMAT_KEYS.forEach(format => {
-            if (word === format.f) {
-                if (word === FORMAT_A || word === FORMAT_a) {
-                    if ((formats.indexOf(FORMAT_h) < 0 && formats.indexOf(FORMAT_hh) < 0) ||
-                        VALID_AMPM_PREFIX.indexOf(words[i - 1]) === -1) {
-                        return;
-                    }
-                }
-                formats.push(word);
-            }
-        });
-    });
-    return formats;
-}
-function getValueFromFormat(date, format) {
-    if (format === FORMAT_A || format === FORMAT_a) {
-        return (date.hour < 12 ? 'am' : 'pm');
-    }
-    if (format === FORMAT_hh || format === FORMAT_h) {
-        return (date.hour > 12 ? date.hour - 12 : date.hour);
-    }
-    return date[convertFormatToKey(format)];
-}
-function convertFormatToKey(format) {
-    for (const k in FORMAT_KEYS) {
-        if (FORMAT_KEYS[k].f === format) {
-            return FORMAT_KEYS[k].k;
-        }
-    }
-    return undefined;
-}
-function convertDataToISO(data) {
-    let rtn = '';
-    if (data.year !== undefined) {
-        rtn = fourDigit(data.year);
-        if (data.month !== undefined) {
-            rtn += '-' + twoDigit(data.month);
-            if (data.day !== undefined) {
-                rtn += '-' + twoDigit(data.day);
-                if (data.hour !== undefined) {
-                    rtn += `T${twoDigit(data.hour)}:${twoDigit(data.minute)}:${twoDigit(data.second)}`;
-                    if (data.millisecond > 0) {
-                        rtn += '.' + threeDigit(data.millisecond);
-                    }
-                    if (data.tzOffset === undefined) {
-                        rtn += 'Z';
-                    }
-                    else {
-                        rtn += (data.tzOffset > 0 ? '+' : '-') + twoDigit(Math.floor(Math.abs(data.tzOffset / 60))) + ':' + twoDigit(data.tzOffset % 60);
-                    }
-                }
-            }
-        }
-    }
-    else if (data.hour !== undefined) {
-        rtn = twoDigit(data.hour) + ':' + twoDigit(data.minute);
-        if (data.second !== undefined) {
-            rtn += ':' + twoDigit(data.second);
-            if (data.millisecond !== undefined) {
-                rtn += '.' + threeDigit(data.millisecond);
-            }
-        }
-    }
-    return rtn;
-}
-function convertToArrayOfStrings(input, type) {
-    if (input == null) {
-        return undefined;
-    }
-    if (typeof input === 'string') {
-        input = input.replace(/\[|\]/g, '').split(',');
-    }
-    let values;
-    if (Array.isArray(input)) {
-        values = input.map(val => val.toString().trim());
-    }
-    if (values === undefined || values.length === 0) {
-        console.warn(`Invalid "${type}Names". Must be an array of strings, or a comma separated string.`);
-    }
-    return values;
-}
-function convertToArrayOfNumbers(input, type) {
-    if (typeof input === 'string') {
-        input = input.replace(/\[|\]|\s/g, '').split(',');
-    }
-    let values;
-    if (Array.isArray(input)) {
-        values = input
-            .map((num) => parseInt(num, 10))
-            .filter(isFinite);
-    }
-    else {
-        values = [input];
-    }
-    if (values.length === 0) {
-        console.warn(`Invalid "${type}Values". Must be an array of numbers, or a comma separated string of numbers.`);
-    }
-    return values;
-}
-function twoDigit(val) {
-    return ('0' + (val !== undefined ? Math.abs(val) : '0')).slice(-2);
-}
-function threeDigit(val) {
-    return ('00' + (val !== undefined ? Math.abs(val) : '0')).slice(-3);
-}
-function fourDigit(val) {
-    return ('000' + (val !== undefined ? Math.abs(val) : '0')).slice(-4);
-}
-const FORMAT_YYYY = 'YYYY';
-const FORMAT_YY = 'YY';
-const FORMAT_MMMM = 'MMMM';
-const FORMAT_MMM = 'MMM';
-const FORMAT_MM = 'MM';
-const FORMAT_M = 'M';
-const FORMAT_DDDD = 'DDDD';
-const FORMAT_DDD = 'DDD';
-const FORMAT_DD = 'DD';
-const FORMAT_D = 'D';
-const FORMAT_HH = 'HH';
-const FORMAT_H = 'H';
-const FORMAT_hh = 'hh';
-const FORMAT_h = 'h';
-const FORMAT_mm = 'mm';
-const FORMAT_m = 'm';
-const FORMAT_ss = 'ss';
-const FORMAT_s = 's';
-const FORMAT_A = 'A';
-const FORMAT_a = 'a';
-const FORMAT_KEYS = [
-    { f: FORMAT_YYYY, k: 'year' },
-    { f: FORMAT_MMMM, k: 'month' },
-    { f: FORMAT_DDDD, k: 'day' },
-    { f: FORMAT_MMM, k: 'month' },
-    { f: FORMAT_DDD, k: 'day' },
-    { f: FORMAT_YY, k: 'year' },
-    { f: FORMAT_MM, k: 'month' },
-    { f: FORMAT_DD, k: 'day' },
-    { f: FORMAT_HH, k: 'hour' },
-    { f: FORMAT_hh, k: 'hour' },
-    { f: FORMAT_mm, k: 'minute' },
-    { f: FORMAT_ss, k: 'second' },
-    { f: FORMAT_M, k: 'month' },
-    { f: FORMAT_D, k: 'day' },
-    { f: FORMAT_H, k: 'hour' },
-    { f: FORMAT_h, k: 'hour' },
-    { f: FORMAT_m, k: 'minute' },
-    { f: FORMAT_s, k: 'second' },
-    { f: FORMAT_A, k: 'ampm' },
-    { f: FORMAT_a, k: 'ampm' },
-];
-const DAY_NAMES = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-];
-const DAY_SHORT_NAMES = [
-    'Sun',
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-];
-const MONTH_NAMES = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-];
-const MONTH_SHORT_NAMES = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-];
-const VALID_AMPM_PREFIX = [
-    FORMAT_hh, FORMAT_h, FORMAT_mm, FORMAT_m, FORMAT_ss, FORMAT_s
-];
-
-class Datetime {
-    constructor() {
-        this.inputId = `ion-dt-${datetimeIds++}`;
-        this.locale = {};
-        this.datetimeMin = {};
-        this.datetimeMax = {};
-        this.datetimeValue = {};
-        this.isExpanded = false;
-        this.name = this.inputId;
+const Range = class {
+    constructor(hostRef) {
+        Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["r"])(this, hostRef);
+        this.noUpdate = false;
+        this.hasFocus = false;
+        this.ratioA = 0;
+        this.ratioB = 0;
+        /**
+         * How long, in milliseconds, to wait to trigger the
+         * `ionChange` event after each change in the range value.
+         */
+        this.debounce = 0;
+        /**
+         * The name of the control, which is submitted with the form data.
+         */
+        this.name = '';
+        /**
+         * Show two knobs.
+         */
+        this.dualKnobs = false;
+        /**
+         * Minimum integer value of the range.
+         */
+        this.min = 0;
+        /**
+         * Maximum integer value of the range.
+         */
+        this.max = 100;
+        /**
+         * If `true`, a pin with integer value is shown when the knob
+         * is pressed.
+         */
+        this.pin = false;
+        /**
+         * If `true`, the knob snaps to tick marks evenly spaced based
+         * on the step property value.
+         */
+        this.snaps = false;
+        /**
+         * Specifies the value granularity.
+         */
+        this.step = 1;
+        /**
+         * If `true`, tick marks are displayed based on the step value.
+         * Only applies when `snaps` is `true`.
+         */
+        this.ticks = true;
+        /**
+         * If `true`, the user cannot interact with the range.
+         */
         this.disabled = false;
-        this.readonly = false;
-        this.displayFormat = 'MMM D, YYYY';
-        this.cancelText = 'Cancel';
-        this.doneText = 'Done';
-        this.onFocus = () => {
-            this.ionFocus.emit();
+        /**
+         * the value of the range.
+         */
+        this.value = 0;
+        this.clampBounds = (value) => {
+            return Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(this.min, value, this.max);
+        };
+        this.ensureValueInBounds = (value) => {
+            if (this.dualKnobs) {
+                return {
+                    lower: this.clampBounds(value.lower),
+                    upper: this.clampBounds(value.upper)
+                };
+            }
+            else {
+                return this.clampBounds(value);
+            }
+        };
+        this.handleKeyboard = (knob, isIncrease) => {
+            let step = this.step;
+            step = step > 0 ? step : 1;
+            step = step / (this.max - this.min);
+            if (!isIncrease) {
+                step *= -1;
+            }
+            if (knob === 'A') {
+                this.ratioA = Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(0, this.ratioA + step, 1);
+            }
+            else {
+                this.ratioB = Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(0, this.ratioB + step, 1);
+            }
+            this.updateValue();
         };
         this.onBlur = () => {
-            this.ionBlur.emit();
+            if (this.hasFocus) {
+                this.hasFocus = false;
+                this.ionBlur.emit();
+                this.emitStyle();
+            }
         };
+        this.onFocus = () => {
+            if (!this.hasFocus) {
+                this.hasFocus = true;
+                this.ionFocus.emit();
+                this.emitStyle();
+            }
+        };
+        this.ionChange = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionChange", 7);
+        this.ionStyle = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionStyle", 7);
+        this.ionFocus = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionFocus", 7);
+        this.ionBlur = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["d"])(this, "ionBlur", 7);
+    }
+    debounceChanged() {
+        this.ionChange = Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["d"])(this.ionChange, this.debounce);
+    }
+    minChanged() {
+        if (!this.noUpdate) {
+            this.updateRatio();
+        }
+    }
+    maxChanged() {
+        if (!this.noUpdate) {
+            this.updateRatio();
+        }
     }
     disabledChanged() {
+        if (this.gesture) {
+            this.gesture.setDisabled(this.disabled);
+        }
         this.emitStyle();
     }
-    valueChanged() {
-        this.updateDatetimeValue(this.value);
-        this.emitStyle();
-        this.ionChange.emit({
-            value: this.value
-        });
-    }
-    componentWillLoad() {
-        this.locale = {
-            monthNames: convertToArrayOfStrings(this.monthNames, 'monthNames'),
-            monthShortNames: convertToArrayOfStrings(this.monthShortNames, 'monthShortNames'),
-            dayNames: convertToArrayOfStrings(this.dayNames, 'dayNames'),
-            dayShortNames: convertToArrayOfStrings(this.dayShortNames, 'dayShortNames')
-        };
-        this.updateDatetimeValue(this.value);
-        this.emitStyle();
-    }
-    onClick() {
-        this.setFocus();
-        this.open();
-    }
-    async open() {
-        if (this.disabled || this.isExpanded) {
-            return;
+    valueChanged(value) {
+        if (!this.noUpdate) {
+            this.updateRatio();
         }
-        const pickerOptions = this.generatePickerOptions();
-        const picker = await this.pickerCtrl.create(pickerOptions);
-        this.isExpanded = true;
-        picker.onDidDismiss().then(() => {
-            this.isExpanded = false;
-            this.setFocus();
-        });
-        picker.addEventListener('ionPickerColChange', async (event) => {
-            const data = event.detail;
-            if (data.name !== 'month' && data.name !== 'day' && data.name !== 'year') {
-                return;
-            }
-            const colSelectedIndex = data.selectedIndex;
-            const colOptions = data.options;
-            const changeData = {};
-            changeData[data.name] = {
-                value: colOptions[colSelectedIndex].value
-            };
-            this.updateDatetimeValue(changeData);
-            const columns = this.generateColumns();
-            picker.columns = columns;
-            await this.validate(picker);
-        });
-        await this.validate(picker);
-        await picker.present();
+        value = this.ensureValueInBounds(value);
+        this.ionChange.emit({ value });
     }
-    emitStyle() {
-        this.ionStyle.emit({
-            'interactive': true,
-            'datetime': true,
-            'has-placeholder': this.placeholder != null,
-            'has-value': this.hasValue(),
-            'interactive-disabled': this.disabled,
-        });
+    connectedCallback() {
+        this.updateRatio();
+        this.debounceChanged();
+        this.disabledChanged();
     }
-    updateDatetimeValue(value) {
-        updateDate(this.datetimeValue, value);
-    }
-    generatePickerOptions() {
-        const pickerOptions = Object.assign({ mode: this.mode }, this.pickerOptions, { columns: this.generateColumns() });
-        const buttons = pickerOptions.buttons;
-        if (!buttons || buttons.length === 0) {
-            pickerOptions.buttons = [
-                {
-                    text: this.cancelText,
-                    role: 'cancel',
-                    handler: () => {
-                        this.updateDatetimeValue(this.value);
-                        this.ionCancel.emit();
-                    }
-                },
-                {
-                    text: this.doneText,
-                    handler: (data) => {
-                        this.updateDatetimeValue(data);
-                        const date = new Date(convertDataToISO(this.datetimeValue));
-                        this.datetimeValue.tzOffset = date.getTimezoneOffset() * -1;
-                        this.value = convertDataToISO(this.datetimeValue);
-                    }
-                }
-            ];
-        }
-        return pickerOptions;
-    }
-    generateColumns() {
-        let template = this.pickerFormat || this.displayFormat || DEFAULT_FORMAT;
-        if (template.length === 0) {
-            return [];
-        }
-        this.calcMinMax();
-        template = template.replace('DDDD', '{~}').replace('DDD', '{~}');
-        if (template.indexOf('D') === -1) {
-            template = template.replace('{~}', 'D');
-        }
-        template = template.replace(/{~}/g, '');
-        const columns = parseTemplate(template).map((format) => {
-            const key = convertFormatToKey(format);
-            let values;
-            const self = this;
-            values = self[key + 'Values']
-                ? convertToArrayOfNumbers(self[key + 'Values'], key)
-                : dateValueRange(format, this.datetimeMin, this.datetimeMax);
-            const colOptions = values.map(val => {
-                return {
-                    value: val,
-                    text: renderTextFormat(format, val, undefined, this.locale),
-                };
-            });
-            const optValue = getDateValue(this.datetimeValue, format);
-            const selectedIndex = colOptions.findIndex(opt => opt.value === optValue);
-            return {
-                name: key,
-                selectedIndex: selectedIndex >= 0 ? selectedIndex : 0,
-                options: colOptions
-            };
-        });
-        const min = this.datetimeMin;
-        const max = this.datetimeMax;
-        ['month', 'day', 'hour', 'minute']
-            .filter(name => !columns.find(column => column.name === name))
-            .forEach(name => {
-            min[name] = 0;
-            max[name] = 0;
-        });
-        return divyColumns(columns);
-    }
-    async validate(picker) {
-        const today = new Date();
-        const minCompareVal = dateDataSortValue(this.datetimeMin);
-        const maxCompareVal = dateDataSortValue(this.datetimeMax);
-        const yearCol = await picker.getColumn('year');
-        let selectedYear = today.getFullYear();
-        if (yearCol) {
-            if (!yearCol.options.find(col => col.value === today.getFullYear())) {
-                selectedYear = yearCol.options[0].value;
-            }
-            const selectedIndex = yearCol.selectedIndex;
-            if (selectedIndex !== undefined) {
-                const yearOpt = yearCol.options[selectedIndex];
-                if (yearOpt) {
-                    selectedYear = yearOpt.value;
-                }
-            }
-        }
-        const selectedMonth = await this.validateColumn(picker, 'month', 1, minCompareVal, maxCompareVal, [selectedYear, 0, 0, 0, 0], [selectedYear, 12, 31, 23, 59]);
-        const numDaysInMonth = daysInMonth(selectedMonth, selectedYear);
-        const selectedDay = await this.validateColumn(picker, 'day', 2, minCompareVal, maxCompareVal, [selectedYear, selectedMonth, 0, 0, 0], [selectedYear, selectedMonth, numDaysInMonth, 23, 59]);
-        const selectedHour = await this.validateColumn(picker, 'hour', 3, minCompareVal, maxCompareVal, [selectedYear, selectedMonth, selectedDay, 0, 0], [selectedYear, selectedMonth, selectedDay, 23, 59]);
-        await this.validateColumn(picker, 'minute', 4, minCompareVal, maxCompareVal, [selectedYear, selectedMonth, selectedDay, selectedHour, 0], [selectedYear, selectedMonth, selectedDay, selectedHour, 59]);
-    }
-    calcMinMax() {
-        const todaysYear = new Date().getFullYear();
-        if (this.yearValues !== undefined) {
-            const years = convertToArrayOfNumbers(this.yearValues, 'year');
-            if (this.min === undefined) {
-                this.min = Math.min(...years).toString();
-            }
-            if (this.max === undefined) {
-                this.max = Math.max(...years).toString();
-            }
-        }
-        else {
-            if (this.min === undefined) {
-                this.min = (todaysYear - 100).toString();
-            }
-            if (this.max === undefined) {
-                this.max = todaysYear.toString();
-            }
-        }
-        const min = this.datetimeMin = parseDate(this.min);
-        const max = this.datetimeMax = parseDate(this.max);
-        min.year = min.year || todaysYear;
-        max.year = max.year || todaysYear;
-        min.month = min.month || 1;
-        max.month = max.month || 12;
-        min.day = min.day || 1;
-        max.day = max.day || 31;
-        min.hour = min.hour || 0;
-        max.hour = max.hour || 23;
-        min.minute = min.minute || 0;
-        max.minute = max.minute || 59;
-        min.second = min.second || 0;
-        max.second = max.second || 59;
-        if (min.year > max.year) {
-            console.error('min.year > max.year');
-            min.year = max.year - 100;
-        }
-        if (min.year === max.year) {
-            if (min.month > max.month) {
-                console.error('min.month > max.month');
-                min.month = 1;
-            }
-            else if (min.month === max.month && min.day > max.day) {
-                console.error('min.day > max.day');
-                min.day = 1;
-            }
-        }
-    }
-    async validateColumn(picker, name, index, min, max, lowerBounds, upperBounds) {
-        const column = await picker.getColumn(name);
-        if (!column) {
-            return 0;
-        }
-        const lb = lowerBounds.slice();
-        const ub = upperBounds.slice();
-        const options = column.options;
-        let indexMin = options.length - 1;
-        let indexMax = 0;
-        for (let i = 0; i < options.length; i++) {
-            const opts = options[i];
-            const value = opts.value;
-            lb[index] = opts.value;
-            ub[index] = opts.value;
-            const disabled = opts.disabled = (value < lowerBounds[index] ||
-                value > upperBounds[index] ||
-                dateSortValue(ub[0], ub[1], ub[2], ub[3], ub[4]) < min ||
-                dateSortValue(lb[0], lb[1], lb[2], lb[3], lb[4]) > max);
-            if (!disabled) {
-                indexMin = Math.min(indexMin, i);
-                indexMax = Math.max(indexMax, i);
-            }
-        }
-        const selectedIndex = column.selectedIndex = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_3__["i"])(indexMin, column.selectedIndex, indexMax);
-        const opt = column.options[selectedIndex];
-        if (opt) {
-            return opt.value;
-        }
-        return 0;
-    }
-    getText() {
-        const template = this.displayFormat || this.pickerFormat || DEFAULT_FORMAT;
-        if (this.value === undefined ||
-            this.value === null ||
-            this.value.length === 0) {
-            return;
-        }
-        return renderDatetime(template, this.datetimeValue, this.locale);
-    }
-    hasValue() {
-        const val = this.datetimeValue;
-        return Object.keys(val).length > 0;
-    }
-    setFocus() {
-        if (this.buttonEl) {
-            this.buttonEl.focus();
-        }
-    }
-    hostData() {
-        const { inputId, disabled, readonly, isExpanded, el, placeholder } = this;
-        const addPlaceholderClass = (this.getText() === undefined && placeholder != null) ? true : false;
-        const labelId = inputId + '-lbl';
-        const label = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_3__["d"])(el);
-        if (label) {
-            label.id = labelId;
-        }
-        return {
-            'role': 'combobox',
-            'aria-disabled': disabled ? 'true' : null,
-            'aria-expanded': `${isExpanded}`,
-            'aria-haspopup': 'true',
-            'aria-labelledby': labelId,
-            class: {
-                [`${this.mode}`]: true,
-                'datetime-disabled': disabled,
-                'datetime-readonly': readonly,
-                'datetime-placeholder': addPlaceholderClass,
-                'in-item': Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_2__["d"])('ion-item', el)
-            }
-        };
-    }
-    render() {
-        let datetimeText = this.getText();
-        if (datetimeText === undefined) {
-            datetimeText = this.placeholder != null ? this.placeholder : '';
-        }
-        Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_3__["e"])(true, this.el, this.name, this.value, this.disabled);
-        return [
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "datetime-text" }, datetimeText),
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("button", { type: "button", onFocus: this.onFocus, onBlur: this.onBlur, disabled: this.disabled, ref: el => this.buttonEl = el })
-        ];
-    }
-    static get is() { return "ion-datetime"; }
-    static get encapsulation() { return "shadow"; }
-    static get properties() { return {
-        "cancelText": {
-            "type": String,
-            "attr": "cancel-text"
-        },
-        "dayNames": {
-            "type": String,
-            "attr": "day-names"
-        },
-        "dayShortNames": {
-            "type": String,
-            "attr": "day-short-names"
-        },
-        "dayValues": {
-            "type": "Any",
-            "attr": "day-values"
-        },
-        "disabled": {
-            "type": Boolean,
-            "attr": "disabled",
-            "watchCallbacks": ["disabledChanged"]
-        },
-        "displayFormat": {
-            "type": String,
-            "attr": "display-format"
-        },
-        "doneText": {
-            "type": String,
-            "attr": "done-text"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "hourValues": {
-            "type": "Any",
-            "attr": "hour-values"
-        },
-        "isExpanded": {
-            "state": true
-        },
-        "max": {
-            "type": String,
-            "attr": "max",
-            "mutable": true
-        },
-        "min": {
-            "type": String,
-            "attr": "min",
-            "mutable": true
-        },
-        "minuteValues": {
-            "type": "Any",
-            "attr": "minute-values"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "monthNames": {
-            "type": String,
-            "attr": "month-names"
-        },
-        "monthShortNames": {
-            "type": String,
-            "attr": "month-short-names"
-        },
-        "monthValues": {
-            "type": "Any",
-            "attr": "month-values"
-        },
-        "name": {
-            "type": String,
-            "attr": "name"
-        },
-        "open": {
-            "method": true
-        },
-        "pickerCtrl": {
-            "connect": "ion-picker-controller"
-        },
-        "pickerFormat": {
-            "type": String,
-            "attr": "picker-format"
-        },
-        "pickerOptions": {
-            "type": "Any",
-            "attr": "picker-options"
-        },
-        "placeholder": {
-            "type": String,
-            "attr": "placeholder"
-        },
-        "readonly": {
-            "type": Boolean,
-            "attr": "readonly"
-        },
-        "value": {
-            "type": String,
-            "attr": "value",
-            "mutable": true,
-            "watchCallbacks": ["valueChanged"]
-        },
-        "yearValues": {
-            "type": "Any",
-            "attr": "year-values"
-        }
-    }; }
-    static get events() { return [{
-            "name": "ionCancel",
-            "method": "ionCancel",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionChange",
-            "method": "ionChange",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionFocus",
-            "method": "ionFocus",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionBlur",
-            "method": "ionBlur",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionStyle",
-            "method": "ionStyle",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get listeners() { return [{
-            "name": "click",
-            "method": "onClick"
-        }]; }
-    static get style() { return ".sc-ion-datetime-ios-h{padding-left:var(--padding-start);padding-right:var(--padding-end);padding-top:var(--padding-top);padding-bottom:var(--padding-bottom);display:-ms-flexbox;display:flex;position:relative;min-width:16px;min-height:1.2em;font-family:var(--ion-font-family,inherit);text-overflow:ellipsis;white-space:nowrap;overflow:hidden;z-index:2}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.sc-ion-datetime-ios-h{padding-left:unset;padding-right:unset;-webkit-padding-start:var(--padding-start);padding-inline-start:var(--padding-start);-webkit-padding-end:var(--padding-end);padding-inline-end:var(--padding-end)}}.in-item.sc-ion-datetime-ios-h{position:static}.datetime-placeholder.sc-ion-datetime-ios-h{color:var(--placeholder-color)}.datetime-disabled.sc-ion-datetime-ios-h{opacity:.3;pointer-events:none}.datetime-readonly.sc-ion-datetime-ios-h{pointer-events:none}button.sc-ion-datetime-ios{left:0;top:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;position:absolute;width:100%;height:100%;border:0;background:transparent;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none;outline:none}[dir=rtl].sc-ion-datetime-ios-h   button.sc-ion-datetime-ios, [dir=rtl]   .sc-ion-datetime-ios-h   button.sc-ion-datetime-ios{right:0}button.sc-ion-datetime-ios::-moz-focus-inner{border:0}.datetime-text.sc-ion-datetime-ios{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;letter-spacing:inherit;text-decoration:inherit;text-overflow:inherit;text-transform:inherit;text-align:inherit;white-space:inherit;color:inherit;-ms-flex:1;flex:1;min-height:inherit;direction:ltr;overflow:inherit}.sc-ion-datetime-ios-h{--placeholder-color:var(--ion-color-step-400,#999);--padding-top:10px;--padding-end:8px;--padding-bottom:10px;--padding-start:16px}"; }
-    static get styleMode() { return "ios"; }
-}
-function divyColumns(columns) {
-    const columnsWidth = [];
-    let col;
-    let width;
-    for (let i = 0; i < columns.length; i++) {
-        col = columns[i];
-        columnsWidth.push(0);
-        for (const option of col.options) {
-            width = option.text.length;
-            if (width > columnsWidth[i]) {
-                columnsWidth[i] = width;
-            }
-        }
-    }
-    if (columnsWidth.length === 2) {
-        width = Math.max(columnsWidth[0], columnsWidth[1]);
-        columns[0].align = 'right';
-        columns[1].align = 'left';
-        columns[0].optionsWidth = columns[1].optionsWidth = `${width * 17}px`;
-    }
-    else if (columnsWidth.length === 3) {
-        width = Math.max(columnsWidth[0], columnsWidth[2]);
-        columns[0].align = 'right';
-        columns[1].columnWidth = `${columnsWidth[1] * 17}px`;
-        columns[0].optionsWidth = columns[2].optionsWidth = `${width * 17}px`;
-        columns[2].align = 'left';
-    }
-    return columns;
-}
-let datetimeIds = 0;
-const DEFAULT_FORMAT = 'MMM D, YYYY';
-
-function iosEnterAnimation(AnimationC, baseEl) {
-    const baseAnimation = new AnimationC();
-    const backdropAnimation = new AnimationC();
-    backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    const wrapperAnimation = new AnimationC();
-    wrapperAnimation.addElement(baseEl.querySelector('.picker-wrapper'));
-    backdropAnimation.fromTo('opacity', 0.01, 0.26);
-    wrapperAnimation.fromTo('translateY', '100%', '0%');
-    return Promise.resolve(baseAnimation
-        .addElement(baseEl)
-        .easing('cubic-bezier(.36,.66,.04,1)')
-        .duration(400)
-        .add(backdropAnimation)
-        .add(wrapperAnimation));
-}
-
-function iosLeaveAnimation(AnimationC, baseEl) {
-    const baseAnimation = new AnimationC();
-    const backdropAnimation = new AnimationC();
-    backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    const wrapperAnimation = new AnimationC();
-    wrapperAnimation.addElement(baseEl.querySelector('.picker-wrapper'));
-    backdropAnimation.fromTo('opacity', 0.26, 0.01);
-    wrapperAnimation.fromTo('translateY', '0%', '100%');
-    return Promise.resolve(baseAnimation
-        .addElement(baseEl)
-        .easing('cubic-bezier(.36,.66,.04,1)')
-        .duration(400)
-        .add(backdropAnimation)
-        .add(wrapperAnimation));
-}
-
-class Picker {
-    constructor() {
-        this.presented = false;
-        this.keyboardClose = true;
-        this.buttons = [];
-        this.columns = [];
-        this.duration = 0;
-        this.showBackdrop = true;
-        this.backdropDismiss = true;
-        this.animated = true;
-    }
-    onBackdropTap() {
-        const cancelBtn = this.buttons.find(b => b.role === 'cancel');
-        if (cancelBtn) {
-            this.buttonClick(cancelBtn);
-        }
-        else {
-            this.dismiss();
-        }
-    }
-    async present() {
-        await Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["c"])(this, 'pickerEnter', iosEnterAnimation, iosEnterAnimation, undefined);
-        if (this.duration > 0) {
-            this.durationTimeout = setTimeout(() => this.dismiss(), this.duration);
-        }
-    }
-    dismiss(data, role) {
-        if (this.durationTimeout) {
-            clearTimeout(this.durationTimeout);
-        }
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["d"])(this, data, role, 'pickerLeave', iosLeaveAnimation, iosLeaveAnimation);
-    }
-    onDidDismiss() {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["e"])(this.el, 'ionPickerDidDismiss');
-    }
-    onWillDismiss() {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["e"])(this.el, 'ionPickerWillDismiss');
-    }
-    getColumn(name) {
-        return Promise.resolve(this.columns.find(column => column.name === name));
-    }
-    buttonClick(button) {
-        let shouldDismiss = true;
-        if (button.handler) {
-            if (button.handler(this.getSelected()) === false) {
-                shouldDismiss = false;
-            }
-        }
-        if (shouldDismiss) {
-            return this.dismiss();
-        }
-        return Promise.resolve(false);
-    }
-    getSelected() {
-        const selected = {};
-        this.columns.forEach((col, index) => {
-            const selectedColumn = col.selectedIndex !== undefined
-                ? col.options[col.selectedIndex]
-                : undefined;
-            selected[col.name] = {
-                text: selectedColumn ? selectedColumn.text : undefined,
-                value: selectedColumn ? selectedColumn.value : undefined,
-                columnIndex: index
-            };
-        });
-        return selected;
-    }
-    hostData() {
-        return {
-            'aria-modal': 'true',
-            class: Object.assign({ [`${this.mode}`]: true, [`picker-${this.mode}`]: true }, Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_2__["a"])(this.cssClass)),
-            style: {
-                zIndex: 20000 + this.overlayIndex
-            }
-        };
-    }
-    render() {
-        return [
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-backdrop", { visible: this.showBackdrop, tappable: this.backdropDismiss }),
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-wrapper", role: "dialog" },
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-toolbar" }, this.buttons.map(b => (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: buttonWrapperClass(b) },
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("button", { type: "button", onClick: () => this.buttonClick(b), class: buttonClass(b) }, b.text))))),
-                Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-columns" },
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-above-highlight" }),
-                    this.presented && this.columns.map(c => Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("ion-picker-column", { col: c })),
-                    Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-below-highlight" })))
-        ];
-    }
-    static get is() { return "ion-picker"; }
-    static get encapsulation() { return "scoped"; }
-    static get properties() { return {
-        "animated": {
-            "type": Boolean,
-            "attr": "animated"
-        },
-        "backdropDismiss": {
-            "type": Boolean,
-            "attr": "backdrop-dismiss"
-        },
-        "buttons": {
-            "type": "Any",
-            "attr": "buttons"
-        },
-        "columns": {
-            "type": "Any",
-            "attr": "columns"
-        },
-        "config": {
-            "context": "config"
-        },
-        "cssClass": {
-            "type": String,
-            "attr": "css-class"
-        },
-        "dismiss": {
-            "method": true
-        },
-        "duration": {
-            "type": Number,
-            "attr": "duration"
-        },
-        "el": {
-            "elementRef": true
-        },
-        "enterAnimation": {
-            "type": "Any",
-            "attr": "enter-animation"
-        },
-        "getColumn": {
-            "method": true
-        },
-        "keyboardClose": {
-            "type": Boolean,
-            "attr": "keyboard-close"
-        },
-        "leaveAnimation": {
-            "type": "Any",
-            "attr": "leave-animation"
-        },
-        "mode": {
-            "type": String,
-            "attr": "mode"
-        },
-        "onDidDismiss": {
-            "method": true
-        },
-        "onWillDismiss": {
-            "method": true
-        },
-        "overlayIndex": {
-            "type": Number,
-            "attr": "overlay-index"
-        },
-        "present": {
-            "method": true
-        },
-        "presented": {
-            "state": true
-        },
-        "showBackdrop": {
-            "type": Boolean,
-            "attr": "show-backdrop"
-        }
-    }; }
-    static get events() { return [{
-            "name": "ionPickerDidPresent",
-            "method": "didPresent",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionPickerWillPresent",
-            "method": "willPresent",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionPickerWillDismiss",
-            "method": "willDismiss",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }, {
-            "name": "ionPickerDidDismiss",
-            "method": "didDismiss",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get listeners() { return [{
-            "name": "ionBackdropTap",
-            "method": "onBackdropTap"
-        }]; }
-    static get style() { return ".sc-ion-picker-ios-h{--border-radius:0;--border-style:solid;--min-width:auto;--width:100%;--max-width:500px;--min-height:auto;--max-height:auto;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;left:0;top:0;display:block;position:absolute;width:100%;height:100%;font-family:var(--ion-font-family,inherit);contain:strict;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:1000}[dir=rtl].sc-ion-picker-ios-h + b.sc-ion-picker-ios{right:0}.overlay-hidden.sc-ion-picker-ios-h{display:none}.picker-wrapper.sc-ion-picker-ios{border-radius:var(--border-radius);left:0;right:0;bottom:0;margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0);display:-ms-flexbox;display:flex;position:absolute;-ms-flex-direction:column;flex-direction:column;width:var(--width);min-width:var(--min-width);max-width:var(--max-width);height:var(--height);min-height:var(--min-height);max-height:var(--max-height);border-width:var(--border-width);border-style:var(--border-style);border-color:var(--border-color);background:var(--background);contain:strict;overflow:hidden;z-index:10}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.picker-wrapper.sc-ion-picker-ios{margin-left:unset;margin-right:unset;-webkit-margin-start:auto;margin-inline-start:auto;-webkit-margin-end:auto;margin-inline-end:auto}}.picker-toolbar.sc-ion-picker-ios{width:100%;background:transparent;contain:strict;z-index:1}.picker-button.sc-ion-picker-ios{border:0;font-family:inherit}.picker-button.sc-ion-picker-ios:active, .picker-button.sc-ion-picker-ios:focus{outline:none}.picker-columns.sc-ion-picker-ios{display:-ms-flexbox;display:flex;position:relative;-ms-flex-pack:center;justify-content:center;margin-bottom:var(--ion-safe-area-bottom,0);contain:strict;direction:ltr;overflow:hidden}.picker-above-highlight.sc-ion-picker-ios, .picker-below-highlight.sc-ion-picker-ios{display:none;pointer-events:none}.sc-ion-picker-ios-h{--background:var(--ion-background-color,#fff);--border-width:1px 0 0;--border-color:var(--ion-item-border-color,var(--ion-border-color,var(--ion-color-step-150,#c8c7cc)));--height:260px;color:var(--ion-item-color,var(--ion-text-color,#000))}.picker-toolbar.sc-ion-picker-ios{display:-ms-flexbox;display:flex;height:44px;border-bottom:.55px solid var(--border-color)}.picker-toolbar-button.sc-ion-picker-ios{-ms-flex:1;flex:1;text-align:end}.picker-toolbar-button.sc-ion-picker-ios:last-child   .picker-button.sc-ion-picker-ios{font-weight:600}.picker-toolbar-button.sc-ion-picker-ios:first-child{font-weight:400;text-align:start}.picker-button.sc-ion-picker-ios, .picker-button.activated.sc-ion-picker-ios{margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:1em;padding-right:1em;padding-top:0;padding-bottom:0;height:44px;background:transparent;color:var(--ion-color-primary,#3880ff);font-size:16px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.picker-button.sc-ion-picker-ios, .picker-button.activated.sc-ion-picker-ios{padding-left:unset;padding-right:unset;-webkit-padding-start:1em;padding-inline-start:1em;-webkit-padding-end:1em;padding-inline-end:1em}}.picker-columns.sc-ion-picker-ios{height:215px;-webkit-perspective:1000px;perspective:1000px}.picker-above-highlight.sc-ion-picker-ios{left:0;top:0;-webkit-transform:translateZ(90px);transform:translateZ(90px);display:block;position:absolute;width:100%;height:81px;border-bottom:1px solid var(--border-color);background:-webkit-gradient(linear,left top,left bottom,color-stop(20%,var(--background,var(--ion-background-color,#fff))),to(rgba(var(--background-rgb,var(--ion-background-color-rgb,255,255,255)),.8)));background:linear-gradient(180deg,var(--background,var(--ion-background-color,#fff)) 20%,rgba(var(--background-rgb,var(--ion-background-color-rgb,255,255,255)),.8));z-index:10}[dir=rtl].sc-ion-picker-ios-h   .picker-above-highlight.sc-ion-picker-ios, [dir=rtl]   .sc-ion-picker-ios-h   .picker-above-highlight.sc-ion-picker-ios{right:0}.picker-below-highlight.sc-ion-picker-ios{left:0;top:115px;-webkit-transform:translateZ(90px);transform:translateZ(90px);display:block;position:absolute;width:100%;height:119px;border-top:1px solid var(--border-color);background:-webkit-gradient(linear,left bottom,left top,color-stop(30%,var(--background,var(--ion-background-color,#fff))),to(rgba(var(--background-rgb,var(--ion-background-color-rgb,255,255,255)),.8)));background:linear-gradient(0deg,var(--background,var(--ion-background-color,#fff)) 30%,rgba(var(--background-rgb,var(--ion-background-color-rgb,255,255,255)),.8));z-index:11}[dir=rtl].sc-ion-picker-ios-h   .picker-below-highlight.sc-ion-picker-ios, [dir=rtl]   .sc-ion-picker-ios-h   .picker-below-highlight.sc-ion-picker-ios{right:0}"; }
-    static get styleMode() { return "ios"; }
-}
-function buttonWrapperClass(button) {
-    return {
-        [`picker-toolbar-${button.role}`]: button.role !== undefined,
-        'picker-toolbar-button': true
-    };
-}
-function buttonClass(button) {
-    return Object.assign({ 'picker-button': true, 'ion-activatable': true }, Object(_chunk_2f96b3d2_js__WEBPACK_IMPORTED_MODULE_2__["a"])(button.cssClass));
-}
-
-class PickerColumnCmp {
-    constructor() {
-        this.optHeight = 0;
-        this.rotateFactor = 0;
-        this.scaleFactor = 1;
-        this.velocity = 0;
-        this.y = 0;
-        this.noAnimate = true;
-    }
-    colChanged() {
-        this.refresh();
-    }
-    componentWillLoad() {
-        let pickerRotateFactor = 0;
-        let pickerScaleFactor = 0.81;
-        if (this.mode === 'ios') {
-            pickerRotateFactor = -0.46;
-            pickerScaleFactor = 1;
-        }
-        this.rotateFactor = pickerRotateFactor;
-        this.scaleFactor = pickerScaleFactor;
-    }
-    async componentDidLoad() {
-        const colEl = this.optsEl;
-        if (colEl) {
-            this.optHeight = (colEl.firstElementChild ? colEl.firstElementChild.clientHeight : 0);
-        }
-        this.refresh();
-        this.gesture = (await Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e("common")]).then(__webpack_require__.bind(null, /*! ./chunk-f56eaea8.js */ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-f56eaea8.js"))).createGesture({
-            el: this.el,
-            queue: this.queue,
-            gestureName: 'picker-swipe',
-            gesturePriority: 100,
-            threshold: 0,
-            onStart: ev => this.onStart(ev),
-            onMove: ev => this.onMove(ev),
-            onEnd: ev => this.onEnd(ev),
-        });
-        this.gesture.setDisabled(false);
-        this.tmrId = setTimeout(() => {
-            this.noAnimate = false;
-            this.refresh(true);
-        }, 250);
-    }
-    componentDidUnload() {
-        cancelAnimationFrame(this.rafId);
-        clearTimeout(this.tmrId);
+    disconnectedCallback() {
         if (this.gesture) {
             this.gesture.destroy();
             this.gesture = undefined;
         }
     }
-    emitColChange() {
-        this.ionPickerColChange.emit(this.col);
-    }
-    setSelected(selectedIndex, duration) {
-        const y = (selectedIndex > -1) ? -(selectedIndex * this.optHeight) : 0;
-        this.velocity = 0;
-        cancelAnimationFrame(this.rafId);
-        this.update(y, duration, true);
-        this.emitColChange();
-    }
-    update(y, duration, saveY) {
-        if (!this.optsEl) {
-            return;
-        }
-        let translateY = 0;
-        let translateZ = 0;
-        const { col, rotateFactor } = this;
-        const selectedIndex = col.selectedIndex = this.indexForY(-y);
-        const durationStr = (duration === 0) ? '' : duration + 'ms';
-        const scaleStr = `scale(${this.scaleFactor})`;
-        const children = this.optsEl.children;
-        for (let i = 0; i < children.length; i++) {
-            const button = children[i];
-            const opt = col.options[i];
-            const optOffset = (i * this.optHeight) + y;
-            let transform = '';
-            if (rotateFactor !== 0) {
-                const rotateX = optOffset * rotateFactor;
-                if (Math.abs(rotateX) <= 90) {
-                    translateY = 0;
-                    translateZ = 90;
-                    transform = `rotateX(${rotateX}deg) `;
-                }
-                else {
-                    translateY = -9999;
-                }
-            }
-            else {
-                translateZ = 0;
-                translateY = optOffset;
-            }
-            const selected = selectedIndex === i;
-            transform += `translate3d(0px,${translateY}px,${translateZ}px) `;
-            if (this.scaleFactor !== 1 && !selected) {
-                transform += scaleStr;
-            }
-            if (this.noAnimate) {
-                opt.duration = 0;
-                button.style.transitionDuration = '';
-            }
-            else if (duration !== opt.duration) {
-                opt.duration = duration;
-                button.style.transitionDuration = durationStr;
-            }
-            if (transform !== opt.transform) {
-                opt.transform = transform;
-                button.style.transform = transform;
-            }
-            if (selected !== opt.selected) {
-                opt.selected = selected;
-                if (selected) {
-                    button.classList.add(PICKER_OPT_SELECTED);
-                }
-                else {
-                    button.classList.remove(PICKER_OPT_SELECTED);
-                }
-            }
-        }
-        this.col.prevSelected = selectedIndex;
-        if (saveY) {
-            this.y = y;
-        }
-        if (this.lastIndex !== selectedIndex) {
-            Object(_chunk_81780b86_js__WEBPACK_IMPORTED_MODULE_4__["a"])();
-            this.lastIndex = selectedIndex;
+    async componentDidLoad() {
+        const rangeSlider = this.rangeSlider;
+        if (rangeSlider) {
+            this.gesture = (await Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ./index-624eea58.js */ "./node_modules/@ionic/core/dist/esm/index-624eea58.js"))).createGesture({
+                el: rangeSlider,
+                gestureName: 'range',
+                gesturePriority: 100,
+                threshold: 0,
+                onStart: ev => this.onStart(ev),
+                onMove: ev => this.onMove(ev),
+                onEnd: ev => this.onEnd(ev),
+            });
+            this.gesture.setDisabled(this.disabled);
         }
     }
-    decelerate() {
-        if (this.velocity !== 0) {
-            this.velocity *= DECELERATION_FRICTION;
-            this.velocity = (this.velocity > 0)
-                ? Math.max(this.velocity, 1)
-                : Math.min(this.velocity, -1);
-            let y = this.y + this.velocity;
-            if (y > this.minY) {
-                y = this.minY;
-                this.velocity = 0;
+    getValue() {
+        const value = this.value || 0;
+        if (this.dualKnobs) {
+            if (typeof value === 'object') {
+                return value;
             }
-            else if (y < this.maxY) {
-                y = this.maxY;
-                this.velocity = 0;
-            }
-            this.update(y, 0, true);
-            const notLockedIn = (Math.round(y) % this.optHeight !== 0) || (Math.abs(this.velocity) > 1);
-            if (notLockedIn) {
-                this.rafId = requestAnimationFrame(() => this.decelerate());
-            }
-            else {
-                this.velocity = 0;
-                this.emitColChange();
-            }
+            return {
+                lower: 0,
+                upper: value
+            };
         }
-        else if (this.y % this.optHeight !== 0) {
-            const currentPos = Math.abs(this.y % this.optHeight);
-            this.velocity = (currentPos > (this.optHeight / 2) ? 1 : -1);
-            this.decelerate();
+        else {
+            if (typeof value === 'object') {
+                return value.upper;
+            }
+            return value;
         }
     }
-    indexForY(y) {
-        return Math.min(Math.max(Math.abs(Math.round(y / this.optHeight)), 0), this.col.options.length - 1);
+    emitStyle() {
+        this.ionStyle.emit({
+            'interactive': true,
+            'interactive-disabled': this.disabled
+        });
     }
     onStart(detail) {
-        detail.event.preventDefault();
-        detail.event.stopPropagation();
-        cancelAnimationFrame(this.rafId);
-        const options = this.col.options;
-        let minY = (options.length - 1);
-        let maxY = 0;
-        for (let i = 0; i < options.length; i++) {
-            if (!options[i].disabled) {
-                minY = Math.min(minY, i);
-                maxY = Math.max(maxY, i);
-            }
+        const rect = this.rect = this.rangeSlider.getBoundingClientRect();
+        const currentX = detail.currentX;
+        // figure out which knob they started closer to
+        let ratio = Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(0, (currentX - rect.left) / rect.width, 1);
+        if (document.dir === 'rtl') {
+            ratio = 1 - ratio;
         }
-        this.minY = -(minY * this.optHeight);
-        this.maxY = -(maxY * this.optHeight);
+        this.pressedKnob =
+            !this.dualKnobs ||
+                Math.abs(this.ratioA - ratio) < Math.abs(this.ratioB - ratio)
+                ? 'A'
+                : 'B';
+        this.setFocus(this.pressedKnob);
+        // update the active knob's position
+        this.update(currentX);
     }
     onMove(detail) {
-        detail.event.preventDefault();
-        detail.event.stopPropagation();
-        let y = this.y + detail.deltaY;
-        if (y > this.minY) {
-            y = Math.pow(y, 0.8);
-            this.bounceFrom = y;
-        }
-        else if (y < this.maxY) {
-            y += Math.pow(this.maxY - y, 0.9);
-            this.bounceFrom = y;
-        }
-        else {
-            this.bounceFrom = 0;
-        }
-        this.update(y, 0, false);
+        this.update(detail.currentX);
     }
     onEnd(detail) {
-        if (this.bounceFrom > 0) {
-            this.update(this.minY, 100, true);
-            this.emitColChange();
-            return;
+        this.update(detail.currentX);
+        this.pressedKnob = undefined;
+    }
+    update(currentX) {
+        // figure out where the pointer is currently at
+        // update the knob being interacted with
+        const rect = this.rect;
+        let ratio = Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(0, (currentX - rect.left) / rect.width, 1);
+        if (document.dir === 'rtl') {
+            ratio = 1 - ratio;
         }
-        else if (this.bounceFrom < 0) {
-            this.update(this.maxY, 100, true);
-            this.emitColChange();
-            return;
+        if (this.snaps) {
+            // snaps the ratio to the current value
+            ratio = valueToRatio(ratioToValue(ratio, this.min, this.max, this.step), this.min, this.max);
         }
-        this.velocity = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_3__["i"])(-MAX_PICKER_SPEED, detail.velocityY * 23, MAX_PICKER_SPEED);
-        if (this.velocity === 0 && detail.deltaY === 0) {
-            const opt = detail.event.target.closest('.picker-opt');
-            if (opt && opt.hasAttribute('opt-index')) {
-                this.setSelected(parseInt(opt.getAttribute('opt-index'), 10), TRANSITION_DURATION);
-            }
+        // update which knob is pressed
+        if (this.pressedKnob === 'A') {
+            this.ratioA = ratio;
         }
         else {
-            this.y += detail.deltaY;
-            this.decelerate();
+            this.ratioB = ratio;
+        }
+        // Update input value
+        this.updateValue();
+    }
+    get valA() {
+        return ratioToValue(this.ratioA, this.min, this.max, this.step);
+    }
+    get valB() {
+        return ratioToValue(this.ratioB, this.min, this.max, this.step);
+    }
+    get ratioLower() {
+        if (this.dualKnobs) {
+            return Math.min(this.ratioA, this.ratioB);
+        }
+        return 0;
+    }
+    get ratioUpper() {
+        if (this.dualKnobs) {
+            return Math.max(this.ratioA, this.ratioB);
+        }
+        return this.ratioA;
+    }
+    updateRatio() {
+        const value = this.getValue();
+        const { min, max } = this;
+        if (this.dualKnobs) {
+            this.ratioA = valueToRatio(value.lower, min, max);
+            this.ratioB = valueToRatio(value.upper, min, max);
+        }
+        else {
+            this.ratioA = valueToRatio(value, min, max);
         }
     }
-    refresh(forceRefresh) {
-        let min = this.col.options.length - 1;
-        let max = 0;
-        const options = this.col.options;
-        for (let i = 0; i < options.length; i++) {
-            if (!options[i].disabled) {
-                min = Math.min(min, i);
-                max = Math.max(max, i);
-            }
-        }
-        if (this.velocity !== 0) {
-            return;
-        }
-        const selectedIndex = Object(_chunk_6d7d2f8c_js__WEBPACK_IMPORTED_MODULE_3__["i"])(min, this.col.selectedIndex || 0, max);
-        if (this.col.prevSelected !== selectedIndex || forceRefresh) {
-            const y = (selectedIndex * this.optHeight) * -1;
-            this.velocity = 0;
-            this.update(y, TRANSITION_DURATION, true);
-        }
+    updateValue() {
+        this.noUpdate = true;
+        const { valA, valB } = this;
+        this.value = !this.dualKnobs
+            ? valA
+            : {
+                lower: Math.min(valA, valB),
+                upper: Math.max(valA, valB)
+            };
+        this.noUpdate = false;
     }
-    hostData() {
-        return {
-            class: {
-                [`${this.mode}`]: true,
-                'picker-col': true,
-                'picker-opts-left': this.col.align === 'left',
-                'picker-opts-right': this.col.align === 'right'
-            },
-            style: {
-                'max-width': this.col.columnWidth
+    setFocus(knob) {
+        if (this.el.shadowRoot) {
+            const knobEl = this.el.shadowRoot.querySelector(knob === 'A' ? '.range-knob-a' : '.range-knob-b');
+            if (knobEl) {
+                knobEl.focus();
             }
-        };
+        }
     }
     render() {
-        const col = this.col;
-        const Button = 'button';
-        return [
-            col.prefix && (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-prefix", style: { width: col.prefixWidth } }, col.prefix)),
-            Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-opts", style: { maxWidth: col.optionsWidth }, ref: el => this.optsEl = el }, col.options.map((o, index) => Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])(Button, { type: "button", class: { 'picker-opt': true, 'picker-opt-disabled': !!o.disabled }, "opt-index": index }, o.text))),
-            col.suffix && (Object(_ionic_core_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "picker-suffix", style: { width: col.suffixWidth } }, col.suffix))
-        ];
-    }
-    static get is() { return "ion-picker-column"; }
-    static get properties() { return {
-        "col": {
-            "type": "Any",
-            "attr": "col",
-            "watchCallbacks": ["colChanged"]
-        },
-        "el": {
-            "elementRef": true
-        },
-        "queue": {
-            "context": "queue"
+        const { min, max, step, el, handleKeyboard, pressedKnob, disabled, pin, ratioLower, ratioUpper } = this;
+        const mode = Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["c"])(this);
+        const barStart = `${ratioLower * 100}%`;
+        const barEnd = `${100 - ratioUpper * 100}%`;
+        const doc = document;
+        const isRTL = doc.dir === 'rtl';
+        const start = isRTL ? 'right' : 'left';
+        const end = isRTL ? 'left' : 'right';
+        const tickStyle = (tick) => {
+            return {
+                [start]: tick[start]
+            };
+        };
+        const barStyle = {
+            [start]: barStart,
+            [end]: barEnd
+        };
+        const ticks = [];
+        if (this.snaps && this.ticks) {
+            for (let value = min; value <= max; value += step) {
+                const ratio = valueToRatio(value, min, max);
+                const tick = {
+                    ratio,
+                    active: ratio >= ratioLower && ratio <= ratioUpper,
+                };
+                tick[start] = `${ratio * 100}%`;
+                ticks.push(tick);
+            }
         }
+        Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["a"])(true, el, this.name, JSON.stringify(this.getValue()), disabled);
+        return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["H"], { onFocusin: this.onFocus, onFocusout: this.onBlur, class: Object.assign(Object.assign({}, Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__["c"])(this.color)), { [mode]: true, 'in-item': Object(_theme_18cbe2cc_js__WEBPACK_IMPORTED_MODULE_3__["h"])('ion-item', el), 'range-disabled': disabled, 'range-pressed': pressedKnob !== undefined, 'range-has-pin': pin }) }, Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "start" }), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "range-slider", ref: rangeEl => this.rangeSlider = rangeEl }, ticks.map(tick => (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { style: tickStyle(tick), role: "presentation", class: {
+                'range-tick': true,
+                'range-tick-active': tick.active
+            } }))), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "range-bar", role: "presentation" }), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "range-bar range-bar-active", role: "presentation", style: barStyle }), renderKnob(isRTL, {
+            knob: 'A',
+            pressed: pressedKnob === 'A',
+            value: this.valA,
+            ratio: this.ratioA,
+            pin,
+            disabled,
+            handleKeyboard,
+            min,
+            max
+        }), this.dualKnobs && renderKnob(isRTL, {
+            knob: 'B',
+            pressed: pressedKnob === 'B',
+            value: this.valB,
+            ratio: this.ratioB,
+            pin,
+            disabled,
+            handleKeyboard,
+            min,
+            max
+        })), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("slot", { name: "end" })));
+    }
+    get el() { return Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["e"])(this); }
+    static get watchers() { return {
+        "debounce": ["debounceChanged"],
+        "min": ["minChanged"],
+        "max": ["maxChanged"],
+        "disabled": ["disabledChanged"],
+        "value": ["valueChanged"]
     }; }
-    static get events() { return [{
-            "name": "ionPickerColChange",
-            "method": "ionPickerColChange",
-            "bubbles": true,
-            "cancelable": true,
-            "composed": true
-        }]; }
-    static get style() { return ".picker-col{display:-ms-flexbox;display:flex;position:relative;-ms-flex:1;flex:1;-ms-flex-pack:center;justify-content:center;height:100%;-webkit-box-sizing:content-box;box-sizing:content-box;contain:content}.picker-opts{position:relative;-ms-flex:1;flex:1;max-width:100%}.picker-opt{left:0;top:0;display:block;position:absolute;width:100%;border:0;text-align:center;text-overflow:ellipsis;white-space:nowrap;contain:strict;overflow:hidden;will-change:transform}:host-context([dir=rtl]) .picker-opt{right:0}.picker-opt.picker-opt-disabled{pointer-events:none}.picker-opt-disabled{opacity:0}.picker-opts-left{-ms-flex-pack:start;justify-content:flex-start}.picker-opts-right,:host-context([dir=rtl]) .picker-opts-left{-ms-flex-pack:end;justify-content:flex-end}:host-context([dir=rtl]) .picker-opts-right{-ms-flex-pack:start;justify-content:flex-start}.picker-opt:active,.picker-opt:focus{outline:none}.picker-prefix{text-align:end}.picker-prefix,.picker-suffix{position:relative;-ms-flex:1;flex:1;white-space:nowrap}.picker-suffix{text-align:start}.picker-col{padding-left:4px;padding-right:4px;padding-top:0;padding-bottom:0;-webkit-transform-style:preserve-3d;transform-style:preserve-3d}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.picker-col{padding-left:unset;padding-right:unset;-webkit-padding-start:4px;padding-inline-start:4px;-webkit-padding-end:4px;padding-inline-end:4px}}.picker-opts,.picker-prefix,.picker-suffix{top:77px;pointer-events:none}.picker-opt,.picker-opts,.picker-prefix,.picker-suffix{-webkit-transform-style:preserve-3d;transform-style:preserve-3d;color:inherit;font-size:20px;line-height:42px}.picker-opt{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;-webkit-transform-origin:center center;transform-origin:center center;height:46px;-webkit-transition-timing-function:ease-out;transition-timing-function:ease-out;background:transparent;-webkit-backface-visibility:hidden;backface-visibility:hidden;pointer-events:auto}:host-context([dir=rtl]) .picker-opt{-webkit-transform-origin:calc(100% - center) center;transform-origin:calc(100% - center) center}"; }
-    static get styleMode() { return "ios"; }
-}
-const PICKER_OPT_SELECTED = 'picker-opt-selected';
-const DECELERATION_FRICTION = 0.97;
-const MAX_PICKER_SPEED = 90;
-const TRANSITION_DURATION = 150;
-
-class PickerController {
-    create(options) {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["f"])(this.doc.createElement('ion-picker'), options);
+    static get style() { return ":host{--knob-handle-size:calc(var(--knob-size) * 2);display:-ms-flexbox;display:flex;position:relative;-ms-flex:3;flex:3;-ms-flex-align:center;align-items:center;font-family:var(--ion-font-family,inherit);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:2}:host(.range-disabled){pointer-events:none}::slotted(ion-label){-ms-flex:initial;flex:initial}::slotted(ion-icon[slot]){font-size:24px}.range-slider{position:relative;-ms-flex:1;flex:1;width:100%;height:var(--height);contain:size layout style;cursor:-webkit-grab;cursor:grab;-ms-touch-action:pan-y;touch-action:pan-y}:host(.range-pressed) .range-slider{cursor:-webkit-grabbing;cursor:grabbing}.range-pin{position:absolute;background:var(--ion-color-base);color:var(--ion-color-contrast);-webkit-box-sizing:border-box;box-sizing:border-box}.range-knob-handle{left:0;top:calc((var(--height) - var(--knob-handle-size)) / 2);margin-left:calc(0px - var(--knob-handle-size) / 2);position:absolute;width:var(--knob-handle-size);height:var(--knob-handle-size);text-align:center}:host-context([dir=rtl]) .range-knob-handle,[dir=rtl] .range-knob-handle{right:unset;right:0}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.range-knob-handle{margin-left:unset;-webkit-margin-start:calc(0px - var(--knob-handle-size) / 2);margin-inline-start:calc(0px - var(--knob-handle-size) / 2)}}:host-context([dir=rtl]) .range-knob-handle,[dir=rtl] .range-knob-handle{left:unset}.range-knob-handle:active,.range-knob-handle:focus{outline:none}.range-bar{border-radius:var(--bar-border-radius);left:0;top:calc((var(--height) - var(--bar-height)) / 2);position:absolute;width:100%;height:var(--bar-height);background:var(--bar-background);pointer-events:none}:host-context([dir=rtl]) .range-bar,[dir=rtl] .range-bar{right:unset;right:0;left:unset}.range-knob{border-radius:var(--knob-border-radius);left:calc(50% - var(--knob-size) / 2);top:calc(50% - var(--knob-size) / 2);position:absolute;width:var(--knob-size);height:var(--knob-size);background:var(--knob-background);-webkit-box-shadow:var(--knob-box-shadow);box-shadow:var(--knob-box-shadow);z-index:2;pointer-events:none}:host-context([dir=rtl]) .range-knob,[dir=rtl] .range-knob{right:unset;right:calc(50% - var(--knob-size) / 2);left:unset}:host(.range-pressed) .range-bar-active{will-change:left,right}:host(.in-item){width:100%}:host(.in-item) ::slotted(ion-label){-ms-flex-item-align:center;align-self:center}:host{--knob-border-radius:50%;--knob-background:#fff;--knob-box-shadow:0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02);--knob-size:28px;--bar-height:2px;--bar-background:rgba(var(--ion-text-color-rgb,0,0,0),0.1);--bar-background-active:var(--ion-color-primary,#3880ff);--bar-border-radius:0;--height:42px;padding-left:16px;padding-right:16px;padding-top:8px;padding-bottom:8px}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){:host{padding-left:unset;padding-right:unset;-webkit-padding-start:16px;padding-inline-start:16px;-webkit-padding-end:16px;padding-inline-end:16px}}:host(.ion-color) .range-bar-active,:host(.ion-color) .range-tick-active{background:var(--ion-color-base)}::slotted([slot=start]){margin-left:0;margin-right:16px;margin-top:0;margin-bottom:0}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){::slotted([slot=start]){margin-left:unset;margin-right:unset;-webkit-margin-start:0;margin-inline-start:0;-webkit-margin-end:16px;margin-inline-end:16px}}::slotted([slot=end]){margin-left:16px;margin-right:0;margin-top:0;margin-bottom:0}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){::slotted([slot=end]){margin-left:unset;margin-right:unset;-webkit-margin-start:16px;margin-inline-start:16px;-webkit-margin-end:0;margin-inline-end:0}}:host(.range-has-pin){padding-top:20px}.range-bar-active{bottom:0;width:auto;background:var(--bar-background-active)}.range-tick{margin-left:-1px;border-radius:0;position:absolute;top:18px;width:2px;height:8px;background:rgba(var(--ion-text-color-rgb,0,0,0),.1);pointer-events:none}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.range-tick{margin-left:unset;-webkit-margin-start:-1px;margin-inline-start:-1px}}.range-tick-active{background:var(--bar-background-active)}.range-pin{-webkit-transform:translate3d(0,28px,0) scale(.01);transform:translate3d(0,28px,0) scale(.01);padding-left:8px;padding-right:8px;padding-top:8px;padding-bottom:8px;display:inline-block;position:relative;top:-20px;min-width:28px;-webkit-transition:-webkit-transform .12s ease;transition:-webkit-transform .12s ease;transition:transform .12s ease;transition:transform .12s ease,-webkit-transform .12s ease;background:transparent;color:var(--ion-text-color,#000);font-size:12px;text-align:center}\@supports ((-webkit-margin-start:0) or (margin-inline-start:0)) or (-webkit-margin-start:0){.range-pin{padding-left:unset;padding-right:unset;-webkit-padding-start:8px;padding-inline-start:8px;-webkit-padding-end:8px;padding-inline-end:8px}}.range-knob-pressed .range-pin{-webkit-transform:translateZ(0) scale(1);transform:translateZ(0) scale(1)}:host(.range-disabled){opacity:.5}"; }
+};
+const renderKnob = (isRTL, { knob, value, ratio, min, max, disabled, pressed, pin, handleKeyboard }) => {
+    const start = isRTL ? 'right' : 'left';
+    const knobStyle = () => {
+        const style = {};
+        style[start] = `${ratio * 100}%`;
+        return style;
+    };
+    return (Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { onKeyDown: (ev) => {
+            const key = ev.key;
+            if (key === 'ArrowLeft' || key === 'ArrowDown') {
+                handleKeyboard(knob, false);
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+            else if (key === 'ArrowRight' || key === 'ArrowUp') {
+                handleKeyboard(knob, true);
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+        }, class: {
+            'range-knob-handle': true,
+            'range-knob-a': knob === 'A',
+            'range-knob-b': knob === 'B',
+            'range-knob-pressed': pressed,
+            'range-knob-min': value === min,
+            'range-knob-max': value === max
+        }, style: knobStyle(), role: "slider", tabindex: disabled ? -1 : 0, "aria-valuemin": min, "aria-valuemax": max, "aria-disabled": disabled ? 'true' : null, "aria-valuenow": value }, pin && Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "range-pin", role: "presentation" }, Math.round(value)), Object(_core_feeeff0d_js__WEBPACK_IMPORTED_MODULE_0__["h"])("div", { class: "range-knob", role: "presentation" })));
+};
+const ratioToValue = (ratio, min, max, step) => {
+    let value = (max - min) * ratio;
+    if (step > 0) {
+        value = Math.round(value / step) * step + min;
     }
-    dismiss(data, role, id) {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["g"])(this.doc, data, role, 'ion-picker', id);
-    }
-    async getTop() {
-        return Object(_chunk_9a4a967d_js__WEBPACK_IMPORTED_MODULE_1__["h"])(this.doc, 'ion-picker');
-    }
-    static get is() { return "ion-picker-controller"; }
-    static get properties() { return {
-        "create": {
-            "method": true
-        },
-        "dismiss": {
-            "method": true
-        },
-        "doc": {
-            "context": "document"
-        },
-        "getTop": {
-            "method": true
-        }
-    }; }
-}
+    return Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(min, value, max);
+};
+const valueToRatio = (value, min, max) => {
+    return Object(_helpers_46f4a262_js__WEBPACK_IMPORTED_MODULE_2__["c"])(0, (value - min) / (max - min), 1);
+};
 
 
 

@@ -1,58 +1,59 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
 
-/***/ "./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2a112823.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@ionic/core/dist/esm/es2017/build/chunk-2a112823.js ***!
-  \**************************************************************************/
-/*! exports provided: startFocusVisible */
+/***/ "./node_modules/@ionic/core/dist/esm/hardware-back-button-5afe3cb0.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@ionic/core/dist/esm/hardware-back-button-5afe3cb0.js ***!
+  \****************************************************************************/
+/*! exports provided: startHardwareBackButton */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startFocusVisible", function() { return startFocusVisible; });
-/* harmony import */ var _ionic_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ionic.core.js */ "./node_modules/@ionic/core/dist/esm/es2017/ionic.core.js");
-
-
-const ION_FOCUSED = 'ion-focused';
-const ION_FOCUSABLE = 'ion-focusable';
-const FOCUS_KEYS = ['Tab', 'ArrowDown', 'Space', 'Escape', ' ', 'Shift', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp'];
-function startFocusVisible(doc) {
-    let currentFocus = [];
-    let keyboardMode = true;
-    function setFocus(elements) {
-        currentFocus.forEach(el => el.classList.remove(ION_FOCUSED));
-        elements.forEach(el => el.classList.add(ION_FOCUSED));
-        currentFocus = elements;
-    }
-    doc.addEventListener('keydown', ev => {
-        keyboardMode = FOCUS_KEYS.includes(ev.key);
-        if (!keyboardMode) {
-            setFocus([]);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startHardwareBackButton", function() { return startHardwareBackButton; });
+const startHardwareBackButton = () => {
+    const doc = document;
+    let busy = false;
+    doc.addEventListener('backbutton', () => {
+        if (busy) {
+            return;
         }
-    });
-    const pointerDown = () => {
-        keyboardMode = false;
-        setFocus([]);
-    };
-    doc.addEventListener('focusin', ev => {
-        if (keyboardMode && ev.composedPath) {
-            const toFocus = ev.composedPath().filter((el) => {
-                if (el.classList) {
-                    return el.classList.contains(ION_FOCUSABLE);
+        const handlers = [];
+        const ev = new CustomEvent('ionBackButton', {
+            bubbles: false,
+            detail: {
+                register(priority, handler) {
+                    handlers.push({ priority, handler });
                 }
-                return false;
+            }
+        });
+        doc.dispatchEvent(ev);
+        if (handlers.length > 0) {
+            let selectedPriority = Number.MIN_SAFE_INTEGER;
+            let selectedHandler;
+            handlers.forEach(({ priority, handler }) => {
+                if (priority >= selectedPriority) {
+                    selectedPriority = priority;
+                    selectedHandler = handler;
+                }
             });
-            setFocus(toFocus);
+            busy = true;
+            executeAction(selectedHandler).then(() => busy = false);
         }
     });
-    doc.addEventListener('focusout', () => {
-        if (doc.activeElement === doc.body) {
-            setFocus([]);
+};
+const executeAction = async (handler) => {
+    try {
+        if (handler) {
+            const result = handler();
+            if (result != null) {
+                await result;
+            }
         }
-    });
-    doc.addEventListener('touchstart', pointerDown);
-    doc.addEventListener('mousedown', pointerDown);
-}
+    }
+    catch (e) {
+        console.error(e);
+    }
+};
 
 
 
