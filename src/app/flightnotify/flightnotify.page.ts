@@ -40,7 +40,6 @@ export class FlightnotifyPage {
     isAll = true;
     isProduct = false;
     isOrder = false;
-    isOther = false;
     objnotication : any;
     textnotifyType = "";countNoti
     constructor(private navCtrl : NavController, private gf : GlobalFunction, public _flightService : flightService, public platform : Platform, private badge : Badge, private storage : Storage, private zone : NgZone, public toastCtrl : ToastController, public valueGlobal : ValueGlobal, private modalCtrl : ModalController, private alertCtrl : AlertController, public activityService : ActivityService) { // get phone
@@ -55,21 +54,22 @@ export class FlightnotifyPage {
                 this.email = e;
             }
         })
-        this.loadUserNotification();
+       this.loadUserNotification();
+       
     }
 
     ngOnInit() {
-        this._flightService.itemMenuFlightClick.pipe().subscribe(data => {
-            if (data == 3) {
-                this.storage.get('objnotication').then(datanoti => {
-                    if (data) {
-                        this.objnotication = datanoti;
-                    }
-                    this.loadUserNotification();
-                })
+        // this._flightService.itemMenuFlightClick.pipe().subscribe(data => {
+        //     if (data == 3) {
+        //         this.storage.get('objnotication').then(datanoti => {
+        //             if (datanoti) {
+        //                 this.objnotication = datanoti;
+        //             }
+        //             this.loadUserNotification();
+        //         })
 
-            }
-        })
+        //     }
+        // })
     }
 
     /**
@@ -101,54 +101,62 @@ export class FlightnotifyPage {
                     } else {
                         if (body && body != "[]") {
                             var data = JSON.parse(body);
-                            if (se.objnotication && se.objnotication.length > 0) {
-                                for (let i = 0; i < se.objnotication.length; i++) {
-                                    const element = se.objnotication[i];
-                                    data.push(element);
+                            se.storage.get('objnotication').then(datanoti => {
+                                if (datanoti) {
+                                    se.objnotication = datanoti;
                                 }
-                            }
-
-                            if (data && data.length > 0) {
-                                data.forEach(element => {
-
-                                    let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
-                                    let d = new Date(Number(arrdate[2]), Number(arrdate[1]) - 1, Number(arrdate[0]), Number(arrdate[3]), Number(arrdate[4]));
-                                    let today = new Date();
-                                    if (moment(today).diff(d, 'hours') <= 24) {
-                                        let diffhours = moment(today).diff(d, 'hours');
-                                        element.date = moment(today).diff(d, 'hours') + " giờ trước";
-                                        if (diffhours == 0) {
-                                            element.date = moment(today).diff(d, 'minutes') + " phút trước";
-                                        }
-
-                                    } else {
-                                        element.date = moment(element.created).format('DD/MM/YYYY');
+                                if (se.objnotication && se.objnotication.length > 0) {
+                                    for (let i = 0; i < se.objnotication.length; i++) {
+                                        const element = se.objnotication[i];
+                                        data.push(element);
                                     }
-                                    element.deleted = false;
-                                    if (se.items.length > 0) {
-                                        if (! se.gf.checkExistsItemInArray(se.items, element, 'trip')) {
+                                }
+    
+                                if (data && data.length > 0) {
+                                    data.forEach(element => {
+    
+                                        let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
+                                        let d = new Date(Number(arrdate[2]), Number(arrdate[1]) - 1, Number(arrdate[0]), Number(arrdate[3]), Number(arrdate[4]));
+                                        let today = new Date();
+                                        if (moment(today).diff(d, 'hours') <= 24) {
+                                            let diffhours = moment(today).diff(d, 'hours');
+                                            element.date = moment(today).diff(d, 'hours') + " giờ trước";
+                                            if (diffhours == 0) {
+                                                element.date = moment(today).diff(d, 'minutes') + " phút trước";
+                                            }
+    
+                                        } else {
+                                            element.date = moment(element.created).format('DD/MM/YYYY');
+                                        }
+                                        element.deleted = false;
+                                        if (se.items.length > 0) {
+                                            if (! se.gf.checkExistsItemInArray(se.items, element, 'trip')) {
+                                                se.items.push(element);
+                                            }
+                                        } else {
                                             se.items.push(element);
                                         }
-                                    } else {
-                                        se.items.push(element);
-                                    }
+    
+                                    });
+                                    setTimeout(() => {
+                                        se.zone.run(() => { // count số notifi
+                                            // let countNoti = se.items.filter(item => {
+                                            //     return !item.status
+                                            // }).length;
+                                            // se.badge.set(countNoti);
+                                            // se.valueGlobal.countNotifi = countNoti;
+                                            // sort lại notifi mới nhất lên trước
+                                            se.sortNotifi();
+                                          
+                                            se.loaddatadone = true;
+                                        })
+                                    }, 100)
+    
+                                }
+                            })
+                       
 
-                                });
-                                setTimeout(() => {
-                                    se.zone.run(() => { // count số notifi
-                                        // let countNoti = se.items.filter(item => {
-                                        //     return !item.status
-                                        // }).length;
-                                        // se.badge.set(countNoti);
-                                        // se.valueGlobal.countNotifi = countNoti;
-                                        // sort lại notifi mới nhất lên trước
-                                        se.sortNotifi(se.items);
-
-                                        se.loaddatadone = true;
-                                    })
-                                }, 100)
-
-                            }
+                            
 
 
                         } else {
@@ -177,12 +185,27 @@ export class FlightnotifyPage {
     /**
      * Thực hiện sort theo date
      */
-    sortNotifi(data) {
+    sortNotifi() {
         var se = this;
-        if (data && data.length > 0) {
-            se.zone.run(() => data.sort(function (a, b) {
+        if (se.items && se.items.length > 0) {
+            se.zone.run(() => se.items.sort(function (a, b) {
                 let direction = -1;
                 if (moment(a['created']).diff(moment(b['created']), 'minutes') <= 0) {
+                    return -1 * direction;
+                } else {
+                    return 1 * direction;
+                }
+            }));
+              // sort ưu tiên đơn hàng
+             se.sortNotifibyBooking();
+        }
+    };
+    sortNotifibyBooking() {
+        var se = this;
+        if (se.items && se.items.length > 0) {
+            se.zone.run(() => se.items.sort(function (a, b) {
+                let direction = -1;
+                if (a.notifyType=='booking' && b.notifyType=='booking') {
                     return -1 * direction;
                 } else {
                     return 1 * direction;
@@ -200,11 +223,11 @@ export class FlightnotifyPage {
                 se.zone.run(() => {
                     if (!element.status) {
                         element.status = 1;
-                        if (element.dataLink) {
-                            se.navCtrl.navigateForward(element.dataLink);
-                        }
                         // update status xuống db
                         se.callUpdateStatus(element);
+                    }
+                    if (element.dataLink) {
+                        se.navCtrl.navigateForward(element.dataLink);
                     }
                 })
             }
@@ -264,11 +287,71 @@ export class FlightnotifyPage {
                         se.paymentselect(itemMap[0], idx);
                     }
 
+                }else{
+                    se.getdatamytripHis().then((data) => {
+                        se.gf.hideLoading();
+                        se.valueGlobal.listhistory=data;
+                        var idxMap = data.map( (item,index) =>{ 
+                          return item.booking_id == BookingCode;
+                        });
+                        var itemMap = data.filter((item) => { return item.booking_id == BookingCode });
+                        if(itemMap && itemMap.length>0){
+                            se.gf.setParams(BookingCode, 'notifiBookingCode');
+                            se._flightService.tabFlightIndex = 2;
+                            se._flightService.itemMenuFlightClick.emit(2);
+            
+                            $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+                            $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+                            $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
+                          
+                        }
+                      })
                 }
             })
 
         }
     }
+    getdatamytripHis(): Promise<any> {
+        var se = this;
+        se.gf.showLoading();
+        return new Promise((resolve, reject) => {
+          se.storage.get('auth_token').then(auth_token => {
+            if (auth_token) {
+              var text = "Bearer " + auth_token;
+              var options = {
+                method: 'GET',
+                //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getmytrip?getall=true',
+                url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=100',
+                headers:
+                {
+                  'accept': 'application/json',
+                  'content-type': 'application/json-patch+json',
+                  authorization: text
+                }
+              };
+              request(options, function (error, response, body) {
+                if (error) {
+                  error.page = "mytrips";
+                  error.func = "getdata";
+                  error.param = JSON.stringify(options);
+                  C.writeErrorLog(error,response);
+                }
+                
+                else {
+                  if (body) {
+                    se.zone.run(() => {
+                      let lstTrips = JSON.parse(body);
+                   
+                       resolve(lstTrips.trips);
+                    });
+                  } 
+                }
+              });
+            } 
+          });
+        })
+        
+      }
     paymentselect(trip, tripidx) {
         var se = this;
         if (trip.amount_after_tax) {
@@ -555,14 +638,12 @@ export class FlightnotifyPage {
         this.isAll = true;
         this.isProduct = false;
         this.isOrder = false;
-        this.isOther = false;
         this.textnotifyType = "";
     }
     funcProduct() {
         this.isAll = false;
         this.isProduct = true;
         this.isOrder = false;
-        this.isOther = false;
         this.textnotifyType = "product";
         this.countNoti = this.items.filter(item => {
             return item.notifyType == this.textnotifyType
@@ -572,21 +653,20 @@ export class FlightnotifyPage {
         this.isAll = false;
         this.isProduct = false;
         this.isOrder = true;
-        this.isOther = false;
         this.textnotifyType = "booking";
         this.countNoti = this.items.filter(item => {
             return item.notifyType == this.textnotifyType
         }).length;
     }
-    funcOther() {
-        this.isAll = false;
-        this.isProduct = false;
-        this.isOrder = false;
-        this.isOther = true;
-        this.textnotifyType = "other";
-        this.countNoti = this.items.filter(item => {
-            return item.notifyType == this.textnotifyType
-        }).length;
+    // funcOther() {
+    //     this.isAll = false;
+    //     this.isProduct = false;
+    //     this.isOrder = false;
+    //     this.isOther = true;
+    //     this.textnotifyType = "other";
+    //     this.countNoti = this.items.filter(item => {
+    //         return item.notifyType == this.textnotifyType
+    //     }).length;
 
-    }
+    // }
 }

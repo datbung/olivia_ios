@@ -132,6 +132,7 @@ export class ValueGlobal {
   notSuggestDailyCB:any;
   refreshFBAccessToken: any;
   arrsuggest: any;
+  listhistory: any;
 }
 export class SearchHotel {
     recent: Array<ItemBook>;

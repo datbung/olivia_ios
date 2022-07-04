@@ -80,16 +80,17 @@ export class Tab4Page implements OnInit{
       if(data){
         this.objnotication = data;
       }
+      se.loadUserNotification();
     })
     //19/07/2019: Load thông tin notification
     //this.loadUserNotification();
-    se.storage.get('listUserNotification').then((data)=> {
-      if(data){
-        se.loadDataNotify(data);
-      }else{
-        se.loadUserNotification();
-      }
-    })
+    // se.storage.get('listUserNotification').then((data)=> {
+    //   if(data){
+    //     se.loadDataNotify(data);
+    //   }else{
+       
+    //   }
+    // })
   }
 
   async handleSplashScreen(): Promise<void> {
@@ -144,10 +145,12 @@ export class Tab4Page implements OnInit{
               }else{
                   if(body && body != "[]"){
                       var data = JSON.parse(body);
-                      for (let i = 0; i < se.objnotication.length; i++) {
-                        const element = se.objnotication[i];
-                        data.push(element);
-                      }
+                      if (se.objnotication && se.objnotication.length > 0) {
+                        for (let i = 0; i < se.objnotication.length; i++) {
+                            const element = se.objnotication[i];
+                            data.push(element);
+                        }
+                    }
                       se.loadDataNotify(data);
                   }else{
                     se.zone.run(()=>{
@@ -251,8 +254,22 @@ export class Tab4Page implements OnInit{
             return 1 * direction;
           }
       }));
+      this.sortNotifibyBooking();
     }
   };
+  sortNotifibyBooking() {
+    var se = this;
+    if (se.items && se.items.length > 0) {
+        se.zone.run(() => se.items.sort(function (a, b) {
+            let direction = -1;
+            if (a.notifyType=='booking' && b.notifyType!='booking') {
+                return 1 * direction;
+            } else {
+                return -1 * direction;
+            }
+        }));
+    }
+};
   /**
    * Hàm set lại trạng thái thông báo
    */
@@ -263,12 +280,13 @@ export class Tab4Page implements OnInit{
         se.zone.run(()=>{
           if(!element.status){
             element.status = 1;
-            if(element.dataLink){
-              se.navCtrl.navigateForward(element.dataLink);
-            }
+            
             //update status xuống db
             se.valueGlobal.countNotifi--;
             se.callUpdateStatus(element);
+          }
+          if(element.dataLink){
+            se.navCtrl.navigateForward(element.dataLink);
           }
         })
       }
@@ -507,6 +525,21 @@ export class Tab4Page implements OnInit{
             se.paymentselect(itemMap[0], idx);
           }
           
+        }else{
+          se.getdatamytripHis().then((data) => {
+            se.gf.hideLoading();
+            se.valueGlobal.listhistory=data;
+            var idxMap = data.map( (item,index) =>{ 
+              return item.booking_id == BookingCode;
+            });
+            var itemMap = data.filter((item) => { return item.booking_id == BookingCode });
+            if(itemMap && itemMap.length>0){
+              se.gf.setParams(BookingCode,'notifiBookingCode');
+              se.gf.setParams(3,'selectedTab3');
+              se.navCtrl.navigateForward(['/app/tabs/tab3']);
+              
+            }
+          })
         }
       })
       
@@ -523,7 +556,7 @@ export class Tab4Page implements OnInit{
           var options = {
             method: 'GET',
             //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getmytrip?getall=true',
-            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=false&pageIndex=1&pageSize=25',
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=false&pageIndex=1&pageSize=100',
             headers:
             {
               'accept': 'application/json',
@@ -543,6 +576,47 @@ export class Tab4Page implements OnInit{
               if (body) {
                 se.zone.run(() => {
                   let lstTrips = JSON.parse(body);
+                   resolve(lstTrips.trips);
+                });
+              } 
+            }
+          });
+        } 
+      });
+    })
+    
+  }
+  getdatamytripHis(): Promise<any> {
+    var se = this;
+    se.gf.showLoading();
+    return new Promise((resolve, reject) => {
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var options = {
+            method: 'GET',
+            //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getmytrip?getall=true',
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=100',
+            headers:
+            {
+              'accept': 'application/json',
+              'content-type': 'application/json-patch+json',
+              authorization: text
+            }
+          };
+          request(options, function (error, response, body) {
+            if (error) {
+              error.page = "mytrips";
+              error.func = "getdata";
+              error.param = JSON.stringify(options);
+              C.writeErrorLog(error,response);
+            }
+            
+            else {
+              if (body) {
+                se.zone.run(() => {
+                  let lstTrips = JSON.parse(body);
+               
                    resolve(lstTrips.trips);
                 });
               } 
@@ -608,12 +682,12 @@ export class Tab4Page implements OnInit{
     this.textnotifyType="booking";
     this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
   }
-  funcOther(){
-    this.isAll=false;
-    this.isProduct=false;
-    this.isOrder=false;
-    this.isOther=true;
-    this.textnotifyType="other";
-    this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
-  }
+  // funcOther(){
+  //   this.isAll=false;
+  //   this.isProduct=false;
+  //   this.isOrder=false;
+  //   this.isOther=true;
+  //   this.textnotifyType="other";
+  //   this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
+  // }
 }
