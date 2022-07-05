@@ -197,6 +197,20 @@ export class FlightnotifyPage {
                 }
             }));
               // sort ưu tiên đơn hàng
+             se.sortNotifibyBooking();
+        }
+    };
+    sortNotifibyBooking() {
+        var se = this;
+        if (se.items && se.items.length > 0) {
+            se.zone.run(() => se.items.sort(function (a, b) {
+                let direction = -1;
+                if (a.notifyType=='booking' && b.notifyType=='booking') {
+                    return -1 * direction;
+                } else {
+                    return 1 * direction;
+                }
+            }));
         }
     }
     

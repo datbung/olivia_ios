@@ -40,7 +40,10 @@
         text-transform: none !important;
         font-size: 17px !important;
     }
-
+    .text-label-segment {
+        border-bottom: solid 1px #26bed6;
+        width: 100%;
+    }
     .div-order-content{
         height: auto;
         background-color: #f2f2f2;
@@ -130,7 +133,15 @@
         font-weight: 600;
         letter-spacing: -0.36px;
     }
-
+    .label-text-processing {
+        padding: 2px 6px;
+        border-radius: 2px;
+        color: #ff9500;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: -0.36px;
+        padding-right: 14px;
+    }
     .div-request-payment{
         position: absolute;
         width: 100%;

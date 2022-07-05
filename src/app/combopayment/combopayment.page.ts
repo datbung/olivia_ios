@@ -309,27 +309,69 @@ export class CombopaymentPage implements OnInit {
     request(options, function (error, response, body) {
       var obj = JSON.parse(body);
       se.bookingCode = obj.Code;
-       //05-07-2022 thêm đoạn sync crm
-      var options = {
-        method: 'POST',
-        url: C.urls.baseUrl.urlContracting + '/api/ToolsAPI/CreateTransactionIDComboTransfer',
-        headers:
-          {},
-        form:
-        {
-          BookingCode: obj.Code,
-          DepartATCode: obj.TransferReserveCode.DepartReserveCode,
-          ReturnATCode: obj.TransferReserveCode.ReturnReserveCode,
-          FromPlaceCode: se.listcars.TransferBooking.fromPlaceCode
-        }
-      };
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-        var json = JSON.parse(body);
-        if (json.Error == 0) {
-          se.CreateBuildLink(paymentType);
-        }
-      });
+      if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+        //Check allotment trước khi book
+        se.gf.checkAllotmentSeri(
+          se.booking.HotelId,
+          se.bookCombo.mealTypeRates.RoomId,
+          se.booking.CheckInDate,
+          se.booking.CheckOutDate,
+          se.bookCombo.mealTypeRates.TotalRoom,
+          'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+          ).then((allow)=> {
+            if(allow){
+             //05-07-2022 thêm đoạn sync crm
+              var options = {
+                method: 'POST',
+                url: C.urls.baseUrl.urlContracting + '/api/ToolsAPI/CreateTransactionIDComboTransfer',
+                headers:
+                  {},
+                form:
+                {
+                  BookingCode: obj.Code,
+                  DepartATCode: obj.TransferReserveCode.DepartReserveCode,
+                  ReturnATCode: obj.TransferReserveCode.ReturnReserveCode,
+                  FromPlaceCode: se.listcars.TransferBooking.fromPlaceCode
+                }
+              };
+              request(options, function (error, response, body) {
+                if (error) throw new Error(error);
+                var json = JSON.parse(body);
+                if (json.Error == 0) {
+                  se.CreateBuildLink(paymentType);
+                }
+              });
+            }else{
+              if (se.loader) {
+                se.loader.dismiss();
+              }
+              se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+            }
+          })
+      }else{
+         //05-07-2022 thêm đoạn sync crm
+          var options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlContracting + '/api/ToolsAPI/CreateTransactionIDComboTransfer',
+            headers:
+              {},
+            form:
+            {
+              BookingCode: obj.Code,
+              DepartATCode: obj.TransferReserveCode.DepartReserveCode,
+              ReturnATCode: obj.TransferReserveCode.ReturnReserveCode,
+              FromPlaceCode: se.listcars.TransferBooking.fromPlaceCode
+            }
+          };
+          request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            var json = JSON.parse(body);
+            if (json.Error == 0) {
+              se.CreateBuildLink(paymentType);
+            }
+          });
+      }
+      
     })
   }
   openWebpage(url: string) {

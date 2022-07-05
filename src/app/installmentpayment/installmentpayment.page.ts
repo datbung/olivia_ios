@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { NavController, ToastController, LoadingController } from '@ionic/angular';
 import { RoomInfo, Booking, Bookcombo, SearchHotel } from '../providers/book-service';
-import { ActivityService } from '../providers/globalfunction';
+import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import * as $ from 'jquery';
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
@@ -53,7 +53,7 @@ export class InstallmentpaymentPage implements OnInit {
     public activityService: ActivityService,
     private toastCtrl: ToastController,
     private storage: Storage,
-    
+    public gf: GlobalFunction,
     private loadingCtrl: LoadingController,
     private zone: NgZone,
     private safariViewController: SafariViewController) {
@@ -198,6 +198,34 @@ export class InstallmentpaymentPage implements OnInit {
     //   data: $.param(param)
     // } 
     se.presentLoader();
+    if(this.roomtype.Supplier == 'SERI'){
+      //Check allotment trÆ°á»›c khi book
+      this.gf.checkAllotmentSeri(
+        this.booking.HotelId,
+        this.Roomif.RoomId,
+        this.booking.CheckInDate,
+        this.booking.CheckOutDate,
+        this.Roomif.roomnumber,
+        'SERI', this.Roomif.roomtype.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            this.continueBook();
+          }else{
+            if (this.loader) {
+              this.loader.dismiss();
+            }
+            this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      this.continueBook();
+    }
+   
+    
+  }
+
+  continueBook() {
+    var se =this;
     se.processBooking().then((data) => {
       if(data){
         var options = {
@@ -240,7 +268,6 @@ export class InstallmentpaymentPage implements OnInit {
         se.presentToastWarning("Đã có lỗi xảy ra. Vui lòng thử lại sau!");
       }
     })
-    
   }
 
   processBooking() : Promise<any>{
@@ -335,69 +362,6 @@ export class InstallmentpaymentPage implements OnInit {
     })
       
     }
-
-    // openWebpage(url: string) {
-    //   var se = this;
-    //   const options: InAppBrowserOptions = {
-    //     zoom: 'no',
-    //     location: 'yes',
-    //     toolbar: 'yes',
-    //     hideurlbar: 'yes',
-    //     closebuttoncaption: 'Đóng'
-    //   };
-    //   const browser = se.iab.create(url, '_self', options);
-    //   setTimeout(()=>{
-    //     if (se.loader) {
-    //       se.loader.dismiss();
-    //   }
-    //   },500)
-
-    //   browser.on("loadstop").subscribe(function (event) { 
-    //     if(event && event.url.indexOf('ivivuapp') != -1){
-    //       let params = event.url.split('&');
-    //       params.forEach(element => {
-    //         if(element.indexOf('errorCode') != -1){
-    //           let errorcodes = element.split('=');
-    //           let errorvalue = errorcodes[1];
-    //           if(errorvalue == "000"){
-    //             browser.close();
-    //             se.activityService.installmentPaymentSuccess = true;
-    //             se.activityService.installmentPaymentErrorCode = "";
-    //             se.navCtrl.navigateForward('/installmentpaymentdone');
-    //           }else{
-    //             browser.close();
-    //             se.activityService.installmentPaymentSuccess = false;
-    //             if(errorvalue == "150"){
-    //               se.activityService.installmentPaymentErrorCode = "Thẻ bị review";
-    //             }
-    //             else if(errorvalue == "155"){
-    //               se.activityService.installmentPaymentErrorCode = "Đợi người mua xác nhận trả góp";
-    //             }
-                
-    //             se.navCtrl.navigateForward('/installmentpaymentdone');
-    //           }
-    //         }
-    //       });
-    //     }
-    //   });
-      
-    //   browser.on('exit').subscribe(() => {
-    //     se.presentLoader();
-    //     se.checkBooking().then((data)=>{
-    //       if(data){
-    //         se.activityService.installmentPaymentSuccess = true;
-    //       }else{
-    //         se.activityService.installmentPaymentSuccess = false;
-    //       }
-    //       se.navCtrl.navigateForward('/installmentpaymentdone');
-    //     })
-        
-    //   }, err => {
-    //     console.error(err);
-    //   });
-    //   browser.show();
-  
-    // }
 
     openWebpage(url: string) {
       var se=this;

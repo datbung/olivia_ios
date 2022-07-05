@@ -397,13 +397,13 @@ export class FlightcombochosebankPage implements OnInit {
       var paymentDate=moment(data.booking.DeliveryPaymentDate).format('YYYYMMDDHHmmss');
       if (paymentTime < paymentDate) {
         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + se.totalPrice + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
-        this.gf.CreateUrl(url).then(datapayoo => {
-          if (se.loader) {
-            se.loader.dismiss();
-          }
-          datapayoo = JSON.parse(datapayoo);
-          se.openWebpage(datapayoo.returnUrl);
-        })
+                this.gf.CreateUrl(url).then(datapayoo => {
+                  if (se.loader) {
+                    se.loader.dismiss();
+                  }
+                  datapayoo = JSON.parse(datapayoo);
+                  se.openWebpage(datapayoo.returnUrl);
+                })
       }
       else{
         if (se.loader) {
@@ -461,8 +461,8 @@ export class FlightcombochosebankPage implements OnInit {
                     se.ischeckTransaction = true;
                     se.bookCombo.DepartATCode = datafly.depcode;
                     se.bookCombo.ReturnATCode = datafly.retcode;
-                    // var url = C.urls.baseUrl.urlPayment + "/Home/PaymentAppComboflyios?code=" + se.bookCombo.bookingcode + "&timestamp=" + se.timestamp + "&cost=" + se.priceshow + "&DepartATCode=" + datafly.depcode + "&ReturnATCode=" + datafly.retcode + "&FlightCode=" + se.bookCombo.FlightCode + "&paymentType=0";
-                    // se.openWebpage(url);
+                    var url = C.urls.baseUrl.urlPayment + "/Home/PaymentAppComboflyios?code=" + se.bookCombo.bookingcode + "&timestamp=" + se.timestamp + "&cost=" + se.priceshow + "&DepartATCode=" + datafly.depcode + "&ReturnATCode=" + datafly.retcode + "&FlightCode=" + se.bookCombo.FlightCode + "&paymentType=0";
+                    se.openWebpage(url);
                     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + se.totalPrice + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink'
                     se.gf.CreateUrl(url).then(dataBuildLink => {
                       dataBuildLink = JSON.parse(dataBuildLink);
@@ -509,24 +509,70 @@ export class FlightcombochosebankPage implements OnInit {
         this.bankid = element.vpc_Card;
       }
     });
+    // if (this.TokenId) {
+    //   this.presentLoading();
+    //   if (this.ischeckTransaction) {
+    //     this.CreateUrlOnePay(this.bankid);
+    //   } else {
+    //     this.postapibook(this.bankid);
+    //   }
+    // }
+    // else {
+    //   if (this.id) {
+    //     this.presentLoading();
+    //     if (this.ischeckTransaction) {
+    //       this.CreateUrlOnePay(this.id);
+    //     } else {
+    //       this.postapibook(this.id);
+    //     }
+    //   } else {
+    //     this.presentToast();
+    //   }
+    // }
+
+    let _id = this.bankid;
     if (this.TokenId) {
-      this.presentLoading();
-      if (this.ischeckTransaction) {
-        this.CreateUrlOnePay(this.bankid);
-      } else {
-        this.postapibook(this.bankid);
-      }
+     _id = this.bankid;
     }
     else {
       if (this.id) {
-        this.presentLoading();
-        if (this.ischeckTransaction) {
-          this.CreateUrlOnePay(this.id);
-        } else {
-          this.postapibook(this.id);
-        }
+       _id = this.id;
       } else {
         this.presentToast();
+        return;
+      }
+    }
+
+    this.presentLoading();
+    let se = this;
+    if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+      //Check allotment trước khi book
+      se.gf.checkAllotmentSeri(
+        se.booking.HotelId,
+        se.bookCombo.mealTypeRates.RoomId,
+        se.booking.CheckInDate,
+        se.booking.CheckOutDate,
+        se.bookCombo.mealTypeRates.TotalRoom,
+        'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            if (se.ischeckTransaction) {
+              se.CreateUrlOnePay(_id);
+            } else {
+              se.postapibook(_id);
+            }
+          }else{
+            if (se.loader) {
+              se.loader.dismiss();
+            }
+            se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      if (se.ischeckTransaction) {
+        se.CreateUrlOnePay(_id);
+      } else {
+        se.postapibook(_id);
       }
     }
   }

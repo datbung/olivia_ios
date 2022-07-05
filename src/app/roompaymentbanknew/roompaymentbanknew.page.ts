@@ -559,6 +559,33 @@ export class RoompaymentbanknewPage implements OnInit {
 
   }
   next() {
+    var se =this;
+    if(se.Roomif.roomtype.Supplier == 'SERI'){
+      se.gf.checkAllotmentSeri(
+        se.booking.HotelId,
+        se.Roomif.RoomId,
+        se.booking.CheckInDate,
+        se.booking.CheckOutDate,
+        se.Roomif.roomnumber,
+        'SERI', se.Roomif.roomtype.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            se.createBooking();
+          }
+          else{
+            if (se.loader) {
+              se.loader.dismiss();
+            }
+            se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    
+    }else{
+     se.createBooking();
+    }
+  }
+
+  createBooking(){
     var se = this;
     //Nếu không phải thanh toán từ mytrip thì theo luồng cũ
       this.presentLoading();

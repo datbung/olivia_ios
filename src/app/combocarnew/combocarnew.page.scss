@@ -107,22 +107,7 @@
             position: relative;
             padding-left: 112px;
 
-            .div-address{
-                padding-top:13px;
-
-                .div-location{
-                    position: absolute;
-                    margin-top: -1px;
-                }
-                .img-location{
-                    height: 12px;
-                }
-                .text-address{
-                    position: relative;
-                    line-height: 16px;
-                    padding-left: 15px;
-                }
-            }
+            
             
         }
         .name-hotel{
@@ -130,6 +115,22 @@
             columns: #222222;
         }
     }
+    .div-address{
+
+      .div-location{
+          position: absolute;
+          margin-top: -1px;
+          margin-left: -1px;
+      }
+      .img-location{
+          height: 15px;
+      }
+      .text-address{
+          position: relative;
+          line-height: 16px;
+          padding-left: 16px;
+      }
+  }
     .div-split{
         border-bottom: solid 1px #dedede;
         opacity: 0.6;

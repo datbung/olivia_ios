@@ -1074,7 +1074,7 @@ export class FlightComboAddDetailsPage implements OnInit {
           se.bookcombo.bookingcode = response.Code;
           se.bookcombo.FlightCode = response.flyBookingCode;
           //check ALM room
-          if(se.objectFlight.HotelBooking.SupplierName != "VINPEARL"){
+          if(se.objectFlight.HotelBooking.SupplierName != "VINPEARL" && se.objectFlight.HotelBooking.SupplierName != "SERI"){
             if (se.objectFlight.HotelBooking.SupplierName == "B2B") {
               //truong hơp giữ chỗ đc mà phòng ko có AL thì k cho trả trước
               se.Roomif.payment = 'RQ';

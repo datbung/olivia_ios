@@ -76,6 +76,9 @@ export class HotelRoomDetailPage implements OnInit {
             const element = this.slideData[i];
             element.Url = (element.Url.toLocaleString().trim().indexOf("http") != -1) ? element.Url : 'https:' + element.Url;
           }
+
+    
+          $('.cls-slide-room-detail-image').click(function(e){ debugger})
         }
       
       
@@ -96,7 +99,17 @@ export class HotelRoomDetailPage implements OnInit {
     gf.googleAnalytion('hotelroomdetail', 'load', '');
 
   }
-
+  handlerButtonSlideClick(e){
+    if (e.offsetX > e.target.offsetLeft) {
+      // click on element
+    }
+    else{
+      // click on ::before element
+      debugger
+    }
+  
+  }
+  
   clearBlurEffect(){
     //$('img.preview').removeClass('preview').addClass('reveal');
     setTimeout(()=>{

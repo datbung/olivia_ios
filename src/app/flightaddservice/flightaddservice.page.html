@@ -278,6 +278,9 @@
                 <div  class="div-desc font-weight-600">
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần. Yêu cầu bồi thường trực tuyến nhanh chóng tức thời <u  class="text-seen" (click)="noteCathay()">Xem quy định</u> 
                 </div>
+                <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
+                    Mua liền tay - Trúng ngay Voucher <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
+                </div>
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>
                     <div>
@@ -298,6 +301,9 @@
                   </div>
                 <div  class="div-desc font-weight-600">
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần. Yêu cầu bồi thường trực tuyến nhanh chóng tức thời <u (click)="noteCathay()" class="text-seen">Xem quy định</u> 
+                </div>
+                <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
+                    Mua liền tay - Trúng ngay Voucher <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
                 </div>
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>

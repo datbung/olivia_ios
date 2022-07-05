@@ -15,17 +15,17 @@
 }
 
 .m-top-54{
-    margin-top: 54px;
+    margin-top: 78px;
 }
 
 .m-top-58{
-    margin-top: 58px;
+    margin-top: 82px;
 }
 .p-left-24{
     padding-left: 24px;
 }
 .cls-text-tealish{
-    font-size: 12px;
+    font-size: 14px;
     color: #26bed6;
 }
 .text-refresh{
@@ -57,20 +57,22 @@
             z-index: 0;
             position: absolute;
             .div-title{
-                font-size: 15px;
+                font-size: 16px;
                 font-weight: 600;
                 font-stretch: normal;
                 font-style: normal;
                 line-height: 1.6;
                 letter-spacing: -0.45px;
+                color: #3f3b3b;
             }
             .div-subtitle{
-                font-size: 11px;
+                font-size: 14px;
                 font-weight: 300;
                 font-stretch: normal;
                 font-style: normal;
                 line-height: 1.82;
                 letter-spacing: -0.31px;
+                color: #868998;
             }
         }
        
@@ -79,7 +81,7 @@
 
             .img-down{
                 position: absolute;
-                top: 26px;
+                top: 30px;
             }
         }
 
@@ -527,13 +529,18 @@
 
   .div-depart-flight-choice{
     height: 54px;
-    background-color: #f9f9f9;
-    margin: -16px -16px 16px -16px;
+    margin: 0px -16px 16px -16px;
     padding: 0 16px;
     position: fixed;
     width: 100%;
     z-index: 10;
 
+    .div-border-choice {
+        border: solid 1px #26bed6;
+        padding: 0px 16px 6px 10px;
+        border-radius: 4px;
+        background: #fff;
+    }
     .div-icon-flight{
         width: 18px;
         margin-right: 12px;
@@ -544,7 +551,7 @@
         margin-top: 10px;
     }
     .div-time-and-price{
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 600;
         line-height: 1.5;
         letter-spacing: -0.36px;
@@ -552,19 +559,20 @@
     }
 
     .div-code{
-        font-size: 10px;
+        font-size: 14px;
         font-weight: 300;
         line-height: 1.67;
         letter-spacing: -0.54px;
-        color: #828282;
+        color: #6d6e71;
     }
     .div-text-change{
         font-size: 14px;
         line-height: 1.5;
         letter-spacing: -0.14px;
-        color: #26bed6;
+        color: #2f80ed;
         text-align: right;
         width: 50%;
+        text-decoration: underline;
     }
   }
   .v-align-center{
@@ -694,6 +702,9 @@
         font-weight: bold;
       }
 
+      .cls-hidden-filter {
+        opacity: 0;
+      }
     ion-modal{ 
         transform:none !important; 
         -webkit-transform:none !important; 
@@ -871,4 +882,7 @@
             top: 15px !important;
         }
 
-       
+        .stick-css {
+            transition: top 0.5s ease-out;
+            margin-top: -16px !important;
+        }

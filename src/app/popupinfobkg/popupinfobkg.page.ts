@@ -282,7 +282,7 @@ export class PopupinfobkgPage implements OnInit {
               se.nightCount = moment(se.datecout).diff( moment(se.datecin), 'days');
               //xử lý âm lịch
               this.bindlunar();
-              //se.getDayName(se.datecin, se.datecout);
+              se.getDayName(se.datecin, se.datecout);
             });
             se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
             se.storage.set('hasChangeDate', true);

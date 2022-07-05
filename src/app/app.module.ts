@@ -111,6 +111,7 @@ import { FlightdcpickaddressinputPageModule } from './flightdcpickaddressinput/f
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { FileOpener } from  '@ionic-native/file-opener/ngx';
 import { ConfirmemailaccountPageModule } from './confirmemailaccount/confirmemailaccount.module';
+import { RequestRoomPageModule} from './requestroom/requestroom.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -120,6 +121,7 @@ import { ConfirmemailaccountPageModule } from './confirmemailaccount/confirmemai
     PickupCalendarPageModule,
     RequestComboPageModule,
     RequestCombo1PageModule,
+    RequestRoomPageModule,
     FlightDeparturePageModule,
     SearchHotelFilterPageModule,
     SearchHotelFilterAndSortPageModule,

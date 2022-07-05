@@ -535,6 +535,7 @@ export class FlightComboReviewsPage implements OnInit{
               itemmealtype.Name = itemmealtype.Name  +", " +itemmealtype.Notes.join(', ');
             }
             se.elementMealtype = itemmealtype;
+            se.bookCombo.mealTypeRates = itemmealtype;
             se.bookCombo.MealTypeName=se.breakfast 
             //se.breakfast = itemmealtype.Name;
             se.Roomif.arrroom = [];
@@ -663,6 +664,7 @@ export class FlightComboReviewsPage implements OnInit{
         data.GetVinHms = 1;
         data.GetSMD= 1;
         data.IsB2B=true;
+        data.IsSeri= true;
         var form = data;
         var options = {
           method: 'POST',
@@ -741,6 +743,7 @@ export class FlightComboReviewsPage implements OnInit{
                     se.roomnumber = element.TotalRoom;
                     se.RoomType = element.RoomType;
                     se.index = index;
+                    se.bookCombo.mealTypeRates = element;
                     se.calculateDiffPriceUnit();
                     se.callSummaryPrice(element, index);
                     se.getBOD(element.MealTypeRates[0].RoomId);
@@ -800,6 +803,7 @@ export class FlightComboReviewsPage implements OnInit{
       se.TravPaxPrices = element.MealTypeRates[index].PriceAvgPlusNet * se.roomnumber * se.TotalNight;
 
       se.roomclass = element;
+      se.bookCombo.mealTypeRates = element.MealTypeRates[index];
       se.elementMealtype = element.MealTypeRates[index];
       se.breakfast= element.MealTypeRates[index].Name;
       se.statusRoom=element.MealTypeRates[index].Status;
@@ -902,7 +906,8 @@ export class FlightComboReviewsPage implements OnInit{
           "roundTrip": true
         },
         "roundTrip": true,
-        "noCache": true
+        "noCache": true,
+        'tcincharge': "89311",
       }
 
       var options = {
@@ -1352,7 +1357,15 @@ export class FlightComboReviewsPage implements OnInit{
     }
 
     if (returnFlight && returnFlight.length > 0) {
-      se.listDeparture.push(returnFlight[0]);
+      let itemReturnFlight = returnFlight[0];
+      //Check vé seri
+      if(departFlight[0] && departFlight[0].id.indexOf('__seri') != -1){
+        let itemr = returnFlight.filter((itemreturn) => { return itemreturn.id.indexOf('__seri') != -1 && itemreturn.availId == departFlight[0].availId})
+        if(itemr && itemr.length >0){
+          itemReturnFlight = itemr[0];
+        }
+      }
+      se.listDeparture.push(itemReturnFlight);
   
       let ar_date = new Date(returnFlight[0].departTime);
       let ar_date_landing = new Date(returnFlight[0].landingTime);
@@ -1440,6 +1453,20 @@ export class FlightComboReviewsPage implements OnInit{
       se.loadflightpricedone = true;
     },4000)
   }
+/**
+   * Trả về true nếu ko chọn seri cả chiều đi, chiều về hoặc có chọn seri chiều đi và vé seri chiều đi & chiều về cùng cặp
+   * Ngược lại trả về false
+   * @returns 
+   */
+ checkMapSeriFlight(){
+  var se = this, res = true;
+  if(se.currentDepartFlight[0] && se.currentReturnFlight[0]){
+    res = (se.currentDepartFlight[0].id.indexOf('__seri') == -1 && se.currentReturnFlight[0].id.indexOf('__seri') == -1)
+    || (se.currentDepartFlight[0].id.indexOf('__seri') != -1 && se.currentReturnFlight[0].id.indexOf('__seri') != -1 
+    && se.currentDepartFlight[0].availId == se.currentReturnFlight[0].availId)
+  }
+  return res;
+}
 
   getDayOfWeek(date): string {
     let coutthu = moment(date).format('dddd');
@@ -1486,6 +1513,36 @@ export class FlightComboReviewsPage implements OnInit{
 
       return;
     }
+    //check valid cặp vé seri
+    if(!this.checkMapSeriFlight()){
+      this.gf.showToastWarning('Một chặng bay đang chọn hạng vé Seri, vui lòng chọn vé Seri cho chặng bay còn lại');
+      return;
+    }
+
+    if(this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal){
+      //Check allotment trÆ°á»›c khi book
+      this.gf.checkAllotmentSeri(
+        this.booking.HotelId,
+        this.elementMealtype.RoomId,
+        this.booking.CheckInDate,
+        this.booking.CheckOutDate,
+        this.roomnumber,
+        'SERI', this.elementMealtype.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            this.continueBook(value);
+          }else{
+            this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      this.continueBook(value);
+    }
+    
+
+  }
+
+  continueBook(value) {
     var pointprice = 0;
     var total = this.TotalPrice;
     if (this.ischeck) {
@@ -1636,7 +1693,8 @@ export class FlightComboReviewsPage implements OnInit{
                 }) : 0,
                 SupplierName: this.elementMealtype.Supplier,
                 HotelCheckDetailTokenVinHms: this.elementMealtype.HotelCheckDetailTokenVinHms ? this.elementMealtype.HotelCheckDetailTokenVinHms : "",
-                HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : ""
+                HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : "",
+                HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : ""
               },
               airLineLuggageDepart: [],
               airLineLuggageReturn: [],
@@ -1752,7 +1810,8 @@ export class FlightComboReviewsPage implements OnInit{
               }) : 0,
               SupplierName: this.elementMealtype.Supplier,
               HotelCheckDetailTokenVinHms: this.elementMealtype.HotelCheckDetailTokenVinHms ? this.elementMealtype.HotelCheckDetailTokenVinHms : "",
-              HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : ""
+              HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : "",
+              HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : ""
             }
             objectFlight.HotelBooking = objhotel;
             this.gf.setParams(objectFlight, 'flightcombo');
@@ -1867,7 +1926,8 @@ export class FlightComboReviewsPage implements OnInit{
                 }) : 0,
                 SupplierName: this.elementMealtype.Supplier,
                 HotelCheckDetailTokenVinHms: this.elementMealtype.HotelCheckDetailTokenVinHms ? this.elementMealtype.HotelCheckDetailTokenVinHms : "",
-                HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : ""
+                HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : "",
+                HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : ""
               },
               airLineLuggageDepart: [],
               airLineLuggageReturn: [],
@@ -1938,7 +1998,6 @@ export class FlightComboReviewsPage implements OnInit{
 
       }
     })
-
 
   }
 
@@ -2888,13 +2947,14 @@ export class FlightComboReviewsPage implements OnInit{
             se.coutthudisplay = se.getDayOfWeek(se.searchhotel.CheckOutDate);
             se.ischangefly = true;
             se.bookCombo.Luggage = 0;
+            se.getDayName(se.cin, se.cout);
             se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
             se.storage.set('hasChangeDate', true);
             se.checkComboAfterChangedate();
             setTimeout(() => {
               se.modalCtrl.dismiss();
             }, 100)
-            
+            se.searchhotel.changeInfoHotelList.emit(1);
           }
         }
       }

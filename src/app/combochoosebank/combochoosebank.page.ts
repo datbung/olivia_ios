@@ -405,18 +405,55 @@ export class CombochoosebankPage implements OnInit {
         this.bankid = element.vpc_Card;
       }
     });
-    if (this.TokenId) {
-      this.presentLoading();
-      this.postapibook(this.bankid);
+
+    // if (this.TokenId) {
+    //   this.presentLoading();
+    //   this.postapibook(this.bankid);
       
+    // }
+    // else {
+    //   if (this.id) {
+    //     this.presentLoading();
+    //     this.postapibook(this.id);
+    //   } else {
+    //     this.presentToast();
+    //   }
+    // }
+    let _id = "";
+
+    if (this.TokenId) {
+      _id = this.bankid;
     }
     else {
       if (this.id) {
-        this.presentLoading();
-        this.postapibook(this.id);
+        _id = this.id;
       } else {
         this.presentToast();
+        return;
       }
+    }
+
+    if(this.bookCombo.mealTypeRates.Supplier == 'SERI' && this.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+      //Check allotment trước khi book
+      this.gf.checkAllotmentSeri(
+        this.booking.HotelId,
+        this.bookCombo.mealTypeRates.RoomId,
+        this.booking.CheckInDate,
+        this.booking.CheckOutDate,
+        this.bookCombo.mealTypeRates.TotalRoom,
+        'SERI', this.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            this.presentLoading();
+            this.postapibook(_id);
+          }else{
+            
+            this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      this.presentLoading();
+      this.postapibook(_id);
     }
   }
 

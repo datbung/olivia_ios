@@ -74,15 +74,7 @@ export class RoomchoosebankPage implements OnInit{
     })
   }
   next() {
-    // var se=this;
-    // se.Roomif.promocode ="ttkkm45";
-    // if (se.Roomif.promocode ) {
-    //   // alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
-    //   se.Roomif.bookingCode=se.bookingCode
-    //   se.showInfo("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!")
-    //   // se.Roomif.promocode="";
-     
-    // }
+   
     this.TokenId="";
     this.bankid="";
     this.arrbankrmb.forEach(element => {
@@ -95,26 +87,43 @@ export class RoomchoosebankPage implements OnInit{
 
   }
   checkBank(){
-    if (this.TokenId) {
-      this.presentLoading();
-      if (this.bookingCode) {
-        this.CreateUrlOnePay(this.bankid);
-      } else {
-        this.CreateBookingRoom(this.bankid);
-      } 
+    let _id = this.TokenId ? this.bankid : this.id;
+    if(!this.TokenId && !this.id) {
+      this.presentToast();
+      return;
     }
-    else{
-      if (this.id) {
+      if(this.roomtype && this.roomtype.Supplier == 'SERI'){
+        //Check allotment trước khi book
+        this.gf.checkAllotmentSeri(
+          this.booking.HotelId,
+          this.Roomif.RoomId,
+          this.booking.CheckInDate,
+          this.booking.CheckOutDate,
+          this.Roomif.roomnumber,
+          'SERI', this.Roomif.roomtype.HotelCheckDetailTokenInternal
+          ).then((allow)=> {
+            if(allow){
+              this.presentLoading();
+              if (this.bookingCode) {
+                this.CreateUrlOnePay(_id);
+              } else {
+                this.CreateBookingRoom(_id);
+              } 
+            }else{
+              if (this.loader) {
+                this.loader.dismiss();
+              }
+              this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+            }
+          })
+      }else{
         this.presentLoading();
         if (this.bookingCode) {
-          this.CreateUrlOnePay(this.id);
+          this.CreateUrlOnePay(_id);
         } else {
-          this.CreateBookingRoom(this.id);
+          this.CreateBookingRoom(_id);
         } 
-      } else {
-        this.presentToast();
       }
-    }
   }
   async presentToast() {
     let toast = await this.toastCtrl.create({

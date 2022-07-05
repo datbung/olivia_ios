@@ -16,6 +16,7 @@ import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AdddiscountPage } from './../adddiscount/adddiscount.page';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({
   selector: 'app-flightaddservice',
@@ -74,6 +75,9 @@ export class FlightaddservicePage implements OnInit {
   alert: any;
   isExtenal: any;
   ischeckShowDC=0;
+  dateShowCathay = '2022-09-30';
+  isShowPromoCathay: boolean = false;
+  
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -85,7 +89,8 @@ export class FlightaddservicePage implements OnInit {
     public searchhotel: SearchHotel,
     public _flightService: flightService,
     private alertCtrl: AlertController,
-    private sanitizer: DomSanitizer) { 
+    private sanitizer: DomSanitizer,
+    private safariViewController: SafariViewController) { 
         if(this._flightService.itemFlightCache){
             this.roundtrip = this._flightService.itemFlightCache.roundTrip;
             this.adult = this._flightService.itemFlightCache.adult;
@@ -279,6 +284,7 @@ export class FlightaddservicePage implements OnInit {
                 }
             }
             
+          this.isShowPromoCathay = moment(this.dateShowCathay).diff(moment(moment(new Date()).format('YYYY-MM-DD'))) >= 0;
         }
     }
 
@@ -850,6 +856,7 @@ export class FlightaddservicePage implements OnInit {
                                               const element = rowseat.seatOptions[idx];
                                               element.show = true;
                                               element.amount = element.seatAssignMentFee.amount;
+                                              element.netPrice = element.seatAssignMentFee.netPrice;
                                               element.name = element.seatNumber;
                                               element.type =1;
                                               
@@ -914,6 +921,7 @@ export class FlightaddservicePage implements OnInit {
                                               const element = rowseat.seatOptions[idx];
                                               element.show = true;
                                               element.amount = element.seatAssignMentFee.amount;
+                                              element.netPrice = element.seatAssignMentFee.netPrice;
                                               element.name = element.seatNumber;
                                               element.type =1;
                                               
@@ -943,6 +951,7 @@ export class FlightaddservicePage implements OnInit {
                                         const element = rowseat.seatOptions[idx];
                                         element.show = true;
                                         element.amount = element.seatAssignMentFee.amount;
+                                        element.netPrice = element.seatAssignMentFee.netPrice;
                                         element.name = element.seatNumber;
                                         element.type =1;
                                         
@@ -1026,6 +1035,7 @@ export class FlightaddservicePage implements OnInit {
                                                   const element = rowseat.seatOptions[idx];
                                                   element.show = true;
                                                   element.amount = element.seatAssignMentFee.amount;
+                                                  element.netPrice = element.seatAssignMentFee.netPrice;
                                                   element.name = element.seatNumber;
                                                   element.type =1;
                                                   
@@ -1119,6 +1129,7 @@ export class FlightaddservicePage implements OnInit {
                                           element.show = true;
                                           
                                           element.amount = element.seatAssignMentFee.amount;
+                                          element.netPrice = element.seatAssignMentFee.netPrice;
                                           element.name = element.seatNumber;
                                           element.type =1;
                                           if(element.seatQualifiers.seatFront){//ghế phía trước
@@ -1195,7 +1206,7 @@ export class FlightaddservicePage implements OnInit {
               listSeatName.push(colname);
             }
 
-            if (data.equipment.indexOf('787') != -1) {
+            if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
               for (let index = 0; index < data.cabin.row.length; index++) {
                 let cabinRows = data.cabin.row[index];
 
@@ -1316,7 +1327,7 @@ export class FlightaddservicePage implements OnInit {
             }
 
             if (indexdepart == 1 || indexdepart == 3) {
-              if (data.equipment.indexOf('787') != -1) {
+              if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
                 se._flightService.itemFlightCache.listSeatName = listSeatName;
                 se._flightService.itemFlightCache.listSeatNormal = listrows;
                 se._flightService.itemFlightCache.isnewmodelseat = true;
@@ -1344,7 +1355,7 @@ export class FlightaddservicePage implements OnInit {
             let listrows = [];
             let listSeatName = [];
 
-            if (data.equipment.indexOf('787') != -1) {
+            if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
 
               for (let index = 0; index < data.cabin.column.length; index++) {
                 let colname = data.cabin.column[index].column1;
@@ -1478,7 +1489,7 @@ export class FlightaddservicePage implements OnInit {
             }
             
             if (indexdepart == 2 || indexdepart == 3) {
-              if (data.equipment.indexOf('787') != -1) {
+              if (data.equipment.indexOf('787') != -1|| data.equipment.indexOf('350') != -1) {
                 se._flightService.itemFlightCache.listReturnSeatName = listSeatName;
                 se._flightService.itemFlightCache.listReturnSeatNormal = listrows;
                 se._flightService.itemFlightCache.isnewmodelreturnseat = true;
@@ -3039,6 +3050,7 @@ export class FlightaddservicePage implements OnInit {
                   PromotionNote: mealtype.PromotionNote,
                   HotelCheckDetailTokenVinHms: mealtype.HotelCheckDetailTokenVinHms,
                   HotelCheckPriceTokenSMD: mealtype.HotelCheckPriceTokenSMD,
+                  HotelCheckDetailTokenInternal: mealtype.Supplier == 'SERI' && mealtype.HotelCheckDetailTokenInternal ? mealtype.HotelCheckDetailTokenInternal : "",
                   Supplier: mealtype.IsHoliday ? "Holiday" : mealtype.Supplier,
                   AllomentBreak: mealtype.AllomentBreak,
                   IsPromotionAllotment: mealtype.IsPromotionAllotment,
@@ -3267,5 +3279,36 @@ export class FlightaddservicePage implements OnInit {
         se._flightService.itemFlightCache.isAirportSecond=jsondata.data.isAirportSecond;
       }
   })
+}
+
+openLinkPromoCathay() {
+  this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          this.safariViewController.show({
+            url: 'https://www.ivivu.com/blog/2022/06/mua-bao-hiem-cathay-o-ivivu-trung-ngay-voucher-du-lich-xin/',
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+          .subscribe((result: any) => {
+              if(result.event === 'opened') console.log('Opened');
+              else if(result.event === 'loaded') console.log('Loaded');
+              else if(result.event === 'closed') 
+              {
+                
+              }
+          
+            },
+            (error: any) => console.error(error)
+          );
+  
+        } else {
+          // use fallback browser, example InAppBrowser
+        }
+      }
+    );
 }
 }

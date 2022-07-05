@@ -124,42 +124,43 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 this.returnCode = data.returnCode;
                 this.returnCity = data.returnCity;
                 this.returnAirport = data.returnAirport;
-                let diffday = moment(data.checkInDate).diff(new Date(), 'days');
+                let diffday = moment(this.gf.getCinIsoDate(data.checkInDate)).diff(this.gf.getCinIsoDate(new Date()), 'days');
                 if(diffday < 0){
-                  this.cin = moment(new Date()).add(7, 'days');
+                  this.cin = moment(this.gf.getCinIsoDate(new Date())).add(7, 'days');
                   this.cout = this.flighttype == "twoway" ? moment(this.cin).add(2, 'days') : this.cin;
                 }else{
-                  if(data.checkInDate){
+                  if(this.gf.getCinIsoDate(data.checkInDate)){
                     this.cin = data.checkInDate;
                   }else{
-                    this.cin = moment(new Date()).add(1, 'days');
+                    this.cin = moment(this.gf.getCinIsoDate(new Date())).add(1, 'days');
                   }
                   
                   if(data.checkOutDate){
                     this.cout = data.checkOutDate;
                   }else{
-                    this.cout = moment(new Date()).add(2, 'days');
+                    this.cout = moment(this.gf.getCinIsoDate(new Date())).add(2, 'days');
                   }
                   
                 }
-                
-                this.getDayName(this.cin, this.cout);
+                let _cin = this.gf.getCinIsoDate(this.cin);
+                let _cout = this.gf.getCinIsoDate(this.cout);
+                this.getDayName(_cin, _cout);
                 this.adult = data.adult;
                 this.child = data.child;
                 this.infant = data.infant ? data.infant : 0;
                 this.arrchild = data.arrchild;
 
-                this.cindisplaymonth =  moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
-                this.coutdisplaymonth =  moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+                this.cindisplaymonth =  moment(_cin).format("DD") + " tháng " + moment(_cin).format("MM") + ", " + moment(_cin).format("YYYY");
+                this.coutdisplaymonth =  moment(_cout).format("DD") + " tháng " + moment(_cout).format("MM") + ", " + moment(_cout).format("YYYY");
 
-                this.myflight.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-                this.myflight.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+                this.myflight.checkInDisplayMonth = this.getDayOfWeek(_cin).dayname +", " + moment(_cin).format("DD") + " thg " + moment(_cin).format("MM");
+                this.myflight.checkOutDisplayMonth = this.getDayOfWeek(_cout).dayname +", " + moment(_cout).format("DD") + " thg " + moment(_cout).format("MM");
 
-                this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-                this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+                this.checkInDisplayMonth = this.getDayOfWeek(_cin).dayname +", " + moment(_cin).format("DD") + " thg " + moment(_cin).format("MM");
+                this.checkOutDisplayMonth = this.getDayOfWeek(_cout).dayname +", " + moment(_cout).format("DD") + " thg " + moment(_cout).format("MM");
 
-                this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
-                this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
+                this.cindisplay = moment(_cin).format("DD-MM-YYYY");
+                this.coutdisplay = moment(_cout).format("DD-MM-YYYY");
 
                 this.isExtenal = data.isExtenal;
 
@@ -391,12 +392,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             if(this._flightService.itemFlightCache.checkInDate){
               this.cin = this._flightService.itemFlightCache.checkInDate;
             }else{
-                this.cin = moment(new Date()).add(7,'days');
+                this.cin = this.gf.getCinIsoDate(moment(new Date()).add(7,'days'));
             }
             if(this._flightService.itemFlightCache.checkOutDate){
-                this.cout = this._flightService.itemFlightCache.checkOutDate;
+                this.cout = this.gf.getCinIsoDate(this._flightService.itemFlightCache.checkOutDate);
             }else{
-                this.cout = moment(new Date()).add(9,'days');
+                this.cout = moment(this.gf.getCinIsoDate(new Date())).add(9,'days');
             }
             this.cinthu = this.getDayOfWeek(this.cin).dayname;
             this.coutthu = this.getDayOfWeek(this.cout).dayname;
@@ -432,13 +433,13 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         reloadInfo(){
            
             if(!this.cin){
-              this.cin = moment(new Date()).add(7,'days');
+              this.cin =  moment(this.gf.getCinIsoDate(new Date())).add(7,'days');
               this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
               this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM")+ ", " + moment(this.cin).format("YYYY");
               this.cinthu = this.getDayOfWeek(this.cin).dayname;
             }
             if(!this.cout){
-              this.cout = moment(new Date()).add(9,'days');
+              this.cout = moment(this.gf.getCinIsoDate(new Date())).add(9,'days');
               this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
               this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
               this.coutthu = this.getDayOfWeek(this.cout).dayname;
@@ -500,9 +501,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 
         reloadInfoOneway(isoneway){
           if(isoneway){
-            this.cout = this.cin;
+            this.cout = this.gf.getCinIsoDate(this.cin);
           }else{
-            this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
+            this.cout = moment(this.gf.getCinIsoDate(this.cin)).add(2,'days').format("YYYY-MM-DD");
           }
 
          
@@ -696,8 +697,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           yearstartdate = objTextMonthStartDate.trim().split(" ")[1];
           monthenddate = objTextMonthEndDate.trim().split(" ")[0];
           yearenddate = objTextMonthEndDate.trim().split(" ")[1];
-          var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
-          var todate = new Date(yearenddate, monthenddate - 1, tday);
+          var fromdate = this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
+          var todate = this.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday));
           let diffday =moment(todate).diff(fromdate, "days");
           this.countday = diffday;
           this.countdaydisplay = this.countday +1;
@@ -713,17 +714,17 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             se.cout = se.flighttype=="twoway" ? moment(todate).format("YYYY-MM-DD") : moment(fromdate).format("YYYY-MM-DD");
             se.zone.run(() => {
              
-              se.datecin = new Date(se.cin);
-              se.datecout = new Date(se.cout);
-              se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
-              se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-              se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM")+ ", " + moment(this.cin).format("YYYY");
-              se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+              //se.datecin = new Date(se.cin);
+              //se.datecout = new Date(se.cout);
+              se.cindisplay = moment(se.gf.getCinIsoDate(se.cin)).format("DD-MM-YYYY");
+              se.coutdisplay = moment(se.gf.getCinIsoDate(se.cout)).format("DD-MM-YYYY");
+              se.cindisplaymonth = moment(se.cin).format("DD") + " tháng " + moment(se.cin).format("MM")+ ", " + moment(this.cin).format("YYYY");
+              se.coutdisplaymonth = moment(se.cout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
-                se._flightService.itemFlightCache.checkInDate = se.datecin;
-                se._flightService.itemFlightCache.checkOutDate = se.datecout;
-              
+                se._flightService.itemFlightCache.checkInDate = se.cin;
+                se._flightService.itemFlightCache.checkOutDate = se.cout;
+              se.getDayName(se.cin, se.cout);
               se.storage.get("itemFlightCache").then((data)=>{
                 if(data){
                   se.storage.remove("itemFlightCache").then(()=>{
@@ -748,24 +749,24 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           return;
         }
         this.allowclickcalendar = false;
-        let fromdate = new Date(moment(this.cin).format('YYYY-MM-DD'));
-        let todate = new Date(moment(this.cout).format('YYYY-MM-DD'));
-        let fd = new Date(moment(this.cout).year(), moment(this.cout).month() +1, 1);
-        let ed = new Date(moment(moment(fd).subtract(1, 'days')).format('YYYY-MM-DD'));
-        let monthed = todate.getMonth();
+        let fromdate = this.gf.getCinIsoDate(moment(this.cin).format('YYYY-MM-DD'));
+        let todate = this.gf.getCinIsoDate(moment(this.cout).format('YYYY-MM-DD'));
+        let fd = this.gf.getCinIsoDate(moment(this.cout));
+        let ed = this.gf.getCinIsoDate(moment(moment(fd).subtract(1, 'days')).format('YYYY-MM-DD'));
+        //let monthed = new Date(todate).getMonth();
         let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
         this.storage.get(key).then((data)=>{
           if(!data || (data.arrivals.length == 0 && data.departs.length ==0) ){
             this.loadCalendarPrice();
           }
         })
-        let cindayofweek = this.gf.getDayOfWeek(this.cin).daynameshort;
-        let cindaydisplay = moment(this.cin).format('DD');
-        let cinmonthdisplay = 'Thg ' + moment(this.cin).format('M');
+        let cindayofweek = this.gf.getDayOfWeek(this.gf.getCinIsoDate(this.cin)).daynameshort;
+        let cindaydisplay = moment(this.gf.getCinIsoDate(this.cin)).format('DD');
+        let cinmonthdisplay = 'Thg ' + moment(this.gf.getCinIsoDate(this.cin)).format('M');
 
-        let coutdayofweek = this.gf.getDayOfWeek(this.cout).daynameshort;
-        let coutdaydisplay = moment(this.cout).format('DD');
-        let coutmonthdisplay = 'Thg ' + moment(this.cout).format('M');
+        let coutdayofweek = this.gf.getDayOfWeek(this.gf.getCinIsoDate(this.cout)).daynameshort;
+        let coutdaydisplay = moment(this.gf.getCinIsoDate(this.cout)).format('DD');
+        let coutmonthdisplay = 'Thg ' + moment(this.gf.getCinIsoDate(this.cout)).format('M');
         
         this.countday = moment(todate).diff(moment(fromdate),'days');
         this.countdaydisplay = (this.flighttype == "twoway") ? (this.countday +1) : 1;
@@ -790,7 +791,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: fromdate,
+            defaultScrollTo: moment(fromdate).toDate(),
             defaultDateRange: { from: fromdate, to: todate },
             daysConfig: _daysConfig
             };
@@ -804,7 +805,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             closeLabel: "",
             doneLabel: "",
             step: 0,
-            defaultScrollTo: fromdate,
+            defaultScrollTo: moment(fromdate).toDate(),
             defaultDate: fromdate,
             //defaultDateRange: { from: fromdate, to: todate },
             daysConfig: _daysConfig
@@ -910,7 +911,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           },10)
         });
         var se = this;
-        const event: any = await this.myCalendar.onDidDismiss();
+        const event: any = await se.myCalendar.onDidDismiss();
         const date = event.data;
         if (event.data) {
         const from: CalendarResult = date.from;
@@ -921,12 +922,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         se.zone.run(() => {
             // se.searchhotel.CheckInDate = se.cin;
             // se.searchhotel.CheckOutDate = se.cout;
-            se.datecin = new Date(se.cin);
-            se.datecout = new Date(se.cout);
+            se.datecin = se.gf.getCinIsoDate(se.cin);
+            se.datecout = se.gf.getCinIsoDate(se.cout);
             se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
             se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
-            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(se.cin).format("YYYY");
+            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(se.cout).format("YYYY");
             se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
                 se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
 
@@ -995,7 +996,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                     }
                 }
                 else{
-                    this.getDayName(this.datecin, this.datecout);
+                    se.getDayName(se.cin, se.cout);
                 }
                 if (checkdate==se.cout) {
                     se.cotdate = 1;
@@ -1011,14 +1012,14 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                     }
                 }
                 else{
-                    this.getDayName(this.datecin, this.datecout);
+                    se.getDayName(se.cin, se.cout);
                 }
                 }
         }
         
     }
     getDayName(datecin, datecout) {
-        if (!this.cinthu || !this.cinthushort) {
+        if (datecin) {
           this.cinthu = moment(datecin).format('dddd');
           switch (this.cinthu) {
             case "Monday":
@@ -1051,7 +1052,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               break;
           }
         }
-        if (!this.coutthu || !this.coutthushort) {
+        if (datecout) {
           this.coutthu = moment(datecout).format('dddd');
           switch (this.coutthu) {
             case "Monday":
@@ -1174,10 +1175,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             adult: se.adult,
             child: se.child ? se.child : 0,
             infant: se.infant ? se.infant : 0,
-            title: se.departCity +" - " + se.returnCity,
-            subtitle : se.cinthu + ", " +moment(se.cin).format("DD") + " thg " +moment(se.cin).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
-            titleReturn: se.returnCity +" - " + se.departCity,
-            subtitleReturn : se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") + " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
+            title: se.departCity +" → " + se.returnCity,
+            dayDisplay: se.cinthu + ", " +moment(se.cin).format("DD") +  " thg " +moment(se.cin).format("M"),
+            subtitle : " · " + (se.adult + se.child + (se.infant ? se.infant : 0) ) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
+            titleReturn: se.returnCity +" → " + se.departCity,
+            dayReturnDisplay: se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") ,
+            subtitleReturn :  " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
             itemSameCity: se.itemSameCity,
             itemDepartSameCity: se.itemDepartSameCity,
             itemReturnSameCity: se.itemReturnSameCity,
@@ -1211,8 +1214,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           se._flightService.itemFlightCache.departInfoDisplay = "Chiều đi" + " · " + se.cinthu + ", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
           se._flightService.itemFlightCache.returnInfoDisplay = "Chiều về" + " · " + se.coutthu + ", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
 
-        se._flightService.itemFlightCache.departPaymentTitleDisplay = se.cinthushort + ", " + moment(se.cin).format("DD-MM")+ " · " + se.departCode + " - " +se.returnCode+ " · ";
-        se._flightService.itemFlightCache.returnPaymentTitleDisplay = se.coutthushort + ", " + moment(se.cout).format("DD-MM")+ " · "+ se.returnCode + " - " +se.departCode+ " · ";
+        se._flightService.itemFlightCache.departPaymentTitleDisplay = se.cinthushort + ", " + moment(se.cin).format("DD-MM")+ " · " + se.departCode + " → " +se.returnCode+ " · ";
+        se._flightService.itemFlightCache.returnPaymentTitleDisplay = se.coutthushort + ", " + moment(se.cout).format("DD-MM")+ " · "+ se.returnCode + " → " +se.departCode+ " · ";
 
         se._flightService.itemFlightCache.checkInDisplay = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
         se._flightService.itemFlightCache.checkOutDisplay = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
@@ -1396,10 +1399,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               adult: se.adult ? se.adult : 1,
               child: se.child ? se.child : 0,
               infant: se.infant ? se.infant : 0,
-              title: "Đi " + item.fromPlaceName +" - " + item.toPlaceNameDisplay,
-              subtitle : objday.dayname + ", " +moment(item.depart.departTime).format("DD") +  " thg " +moment(item.depart.departTime).format("M")  + " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
-              titleReturn: "Về " + item.toPlaceNameDisplay +" - " + item.fromPlaceName,
-              subtitleReturn : objdayreturn.dayname + ", " + moment(item.return.departTime).format("DD") + " thg " +moment(item.return.departTime).format("M") + " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
+              title: "Đi " + item.fromPlaceName +" → " + item.toPlaceNameDisplay,
+              dayDisplay: objday.dayname + ", " +moment(item.depart.departTime).format("DD") +  " thg " +moment(item.depart.departTime).format("M"),
+              subtitle : " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
+              titleReturn: "Về " + item.toPlaceNameDisplay +" → " + item.fromPlaceName,
+              dayReturnDisplay: objdayreturn.dayname + ", " + moment(item.return.departTime).format("DD") + " thg " +moment(item.return.departTime).format("M"),
+              subtitleReturn : " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
               itemSameCity: null,
               itemDepartSameCity: "",
               itemReturnSameCity: "",
@@ -1431,8 +1436,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           se._flightService.itemFlightCache.departInfoDisplay = "Chiều đi" + " · " + objday.dayname + ", " + moment(item.depart.departTime).format("DD") + " thg " + moment(item.depart.departTime).format("MM");
           se._flightService.itemFlightCache.returnInfoDisplay = "Chiều về" + " · " + objdayreturn.dayname + ", " + moment(item.return.departTime).format("DD") + " thg " + moment(item.return.departTime).format("MM");
   
-          se._flightService.itemFlightCache.departPaymentTitleDisplay = objday.daynameshort + ", " + moment(item.depart.departTime).format("DD-MM")+ " · " + item.depart.fromPlace + " - " +item.return.fromPlace+ " · ";
-          se._flightService.itemFlightCache.returnPaymentTitleDisplay = objdayreturn.daynameshort + ", " + moment(item.return.departTime).format("DD-MM")+ " · "+ item.return.fromPlace + " - " +item.depart.fromPlace+ " · ";
+          se._flightService.itemFlightCache.departPaymentTitleDisplay = objday.daynameshort + ", " + moment(item.depart.departTime).format("DD-MM")+ " · " + item.depart.fromPlace + " → " +item.return.fromPlace+ " · ";
+          se._flightService.itemFlightCache.returnPaymentTitleDisplay = objdayreturn.daynameshort + ", " + moment(item.return.departTime).format("DD-MM")+ " · "+ item.return.fromPlace + " → " +item.depart.fromPlace+ " · ";
 
           se._flightService.itemFlightCache.checkInDisplay = se.getDayOfWeek(item.depart.departTime).dayname +", " + moment(item.depart.departTime).format("DD") + " thg " + moment(item.depart.departTime).format("MM");
           se._flightService.itemFlightCache.checkOutDisplay = se.getDayOfWeek(item.return.departTime).dayname +", " + moment(item.return.departTime).format("DD") + " thg " + moment(item.return.departTime).format("MM");
@@ -1601,7 +1606,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 let objtextmonth = elementMonth.children[0].textContent.replace('Tháng ','');
                 let monthstartdate:any = objtextmonth.trim().split(" ")[0];
                 let yearstartdate:any = objtextmonth.trim().split(" ")[1];
-                let textmonth = moment(new Date(yearstartdate, monthstartdate - 1, 1)).format('YYYY-MM');
+                let textmonth = moment(this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, 1))).format('YYYY-MM');
                 
                 if(objtextmonth && objtextmonth.length >0){
                   let listdepartinmonth = departs.filter((item) => { return moment(item.departTime).format('YYYY-MM') == textmonth});
@@ -1619,9 +1624,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                         if(elementday && elementday.textContent){
                           //let fday:any = elementday.textContent;
                           let fday:any = elementday.children[0].children[0].textContent;
-                          let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
+                          let fromdate = moment(this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday))).format('YYYY-MM-DD');
                           let todate = moment(fromdate).add(diffday ,'days').format('YYYY-MM-DD');
-                          if(fromdate && moment(fromdate).diff( moment(new Date()).format('YYYY-MM-DD'), 'days') >=0){
+                          if(fromdate && moment(fromdate).diff( moment(this.gf.getCinIsoDate(new Date())).format('YYYY-MM-DD'), 'days') >=0){
                               if(type ==1){
                                 let mindepartvalue = Math.min(...listdepartinmonth.map(o => o.price));
                                 let minreturnvalue = Math.min(...listreturninmonth.map(o => o.price));

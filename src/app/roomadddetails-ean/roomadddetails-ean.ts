@@ -274,7 +274,7 @@ export class RoomadddetailsEanPage implements OnInit {
         this.jsonroom.RoomClasses = this.room;
         let mealtype = this.jsonroom.RoomClasses[0].MealTypeRates[this.booking.indexmealtype];
 
-        this.showInstallmentButton = (priceBooking * 1 >= 3000000 && this.Roomif.payment == 'AL' && (mealtype && mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD")) ? true : false;
+        this.showInstallmentButton = (priceBooking * 1 >= 3000000 && this.Roomif.payment == 'AL' && (mealtype && mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD" || mealtype.Supplier == 'SERI')) ? true : false;
         this.getInstallment(priceBooking * 1);
         this.zone.run(() => {
             let priceinstallment = Math.round(priceBooking * 1 / 12 * 1.05);
@@ -1440,6 +1440,31 @@ export class RoomadddetailsEanPage implements OnInit {
         if (this.checkchangeemail) {
             return;
         }
+        if(this.Roomif.roomtype.Supplier == 'SERI'){
+            //Check allotment trước khi book
+              this.gf.checkAllotmentSeri(
+              this.booking.HotelId,
+              this.Roomif.RoomId,
+              this.booking.CheckInDate,
+              this.booking.CheckOutDate,
+              this.Roomif.roomnumber,
+              'SERI', this.Roomif.roomtype.HotelCheckDetailTokenInternal
+              ).then((allow)=> {
+                if(allow){
+                 this.continueBook();
+                }else{
+                  if (this.loader) {
+                    this.loader.dismiss();
+                  }
+                  this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+                }
+              })
+          }else{
+           this.continueBook();
+          }
+    }
+
+    continueBook() {
         this.presentLoading();
         var se = this;
         this.jsonroom.RoomClasses = this.room;
@@ -1508,11 +1533,7 @@ export class RoomadddetailsEanPage implements OnInit {
             };
             if (body) {
                 if (body.error == 0) {
-                    // console.log(body.code);
-                    // var value = { BookingCode: body.code, total: se.Roomif.pricepoint,ischeck:'1' };
-                    // //se.closeLoading();
-                    // se.clearClonePage('page-roompaymentdoneean');
-                    // se.navCtrl.navigateForward('RoompaymentdoneeanPage');
+                   
                     var id = body.code;
                     var total = se.Roomif.pricepoint.toString().replace(/\./g, '').replace(/\,/g, '');
                     var ischeck = '1';
@@ -1557,9 +1578,6 @@ export class RoomadddetailsEanPage implements OnInit {
             }
 
         });
-
-
-        // })
     }
     async presentToasterror() {
         let toast = await this.toastCtrl.create({message: "Số điểm không đủ để tạo booking", duration: 3000, position: 'top'});

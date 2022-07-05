@@ -115,8 +115,14 @@ export class FlightdetailPage implements OnInit {
             }
 
             if(this.itemFlight.timeDisplay){
+              if(this.itemFlight.timeDisplay.indexOf('→') != -1){
+                this.departTime = this.itemFlight.timeDisplay.split('→')[0].trim();
+                this.landingTime = this.itemFlight.timeDisplay.split('→')[1].trim();
+              }else{
                 this.departTime = this.itemFlight.timeDisplay.split('-')[0].trim();
                 this.landingTime = this.itemFlight.timeDisplay.split('-')[1].trim();
+              }
+                
             }
             
            //this.departAirPort = this._flightService.itemFlightCache.departAirport;

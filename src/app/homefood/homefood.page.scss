@@ -853,3 +853,35 @@
     .div-myorder{
         height: 100%;
     }
+
+    
+.div-homefood-content {
+    .img-farewell {
+        text-align: center;
+    }
+    .text-content {
+        font-size: 20px;
+        line-height: 1.4;
+        text-align: left;
+        color: #3f3b3b;
+    }
+
+    .text-tealish {
+        color: #26bed6;
+    }
+    .text-orange {
+        color: #f79321;
+    }
+    
+}
+
+.div-button {
+    margin: 16px;
+    width: 91%;
+}
+.btn-back {
+    width: 100%;
+    margin: 0;
+    background-color: #f79321;
+    color: #fff;
+}

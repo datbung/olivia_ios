@@ -257,3 +257,24 @@ p {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.div-address{
+
+  .div-location{
+      position: absolute;
+      margin-top: 0;
+      margin-left: -1px;
+  }
+  .img-location{
+      height: 15px;
+  }
+  .text-address{
+      position: relative;
+      line-height: 16px;
+      padding-left: 16px;
+  }
+  .color-blue{
+    color: #26bed6 !important
+  }
+  
+}

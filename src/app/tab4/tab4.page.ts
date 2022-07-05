@@ -84,6 +84,21 @@ export class Tab4Page implements OnInit{
     })
     //19/07/2019: Load thông tin notification
     //this.loadUserNotification();
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        se.storage.get('listUserNotification').then((data)=> {
+          if(data){
+           se.loadDataNotify(data);
+          }else{
+            se.loadUserNotification();
+          }
+        })
+      }else{
+        se.items = [];
+        se.loaddatadone = true;
+      }
+    })
+    
     // se.storage.get('listUserNotification').then((data)=> {
     //   if(data){
     //     se.loadDataNotify(data);
@@ -521,7 +536,7 @@ export class Tab4Page implements OnInit{
             });
             var itemMap = data.filter((item) => { return item.booking_id == BookingCode });
             if(itemMap && itemMap.length>0){
-              // se.gf.setParams(BookingCode,'notifiBookingCode');
+              se.gf.setParams(BookingCode,'notifiBookingCode');
               se.gf.setParams(3,'selectedTab3');
               se.navCtrl.navigateForward(['/app/tabs/tab3']);
               

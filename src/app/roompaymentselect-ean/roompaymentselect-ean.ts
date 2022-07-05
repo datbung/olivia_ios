@@ -470,6 +470,33 @@ export class RoompaymentselectEanPage implements OnInit{
   CreateBooking(paymentType) {
     var se = this;
     se.presentLoading();
+    if(se.Roomif.roomtype.Supplier == 'SERI'){
+      //Check allotment trÆ°á»›c khi book
+        se.gf.checkAllotmentSeri(
+        se.booking.HotelId,
+        se.Roomif.RoomId,
+        se.booking.CheckInDate,
+        se.booking.CheckOutDate,
+        se.Roomif.roomnumber,
+        'SERI', se.Roomif.roomtype.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            se.continueBooking(paymentType);
+          }else{
+            if (se.loader) {
+              se.loader.dismiss();
+            }
+            se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    }else{
+      se.continueBooking(paymentType);
+    }
+  
+  }
+
+  continueBooking(paymentType){
+    var se= this;
     var paymentMethod=se.gf.funcpaymentMethod(paymentType);
     this.CreateBookingRoom(paymentMethod).then(databook => {
       if (databook) {
@@ -523,8 +550,8 @@ export class RoompaymentselectEanPage implements OnInit{
             })
           }
           //pdanh 12/03/2021 luồng book VIN
-          else if(this.roomtype.Supplier == "VINPEARL" 
-          || this.roomtype.Supplier == "SMD"
+          else if(se.roomtype.Supplier == "VINPEARL" 
+          || se.roomtype.Supplier == "SMD" || se.Roomif.roomtype.Supplier == 'SERI'
           ){
             var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '')
                 var url="";
@@ -648,16 +675,7 @@ export class RoompaymentselectEanPage implements OnInit{
             }
             
           })
-          // alert(databook.Msg);
-          // if(this.Roomif.point &&  this.Roomif.bookingCode)
-          // {
-          //   this.navCtrl.navigateBack('/roomdetailreview');
-          // }
-          // if(this.Roomif.promocode &&  this.Roomif.bookingCode)
-          // {
-          //   this.navCtrl.navigateBack('/roomdetailreview');
-          // }
-          //se.navCtrl.navigateBack('/hoteldetail/' + se.booking.HotelId);
+         
         }
       }
       else {

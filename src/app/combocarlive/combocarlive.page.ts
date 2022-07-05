@@ -266,7 +266,28 @@ export class CombocarlivePage implements OnInit {
             se.listcars.HotelBooking.LeadingName = se.hoten;
             se.listcars.HotelBooking.LeadingEmail = se.email;
             se.listcars.HotelBooking.LeadingPhone = se.phone;
-            se.CreateCombo();
+            if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+              //Check allotment trước khi book
+              se.gf.checkAllotmentSeri(
+                se.booking.HotelId,
+                se.bookCombo.mealTypeRates.RoomId,
+                se.booking.CheckInDate,
+                se.booking.CheckOutDate,
+                se.bookCombo.mealTypeRates.TotalRoom,
+                'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+                ).then((allow)=> {
+                  if(allow){
+                    se.CreateCombo();
+                  }else{
+                    if (se.loader) {
+                      se.loader.dismiss();
+                    }
+                    se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+                  }
+                })
+            }else{
+              se.CreateCombo();
+            }
   
           } else {
             se.loader.dismiss();

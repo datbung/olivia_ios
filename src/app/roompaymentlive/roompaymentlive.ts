@@ -48,24 +48,38 @@ export class RoompaymentlivePage implements OnInit{
       })
   }
   next() {
+    var se =this;
+    if(se.Roomif.roomtype.Supplier == 'SERI'){
+      se.gf.checkAllotmentSeri(
+        se.booking.HotelId,
+        se.Roomif.RoomId,
+        se.booking.CheckInDate,
+        se.booking.CheckOutDate,
+        se.Roomif.roomnumber,
+        'SERI', se.Roomif.roomtype.HotelCheckDetailTokenInternal
+        ).then((allow)=> {
+          if(allow){
+            se.createBooking()
+          }
+          else{
+            if (se.loader) {
+              se.loader.dismiss();
+            }
+            se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+          }
+        })
+    
+    }else{
+      se.createBooking();
+    }
+
+  }
+
+  createBooking(){
     this.presentLoading();
     var se = this;
-    // var arrMealTypeRates = [];
-    // var room1 = [];
-    // arrMealTypeRates.push(this.room[0].MealTypeRates[this.booking.indexmealtype]);
-    // var itemroom1 = {
-    //   Penalty_Type: this.room[0].Rooms[0].Penalty_Type, RoomID: this.room[0].Rooms[0].RoomID, RoomPriceBreak: this.room[0].Rooms[0].RoomPriceBreak,
-    //   SupplierRef: this.room[0].Rooms[0].SupplierRef, SalesTax: this.room[0].Rooms[0].SalesTax
-    // }
-    // room1.push(itemroom1);
-    // this.jsonroom.RoomClasses = this.room;
-    // this.jsonroom.RoomClasses[0].MealTypeRates = arrMealTypeRates;
-    // this.jsonroom.RoomClasses[0].Rooms = room1;
-    // this.jsonroom.RoomClassesHidden = [];
-    // this.booking.Hotels = this.jsonroom
     se.jsonroom.RoomClasses=se.room;
     se.timestamp = Date.now();
-    //se.storage.get('auth_token').then(auth_token => {
       if (se.booking.CEmail) {
         var Invoice=0;
         if (se.Roomif.order) {
@@ -131,14 +145,12 @@ export class RoompaymentlivePage implements OnInit{
           };
           if (body) {
             if (body.error == 0) {
-              // console.log(body.code);
               var code=body.code;
               var stt=body.bookingStatus;
               se.clearClonePage('page-roompaymentdone');
               se.loader.dismiss();
               //PDANH 22/03/2021 - Case trả sau của VIN gọi thêm hàn build link để đẩy xuống backend luồng VIN
               let mealtype = se.jsonroom.RoomClasses[0].MealTypeRates[se.booking.indexmealtype];
-                //if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD") ){
                   let totalprice = '';
                   if (se.Roomif.priceshow) {
                     totalprice= se.Roomif.priceshow;
@@ -149,9 +161,7 @@ export class RoompaymentlivePage implements OnInit{
                   }
                   let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + body.code + '&memberId=' + se.jti + '&buyerPhone=' + se.Roomif.phone;
                   se.gf.CreateUrl(url);
-                //}
               se.navCtrl.navigateForward('/roompaymentdone/'+code+'/'+stt);
-              //se.gf.googleAnalytion('paymentdirect','Purchases','hotelid:'+se.booking.cost+'/cin:'+se.jsonroom.CheckInDate+'/cout:'+se.jsonroom.CheckOutDate+'/adults:'+se.booking.Adults+'/child:'+se.booking.Child+'/price:'+se.booking.cost)
             }
             else{
               se.loader.dismiss();
@@ -173,14 +183,6 @@ export class RoompaymentlivePage implements OnInit{
                 }
                 
               })
-              // alert(body.Msg);
-              // if(se.Roomif.point &&  se.Roomif.bookingCode)
-              // {
-              //   se.navCtrl.navigateBack('/roomdetailreview');
-              // }
-              //se.refreshToken();
-              // se.navCtrl.popToRoot();
-              // se.app.getRootNav().getActiveChildNav().select(0);
             }
           }
           else{
@@ -199,8 +201,6 @@ export class RoompaymentlivePage implements OnInit{
         se.loader.dismiss();
         se.presentToastr('Email không hợp lệ. Vui lòng kiểm tra lại.');
       }
-    //})
-
   }
 
 
