@@ -143,6 +143,11 @@ export class FlightchangeinfoPage implements OnInit {
 
         search(){
             var se = this;
+            if(se.departCode && se.returnCode && se.departCode === se.returnCode){
+              se.gf.showToastWarning('Điểm khởi hành không được trùng với điểm đến. Vui lòng kiểm tra lại.');
+              return;
+            }
+            
             se._flightService.objSearch = {
                 departCode: se.departCode,
                 arrivalCode: se.returnCode,

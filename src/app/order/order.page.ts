@@ -330,10 +330,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
           this.activeTabTrip = 1;
           this.tabtrip = 'nexttrip';
         }
-        
-        if (this.gf.getParams('selectedTab3') && this.gf.getParams('notifiBookingCode')) {
- 
-        }
+      
         this.storage.get('auth_token').then((data: any) => {
           this.loginuser = data;
         })
@@ -1527,8 +1524,12 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
           //List trip đã đi
           else {
             if (lstTrips && lstTrips.trips && lstTrips.trips.length > 0) {
-              this.activeTabTrip = 3;
+                
+        if (this.gf.getParams('selectedTab3') && this.gf.getParams('notifiBookingCode')) {
+               this.activeTabTrip = 3;
               this.tabtrip = 'historytrip';
+        }
+
             lstTrips.trips.forEach(elementHis => {
               if(!se.gf.checkExistsItemInArray(se.listHistoryTrips, elementHis, 'order')){
                 if (elementHis.avatar  && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {

@@ -677,19 +677,19 @@ export class TabsPage implements OnInit {
     // this.showActionSheetNoti(datatest);
 
     //Count noti
-    var obj={
-      "title":"🌟 Du Xuân Đón Tết - Đặt Ngay Kẻo Hết 🌟",
-      "message": "Sau một năm làm việc vất vả, đến lúc tự thưởng cho bản thân và gia đình kỳ nghỉ dịp Tết này. Truy cập ngay App iVIVU.com để xem các ưu đãi hấp dẫn.", 
-      "dataLink": "/hoteldetail/577390",
-      "created":moment().format(),
-      "status":0,
-      "id":Date.now(),
-      "notifyType":"product"
+    // var obj={
+    //   "title":"🌟 Du Xuân Đón Tết - Đặt Ngay Kẻo Hết 🌟",
+    //   "message": "Sau một năm làm việc vất vả, đến lúc tự thưởng cho bản thân và gia đình kỳ nghỉ dịp Tết này. Truy cập ngay App iVIVU.com để xem các ưu đãi hấp dẫn.", 
+    //   "dataLink": "/hoteldetail/577390",
+    //   "created":moment().format(),
+    //   "status":0,
+    //   "id":Date.now(),
+    //   "notifyType":"product"
    
-    }
-    var datanoti=[];
-    datanoti.push(obj);
-    this.storage.set("objnotication",datanoti);
+    // }
+    // var datanoti=[];
+    // datanoti.push(obj);
+    // this.storage.set("objnotication",datanoti);
     this.loadUserNotification();
     
     var el = document.getElementsByClassName('tab-button');

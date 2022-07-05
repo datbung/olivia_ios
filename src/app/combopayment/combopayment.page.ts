@@ -309,15 +309,15 @@ export class CombopaymentPage implements OnInit {
     request(options, function (error, response, body) {
       var obj = JSON.parse(body);
       se.bookingCode = obj.Code;
-      if(this.bookCombo.mealTypeRates.Supplier == 'SERI' && this.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
+      if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
         //Check allotment trước khi book
-        this.gf.checkAllotmentSeri(
-          this.booking.HotelId,
-          this.bookCombo.mealTypeRates.RoomId,
-          this.booking.CheckInDate,
-          this.booking.CheckOutDate,
-          this.bookCombo.mealTypeRates.TotalRoom,
-          'SERI', this.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
+        se.gf.checkAllotmentSeri(
+          se.booking.HotelId,
+          se.bookCombo.mealTypeRates.RoomId,
+          se.booking.CheckInDate,
+          se.booking.CheckOutDate,
+          se.bookCombo.mealTypeRates.TotalRoom,
+          'SERI', se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal
           ).then((allow)=> {
             if(allow){
               se.CreateBuildLink(paymentType);
@@ -325,7 +325,7 @@ export class CombopaymentPage implements OnInit {
               if (se.loader) {
                 se.loader.dismiss();
               }
-              this.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
+              se.gf.showToastWarning('Hiện tại khách sạn đã hết phòng loại này.');
             }
           })
       }else{

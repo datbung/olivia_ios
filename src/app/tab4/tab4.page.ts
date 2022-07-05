@@ -536,7 +536,7 @@ export class Tab4Page implements OnInit{
             });
             var itemMap = data.filter((item) => { return item.booking_id == BookingCode });
             if(itemMap && itemMap.length>0){
-              // se.gf.setParams(BookingCode,'notifiBookingCode');
+              se.gf.setParams(BookingCode,'notifiBookingCode');
               se.gf.setParams(3,'selectedTab3');
               se.navCtrl.navigateForward(['/app/tabs/tab3']);
               
