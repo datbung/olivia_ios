@@ -325,14 +325,14 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
       }
     
       loadPageData() {
-        
+        var se = this;
         if (this.gf.getParams('notifiBookingCode') && !this.gf.getParams('selectedTab3')) {
           this.activeTabTrip = 1;
           this.tabtrip = 'nexttrip';
         }
+        
         if (this.gf.getParams('selectedTab3') && this.gf.getParams('notifiBookingCode')) {
-          this.activeTabTrip = 3;
-          this.tabtrip = 'historytrip';
+ 
         }
         this.storage.get('auth_token').then((data: any) => {
           this.loginuser = data;
@@ -1337,7 +1337,28 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                   var idx = idxMap.findIndex((el) => { return el == true });
                   se.currentTrip = idx;
                   se.gf.setParams('','notifiBookingCode');
-                  se.showtripdetail(se.listMyTrips[idx]);
+                  if (idx!=-1) {
+                    se.showtripdetail(se.listMyTrips[idx]);
+                  }else{
+            
+                        //Map số bkg trong listtrip để focus vào bkg được notifi
+                        var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
+                          return item.booking_id == se.valueGlobal.BookingCodeHis;
+                        });
+                        if (idxMaphis && idxMaphis.length > 0) {
+                          var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                          se.currentTrip = idxhis;
+                          se.gf.setParams('','notifiBookingCode');
+                          if (idxhis!=-1) {
+                            se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
+                          }else{
+                            se.getdata(null,true);
+                          }
+                        }
+                      
+                    }
+                  
+                
                 }
               }
     
@@ -1506,6 +1527,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
           //List trip đã đi
           else {
             if (lstTrips && lstTrips.trips && lstTrips.trips.length > 0) {
+              this.activeTabTrip = 3;
+              this.tabtrip = 'historytrip';
             lstTrips.trips.forEach(elementHis => {
               if(!se.gf.checkExistsItemInArray(se.listHistoryTrips, elementHis, 'order')){
                 if (elementHis.avatar  && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
@@ -2985,7 +3008,25 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
               var idx = idxMap.findIndex((el) => { return el == true });
               se.currentTrip = idx;
               se.gf.setParams('','notifiBookingCode');
-              se.showtripdetail(se.listMyTrips[idx]);
+              if (idx!=-1) {
+                se.showtripdetail(se.listMyTrips[idx]);
+              }else{
+        
+                    //Map số bkg trong listtrip để focus vào bkg được notifi
+                    var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
+                      return item.booking_id == se.valueGlobal.BookingCodeHis;
+                    });
+                    if (idxMaphis && idxMaphis.length > 0) {
+                      var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                      se.currentTrip = idxhis;
+                      if (idxhis!=-1) {
+                        se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
+                      }else{
+                        se.getdata(null,true);
+                      }
+                    }
+                  
+                }
             }
             //Sau khi map được trip thì set giá trị về null
             se.gf.setParams(null, 'notifiBookingCode');

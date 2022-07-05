@@ -212,7 +212,8 @@ export class FlightnotifyPage {
                 }
             }));
         }
-    };
+    }
+    
     /**
      * Hàm set lại trạng thái thông báo
      */
@@ -291,6 +292,7 @@ export class FlightnotifyPage {
                     se.getdatamytripHis().then((data) => {
                         se.gf.hideLoading();
                         se.valueGlobal.listhistory=data;
+                        se.valueGlobal.BookingCodeHis=BookingCode;
                         var idxMap = data.map( (item,index) =>{ 
                           return item.booking_id == BookingCode;
                         });

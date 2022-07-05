@@ -16,6 +16,7 @@ import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AdddiscountPage } from './../adddiscount/adddiscount.page';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({
   selector: 'app-flightaddservice',
@@ -74,6 +75,9 @@ export class FlightaddservicePage implements OnInit {
   alert: any;
   isExtenal: any;
   ischeckShowDC=0;
+  dateShowCathay = '2022-09-30';
+  isShowPromoCathay: boolean = false;
+  
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -85,7 +89,8 @@ export class FlightaddservicePage implements OnInit {
     public searchhotel: SearchHotel,
     public _flightService: flightService,
     private alertCtrl: AlertController,
-    private sanitizer: DomSanitizer) { 
+    private sanitizer: DomSanitizer,
+    private safariViewController: SafariViewController) { 
         if(this._flightService.itemFlightCache){
             this.roundtrip = this._flightService.itemFlightCache.roundTrip;
             this.adult = this._flightService.itemFlightCache.adult;
@@ -279,6 +284,7 @@ export class FlightaddservicePage implements OnInit {
                 }
             }
             
+          this.isShowPromoCathay = moment(this.dateShowCathay).diff(moment(moment(new Date()).format('YYYY-MM-DD'))) >= 0;
         }
     }
 
@@ -3273,5 +3279,36 @@ export class FlightaddservicePage implements OnInit {
         se._flightService.itemFlightCache.isAirportSecond=jsondata.data.isAirportSecond;
       }
   })
+}
+
+openLinkPromoCathay() {
+  this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          this.safariViewController.show({
+            url: 'https://www.ivivu.com/blog/2022/06/mua-bao-hiem-cathay-o-ivivu-trung-ngay-voucher-du-lich-xin/',
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+          .subscribe((result: any) => {
+              if(result.event === 'opened') console.log('Opened');
+              else if(result.event === 'loaded') console.log('Loaded');
+              else if(result.event === 'closed') 
+              {
+                
+              }
+          
+            },
+            (error: any) => console.error(error)
+          );
+  
+        } else {
+          // use fallback browser, example InAppBrowser
+        }
+      }
+    );
 }
 }

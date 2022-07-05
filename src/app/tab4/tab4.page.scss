@@ -90,10 +90,10 @@ ng-deep{
   font-size: 16px;
   font-weight: 500;
   color: #fff;
-  width: 88px;
+  width: 120px;
   height: 36px;
   text-align: center;
-  margin-left: 8px;
+  margin-left: 12px;
   padding: 0px;
 }
 .div-flex{
@@ -105,10 +105,10 @@ ng-deep{
   font-size: 16px;
   font-weight: 500;
   color: #3f3b3b;
-  width: 88px;
+  width: 120px;
   height: 36px;
   text-align: center;
-  margin-left: 8px;
+  margin-left: 12px;
   padding: 0px;
 }
 .margin-left-0{
@@ -166,4 +166,8 @@ ng-deep{
 }
 .img-empty{
   padding-bottom: 24px;
+}
+.btn-Product{
+  position: absolute;
+  right: 16px;
 }
