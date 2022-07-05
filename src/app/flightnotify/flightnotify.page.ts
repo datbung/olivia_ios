@@ -197,22 +197,9 @@ export class FlightnotifyPage {
                 }
             }));
               // sort ưu tiên đơn hàng
-             se.sortNotifibyBooking();
         }
-    };
-    sortNotifibyBooking() {
-        var se = this;
-        if (se.items && se.items.length > 0) {
-            se.zone.run(() => se.items.sort(function (a, b) {
-                let direction = -1;
-                if (a.notifyType=='booking' && b.notifyType=='booking') {
-                    return -1 * direction;
-                } else {
-                    return 1 * direction;
-                }
-            }));
-        }
-    };
+    }
+    
     /**
      * Hàm set lại trạng thái thông báo
      */
@@ -291,6 +278,7 @@ export class FlightnotifyPage {
                     se.getdatamytripHis().then((data) => {
                         se.gf.hideLoading();
                         se.valueGlobal.listhistory=data;
+                        se.valueGlobal.BookingCodeHis=BookingCode;
                         var idxMap = data.map( (item,index) =>{ 
                           return item.booking_id == BookingCode;
                         });

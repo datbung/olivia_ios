@@ -254,22 +254,8 @@ export class Tab4Page implements OnInit{
             return 1 * direction;
           }
       }));
-      this.sortNotifibyBooking();
     }
-  };
-  sortNotifibyBooking() {
-    var se = this;
-    if (se.items && se.items.length > 0) {
-        se.zone.run(() => se.items.sort(function (a, b) {
-            let direction = -1;
-            if (a.notifyType=='booking' && b.notifyType!='booking') {
-                return 1 * direction;
-            } else {
-                return -1 * direction;
-            }
-        }));
-    }
-};
+  }
   /**
    * Hàm set lại trạng thái thông báo
    */
@@ -529,12 +515,13 @@ export class Tab4Page implements OnInit{
           se.getdatamytripHis().then((data) => {
             se.gf.hideLoading();
             se.valueGlobal.listhistory=data;
+            se.valueGlobal.BookingCodeHis=BookingCode;
             var idxMap = data.map( (item,index) =>{ 
               return item.booking_id == BookingCode;
             });
             var itemMap = data.filter((item) => { return item.booking_id == BookingCode });
             if(itemMap && itemMap.length>0){
-              se.gf.setParams(BookingCode,'notifiBookingCode');
+              // se.gf.setParams(BookingCode,'notifiBookingCode');
               se.gf.setParams(3,'selectedTab3');
               se.navCtrl.navigateForward(['/app/tabs/tab3']);
               

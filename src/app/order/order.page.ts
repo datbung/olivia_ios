@@ -1309,14 +1309,14 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
             
                         //Map số bkg trong listtrip để focus vào bkg được notifi
                         var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
-                          return item.booking_id == se.gf.getParams('notifiBookingCode');
+                          return item.booking_id == se.valueGlobal.BookingCodeHis;
                         });
                         if (idxMaphis && idxMaphis.length > 0) {
                           var idxhis = idxMaphis.findIndex((el) => { return el == true });
                           se.currentTrip = idxhis;
                           se.gf.setParams('','notifiBookingCode');
                           if (idxhis!=-1) {
-                            se.showtripdetail(se.listMyTrips[idx]);
+                            se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
                           }else{
                             se.getdata(null,true);
                           }
@@ -2947,14 +2947,13 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
         
                     //Map số bkg trong listtrip để focus vào bkg được notifi
                     var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
-                      return item.booking_id == se.gf.getParams('notifiBookingCode');
+                      return item.booking_id == se.valueGlobal.BookingCodeHis;
                     });
                     if (idxMaphis && idxMaphis.length > 0) {
                       var idxhis = idxMaphis.findIndex((el) => { return el == true });
                       se.currentTrip = idxhis;
-                      se.gf.setParams('','notifiBookingCode');
                       if (idxhis!=-1) {
-                        se.showtripdetail(se.listMyTrips[idx]);
+                        se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
                       }else{
                         se.getdata(null,true);
                       }
