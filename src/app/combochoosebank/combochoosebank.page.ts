@@ -216,8 +216,29 @@ export class CombochoosebankPage implements OnInit {
             ReturnATCode: obj.TransferReserveCode.ReturnReserveCode
           }
           se.bookingCode=obj.Code;
+          //05-07-2022 thêm đoạn sync crm
+          var options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlContracting + '/api/ToolsAPI/CreateTransactionIDComboTransfer',
+            headers:
+              {},
+            form:
+            {
+              BookingCode: obj.Code,
+              DepartATCode: obj.TransferReserveCode.DepartReserveCode,
+              ReturnATCode: obj.TransferReserveCode.ReturnReserveCode,
+              FromPlaceCode: se.listcars.TransferBooking.fromPlaceCode
+            }
+          };
+          request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            var json = JSON.parse(body);
+            if (json.Error == 0) {
+              se.CreateUrlOnePay(bankid);
+            }
+          });
           //se.Roomif.bookingCode=obj.Code;
-          se.CreateUrlOnePay(bankid);
+
           // var url = C.urls.baseUrl.urlPayment + "/Home/PaymentAppCombo?info=" + JSON.stringify(se.book);
           // se.openWebpage(url);
 
