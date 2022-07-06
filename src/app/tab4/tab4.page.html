@@ -13,18 +13,26 @@
 </ion-header>
 
 <ion-content style="background-color: #ffffff">
-  <div  class="div-scroll margin-left-16" *ngIf="items && items.length > 0 && loaddatadone">
-    <div class="div-flex">
+  <div  class="div-scroll margin-left-16 div-flex" *ngIf="items && items.length > 0 && loaddatadone">
+
+      <div class="div-33">
+        <button 
+        ion-button round outline [ngClass]="isAll ? 'btn-typeMessenger-action margin-left-0': 'btn-typeMessenger margin-left-0'" (click)="funcAll()">Tất cả</button>
+      </div>
+     <div class="div-33">
+        <button 
+        ion-button round outline [ngClass]="isOrder ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcOrder()">Đơn hàng</button>
+      </div>
+     
+    <div class="div-33">
       <button 
-      ion-button round outline [ngClass]="isAll ? 'btn-typeMessenger-action margin-left-0': 'btn-typeMessenger margin-left-0'" (click)="funcAll()">Tất cả</button>
-      <button 
-      ion-button round outline [ngClass]="isOrder ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcOrder()">Đơn hàng</button>
-      <button 
-      ion-button round outline [ngClass]="isProduct ? 'btn-typeMessenger-action btn-Product': 'btn-typeMessenger btn-Product'" (click)="funcProduct()">Sản phẩm</button>
+      ion-button round outline [ngClass]="isProduct ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcProduct()">Ưu đãi</button>
+    </div>
+     
      
       <!-- <button 
       ion-button round outline [ngClass]="isOther ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcOther()">Khác</button> -->
-    </div>
+
   </div>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content
