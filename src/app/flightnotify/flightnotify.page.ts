@@ -256,7 +256,10 @@ export class FlightnotifyPage {
                 se.mapBookingAndPayment(item.bookingCode);
             }
         } else { // show notifi
-            se.presentToastNotifi(item.message);
+            if (!item.dataLink) {
+                se.presentToastNotifi(item.message);
+            }
+         
         }
 
     }
