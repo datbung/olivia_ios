@@ -90,14 +90,14 @@ ng-deep{
   font-size: 16px;
   font-weight: 500;
   color: #fff;
-  width: 120px;
+  width: 104px;
   height: 36px;
   text-align: center;
-  margin-left: 12px;
   padding: 0px;
 }
 .div-flex{
   display: flex;
+  width: 101%;
 }
 .btn-typeMessenger{
   border-radius: 30px;
@@ -105,10 +105,9 @@ ng-deep{
   font-size: 16px;
   font-weight: 500;
   color: #3f3b3b;
-  width: 120px;
+  width: 104px;
   height: 36px;
   text-align: center;
-  margin-left: 12px;
   padding: 0px;
 }
 .margin-left-0{
@@ -170,4 +169,8 @@ ng-deep{
 .btn-Product{
   position: absolute;
   right: 16px;
+}
+
+.div-33{
+  width: 33%;
 }

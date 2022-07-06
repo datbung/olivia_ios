@@ -5,7 +5,6 @@ import { NavController, LoadingController, Platform, ToastController,ModalContro
 import { Booking, RoomInfo } from '../../providers/book-service';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction, ActivityService } from '../../providers/globalfunction';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { C } from './../../providers/constants';
 import * as request from 'requestretry';

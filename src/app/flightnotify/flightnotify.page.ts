@@ -197,7 +197,7 @@ export class FlightnotifyPage {
                 }
             }));
               // sort ưu tiên đơn hàng
-             se.sortNotifibyBooking();
+            //  se.sortNotifibyBooking();
         }
     };
     sortNotifibyBooking() {
