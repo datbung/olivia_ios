@@ -1239,13 +1239,18 @@ export class TabsPage implements OnInit {
       if (!datanoti) {
         datanoti=[];
       }
-      data.created=moment().format();
-      data.status=0;
-      data.id=Date.now();
-      data.status=0;
-      data.notifyType=notifyType;
-      datanoti.push(data);
-      this.storage.set("objnotication",datanoti);
+      let checkNoti = datanoti.filter((item) => { return item.dataLink== data.dataLink});
+      if (checkNoti.length==0) {
+        data.created=moment().format();
+        data.status=0;
+        data.id=Date.now();
+        data.status=0;
+        data.notifyType=notifyType;
+        
+        datanoti.push(data);
+        this.storage.set("objnotication",datanoti);
+      }
+  
     })
   }
 }

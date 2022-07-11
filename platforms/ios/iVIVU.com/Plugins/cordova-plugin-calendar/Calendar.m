@@ -599,7 +599,7 @@
         calendar.title = calendarName;
         calendar.source = [self findEKSource];
         NSError* error;
-        [self.eventStore saveCalendar:calendar commit:YES error:&error];
+         [self.eventStore saveCalendar:calendar commit:YES error:&error];
         if (error != nil) {
           NSLog(@"could not create calendar, error: %@", error.description);
           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Calendar could not be found nor created. Is access to the Calendar blocked for this app?"];

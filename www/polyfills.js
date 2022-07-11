@@ -5766,8 +5766,13 @@ window.__Zone_disable_customElements = true;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
+__webpack_require__(/*! /Users/itdev/Documents/Develop/Olivia_iOS/olivia_ios hotfix 2.9.7/src/polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! /Users/itdev/Documents/Develop/Olivia_iOS/olivia_ios hotfix 2.9.7/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js */"./node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js");
+=======
 __webpack_require__(/*! /Users/dev-ivivu/Documents/Develop/olivia_ios/src/polyfills.ts */"./src/polyfills.ts");
 module.exports = __webpack_require__(/*! /Users/dev-ivivu/Documents/Develop/olivia_ios/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js */"./node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js");
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
 
 
 /***/ })

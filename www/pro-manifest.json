@@ -1896,6 +1896,120 @@
   },
   {
     "href": "bizTravel-bookingdetail-bookingdetail-module.js",
+<<<<<<< HEAD
+    "size": 546601,
+    "integrity": "sha256-tQECIk345K0M7jE+pTDW3uCJGTN/nQZQhGP/Gg4Uw/Q= sha384-56iVoZ/i9Peljv4jdHpO9CVD0H4LkrQLZ0vbUnqXp4NvbN1b4lRgJRoE0dBCOG0c sha512-Z+FA1wkSG0vhljZMY2f/phhBxh8Xqd9KOsrpBiTZZM8bw3jI8mzGtMm5nCUTA4QRlzK7Dt99j+Tx6O9zhE9yMg=="
+  },
+  {
+    "href": "bizTravel-bookinghoteldetail-bookinghoteldetail-module.js",
+    "size": 59000,
+    "integrity": "sha256-aMVUx7qnH3G4p8ffxQ40z1cMg533fufiI5U1wpcnIzU= sha384-U8yUJyNWxL6pZ6e2seHQ/wmBiTmQfxjbhBS/06p6KdRi99aCJ1n9v1u4ii0le3KI sha512-FoMb4IGxrJaKtu+KOz9z6TBErSoRpYByVXnE7LzLbikAUE2YNfPALoQPBX56R8Y3ugIvhuT8QifNfjqDhca4hg=="
+  },
+  {
+    "href": "bizTravel-companyinfo-companyinfo-module.js",
+    "size": 28476,
+    "integrity": "sha256-YIZ8rslHo1d0P1iKKUA/yg2tt/xfsrwBSomFj3mkwf8= sha384-jLcxZEiCnx5J/y+7r2UbtcvEnKEuUjrZsECZNMRnq4FNGJqigMKHf6hu8uCDojeM sha512-LUVaE42rhHmK5YtfXWvPX++d2fullUHToLoW/03khBh0H5739rCJIn1v8oMwxvfzYcGihXqjDGnnE2rR3MXXlw=="
+  },
+  {
+    "href": "bizTravel-confirmpayment-confirmpayment-module.js",
+    "size": 29680,
+    "integrity": "sha256-uhSXfdKch0XZN2qiThSZ9uMInbAKpq9E2MdVOtnPUho= sha384-hetKsf/Nz0JoXfT32/tmEP6yukePNpTd+D2RHYymhdwRA2QEQfZPHg3u8NtdbFzM sha512-nAy3gZMH1wP++/vvROdveKWWibxw2+WjjGN4i398rrlgN+unZx/kQc9Jaf955D/26AOv5+4T2kyNDi1kAWQaGw=="
+  },
+  {
+    "href": "bizTravel-confirmpaymentdone-confirmpaymentdone-module.js",
+    "size": 26260,
+    "integrity": "sha256-BanGDDxKSKPbvUcPBBS+5L64rk9cq3kBnfGpvghtfA4= sha384-1N51dlYBzItH/Bl+5oMTAULaAs5fg/U6ATzAFkOgx7HybJQ8HgyYrwbgHDgZyQty sha512-Y6ZqHiiltFjGAddX/oP9Tw88aRuDx0fJSajpKBQL69fnWhTcFTO8+050BMUbIWjLT5hooSmKVAyhlh2YpfNxYw=="
+  },
+  {
+    "href": "bizTravel-paymentdetail-paymentdetail-module.js",
+    "size": 28142,
+    "integrity": "sha256-C/cXGO5kNyHCk3oOLQz0xdI7L0N6Wi0CNDKr2BHJi6A= sha384-3fvl0Sqbx9zeXQxT/+s0+iTkpYtZm+gzQs6JkQmJBvtB0uehAL41orn4RFflTcaO sha512-WRIgMWsZ7io/lOjQzr8xwsuEyjD1ypWCupMES0ERy9Keh3YOp8Id0tOCRZJZDVD6eF0f/ite82JUCeabYOPdtw=="
+  },
+  {
+    "href": "bizTravel-topup-topup-module.js",
+    "size": 27280,
+    "integrity": "sha256-ln2RcnoC0VGU4p66Eb8RoFD+fxxMzgFEfLZcUgW2dVs= sha384-bAahmlfwhkU+ip6h5eh2B+Ei4DCPLIh4uAMTS0Blp5c+RCrJj7H6IkpQ6XBaHDWe sha512-yWD9VC96fAN5gHiXq9gv9QMl+abMsr/KEzQBqFXt2lqaBeU4KO5Ua3NbOuzMXhZ3UjyO0jz+/5+ObeKuswO1GA=="
+  },
+  {
+    "href": "bloglist-bloglist-module.js",
+    "size": 69393,
+    "integrity": "sha256-Mj7yP1/jYarFEVwnoXyX+FLy1LOV79WEplb54G9d7p4= sha384-xUIGFUG/RzG/yhQvQ09JaauzZBfK+/2xS7x39M2J9qRwc3vEX4fMMcEh/EtN/m6O sha512-L5GTqm3KOr/AEtQVfFvxw/SxtXPFXsoy70RfWlHbqtxwZ4q1WYkGIMrKnVDEWk7FK55K2YMHHgEFA40+jmtzyQ=="
+  },
+  {
+    "href": "carcombo-carcombo-module.js",
+    "size": 118448,
+    "integrity": "sha256-lsXbl8fVloL/XVYbqQNSB6anbCeu6ZpiGHYHW9MPpVc= sha384-MC1YZSSu2+ls0pXn8ecd0x8TIS+qAC1XGVZ9r0UjsEGDuWi7UuE9NaSvNQTS19tW sha512-/7loeDgnXAXADSeUWVhXQ+Eaha/ux/ph2sid/eN4gyHctazpfe5brlbeHT6eL2VseelUwwk5PK+8QewjkV4jcA=="
+  },
+  {
+    "href": "comboadddetails-comboadddetails-module.js",
+    "size": 58978,
+    "integrity": "sha256-R92eZWgnVTqjFOTQznYCYMeAZUhcfDOdk8MrBUTlIpM= sha384-NygSJgk61exqtv0eDq3smXKUnMplS23qY7BVAmqC+qfzq4ACSbho9msQOP/oOO1W sha512-ETUn9M8t1JEbk9H70/Iteep9Wz+GIzn56G28KHXccyLW4cEcJFqJuGfs+H9AoOq4A0+f3BoAXeCYs1WlD8vMOQ=="
+  },
+  {
+    "href": "combocarbank-combocarbank-module.js",
+    "size": 46627,
+    "integrity": "sha256-FyXOQNXVairWQeomXdWYGXOZ+rLoGNRzadUzmxtEhXM= sha384-7IPMYWd9EcPjXGFBrpq+Zwj1PiG8tT2o7vc/iDLGwg7Kq6CifWXMmfsE8Rr9JJ7b sha512-j9cYn8FwK0S2KCQov1j81q3KE0w6UHEneHc7kCBUoajbUtIMmOo3CUSS7TstZFwjJZafrQ5tB3Beb2iSLEIczg=="
+  },
+  {
+    "href": "combocarlive-combocarlive-module.js",
+    "size": 26366,
+    "integrity": "sha256-cIYiSHU+gJLS2SfD6MHzG27cDPlws6sxGRgSZ7ROjQk= sha384-m2UmbdcSrBYwiC5M5BLgjd8m1/zoQuaksFQDOgpnJA3RcJGV+GQm1NzolXDpzPV2 sha512-iQ13K8M19KIB3pwnOSw1zP/Rv3B3zcH8ieSR/mL+o9ZL8pYRcovPC1oGHo6GKNUJAmPsGoeg0qssReoiVD4ehQ=="
+  },
+  {
+    "href": "combocarnew-combocarnew-module.js",
+    "size": 207261,
+    "integrity": "sha256-05KImDJkWbaJBiY7b5PnkrrL3AtVEEPg9vUsJm1og9M= sha384-dYqtiIHp09p0QAR7/cT7YCfE7rpED0BAf+iVG+AdOHUyFt2oXhxq46UfH9ntZ60y sha512-1XZZhH+e4qUeS9zkFtQGA/Ql4pjUPfDabisauCxIitXPp2ZEvJWszmA5puIKRqPQZv75gkujIG1SDsN2NLoXtw=="
+  },
+  {
+    "href": "combocarpaymentbreakdown-combocarpaymentbreakdown-module.js",
+    "size": 31021,
+    "integrity": "sha256-HvjjV50jLIONAAJy0loj/LR1IGi6jk/WUxKBp/bkN8E= sha384-RJFM7ibhEsjUZN6CbY1bkGpS5wYLZuFsisMCjFkWVJVMxSyNlAuuCNNswkjQDuHy sha512-/hYVQ/f/z37E2tiV/lyuDwOlQShJcDLcNM9GzohZUxUa/m+ZJZpaPwfnBIlnZOfGN6/cshzC/TH4aF8F0vPOEw=="
+  },
+  {
+    "href": "combocarpaymentpayoo-combocarpaymentpayoo-module.js",
+    "size": 17212,
+    "integrity": "sha256-HDxW2AgoM7xxD8IdCn2UR+WK6D4mCQF4cKk+Q3rIhpU= sha384-gDvUSzZlQrMWXn31FOu6sEGBJSA8oDE45ToknphjBHvd/UN0vT00U1Yl/XtvBdvN sha512-H13c3g+pYlDXc+tG21/Oea9LeNBJC6DyiPuoPffUjrV7Z/CcMCiSpP6exUuIykv/lUwdD/Z7PMCBYcGns5hbJA=="
+  },
+  {
+    "href": "combochoosebank-combochoosebank-module.js",
+    "size": 58621,
+    "integrity": "sha256-+Ma3qwd+Ad4lisWPSlBBzf0ZBI5uXofyxrop/yKPowc= sha384-5+GFNHzZkQfsolTLTxUoj7jMNtMyfS0eHW9DwgYTes5uAi4Go08xI3iWqK3JKoTf sha512-QYqbz5wwAoeFCPBTxZIm8726w46Cw18adCv398CvT6r0wDbHTR/0cipFKxyh4DTT/yZeVhy3mPOsLkXJ7mCQMQ=="
+  },
+  {
+    "href": "combodone-combodone-module.js",
+    "size": 45169,
+    "integrity": "sha256-j7mrmStIMyGVri05dGEKAE69nrA4oBYDl5EbkB+0BZs= sha384-B7O6BGQb6nTEEeefaUh9rSI/cwxY7whmB830jCg2PQon4ucbSV6zwhgeLaKjmVPL sha512-Xg5VRPdzNtjZltK6o3OHduDm+0Sj+RbHJ7NW7UT61DufTZCpRcHGaZqHdvae6jjIYjl2puNaG6zs0bLX9VGmJg=="
+  },
+  {
+    "href": "combodonebank-combodonebank-module.js",
+    "size": 44611,
+    "integrity": "sha256-rOeuLdQdPQNdnL+1q0BhlffNyfXgLUITp5lhhPfsIzk= sha384-iVKZGUUtO8wOswT1L7kyQq+l6FJWI/wiNjJxPHHgIhe8482eqzkqh3vdB0o2lKWw sha512-BJOECNmfMHukL0Tz5oaXIF4j1+addaq7NfZg2A7eWfHp7kt+Ij7UTZR2crN6PiTKJ5/LKIWQzZp4Wy+8pEsZ2A=="
+  },
+  {
+    "href": "combodoneprepay-combodoneprepay-module.js",
+    "size": 40629,
+    "integrity": "sha256-XAGUQ0fh3zJRxIgxgZlWAp2fatN2EabZM9uID1r3BC8= sha384-tPEQr3pMokogNRyQSoa5z/D2cMgGuzzCMtOi/G26PCYGcRd2RUlpp+0K85D1bVrI sha512-4j0ZAkZqBnuZ+Ei8PBrUtJ3BSmhl+YVijKAM2HP+rO/UzvUKKjXkQuRFXVdRrG4/gD0ig8qZG8FbG/g0ayAEHA=="
+  },
+  {
+    "href": "combolist-combolist-module.js",
+    "size": 115329,
+    "integrity": "sha256-1eiy9uIV+INiQMQGM5wEHFZvBzcULpHpVUn/XpgDE74= sha384-GF8CF94wHvH4e7wT3MpctcALKj1flfargx8+4oEFfj6vkfxW8QDkk8BaiPo5tgW/ sha512-b/5swAk5YpNuv1v/cKIZFLTPn13FW5BJAaVTb/xt1m2ug26HZVymSKBZwGqFv9yYDLrHIQSVfZU3osYULiTKRA=="
+  },
+  {
+    "href": "combopayment-combopayment-module.js",
+    "size": 74359,
+    "integrity": "sha256-9Tyg6kfAmqV4hyj+OYlxvFD5XHt3NtrTBLhBEU/B4pc= sha384-Ell8phWzbhoK4ebObawUMJtnWYhImeo7yVikuzx5cjQCvRMBLpZNjRH+JyxBokRi sha512-qQlxTLZCmGOD5UfbD1CxvX36Eo4t68vLjhB3WzuBpKJ5YNQxDyc9YKblAgkg1RsXvaYxOBnO5ss3vb38OM5qkA=="
+  },
+  {
+    "href": "common.js",
+    "size": 46996,
+    "integrity": "sha256-Y78AqGeilELfEGGnGCTBKz66yf/p92bCEULMFHbWvYI= sha384-UvGF4HpEbBNeIRZJq2zL8NXMAu2giLjlGJcxP+obL3R9SCl6AuMQbcF8q8fcB6li sha512-EuGVZ7lCuh2GytL/HJtZMqCdqK6zBBwg/2bnr5PmR4Di4cnB23JOfjs9PlRo6us5LXbAq6xg0m9cnPWrk1CkaA=="
+  },
+  {
+    "href": "cooperateverifyotp-cooperateverifyotp-module.js",
+    "size": 19262,
+    "integrity": "sha256-hf8JvyjC4DG2+MZJpzIDf2I1Gp4wxDlYeXlP7Op5E2o= sha384-4zxnIZbmrYCE694eWN0jjnkPjDQpEVjaQDmsSw1FIhR2OyKQyspqz+t9PskUEkVL sha512-oYMvdm+68txjmi90QDgn/t4cpXbVCvGDMVs03Pb29Hc4EnQgbrnyaIzGTwr8hRJhnC+546sGB/0WK0y0TPo4bg=="
+=======
     "size": 546544,
     "integrity": "sha256-qlOFYDbshuvgM+WUmfBd4b0Z3tWvqGc5iYBxR0o2o1c= sha384-0UAhlur/dB95PfIFbnOnN32qyvTiXEGKI8M6AmcwNFTnO34pG0AtKFMYSF0o3yYv sha512-j8E1inQnQMMYO9qB3SLy/lAncHFSSV2CsAnjsPy1rrXizeZez14Lp4weqz72nSRipveUXLMkZZbh5cyAi2zguw=="
   },
@@ -2023,6 +2137,7 @@
     "href": "cordova.98fc7fcb7c020c1504f6.js",
     "size": 20452,
     "integrity": "sha256-C4bP4f8zoRrlBAZHb4Qa+IU4gPNmUj2TeKcSAzDYtz4= sha384-vKtax2I4rcUUcd37ORMCz3uDE9OZsGdC/scsuWgWGUyDrEWToUjAxmenh7YRz2Ui sha512-7kcer3QEna43LzSD0QOFn5qdfdEhkDnJPBvlpAWwZd9M/2v9o3IMPvpE7uRLbyuCM52+v7RAeIAQz9HfwmUAgg=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "cordova.js",
@@ -2036,6 +2151,395 @@
   },
   {
     "href": "cusimgreview-cusimgreview-module.js",
+<<<<<<< HEAD
+    "size": 17459,
+    "integrity": "sha256-1LODF6MmaTbbqwM9ykLkfjhkRIxXLJr2jBw7BHWCJnQ= sha384-C47/6ZaLG/M+97fSyMUgvIWBGe0GaOmcuDjBqalNlmq2sykeQHLCpvkkyEkcXsH1 sha512-v/8rTYCr95uxDG9VgS3LOT+2aZ1Fi4Plr0rngP7e3xKThAoIhDCEYZ5r+e333t0ptYx2LPZNuH8Oeb5QXIdXrw=="
+  },
+  {
+    "href": "default~foodbill-foodbill-module~foodcombodetail-foodcombodetail-module.js",
+    "size": 28884,
+    "integrity": "sha256-FoOmLlHiFcfxZq9hWjP8gWmn3iSN9tMIUwJ7yHfYpRc= sha384-I2w8NVbstL7CEJMJS6Gaa5kn5EFCSecuCBTZsFEAYUrIaddX7KowoQ4yXZYkq4IB sha512-Fzkq1+pKcZwWmVng6iiYPhUKFMxK0MzSwdkmlaZ0LQus/tTa35xSljBTAJX+zC79qKKcEHqWQMRsOfROHQuFFg=="
+  },
+  {
+    "href": "default~foodbill-foodbill-module~fooddinnerdetail-fooddinnerdetail-module.js",
+    "size": 28702,
+    "integrity": "sha256-FQPzBNXjR8qT3aclsXgCfwz3AWP32EEr2LEd5xmUU24= sha384-jnlaoNJcOt5jxJicE2sV3LjjEwDwH6ck+c6V9AdQeesjgJISbWyj5PGEtflTwtv7 sha512-GV3bmq702VhzlDU48F04KAXpWJ9RseiMwJ+5Be3zCXvnXO4+TSg8xIEstI05D9UEzqbfyGQncLcisMZBaaOFJA=="
+  },
+  {
+    "href": "default~foodcombodetail-foodcombodetail-module~foodcombolist-foodcombolist-module~homefood-homefood-~c0ca3a34.js",
+    "size": 29357,
+    "integrity": "sha256-diqSmOHYBCcgGiEy8j+SbbZOtl9MNVU62kTYphC7PdU= sha384-/bzD7w1N7L8X7vjl4htwCxR8RFhD5ZhYVHyGH35MnZgVRZRPXVJHy6mizKsj9fEM sha512-1WhCKeA55omIKsIEddKfc5NHiLVm4r59PE3OEG6LwvimNjOXYpAwGvGH6e0h1SIJuNRBVPfUHqHc72sWfaz5JQ=="
+  },
+  {
+    "href": "default~homefood-homefood-module~mytriphistory-mytriphistory-module~tab1-tab1-module~tab3-tab3-modul~e89954f6.js",
+    "size": 540003,
+    "integrity": "sha256-NRWv+FErOYzONEmu6PiGioX7qUmAqiLYbDI90RE5Xbg= sha384-WBcdgAK+QDCt23TYcpiA2khM9yv+EnnJaOHWvmfYBWTrtT9c2sp6LouBzeoVeD3+ sha512-C8aPYEM492T4bpRTioGAVzmL1cJxwL2YFRGSU3zlIqzk+1V6DkRFEv6CxtzGNbPHcPRplPFkyu0zQ1QrovUUYg=="
+  },
+  {
+    "href": "default~homefood-homefood-module~tab1-tab1-module~tab3-tab3-module.js",
+    "size": 2238127,
+    "integrity": "sha256-qmoEFdcuBX6/SB8gMPTvhC1o4S03rHM4tEoI7c9iosk= sha384-Yp0pG2M2EPkb4Aaw2RxeKlh4i42qlsRJamsyyb/N4EhNPITLL4pvZVG+Se3FU5s7 sha512-ZXXgLmsW6z0d0ZaaaUW6nuL0XBuMMhu6ILtTmc8INYCAq8bGSyHHEPJZWO7UWP+z/O6atKa7NmH/P9UKBU03vw=="
+  },
+  {
+    "href": "default~homefood-homefood-module~tab1-tab1-module~tab3-tab3-module~userreviews-userreviews-module.js",
+    "size": 29529,
+    "integrity": "sha256-q0UKeMZToML4UELWma+OSIe4Gc2VBpYESuEp9cqSjFs= sha384-PkA2iJvgT4i87RB/vBtyTMmkOvA6sDiUCVr/44Y2OMXMEM3f6VJ2iO5n8L83M7Ft sha512-IYbm6rsqePoyHaU2A7A/c2c4Fj5MZWxhRARhfn7atIM3OAREiHSlxi9giGHmHCjMqMj3sn1NRmCkZocwF2uwSw=="
+  },
+  {
+    "href": "default~homefood-homefood-module~tabs-tabs-module.js",
+    "size": 17428,
+    "integrity": "sha256-WeIJzwmGnUQMGEieadvSresgbgx9yckvocYLQaJ3JSQ= sha384-hDcLbszH5YCMOcEHE4TH0kUoyrETVU7ZNES13jthQ1l97HcC4HBHQ2cNu28XlZYx sha512-RZtOsVa5VxSHuqsQ4FcStDNkZKuSdprw4XgvctV+azWKO8oM477rc/CMJD3nmRThn/KAFvtdmRb+1MThki7dxg=="
+  },
+  {
+    "href": "default~hotel-list-hotel-list-module~tabs-tabs-module.js",
+    "size": 147337,
+    "integrity": "sha256-9FgnpWfG/mgrrLgwAo4HxzHA8XAANlxZrdmxYPPPdyU= sha384-7ccYXFybdifpTYWe6CtxSUOHqxmb8R0pMeebIKqLlFtSe1OdyiJCxM19dLGKtEQ5 sha512-BWJOD29fMrHewEgeErhu8i1I9dZ7FegVPyu6h4h17C8Ghc8zAt9HHLVHS+jVu89riMD9+gesC5oBKzPGh6X7UA=="
+  },
+  {
+    "href": "description-description-module.js",
+    "size": 11609,
+    "integrity": "sha256-gQKTS641+cBH12W+9i9n4RycyoHj6unCSIxF6VW71k8= sha384-45053WjbG26CNY6FUWBph53VRVys8J9Jl6jRIEWedIgPqOqX/tj+UgUTp/T6C+/6 sha512-hOm7vkQruw1CfyacW2RRZGl5TuY+Ji7EPaKjlRMXOP//6h8cc4x+36mGWmSwjXJ34SwUWCfLLGxJL/d8yp+7Jw=="
+  },
+  {
+    "href": "es2015-polyfills.js",
+    "size": 290852,
+    "integrity": "sha256-zwrvPfjXiZ2GRgIIT9nuSxj2f0QasUgtgfAlqnlMvSk= sha384-pi1rY9AwEmFoN/i04wFYc/1PDNIjGuFrTc8SD2JzqeDbJ/wCsxAuBLrb+IS3Wz3B sha512-o5x+/sMR7T2MTVHBzO7XSHQd+JV4yAGY6uhdYSAoIpaiAWs/Hsll1cCgFGQpbcQEupEJwAeDwib92Gi4NcSQ+g=="
+  },
+  {
+    "href": "exchangegift-exchangegift-module.js",
+    "size": 28006,
+    "integrity": "sha256-lmuf0s+9lIQ8UJTesXNnm59siv7ap4onL8MzL8rTtlw= sha384-hZypmBYFFGU2A69g1ZLzL5O3SC9KWsU9xRes6Oe9spVcpYsVACk5mkv5e1zIclsj sha512-2d9mGX7y6O06CLhb+J8QPlVJNYENeIvs457hTkBIneyP32bbqFRr2lZ2So2bKZzZLNq68uet8Kx2OGlVCI7TSg=="
+  },
+  {
+    "href": "facilities-facilities-module.js",
+    "size": 11375,
+    "integrity": "sha256-4YUOxHSOgkC0EtCsov9emCBunvnI4IEDPIi28Qvi+ts= sha384-8/G1AmzBLEPVBCcEL4Y9tdZpB3j4IDX553l2XR1YIISqOqC79JLVep2Rn8pkvKhD sha512-/7SA2x2HxnM0BTve+HY5lNEPYdqXy0SIBLfIXQa6P5gIFLaM2oPUt2V3HbtyEd/2AHU/4BbfyWO1PfN2srK7TQ=="
+  },
+  {
+    "href": "flightadddetails-flightadddetails-module.js",
+    "size": 337582,
+    "integrity": "sha256-2IXRJKM8j7NLJZzi/jLRrLtmx/XHyv+5KvXxGNuEHNQ= sha384-ay48uo91thvZZb/l2CH+c1gNCS9oR8dITDRWVcd/UJssPWG9axrVofvA2lrgzV90 sha512-Ktsk3hz45wFxWZEGcyJ/EZnX4hlrgbksaTOxUpUSRrkLQSIbipb+PVoInsrBq0DX0ENW2kCCYLm6bV6vWf+GnQ=="
+  },
+  {
+    "href": "flightaddluggage-flightaddluggage-module.js",
+    "size": 50790,
+    "integrity": "sha256-U+0uyjO9QWjf2TVANfmOE+L81yp6T0arcWQpvHhnGow= sha384-UX3lLC7r5J0CMuN0uL4uT0YoOePthxCnrYhLS5wEIGL+Wqar9m1oadl4XKJDUnU7 sha512-h/pFHAKY19G6BxQFcbr9foqnAujJLVV7M+rDpqDspT0zhOAgloiFe9lGIV8hoMD1FxRyHqLHiZ11mKLEnEZqWw=="
+  },
+  {
+    "href": "flightaddmeal-flightaddmeal-module.js",
+    "size": 21286,
+    "integrity": "sha256-Cu8yO7lcTelBw+xc1VEn3KCW1gD3n5652i74xL5XjME= sha384-xURwmnPcp/R6GQxMqdGWpKqUh/+A/k1tle/AwNTNjQ2QLeeLkI6Dvh3CZ69Wjw2C sha512-ro+tNyDrvcrtf79TwW9nAo6JyWpzuA78uC3Z7uABhO8NhlrkeTODt+Q2B3Ic8/OYBedXMcgt5btxe9YFah0akw=="
+  },
+  {
+    "href": "flightaddseat-flightaddseat-module.js",
+    "size": 68437,
+    "integrity": "sha256-cMuQsslaeKrYifH8TWd2xddLDEf58hbRLPLHFv48HNQ= sha384-UkLEjdrerEijypqq+e5MYj/KTpqnYoNO+YakBg6ieKuxaZ1nJ8sTOwAQg+FfsKs0 sha512-J/mn9LZrzOpY9vlvmzIzXOG9gy21zOmUzAHBViessffbXV0tLJhsTOmDPtXKlHlp86AL9QBOxC1PLrao9QfAhw=="
+  },
+  {
+    "href": "flightaddservice-flightaddservice-module.js",
+    "size": 315645,
+    "integrity": "sha256-HriyRCXPrWGK8M3IL3uxdrP0fd4fGEIpmvv5KIHonUs= sha384-ss+jSeK+jvGu/QedYhjnaysqiVJftAJGxblyQzlMDiUnPzSpathPODUHcXR2/x9M sha512-WM33kw0SBAPJhCjKEY1l1vm1WfLb1g8zVqmqRotvXjVxRwAsnXSI0keAKFVTFshAmzWgMbMOaGozc6/UYTTyaw=="
+  },
+  {
+    "href": "flightcomboadddetails-flightcomboadddetails-module.js",
+    "size": 209070,
+    "integrity": "sha256-q6bWTmKxLwE6QAP0Jt9v6uHE6oqW5/IKWo2PN49ymds= sha384-9kR427if94Cc6ezCrrOh56Mg/3HyeB8EGIgGVOH1SpTmlCjkrcywTh0tki+Rd39I sha512-oyKfZ+OQWPoGnTV69Ov/h9p895cmaVbpfF1s1zKltjqBNw9A4JjtRbUd1BMYHya0WSxPzWQibz4nz4FsLKTB1g=="
+  },
+  {
+    "href": "flightcomboaddluggage-flightcomboaddluggage-module.js",
+    "size": 46000,
+    "integrity": "sha256-Steb2KE51SmLcnkOM4zN3W5sgN8eZq6AF+CEBhwiSPs= sha384-3pKqTtZBfrgd5DYG7vdp4uOaWUHF+dK7/TdQ93k77vng5srof2nCQqoAGy+elyTO sha512-raGsdZQAyBn84/z5lYk/JaAXeV5c+deyDyufsT1X59+4rlqg26pVEH6YqWCA03ATwAmTMucTNRbC0eywd5ygJg=="
+  },
+  {
+    "href": "flightcombobank-flightcombobank-module.js",
+    "size": 45723,
+    "integrity": "sha256-1U6O2aRZKhsvUhmetbtqtL2Rvl7GGmxczOWXw1CMFec= sha384-TU0iC81MHYJkxqLbsnFY0lJ2vBdoNP17T1vHSRObsvIiVfwneIiKfVettmOD+uw/ sha512-MSYscwCrUwqz3+jOeu0wDzNNUAzi1qxlXnUxeJLymV3J//DeFZXAGV3frcRYVhP2umo1qtyQGOxNxzR17oRJtA=="
+  },
+  {
+    "href": "flightcombochosebank-flightcombochosebank-module.js",
+    "size": 56289,
+    "integrity": "sha256-i8o8z9SpE2ph3oYX8B9bK4tNMLJtwWv6vR2JGiFZJRI= sha384-jR0RO+kH1F/Jn04YVZToZHJr1Uxpwmd6YNbBOoeB7DNLmiVQZLcvpSyP05j2icnS sha512-osDtI/UwhMjen95xaQ/xMeqPwGaoBBFnQovQ7gQhhHjnVC4SzAJveXm8TlvSLKnyF1hEZAqXdDwhGVp8i3pecg=="
+  },
+  {
+    "href": "flightcombodoneprepay-flightcombodoneprepay-module.js",
+    "size": 51861,
+    "integrity": "sha256-W422UHjei9mI0SdTtqkZG2OaxaXYtEPHZBDIpRmNsgE= sha384-lqFLmXXZHA8d4nJJDQt37dLhfHEC+6lqHLl20Mzs7YpxdzO3HJ+/Of3giYo+cun3 sha512-DVUvwnvSR/EueSkX1G5Ilf7TMooNwFIcFNHyjmz6k/2lLeoPJeDWCNSJaO71Xnl8g4BofHZQw/j5KYiEocufzw=="
+  },
+  {
+    "href": "flightcomboinfoluggage-flightcomboinfoluggage-module.js",
+    "size": 23978,
+    "integrity": "sha256-UnFyvWLQW5aFFkoGv2cvcQoHpyfwBqBYec8ZMtR5tjQ= sha384-+UcpCqTMZD7jGdzG0XzTvicuQQtZOHFx+UpVG8cP24Hqa2eCMWfiurO6XfgwlWHW sha512-5XFVglBmwsYSGqgdOph3kbJ4xgJyPbxYtSXbjdhSiDoGujI4EXJHqzpgtT/aYKIBNBh8jjQJZiIzJhT/Wu/Olw=="
+  },
+  {
+    "href": "flightcombolive-flightcombolive-module.js",
+    "size": 18163,
+    "integrity": "sha256-kkHz600PI9awacpeHPVD7/aSRWYWPvgvx/VlgMmBOf0= sha384-Yj5B3Vp80igxuOndKvbkMrGfP6ebaA7ek5VReHPdjvjIDhA+92kFjfx5Dwpfd7QK sha512-IBI54njP3oPCwqNvkFnJNEQ5Uc3tgZzfLrwVHipGrJb4kw1Wi/MSN35n2vRegiEPqNVzXuVhdm0vNNfN0ML7dg=="
+  },
+  {
+    "href": "flightcombopayment-flightcombopayment-module.js",
+    "size": 77322,
+    "integrity": "sha256-+9scpPFHIUfEuOgjfzu+xWj65aNHkiTHx6kjR8tw51I= sha384-W5ZuVi0ZSo1gTxU4p7fLQb1lgpVvfDukG/4GHuiTPAIXWEzmeGk2N62Ycn5XKUG8 sha512-BpIQSqHUuyIIpvpQmvGwAnpU0qI2Mhuwepi8tLpxj/Dh3IENDtwvCxOCJf/jULgX83a0U+y7B+zSgZRk7Dqpxw=="
+  },
+  {
+    "href": "flightcombopaymentbreakdown-flightcombopaymentbreakdown-module.js",
+    "size": 30200,
+    "integrity": "sha256-Hx8bh16RsmlfRoX/kupuo4ZlrvIYpkigcAc4FxGHYLI= sha384-jB2VL/u4nfwchJR88iMFPvzqXjzg+uvB1Yb0tdsK7U5wTg+o4h/OFLuStPGtOggm sha512-ho1hB+EFUsIwxungZbpN+aTsEz2haRsp1KXjsqfgtPOBs2Wb31sgi7FKjLRF4v/We2fOeLrTfXR4AeMrofio4A=="
+  },
+  {
+    "href": "flightcombopaymentdone-flightcombopaymentdone-module.js",
+    "size": 50559,
+    "integrity": "sha256-NHPNsSyi2rAZOmIqnKrGT9gUUw3TwVlP0U+FUBwg6LQ= sha384-b7Yv0VQ9qpID9ZoNbqp5Wgv/pWW0ACarMNVJSLz0SvJVbnNiAC/rzuoAGgHVsYGE sha512-QunRJo7pjUPrGNgQO76xHyRODDK9qy6DuFQQ80QsImb1EV7WQjSICYLX8lkN8Hp/J5MsTJLORatEtArYowsGpA=="
+  },
+  {
+    "href": "flightcombopaymentdonebank-flightcombopaymentdonebank-module.js",
+    "size": 42760,
+    "integrity": "sha256-zek4v5I1Eaq/djawj9oZkdXZ8JwcKA6u8lE6Q1x0C/M= sha384-39+xVADHODn5M0Yb+YZhXqwr7hL0xACWjTmuxOlZqc/UB0C6a1NNe4ucz/BieApW sha512-sSACCpfR6DFZi9Ff5Zq+RKoN9gAHabFnMYMrevzTwlI0yJWGOrSkfTRAo/h4CAWW1MwHTz1wh0h6iNM11UFd3g=="
+  },
+  {
+    "href": "flightcombopaymentpayoo-flightcombopaymentpayoo-module.js",
+    "size": 18254,
+    "integrity": "sha256-ivYTdoRKA2DTaXR5w7HDSIPr0OL41+TGjvu9GHTxNDM= sha384-kEt8oPy/2sGVxGg6LuNlLa0fXDPDLpipOxE+WIIo8kFVSM8iI+VB1FR+1Ci10iAD sha512-6v50qiZtPS5a2DZCMA7OqyNwWO7a8KZMOEnNvZNFiR9gKlgLf+htNhSjFc/ZXvXxi8O9kj41gMdSl2wTn7HxdA=="
+  },
+  {
+    "href": "flightcomboreviews-flightcomboreviews-module.js",
+    "size": 270195,
+    "integrity": "sha256-k/a9N6zFAq8xbNqTAluLXSbiWXIfQrpaN+5qCE1QI8g= sha384-kkl/2iU6mZx5dVETCFQXDNeg5oBd6DZw+bIaGxwMAbQ1XB+SMVt6ou7VSF8p4sZK sha512-f4+hTnq5ToI8LLNwOI0HAXhbFREikjihmqI4AOG47fZZjK073yvcPcuUkP/tlEXFsRDvBE1R+ysmJha/l/ewIg=="
+  },
+  {
+    "href": "flightcombowarning-flightcombowarning-module.js",
+    "size": 14946,
+    "integrity": "sha256-6eL9uY7I5qmsoVusqj0rJz7U32lmNa8E5rKK9KQqtU8= sha384-FVOYKRGibGtQBLcvVONrLTE+UDTQ4qS6mbBZ2sN5hj1VTZ4SsYPeZpwpCMDFDxLw sha512-BAq9Xe6+CvpWxVMs+Fv9vZIqRik6XINQ6qzOYouon/sZ7apJJ/MUzOYdTxx/dSaTHjWSxBjHwt1m20oVSOLF6A=="
+  },
+  {
+    "href": "flightcondition-flightcondition-module.js",
+    "size": 19997,
+    "integrity": "sha256-TSQJU+ddCxG50weoL7jfdqPMjHhSjd77aUx8gdvPXgg= sha384-KOJeHvrK5uD05gMZoj1WHspmYzk0lyfTvPiV4KZkimzJNNrkOuybEOY2RGlUd9oh sha512-RQdNGDZNZCfwVTct1GsUyVCRzIrqfOmcyc4Cgfs/nwKpYI7vCzfWviV/FCvqxJSXFrKMUaPnwko4bX4ueZu64w=="
+  },
+  {
+    "href": "flightdcdetail-flightdcdetail-module.js",
+    "size": 70396,
+    "integrity": "sha256-o5Z4F9C2zhYutPFqLXjJ5WKSDxfsSM9PHXU5f8fUkwM= sha384-M5cv4CF+o6KgVnNZNMo0zPns+tpalkMv7/ZHCF0+PMSx/5sQvaFjoTdwKGPEQ+9U sha512-RU7//Nu04IVpuI8AtSgP11XLNcv50UyrTLNZAjIv9YDUCwxbhepzRGcr2oGylWHSwove8cku0PZmVtgaWX99Cg=="
+  },
+  {
+    "href": "flightdcpickaddress-flightdcpickaddress-module.js",
+    "size": 26354,
+    "integrity": "sha256-/pzP/xXrvxO4k0EFtIl38BCnDhnNudq9X5pJHbarKpU= sha384-q8KJhbbDo2IcTZ8JhZbQR7iHzyc2LSLJny+3Wl/lynxKQXsqCIPv59EpoUQT6Fi3 sha512-GrrhsXVVKr4+pR5SkBMmn/wicxK2u+IGy/gQ8zs1GvfvXFMqgQKMkc38bFiKBxoxWYkBVxmeV6nagkYJY6ViFg=="
+  },
+  {
+    "href": "flightpaymentatoffice-flightpaymentatoffice-module.js",
+    "size": 21780,
+    "integrity": "sha256-E3VF+ikr7VC+Lm2rFyX18v93jsfb5a0Amj8SP7MvNNY= sha384-+b1UF6c99UkTvH/TBFbf2l/J+orUljvLgjWDir4VMcxEt4bUwR0dZeoJL5JeRiKU sha512-HwylsWWlMW6h2wkOINDkJ0Geob+p1aKjA82EcXLXxf7Z36njBEqmg1qi9wbFbF3tspxM3i9+tphFIQwUF7BIuw=="
+  },
+  {
+    "href": "flightpaymentbank-flightpaymentbank-module.js",
+    "size": 57298,
+    "integrity": "sha256-8E9Peb+wMbvZ5NnyCGPC/iApwgQdYAroYPMnUXAkwpM= sha384-xJTguZQTpSQ9nXT/l5WWxo1WXwMdAj9h63oz5cw0E9cE5PtAVa5CeTLM0Q/MHOuM sha512-Q8sq1cPIfKq5RtPHQgr6PiALs3wdb8jipCneSMyqdVzmbKnVbc9RE1kLKw1oDvt8GheeUbHJJnPJ0U5EBqd/ow=="
+  },
+  {
+    "href": "flightpaymentchoosebank-flightpaymentchoosebank-module.js",
+    "size": 62495,
+    "integrity": "sha256-9r9p84cbPpjYpWqxSPCN8Dc9MmlieAexK/tBsfexjRk= sha384-zQWtz7xBHPNY89VPwrXDzl+Qc8/8wf7Mvl2pLCvmyYkV3/zI++X8d3pEcf8mgay2 sha512-Xr2WdPCQ1/huV0LpTzgRmY7PQlWH58JwefJoj8e+0YqFdSsxMOil1N/WgMGdQ9G4IVsCTZj4JAC8lQQDsz2/5A=="
+  },
+  {
+    "href": "flightpaymentdone-flightpaymentdone-module.js",
+    "size": 81265,
+    "integrity": "sha256-ss13b0yffU83jt+KeNwJTIDw86FRNnPbWWF1xv8u8/0= sha384-4Nl0Eq06AZgIeyHullnKj6zWXZ4GQv1z7eHILoK4ugrunAf+1DSpWIK6QbR3U0w6 sha512-m6tbABqK1a1r/Tor1uMUR/LsKKyRGtDgno8ec3ZOhkNOX85in1bFyY2cot+Vb3OqcHpLB8oDVZ8z2lzblGV77A=="
+  },
+  {
+    "href": "flightpaymentdonebank-flightpaymentdonebank-module.js",
+    "size": 51473,
+    "integrity": "sha256-R424vUX4P+3bsQ/7mF5VbRwYNbbjlSA9j7hu2X7Rwbc= sha384-9kiti0qW0VxBzM2JjbVnsBJoWYO74ix6DcycQFzv4j/FqB3YpBQyVfRv1Bneisz2 sha512-UxMHsrWgZ+M1suO4y6p6OE1+gFjDaMC2dyqL8FOjVvn3eufLXH+1ofgh6aEWIf02k4OxpIIr1mysuiMsEdM9Vw=="
+  },
+  {
+    "href": "flightpaymentdonepayoo-flightpaymentdonepayoo-module.js",
+    "size": 54489,
+    "integrity": "sha256-c6OAbMKl19lSwzJ+xiTGj9c2sme4h8wNfZlT4L0H5KI= sha384-xM99m3apeQxDKHaIota+UzU1KxUwldp95oufv7moUI8j5AbuTIDnuO3n+ElimHiN sha512-fts6pwTkBv0vDKLPSLpRtJ8wW3fLR+ucyUJjEpb5ICHu6H8nSH66FC6jK4z3n3T0Jk9/iLqOqgKHTXplVYG3UQ=="
+  },
+  {
+    "href": "flightpaymenterror-flightpaymenterror-module.js",
+    "size": 14481,
+    "integrity": "sha256-4Sp/VaE6Fw5f122VC5UPZ5zmHLRbNEcqJA9jI2B0ELU= sha384-h9hGLbLf1C5expoPasE5wjTEYKQkSRO3pZRSR04vZf4We6YpoQqNU1QhiiSNy8VA sha512-nhP75A6GEWir0wJAK44H9P7ZSxe/2dZwk6nA3gN7o4MC6c22sfO0XPUntKF67kMLjX5Jxse0e3wArKtNPpB0JA=="
+  },
+  {
+    "href": "flightpaymentpayoo-flightpaymentpayoo-module.js",
+    "size": 49590,
+    "integrity": "sha256-wUDv+t9QlzrSzttYAwDLlmQlifs/G/oZcNuyXpbB3LU= sha384-2LpFrgZWF0ijGky0qW3eBPVHr5E1KHLHCZGGfrINnEVrvfHfAV/AD9APkIbyHyYs sha512-et7q3FS2zTy2fcQIFFMgkffZLSJO1zc0kvQPmrIC6L+P/Gqfa8JnIeQVnvL+P5lAWgeO9TYNUOPp5SEX0fWZ7w=="
+  },
+  {
+    "href": "flightpaymentselect-flightpaymentselect-module.js",
+    "size": 128918,
+    "integrity": "sha256-Zurd+LYqmTLdu2X0KFMm93VtCwqhdoZB0pyKqcy9TAk= sha384-jiAui90Zd3FfBqlq2J8e1fU4B5sZ4pr4cZAMzUdbqmKsNcXnT7FMgJLJ8any7y2D sha512-GFz8mruVV1T+NDzzCKttsv03AffRHN3Ufu10KEcz1om4U+naQbGVW5g0nj8B2Qm7nmcO1XQDVV867zMJJKm6uw=="
+  },
+  {
+    "href": "flightpaymenttimeout-flightpaymenttimeout-module.js",
+    "size": 26669,
+    "integrity": "sha256-79GUfHC7hCChzEwb9PXTdbSbFXfhTlcC1Hkbv9Gq8eM= sha384-T7UKZESeugg0dZJQikzAJ7weccepwSgbcpQovkzNTuolZoNt1NvCFj/hYk6uuWzq sha512-XN/qlobkBy6t99ql2m90C++Q+E2qE5vj9BglNe6s6otlDDeQmcfgUR2reuCNZhtNgLVwAzjnh9YSyvqMfFdF5Q=="
+  },
+  {
+    "href": "flightpaymentwarning-flightpaymentwarning-module.js",
+    "size": 17906,
+    "integrity": "sha256-5PiDu2Y5oywt9FuWrt8nUr0fYKs0IAg5uwrTQH4wMKk= sha384-SXsql23bE+kcvKWJ4UvoAoFkc//tywuqpTavXmM1W6W4InOB45NJCiwGqObQEPAk sha512-QoJKZcQGr6kjUZZX5AHQoRx9SKNPENs7gmcmsqeDCQ/w0u2TW5y7IUXjW3KvhWlpGYqCC1hk0FO94F6UKv4cfw=="
+  },
+  {
+    "href": "flightsearchresult-flightsearchresult-module.js",
+    "size": 374086,
+    "integrity": "sha256-ym4CwJf+9VeNKpYdd4XSY5bnitJXKWEAll7FPCdkkj4= sha384-1Gww3Bs+cwZPTf4WLxm6MovEIV95zZW3f5tvgEpDEO5Vfab2kd3votv4F5rm1tPl sha512-D1N7IsBLCy/9+RrZXnwiJNhn18nsyFxNtyYQNvNWorkO3r4mn8dAdFyJD5YB5vCh1MmfJPrGuAIsB65y8TB6EA=="
+  },
+  {
+    "href": "flighttopdealdetail-flighttopdealdetail-module.js",
+    "size": 13166,
+    "integrity": "sha256-sPxVsBDbWTzgUgDi2U3fzUhXcqm1ds9wf07Cbj/K9cg= sha384-5JRJHzBKDElIWOeER5yhugyqjbFIvrMZjTva58UKmvyYHncg55ezDzeqh+YfSOTY sha512-bfAYrNFWWmYn3C9Bo7J4kIefge779Es3sFv9t+Uk8ajVN418yUFNDJMxM6ArdyH6/wUFn0dBtyMdW63sOs/8IQ=="
+  },
+  {
+    "href": "foodadddetail-foodadddetail-module.js",
+    "size": 74464,
+    "integrity": "sha256-qyKA9sEi9CeeLwU3F4cRbwfs2M2QFWmV3Ab/os9UpX0= sha384-X3ydr4Cvryg/z2hgcXThocEzirFttbt4HdxITMW/1NrJ69fc6byacoMB2FrjOB2y sha512-iWL/HYBI2ne/vM85ldVnTxojTbCFWWkKhfqck0IhrAnugb0WZT45NOWTiYmLI1PctMUEVZaVxWjrWlmkWJuJlw=="
+  },
+  {
+    "href": "foodbill-foodbill-module.js",
+    "size": 55867,
+    "integrity": "sha256-C+H0MOweNUP+8yP95SZIb1nhC7VHIq6eYsPnLwe2g4A= sha384-fK6jqAFsb557MXcaRwuPHYEWN4RM3CPVMx0UoKyixLJBl5B3LQs9bk3UPaehjIY9 sha512-9puPoINTNyLZDktMDSZG7S4sqSWL5PF1J+g0zZPgjaykv4R/0zxZEGFLihZvBicbBA0ydGumFXfxk5QVqxPBwg=="
+  },
+  {
+    "href": "foodcombodetail-foodcombodetail-module.js",
+    "size": 176758,
+    "integrity": "sha256-D/dX335ClLzkIVze5CQGh7jR5yuz995+jykAbUQFjh4= sha384-iBfp2TWjaARNn/u6CRi+q0aIrXWSYvesEauqMJ0XP1lub+jf49CFbw1XeMBxCjSK sha512-5t+6Md9TGo25VSfivZPth1SHniuxFJkwlLxcAiNg4Zu8+IxszGndj5/Ag4wNKRDAwUWS+cQ/b+VQK5lynXg/fQ=="
+  },
+  {
+    "href": "foodcombolist-foodcombolist-module.js",
+    "size": 12018,
+    "integrity": "sha256-Emy50oo7C/HkN+kM8wXq5j/Iu1Kwd3P9t2aaO7fa7ac= sha384-qVjKJGVPUipWAIXSHYybiKutkDvXfaXY7V1l5vLg3zSo39+MhkuHLfSlNyGXCFJ8 sha512-/HQka0beSXQQZOE8PVYyxKWqO528q2NeXtquo960AJHJpHnX1tE96TCICOOzwCDY6UN1VwRMJvFvSZTR4ms1gg=="
+  },
+  {
+    "href": "foodcomboreview-foodcomboreview-module.js",
+    "size": 12316,
+    "integrity": "sha256-kiR/+dapcr9DuQFHi5l77OOxy/0BjQ4ysb6XozoUnx0= sha384-cQJCM7mh6rtxVuHoulhODpTqFubNa5TMMk/KXcIiEol6q/p6Rb77Cc+ZludN4CTv sha512-nRKEUUEicQcyR6uTPO95KdJIGXvO39vvnhu8HHcIsIaL/+2GiVx/c9Yv+gegdLV8OsmKH3RpUnNyF03mz/16pg=="
+  },
+  {
+    "href": "fooddinnerdetail-fooddinnerdetail-module.js",
+    "size": 199590,
+    "integrity": "sha256-XNokEukFV/64eR2Rdb61ijRW0+RCpOpL0pKMfL7TX/g= sha384-4tXEbDuXHYxqb19lz4PJWmo5PbNeedMTPIgGlfnV2hDlgTlEawdLiQOuMMHWfAzd sha512-LuFnrqUMr09KisrVnH7sj1fnQUCDygLXBZBOhlPeK9jPneyt0j5MhxbOAwRabXL8MOyDJ36vxh9MQoVKoI/jHA=="
+  },
+  {
+    "href": "foodinstallment-foodinstallment-module.js",
+    "size": 65733,
+    "integrity": "sha256-LBlgJlkNfpKA3bnyI1P0V4eHMbm3o1+V1b/zl3BA7kM= sha384-y6gouu89NrMk3WV4ljyvtq97f8GwTtAairQ/FBi944pgecdGimZUS9E87sWUMmax sha512-mK/dNvKEpsAbojTbVQ7YzOsST6d7RUZoujXF8UW8E5N8/chxldgG6cR2ppgcyq9sv693yiU/UIAsA76ZreMlig=="
+  },
+  {
+    "href": "foodinstallmentdone-foodinstallmentdone-module.js",
+    "size": 18653,
+    "integrity": "sha256-ZyNKg+cstHa7OROFHdmFsJWDouiNMnZmZGYRA9Dj8pY= sha384-U4rExFGEgGJ9FvIhERdi2kTvWNtvLSPa7k0YmKvD31llo4qr7tppumut+Kn6iQFy sha512-MAHF+fGQbFrDqHs5R2NP7C+roQ77KJVKfHcQGlx3+taz+o+4nkOr2L0Oyu9sSxHeNxVJHFHSLpHMjFwjr3f3cQ=="
+  },
+  {
+    "href": "foodmyorderdetail-foodmyorderdetail-module.js",
+    "size": 49568,
+    "integrity": "sha256-Nau4VGr+xchE5x+/OigPlHkboGvHQLL8QJosHAX3Kgo= sha384-z3Kyf6VZ6c3A7LBd0xGKVAZZpFLgkKF378OCgXHK2l4U/eaNL1Pqqz6PkTBoeE2k sha512-MdXtCiVo7r96TTgWtczp6wZtrDDcdokQqklQsepiAyblyxImqAqeVu/DzqHeqL52ZOBhnsr+hsWVaBi2Vu8vJw=="
+  },
+  {
+    "href": "foodpaymentbank-foodpaymentbank-module.js",
+    "size": 45271,
+    "integrity": "sha256-xh02ztQl+ZJRJrct4nbUhUEoR4X+XAelWv6XKngdwQ8= sha384-oNdNg0VTnJg4za0mrp1E1e7U0V+GmmwAivYf6tRcuhdNpxDxhYy80ZQlbFjPXo8D sha512-ULDv7cYxnSuQvk6hqepKVNAsw10OD6bRaav/koSn+iTXdnocFXRqmZUC2fP1FAVF9fmJJGYwSjg8iX9YJtWBoQ=="
+  },
+  {
+    "href": "foodpaymentchoosebank-foodpaymentchoosebank-module.js",
+    "size": 45427,
+    "integrity": "sha256-AljrUCmP9QW2ofKYG6Q1ZV3zZuMGJLKK5WM57RTs6iY= sha384-rdNnA0ErXEMzpmLC74PM9y9uTJy+xeg6JrblycEoydrnJQ6nfSBNAN1ekeb83hUO sha512-l4OwKK8mdJ/xfbbgfYpeTJNAWUsGy7eqCq/xCN/LSV+SOzqk/wJvUdoMifn/4KdleOhyShFVToH3zwCO4vP/GQ=="
+  },
+  {
+    "href": "foodpaymentdone-foodpaymentdone-module.js",
+    "size": 35605,
+    "integrity": "sha256-VAmB9PKrlqOmZspxpKx8LDU043fDqIR3mkunFYiAQTg= sha384-6VfqE+n/JLs91IpuKlrdvr3myev1yor1E+Xh37+eJ0qpebeVR4ZpmYdoa6OIks6j sha512-z+7ssw2TJlpCsycUMh5aOZxu5QA78k4O7vFpjzSQR5NQT5rY7okFIIJ5tiXzimUMCOfVDMsqBD8udE00YzaRzA=="
+  },
+  {
+    "href": "foodpaymentdonepayoo-foodpaymentdonepayoo-module.js",
+    "size": 38335,
+    "integrity": "sha256-HtduGe67zHlf8nb3Jwj8PNOvPJw1AA8TKdYHsh3O95k= sha384-uim25MrFvODUffJ+FhUoOMPxr5hiUknHWh63+P5Iy2RLt02Y/sGKCfhorZjVudtz sha512-6NYuHhyq0gkJf2GHikl1O2MNFfauH7UDtxBWMD9oJpmaKEoz7pPM5bQqxUMmrLDPLv0f5sZa9YXL5zsVJYt38A=="
+  },
+  {
+    "href": "foodpaymentpayoo-foodpaymentpayoo-module.js",
+    "size": 16968,
+    "integrity": "sha256-GafGpuhcYfJbpVpcm2xN4gL1vDslbf6XqqFVuvILta8= sha384-SKn2fDnfdA2Ziw0urc4tNDUvD9IgJl7jhRAHxULYV67Xeh5u9HZcwWKFxIyBwNxe sha512-1ikknALE/Wv3vgzqZbDiE49vc0z/gLwwpyWbyBY0oBigRek30tHRqowrrMCl4Cs5secWUC1wofo5XFP6S1r1uA=="
+  },
+  {
+    "href": "foodpaymentselect-foodpaymentselect-module.js",
+    "size": 57716,
+    "integrity": "sha256-g1mW7lb3O7MsmqBlfuzh2FV9axprlg+lv3A1kddf7ko= sha384-m2NpD5CVZc2AR9AAySXWZO29aAbDZ+i0QGeRwrI+oIh89xH610nk4dZLizOnmAFW sha512-D/PN8p6gVwmjwbHQDk/MzvtXVoXFcLA0zJ6+MS1jQl/txOspsiAW/QCi/uaIOr8jhUDrcYpCA17VWelmSDJL2A=="
+  },
+  {
+    "href": "foodreview-foodreview-module.js",
+    "size": 38522,
+    "integrity": "sha256-QYlcgmJ2ORGI2K3mjVdGlUAFXz6bs4JszZwuPt7uAGU= sha384-PXGjCymXiito5PpsAYqypIr85ZRPy9pcVlfqLVZT+M1clemztZ8GCUxsoFr5Yrqf sha512-CRm91NseG+KcdBuyMtNEmsnZqNO379HMSB7Lux12nCuXbBVz6jW5mZsVUlqXGaMpkDUu+O3phMwSoR5tLziKWw=="
+  },
+  {
+    "href": "foodreviewweek-foodreviewweek-module.js",
+    "size": 37173,
+    "integrity": "sha256-p7b6Ie/Gg0Epvpwr3uxGi6uh4YlWoZlzppZevzGpeoM= sha384-5JC1vZgP2OWhOoizLxdQiYXPywf5MqummajNkUwzz17vR7YbRAokADmZC6R2dvvn sha512-dhBvqvIGxp7KgqxSOo0Q6YabTH7NYE9bE4w7AhsFpBf2F7f6y8xV//MemRXAuvRUefBoOu6euhPrbT2IDn+BBQ=="
+  },
+  {
+    "href": "forgotpass-forgotpass-module.js",
+    "size": 9906,
+    "integrity": "sha256-YCwUF9DxmOwBUMoBkg8xMbMVadFihnjcd1eB5+FajOY= sha384-vqQ/+3x0Lrv/7ias1hOrbPFnEkkdyNnjMvnwAlaUa7gLa6TE4Uqpy44SWgdItkNT sha512-YRLkq0IB2fXx1oldHNWoKbkldYEDmGpW1I+ltl12g4koi8xLevSb18fIp8GdlsaMcVq4TDIzgtT0DoSun9Ij6w=="
+  },
+  {
+    "href": "forgotpasschange-forgotpasschange-module.js",
+    "size": 18912,
+    "integrity": "sha256-deGLV9kE/nk7wXvZDgjuurQ/dPwmrKAkxV5jQ3p1IiI= sha384-drhETsFDmDE1gGcymnLf0KVRhH8zitwFXiDfcW4mp7fzsGKzyw+oAbDiDwOvDk9+ sha512-88oL6Ne2Xdf4myObALtx2M4VtM8y5sgyq/4zTmVoZyuz69eciqEov0kyF61NdzaHRGUtvLnm0u/6PCjwOSVvGw=="
+  },
+  {
+    "href": "forgotpassotp-forgotpassotp-module.js",
+    "size": 20572,
+    "integrity": "sha256-sxkB5O4ak1wNpBOFdIC3l1ywe63CkilR4UhpHXmNFs8= sha384-mFA3jmelS3kQbYAkamGI5Dxn0RWvc2ycGf0/VoBW1I3VABFL/7pB7bpNyXEoVbH7 sha512-Wb/BegwS6dmDohK5B1xM/nl1GHk0G479DFzcrs5lD1LxbvdvVZd+HMDRp6VtJSKzp9m6mAiSbMriugumOHVbRA=="
+  },
+  {
+    "href": "forgotpassword-forgotpassword-module.js",
+    "size": 15923,
+    "integrity": "sha256-lOoPd+xZQ2BqvJfSd1xLaJygEw3EUv+TnLioEC28a+0= sha384-qZ5Rttr5ubDmcrSB/pJgEovwRKvqFwd5czy9W3r+PLpBD15C12MYfWkJQL28fznd sha512-xzVWJGKmKSO41gNHBRzMRyPGyTiwA3nEudsvFbSnzjZzBkZr0Imhv1FmmPB5ITPd89MhWmrnOUl3Uedxe4Xm/Q=="
+  },
+  {
+    "href": "homefood-homefood-module.js",
+    "size": 334026,
+    "integrity": "sha256-3LzQaoivzQ/dboH2VrZqZ4tXTPjiEZugUnIuf6xnESc= sha384-75NZBX3mWdXwRULQfUjj9wFrK3hq+OtQp06XzYV88XHyFpO+0crzX+Nt5PQeqK6j sha512-K3/91C6F27vJKHz5j1723spjpgAClrEtQJL8UfUcbW/wbLhW7CNvM90kXYwbyezi/NZNP50zebWnOKRq45XaqQ=="
+  },
+  {
+    "href": "hotel-list-mood-hotel-list-mood-module.js",
+    "size": 106672,
+    "integrity": "sha256-cQLDzJmbXpzYMrXCTN9+dZiu0aCX7J+saNmTJzOiaYk= sha384-BP9nlacNqivwe0Vo/gKmPyIWkEQtpWU+YnsW29cEG/IkT9PGNPPzIdK4S8IgTULb sha512-xfOb7p/fpE0M28RzB/9iP0SSy8Icj0aEGhyE5j4Pvfqo3oiUAs9ZevR2+CUFrfrsWuEuOQ+fkWeevM0kCigE/A=="
+  },
+  {
+    "href": "hotelcityitemdetail-hotelcityitemdetail-module.js",
+    "size": 301776,
+    "integrity": "sha256-xLFFy876NPu4fdlPEG9KkqQhfW+F56wnmirPl++J4yc= sha384-Oq+9OL30vMxDHZ+bejDBawgEAfHauSGZ0Z3DX0cWU5MXqsi9hOU84L39KvIgrNVS sha512-2cQ5hnBPzekWb6vQsBwyqNqNoZO3kZ4IaNuHyEIAypC3MP+RXEb6htW7zpTMCMVabGIC6wfou0CSzA5zfV6MYw=="
+  },
+  {
+    "href": "hotelcityroomupgrade-hotelcityroomupgrade-module.js",
+    "size": 59818,
+    "integrity": "sha256-ajFLSe752i1CtlCrooXS/Nf+Gm9ggBT8YEbrw5Ob+xY= sha384-0VZBlDhCj1sPHb5cULoV7PY+oCAvsIMktVB9XsqOYSMsIgohpeln4yaC4tILsC9U sha512-CAt9f9Ze+3PxmdXxYq+UuOrY9OF0h980GLvV+ct2I7vS2t7O+T4jTvE34dxaK/0ldXjAP+fjsj+fWT22DrmVfw=="
+  },
+  {
+    "href": "hoteldetail-hoteldetail-module.js",
+    "size": 539257,
+    "integrity": "sha256-46mfGWWDglwkSQMhh8ZXo8WZqwuTtd/H2MxXc2H+VIg= sha384-uS5xm2tBxOUZElmxGMPQG77GUt+X2Af9uw38V1Yhfx2D/OJ2fY3yrFJYv742iry6 sha512-kOjyiv7UaGokDyi0In9Gx+xdQwzrUGSELu4dDoKW8KR9yU9DfNXgbwOReBzyKO2bFH/AtqP+j0Aey0OIT62KhQ=="
+  },
+  {
+    "href": "hotelexpsnotes-hotelexpsnotes-module.js",
+    "size": 9015,
+    "integrity": "sha256-85IBjrpZ1DbAeLFz2o3WBXO/VypQmoM6WF8fZ1oKymw= sha384-sViWOfBvCwtx0SzzeEAnZFRvUCrNWUV0COR6vePI5sxQM7lZRCPVxKN5LAOFbwR4 sha512-eI8jEt8BStNkCBdPoiM5GmzWFNDzkhjjEgqSuxBGpWnmh3HNbB0BdiZiXUkc+dq2D2ysBAQoKAwdgdtvxio+FA=="
+  },
+  {
+    "href": "hotelnotes-hotelnotes-module.js",
+    "size": 8917,
+    "integrity": "sha256-p7GYEH7HlgYgVNCAzRFZRKw4MTqOWDFiZm4esgKvBzY= sha384-+/xl8AOhW8N338RFPsmuE/YbJ11Ngp4Uz/igDjPNQS9U5embvLrJhmHxI5zM/zWv sha512-tX7+y+DI+2tTS0SFcINHUorwo++jMZALoTGgLFZZEHc1RQJ+pjuI3J4WYesel7y2DYGYyb7Xkf7unZQ90yWvJA=="
+  },
+  {
+    "href": "hotelreviews-hotelreviews-module.js",
+    "size": 42014,
+    "integrity": "sha256-QEpW9ek6IknwPhsREFl9lJiSwBtDOL9DtSgu+rKHWO4= sha384-Y1iuQVHaB+naXTpTmUw+8AM8IxcRs6QfaXiNfxZKbYfNZUDoHXEReYGBueGNlR62 sha512-9Rle9PdwCosC29cAJQ2tY7lW5nbhIq6YA8GDA5F3q7oAPVRKytzC6Um6zMxYGKKPemcl/IDSFB05M2iCPsdZlw=="
+  },
+  {
+    "href": "hotelupgraderoom-hotelupgraderoom-module.js",
+    "size": 66145,
+    "integrity": "sha256-RTuG5hhiGEkouzrfpTtN0XAk7esfW3XZLefooyOTeWg= sha384-UZcPC0IYhDVByjrLWQ6a3enAWo2oWnsbs7xxwtOkCTeT3hhiXiR3Fbo4zf8tYec4 sha512-hp83q/YYBFHHaRtwju6N/xwt3/iCOp8R25M/RGJsbPOy+tTTjVbS6gYpd0Mh6K+fnZqwkBpbv1fr6t28afK7GA=="
+=======
     "size": 17431,
     "integrity": "sha256-vDvLfnGji3QZyzkhFLCQWaKxL1DwlNyG2mHIOYrmdWY= sha384-cavprWO+/qny5lnS2Rp3QWq+Ogx6k6+d1uzV2zXKTnZwcHFUkXJppBISQVqlQU1q sha512-rlvTsuWSyofj5wtoD1qlZDxC+c7R6QiexweKy6qOeFeYcoBBA0f+M7B5840ZVZRo7hd8e3CN35QV4P6DsKooGA=="
   },
@@ -2433,6 +2937,7 @@
     "href": "ic_bus2.3acdec6791f0d9087705.svg",
     "size": 1453,
     "integrity": "sha256-4hcuq9FwNOBxZu7yaXwVLwva4j2M10KAdjLo581Fkdk= sha384-gabirMqs4+FVa/wlceuHY+xkWTUJ4qjfWOQY7O83Ba16srglVstoJj2i1b38wH8Y sha512-3jisQexhxDTwYWtHBqbP90/bqxIMm+fVkss4wb4zZqGsPXRzvKQcI16UXrqLk+RQZ7V8c3h4MRYa60OBOheLEw=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "ic_bus2.svg",
@@ -2526,6 +3031,35 @@
   },
   {
     "href": "installmentdetail-installmentdetail-module.js",
+<<<<<<< HEAD
+    "size": 14032,
+    "integrity": "sha256-XAhj/EbThnYd8vDl884XWbEGS0d+Lr5CTN3YMEx9n3c= sha384-Jv1d45HQdLgICXsb5AfeNly1b5zxLsv+NhC2h0ek5TmqSeO6wpdfXxsZJl+EPW9w sha512-sFvssJKsb/HpXLqmej92qyLdp5759vUNqaz8QYUecLvqitN1NQVfBs3C6zdouCcOB5JMrReIWHA6fJ4IB7aaWg=="
+  },
+  {
+    "href": "installmentpayment-installmentpayment-module.js",
+    "size": 57366,
+    "integrity": "sha256-/IfwVmDo2q/hkQZgXDW0jgz0bbLG/mCxINXTwQ+4HVI= sha384-KyFxqGO9XiPKNlxx5dycgAYxNWOwRz/FwSpxx0HJnOTAr1Jw7BVPnNh645zUGxvX sha512-9gMu2dAxuCytqKN2cPG63AGeMRSRstYw358SjW99gMuNP/LPfk8NKBcFATM6lhw7oQGd0Ran40xRcZB7E8gEWA=="
+  },
+  {
+    "href": "installmentpaymentdone-installmentpaymentdone-module.js",
+    "size": 18721,
+    "integrity": "sha256-gH32Tf/XRp5EG7bIsH/1V4MdKIsdeeB/bHdO/LKnSIY= sha384-9P3VtCn2CZ0+hDrCV5KdYhiK2j1AH6fgrj1xuubdqiolduFUGT7mPecnhJzIbjuW sha512-GxkDsIxcBT6wskEknE3LOY98wc1ETYCZaXqD4qr4tVZo61mBnKFXcz6nNTVq2HmZ/4HbzY4U5xu80AlLoUhxuw=="
+  },
+  {
+    "href": "insurrancedetail-insurrancedetail-module.js",
+    "size": 183029,
+    "integrity": "sha256-g+GqSZYsOl01ZTpiqHeYIGAaBVcIiCAC2bVQL3yN3Go= sha384-NhFXi95UBuKWd6kAgnU6OlZofwEIs2IxGlFiC3Mow0n96c+2XIa9gBqA3vAnbFuk sha512-0WARhsTbCsH2oTalGW/Gkkx1ufXvdn17Qla+CK+VMjmlkbfG5BM82J6MVYnqJmieDNRsR5jb9JhuwLwtw5FlXg=="
+  },
+  {
+    "href": "insurrancedone-insurrancedone-module.js",
+    "size": 16734,
+    "integrity": "sha256-BfObOtPEZOy/ertUk83H7EVSiApM0fZ5kpnaxkG6Dsc= sha384-PmxSnfc8MoCumvZ0VoZY/4Sfw+Xa4ZZGWwlu3FFs0cfIZRmcFh5Sr95LyGM7httq sha512-C/AUjjxy9RafN4HXj9QgI0Nzl8q49dTLYevo0MDwxNkR3et+7MeYdpsjpoe0u1c0Dzvnwc1/6TyM+JYlvhCwLQ=="
+  },
+  {
+    "href": "insurrancenote-insurrancenote-module.js",
+    "size": 119556,
+    "integrity": "sha256-orYWqV7Xz7eYM0RZ9l2vb7wTM1i2fHT26dFU8+pRfiw= sha384-V8E+/jPC1Wb+Ut2+t8vm0BKCO2WkgfO9ajHV9Yhoyx2fGgrk5Fxp/Rb038Wgn3oE sha512-zRRyiPMvBcVZcBPuUADr/ZcDxPJufG94PnVc7IvHIZIQ8eCMBixYt2Qor/BG0tpKB2TeP7k8qonsPAL5DysU5A=="
+=======
     "size": 14008,
     "integrity": "sha256-reo7mtIpi49fzUSIOkXjl4sNKLMys5osRFPRN/cCWJc= sha384-K2M53yobl/IbqnYN2/dy7d+qn1zDszqqeuwQCj76dFDYURwRAn1sjCpsq+kAlh4u sha512-0UQozDZ1DKrz7lYgwXtxZohQhLHRDeIYXG79iR1rJT8AlgaLfm0PhQz8w81APcVdGFn8X5GbwsomQLO+OCHM4w=="
   },
@@ -2558,6 +3092,7 @@
     "href": "layers-2x.4f0283c6ce28e888000e.png",
     "size": 1259,
     "integrity": "sha256-Bm2sqFDY/77wB68AsG6sABVyje4nnFHzy2xxbffELt8= sha384-+F2ZWK/HTpkV9kN2HnMGCQOTM/cnQJLs770FLOeHznwVWRfDESI8z4JwcGYmy2Au sha512-hNAodifp1Ry/svijkD1I40XLbWRVgcmPlAHS1flHXTRfJfiB0vYr0CvmvTj5+fsDaZoFdJLj9ebqc0p8ivo3YQ=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "layers-2x.png",
@@ -2581,6 +3116,20 @@
   },
   {
     "href": "loginsms-loginsms-module.js",
+<<<<<<< HEAD
+    "size": 10843,
+    "integrity": "sha256-WrfZSbl4IuEVO8/BCsQUDkkpSirryVPLkqH8tsZ7eO4= sha384-yqCUZMYTnuqhLYSHVGWqCGsdQci+OxUZShzOwfmKNv73LeB01skJO1C0Pkzjf/wH sha512-tMPd+zQ+FVNA8g0BS1XH69M2sD8HQIahdLlvVzMs7gmZBU3rokHtvzqwnuW9yWIXmIBl7XCCUXuklq4CssmUrw=="
+  },
+  {
+    "href": "loginsmsverify-loginsmsverify-module.js",
+    "size": 28660,
+    "integrity": "sha256-eOU0J9MuOpdopafDHoe+fpgyxAcB/susqeNrYugR/cM= sha384-3OmD9NmvmEnlitv4J+dWjXa/fi7odAccN3GSryoa9X+/tejHvLu5UEI1xmVSZEXN sha512-Dhqq8uG12sEiOPUDO0mg9FK4mKjbwJhaP9ass7Eu4TjgunYqM8mlU/e/fvPYKAfSIq5rnVSu0etV5KHJbNy7Lg=="
+  },
+  {
+    "href": "loginusername-loginusername-module.js",
+    "size": 27783,
+    "integrity": "sha256-K3Zv45p5Zw69uqlrfrcjSOPOW0TEe7TZhiz9mwHLXw4= sha384-ZNQRWYpDcRd2Cnhr5EFV5tdm5/0hOG+JGLVu0yXxVHiDHvklfnKytYf9wra7Cuf9 sha512-zJvZr5RF346r1oxmcOzt+Kxe6c1TLIW8Pd8nzbc1otNoWF7LRorHwTMAZU9fnP/1ipDUcmm0QeZdCE5rbTAxVA=="
+=======
     "size": 10815,
     "integrity": "sha256-vKiNHFjNNxThUzQRWex49qYitqIioa9srxcgNXN9yMM= sha384-uU81qQSshFvmHvDaYg7qY3C6BN5VzcFs6Ydm1ixmi2mPGo91sZ6pOKKkvkTUQP8M sha512-F//WdROkFfvu8EAw52xN5LlOnKy1xmPCbY1pxFZFdPAa31YlxmYX5DP0vy4vGwVX41jUTd2QfVUGYBpcxn+1Bg=="
   },
@@ -2598,6 +3147,7 @@
     "href": "logo_splash.9484719890864a199bcf.svg",
     "size": 6988,
     "integrity": "sha256-YSyURGW/z6zavBsBZpjAea0nHLs+4Lh1DWT7p4txjDI= sha384-Vf7U6OdN+pM9VSEtMFZASCtOUQEoLhNXFwSQTu3m6FpMMR8YhDxNZ7JdXScuCOCZ sha512-O1HP3aRqsZNjSo2h+BjUhdsmjuZQXWr+r0u9vStAcM3Dk0UtyPorbt7Wv3Z3RqOuIN+RUmZ+ioUpRYQLltEWVg=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "logo_splash.svg",
@@ -2616,6 +3166,10 @@
   },
   {
     "href": "main.js",
+<<<<<<< HEAD
+    "size": 2406900,
+    "integrity": "sha256-103V53lvwxCQ29Y6VYa3eZGz1LBbqoVofKw2ZpIf9eI= sha384-LtHiyx+YCKZnkzFNrjfzs5gIaC5LpsszyIwaClMssp1PL4dxsXJWJTCrFtTk/u2x sha512-Rt2KH3lRN3DddgrQIaDFTdnyOvLZL5/c+md1ziN1t1ZvfrJhL9S5hWvzQXi3hL7lINJQwhXQx7b7xrXVTmGkJQ=="
+=======
     "size": 2311029,
     "integrity": "sha256-1jmFkIASbMYXsv4aVCQbHP1XDVdicstzVkHlvFBOP9g= sha384-KtW3p15UitxfO+kDnBe8oRdsxux2Z9Ta+155SG9SteDOSGVCG0RcJB7/6dgxRcfY sha512-uB3lz9DuASUcZid8ZuGEjynT9gvrEFvxeVppOsEnFwrvdWocg5xvSq1ccWJXpa/sgI1Hax4KMVquRpADlKeWZA=="
   },
@@ -2623,6 +3177,7 @@
     "href": "marker-icon.2273e3d8ad9264b7daa5.png",
     "size": 1466,
     "integrity": "sha256-V0w6XMqF9BFAhbaEFZbWLwDXyJLHsD8oy/owHesdxDc= sha384-wg83fCOXjBtqzFAWhTL9Sd9vmLUNhfEEzfmNUX9zwv2igKlz/YQbdapF4ObdxF+R sha512-yPlkcjmYXJ64J3Qezl0UOLFOcb0tv2CGxrh/VS4DLkMYVxTNS3NqmlN0arcwqIFT3DQhf1hNX9J3mDhVJSgGXg=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "marker-icon.png",
@@ -2631,6 +3186,230 @@
   },
   {
     "href": "mytripaymentcarcombo-mytripaymentcarcombo-module.js",
+<<<<<<< HEAD
+    "size": 57054,
+    "integrity": "sha256-kHUdzp6lx4mC4QqBFeqRCfAeTCncNgJwLodMZ2yZKgA= sha384-fKab7rsQmc5mjVxYLZJUVjXLOwt7BGJN9xvrh358wvEuCIn73KtKtDiXMOeYN3qX sha512-7etp+Qu9eVLKY5wJzoagapnNl9S4LVB1HIWOuEQLwc8+tPL42Y1eAQINGSRlwZTKp/eWuSm8Uf+7Duq+6jqR7Q=="
+  },
+  {
+    "href": "mytripaymentflighdone-mytripaymentflighdone-module.js",
+    "size": 72869,
+    "integrity": "sha256-d2GDdEV3KRiLKGus9NTV+y4gF2T6hR5bS2FzJCW2w3g= sha384-9h9ZVgRKRlYcXyXJiBb2a71dffIrP3AnvUUK8bQs56kyJXL8xRlPhP1plX2OigpE sha512-n/TNZ+iEU+M8Ej29GhdaU+mgUFcDHnPAnJa2BpLuO0vdZyiHTx1vr+SgDhBsVd+e+gFM5zqZ8waxBDV50mzK8A=="
+  },
+  {
+    "href": "mytripaymentflightbank-mytripaymentflightbank-module.js",
+    "size": 61827,
+    "integrity": "sha256-v5mLobsvrYjjFQTetOkC01FcYX3A6i5wje+NKlN4f2o= sha384-zktaP1gR8zqWB0qUq5eYtaswsxQ/hHY5E/T+RprT02QiB2W9zQunZpFfsgZ9apbN sha512-IP5rFZrR8Q8oZVtC65XYQZW8p7fCzTbmLAC/53qFPJwlQZ9XI9VDRTduByrfEB2o9TVvXXslfffNtPQtY0bRzQ=="
+  },
+  {
+    "href": "mytripaymentflightcombo-mytripaymentflightcombo-module.js",
+    "size": 60282,
+    "integrity": "sha256-zAT4VRyAmmXigtoAahE0HJx7INFMNYHy28mtab+7A04= sha384-ph+3oxQrJHDT9XTlDTk1H1+MTxhCGI4HLUMXOirVhUZAJcftMhXAuEcWkSXalof4 sha512-nU8P+9kNQUEd2a5Sb4qmhrOQ+rkAvxex5rFo79F/GpFyymuN6I+dWIkX/wzbBM/XDapOLK30zqf4m20NQPoN8Q=="
+  },
+  {
+    "href": "mytripaymentflightpayoo-mytripaymentflightpayoo-module.js",
+    "size": 48999,
+    "integrity": "sha256-SpQOgv2lSxrYW6Obd3J07bRWgdRW2y9V+jXttT/r8zQ= sha384-ixuYw02d76TjRhvGvnU7PWA5a01OR3GWDOYkb5+Vm3e3JNNmY8I43IF5wr+AZMNq sha512-gISV/Nu3XzfbIcjZ5TiRs4aKc02LUxn9rliA21008u2iDOolEmgkW9+/lykc/M5+GQTD2Qa/1ZTiBSQipo3pDQ=="
+  },
+  {
+    "href": "mytripaymentflightselect-mytripaymentflightselect-module.js",
+    "size": 99088,
+    "integrity": "sha256-lPIPOSdy0okosOn8ypGvC6ju0a2bvZ6lmCZlqQzzu1M= sha384-iFO4PWGl9M8zTXCkIaJIHEz7vXrbutD8sCVAVfKWGaTykA70z0/QDfokMCGYHApY sha512-MfOdDJV0cO0D0jvtlCi7buSt21AOJ9ogwASNTadoQn1/buK/cguGi0ZQ5L9iK3xn61yq/FoP3nOHH9FvBbVj8Q=="
+  },
+  {
+    "href": "mytripaymentselect-mytripaymentselect-module.js",
+    "size": 57866,
+    "integrity": "sha256-2qvBxxkWz9WhQX7vV8zErzitdkKQkU43pkZ5fWNeTbY= sha384-/R/bEkGZrVetaEA4Jdb87FDsBy+8LM/0XBCSB0c33MK9kGNj7av4x8Ea2MhPfcTe sha512-ZSHIWnPOVzUCdsCkiWhkocSTR98vEYLTIdSaTC03+q16IBPONpG/D2Hbh6KEP8cy7i+Q3E+00Y8fVB+HuUethw=="
+  },
+  {
+    "href": "mytripbookingdetail-mytripbookingdetail-module.js",
+    "size": 57008,
+    "integrity": "sha256-nm0DLxBuq3fp5nv+yjIWUcxtpukE08OZWOId3yvBiEg= sha384-S7r5luI1JvlijNzl+P5CSX0fjzBMtCKlvqYfLuCFyR3DEt0ALhdPEx3DuJ5krGhE sha512-wnwH6X/vHMWeLvrY0vu0aFMD3I1YvfN9XsQtHv8f3AMZdeiikXcxnot5dTCZPwnJdfWjaG3Xns25xEayQrIjFA=="
+  },
+  {
+    "href": "mytripcathay-mytripcathay-module.js",
+    "size": 19891,
+    "integrity": "sha256-Npjt6mKGOSmEX80Stz77uOS9hj7W7NENVYQbm+zLdBM= sha384-L8hwcZeljEXDww7VswF/dbl04kwNJOKqc4rpHCuFUMW1fzt9QDp4jXwGHlKNkT7g sha512-Qmvd8385SE83I8kSeCZ15nFMSf8J+/Bd+iYJnS7Go8s/QSnadQyXg9xJmhcTggP0leeah0TeLgG3I1MagMbweQ=="
+  },
+  {
+    "href": "mytripdetail-mytripdetail-module.js",
+    "size": 566083,
+    "integrity": "sha256-Yl/wCW7wvG2y1ev6pgGG9vhyIeXTpm7wz02uhnz0HZ8= sha384-zuW2YaoRUyonmZnp0XYl5cK+BAaTEaNzaMmtO794ydTxUTpb64TSu7XeP6D/hfq9 sha512-Fup3ZsxZ9eASTaDrZKgsBEwELAoWAD6Lu4G8zYV8XzYXEZlQJhzYdj6UOUfWPr+qGIVgaljUPMYl9OV2S/q+5A=="
+  },
+  {
+    "href": "mytrippaymentbank-mytrippaymentbank-module.js",
+    "size": 47539,
+    "integrity": "sha256-xIyaH2bjVsbf0rE8xh1doJwCY+oYCeta4B7nIiyy6nE= sha384-zA/EpiV6AQKl49+BtsyuE+oKYr3UIteV8qn2KxtXminCZJcWIX/FV/+HBFI5nCEm sha512-DYE+/FOdbX4xeYB2IsRMltiSfQ8Fki1JX585Jjmb5D8rmH2JwKZn+7HNd3+R6Wun86rCjGCfwqlRLGrCm/WaVg=="
+  },
+  {
+    "href": "mytripuppayment-mytripuppayment-module.js",
+    "size": 14304,
+    "integrity": "sha256-8dD9NfOVe3sV1COpKTPzsz86rbsUW8gX12pOwnxj/ZA= sha384-ti2MYP5/dgL2AnBf/fUDaeg4Jg891tEGhh9o8MpoFZEtgrusXUppAFttBsxuUK3x sha512-BisSVCnePLT2q8QrzypAJpw2fcaOX5Vg3x92o+2CTsjqOLDWfbsMpbxu0U3S4KXuMDUpT4hcg1F4c1Dy01Dn5A=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggage-orderrequestaddluggage-module.js",
+    "size": 61726,
+    "integrity": "sha256-s/X6fHJNvMFYayc8Z5aodaKZpF6xqy2Nnr47rELT7r8= sha384-0bxnpc3GDNK1nr8Hxi453fmyLu3VMeJ3I3mACI4udBE56LBxoyk35tywrapr3x+0 sha512-BTEGFt9GjOp7Y2HFnBGMNHaNOMb6tuRM9hzg8JqnauFIUpYf2pxK+jtk9mWIWZpgVD3pBD5mtE00zQLVJAdVlA=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggagepaymentatoffice-orderrequestaddluggagepaymentatoffice-module.js",
+    "size": 19091,
+    "integrity": "sha256-/bsafpfdJrykK5Sjxu2CfXNPdROr6+Z8GfIx15cv25w= sha384-3AXo0XDUaqZzf2rXHEP/ZVE0diB9q1S3g5EVXj8UVV2rtxXW0BaqQ9gSuDANTyT0 sha512-txZtj1O6Cgnl5dBeemwjW/Ng/vk53UIlaP6vaJElqgIEGH46+lPGaTKBNSMYapTfQAgnCsDhSnKGOgbnjzMyAg=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggagepaymentbank-orderrequestaddluggagepaymentbank-module.js",
+    "size": 54642,
+    "integrity": "sha256-+421I4dswWKw3fSD5mGS9CAymNzSJ/jzYGPZXj5VC9Y= sha384-BuVCdTy9RVNo4Xr1t2EPSiPUyc5lJfW5zBQruSNm0dLzk0+wugWCj/Cmy+DVN7e4 sha512-1zCi9hYG0p3kNnhzq9prR6ga5nBcYEP0+3H+GsJgBoZAWyOCODDXL4xG55xvst60HNeVCH7ubUHpc2+H/f0oZA=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggagepaymentchoosebank-orderrequestaddluggagepaymentchoosebank-module.js",
+    "size": 46783,
+    "integrity": "sha256-i87iwaL/OtRmPyWakyw4SYtgldOw6dD9+AJltlKLMx0= sha384-ALraFkRrucx+b4ivWxvHdzU0sLtdw1ajxyc2YQAS2FMtku0RZP7P6tGLsXNgfGqP sha512-vezM+TJhUwMxGjLtsEVcb8ASWuuE3e9aVASyFEtS6zeNJtWRmdVXcheUwSewZn20CKtokqwc2eSkda3c9KTiKQ=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggagepaymentdone-orderrequestaddluggagepaymentdone-module.js",
+    "size": 47660,
+    "integrity": "sha256-+g5/x6gsQ0wf1iJrEU6KmMn7W34iu8y8Js0P8P1lc1I= sha384-X2H5qGAB4ckaVzYPCUoNDTE8w+jC7Po0v707oa3G9BplyOyC/EWPchcg+NY41ePR sha512-rQOt8/xYlQpwntNAHVWkfh0/QKqqQX7npIt+Km64Xm3PEWsRTRLEkUcvZ+qekxnXePVSCoaAgYMXrwssZDEPaw=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggagepaymentpayoo-orderrequestaddluggagepaymentpayoo-module.js",
+    "size": 33796,
+    "integrity": "sha256-azbIOgm7oqjFAq/mBeZzfrW02GSv9ASYB7nesPWndoQ= sha384-UenmdkdnbN0oeuL8s6YE8PyHwqE5VYtAlDIpBqy67EFHku58m/cx6oIFYSkqSdNO sha512-jnAC99GLAG5jCNWWK5L5M9uefOyTzd3d+sok8z7QrgK+fqqAadnnNhryvsP2HEDvt//oL7f/rI43XUtYHd99Uw=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestaddluggagepaymentselect-orderrequestaddluggagepaymentselect-module.js",
+    "size": 92000,
+    "integrity": "sha256-TV9gkdHYOeZDW2Z/g3dbaCyUg+eUWAi/Uatl7hU1s9k= sha384-+Pf+7HfXfiKYDgl7juyXtS7MntKVgPaQG7VshOgfFRFnS0lQQmzrOw0bQOo9K5qs sha512-wo7Yh1GO4LTyOXPzXO7Z3RHcp0rmNnBKarEDFffhbplPoIa0xTUfHr1hytXm5bsaMOCxikpLYSknZOuy4lyxjQ=="
+  },
+  {
+    "href": "orderrequestsupport-orderrequestsupport-orderrequestsupport-module.js",
+    "size": 27210,
+    "integrity": "sha256-iuWBKdqMqavbSz0QgruXnhkUMj3qJ/IJXnLOt/3jQMM= sha384-/S87QFCALAv035zy2TdZF+MziL2/v1IG1foYVae2kKMIBQB3QzInp7yiQi7fuuIa sha512-zKMpU4L7J9q0NQ3wDiAt6+J7bpQ5ENo9Zs8WOh8Zn6i5g/3/E8BdLn5/VqSqihuLdIt9yYJZ4MVkbMf9BIRt5A=="
+  },
+  {
+    "href": "ordersupport-ordersupport-module.js",
+    "size": 17384,
+    "integrity": "sha256-ZYO5STjqQBU/w+8ar2B0e1X8H2U5MQMwx3sPOjWxECc= sha384-/X7EeVaGpCegTSXQGlUd8mpVzvKMDBDTS08jPuiYGg/1zwU89jR/qWFYQ4EnCxDp sha512-mbNaLpl4Euzrv+s4pX0fiUH3rFRut7wr+F5mEc1VGpT8+WsXl/LqEQO+GU8PLsi5Ui33Dq/oMBfk4XXaOmLt9Q=="
+  },
+  {
+    "href": "ordersupportdone-ordersupportdone-module.js",
+    "size": 10038,
+    "integrity": "sha256-O+I3xkknucFLAg5sk1ehh8q9blBkeuN4UEMZ6Pr9IG8= sha384-fsM9I5f4ao4msEgf/X13cAeMUv7Ly/Ky0abWfcZwGWDvRv7Xao0pdZUObIn4RcQj sha512-82d2ysYj4PAf+ShB486A4eWGLkb3kuKAcNW7Au1lJ1CP5dmraiEGM/WE1pMgUUHEp/9dJpknIF7qrfS8mIMg7g=="
+  },
+  {
+    "href": "policy-policy-module.js",
+    "size": 13640,
+    "integrity": "sha256-HIQqo1xhscCd5cEgAJnhTDw3DQapxDWiNoj7nC9hflg= sha384-TdZI3o5gbc/8HvFRol1se39h7aSL8Pf1plDMvewtUirZVwzTPQHmpqcl6UbnkLnA sha512-IKUTzZE3hIt8h3+BcT3yiGe2HKwWN3PZP2Zct83CwpxJ15L722TAQA5pGzE8nrcKREmyktDVGgYOj5n/9bqxsw=="
+  },
+  {
+    "href": "polyfills.js",
+    "size": 239827,
+    "integrity": "sha256-3/P575RNg/VPbz85HS79sp+rmcYL2bTHSfDAJiaqN3U= sha384-0X4ID0bQ2U/EXkkQJKyFDJw5dyyHaSFm9tYha6/LmHps2PR9ZUPKQTRCj9aTG2nu sha512-YNg6w7iZVeSSbfUTQt8qbmQFXYSRPCwtPPGdnOWdoiMOJYB/BO+IA061iunvhRHpEQskBHSnhiLc9Rt3OBoIjg=="
+  },
+  {
+    "href": "popupinfobkg-popupinfobkg-module.js",
+    "size": 36921,
+    "integrity": "sha256-leiABydK+nc1mDB2+On0lQcgfPYhf6a0rSOPya7XrP4= sha384-Krx4TVWfJMqO5E0HEEyRGKlc0LRoGeg7d+qDGJJ5XZaXrqWiZ8eUeq3UnwIZFDmX sha512-X/PqWpOoec58X46es1NA1pQuRJxnJKYVb7JgK4ENtD0Y4jURWJAvCtK1th28wnIEAYjU/DGItSgbfDz/ERtMig=="
+  },
+  {
+    "href": "register-register-module.js",
+    "size": 24955,
+    "integrity": "sha256-QNbxOIRxabDUvsJYSm+TxL4ETHszifWuKBwPhnZ394g= sha384-oW4oBy0fjOpOdT5ymtzS4PtkXwuQeGdIkDJPlXOf25GT4vyCZrgucbfItxc1I/wl sha512-JWJ1G48+XGVN49ODptGO8rOqhkTmO1GPL9C+t2TdDk5u/66v3AtpVto52S8H6FpmJIg/exCWCPLvRJueST8LFg=="
+  },
+  {
+    "href": "registerverify-registerverify-module.js",
+    "size": 27200,
+    "integrity": "sha256-HDYxzXtdUOJJ8Mlsw9MnTKAJD+ZutyrMsyHntYt9iIA= sha384-MQssp4eiedqvYEtBKNIB9vSur+vtloJWdvebA8AiHoJkUxnZiql3DQTe5pdJajfS sha512-qGUC2GfRQ25ZDtg0Htkv2FgUliIJ+f09KyRYzJGr/JPHZCUlRc4OfVatUelLTATna9P9ZsUN0BTwTbYeUbuZtA=="
+  },
+  {
+    "href": "roomadddetails-ean-roomadddetails-ean-module.js",
+    "size": 126130,
+    "integrity": "sha256-xmCDD/wBYs0cMrgfzVM43ZNAh2xUUmAcUCL6xdU4suM= sha384-F1efdMauwexHXDS8nrLE76xTXSDzBE6jEt5jZ7Egq2hTo86ec8d+XM2xawrxCUUr sha512-ZkZ1CVrKwJIHzkF0XQQGWcQ8JGREZPy1/a+a7dhKgcYfDnQmCxrQtTViOJPcvaQvHdlRKA/lC6z9LarFCdpubw=="
+  },
+  {
+    "href": "roomadddetails-roomadddetails-module.js",
+    "size": 72448,
+    "integrity": "sha256-A63t8THAGVQkpE0sofHHemSehPGKsBv9Mj/a3Xr8VpU= sha384-fmfDyVG9diBxBdZ0G0oW7YauVaNATYe9FgYJBvm1Lozwhg5SOF8Nsm738+EqI4q3 sha512-miI7Fb/9zaDVTZkqmLh1yj64wxOUWhglwWXwPZFPjQ/2/Cv/3Zvl8sOk7a/d3xAJySj3aJrTZT2eHoRsSOULeQ=="
+  },
+  {
+    "href": "roomcancel-roomcancel-module.js",
+    "size": 15629,
+    "integrity": "sha256-lebfjtTFbcPE/MoVLAaqmvTnFQVhQR2HNwHpKGEM5o0= sha384-TLc5MuRwWSUMhuHEAvFOZlG7udpAgUVq6y3JhTOIJAm6r+WBxFGriIA3EELyTm3h sha512-1cxi1SnxGdttjkTCuIEWRRo5cNffrxCaO0Tu+hRUWTSXxMllrFySuWZ5YKt7h+E+0Zi06hO0fIDastUaLCyzsg=="
+  },
+  {
+    "href": "roomchoosebank-roomchoosebank-module.js",
+    "size": 58409,
+    "integrity": "sha256-/v5y1mum3k8pAlehuy5H1xzVuHuSE/L1r3+11QNwvYI= sha384-xkJMaY81aNliRKDtrb1VS9xuss7gIydLuyc8D3fk/s8BhCBjE4snlXoyGZFkvvh8 sha512-kE77fmdEIcVtkTUm8sO0OVQ5riRiFzjUZBLySuNYdLi3oWcD2CuuN3YcznKmJpbcGZp3TgAcj5d2hAeSMjHPAw=="
+  },
+  {
+    "href": "roomdetailreview-roomdetailreview-module.js",
+    "size": 66736,
+    "integrity": "sha256-2TlhKIw8yH9cn/PX43HdxodY6zr8e6J0BPiRSdTtBqA= sha384-+iruewy7j6RRI9i9xQMWqup0ZxpOa7KBeafcf+HVLvhSXiB3xIIpSwWUQUp3jvxg sha512-h/jV9ppuYQYsrHP3Wx3TmQ/jTWwcnyQWwDmO1Fr/DpW5OGmUkf5Lxui0ZWAgDDRk6jeRyZ/0sVanILoObb/95Q=="
+  },
+  {
+    "href": "roomimagedetail-roomimagedetail-module.js",
+    "size": 14080,
+    "integrity": "sha256-uzh3B9kOJfCADWmOkQAz5ByeYVtscF+hb4SfFuWUPBU= sha384-XIrQMmwDjtu+6YmxHrPJOuaNS57Fs+pXUPKkixwZQSgNFhCuwO2xlMpcI5FtM+yp sha512-g0mJk2WuNtB48lEcVqJ4mE9aAAju+79hhffEPaeBv3AMlepPqY0wQFaKHRLY0fAxbHoK28MvUWdtuzByweaIKw=="
+  },
+  {
+    "href": "roompaymentbank-roompaymentbank-module.js",
+    "size": 59512,
+    "integrity": "sha256-8JV2p7YedFHv3gvrSYXKHjGsVxtYfFQK6wtAuLMMpBY= sha384-lNpqzKHzgWZ7LCdmivh4jT+omDFKtGPiW5WWKm7Xk9qn3gqYWmLyrLFYQWeJc+oj sha512-M3FhakqQPQSNkIhWaBHoJzbkLgegL/ii0G8Kk8ruUilKUHlIQQRcsCTCNedsERFPfzfFZ6dzIhYUUXq3dCEvBA=="
+  },
+  {
+    "href": "roompaymentbanknew-roompaymentbanknew-module.js",
+    "size": 57339,
+    "integrity": "sha256-Uk0UEqV3qYQivCSP2eUnkg/9FcYUG1gfI2IGguFWpf8= sha384-OvqP65WVMsrAKvwKqG5vZUlgZ1QOue6/9oWS9xMUvPRjSUHy5Zjerde5ErQpivBE sha512-NRvACE3ZusVWFJ9fdQdjkMylABqSJ9nYca9i5wa5bV1GnrfGxmrTg34jR9D1TwL4Gew8ofpvsdqNRLkrTqRzDA=="
+  },
+  {
+    "href": "roompaymentbreakdown-roompaymentbreakdown-module.js",
+    "size": 15147,
+    "integrity": "sha256-HkLon89k6jEbGOCM5PL53oqplpXHbFAMVJybHu/pVA0= sha384-WTJXCBuZw1kFOOuT73mY8yZv+byzbUIX/MZk0wu0vu1PfM/Hx0xeFTNSK1QH4cod sha512-FR/RLzMNgZLQ8wpGF+EVieHbwIeVMglT48H+QDbEuwRUbsRr+rdzFnMZL+mr4D9VFfsH6y/qPUevsbc9kNIAag=="
+  },
+  {
+    "href": "roompaymentdone-roompaymentdone-module.js",
+    "size": 42902,
+    "integrity": "sha256-+bNALhxfg8X7KyqRONxPPKitIIIqhVO7rcirhSguPeY= sha384-6JD0KvGugwZ61ghhrHDtE8i5dmShwc5I6OAHz0dWO9UuJAetbnjwoKk3qS+gd1AO sha512-dqeA6Z2RUrIvc36dmMUU/llo7USp0YEd5C5Q/GvJUiNqtgRGhCnqqviLAIZs9SpaxGTmcYhsej4ivGlCmU7kbg=="
+  },
+  {
+    "href": "roompaymentdoneean-roompaymentdoneean-module.js",
+    "size": 58239,
+    "integrity": "sha256-QL89Jz6pudFbg3+gOcpYVE8jmGieOLIBNpNA9Zxnn4M= sha384-Ueo9FxRP8YDk19e+3jk9zeCKaVhIp+qbBFKdSXuU42Zc6qRfLedeYnnFlovHCawF sha512-Mg3jKjDZMv5N3iOUNJHTRpf78PLZ95j0BkH5gu0GcITUqGEzvcdiYaHurvqt0nNodAHJLZoCoArqiDSKI1lbwQ=="
+  },
+  {
+    "href": "roompaymentdonenew-roompaymentdonenew-module.js",
+    "size": 39644,
+    "integrity": "sha256-d4b7yNJvViLuuM12tG4+NEoqanwaJt8EsuC5QgGu0iI= sha384-hU2uY4fiNg92b86dDQsgjwGvmDfoPZK0uxr+kCjyQMM3ut2NfMMGH91IzLwBnEw9 sha512-IzJ0ql6dNKggwvrcJtR+rAMDHQ8tVx664aoIvRfjGFGdaKE9OmX6gDJGQui3Sf+1VsjoKuKBByZAlmZvsTnl5g=="
+  },
+  {
+    "href": "roompaymentlive-roompaymentlive-module.js",
+    "size": 25942,
+    "integrity": "sha256-ECtNdKLYnT88wm2mcPjc2kmf+l2/J+JMjkkPzL0Og2k= sha384-kNRr++JAIrvk7bEKEglL5iAj9bi0g7naOVTbeb3+kfNhK7/PJPEtWqJJJ9x3Jrl6 sha512-Z9yDgakqTEHpDdiV2N6U1FLMV23Ls1QJVtjNnijYOUPZd/sQ6als3qiLxnRrbwZX7sWWi4afdtaTdScSiRfDxQ=="
+  },
+  {
+    "href": "roompaymentpayoo-roompaymentpayoo-module.js",
+    "size": 15356,
+    "integrity": "sha256-05zFaaniB9ooKorL4SdEOCejExWKySL8JG8hGJa8tvM= sha384-pkUgqtgSlKSAMkHdrkfRvW4EFaNcwpxJ7RbH3XSKfVur5rinx34rP+uAIlRr8sGn sha512-AKG+3C2ml66MtikY0plbQJtG5lC5SfMdHXmDnI2VrslIyoCl9ICoOWeONwHc/TL/qt7/kHgmeNFYplwi6Rm+YQ=="
+  },
+  {
+    "href": "roompaymentselect-ean-roompaymentselect-ean-module.js",
+    "size": 80898,
+    "integrity": "sha256-u6CKGxNK+rkTH5avt58/k1bjhXaa5Ga25m+2oFqQNxE= sha384-vTDaKZgd17M7rqoNtlh+4fqRhllJT+inrP7jcC7ZuNBlMNL/VTFqjbQSo99gSKXT sha512-l9rLbiBCHVQDgFBslmHu8VrUILAXeFbMK8oOEs1cfJRXx/voLiQIB0XYKmxqR5y8i4qyuyr+mwwxTdO2cI89ug=="
+  },
+  {
+    "href": "roompaymentselect-roompaymentselect-module.js",
+    "size": 69822,
+    "integrity": "sha256-YePg0+iD69JvCFAcM0H3/WMJvmSkZtokp/IJmyf0bp4= sha384-a5Q7vfwntfXEPxadZfpW1pczEV2h9rO95f6sNeBCUpyigyevS0qh65jtJjipebKY sha512-oNo+Ef7egDhKz+ZH1S6lcFyFoWL3KiXYqgAEf8lR1EBFKnbY9/aRP67aI6FozbFxQPV86bep3T29LwVhkLDdFQ=="
+  },
+  {
+    "href": "rules-rules-module.js",
+    "size": 21753,
+    "integrity": "sha256-lM91Kjf+LIKQKmWZgzCLvK3GK/uDaBdmYSZHzWftGo4= sha384-218LBJiJ3DuS7Wm8hQ6WTPYeWZyPsTAluGELLTN3hxJ6C+LNIDn95+TCca7+oxf4 sha512-KY7H3H5VpdrIfhCA9T7/bwcQMuebKzc0uNnSgaoYYhWXN3gRCJGUniReDo3B5gfMcyk3YB8GpTuJhdapCEkaFw=="
+  },
+  {
+    "href": "runtime.js",
+    "size": 24657,
+    "integrity": "sha256-LJ77UMtwho5K2vH69X5JF6dhrwFXTdbP2WydEK36yxY= sha384-pEYgm2J5zVqxlAXMTO/hKsMvFQbhPOqYFXp99e3HBS22AphQv5hsu2F/DVPKP+FM sha512-iGhKdHfWJbyvxI6tlFy9BqiOV21xy7Q+mf3FoqX6gPPKNhBz7c2jF3zwiAB1qC4JDxmqWsBCycBf+6oxtxEYJQ=="
+=======
     "size": 57026,
     "integrity": "sha256-mpk+kVaOw0kRqDSmn3sBzi86DwGi6xO2GH2bx0wKHEU= sha384-hrxPag9XYxdMvwqQyX+ESJPQuYmDppjFOh6IwKXSvzGVoyvzEDghOI/eomrMKpZJ sha512-xe+LpGcxNaQ5uitpnp6F49Sz7RdJAhX2sQCjyBfDVgW4tZA3g6zOm3wM6dWt3jVO8pbSbW/1MynIwU6pe4CwTA=="
   },
@@ -2833,6 +3612,7 @@
     "href": "scripts.7691b53a4fb4a9020182.js",
     "size": 89174,
     "integrity": "sha256-BLcfXFmudRauTXfucamDZiJ7RTKX6jvtWCyPw91iGuM= sha384-XvZJek5shnxEtuMt4VLKUvSFaEDhQK1KppYxbcwx6zBf0/fNA1emEOARR6AIN6f+ sha512-xzdWRia3+JS4NHMuNJ6iMNYkaSEZqph0OrpsCPpLyGVPJETNHvWDViIByIeNzzQ5133qqGd/a10mKIbDFJyQaQ=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "scripts.js",
@@ -2841,6 +3621,90 @@
   },
   {
     "href": "search-hotel-filter-again-search-hotel-filter-again-module.js",
+<<<<<<< HEAD
+    "size": 24183,
+    "integrity": "sha256-U4JlArWOOSQQX9CXdhZsOXLvzw/igFu87f871Bf/m7k= sha384-8Vmy21C8wxk2n5+4LuR017zR5//xZlOvFy3wIXmAkqUORxmCTwSYifPBg3AysIvV sha512-fMKyTZd1XOoMqCA6BmH53FOVdDxOt7pB0Gygda4G9f+TF+pnwrVjJoR/Nv8TRDAbnmhT8ZPHxGJRu9t3CWs+Zg=="
+  },
+  {
+    "href": "searchblog-searchblog-module.js",
+    "size": 59044,
+    "integrity": "sha256-OxB3uoHEkhBUUe20bI5P6E7JsAVeY2PfZYIGSaKQgNE= sha384-3kOWkbutxDE45sW9biyUWUCdoWuqBXlrw+0DXa2acpdmGSBnnZvinN2vmyvzNYsn sha512-FcDIFOtFpgX38gGv0qVwmb5zqA5q3vUesWAsAvFsxLj1EeKrETD78wiP0J0wdBuLJfN/XVlbeOZnuUqZK3APWw=="
+  },
+  {
+    "href": "searchhotel-searchhotel-module.js",
+    "size": 39525,
+    "integrity": "sha256-CWNaubVLnynsfn6XyRoE27sFsKlT7AX+k7mazpsJCvo= sha384-p+hFlK+Js/0vW1lMgg7oobDylR+oxb72vgns2YXNcx8SdYeQG1zFmzaudsXjry7G sha512-pE5bAG8UK5nYBcHTUfSl0HraN0W5uX+oejWNg8xvrRJ2EFeXrlo7PSkfvNh2IOmWF57czQ660E/PdRe2Cco+yQ=="
+  },
+  {
+    "href": "shuttlebusnote-shuttlebusnote-module.js",
+    "size": 12487,
+    "integrity": "sha256-jDE4lmhluPGQScfhp8x4PdFYsdAvx4+nuw/R56el4fg= sha384-D8ssynkngMlm5Fo+qEaL9vuvwobrIYREDhLdyqvihJdZ8wDE6h1zXoLt4HRv+h1O sha512-imH1piBuy/0oqj0/ep1YRYHnKvS75dJWueUQ7DC4OT7bOG9pBag5nSNxsnXDqVQSb3+sfyd3GG+l0mOTh6NC/A=="
+  },
+  {
+    "href": "styles.js",
+    "size": 274787,
+    "integrity": "sha256-/no4ZUSoLOvaXYX2DVPZc7AGEutxeK+uRCCfhpAd/m0= sha384-91VgI3qpZaKDIWUkanEy9RgFYlywLKu/GoMdo8geFbyFbV9ApnUsROt+7Tv7sMMC sha512-yBXYxRyym8idwRGu0dhwo3x+vY1CSHSPgoHcptAwFRzBAtlTlHv1GAq6PioedCHD/lfpNrdOwGmLTQc8Dca35A=="
+  },
+  {
+    "href": "tab1-tab1-module.js",
+    "size": 1038467,
+    "integrity": "sha256-89kpQjuL8LE3gbdPOElk5WWgrCRjBl9GSzLjiZP7nNk= sha384-NA5dL6777xyiarn04nUSaz0z2E2g/FHZqxvudeLzxbRQMi5SKl9nGr5RtgJVkEGg sha512-FY2lehJYve7iyNY+ucotOBN5L1Tu87dQyZlP0oaKaBGFjWdICWHp4BsKy1tn4LdSw3pVzOXEqXxVIU1Y29M7og=="
+  },
+  {
+    "href": "tab2-tab2-module.js",
+    "size": 127711,
+    "integrity": "sha256-La7FAuq4ik7ub15Ntg7J4FrWgrjVceQ5MpBppvZSoko= sha384-Lrjjoc/wO1ySgmILKYSr5cT9L7wLVI1Cz0bAmJw0l1QEXTC3pI2uJLsoo7UsY7nO sha512-Oh6JWy/JPpdxpfsHE212AozKJ09SDxaJh6CKtM6G1oCj8SjsLU6G6ljS/6+2bhcWrNIpV+bZexkBK8YgQLeuKg=="
+  },
+  {
+    "href": "tab3-tab3-module.js",
+    "size": 145470,
+    "integrity": "sha256-0a7EUnEkcXg8m3ABkMOE+qCCmx1Bpod14Gv+l8EGOkQ= sha384-Ia7ZmN4G9xsINzbiFDR1mM/bf5GVtvEI1gFqnP1UWt4+0TQ4TO1oCJqMrHW4UuI+ sha512-uwG/UO7zRmGN68UZ9C1SCBRNpjf0syv+CzTeGGKN0ULY33D2vXFKz+XFii+LArl7VyEBWv9NXsv90WUvvuIoWw=="
+  },
+  {
+    "href": "tab4-tab4-module.js",
+    "size": 49137,
+    "integrity": "sha256-A6Db5hLMTdaYRXpoyz3WmB0USzGFGXSYro8wjjhYYCU= sha384-YEQwJcEDD02UnMTHExSyQz6RHqoAGN8iPS+eBVwA6hWwNMtE3hDudGl3pyUrLUu5 sha512-gIBp3C4f9VriIgvGQp6UYondMI+sRQ03IPQrJlDDb6ghaDOuzLMnYLUFssBDKT0GXQpRN+k1d/ofy+rDMrHTrw=="
+  },
+  {
+    "href": "tab5-tab5-module.js",
+    "size": 121628,
+    "integrity": "sha256-NnXRicnnVez0MvVCHOz4V/QLUFJV6Ip/RVGbnh7R1gk= sha384-o89lrSBqRc6hcYpyjUc147X0ybco674v9SvMN58hRWp784PBLk/YBKs7EX9ew2qq sha512-zb6JeGBXP31JGX/Xy/Gxhwbopi+lNCtJhHvvvtqy9LhkXT7xchsuZDhLGvI8nOAQeTm+1hwjZTxgOoj8UzrnfA=="
+  },
+  {
+    "href": "tabs-tabs-module.js",
+    "size": 116007,
+    "integrity": "sha256-ArEYJSP8BFRymnroST4jZXrHElfYvXhOtbPiTDxIDXU= sha384-/mwWjEYcb/8A1zVlqWDAXqFm5NW2EWbKhRUDnS1zQYQZVP8yVJ43Ypr/FF4VSN09 sha512-u5mUxLelSdmTFfu6wUegywhQYplBox9vxKS6cha5oNQh1kNuqZ/lwFwZF3ziHDOG+xtQCwklryBRjVtUaU8B4A=="
+  },
+  {
+    "href": "topdeallist-topdeallist-module.js",
+    "size": 66984,
+    "integrity": "sha256-jmn0E8zt1BA4JqOb+Klgnw1B9NAeFarvzCeojNNH6GY= sha384-WgiRBdi5fpo9sTVsjmHzOtx09dH9lenRTmJmliP6nNtQ5J8hBUVwHasE5i4+5svt sha512-olO/pJ/sJnNGSbo5nWaD0xSMhzAzfst/9oAAl4CYvXxIhtVbPHoeR49jJsLIR76hXOjGO/VGDLQGFVa3zJRusg=="
+  },
+  {
+    "href": "userchangepassword-userchangepassword-module.js",
+    "size": 24018,
+    "integrity": "sha256-D1yUCiG+6/72iLaK+fj0dqgDNzke8q7nqgZbxdWuClc= sha384-f/QuB30IJDk2CVt+xTncolYTC2b6gE4q9D82bxLI46mz5A7Gpw739qzSXPcf23RV sha512-7izgo1Wbtcs8WzIQ+tJV4kYZvAzT+ipOcguwixiIOexD/3XRmADK+KmEgGWowMf1Q4ZVX3Gma1XSojLvtCnmCg=="
+  },
+  {
+    "href": "usercondition-usercondition-module.js",
+    "size": 33972,
+    "integrity": "sha256-SvAUw/pFt04S8v46ENTQYsjmF+Os1pZtfYi5U3Oj1Tc= sha384-LcpOVsObCGo1be3rLz5j4RONvEID+uQo4MR6Z2Zxtja1iskZ0O8Ba9D5Q5G1/4Tv sha512-6WaB6U9Z/VtqoeRhO8TYn7rLjZp+yi2XRpWttz7sEw7BBihKOaEz53Xb6R8hrCcHwGihdrMfpOD7YWQ2UxroHA=="
+  },
+  {
+    "href": "userlinkprofile-userlinkprofile-module.js",
+    "size": 25862,
+    "integrity": "sha256-lSqASGKMx/bg7+FezcdGyNClF00CDO35glIo7Pa26k4= sha384-/rzo0lrSZFCMe3G+13nfexqVEfE9GqNaiburMWG2hVYI+NV5Fxxyb2yAPokwAAxV sha512-CgrTGbQ5UwgSb6X/b8zO3Y+xiFmUJYojkDd/O29+MIppWhitWCj0vTIz4AUBXqfviKAFy+e9rc2B4B4Ge0Skaw=="
+  },
+  {
+    "href": "userprivacypolicy-userprivacypolicy-module.js",
+    "size": 28245,
+    "integrity": "sha256-svP5u+gAiOvJP6qZ8D5Y2jmnccGWdF2enHxvzC3g/L4= sha384-wB2kWxCdz4VYemk//hXqUA/GWm6BizKen3GmsUlc8NGljFf4ISgLC4td84NJUsU6 sha512-GyqIOZ7FbvHvlhC+TBSL7oxx8UKf0/0C6AZB4R5Ou2HN4ao8JDa58QZuxnYboRdCKrZRtM9rlY6FnVqxGKuDxA=="
+  },
+  {
+    "href": "userprofile-userprofile-module.js",
+    "size": 73454,
+    "integrity": "sha256-OV4W63v7HGRmieKBGUD9MWGyQv2GPe8pVdOnsTRcgYQ= sha384-XSq4g2seO7Ki+sRot/wLTzJIIZm+9Gj2WHcKKHiTtkl0lxZ9vB3+7RALlycixBHe sha512-m9q82uGQ46JDCLyVXWIPSKvHGrw6MFwrx9UgUlP12bT8U59ffXgUa6GX/rEJRM8xhNU5W0YA6/0lWxRJNdWv/A=="
+=======
     "size": 24159,
     "integrity": "sha256-ln2g89N3v/04ehCEX7v4uuMDUI3+OmxBoXsC0VWmcuc= sha384-hKrMbi0DJZcnMHRGEv3VGDbr2rI4CuS5aeUem6y5Co3x04i+tmjuAOl1caWurLsS sha512-WqO7Fw+UEk0VOB2XA2Uq8I9xRNEnHVpy4yamFrB7FrLIVU1PmkFyQ2JQAmEluKgVeyPLdjqUqceGDJhHYxw47A=="
   },
@@ -2928,6 +3792,7 @@
     "href": "userprofile-userprofile-module.js",
     "size": 73364,
     "integrity": "sha256-z3BsaiDfQ8YSxE8SU9CqviIjxNXgUHwutABf7mO0xkE= sha384-jhU4zAmz3xaYKj677I/o8uawFrnOlBziW/1CJuwfgvJKcKUwurJms5Nev9z/EiGR sha512-TM+gVPq6K7utCML6fsV4xzBE6I0OBehxUAuXYT3hbUTGz9vFza8AzQCUWDtOT2RH2yrsJey2FoG0J8pxIQddrQ=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "userreviews-userreviews-module.js",
@@ -2936,8 +3801,13 @@
   },
   {
     "href": "userreward-userreward-module.js",
+<<<<<<< HEAD
+    "size": 32285,
+    "integrity": "sha256-zqI15l9nmO55M4u6vfBKIMWzBOmSECdoHbdG4qARe00= sha384-6Dz7nGTXSLfCHL2PyAUL8uv8fd065UDEAQjyc/iDb8Fv1c0f42s74sVOBdIV5E/a sha512-OcjbGU5UD94tQVnqRKlO03WtxhSTYooXWLvfbzBArUkFkgvik/ostIbb3Ie5wIKzdIzlmeVK871xhgrsJZyh2g=="
+=======
     "size": 32257,
     "integrity": "sha256-ErWSeP8pWv9vXmFtJ3RbGahcobtwUP+hgLiSDVeLJ9A= sha384-tIkcB9U25SeADAbEPZx5kfVu1+2dyHfxZTLlFS9mTu3BC+w5bQle113G63j/dXmB sha512-iP0rgDMIsOTooJrz9ZwViX8P54nmh3IF7WN/dLwFTb8GDqgbydgxxcvkdRLMDIwabcCeoLQlHLGqvwdGd1YdBA=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "vendor.js",
@@ -2946,8 +3816,13 @@
   },
   {
     "href": "weather-weather-module.js",
+<<<<<<< HEAD
+    "size": 12917,
+    "integrity": "sha256-ydqof2rZUVy4Qiqui6ncxSFQDGNVvotNt/7zZ91eEjI= sha384-gjzYmNlK4ajZ74rfrGVILgibqnMPa6UxaEGNrn97H6CQ0YwL1eCIrd9JjT7M0VL1 sha512-cA9k2K4T3kURt0kAB/0NlmgCquM1ajnwM4sgo3e+IrO6Ddn3WLsWTu/kZCt0kLgzTmao87Wtfpd9te4WX4zx1w=="
+=======
     "size": 12889,
     "integrity": "sha256-AGb/fKuNMCY7pRZgYuvql1mwxvu8HrquYDy8eLlthHI= sha384-sPN8wejEWuEiXnlk8w2jQkCt89RJgg55P30+VH/F+bXd+SZqupKGPUXiZNI9dZnj sha512-Iy7eFqgaT+TTxhIzaVABFECG+5Ueb4mm37Mk4AnGg1n5YT8AHKeemOgWTcJArirUvT9sCJDt5CQWb3DYTNtRuw=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "wk-plugin.js",
@@ -7650,6 +8525,11 @@
     "integrity": "sha256-emH8xX+hSPYmRXtzrCzOFE8c3yMoEpatG6sUtLw2gog= sha384-M2LKWx7LQSiLRkqwzby4/TLcr76cU9JdUnkY/KvoHVEIZJCeus+3vps06e+cAkg9 sha512-1P8DV2oGIsbfW+tbD/lD4XRbfXWY/gnnI4mhOLWuM9v1FyjFgN19OebTs51LQiLtmpjzqsPf4rl5XIkuU3urTQ=="
   },
   {
+    "href": "assets/ic_flight/icon_down_orange.svg",
+    "size": 301,
+    "integrity": "sha256-x5Km/88fGgZ/xLL9yallhpY9xLQ3FtuyVwCH6eHP7p0= sha384-hIfW6IHliH24Pl6zXYSaDktZXsi1eIpd9J1gOrJK2calLYw2uFE3nBGJNa6zuN+s sha512-KTocIEylhfc4XZ/vNZuHtm7If7vjuQOOSvdrxkC4FBrKYAiBXCwxY4dW8jrSYZGdSmZ6eaCo6lPYxSWdCR3OhQ=="
+  },
+  {
     "href": "assets/ic_flight/icon_flight.svg",
     "size": 435,
     "integrity": "sha256-02uPd/jTiGnSpIXXfVm0l+ODYKgk1oG1ZtvZIkj62Gw= sha384-h3Mh4gKc7BuVl2/FKUeUS+58bdpQnyiBDKWLNOgOdF5punxWiNHGrESxRuMF+TgI sha512-mXtmOTwMR1PXYD/tdhKlWSE7GEnKjDtEHZsXzzn7MEhL0pDXhCFKYWoFKgU6EJPU6MU4/NWMYoLmEXpxVyWVnQ=="
@@ -7758,6 +8638,11 @@
     "href": "assets/ic_flight/vector_orange.svg",
     "size": 398,
     "integrity": "sha256-B0DJfdev1xg08RtrZbkt9rXxrRKXAOa3+xhiEvrD2jM= sha384-KAj+SiQStcSZnvYO8+FavJPe4UIjrdhwmAg/0T6YYFV/9TF8JJRoXWdETT2DagYK sha512-3XbEkfZtiNAjxUJ/MORWeBkg5OC8RygPbC7wG6OunZ6v4qi/jGt6S1Ok+sS3A/5I6uvj1n/uDJ+BAcKAdZsOxQ=="
+  },
+  {
+    "href": "assets/ic_food/Foodfarewell.jpg",
+    "size": 14622,
+    "integrity": "sha256-8zgsVnnpoHR0Mq1PwdNZ3pKIPHbnJiMO4uRjMFK6/e0= sha384-HwY7QrWQe+dQzsbTtfs49+gSI8WqToWJauEmCQEIMExOS12LRyXBnku8Pe5t/N55 sha512-mHQZyalNApBYPVuiFR1sse7/tKoBjZV9l8lUhSZRlMYKf0Typ4ac5GQDz9y26fxCAYqGDJ7TFoX1SVgwf9+BCw=="
   },
   {
     "href": "assets/ic_food/Frame.svg",
@@ -8015,9 +8900,15 @@
     "integrity": "sha256-EOUOz5hzj07kQDf5yedEYLOp54ujCaoyI6rTcOq6icU= sha384-3aTe8AXLzAmHve0jMBTkSJ6vseeGWO5tvWd4XYyv6cGee6fRaV6ovA+q3rkgjew1 sha512-ePnvnytZHSqY6a2WvslQQAwzD4fQl7BrAPdSzz3Kxz2ipEwpobBdCQsjTYgb6PKkpwG/QwzjbrSIoFcW5hJODw=="
   },
   {
+<<<<<<< HEAD
+    "href": "assets/ic_hoteldetail/email_tealish.svg",
+    "size": 439,
+    "integrity": "sha256-ahA014Bv6a+ZHD5CeUEa/HuvIj9fuVgaSuy9SEJjHww= sha384-I7MGmObjpbPYlWrRcent0rUFyMQGlYgSviITogFj8OPpuByXfbtSMMFDbQKUKsFv sha512-5WBG9Bcr4/oGvTp9NjvIXtqsS/XuP+EvdUQGTRWMcu+u0mAm7DAawQnap2DDQzsuVn1/PVVu1IPwDb16DBnI9g=="
+=======
     "href": "assets/ic_hoteldetail/bus.svg",
     "size": 1092,
     "integrity": "sha256-WxBf/zMMavai17+rrJ24dUJpNWj3MbQzBwlGve/L9fM= sha384-8A4urAblXpOPvWHFlYywofHvjExxYgIUHTZEKxQuxZPewdZdrZ2yU06XNHdNCfMe sha512-3IGKGP3i1MLNt9vFpidzBoM1qunJ41tAVRZUJfJcdGPxhzOMP+5/MdqtLxNLAonQyH2FBIx1usYEreYMyjCMWQ=="
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
   },
   {
     "href": "assets/ic_hoteldetail/group.svg",
@@ -8205,6 +9096,34 @@
     "integrity": "sha256-2YIsL6IrNLgC6wI3BD11o3HQ4aSfTxUflrf+lWvA7ds= sha384-ngI8oFBRvVCLdTg/L/MNL0DvLghwg+454kGQGPq7Yka1UIdXje4cM7aWysb54/pN sha512-EmQZ3lEZn2OAcZE/BjVdka42d9LeBnCvNHmFiHo7JbvbBl9pw8XT8AoT2Vf69a7Ge73AU3jKPxzk08Pk4yclRw=="
   },
   {
+<<<<<<< HEAD
+    "href": "assets/ic_ordersupport/Group.svg",
+    "size": 759,
+    "integrity": "sha256-Uu6caueivx5terD16vJ4mLK6BZ6SqdRtIP1efc9B3OI= sha384-DtVOydYX/btsyqNgf847qZy5M0INwkDqbSrVLlq3krAFFRYkUz7YZLjaEuxBTY16 sha512-2ioybJmNnIjrSbLaRONGoFVNeFW9/wQWrc6wTg93g6cG8JN6tCN2+gU6zGQmRgJ4+a+nlGeDYbeiJW64iSzHfg=="
+  },
+  {
+    "href": "assets/ic_ordersupport/Vector.svg",
+    "size": 1614,
+    "integrity": "sha256-zfwz5Rx8cd8TnATZSRtjKsThAKzVYSEh/NYWHELP8WU= sha384-sd+lo3lJxcGaIgK37scJcGuOENmuHMrxxHg0Hj2ZPBuMAy5aDpd5QHF1PaU4s6of sha512-/81x9U3I+uRMjXpSrtc2QJ5Lm48CR5Rm6I8ahV4uuXSv+hoAk7MCNintMQtsosLL+cy9oA7B3oP0n03JnR5vFA=="
+  },
+  {
+    "href": "assets/ic_ordersupport/next.svg",
+    "size": 244,
+    "integrity": "sha256-T7BV07upDDID+uF+ciyK3kQ6CcCqDjhn6F/EA879Vz4= sha384-aWDc2Qy9QE1eLZa+XdzqTPHxE8ZsGbCrdgQxY/MAu+KcBPRL4lUit9a+ZIannWab sha512-YaDMQUUChR7tTEhK5Rms3Q/4uPwywaBUai5XolOV0rFtHGod/YKkHoT8f32LZ3R94cfbFDS7LoYkJbiIJ/Zh+Q=="
+  },
+  {
+    "href": "assets/ic_ordersupport/step_3.svg",
+    "size": 7578,
+    "integrity": "sha256-T0Z7li4w8i2/OVFort+v+ABq6NVFMSXZkp2vY/yeaUo= sha384-0rsgZ0jALakt5Xotbpx9NNpnUaDRRABKVxot/4jJLVgeIxLJIyXV70n6+5mg7NZn sha512-RMLuotQic22lWNlIL5Yl3hd2RKPg7uWpCd5hGYJIwXvxUEvjwd9ALMOhXjKCJSlY7JV0qEUrqwi8unn3+DKo8A=="
+  },
+  {
+    "href": "assets/ic_ordersupport/step_4.svg",
+    "size": 7744,
+    "integrity": "sha256-vJK9Qoapx3aLQkIrU25lXXFvXupKkf6PSBwTuL3Biow= sha384-hp84OXQSwH16H81KHl8B6UYu6rB4q+OiJGH72ZOPkEkQUTVOmRrxEJFf79Rj2cAL sha512-Pos4xTC5xrhExtjIPllG/EiXnBjJ+WUi7oDiHnMvF8FxdKcHtCTK7kCUuUDNWqt4DbOCHeHwEe2HrYepowD2zQ=="
+  },
+  {
+=======
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
     "href": "assets/ic_review/ic_bed.svg",
     "size": 1562,
     "integrity": "sha256-TZx4Vw3gcFLKlQkI6ftZ06gqkmCzkF5RVfMj4wA1wBY= sha384-ihx+8TfRcJejSwC0Ln+pY7TjOYXc9x3zwlGgeLgcXz30pR99ZBABSDKvC80AiqRd sha512-n8g9h8aNJDVioe763bHLDeJYUCRw8wpsxx1UlODvP85MiNalil9XnYLHqiljs+aPTui7A/EAGNHtEGC6XF6ILQ=="
@@ -8418,11 +9337,6 @@
     "href": "assets/imgs/ic_arrow_w.svg",
     "size": 241,
     "integrity": "sha256-ELXT/42AqbSFtef0v/mjjWe9ChsE0kRW0qMYC5jvGi0= sha384-oV2Hw0Z48lzg0D7GdmakoeW108wrCXENo4DnWtyZXNrQjaY2sn1mT+hwAThQuMpm sha512-l03xcNDOZjao0yCgemt996wUOalU4l6j+VXPWBZzUQmniRz69vx0Mg+kpZy/xps47LPpaU+e1IuEuge8Tp378w=="
-  },
-  {
-    "href": "assets/imgs/ic_bus.svg",
-    "size": 1418,
-    "integrity": "sha256-VFpeVTH/YcfzX7TBWIJJapzxAQdxBWMqiPRgOLovc44= sha384-mvPTNrAIWOur4ZkeoBtTJ3QtkTZ2Mx2z05dJao5yM3bxqaOM4EtuAzyILGK5NF/+ sha512-yUrW4jlbNo9RJ0f7n6l1PuoWGiGJUG0QnoAty4+lyNsq6uusN4627nSK8N04oKlgILhGpRRXO73/kpdm0a4Qlw=="
   },
   {
     "href": "assets/imgs/ic_bus2.svg",
@@ -8820,11 +9734,14 @@
     "integrity": "sha256-Kb6O7xtqB7Us1LyXApeCFFbfCSdYw1ztk5RnSCVeE8g= sha384-ve5z3NyqeLZ8OJKfG8CUHBsYTYAmQwiPhxSTSxJTdWNUfA0SJWC5A6qyfR81LwfK sha512-QlUdIbFUWhO70aZ/+n4u7ZQ/3cMTSmPKDpZqi+SzBXyGDyvnekfQFaM1OEbGw46GxXlMshploc4rkGbmsGA6tA=="
   },
   {
+<<<<<<< HEAD
+=======
     "href": "assets/imgs/notice.svg",
     "size": 677,
     "integrity": "sha256-EmzIWb1CqStapvneh1ty2oc67ffprTeitMqdjM1dTa0= sha384-kmJv1HBu1RQjUGTHN96X7e/gH9Ao3ayLZW2zINsIO3c6di4XNVOrbN6AjUwnD6Lg sha512-hFiOTkXKIFyr12hlXyiUfet8CDIPFAz2eK1GbXAt/Cip1r4O7p9eXv4zB3kMokx7ODdroxFToAxhEKKBYOdsQw=="
   },
   {
+>>>>>>> 76dafe597a6de74d5d436cb1bfbd518c95b82a61
     "href": "assets/imgs/placeholder.svg",
     "size": 1536,
     "integrity": "sha256-o4KQxjHh3McceJEv7grvBd2fyOZGoX/cJugWAmPB8Ug= sha384-hPperqJxn6T7IB8UfyWzt2Seny0JyPe521B2cckSaJfxEwcYiLSJxWLlXGtMf7/V sha512-5LUzL/O2g223IJdTk0AK4LAZfXgm+uNRUUKjD/L5+am1sr5HUnS65iPt0Pc5x3M53exQ7lgyYOY0BHYaRqu87A=="

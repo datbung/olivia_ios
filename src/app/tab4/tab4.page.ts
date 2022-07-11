@@ -318,7 +318,10 @@ export class Tab4Page implements OnInit{
       }
     }else{
       //show notifi
-      se.presentToastNotifi(item.message);
+      if (!item.dataLink) {
+        se.presentToastNotifi(item.message);
+      }
+     
     }
   }
   /**
