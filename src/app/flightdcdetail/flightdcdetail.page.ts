@@ -29,6 +29,10 @@ export class FlightdcdetailPage implements OnInit {
   loaddonedepart = false;
   loaddonereturn = false;
   loadsk = [1, 2];
+  DateGoResult: string;
+  Date_Go_RoundTrip: string;
+  Date_Return: string;
+  Date_Return_RoundTrip: string;
   constructor(public _flightService: flightService, public gf: GlobalFunction, private navCtrl: NavController, private activatedRoute: ActivatedRoute,
     public loadingCtrl: LoadingController, private toastCtrl: ToastController, public modalCtrl: ModalController) {
 
@@ -150,12 +154,12 @@ export class FlightdcdetailPage implements OnInit {
       }
       if (this.isblocktextDepart && this.departTotalPrice) {
         if (this.PhaseGo != undefined) {
-          let DateGo = moment(this._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-          let TimeGo = moment(DateGo).add(this.PhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          // let DateGo = moment(this._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+          // let TimeGo = moment(DateGo).add(this.PhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
           AllParam.PhaseGo = this.PhaseGo;
           AllParam.ListProductsGo = this.ListProductsGo;
-          AllParam.Date_Go = DateGo;
-          AllParam.Time_Go = TimeGo;
+          AllParam.Date_Go = this.DateGoResult;
+          AllParam.Time_Go = moment(this.DateGoResult).add(this.PhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";;
           AllParam.Go_planenumber = (this._flightService.itemFlightCache != undefined && this._flightService.itemFlightCache.departFlight != undefined) ? this._flightService.itemFlightCache.departFlight.flightNumber : "";
         }
         else {
@@ -167,12 +171,12 @@ export class FlightdcdetailPage implements OnInit {
         }
 
         if (this.PhaseReturn != undefined) {
-          let Date_Go_RoundTrip = moment(this._flightService.itemFlightCache.returnFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
-          let Time_Go_RoundTrip = moment(Date_Go_RoundTrip).add(this.PhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          // let Date_Go_RoundTrip = moment(this._flightService.itemFlightCache.returnFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
+          // let Time_Go_RoundTrip = moment(Date_Go_RoundTrip).add(this.PhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
           AllParam.PhaseGo_RoundTrip = this.PhaseReturn;
           AllParam.ListProductsGo_RoundTrip = this.ListProductsGo_RoundTrip;
-          AllParam.Date_Go_RoundTrip = Date_Go_RoundTrip;
-          AllParam.Time_Go_RoundTrip = Time_Go_RoundTrip;
+          AllParam.Date_Go_RoundTrip = this.Date_Go_RoundTrip;
+          AllParam.Time_Go_RoundTrip = moment(this.Date_Go_RoundTrip).add(this.PhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";;
           AllParam.Go_RoundTrip_planenumber = (this._flightService.itemFlightCache != undefined && this._flightService.itemFlightCache.returnFlight != undefined) ? this._flightService.itemFlightCache.returnFlight.flightNumber : "";
         }
         else {
@@ -198,12 +202,12 @@ export class FlightdcdetailPage implements OnInit {
       //return
       if (this.isblocktextReturn && this.returnTotalPrice) {
         if (this.returnPhaseGo != undefined) {
-          let Date_Return = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
-          let Time_Return = moment(Date_Return).add(this.returnPhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          // let Date_Return = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
+          // let Time_Return = moment(Date_Return).add(this.returnPhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
           AllParam.PhaseReturn = this.returnPhaseGo;
           AllParam.ListProductsReturn = this.ListProductsReturn;
-          AllParam.Date_Return = Date_Return;
-          AllParam.Time_Return = Time_Return;
+          AllParam.Date_Return = this.Date_Return;
+          AllParam.Time_Return = moment(this.Date_Return).add(this.returnPhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";;
           AllParam.Return_planenumber = (this._flightService.itemFlightCache != undefined && this._flightService.itemFlightCache.departFlight != undefined) ? this._flightService.itemFlightCache.departFlight.flightNumber : "";
         }
         else {
@@ -214,12 +218,12 @@ export class FlightdcdetailPage implements OnInit {
           AllParam.Return_planenumber = "";
         }
         if (this.returnPhaseReturn != null) {
-          let Date_Return_RoundTrip = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-          let Time_Return_RoundTrip = moment(Date_Return_RoundTrip).add(this.returnPhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          // let Date_Return_RoundTrip = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+          // let Time_Return_RoundTrip = moment(Date_Return_RoundTrip).add(this.returnPhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
           AllParam.PhaseReturn_RoundTrip = this.returnPhaseReturn;
           AllParam.ListProductsReturn_RoundTrip = this.ListProductsReturn_RoundTrip;
-          AllParam.Date_Return_RoundTrip = Date_Return_RoundTrip;
-          AllParam.Time_Return_RoundTrip = Time_Return_RoundTrip;
+          AllParam.Date_Return_RoundTrip = this.Date_Return_RoundTrip;
+          AllParam.Time_Return_RoundTrip = moment(this.Date_Return_RoundTrip).add(this.returnPhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
           AllParam.Return_RoundTrip_planenumber = (this._flightService.itemFlightCache != undefined && this._flightService.itemFlightCache.returnFlight != undefined) ? this._flightService.itemFlightCache.returnFlight.flightNumber : "";
         }
         else {
@@ -268,7 +272,7 @@ export class FlightdcdetailPage implements OnInit {
     if (stt == 0) {
 
       se.PhaseGo = data;
-      // let numberAddOrReduceDay = data.addOrReduceDay; //Them phan tang ngay hoac giam ngay
+      let numberAddOrReduceDay = data.addOrReduceDay; //Them phan tang ngay hoac giam ngay
       if (se.PhaseGo != undefined &&  se.PhaseGo.pickUpTime) {
         se.selectedTimePhaseGo =
           [{ name: se.PhaseGo.pickUpTime.text, value: se.PhaseGo.pickUpTime.value },
@@ -276,27 +280,26 @@ export class FlightdcdetailPage implements OnInit {
           { name: moment(se.PhaseGo.pickUpTime.text, 'HH:mm').add(-30, 'minutes').format('HH:mm'), value: (se.PhaseGo.pickUpTime.value - 1800000) },
           { name: moment(se.PhaseGo.pickUpTime.text, 'HH:mm').add(-45, 'minutes').format('HH:mm'), value: (se.PhaseGo.pickUpTime.value - 2700000) }
           ];
-        //   let dateProductDICHUNG = se._flightService.itemFlightCache.departFlight.departTime
-        //   let dateResult = "";
-        //   let tempDate;
-        //   switch (numberAddOrReduceDay) {
-        //     case 0:
-        //         dateResult = moment(se._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case 1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case -1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     default:
-        //         break;
-        // }
-        //let DateGo = dateResult;
-        let DateGo = moment(se._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-        let TimeGo = moment(DateGo).add(se.PhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          let dateProductDICHUNG = se._flightService.itemFlightCache.departFlight.departTime
+          this.DateGoResult = "";
+          let tempDate;
+          switch (numberAddOrReduceDay) {
+            case 0:
+                this.DateGoResult = moment(se._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case 1:
+                tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
+                this.DateGoResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case -1:
+                tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
+                this.DateGoResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            default:
+                break;
+        }
+        //let DateGo = moment(se._flightService.itemFlightCache.departFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+        let TimeGo = moment(this.DateGoResult).add(se.PhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
         this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.departDCPlace.place_id, se._flightService.itemFlightCache.departDCAirport, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Go").then(data => {
           se.GetListProductGo(data.data, stt);
         })
@@ -307,7 +310,7 @@ export class FlightdcdetailPage implements OnInit {
       }
     } else {
       se.returnPhaseGo = data;
-      // let numberAddOrReduceDay = data.addOrReduceDay; //Them phan tang ngay hoac giam ngay
+      let numberAddOrReduceDay = data.addOrReduceDay; //Them phan tang ngay hoac giam ngay
       if (se.returnPhaseGo != undefined &&  se.returnPhaseGo.pickUpTime) {
         se.selectedTimeReturnPhaseGo =
           [{ name: se.returnPhaseGo.pickUpTime.text, value: se.returnPhaseGo.pickUpTime.value },
@@ -315,27 +318,26 @@ export class FlightdcdetailPage implements OnInit {
           { name: moment(se.returnPhaseGo.pickUpTime.text, 'HH:mm').add(-30, 'minutes').format('HH:mm'), value: (se.returnPhaseGo.pickUpTime.value - 1800000) },
           { name: moment(se.returnPhaseGo.pickUpTime.text, 'HH:mm').add(-45, 'minutes').format('HH:mm'), value: (se.returnPhaseGo.pickUpTime.value - 2700000) }
           ];
-        //   let dateProductDICHUNG = this._flightService.itemFlightCache.departFlight.landingTime
-        //   let dateResult = "";
-        //   let tempDate;
-        //   switch (numberAddOrReduceDay) {
-        //     case 0:
-        //         dateResult = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case 1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case -1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // let DateGo = dateResult;
-        let DateGo = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
-        let TimeGo = moment(DateGo).add(se.returnPhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          let dateProductDICHUNG = this._flightService.itemFlightCache.departFlight.landingTime
+          this.Date_Return = "";
+          let tempDate;
+          switch (numberAddOrReduceDay) {
+            case 0:
+                this.Date_Return = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case 1:
+                tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
+                this.Date_Return = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case -1:
+                tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
+                this.Date_Return = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            default:
+                break;
+        }
+        //let DateGo = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
+        let TimeGo = moment(this.Date_Return).add(se.returnPhaseGo.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
         this.gf.GetListProduct(TimeGo, this._flightService.itemFlightCache.returnDCAirport, this._flightService.itemFlightCache.returnDCPlace.place_id, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Go_RoundTrip").then(data => {
           se.GetListProductGo(data.data, stt);
         })
@@ -351,7 +353,7 @@ export class FlightdcdetailPage implements OnInit {
     var se = this;
     if (stt == 0) {
       se.PhaseReturn = data;
-      // let numberAddOrReduceDay = data.addOrReduceDay;
+      let numberAddOrReduceDay = data.addOrReduceDay;
       if (se.PhaseReturn != undefined && se.PhaseReturn.pickUpTime) {
         se.selectedTimePhaseTo =
           [{ name: se.PhaseReturn.pickUpTime.text, value: se.PhaseReturn.pickUpTime.value },
@@ -359,27 +361,27 @@ export class FlightdcdetailPage implements OnInit {
           { name: moment(se.PhaseReturn.pickUpTime.text, 'HH:mm').add(-30, 'minutes').format('HH:mm'), value: (se.PhaseReturn.pickUpTime.value - 1800000) },
           { name: moment(se.PhaseReturn.pickUpTime.text, 'HH:mm').add(-45, 'minutes').format('HH:mm'), value: (se.PhaseReturn.pickUpTime.value - 2700000) }
           ];
-        //   let dateProductDICHUNG = se._flightService.itemFlightCache.departFlight.departTime
-        //   let dateResult = "";
-        //   let tempDate;
-        //   switch (numberAddOrReduceDay) {
-        //     case 0:
-        //         dateResult = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case 1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case -1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     default:
-        //         break;
-        // }
-        //let DateGo = dateResult;
-        let DateGo = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-        let TimeGo = moment(DateGo).add(se.PhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          let dateProductDICHUNG = se._flightService.itemFlightCache.returnFlight.departTime
+          this.Date_Go_RoundTrip = "";
+          let tempDate;
+          switch (numberAddOrReduceDay) {
+            case 0:
+                this.Date_Go_RoundTrip = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case 1:
+                tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
+                this.Date_Go_RoundTrip = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case -1:
+                tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
+                this.Date_Go_RoundTrip = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            default:
+                break;
+        }
+        // let DateGo = this.Date_Go_RoundTrip;
+        //let DateGo = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+        let TimeGo = moment(this.Date_Go_RoundTrip).add(se.PhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
         this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.departDCAirport, se._flightService.itemFlightCache.departDCPlace.place_id, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Return").then(data => {
           se.GetListProductReturn(data.data, stt);
         })
@@ -391,7 +393,7 @@ export class FlightdcdetailPage implements OnInit {
       }
     } else {
       se.returnPhaseReturn = data;
-      // let numberAddOrReduceDay = data.addOrReduceDay;
+      let numberAddOrReduceDay = data.addOrReduceDay;
       if (se.returnPhaseReturn != undefined && se.returnPhaseReturn.pickUpTime) {
         se.selectedTimeReturnPhaseTo =
           [{ name: se.returnPhaseReturn.pickUpTime.text, value: se.returnPhaseReturn.pickUpTime.value },
@@ -399,27 +401,26 @@ export class FlightdcdetailPage implements OnInit {
           { name: moment(se.returnPhaseReturn.pickUpTime.text, 'HH:mm').add(-30, 'minutes').format('HH:mm'), value: (se.returnPhaseReturn.pickUpTime.value - 1800000) },
           { name: moment(se.returnPhaseReturn.pickUpTime.text, 'HH:mm').add(-45, 'minutes').format('HH:mm'), value: (se.returnPhaseReturn.pickUpTime.value - 2700000) }
           ];
-        //   let dateProductDICHUNG = this._flightService.itemFlightCache.departFlight.landingTime
-        //   let dateResult = "";
-        //   let tempDate;
-        //   switch (numberAddOrReduceDay) {
-        //     case 0:
-        //         dateResult = moment(this._flightService.itemFlightCache.departFlight.landingTime).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case 1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     case -1:
-        //         tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
-        //         dateResult = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
-        //         break;
-        //     default:
-        //         break;
-        // }
-        //let DateGo = dateResult;
-        let DateGo = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
-        let TimeGo = moment(DateGo).add(se.returnPhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
+          let dateProductDICHUNG = this._flightService.itemFlightCache.returnFlight.departTime
+          this.Date_Return_RoundTrip = "";
+          let tempDate;
+          switch (numberAddOrReduceDay) {
+            case 0:
+                this.Date_Return_RoundTrip = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case 1:
+                tempDate = moment(new Date(dateProductDICHUNG)).add(1, 'days');
+                this.Date_Return_RoundTrip = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            case -1:
+                tempDate = moment(new Date(dateProductDICHUNG)).subtract(1, 'days');
+                this.Date_Return_RoundTrip = moment(tempDate).format("YYYY-MM-DDT00:00:00.000");
+                break;
+            default:
+                break;
+        }
+        // let DateGo = moment(this._flightService.itemFlightCache.returnFlight.departTime).format("YYYY-MM-DDT00:00:00.000");
+        let TimeGo = moment(this.Date_Return_RoundTrip).add(se.returnPhaseReturn.pickUpTime.value / 1000, 'seconds').utc().format("YYYY-MM-DDTHH:mm:ss.000") + "Z";
         this.gf.GetListProduct(TimeGo, se._flightService.itemFlightCache.returnDCPlace.place_id, se._flightService.itemFlightCache.returnDCAirport, se._flightService.itemFlightCache.pax, "v_transfer", "dichungtaxi", "price","Return_RoundTrip").then(data => {
           se.GetListProductReturn(data.data, stt);
         })
