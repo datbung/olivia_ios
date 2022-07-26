@@ -9,6 +9,7 @@ import { GlobalFunction } from '../providers/globalfunction';
 import { Bookcombo } from './../providers/book-service';
 import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightcombochosebank',
@@ -25,7 +26,8 @@ export class FlightcombochosebankPage implements OnInit {
   ischeckedDK=true;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, 
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
-    public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction, public bookCombo: Bookcombo,private safariViewController: SafariViewController) {
+    public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction, public bookCombo: Bookcombo,private safariViewController: SafariViewController,
+    public _voucherService: voucherService) {
     this.searchhotel.rootPage = "flightcombochosebank";
     this.listfly = this.gf.getParams('flightcombo');
     this.priceshow = this.bookCombo.totalprice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -401,6 +403,12 @@ export class FlightcombochosebankPage implements OnInit {
                   if (se.loader) {
                     se.loader.dismiss();
                   }
+                  if(se._voucherService.selectVoucher){
+                    se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                    setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                  }
                   datapayoo = JSON.parse(datapayoo);
                   se.openWebpage(datapayoo.returnUrl);
                 })
@@ -469,6 +477,12 @@ export class FlightcombochosebankPage implements OnInit {
                       if (dataBuildLink.success) {
                         if (se.loader) {
                           se.loader.dismiss();
+                        }
+                        if(se._voucherService.selectVoucher){
+                          se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                          setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
                         }
                         se.openWebpage(dataBuildLink.returnUrl);
                       }

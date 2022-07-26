@@ -781,7 +781,11 @@ public getAppVersion() {
                   else{
                       resolve(JSON.parse(body));
                   }
-                }else{
+                }
+                else if (response && response.statusCode == 401){
+                  resolve({error: 401});
+                }
+                else{
                   resolve([]);
                 }
 
@@ -3494,5 +3498,6 @@ export class ActivityService {
   installmentPriceStr: string;
   backValue: string;
   objRequestAddLuggage: { bookingCode: any; totalPrice: number; totalPriceDisplay: any; departWeight: any; returnWeight: any; objectDepartLuggage: any; objectReturnLuggage: any; };
+  itemRefreshDeletionAccount=new EventEmitter();
   //abortSearch: boolean;
 }

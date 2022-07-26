@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { CombocarnewPage } from './combocarnew.page';
+import { VoucherSlideCarComboPageModule } from '../voucher/voucherslidecarcombo/voucherslidecarcombo.module';
 
 const routes: Routes = [
   {
@@ -19,8 +20,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    VoucherSlideCarComboPageModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [CombocarnewPage]
+  declarations: [CombocarnewPage],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class CombocarnewPageModule {}

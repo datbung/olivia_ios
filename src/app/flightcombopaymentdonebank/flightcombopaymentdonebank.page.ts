@@ -12,6 +12,7 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightcombopaymentdonebank',
   templateUrl: './flightcombopaymentdonebank.page.html',
@@ -25,7 +26,15 @@ export class FlightcombopaymentdonebankPage implements OnInit {
     public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
     public bookCombo: Bookcombo, private activatedRoute: ActivatedRoute, private launchReview: LaunchReview, public clipboard: Clipboard, private toastCtrl: ToastController,private safariViewController: SafariViewController,
     private fb: Facebook,
-    public searchhotel: SearchHotel, private _calendar: Calendar) {
+    public searchhotel: SearchHotel, private _calendar: Calendar,
+    public _voucherService: voucherService) {
+      if(this._voucherService.selectVoucher){
+        this._voucherService.publicClearVoucherAfterPaymentDone(1);
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this.bookCombo.promoCode="";
+      this.bookCombo.discountpromo=0;      
     this.priceshow = this.bookCombo.totalprice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this.accountNumber = this.Roomif.accountNumber;
     this.textbank = this.Roomif.textbank;

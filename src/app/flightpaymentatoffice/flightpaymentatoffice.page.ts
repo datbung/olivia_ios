@@ -9,6 +9,7 @@ import jwt_decode from 'jwt-decode';
 import { flightService } from '../providers/flightService';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import * as moment from 'moment';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentlivePage page.
  *
@@ -29,7 +30,8 @@ export class FlightpaymentatofficePage implements OnInit{
 ; room; jsonroom;loader:any;
   constructor(public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,
     public _flightService: flightService,
-    private fb: Facebook) {
+    private fb: Facebook,
+    public _voucherService: voucherService) {
     this.text = "<b>Văn phòng tại TP. Hồ Chí Minh:</b> Lầu 2, tòa nhà Saigon Prime, 107-109-111 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh<br />Thời gian làm việc:<br /><ul><li>Thứ 2 - Thứ 7: từ 07h30 đến 21h00</li><li>Chủ Nhật: từ 07h30 đến 20h00</li></ul><br /><b>Văn phòng tại Hà Nội:</b> Lầu 9, 70-72 Bà Triệu, Quận Hoàn Kiếm<br />Thời gian làm việc:<br /><ul ><li>Thứ 2 - Thứ 6: từ 07h30 đến 17h30</li></ul>";
     this.bookingCode =  this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
 
@@ -88,35 +90,6 @@ export class FlightpaymentatofficePage implements OnInit{
               }
               se.gf.hideLoading();
               se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-              
-              // //se.gf.createFlightTransaction(se._flightService.itemFlightCache);
-              // let itemcache = se._flightService.itemFlightCache;
-              //  //Có chọn khách sạn thì gọi thêm updatepayment theo luồng check ks
-              // if(se._flightService.itemFlightCache.objHotelCitySelected){
-              //   se.gf.hideLoading();
-              //   var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
-              //     se.gf.CreatePayoo(url).then(dataoffice => {
-              //       console.log(dataoffice)
-              //       //let data = JSON.parse(dataoffice);
-              //       //se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-              //       se._flightService.itemFlightCache.ischeckpayment = 0;
-
-              //     se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-                  
-              //   })
-              // }else{
-              //   //se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-              //   var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
-              //   se.gf.CreatePayoo(url).then((dataoffice) => {
-              //     console.log(dataoffice)
-              //     //let data = JSON.parse(dataoffice);
-              //     //se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-              //       se._flightService.itemFlightCache.ischeckpayment = 0;
-
-              //     se.gf.hideLoading();
-              // se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-              // })
-              // }
             }else{//hold vé thất bại về trang tìm kiếm
               se.gf.hideLoading();
               se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 1);
@@ -141,6 +114,13 @@ export class FlightpaymentatofficePage implements OnInit{
       itemcache.ischeckpayment = 0;
       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
                   se.gf.CreatePayoo(url).then((data) => {
+                    if(se._voucherService.selectVoucher){
+                      se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                      se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                      setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                    }
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);
                         resolve(data.success);

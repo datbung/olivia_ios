@@ -13,6 +13,7 @@ import * as moment from "moment";
 import { InAppReview } from '@ionic-native/in-app-review/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentdonePage page.
  *
@@ -32,7 +33,8 @@ export class RoompaymentdonePage implements OnInit {
     public storage: Storage, public gf: GlobalFunction, public alertCtrl: AlertController, private launchReview: LaunchReview,
     private inAppReview: InAppReview,
     public searchhotel: SearchHotel,
-    private fb: Facebook, private _calendar: Calendar) {
+    private fb: Facebook, private _calendar: Calendar,
+    public _voucherService: voucherService) {
       this.storage.get('checkreview').then(checkreview => {
         if (checkreview==0) {
           this.checkreview=0;
@@ -53,7 +55,13 @@ export class RoompaymentdonePage implements OnInit {
     //     this.cout= chuoicout[2]+"/"+chuoicout[1]+"/"+chuoicout[0];
     //   }
     // })
-
+    if(this._voucherService.selectVoucher){
+      
+      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+      this._voucherService.selectVoucher = null;
+    }
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    
     this.ischeckpayment = Roomif.ischeckpayment;
     this.Roomif.ischeckpoint = false;
     var ti = new Date();

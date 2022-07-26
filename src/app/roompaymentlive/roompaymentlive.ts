@@ -7,6 +7,7 @@ import { C } from '../providers/constants';
 import { GlobalFunction,ActivityService } from '../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
 import { ActivatedRoute } from '@angular/router';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentlivePage page.
  *
@@ -24,7 +25,8 @@ export class RoompaymentlivePage implements OnInit{
   jti: any;
 ; room; jsonroom;loader:any;stt;booking_type
   constructor(public activityService: ActivityService,public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,private activatedRoute: ActivatedRoute,
-    public alertCtrl: AlertController,) {
+    public alertCtrl: AlertController,
+    public _voucherService: voucherService) {
    
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -161,6 +163,13 @@ export class RoompaymentlivePage implements OnInit{
                   }
                   let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + body.code + '&memberId=' + se.jti + '&buyerPhone=' + se.Roomif.phone;
                   se.gf.CreateUrl(url);
+                  if(se._voucherService.selectVoucher){
+                    se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                    se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                    setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                  }
               se.navCtrl.navigateForward('/roompaymentdone/'+code+'/'+stt);
             }
             else{

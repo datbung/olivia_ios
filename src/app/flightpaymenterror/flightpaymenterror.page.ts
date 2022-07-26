@@ -9,6 +9,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from '../providers/flightService';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { ValueGlobal } from '../providers/book-service';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightpaymenterror',
   templateUrl: './flightpaymenterror.page.html',
@@ -23,7 +24,8 @@ export class FlightpaymenterrorPage implements OnInit {
     private activatedRoute: ActivatedRoute,private _flightService: flightService,private safariViewController: SafariViewController,
     private backgroundmode: BackgroundMode,
     private platform: Platform,
-    public valueGlobal: ValueGlobal) { 
+    public valueGlobal: ValueGlobal,
+    public _voucherService: voucherService) { 
         this.clearItemCache();
     
     }
@@ -47,10 +49,31 @@ export class FlightpaymenterrorPage implements OnInit {
         this._flightService.itemFlightCache.returnConditionInfo = null;
         this._flightService.itemFlightCache.isnewmodelseat = false;
         this._flightService.itemFlightCache.isnewmodelreturnseat = false;
+        this._flightService.itemFlightCache.promotionCode = "";
+        this._flightService.itemFlightCache.promocode = "";
+        this._flightService.itemFlightCache.discount = 0;
+        if(this._voucherService.selectVoucher){
+          this._voucherService.publicClearVoucherAfterPaymentDone(1);
+          this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+          this._voucherService.selectVoucher = null;
+          
+        }
+        this._flightService.itemFlightCache.promotionCode = "";
+              this._flightService.itemFlightCache.promocode = "";
+              this._flightService.itemFlightCache.discount = 0;
   }
 
   gohome(){
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemFlightCache.promotionCode = "";
+        this._flightService.itemFlightCache.promocode = "";
+        this._flightService.itemFlightCache.discount = 0;
+        if(this._voucherService.selectVoucher){
+         
+          this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+          this._voucherService.selectVoucher = null;
+        }
+        this._voucherService.publicClearVoucherAfterPaymentDone(1);
     this.valueGlobal.backValue = "homeflight";
     this.navCtrl.navigateBack('/tabs/tab1');
   }

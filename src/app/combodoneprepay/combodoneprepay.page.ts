@@ -12,6 +12,7 @@ import { GlobalFunction } from '../providers/globalfunction';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import * as moment from 'moment';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-combodoneprepay',
   templateUrl: './combodoneprepay.page.html',
@@ -24,7 +25,16 @@ export class CombodoneprepayPage implements OnInit {
     public gf: GlobalFunction,
     public searchhotel: SearchHotel,
     private fb: Facebook,
-    public bookCombo: Bookcombo, private _calendar: Calendar) {
+    public bookCombo: Bookcombo, private _calendar: Calendar,
+    public _voucherService: voucherService) {
+      if(this._voucherService.selectVoucher){
+        this._voucherService.publicClearVoucherAfterPaymentDone(1);
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this.bookCombo.promoCode="";
+      this.bookCombo.discountpromo=0;
+    
       this.listcars = this.gf.getParams('carscombo');
       this.room = Roomif.arrroom;
       this.nameroom = this.room[0].ClassName;

@@ -984,7 +984,7 @@ export class CarComboPage implements OnInit {
             if (se.ischeck) {
               total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
             }
-            se.discountpromo = json.data.discount;
+            se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.Pricepointshow = total - se.discountpromo;
             if (se.Pricepointshow > 0) {
               se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");

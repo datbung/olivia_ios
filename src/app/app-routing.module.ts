@@ -215,6 +215,12 @@ const routes: Routes = [
   { path: 'orderrequestaddluggagepaymentchoosebank', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentchoosebank/orderrequestaddluggagepaymentchoosebank.module#OrderRequestAddluggagePaymentChooseBankPageModule' },
   { path: 'orderrequestaddluggagepaymentpayoo/:code/:stt', loadChildren: './orderrequestsupport/orderrequestaddluggagepaymentpayoo/orderrequestaddluggagepaymentpayoo.module#OrderRequestAddluggagePaymentPayooPageModule' },
   { path: 'shuttlebusnote', loadChildren: './shuttlebusnote/shuttlebusnote.module#ShuttlebusnotePageModule' },
+
+  { path: 'accountdeletionsms', loadChildren: './accountdeletionsms/accountdeletionsms.module#AccountDeletionSmsPageModule' },
+  { path: 'accountdeletionsmsverify', loadChildren: './accountdeletionsmsverify/accountdeletionsmsverify.module#AccountDeletionSmsVerifyPageModule' },
+  { path: 'accountdeletiondone', loadChildren: './accountdeletiondone/accountdeletiondone.module#AccountDeletionDonePageModule' },
+
+  { path: 'myvoucher', loadChildren: './voucher/myvoucher/myvoucher.module#MyVoucherPageModule' },
 ];
 @NgModule({
   imports:

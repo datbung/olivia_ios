@@ -1070,7 +1070,7 @@ export class HotelDetailPage implements OnInit {
       }
           se.hotelcode = jsondata.Code;
           se.ChildAgeTo = jsondata.ChildAgeTo;
-          se.isShowPriceHotel = (jsondata.IsShowPrice ==2 || jsondata.IsShowPrice ==0) ? false : true;//=2 ks luôn ẩn giá
+          se.isShowPriceHotel = jsondata.IsShowPrice !=2;//=2 ks luôn ẩn giá
           if(jsondata.Combos)
           {
             se.valueGlobal.titlecombo=jsondata.Combos.MiniTitle
@@ -1374,7 +1374,7 @@ export class HotelDetailPage implements OnInit {
           dataKey: '',
           'RoomsRequest[0][Adults][value]': se.adults ? se.adults : "2",
           'RoomsRequest[0][Child][value]': se.child ? se.child : "0",
-          IsFenced: se.loginuser ? true : false,
+          IsFenced: se.loginuser && se.isShowPrice ? true : false,
           GetVinHms: 1,
           GetSMD: 1,
           IsB2B: true,
@@ -1914,7 +1914,7 @@ async getdataroom() {
     dataKey: '',
     'RoomsRequest[0][Adults][value]': self.adults ? self.adults : "2",
     'RoomsRequest[0][Child][value]': self.child ? self.child : "0",
-    IsFenced: self.loginuser ? true : false,
+    IsFenced: self.loginuser && self.isShowPrice ? true : false,
     GetVinHms: 1,
     GetSMD: 1,
     IsB2B: true,
@@ -4033,7 +4033,8 @@ async bookcombo() {
             error.func = "GetUserInfo";
             error.param = JSON.stringify(options);
             C.writeErrorLog(error, response);
-          } else {
+          } 
+          else {
             if (body) {
               var data = JSON.parse(body);
               //se.storage.set("email", data.email);
@@ -4041,6 +4042,8 @@ async bookcombo() {
               se.storage.set("username", data.fullname);
               se.storage.set("phone", data.phone);
               se.storage.set("point", data.point);
+            }else{
+              se.isShowPrice = false;
             }
 
           }
@@ -4808,6 +4811,8 @@ async bookcombo() {
                         se.storage.remove('userInfoData').then(()=>{
                           se.storage.set('userInfoData', data);
                         });
+                    }else{
+                      this.isShowPrice = false;
                     }
                 }
             });

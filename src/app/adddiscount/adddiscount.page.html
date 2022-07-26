@@ -1,32 +1,39 @@
-<ion-header class="header-infobkg">
+<ion-header [ngClass]="_voucherService.hasVoucher ? 'header-discount no-shadow' : 'header-discount'">
   <ion-toolbar class="toolbar-infobkg">
-    <ion-title class="title-infobkg">Mã giảm giá</ion-title>
+    <ion-title class="title-infobkg">Chọn hoặc nhập mã voucher</ion-title>
     <ion-buttons start class="cls-button">
       <button slot="primary" routerDirection="root" class="btn-close div-close" (click)="closeModal()">
         <img class="header-img-close" src="./assets/imgs/ios-arrow-round-back.svg" >
       </button>
     </ion-buttons>
 </ion-toolbar>
-  <div class="cls-m16">
-   
-      <ion-row style="margin-left: -5px">
-          <ion-col class="cls-col" size="8.2">
-            <ion-item class="ion-item">
-              <ion-input class="text-input"  (ionFocus)="click()" placeholder="Nhập mã giảm giá"  (ionInput)="textchange()" [(ngModel)]="promocode" type="text" *ngIf="ischecktext==3" class="none"  ></ion-input>
-              <ion-input class="text-input"  (ionFocus)="click()" placeholder="Nhập mã giảm giá"  (ionInput)="textchange()" [(ngModel)]="promocode" type="text" *ngIf="ischecktext==1||ischecktext==2" class="error"  ></ion-input>
-              <ion-input class="text-input"  (ionFocus)="click()" placeholder="Nhập mã giảm giá"  (ionInput)="textchange()" [(ngModel)]="promocode" type="text" *ngIf="ischecktext==0" class="click" ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="3.8" style="text-align: right;">
-              <button style="margin-top: 35px" *ngIf="!ischeckbtnpromo" (click)="promofunc()" ion-button round outline class="button btnnone">Áp dụng</button>
-              <button style="margin-top: 35px" *ngIf="ischeckbtnpromo"  ion-button round outline class="button btnnonesuccess"><span>
-                  <ion-icon name="checkmark"></ion-icon>
-              </span></button>
-          </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
-        <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
-      </ion-row>
+<div class="cls-m16">
+  <ion-row style="margin-left: -5px">
+      <ion-col class="cls-col" size="8.2">
+        <ion-item class="ion-item">
+          <ion-input (ionFocus)="click()" placeholder="iVIVU Voucher | Mobile Gift"  (ionInput)="textchange()" [(ngModel)]="promocode" type="text" [ngClass]="ischecktext == 3 ? 'text-input none' : (ischecktext==0 ? 'text-input click' : 'text-input error')"  ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="3.8" style="text-align: right;">
+          <button *ngIf="!ischeckbtnpromo" (click)="promofunc()" ion-button round outline class="button btnnone">Áp dụng</button>
+          <button *ngIf="ischeckbtnpromo"  ion-button round outline class="button btnnonesuccess"><span>
+              <ion-icon name="checkmark"></ion-icon>
+          </span></button>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
+    <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+  </ion-row>
 </div>
 </ion-header>
+<ion-content>
+  <div class="div-split-panel" *ngIf="_voucherService.hasVoucher"></div>
+  <div class="cls-m16" *ngIf="_voucherService.hasVoucher">
+    <div class="title-voucher">Voucher của bạn</div>
+    <app-voucherslide class="voucher-list cls-flightaddservice" *ngIf="_voucherService.openFrom == 'flightaddservice'"></app-voucherslide>
+    <app-voucherslidehotel class="voucher-list cls-roomdetailreview" *ngIf="_voucherService.openFrom == 'roomdetailreview'"></app-voucherslidehotel>
+    <app-voucherslidecarcombo class="voucher-list cls-carcomboreview" *ngIf="_voucherService.openFrom == 'combocarnew'"></app-voucherslidecarcombo>
+    <app-voucherslideflightcombo class="voucher-list cls-flightcomboreview" *ngIf="_voucherService.openFrom == 'flightcomboreview'"></app-voucherslideflightcombo>
+</div>
+</ion-content>

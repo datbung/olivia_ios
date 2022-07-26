@@ -12,6 +12,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import { LaunchReview } from '@ionic-native/launch-review/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightpaymentdone',
   templateUrl: './flightpaymentdone.page.html',
@@ -33,7 +34,8 @@ export class FlightpaymentdonePage implements OnInit {
     private modalCtrl: ModalController,
     private fb: Facebook,
     private _platform: Platform,
-    private _calendar: Calendar) { 
+    private _calendar: Calendar,
+    public _voucherService: voucherService) { 
       if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.pnr){
         this.total = this._flightService.itemFlightCache.totalPrice;
         this._email = this._flightService.itemFlightCache.email;
@@ -48,7 +50,14 @@ export class FlightpaymentdonePage implements OnInit {
           this.checkreview=checkreview;
         }
       })
-      
+      if(this._voucherService.selectVoucher){
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this._voucherService.publicClearVoucherAfterPaymentDone(1);
+        this._flightService.itemFlightCache.promotionCode = "";
+        this._flightService.itemFlightCache.promocode = "";
+        this._flightService.itemFlightCache.discount = 0;
     }
 
  

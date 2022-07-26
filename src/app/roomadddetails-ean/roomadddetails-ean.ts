@@ -536,6 +536,8 @@ export class RoomadddetailsEanPage implements OnInit {
                                         } else {
                                           if (this.Roomif.roomtype.Penaltys.length == 0) {
                                             this.checkhbed(this.Roomif.roomtype);
+                                          }else {
+                                            this.navCtrl.navigateForward("roompaymentselect-ean");
                                           }
                                         }
                                       }else{
@@ -636,6 +638,8 @@ export class RoomadddetailsEanPage implements OnInit {
                                     } else {
                                       if (this.Roomif.roomtype.Penaltys.length == 0) {
                                         this.checkhbed(this.Roomif.roomtype);
+                                      }else{
+                                        this.navCtrl.navigateForward("roompaymentselect-ean");
                                       }
                                     }
                                   }else{
@@ -862,6 +866,8 @@ export class RoomadddetailsEanPage implements OnInit {
                         } else {
                           if (this.Roomif.roomtype.Penaltys.length == 0) {
                             this.checkhbed(this.Roomif.roomtype);
+                          }else{
+                            this.navCtrl.navigateForward("roompaymentselect-ean");
                           }
                         }
                       }else{
@@ -1941,6 +1947,8 @@ export class RoomadddetailsEanPage implements OnInit {
                                 } else {
                                   if (this.Roomif.roomtype.Penaltys.length == 0) {
                                     this.checkhbed(this.Roomif.roomtype);
+                                  }else {
+                                    this.navCtrl.navigateForward("roompaymentselect-ean");
                                   }
                                 }
                               }else{

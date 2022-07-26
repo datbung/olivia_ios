@@ -9,6 +9,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from '../providers/flightService';
 import { ValueGlobal } from '../providers/book-service';
 import { MytripService } from '../providers/mytrip-service.service';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightpaymenttimeout',
   templateUrl: './flightpaymenttimeout.page.html',
@@ -29,7 +30,8 @@ export class FlightpaymenttimeoutPage implements OnInit {
     public valueGlobal: ValueGlobal,
     private zone: NgZone,
     private alertCtrl: AlertController,
-    public _mytripservice: MytripService) { 
+    public _mytripservice: MytripService,
+    public _voucherService: voucherService) { 
  
     }
 
@@ -183,6 +185,16 @@ export class FlightpaymenttimeoutPage implements OnInit {
             role: 'OK',
             handler: () => {
               this._flightService.itemChangeTicketFlight.emit(1);
+              if(this._voucherService.selectVoucher){
+                
+                this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                this._voucherService.selectVoucher = null;
+                
+              }
+              this._voucherService.publicClearVoucherAfterPaymentDone(1);
+              this._flightService.itemFlightCache.promotionCode = "";
+              this._flightService.itemFlightCache.promocode = "";
+              this._flightService.itemFlightCache.discount = 0;
               this.navCtrl.navigateBack('/flightsearchresult');
               alert.dismiss();
             }

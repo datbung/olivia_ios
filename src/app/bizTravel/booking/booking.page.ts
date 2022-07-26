@@ -236,7 +236,7 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         });
 
         se._mytripservice.orderPageState.pipe().subscribe((data) => {
-            se.ionViewWillEnter();
+            //se.ionViewWillEnter();
             se.enableheader = true;
         })
 
@@ -819,7 +819,12 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
                           }
                         }
                         if (element.amount_after_tax) {
-                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          //element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          if(element.paid_amount){
+                            element.priceShow = Math.round(element.amount_after_tax - element.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          }else{
+                            element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          }
                         }
                       }
 
@@ -1240,7 +1245,12 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
                           }
                         }
                         if(element.amount_after_tax){
-                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          //element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          if(element.paid_amount){
+                            element.priceShow = Math.round(element.amount_after_tax - element.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          }else{
+                            element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                          }
                         }
                       }
                       element.isRequestTrip = false;
@@ -1617,7 +1627,12 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
                       }
                     }
                     if (elementHis.amount_after_tax) {
-                      elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      //elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      if(elementHis.paid_amount){
+                        elementHis.priceShow = Math.round(elementHis.amount_after_tax - elementHis.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      }else{
+                        elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      }
                     }
                   }
                   elementHis.isRequestTrip = false;

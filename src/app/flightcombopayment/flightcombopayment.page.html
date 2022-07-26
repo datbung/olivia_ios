@@ -37,14 +37,21 @@
   </div>
   
   <hr >
+  <div class="div-voucher-apply" *ngIf="bookCombo.promoCode">
+    <div class="width-200" *ngIf="bookCombo.promoCode"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{bookCombo.promoCode}}</span><span class="text-normal">)</span> </div>
+    <div class="width-100 text-normal text-right" *ngIf="bookCombo.discountpromo">{{gf.convertNumberToString(bookCombo.discountpromo)}}đ</div>
+  </div>
+
   <div class="d-flex mt-16">
     <div class="div-width-100">
         <div class="text-pax">{{ adults }} người lớn</div>
         <div class="text-pax" *ngIf="children && children >0">{{ children }} trẻ em</div>
     </div>
     <div class="div-width-100 text-right">
-      <div class="text-total-price">{{priceshow}}<span class="text-d">đ</span>
-      </div>
+      <!-- <div class="text-total-price" *ngIf="!(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed)">{{priceshow}}<span class="text-d">đ</span>
+      </div> -->
+      <div class="text-total-price">{{priceshow}}<span class="text-d">đ</span></div>
+      <div class="width-100 text-normal text-strike" *ngIf="bookCombo.totalPriceBeforeApplyVoucher">{{gf.convertNumberToString(bookCombo.totalPriceBeforeApplyVoucher)}}đ</div>
       <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
       
     </div>

@@ -469,6 +469,7 @@ export class FlightsearchresultPage implements OnInit {
       se.canselect = true;
       se.gf.hideLoading();
       if(data && data.id){
+        se._flightService.itemFlightCache.dataTicket = data;
         se._flightService.itemFlightCache.dataBooking = data.detail;
         
           se._flightService.itemFlightCache.reservationId = data.id;
@@ -495,39 +496,7 @@ export class FlightsearchresultPage implements OnInit {
           se.clearServiceInfo();
           let _totalprice =  se._flightService.itemFlightCache.departFlight.totalPrice + (se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.totalPrice : 0);
           se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flights' ,  start_date: moment(se._flightService.itemFlightCache.checkInDate).format("YYYY-MM-DD"), end_date: moment(se._flightService.itemFlightCache.checkOutDate).format("YYYY-MM-DD"),item_name: se._flightService.itemFlightCache.departCity+'-'+se._flightService.itemFlightCache.returnCity,item_id:se._flightService.itemFlightCache.departCode, value: _totalprice ,currency: "VND"});
-          se.getSummaryBooking(data).then((dataBooking)=>{
-            if(dataBooking && dataBooking.hotelIds){
-
-              se.getHotelCity(dataBooking.hotelIds).then((dataHotelCity:any) => {
-                if(dataHotelCity && dataHotelCity.List){
-
-                  if(dataBooking && dataBooking.rateKey){
-
-                    se.getHotelCityPrice(dataBooking.rateKey).then((dataHotelCityPrice:any) => {
-                        if(dataHotelCityPrice && dataHotelCityPrice.HotelListResponse && dataHotelCityPrice.HotelListResponse.HotelList && dataHotelCityPrice.HotelListResponse.HotelList.HotelSummary && dataHotelCityPrice.HotelListResponse.HotelList.HotelSummary.length >0){
-                          let arrHotelPrice = [], arrHotelDetail = [], arrHotel = [];
-                          
-                          se.mapHotelInfo(dataHotelCity,dataHotelCityPrice,arrHotelPrice,arrHotelDetail, arrHotel).then((data)=>{
-                            se._flightService.itemFlightCache.itemsFlightCityHotel = [...data];
-                            se._flightService.itemCheckHotelCity.emit([...data]);
-                          })
-                          
-                        }else{
-                          se._flightService.itemCheckHotelCity.emit(0);
-                        }
-                    })
-                  }
-                }else{
-                  se._flightService.itemCheckHotelCity.emit(0);
-                }
-                
-              })
-            }else{
-              se._flightService.itemCheckHotelCity.emit(0);
-            }
-            se.gf.hideLoading();
-            //se.navCtrl.navigateForward('/flightaddservice');
-          })
+          
 
           se.navCtrl.navigateForward('/flightaddservice');
           se.stoprequest = true;
@@ -537,103 +506,8 @@ export class FlightsearchresultPage implements OnInit {
       }
     })
   }
-
-  mapHotelInfo(dataHotelCity,dataHotelCityPrice, arrHotelPrice, arrHotelDetail, arrHotel):Promise<any>{
-    return new Promise((resolve, reject) => {
-        for (let index = 0; index < dataHotelCity.List.length; index++) {
-          const elementHotel = dataHotelCity.List[index];
-         
-
-            let objhoteldetailmap = dataHotelCityPrice.HotelDetailData.filter((itemdetail) => {return itemdetail.HotelID == elementHotel.HotelId});
-            if(objhoteldetailmap && objhoteldetailmap.length >0){
-              elementHotel.hotelDetail = objhoteldetailmap[0];
-
-              let objhotelmap = dataHotelCityPrice.HotelListResponse.HotelList.HotelSummary.filter((item) => {return item.HotelId == elementHotel.HotelId});
-              if(objhotelmap && objhotelmap.length >0){
-                elementHotel.dataPrice = objhotelmap[0];
-                arrHotel.push(elementHotel);
-              }
-            }
-            
-          }
-          resolve(arrHotel);
-    })
-  }
-
-  getHotelCity(ids){
-    var se = this;
-    return new Promise((resolve, reject) => {
-      var options = {
-        method: 'GET',
-        url: C.urls.baseUrl.urlGet + "/hotelslist?hotelids="+ids+"&page=1&pageSize=15",
-        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
-      };
-      request(options, function (error, response, body) {
-        if (error) {
-          error.page = "flightsearchresult";
-          error.func = "hotelslist";
-          error.param = JSON.stringify(options);
-        }
-        if (response.statusCode == 200) {
-          let result = JSON.parse(body);
-          resolve(result);
-        }
-      })
-    })
-  }
-
-  getHotelCityPrice(key){
-    var se = this;
-    return new Promise((resolve, reject) => {
-      var options = {
-        method: 'POST',
-        url: C.urls.baseUrl.urlContracting + "/api/contracting/HotelSearchReqContractMultiHotel",
-        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
-        body: JSON.stringify({cacheKey: key}),
-        headers: {
-          //"Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-          'Content-Type': 'application/json; charset=utf-8'
-        }
-      };
-      request(options, function (error, response, body) {
-        if (error) {
-          error.page = "flightsearchresult";
-          error.func = "HotelSearchReqContractMultiHotel";
-          error.param = JSON.stringify(options);
-        }
-        if (response.statusCode == 200) {
-          let result = JSON.parse(body);
-          resolve(result);
-        }
-      })
-    })
-  }
-
-  getSummaryBooking(data) : Promise<any>{
-    var se = this;
-    return new Promise((resolve, reject) => {
-      var options = {
-        method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+data.resNo+"?"+new Date().getTime()+"&stepBooking=service",
-        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
-        headers: {
-          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      };
-      request(options, function (error, response, body) {
-        if (error) {
-          error.page = "flightpaymentselect";
-          error.func = "getSummaryBooking";
-          error.param = JSON.stringify(options);
-        }
-        if (response.statusCode == 200) {
-          let result = JSON.parse(body);
-          resolve(result);
-        }
-      })
-    })
-  }
+  
+  
 
   clearServiceInfo(){
     this._flightService.itemFlightCache.jsonSeats = null;

@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoomdetailreviewPage } from './roomdetailreview';
-
+import { VoucherSlideHotelPageModule } from '../voucher/voucherslidehotel/voucherslidehotel.module';
 @NgModule({
   declarations: [
     RoomdetailreviewPage,
@@ -14,6 +14,7 @@ import { RoomdetailreviewPage } from './roomdetailreview';
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
+    VoucherSlideHotelPageModule,
     RouterModule.forChild([
       {
         path: '',

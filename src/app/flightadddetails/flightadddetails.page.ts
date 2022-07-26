@@ -2906,8 +2906,10 @@ alert.present();
                         objAncilaryReturn.push(objTransfer);
                      }
                    }
-                  element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
-                  element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
+                   element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
+                   element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
+                  console.log(element.ancillaryJson);
+                  console.log(element.ancillaryReturnJson);
                   listpassenger.push({
                     "passengerType": 0,
                     "gender": element.gender,
@@ -2929,8 +2931,8 @@ alert.present();
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
                     "adultIndex": index, 
-                    "ancillaryJson": (objAncilary.length >0 ? JSON.stringify(objAncilary): ""),
-                    "ancillaryReturnJson": (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn) : "")
+                    "ancillaryJson": element.ancillaryJson,
+                    "ancillaryReturnJson": element.ancillaryReturnJson
                   })
               }
   
@@ -3258,8 +3260,8 @@ alert.present();
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
                     "adultIndex": element.isInfant ? adultIndex -1 : 0, 
-                    "ancillaryJson": (objAncilary.length >0 ? JSON.stringify(objAncilary): ""),
-                    "ancillaryReturnJson": (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn) : "")
+                    "ancillaryJson": element.ancillaryJson,
+                    "ancillaryReturnJson": element.ancillaryReturnJson
                   })
               }
   
@@ -3318,6 +3320,7 @@ alert.present();
                   {
                     objPass.voucher={};
                     objPass.voucher.keepCurrentVoucher=true;
+                    objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
                   }
                   var options = {
                     method: 'POST',

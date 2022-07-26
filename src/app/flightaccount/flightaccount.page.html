@@ -51,7 +51,12 @@
                 <span (click)="showUserProfile()" class="item-list margin-left-4">Hồ sơ của tôi</span>
             </div>
         </div>
-
+        <div class="div-item" >
+            <div (click)="showUserVoucher()" class="div-flex">
+                <img class="icon-style" src="./assets/ic_voucher/ticket.svg">
+                <span class="item-list margin-left-4">Voucher của tôi</span>
+            </div>
+        </div>
         <div class="div-item">
             <div (click)="linkProfile()" class="div-flex">
                 <img class="icon-style" src="./assets/imgs/ic_link.svg">
@@ -60,7 +65,7 @@
         </div>
         <div class="div-item" *ngIf="loginuser && bizTravelService.isCompany">
             <div (click)="showCompanyInfo()" class="div-flex">
-                <img class="icon-style" src="./assets/imgs/ic_biztravel/suit.svg">
+                <img class="icon-style" src="./assets/ic_biztravel/suit.svg">
                 <span class="item-list margin-left-4">Thông tin công ty</span>
             </div>
         </div>

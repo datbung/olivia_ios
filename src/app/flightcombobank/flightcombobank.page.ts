@@ -8,6 +8,7 @@ import { GlobalFunction } from '../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
 import { Bookcombo } from './../providers/book-service';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightcombobank',
@@ -32,7 +33,8 @@ export class FlightcombobankPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController, public bookCombo: Bookcombo,
     public gf: GlobalFunction,
     private fb: Facebook,
-    public searchhotel: SearchHotel) {
+    public searchhotel: SearchHotel,
+    public _voucherService: voucherService) {
     this.hoten = this.Roomif.hoten;
     this.phone = this.Roomif.phone
     this.totalAdult = bookCombo.totalAdult;
@@ -616,6 +618,12 @@ export class FlightcombobankPage implements OnInit {
           if(se.jti){
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
                       se.gf.CreatePayoo(url);
+            }
+            if(se._voucherService.selectVoucher){
+              se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+              setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
             }
           if (se.Roomif.payment == 'AL' && datafly.depcode && datafly.retcode) {
             se.navCtrl.navigateForward('/flightcombopaymentdonebank/AL');

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFunction, ActivityService } from './../providers/globalfunction';
 import { NavController } from '@ionic/angular';
+import { Bookcombo } from '../providers/book-service';
 
 @Component({
   selector: 'app-combocarpaymentbreakdown',
@@ -33,7 +34,8 @@ export class CombocarpaymentbreakdownPage implements OnInit {
   diff_feedepunit: any;
 
   constructor(public activityService: ActivityService,
-    private navCtrl: NavController) { 
+    private navCtrl: NavController,
+    public bookcombo: Bookcombo) { 
     var se = this;
     se.objectDetail = activityService.objCarComboPaymentBreakDown.objectDetail;
     if(se.objectDetail){

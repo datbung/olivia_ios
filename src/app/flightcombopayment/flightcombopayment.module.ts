@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { FlightcombopaymentPage } from './flightcombopayment.page';
+import { VoucherSlidePageModule } from '../voucher/voucherslide/voucherslide.module';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    VoucherSlidePageModule,
     RouterModule.forChild(routes)
   ],
   declarations: [FlightcombopaymentPage]

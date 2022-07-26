@@ -8,6 +8,7 @@ import { C } from '../providers/constants';
 import { GlobalFunction } from '../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
 import { Bookcombo } from './../providers/book-service';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightcombolive',
   templateUrl: './flightcombolive.page.html',
@@ -18,7 +19,8 @@ export class FlightcombolivePage implements OnInit {
   text;
   public loader:any;listcars;hoten;phone;totalAdult;email
   jti: any;
-  constructor(public bookCombo: Bookcombo,public platform: Platform,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone) {
+  constructor(public bookCombo: Bookcombo,public platform: Platform,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,
+    public _voucherService: voucherService) {
     this.text = "<b>Văn phòng tại TP. Hồ Chí Minh:</b> Lầu 2, tòa nhà Saigon Prime, 107-109-111 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh<br />Thời gian làm việc:<br /><ul><li>Thứ 2 - Thứ 7: từ 07h30 đến 21h00</li><li>Chủ Nhật: từ 07h30 đến 20h00</li></ul><br /><b>Văn phòng tại Hà Nội:</b> Lầu 9, 70-72 Bà Triệu, Quận Hoàn Kiếm<br />Thời gian làm việc:<br /><ul ><li>Thứ 2 - Thứ 6: từ 07h30 đến 17h30</li></ul>";
     this.listcars = this.gf.getParams('carscombo');
     this.hoten=this.Roomif.hoten;
@@ -71,7 +73,13 @@ export class FlightcombolivePage implements OnInit {
                       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
                       se.gf.CreatePayoo(url);
                     }
-                    
+                    if(se._voucherService.selectVoucher){
+                      se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                      se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                      setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                    }
                     se.gf.createFlightTransactionCombo(se.bookCombo.FlightCode);
                     if(se.Roomif.payment=='AL' && datafly.depcode && datafly.retcode){
                       se.navCtrl.navigateForward('/flightcombopaymentdone/AL');
@@ -103,7 +111,13 @@ export class FlightcombolivePage implements OnInit {
                     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
                     se.gf.CreatePayoo(url);
                   }
-                  
+                  if(se._voucherService.selectVoucher){
+                    se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                    se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                    setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                  }
                   se.gf.createFlightTransactionCombo(se.bookCombo.FlightCode);
                   if(se.Roomif.payment=='AL' && datafly.depcode && datafly.retcode){
                     se.navCtrl.navigateForward('/flightcombopaymentdone/AL');

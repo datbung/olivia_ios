@@ -15,6 +15,7 @@ import * as $ from 'jquery';
 import { FlightcomboupgraderoomPage } from '../flightcomboupgraderoom/flightcomboupgraderoom.page';
 import { CalendarModal, CalendarModalOptions, DayConfig } from 'ion2-calendar';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the FacilitiesPage page.
  *
@@ -135,7 +136,7 @@ export class FlightComboReviewsPage implements OnInit{
   objInsurranceFee: any;
   hasInsurrance:any;
   showInsurranceText: any;
-  textpromotion="Nhập mã giảm giá";
+  textpromotion="iVIVU Voucher | Mobile Gift";
   pointshow;
   myCalendar: HTMLIonModalElement;
   _daysConfig: DayConfig[] = [];
@@ -165,12 +166,14 @@ export class FlightComboReviewsPage implements OnInit{
   arrBOD: any;
   elementRooom: any;
   statusRoom: any;
+  itemVoucherCombo: any;
   constructor(public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,private loadingCtrl: LoadingController,
     public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
     public bookCombo: Bookcombo, public searchhotel: SearchHotel,
     public activityService: ActivityService,
     private toastCtrl: ToastController,
-    private fb: Facebook) {
+    private fb: Facebook,
+    public _voucherService: voucherService) {
     
 
     setTimeout(()=>{
@@ -421,16 +424,22 @@ export class FlightComboReviewsPage implements OnInit{
     }
   }
   ionViewWillEnter() {
-    this.point=0;
-    this.ischeck = false;
-    this.Roomif.point=null;
-    this.price=0;
+    if(this.valueGlobal.backValue != "flightcombopaymentbreakdown" && this.valueGlobal.backValue != "flightcomboupgraderoom" && this.valueGlobal.backValue !="flightcomboinfoluggage"){
+      this.point=0;
+      this.ischeck = false;
+      this.Roomif.point=null;
+      this.price=0;
 
-    this.textpromotion="Nhập mã giảm giá";
-    this.promocode="";
-    this.ischeckbtnpromo=false;
-    this.ischeckpromo=false;
-    this.msg="";
+      this.textpromotion="iVIVU Voucher | Mobile Gift";
+      this.promocode="";
+      this.discountpromo=0;
+      this.ischeckbtnpromo=false;
+      this.ischeckpromo=false;
+      this.msg="";
+      this.bookCombo.promoCode="";
+      this.bookCombo.discountpromo=0;
+      this.itemVoucherCombo=null;
+    }
     this.GetUserInfo();
   }
   ionViewDidEnter() {
@@ -507,6 +516,58 @@ export class FlightComboReviewsPage implements OnInit{
         if(dataRoomChange){
             se.updateRoomChange(dataRoomChange);
         }
+    })
+
+    this._voucherService.getFlightComboObservable().subscribe((itemVoucher)=> {
+      if(itemVoucher){
+        if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherCombo){
+          this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+          return;
+        }
+        //this._voucherService.selectVoucher = itemVoucher;
+        this.zone.run(()=>{
+          let total = se.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '');
+            if (se.ischeck) {
+              total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
+            }
+          if(itemVoucher.claimed){
+            this.itemVoucherCombo = itemVoucher;
+            this.promocode = itemVoucher.code;
+            this.discountpromo = itemVoucher.rewardsItem.price;
+            this.bookCombo.promoCode = itemVoucher.code;
+            this.bookCombo.discountpromo = this.discountpromo;
+            this.ischeckbtnpromo = true;
+            this.ischeckpromo = true;
+            
+            this.Pricepointshow = total - this.discountpromo;
+          }else{
+            this.itemVoucherCombo = null;
+            this.promocode = "";
+            this.bookCombo.promoCode = "";
+            this.bookCombo.discountpromo = 0;
+            this.discountpromo = 0;
+            this.ischeckbtnpromo = false;
+           
+            this.Pricepointshow = total + itemVoucher.rewardsItem.price;
+          }
+          this.edit();
+        })
+        
+        this.modalCtrl.dismiss();
+      }
+    })
+
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this.itemVoucherCombo = null;
+            this.promocode = "";
+            this.bookCombo.promoCode = "";
+            this.bookCombo.discountpromo = 0;
+            this.discountpromo = 0;
+            this.ischeckbtnpromo = false;
+        this.edit();
+      }
     })
     
   }
@@ -848,6 +909,9 @@ export class FlightComboReviewsPage implements OnInit{
   }
 
   goback() {
+    this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+    this._voucherService.selectVoucher = null;
+    this.valueGlobal.backValue = '';
     this.navCtrl.navigateBack('/hoteldetail/' + this.booking.HotelId);
     //this.navCtrl.navigateBack(['/app/tabs/hoteldetail/'+this.booking.HotelId]);
   }
@@ -1451,6 +1515,7 @@ export class FlightComboReviewsPage implements OnInit{
     }, 10 *1000)
     setTimeout(() => {
       se.loadflightpricedone = true;
+      se.checkVoucherClaimed();
     },4000)
   }
 /**
@@ -1545,6 +1610,7 @@ export class FlightComboReviewsPage implements OnInit{
   continueBook(value) {
     var pointprice = 0;
     var total = this.TotalPrice;
+    this.valueGlobal.backValue = '';
     if (this.ischeck) {
       pointprice = this.point;
       if (this.ischeckpoint) {
@@ -1562,6 +1628,11 @@ export class FlightComboReviewsPage implements OnInit{
       this.bookCombo.discountpromo = 0;
       this.promocode = "";
     }
+    // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
+    //   this.bookCombo.discountpromo= this._voucherService.selectVoucher.rewardsItem.price;
+    //   this.promocode = this._voucherService.selectVoucher.code;
+    //   //total = this.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
+    // }
     total = Number(total).toFixed(0);
     var officestr = "";
     if (this.bookCombo.ComboDetail.departureCode) {
@@ -2193,11 +2264,12 @@ export class FlightComboReviewsPage implements OnInit{
       }
       //se.PriceAvgPlusTAStr = se.Pricepoint.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     }
-    if (se.ischeckbtnpromo) {
-      var total = se.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '');
+    var total = se.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '');
       if (se.ischeck) {
         total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
       }
+    se.bookCombo.totalPriceBeforeApplyVoucher = total;
+    if (se.ischeckbtnpromo) {
       se.Pricepointshow = total -  se.discountpromo;
       if (se.Pricepointshow>0) {
         se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -2211,6 +2283,7 @@ export class FlightComboReviewsPage implements OnInit{
       se.ischecktext=0;
       se.ischeckerror=0;
     }
+
     se.bookCombo.totalprice = se.Pricepointshow ? se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : se.PriceAvgPlusTAStr;
     se.bookCombo.pricePointShow = se.Pricepointshow;
     se.bookCombo.PriceAvgPlusTAStr = se.PriceAvgPlusTAStr;
@@ -2220,6 +2293,7 @@ export class FlightComboReviewsPage implements OnInit{
         se.PriceAvgPlusTAStr = 0;
         se.loadpricedone = true;
         se.loadflightpricedone = true;
+        //se.checkVoucherClaimed();
       })
     }
   }
@@ -2246,12 +2320,18 @@ export class FlightComboReviewsPage implements OnInit{
             this.price = this.point.toLocaleString();
             var tempprice = this.TotalPrice;
             this.Pricepoint = tempprice - this.point - this.discountpromo;
+            if (this.Pricepoint<=0) {
+              this.Pricepoint=0;
+            }
             this.Pricepointshow = this.Pricepoint.toLocaleString();
             this.bookCombo.totalprice = this.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           } else {
             this.price = this.point.toLocaleString();
             var tempprice = this.TotalPrice;
             this.Pricepoint = tempprice - this.point;
+            if (this.Pricepoint<=0) {
+              this.Pricepoint=0;
+            }
             this.Pricepointshow = this.Pricepoint.toLocaleString();
             this.PriceAvgPlusTAStr = this.TotalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             this.bookCombo.totalprice = this.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -2263,6 +2343,13 @@ export class FlightComboReviewsPage implements OnInit{
           this.PriceAvgPlusTAStr = this.TotalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           var tempprice = this.TotalPrice;
           this.Pricepointshow = tempprice - this.discountpromo;
+          //  //thêm luồng voucher heniken
+          //  if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+          //   this.Pricepointshow = this.Pricepointshow - this._voucherService.selectVoucher.rewardsItem.price;
+          // }
+          if (this.Pricepointshow<=0) {
+            this.Pricepointshow=0;
+          }
           this.Pricepointshow = this.Pricepointshow.toLocaleString();
         }
         else {
@@ -2544,7 +2631,7 @@ export class FlightComboReviewsPage implements OnInit{
             if (se.ischeck) {
               total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
             }
-            se.discountpromo=json.data.discount;
+            se.discountpromo=json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.Pricepointshow = total -  se.discountpromo;
             if (se.Pricepointshow>0) {
               se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -2613,16 +2700,26 @@ export class FlightComboReviewsPage implements OnInit{
     if (!this.ischeck) {
       $('.div-point').removeClass('div-disabled');
     this.valueGlobal.PriceAvgPlusTAStr=this.PriceAvgPlusTAStr;
-    this.textpromotion="Nhập mã giảm giá";
+    this.textpromotion="iVIVU Voucher | Mobile Gift";
     this.promocode="";
+    this.discountpromo=0;
     this.ischeckbtnpromo=false;
     this.ischeckpromo=false;
     this.msg="";
+    this.bookCombo.discountpromo = 0;
+    this.bookCombo.promoCode = "";
+    this.itemVoucherCombo = null;
+    this._voucherService.openFrom = 'flightcomboreview';
     const modal: HTMLIonModalElement =
     await this.modalCtrl.create({
       component: AdddiscountPage,
     });
     modal.present();
+    if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+      this._voucherService.selectVoucher = null;
+    }
+    this.edit();
     modal.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
         this.zone.run(() => {
@@ -2951,6 +3048,7 @@ export class FlightComboReviewsPage implements OnInit{
             se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
             se.storage.set('hasChangeDate', true);
             se.checkComboAfterChangedate();
+            
             setTimeout(() => {
               se.modalCtrl.dismiss();
             }, 100)
@@ -2958,6 +3056,16 @@ export class FlightComboReviewsPage implements OnInit{
           }
         }
       }
+    }
+  }
+
+  checkVoucherClaimed(){
+    if(this.itemVoucherCombo && this.itemVoucherCombo.claimed){
+      this._voucherService.vouchers.forEach((element)=>{
+        if(element.id == this.itemVoucherCombo.id){
+          element.claimed = true;
+        }
+      });
     }
   }
 

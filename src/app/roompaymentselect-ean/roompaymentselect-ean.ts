@@ -11,6 +11,7 @@ import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { BizTravelService } from '../providers/bizTravelService';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentselectEanPage page.
  *
@@ -36,7 +37,8 @@ export class RoompaymentselectEanPage implements OnInit{
   ischeckedDK=true;
   constructor(public platform: Platform, public searchhotel: SearchHotel,public bookcombo:Bookcombo, public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage,  public booking1: Booking, public booking: Booking, public authService: AuthService, public modalCtrl: ModalController, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, public zone: NgZone,private router: Router,private safariViewController: SafariViewController,private toastCtrl: ToastController,public alertCtrl: AlertController,
-    public bizTravelService: BizTravelService) {
+    public bizTravelService: BizTravelService,
+    public _voucherService: voucherService) {
     this.Avatar = Roomif.imgHotel;
     this.Name = booking.HotelName;
     this.Address = Roomif.Address;
@@ -126,6 +128,24 @@ export class RoompaymentselectEanPage implements OnInit{
     C.writePaymentLog("hotel", "paymentselect", "purchase", this.bookingCode);
   }
   ngOnInit() {
+    // this._voucherService.getObservable().subscribe((itemVoucher)=> {
+    //   if(this._voucherService.itemSelectVoucher.observers && this._voucherService.itemSelectVoucher.observers.length >1){
+    //     if(this._voucherService.itemSelectVoucher.observers[0]){
+    //         this._voucherService.itemSelectVoucher.observers = [...this._voucherService.itemSelectVoucher.observers[0]];
+    //     }
+    //   }
+    //   if(itemVoucher){
+    //     let totalprice = this.gf.convertStringToNumber(this.Roomif.priceshow || this.PriceAvgPlusTAStr);
+    //     if(totalprice < itemVoucher.rewardsItem.price){
+    //       //this.priceshow =0;
+    //       // this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+    //       // this.gf.showAlertMessageOnly('Giá trị đơn hàng nhỏ hơn giá trị giảm giá. Quý khách vui lòng chọn mã khác!');
+    //       // return;
+    //     }else{
+    //       this._voucherService.selectVoucher = itemVoucher;
+    //     }
+    //   }
+    // })
   }
   roompaymentbank() {
     clearInterval(this.Roomif.setInter);
@@ -442,9 +462,15 @@ export class RoompaymentselectEanPage implements OnInit{
   }
   goback() {
     clearInterval(this.intervalID);
+    
     if((this.Roomif.point && this.bookingCode) || (this.Roomif.promocode && this.bookingCode))
     {
-      // this.Roomif.promocode="";
+      // // this.Roomif.promocode="";
+      // if(this._voucherService.selectVoucher){
+      //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+      //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+      //   this._voucherService.selectVoucher = null;
+      // }
       this.Roomif.bookingCode=this.bookingCode;
       this.navCtrl.navigateBack('/roomdetailreview');
     }else{
@@ -504,7 +530,10 @@ export class RoompaymentselectEanPage implements OnInit{
           this.bookingCode = databook.code;
           this.Roomif.bookingCode = databook.code;
           if (this.roomtype.Supplier == 'HBED') {
-            var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '')
+            var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+            if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+              totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+            }
             // var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + totalPrice + '&orderCode=' + databook.code + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankapBlankDeepLinkpNew';
             var url="";
             if (paymentType=='visa') {
@@ -517,6 +546,13 @@ export class RoompaymentselectEanPage implements OnInit{
             this.gf.CreateUrl(url).then(dataBuildLink => {
               dataBuildLink = JSON.parse(dataBuildLink);
               if (dataBuildLink.success) {
+                // if(se._voucherService.selectVoucher){
+                //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                //   setTimeout(()=> {
+                //       se._voucherService.selectVoucher = null;
+                //     },300)
+                // }
                 if (paymentType == 'visa') {
                   se.openWebpage(dataBuildLink.returnUrl);
                 }
@@ -553,7 +589,10 @@ export class RoompaymentselectEanPage implements OnInit{
           else if(se.roomtype.Supplier == "VINPEARL" 
           || se.roomtype.Supplier == "SMD" || se.Roomif.roomtype.Supplier == 'SERI'
           ){
-            var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '')
+            var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+            if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+              totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+            }
                 var url="";
                 if (paymentType=='visa') {
                   url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
@@ -564,6 +603,13 @@ export class RoompaymentselectEanPage implements OnInit{
                 this.gf.CreateUrl(url).then(dataBuildLink => {
                   dataBuildLink = JSON.parse(dataBuildLink);
                   if (dataBuildLink.success) {
+                    // if(se._voucherService.selectVoucher){
+                    //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                    //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                    //   setTimeout(()=> {
+                    //   se._voucherService.selectVoucher = null;
+                    // },300)
+                    // }
                     if (paymentType == 'visa') {
                       se.openWebpage(dataBuildLink.returnUrl);
                     }
@@ -597,9 +643,12 @@ export class RoompaymentselectEanPage implements OnInit{
                 })
           }
           else{
-            se.gf.checkroomEAN(this.bookingCode).then(data => {
+            se.gf.checkroomEAN(se.bookingCode).then(data => {
               if (data == '0') {
-                var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '')
+                var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+                if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+                  totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+                }
                 var url="";
                 if (paymentType=='visa') {
                   url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
@@ -610,6 +659,13 @@ export class RoompaymentselectEanPage implements OnInit{
                 this.gf.CreateUrl(url).then(dataBuildLink => {
                   dataBuildLink = JSON.parse(dataBuildLink);
                   if (dataBuildLink.success) {
+                    // if(se._voucherService.selectVoucher){
+                    //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                    //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                    //   setTimeout(()=> {
+                    //   se._voucherService.selectVoucher = null;
+                    // },300)
+                    // }
                     if (paymentType == 'visa') {
                       se.openWebpage(dataBuildLink.returnUrl);
                     }
@@ -933,12 +989,22 @@ export class RoompaymentselectEanPage implements OnInit{
               se.bookingCode = databook.code;
               se.Roomif.bookingCode = databook.code;
               var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+              if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+                totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+              }
               url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.Roomif.phone + '&memberId=' + se.jti +'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
               
               se.gf.CreateUrl(url).then(dataBuildLink => {
                 dataBuildLink = JSON.parse(dataBuildLink);
                 se.gf.hideLoading();
                 if (dataBuildLink.success) {
+                  // if(se._voucherService.selectVoucher){
+                  //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                  //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                  //   setTimeout(()=> {
+                  //     se._voucherService.selectVoucher = null;
+                  //   },300)
+                  // }
                   se.bizTravelService.routeBackWhenCancel = 'roomdetailreview';
                   se.bizTravelService.mytripPaymentBookingCode = se.bookingCode;
                   se.navCtrl.navigateForward('confirmpayment');
@@ -952,10 +1018,12 @@ export class RoompaymentselectEanPage implements OnInit{
               alert(databook.Msg );
               if(se.Roomif.point &&  se.Roomif.bookingCode)
               {
+                se._voucherService.publicClearVoucherAfterPaymentDone(1);
                 se.navCtrl.navigateBack('/roomdetailreview');
               }
               if(se.Roomif.promocode &&  se.Roomif.bookingCode)
               {
+                se._voucherService.publicClearVoucherAfterPaymentDone(1);
                 se.navCtrl.navigateBack('/roomdetailreview');
               }
             }
@@ -977,6 +1045,7 @@ export class RoompaymentselectEanPage implements OnInit{
         handler: () => {
           alert.dismiss();
           this.Roomif.promocode="";
+          this._voucherService.publicClearVoucherAfterPaymentDone(1);
           this.navCtrl.navigateForward('/roomdetailreview');
         }
       }

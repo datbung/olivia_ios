@@ -112,6 +112,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { FileOpener } from  '@ionic-native/file-opener/ngx';
 import { ConfirmemailaccountPageModule } from './confirmemailaccount/confirmemailaccount.module';
 import { RequestRoomPageModule} from './requestroom/requestroom.module';
+import { VoucherDetailPageModule } from './voucher/voucherdetail/voucherdetail.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -165,6 +166,7 @@ import { RequestRoomPageModule} from './requestroom/requestroom.module';
     HotellistmoodfilterPageModule,
     FlightdcpickaddressinputPageModule,
     ConfirmemailaccountPageModule,
+    VoucherDetailPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

@@ -12,7 +12,7 @@ import {
 import {Storage} from '@ionic/storage';
 import * as request from 'requestretry';
 import {C} from './../providers/constants';
-import {GlobalFunction} from './../providers/globalfunction';
+import {ActivityService, GlobalFunction} from './../providers/globalfunction';
 import {Subscription} from 'rxjs/Subscription';
 import {Router, NavigationEnd} from '@angular/router';
 import {CallNumber} from '@ionic-native/call-number/ngx';
@@ -28,6 +28,7 @@ import {FCM} from '@ionic-native/fcm/ngx';
 import { OverlayEventDetail } from '@ionic/core';
 import { ConfirmemailaccountPage } from '../confirmemailaccount/confirmemailaccount.page';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the TabPage page.
  *
@@ -58,7 +59,9 @@ export class Tab5Page implements OnInit {
   version: any;
     constructor(public platform : Platform, public navCtrl : NavController, public storage : Storage, public modalCtrl : ModalController, private router : Router, private callNumber : CallNumber, public valueGlobal : ValueGlobal, public zone : NgZone, public alertCtrl : AlertController, public gf : GlobalFunction, public loadingCtrl : LoadingController, public network : Network, public networkProvider : NetworkProvider, public actionsheetCtrl : ActionSheetController, 
       private camera : Camera, private crop : Crop, private file : File, 
-      private fcm : FCM, public bizTravelService : BizTravelService, private appVersion: AppVersion) {
+      private fcm : FCM, public bizTravelService : BizTravelService, private appVersion: AppVersion,
+      public activityService: ActivityService,
+      public _voucherService: voucherService) {
         this.point = 0;
         storage.get('auth_token').then(auth_token => {
             this.loginuser = auth_token;
@@ -112,6 +115,12 @@ export class Tab5Page implements OnInit {
             });
 
 
+        })
+
+        se.activityService.itemRefreshDeletionAccount.pipe().subscribe((data)=> {
+            if(data) {
+                se.checkLogout();
+            }
         })
     }
 
@@ -249,49 +258,54 @@ export class Tab5Page implements OnInit {
         })
     }
     ionViewDidLeave(){
-      this.gf.checkLogout().then((data) => {
-        console.log(data)
-        if(!data)
-        {
-          this.storage.remove('auth_token');
-          this.storage.remove('email');
-          this.storage.remove('username');
-          this.storage.remove('jti');
-          this.storage.remove('userInfoData');
-          this.storage.remove('userRewardData');
-          this.storage.remove('weatherInfo');
-          this.storage.remove('point');
-          this.storage.remove('infocus');
-          this.gf.setParams(true, 'resetBlogTrips');
-          this.storage.remove('listblogtripdefault');
-          this.storage.remove('listmytrips');
-          this.storage.clear();
-          this.croppedImagepath = null;
-          this.avatar = null;
-          this.valueGlobal.backValue = 'tab5';
-          this.zone.run(() => {
-              this.point = 0;
-              this.loginuser = null;
-              this.username = "";
-              this.valueGlobal.countNotifi = 0;
-              this.isShowConfirm = false;
-              this.bizTravelService.bizAccount = null;
-              this.bizTravelService.actionHistory = null;
-              this.bizTravelService.isCompany = false;
-          })
-          this.bizTravelService.accountBizTravelChange.emit(2);
-          // Xóa token device khi logout
-          this.fcm.getToken().then(token => {
-            this.storage.get('auth_token').then(id_token => {
-              if (id_token !== null) {
-                this.gf.DeleteTokenOfUser(token, id_token, this.gf.getAppVersion());
-              }
-          });
+      this.checkLogout();
+    }
 
-          });
-          this.valueGlobal.refreshUserToken.emit(1);
-        }
-      })
+    checkLogout(){
+        this.gf.checkLogout().then((data) => {
+            console.log(data)
+            if(!data)
+            {
+              this.storage.remove('auth_token');
+              this.storage.remove('email');
+              this.storage.remove('username');
+              this.storage.remove('jti');
+              this.storage.remove('userInfoData');
+              this.storage.remove('userRewardData');
+              this.storage.remove('weatherInfo');
+              this.storage.remove('point');
+              this.storage.remove('infocus');
+              this.gf.setParams(true, 'resetBlogTrips');
+              this.storage.remove('listblogtripdefault');
+              this.storage.remove('listmytrips');
+              this.storage.clear();
+             
+              this.zone.run(() => {
+                this.croppedImagepath = null;
+                this.avatar = null;
+                this.valueGlobal.backValue = 'tab5';
+                  this.point = 0;
+                  this.loginuser = null;
+                  this.username = "";
+                  this.valueGlobal.countNotifi = 0;
+                  this.isShowConfirm = false;
+                  this.bizTravelService.bizAccount = null;
+                  this.bizTravelService.actionHistory = null;
+                  this.bizTravelService.isCompany = false;
+              })
+              this.bizTravelService.accountBizTravelChange.emit(2);
+              // Xóa token device khi logout
+              this.fcm.getToken().then(token => {
+                this.storage.get('auth_token').then(id_token => {
+                  if (id_token !== null) {
+                    this.gf.DeleteTokenOfUser(token, id_token, this.gf.getAppVersion());
+                  }
+              });
+    
+              });
+              this.valueGlobal.refreshUserToken.emit(1);
+            }
+          })
     }
     ionViewWillEnter() {
         var se = this;
@@ -574,10 +588,10 @@ export class Tab5Page implements OnInit {
                         this.storage.remove('listmytrips');
                         this.storage.remove('objAppid');
                         this.storage.clear();
-                        this.croppedImagepath = null;
-                        this.avatar = null;
-                        this.valueGlobal.backValue = 'tab5';
                         this.zone.run(() => {
+                            this.croppedImagepath = null;
+                            this.avatar = null;
+                            this.valueGlobal.backValue = 'tab5';
                             this.point = 0;
                             this.loginuser = null;
                             this.username = "";
@@ -586,6 +600,9 @@ export class Tab5Page implements OnInit {
                             this.bizTravelService.bizAccount = null;
                             this.bizTravelService.actionHistory = null;
                             this.bizTravelService.isCompany = false;
+                            this._voucherService.hasVoucher = false;
+                            this._voucherService.vouchers = [];
+                            this._voucherService.selectVoucher = null;
                         })
                         this.bizTravelService.accountBizTravelChange.emit(2);
                         // Xóa token device khi logout
@@ -1335,7 +1352,8 @@ export class Tab5Page implements OnInit {
                 if (data.status==0) {
                   se.showConfirmEmail();
                 }else if(data.status==1){
-                  alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư '+data.email+' để hoàn tất việc xóa tài khoản của bạn');
+                 // alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư '+data.email+' để hoàn tất việc xóa tài khoản của bạn');
+                 se.navCtrl.navigateForward('accountdeletionsms');
                 } else if (data.status==2) {
                   alert('Tài khoản của quý khách đang có booking sắp đi. Vui lòng thử lại sau');
                 }else if(data.status==-2){
@@ -1442,5 +1460,19 @@ export class Tab5Page implements OnInit {
            
           })
     }
-  
+    showUserVoucher(){
+        let se = this;
+        se.storage.get('auth_token').then(auth_token => {
+            if (auth_token) {
+                this.navCtrl.navigateForward('/myvoucher');
+            } else {
+                if (se.isShowConfirm) 
+                    return;
+                
+                se.showConfirmLogin("Bạn cần đăng nhập để sử dụng chức năng này.");
+                se.isShowConfirm = true;
+            }
+        });
+        
+    }
 }

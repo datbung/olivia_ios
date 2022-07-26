@@ -43,7 +43,7 @@
             </div>
             <!-- Vùng hiển thị room detail -->
             <div class="mealtype-item group-{{0}} p-top-8" *ngFor="let mealtype of hotelroom.MealTypeRates;let indexMeal=index">
-              <div *ngIf="mealtype.IsFlashSale == true && (mealtype.Supplier == 'Internal' || mealtype.Supplier == 'VINPEARL' || mealtype.Supplier == 'B2B'|| mealtype.Supplier == 'SMD') && mealtype.PromotionNote != ''" class="div-mealtype">
+              <div *ngIf="mealtype.IsFlashSale == true && (mealtype.Supplier == 'Internal' || mealtype.Supplier == 'VINPEARL' || mealtype.Supplier == 'B2B'|| mealtype.Supplier == 'SMD'|| mealtype.Supplier == 'SERI') && mealtype.PromotionNote != ''" class="div-mealtype">
                   <!-- <div *ngIf="currentRoomSelect.PriceAvgPlusOTA != mealtype.PriceAvgPlusOTA" [ngClass]=" j == 0 ? ' cls-fix-visible' : 'cls-fix-visible ' "> -->
                     <div [ngClass]=" j == 0 ? ' cls-fix-visible' : 'cls-fix-visible ' ">
                       <ion-row style="width:100%;align-items: center;padding-top: 4px">

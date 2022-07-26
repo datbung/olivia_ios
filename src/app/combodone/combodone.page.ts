@@ -11,6 +11,7 @@ import { GlobalFunction } from '../providers/globalfunction';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import * as moment from 'moment';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-combodone',
   templateUrl: './combodone.page.html',
@@ -22,7 +23,17 @@ export class CombodonePage implements OnInit {
     public booking: Booking, public authService: AuthService, public activatedRoute: ActivatedRoute, public router: Router,
     public storage: Storage, public gf: GlobalFunction, public alertCtrl: AlertController, private launchReview: LaunchReview,public bookCombo:Bookcombo,
     public searchhotel: SearchHotel,
-    private fb: Facebook, private _calendar: Calendar) {
+    private fb: Facebook, private _calendar: Calendar,
+    public _voucherService: voucherService) {
+      if(this._voucherService.selectVoucher){
+        
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this._voucherService.publicClearVoucherAfterPaymentDone(1);
+      this.bookCombo.promoCode="";
+      this.bookCombo.discountpromo=0;
+      
     this.listcars = this.gf.getParams('carscombo');
     this.room = Roomif.arrroom;
     this.nameroom = this.room[0].ClassName;

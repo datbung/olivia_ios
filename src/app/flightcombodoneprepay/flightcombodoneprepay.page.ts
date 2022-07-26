@@ -11,6 +11,7 @@ import jwt_decode from 'jwt-decode';
 import { GlobalFunction } from '../providers/globalfunction';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import * as moment from 'moment';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightcombodoneprepay',
   templateUrl: './flightcombodoneprepay.page.html',
@@ -23,7 +24,8 @@ export class FlightcombodoneprepayPage implements OnInit {
   constructor(public _platform: Platform, public navCtrl: NavController, public Roomif: RoomInfo, public activatedRoute: ActivatedRoute,
     public zone: NgZone, public booking: Booking, public authService: AuthService, public storage: Storage, public alertCtrl: AlertController, private launchReview: LaunchReview,
     public gf: GlobalFunction,public bookCombo:Bookcombo,
-    public searchhotel: SearchHotel,  private _calendar: Calendar) {
+    public searchhotel: SearchHotel,  private _calendar: Calendar,
+    public _voucherService: voucherService) {
     //   this.objectFlight = this.gf.getParams('objinfofly');
     // this.bookingCode = this.bookCombo.bookingcode;
     // this.roomnumber = this.searchhotel.roomnumber;
@@ -32,6 +34,8 @@ export class FlightcombodoneprepayPage implements OnInit {
     // this.nameroom = this.room[0].ClassName;
     // this.Rating = this.booking.RatingHotel;
     // this.Name = booking.HotelName;
+    this._voucherService.selectVoucher = null;
+          
     this.objectFlight = this.gf.getParams('flightcombo');
     this.room = Roomif.arrroom;
     this.nameroom = this.room[0].ClassName;

@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FlightComboReviewsPage } from './flightcomboreviews';
+import { VoucherSlideFlightComboPageModule } from '../voucher/voucherslideflightcombo/voucherslideflightcombo.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { FlightComboReviewsPage } from './flightcomboreviews';
     CommonModule,
     FormsModule,
     IonicModule,
+    VoucherSlideFlightComboPageModule,
     RouterModule.forChild([
       {
         path: '',
@@ -20,5 +22,6 @@ import { FlightComboReviewsPage } from './flightcomboreviews';
       }
     ])
   ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class FlightComboReviewsPageModule {}

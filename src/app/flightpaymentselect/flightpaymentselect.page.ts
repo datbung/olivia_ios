@@ -19,6 +19,7 @@ import { FlightBookingDetailsPage } from '../flightbookingdetails/flightbookingd
 import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { BizTravelService } from '../providers/bizTravelService';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightpaymentselect',
@@ -50,6 +51,8 @@ export class FlightPaymentSelectPage implements OnInit {
   totalPaxStr: string;
   totalRoom: string;
   ischeckedDK=true;
+  totalPrice: number;
+  allowApplyVoucher: boolean=true;
   constructor(private navCtrl:NavController,public _flightService: flightService
     ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel,private safariViewController: SafariViewController, public storage: Storage,
@@ -58,7 +61,9 @@ export class FlightPaymentSelectPage implements OnInit {
     private backgroundmode: BackgroundMode,
     private alertCtrl: AlertController,
     private zone: NgZone,
-    public bizTravelService: BizTravelService) { 
+    public bizTravelService: BizTravelService,
+    public _voucherService: voucherService
+    ) { 
     
     if(this._flightService.itemFlightCache){
       this.showline = this._flightService.itemFlightCache.roundTrip ? true : false;
@@ -76,6 +81,11 @@ export class FlightPaymentSelectPage implements OnInit {
       this.child = this._flightService.itemFlightCache.child;
       this.infant = this._flightService.itemFlightCache.infant;
       this.totalpricedisplay=this._flightService.itemFlightCache.totalPriceDisplay;
+      this.totalPrice = this.gf.convertStringToNumber(this._flightService.itemFlightCache.totalPriceDisplay);
+      //thêm luồng voucher heniken
+      // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+      //   this.totalPrice = this.totalPrice - this._voucherService.selectVoucher.rewardsItem.price;
+      // }
       this.departtitle = this._flightService.itemFlightCache.departPaymentTitleDisplay + moment(this._flightService.itemFlightCache.departFlight.departTime).format("HH:mm") + " - " + moment(this._flightService.itemFlightCache.departFlight.landingTime).format("HH:mm")+ " · " +this._flightService.itemFlightCache.departFlight.airlineCode;
       
       if(this._flightService.itemFlightCache.returnFlight){
@@ -168,14 +178,10 @@ export class FlightPaymentSelectPage implements OnInit {
   ngOnInit() {
   }
   gobackpage(){
-    this._flightService.itemFlightCache.backtochoiceseat = false;
     this.gf.hideLoading();
     this.navCtrl.navigateBack('flightadddetails');
   }
   gotoaddservicepage(){
-    //this.showAlertChoiceSeat();
-    this._flightService.itemFlightCache.backtochoiceseat =  true;
-    this._flightService.itemResetCheckSeat.emit(1);
     this.gf.hideLoading();
     this.navCtrl.navigateBack('flightadddetails');
   }
@@ -183,82 +189,85 @@ export class FlightPaymentSelectPage implements OnInit {
   goback()
   {
     var se = this;
-    se.gf.showLoading();
-    se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
-    se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
-      let data = se._flightService.itemFlightCache;
-      let dataancinaly = databkg.paxInfo.passengers[0].ancillaryJson ? JSON.parse(databkg.paxInfo.passengers[0].ancillaryJson) : '';
-      let dataancinalyReturn = databkg.paxInfo.passengers[0].ancillaryReturnJson ? JSON.parse(databkg.paxInfo.passengers[0].ancillaryReturnJson) : '';
-      if(dataancinaly || dataancinalyReturn){
-        let ancinaly, ancinalyreturn;
-        if(dataancinaly && dataancinaly.length >0){
-          ancinaly = dataancinaly;
-        }
-
-        if(dataancinalyReturn && dataancinalyReturn.length >0){
-          ancinalyreturn = dataancinalyReturn;
-        }
-        let checkseat = false, checkseatreturn = false;
-        if(ancinaly && ancinaly.length >0){
-          checkseat = ancinaly.some((item) => { return item.Type == "Seat"});
-        }
-
-        if(ancinalyreturn && ancinalyreturn.length >0){
-          checkseatreturn = ancinalyreturn.some((item) => { return item.Type == "Seat"});
+      se.gf.showLoading();
+      se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+      se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
+        let data = se._flightService.itemFlightCache;
+        let dataancinaly = databkg.paxInfo.passengers[0].ancillaryJson ? JSON.parse(databkg.paxInfo.passengers[0].ancillaryJson) : '';
+        let dataancinalyReturn = databkg.paxInfo.passengers[0].ancillaryReturnJson ? JSON.parse(databkg.paxInfo.passengers[0].ancillaryReturnJson) : '';
+        if(dataancinaly || dataancinalyReturn){
+          let ancinaly, ancinalyreturn;
+          if(dataancinaly && dataancinaly.length >0){
+            ancinaly = dataancinaly;
+          }
+  
+          if(dataancinalyReturn && dataancinalyReturn.length >0){
+            ancinalyreturn = dataancinalyReturn;
+          }
+          let checkseat = false, checkseatreturn = false;
+          if(ancinaly && ancinaly.length >0){
+            checkseat = ancinaly.some((item) => { return item.Type == "Seat"});
+          }
+  
+          if(ancinalyreturn && ancinalyreturn.length >0){
+            checkseatreturn = ancinalyreturn.some((item) => { return item.Type == "Seat"});
+          }
+          
+          if(data.ischeckpayment == 0)//trả sau
+          {
+              if(databkg.isRoundTrip){//khứ hồi
+                if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1 
+                && databkg.returnFlight.atBookingCode != null && databkg.returnFlight.atBookingCode.indexOf("T__") == -1
+                && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && (checkseat || checkseatreturn))
+                {
+                  se._flightService.itemFlightCache.backtochoiceseat = true;
+                  se.gotoaddservicepage();
+                }
+                else{
+                 se.gobackpage();
+                }
+              }else{
+                if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1
+                && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && checkseat)
+                {
+                  se._flightService.itemFlightCache.backtochoiceseat = true;
+                  se.gotoaddservicepage();
+                }
+                else{
+                 se.gobackpage();
+                }
+              }
+            }else{//trả trước
+    
+              if(databkg.isRoundTrip){//khứ hồi
+                //Có mã giữ chỗ và trạng thái đã xuất vé cả 2 chiều thì trả về true - hoàn thành
+                if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1 
+                && databkg.returnFlight.atBookingCode != null && databkg.returnFlight.atBookingCode.indexOf("T__") == -1
+                && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && (checkseat || checkseatreturn))
+                {
+                  se._flightService.itemFlightCache.backtochoiceseat = true;
+                  se.gotoaddservicepage();
+                }
+                else{
+                  se.gobackpage();
+                }
+              }else{//Có mã giữ chỗ và trạng thái đã xuất vé thì trả về true - hoàn thành
+                if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1
+                && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && checkseat)
+                {
+                  se._flightService.itemFlightCache.backtochoiceseat = true;
+                  se.gotoaddservicepage();
+                }
+                else{
+                  se.gobackpage();
+                }
+              }
+            }
+        }else{
+          se.gobackpage();
         }
         
-        if(data.ischeckpayment == 0)//trả sau
-        {
-            if(databkg.isRoundTrip){//khứ hồi
-              if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1 
-              && databkg.returnFlight.atBookingCode != null && databkg.returnFlight.atBookingCode.indexOf("T__") == -1
-              && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && (checkseat || checkseatreturn))
-              {
-                se.gotoaddservicepage();
-              }
-              else{
-               se.gobackpage();
-              }
-            }else{
-              if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1
-              && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && checkseat)
-              {
-                se.gotoaddservicepage();
-              }
-              else{
-               se.gobackpage();
-              }
-            }
-          }else{//trả trước
-  
-            if(databkg.isRoundTrip){//khứ hồi
-              //Có mã giữ chỗ và trạng thái đã xuất vé cả 2 chiều thì trả về true - hoàn thành
-              if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1 
-              && databkg.returnFlight.atBookingCode != null && databkg.returnFlight.atBookingCode.indexOf("T__") == -1
-              && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && (checkseat || checkseatreturn))
-              {
-                se.gotoaddservicepage();
-              }
-              else{
-                se.gobackpage();
-              }
-            }else{//Có mã giữ chỗ và trạng thái đã xuất vé thì trả về true - hoàn thành
-              if(databkg.departFlight.atBookingCode != null && databkg.departFlight.atBookingCode.indexOf("T__") == -1
-              && databkg && !databkg.expIssueTicket && databkg.urlPaymentAgain && checkseat)
-              {
-                se.gotoaddservicepage();
-              }
-              else{
-                se.gobackpage();
-              }
-            }
-          }
-      }else{
-        se.gobackpage();
-      }
-      
-    })
-    
+      })
   }
 
 
@@ -501,6 +510,12 @@ export class FlightPaymentSelectPage implements OnInit {
               this.gf.CreatePayoo(url).then((data) => {
                 //let data = JSON.parse(datapayoo);
                 if (data.success) {
+                  // if(this._voucherService.selectVoucher){
+                  //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                  //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                  //   this._voucherService.selectVoucher = null;
+                  // }
+
                   this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                   this.openWebpage(data.returnUrl.payUrl);
                   this.zone.run(()=>{
@@ -530,6 +545,12 @@ export class FlightPaymentSelectPage implements OnInit {
                     this.gf.CreatePayoo(url).then((data) => {
                       //let data = JSON.parse(datapayoo);
                       if (data.success) {
+                        // if(this._voucherService.selectVoucher){
+                        //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                        //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                        //   this._voucherService.selectVoucher = null;
+                        // }
+
                         this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                         this.openWebpage(data.returnUrl.payUrl);
                         this.zone.run(()=>{
@@ -755,6 +776,15 @@ export class FlightPaymentSelectPage implements OnInit {
                   se.gf.CreatePayoo(url).then((data) => {
                     //let data = JSON.parse(datapayoo);
                     if(data.success){
+                    //   if(se._voucherService.selectVoucher){
+                    //     se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                    //     se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                    //     setTimeout(()=> {
+                    //   se._voucherService.selectVoucher = null;
+                    // },300)
+                    //   }
+                      
+
                       se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                         se._flightService.itemFlightCache.ischeckpayment = 1;
                         se.openWebpage(data.returnUrl);
@@ -808,6 +838,12 @@ export class FlightPaymentSelectPage implements OnInit {
                       this.hideLoading();
                       //let data = JSON.parse(datapayoo);
                       if (data.success) {
+                      //   if(this._voucherService.selectVoucher){
+                      //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                      //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                      //   this._voucherService.selectVoucher = null;
+                      // }
+
                         this._flightService.itemFlightCache.BillingCode = data.payooStoreData.BillingCode;
                         this._flightService.itemFlightCache.periodPaymentDate = data.payooStoreData.periodPayment;
                         console.log(this._flightService.itemFlightCache.periodPaymentDate);
@@ -851,6 +887,13 @@ export class FlightPaymentSelectPage implements OnInit {
               this.hideLoading();
               //let data = JSON.parse(datapayoo);
               if (data.success) {
+                // if(this._voucherService.selectVoucher){
+                //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                //   this._voucherService.selectVoucher = null;
+                // }
+                
+
                 this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                 this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
                 this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/1');
@@ -879,6 +922,11 @@ export class FlightPaymentSelectPage implements OnInit {
                         this.hideLoading();
                         //let data = JSON.parse(datapayoo);
                         if (data.success) {
+                          // if(this._voucherService.selectVoucher){
+                          //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                          //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                          //   this._voucherService.selectVoucher = null;
+                          // }
                           this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                           this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
                           if (this.loader) {
@@ -1145,6 +1193,11 @@ export class FlightPaymentSelectPage implements OnInit {
                   this.gf.CreatePayoo(url).then((data) => {
                     //let data = JSON.parse(datapayoo);
                     if (data.success) {
+                      // if(this._voucherService.selectVoucher){
+                      //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+                      //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                      //   this._voucherService.selectVoucher = null;
+                      // }
                       this.hideLoading();
                       resolve(true);
                     }else{

@@ -100,21 +100,40 @@
       </ion-item>
     </div>
     <hr> -->
-    
+    <div class="div-voucher-apply" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">
+      <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_voucherService.selectVoucher.code}}</span><span class="text-normal">)</span> </div>
+      <div class="width-100 text-normal text-right p-r-5">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div>
+    </div>
     <div class="cls-divpayment">
       <ion-row class="cls-rowheight">
         <ion-col size="5">
           <div>
-            <h2 class="text-name" style="font-size: 18px;" position="stacked">Tổng cộng</h2>
-            <p style="font-size: 10px;font-weight: 300;margin-top: -10px">Giá đã bao gồm thuế & phí</p>
+            <h2 class="text-name" position="stacked">Tổng cộng</h2>
+            <p style="font-size: 10px;font-weight: 300;">Giá đã bao gồm thuế & phí</p>
           </div>
         </ion-col>
         <ion-col (click)="roompaymentbreakdow()" size="7">
-          <p class="total-price" style="text-align: right">
+          <p class="total-price" style="text-align: right;margin: 0;" *ngIf="!(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed)">
             {{priceshow}}đ
             <sup>
               <img  src="./assets/ic_green/ic_info.svg">
             </sup>
+          </p>
+
+          <p class="total-price" style="text-align: right; margin: 0;" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed && !Roomif.promocode">
+            {{ gf.convertNumberToString( ((totalPrice - _voucherService.selectVoucher.rewardsItem.price)>0? (totalPrice - _voucherService.selectVoucher.rewardsItem.price) : 0 )) }}đ
+            <sup>
+              <img  src="./assets/ic_green/ic_info.svg">
+            </sup>
+          </p>
+          <p class="total-price" style="text-align: right; margin: 0;" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed && Roomif.promocode">
+            {{gf.convertNumberToString(totalPrice)}}đ
+            <sup>
+              <img  src="./assets/ic_green/ic_info.svg">
+            </sup>
+          </p>
+          <p class="text-normal text-strike" *ngIf="_voucherService.selectVoucher&& _voucherService.selectVoucher.claimed">
+            {{roomtype.PriceAvgPlusTAStr}}đ
           </p>
         </ion-col>
       </ion-row>

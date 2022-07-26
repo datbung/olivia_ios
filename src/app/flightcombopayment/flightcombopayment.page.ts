@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import * as moment from 'moment';
 import { BizTravelService } from '../providers/bizTravelService';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightcombopayment',
   templateUrl: './flightcombopayment.page.html',
@@ -26,13 +27,16 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   intervalID: any; ischeckTransaction = false;
   _inAppBrowser: any;isremember=true;isdisable=false;
   ischeckedDK=true;
+  totalPrice: number;
   constructor(public platform: Platform, public searchhotel: SearchHotel, public navCtrl: NavController,
     public storage: Storage, public Roomif: RoomInfo,  public booking1: Booking,
     public booking: Booking, public authService: AuthService, public modalCtrl: ModalController, public loadingCtrl: LoadingController,
-    public gf: GlobalFunction, public zone: NgZone, private router: Router, private bookCombo: Bookcombo, private valueGlobal: ValueGlobal,private safariViewController: SafariViewController,
-    public bizTravelService: BizTravelService) {
+    public gf: GlobalFunction, public zone: NgZone, private router: Router, public bookCombo: Bookcombo, public valueGlobal: ValueGlobal,private safariViewController: SafariViewController,
+    public bizTravelService: BizTravelService,
+    public _voucherService: voucherService) {
     this.listfly = this.gf.getParams('flightcombo');
-    this.priceshow = this.bookCombo.totalprice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    this.priceshow = this.gf.convertNumberToString(this.bookCombo.totalprice);
+    this.totalPrice = this.gf.convertStringToNumber(this.bookCombo.totalprice);
     this.Name = booking.HotelName;
     this.Avatar = Roomif.imgHotel;
     this.cin = booking.CheckInDate;
@@ -140,6 +144,21 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     return thu;
   }
   ngOnInit() {
+    // this._voucherService.getObservable().subscribe((itemVoucher)=> {
+    //   if(this._voucherService.itemSelectVoucher.observers && this._voucherService.itemSelectVoucher.observers.length >1){
+    //     if(this._voucherService.itemSelectVoucher.observers[0]){
+    //         this._voucherService.itemSelectVoucher.observers = [...this._voucherService.itemSelectVoucher.observers[0]];
+    //     }
+    //   }
+    //   if(itemVoucher){
+    //     let totalprice = this.gf.convertStringToNumber(this.bookCombo.totalprice);
+    //     if(totalprice < itemVoucher.rewardsItem.price){
+          
+    //     }else{
+    //       this._voucherService.selectVoucher = itemVoucher;
+    //     }
+    //   }
+    // })
   }
   roompaymentbank() {
     this.navCtrl.navigateForward("/flightcombobank");
@@ -219,6 +238,13 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
                     se.gf.CreateUrl(url).then(dataBuildLink => {
                       dataBuildLink = JSON.parse(dataBuildLink);
                       if (dataBuildLink.success) {
+                        // if(se._voucherService.selectVoucher){
+                        //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                        //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                        //   setTimeout(()=> {
+                        //   se._voucherService.selectVoucher = null;
+                        // },300)
+                        //}
                         if (paymentType == 'visa') {
                           se.openWebpage(dataBuildLink.returnUrl);
                           se.setinterval();
@@ -434,6 +460,13 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     this.loader.present();
   }
   goback() {
+    // if(this._voucherService.selectVoucher){
+    //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+    //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    //   this._voucherService.selectVoucher = null;
+    // }
+    
+    
     this.navCtrl.navigateForward('/flightcomboreviews')
   }
   callCheckHoldTicket(url) {
@@ -553,6 +586,13 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     this.gf.CreateUrl(url).then(dataBuildLink => {
       dataBuildLink = JSON.parse(dataBuildLink);
       if (dataBuildLink.success) {
+        // if(se._voucherService.selectVoucher){
+        //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+        //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+        //   setTimeout(()=> {
+        //               se._voucherService.selectVoucher = null;
+        //             },300)
+        // }
         if (paymentType == 'visa') {
           se.openWebpage(dataBuildLink.returnUrl);
           se.setinterval();
@@ -760,6 +800,13 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
       se.gf.CreateUrl(url).then(dataBuildLink => {
         dataBuildLink = JSON.parse(dataBuildLink);
         if (dataBuildLink.success) {
+          // if(se._voucherService.selectVoucher){
+          //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+          //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
+          //   setTimeout(()=> {
+          //             se._voucherService.selectVoucher = null;
+          //           },300)
+          // }
           se.gf.hideLoading();
           resolve(true);
         }else{

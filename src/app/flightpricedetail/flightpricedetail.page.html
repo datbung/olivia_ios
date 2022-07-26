@@ -159,7 +159,7 @@
           </div>
 
           <div class="div-split"></div>
-          <div *ngIf="promotionCode && discount>0" class="d-flex">
+          <!-- <div *ngIf="promotionCode && discount>0" class="d-flex">
             <div class="div-width-30 v-align-center">
               <div class="text-pax">
                 Giá giảm 
@@ -171,7 +171,7 @@
                 -{{gf.numberToCurrency(discount, '.')}}đ VND ({{promotionCode}})
               </div>
             </div>
-        </div>
+        </div> -->
         <div *ngIf="priceCathay>0" class="d-flex">
           <div class="div-width-100 v-align-center">
             <div class="text-pax">
@@ -185,6 +185,10 @@
             </div>
           </div>
       </div>
+      <div class="div-voucher-apply" *ngIf="promotionCode">
+        <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{promotionCode}}</span><span class="text-normal">)</span> </div>
+        <div class="width-100 text-normal text-right text-pax">-{{gf.convertNumberToString(discount)}}đ</div>
+      </div>
           <div class="d-flex">
               <div class="div-width-100 v-align-center">
                   <div class="text-pax">{{ adult }} người lớn</div>
@@ -193,6 +197,7 @@
               </div>
               <div class="div-width-100 text-right">
                 <div class="text-total-price">{{totalpricedisplay}}đ</div>
+                <!-- <div class="text-total-price" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">{{ gf.convertNumberToString(totalPrice > 0 ? totalPrice : 0)}}đ</div> -->
                 <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
                 
               </div>

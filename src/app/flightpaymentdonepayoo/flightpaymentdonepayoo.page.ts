@@ -10,6 +10,7 @@ import { GlobalFunction } from '../providers/globalfunction';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import { LaunchReview } from '@ionic-native/launch-review/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightpaymentdonepayoo',
   templateUrl: './flightpaymentdonepayoo.page.html',
@@ -26,7 +27,8 @@ export class FlightpaymentdonepayooPage implements OnInit {
     public gf: GlobalFunction,
     private fb: Facebook,
     private _platform: Platform,
-    private _calendar: Calendar,public alertCtrl: AlertController, private launchReview: LaunchReview) { 
+    private _calendar: Calendar,public alertCtrl: AlertController, private launchReview: LaunchReview,
+    public _voucherService: voucherService) { 
     this.total=this._flightService.itemFlightCache.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this._email = this._flightService.itemFlightCache.email;
     this.storage.get('checkreview').then(checkreview => {
@@ -37,6 +39,14 @@ export class FlightpaymentdonepayooPage implements OnInit {
         this.checkreview=checkreview;
       }
     })
+    if(this._voucherService.selectVoucher){
+      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+      this._voucherService.selectVoucher = null;
+    }
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    this._flightService.itemFlightCache.promotionCode = "";
+        this._flightService.itemFlightCache.promocode = "";
+        this._flightService.itemFlightCache.discount = 0;
   }
 
   ngOnInit() {

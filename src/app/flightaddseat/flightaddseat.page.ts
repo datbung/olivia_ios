@@ -98,7 +98,7 @@ export class FlightaddseatPage implements OnInit {
        
         if(this._flightService.itemFlightCache.isnewmodelreturnseat){
           this.listReturnSeatName = this._flightService.itemFlightCache.listReturnSeatName;
-          if(this.listReturnSeatName && this.listReturnSeatName.indexOf('-1') == -1){
+          if(this.listReturnSeatName && this.listReturnSeatName.indexOf('-1') == -1 && this.listReturnSeatName.length >4){
             this.listReturnSeatName.splice(3,0,'-1');
             this.listReturnSeatName.splice(7,0,'-1');
           }

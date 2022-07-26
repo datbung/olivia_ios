@@ -32,7 +32,7 @@ export class FlightcombopaymentpayooPage implements OnInit {
       this.qrimg=this.Roomif.qrimg;
       this.intervalID = setInterval(() => {
         this.checkBooking();
-      }, 1000 * 1);
+      }, 1000 * 1); 
       setTimeout(() => {
         clearInterval(this.intervalID);
       }, 60000 * 15);

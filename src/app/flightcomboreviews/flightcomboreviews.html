@@ -239,7 +239,8 @@
         <span class="text-luggage margin-left-8">Đi: {{totaldepluggage}} kg.</span>
         <span class="text-luggage margin-left-8">Về: {{totalretluggage}} kg.</span>
        </div>
-      <ion-icon class="cls-icon-img" slot="end" name="ios-arrow-round-forward"  (click)="buyLuggage()"></ion-icon>
+      <!-- <ion-icon class="cls-icon-img" slot="end" name="ios-arrow-round-forward"  (click)="buyLuggage()"></ion-icon> -->
+      <div class="cls-icon-img"><img src="./assets/ic_ordersupport/next.svg"></div>
     </ion-item>
     <hr class="cls-hr">
   </div>
@@ -248,43 +249,46 @@
       <label class="depart-title">
         Chính sách hủy combo
       </label>
-      <ion-icon class="cls-icon-img" slot="end" name="ios-arrow-round-forward"></ion-icon>
+      <!-- <ion-icon class="cls-icon-img" slot="end" name="ios-arrow-round-forward"></ion-icon> -->
+      <div class="cls-icon-img"><img src="./assets/ic_ordersupport/next.svg"></div>
     </ion-item>
     <hr class="cls-hr">
   </div>
     <div *ngIf="point>0 && PriceAvgPlusTAStr&& loadflightpricedone" class="div-voucher">
       <div class="div-flex">
-        <div class="div-first">
-          <div *ngIf="!ischeckpoint" class="div-checkpoint">
-              <ion-checkbox class="check-point" mode="md" (ionChange)="edit()" [disabled]="ischeckbtnpromo==true?'true':false" checked="false" [(ngModel)]="ischeck" color="secondary"></ion-checkbox>
-              <div class="div-point cls-ml8">
-                <div  class="text-point">Dùng {{pointshow}} điểm</div>
-                <div class="num-point">
-                (-{{price}}đ)
-                </div>
-              </div>
+          <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ivvpoint_tealish.svg"/></div>
+          <div class="div-text-center">
+            <div class="width-150">Sử dụng iVIVU point</div>
+            <div class="width-100 text-point text-right">-{{gf.convertNumberToString(point)}}đ</div>
           </div>
-          <div *ngIf="ischeckpoint" class="div-checkpoint">
-              <ion-checkbox class="check-point" mode="md" (ionChange)="edit()" checked="false" [disabled]="ischeckbtnpromo==true?'true':false" [(ngModel)]="ischeck" color="secondary"></ion-checkbox>
-              <div class="div-point cls-ml8">
-                <div  class="text-point">Dùng {{pointshow}} điểm</div>
-                <div class="num-point">
-                (-{{PriceAvgPlusTAStr}}đ)
-                </div>
-              </div>
-          </div>
-        </div>
-        <div  class="div-col-split">
-        </div>
-         
-        <div *ngIf="!ischeck" class="div-promotion">
-        <ion-label (click)="showdiscount()" class="text-point">{{textpromotion}}</ion-label>
-        </div>
-        <div *ngIf="ischeck" class="div-promotion">
-          <ion-label class="text-promotion">Nhập mã giảm giá</ion-label>
-          </div>
+          <div class="div-button"><ion-toggle style="margin-top: -4px;" class="toggle-promo" (ionChange)="edit()" [(ngModel)]="ischeck"></ion-toggle></div>
       </div>
-      <hr class="cls-hr" >
+
+      <div class="div-line"></div>
+      <div class="div-flex" (click)="showdiscount()">
+        <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
+        <div class="div-text-center ">
+          <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
+        </div>
+        <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
+      </div>
+      <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
+        <div class="width-200">
+          <span class="text-normal">Ưu đãi (</span>
+          <!-- <span class="text-code" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{_voucherService.selectVoucher.code}}</span> -->
+          <span class="text-code" *ngIf="promocode">{{promocode}}</span>
+          <span class="text-normal">)</span> 
+        </div>
+        <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
+        <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}đ</div>
+      </div>
+      <ion-row> 
+        <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
+        <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+      </ion-row>
+      
+    <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
+    <app-voucherslideflightcombo *ngIf="loadflightpricedone"></app-voucherslideflightcombo>
     <div *ngIf="ischeck||ischeckbtnpromo&& loadflightpricedone" >
         <ion-row>
           <ion-col size="5.8" style="padding: 0;">
@@ -327,22 +331,45 @@
             </ion-col>
           </ion-row>
         </div>
+
     </div>
   
-    <div *ngIf="(point<=0||!point)&&PriceAvgPlusTAStr">
+    <div *ngIf="(point<=0||!point)&&PriceAvgPlusTAStr&&loadflightpricedone">
         <div>
               
-                  <ion-row (click)="showdiscount()">
-                          <label *ngIf="!promocode" class="depart-title" >Nhập mã giảm giá</label>
+                  <!-- <ion-row (click)="showdiscount()">
+                          <label *ngIf="!promocode" class="depart-title" >iVIVU Voucher | Mobile Gift</label>
                           <label *ngIf="promocode" class="depart-title" >{{textpromotion}}</label>
                         
                   </ion-row>
                   <ion-row> 
                       <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
                       <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+                  </ion-row> -->
+                  <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!promocode">
+                    <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
+                    <div class="div-text-center">
+                      <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
+                    </div>
+                    <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
+                  </div>
+                  <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
+                    <div class="width-200">
+                      <span class="text-normal">Ưu đãi (</span>
+                      <!-- <span class="text-code" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{_voucherService.selectVoucher.code}}</span> -->
+                      <span class="text-code" *ngIf="promocode">{{promocode}}</span>
+                      <span class="text-normal">)</span> 
+                    </div>
+                    <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
+                    <div class="width-100 text-normal text-right p-r-5" *ngIf="discountpromo">{{gf.convertNumberToString(discountpromo)}}đ</div>
+                  </div>
+                  <ion-row> 
+                    <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
+                    <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
                   </ion-row>
           </div>
-          <hr class="cls-hr">
+          <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
+          <app-voucherslideflightcombo></app-voucherslideflightcombo>
           <div *ngIf="!ischeckbtnpromo">
               <ion-row>
                   <ion-col size="5.8" style="padding: 0;">
@@ -360,6 +387,9 @@
                       <sup>
                         <img src="./assets/ic_green/ic_info.svg">
                       </sup>
+                    </p>
+                    <p *ngIf="discountpromo" class="text-room-price-ota">
+                      {{ gf.convertNumberToString(gf.convertStringToNumber(PriceAvgPlusTAStr) + discountpromo) }}đ
                     </p>
                   </ion-col>
                 </ion-row>

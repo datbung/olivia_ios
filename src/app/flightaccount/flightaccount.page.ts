@@ -24,6 +24,7 @@ import { BizTravelService } from '../providers/bizTravelService';
 import { OverlayEventDetail } from '@ionic/core';
 import { ConfirmemailaccountPage } from '../confirmemailaccount/confirmemailaccount.page';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightaccount',
   templateUrl: './flightaccount.page.html',
@@ -54,7 +55,8 @@ export class FlightaccountPage {
     private file: File,
     private fcm: FCM,
     public _flightService: flightService,
-    public bizTravelService: BizTravelService, private appVersion: AppVersion){
+    public bizTravelService: BizTravelService, private appVersion: AppVersion,
+    public _voucherService: voucherService){
       this.point = 0;
       this.appVersion.getVersionNumber().then((version) => {
         this.zone.run(()=>{
@@ -567,6 +569,9 @@ export class FlightaccountPage {
                   this.bizTravelService.bizAccount = null;
                   this.bizTravelService.actionHistory = null;
                   this.bizTravelService.isCompany = false;
+                  this._voucherService.hasVoucher = false;
+                            this._voucherService.vouchers = [];
+                            this._voucherService.selectVoucher = null;
                 })
 
                 this.bizTravelService.accountBizTravelChange.emit(2);
@@ -1350,6 +1355,21 @@ export class FlightaccountPage {
               this.valueGlobal.refreshUserToken.emit(1);
             }
           })
+        }
+
+        showUserVoucher() {
+          let se = this;
+          se.storage.get('auth_token').then(auth_token => {
+              if (auth_token) {
+                  this.navCtrl.navigateForward('/myvoucher');
+              } else {
+                  if (se.isShowConfirm) 
+                      return;
+                  
+                  se.showConfirmLogin("Bạn cần đăng nhập để sử dụng chức năng này.");
+                  se.isShowConfirm = true;
+              }
+          });
         }
     }
     

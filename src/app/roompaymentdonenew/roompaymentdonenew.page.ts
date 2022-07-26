@@ -15,6 +15,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-roompaymentdonenew',
   templateUrl: './roompaymentdonenew.page.html',
@@ -28,7 +29,8 @@ export class RoompaymentdonenewPage implements OnInit {
     public booking: Booking, public authService: AuthService, public activatedRoute: ActivatedRoute, public router: Router,
     public storage: Storage, public gf: GlobalFunction, public alertCtrl: AlertController, private launchReview: LaunchReview,
     public activityService: ActivityService, private modalCtrl: ModalController,
-    public clipboard: Clipboard, private toastCtrl: ToastController,private safariViewController: SafariViewController, private fb: Facebook, public searchhotel: SearchHotel, private _calendar: Calendar) {
+    public clipboard: Clipboard, private toastCtrl: ToastController,private safariViewController: SafariViewController, private fb: Facebook, public searchhotel: SearchHotel, private _calendar: Calendar,
+    public _voucherService: voucherService) {
     this.accountNumber = this.Roomif.accountNumber;
     this.textbank = this.Roomif.textbank;
     this.bankName = this.Roomif.bankName + " . " + this.Roomif.bankBranch;
@@ -43,6 +45,12 @@ export class RoompaymentdonenewPage implements OnInit {
         this.checkreview = checkreview;
       }
     })
+    if(this._voucherService.selectVoucher){
+      
+      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+      this._voucherService.selectVoucher = null;
+    }
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
     this.jsonroom = Roomif.jsonroom
     this.ischeckpayment = Roomif.ischeckpayment;
     this.Roomif.ischeckpoint = false;

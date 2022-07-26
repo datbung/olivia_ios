@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { RoompaymentselectPage } from './roompaymentselect';
 import { FormsModule } from '@angular/forms';
+import { VoucherSlidePageModule } from '../voucher/voucherslide/voucherslide.module';
 @NgModule({
   declarations: [
     RoompaymentselectPage,
@@ -12,6 +13,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     IonicModule,
     FormsModule,
+    VoucherSlidePageModule,
     RouterModule.forChild([
       {
         path: '',

@@ -82,11 +82,18 @@
         </ion-item>
     </div>
    <hr>
+   <div class="div-voucher-apply" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">
+    <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_voucherService.selectVoucher.code}}</span><span class="text-normal">)</span> </div>
+    <div class="width-100 text-normal text-right total-price">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div>
+  </div>
     <div style="margin-left: -15px">
       <ion-item style="--border-style: none">
         <ion-label style="font-size: 14px">Tổng cộng</ion-label>
-        <p class="total-price1"  slot="end">
+        <p class="total-price1"  slot="end"  *ngIf="!(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed)">
           {{total}}đ
+        </p>
+        <p class="total-price1"  slot="end"  *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">
+          {{gf.convertNumberToString((totalPrice - _voucherService.selectVoucher.rewardsItem.price) >0 ? totalPrice - _voucherService.selectVoucher.rewardsItem.price : 0)}}đ
         </p>
       </ion-item>
     </div>

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { BizTravelService } from '../providers/bizTravelService';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-combopayment',
   templateUrl: './combopayment.page.html',
@@ -42,8 +43,9 @@ export class CombopaymentPage implements OnInit {
   constructor(public platform: Platform, public searchhotel: SearchHotel, public navCtrl: NavController,
     public storage: Storage, public Roomif: RoomInfo,  public booking1: Booking,
     public booking: Booking, public authService: AuthService, public modalCtrl: ModalController, public loadingCtrl: LoadingController,public alertCtrl: AlertController,
-    public gf: GlobalFunction, public zone: NgZone, private router: Router, private bookCombo: Bookcombo,private safariViewController:SafariViewController,
-    public bizTravelService: BizTravelService) {
+    public gf: GlobalFunction, public zone: NgZone, private router: Router, public bookCombo: Bookcombo,private safariViewController:SafariViewController,
+    public bizTravelService: BizTravelService,
+    public _voucherService: voucherService,) {
     this.listcars = this.gf.getParams('carscombo');
 
     this.priceshow = this.bookCombo.totalprice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -133,6 +135,7 @@ export class CombopaymentPage implements OnInit {
 
   }
   ngOnInit() {
+    
   }
   roompaymentbank() {
     clearInterval(this.Roomif.setInter);
@@ -427,13 +430,13 @@ export class CombopaymentPage implements OnInit {
   );
   }
   goback() {
-    if((this.Roomif.point && this.bookingCode) || (this.Roomif.promocode && this.bookingCode))
-    {
-      this.Roomif.bookingCode=this.bookingCode;
-      this.navCtrl.navigateBack('/combocarnew');
-    }else{
-      this.navCtrl.back();
-    }
+      if((this.Roomif.point && this.bookingCode) || (this.Roomif.promocode && this.bookingCode))
+      {
+        this.Roomif.bookingCode=this.bookingCode;
+        this.navCtrl.navigateBack('/combocarnew');
+      }else{
+        this.navCtrl.back();
+      }
   }
 
 

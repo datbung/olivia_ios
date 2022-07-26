@@ -104,8 +104,10 @@ export class RoomadddetailsPage implements OnInit {
       if (this.Roomif.priceshow == "0") {
         this.priceshow = this.Roomif.priceshow;
       }
-      else {
+      else if(this.Roomif.priceshow){
         this.priceshow = this.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
+      }else {
+        this.priceshow = this.booking.cost.replace(/\./g, '').replace(/\,/g, '');
       }
 
     }

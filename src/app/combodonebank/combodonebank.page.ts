@@ -13,6 +13,7 @@ import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-combodonebank',
   templateUrl: './combodonebank.page.html',
@@ -29,7 +30,16 @@ export class CombodonebankPage implements OnInit {
     public bookCombo: Bookcombo, public clipboard: Clipboard, private activatedRoute: ActivatedRoute, private launchReview: LaunchReview, private toastCtrl: ToastController
     ,private safariViewController: SafariViewController,
     private fb: Facebook,
-    public searchhotel: SearchHotel, private _calendar: Calendar) {
+    public searchhotel: SearchHotel, private _calendar: Calendar,
+    public _voucherService: voucherService) {
+      if(this._voucherService.selectVoucher){
+        
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this.bookCombo.promoCode="";
+      this.bookCombo.discountpromo=0;
+      this._voucherService.publicClearVoucherAfterPaymentDone(1);
     this.priceshow = this.bookCombo.totalprice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this.accountNumber = this.Roomif.accountNumber;
     this.textbank = this.Roomif.textbank;

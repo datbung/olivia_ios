@@ -419,6 +419,8 @@ export class Bookcombo {
   ischeckShowupgrade: boolean;
   mealTypeRates: any;
   isshuttlebus: any;
+  promoCode: string;
+  totalPriceBeforeApplyVoucher: number;
 }
 export class childAge {
     numage: string;

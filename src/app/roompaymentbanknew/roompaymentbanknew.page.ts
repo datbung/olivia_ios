@@ -8,6 +8,7 @@ import { C } from '../providers/constants';
 import { GlobalFunction, ActivityService } from '../providers/globalfunction';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-roompaymentbanknew',
@@ -38,7 +39,8 @@ export class RoompaymentbanknewPage implements OnInit {
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
     public alertCtrl: AlertController,
-    public clipboard: Clipboard,private safariViewController: SafariViewController) {
+    public clipboard: Clipboard,private safariViewController: SafariViewController,
+    public _voucherService: voucherService) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
     this.ischecktechcom = true;
@@ -677,9 +679,20 @@ export class RoompaymentbanknewPage implements OnInit {
                   {
                     totalprice=(se.Roomif.roomtype as any).PriceAvgPlusTAStr;
                   }
+                  if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+                    let tp:any = totalprice.replace(/\./g, '').replace(/\,/g, '');
+                    totalprice = se.gf.convertNumberToString(tp - se._voucherService.selectVoucher.rewardsItem.price);
+                  }
                   if(se.jti){
                     let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + body.code + '&memberId=' + se.jti + '&buyerPhone=' + se.Roomif.phone;
                     se.gf.CreateUrl(url);
+                    if(se._voucherService.selectVoucher){
+                      se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                      se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                      setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                    }
                   }
                 
                 //}

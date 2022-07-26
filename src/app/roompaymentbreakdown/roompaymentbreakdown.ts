@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController,Platform } from '@ionic/angular';
 import { RoomInfo } from '../providers/book-service';
 import { GlobalFunction } from '../providers/globalfunction';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentbreakdownPage page.
  *
@@ -18,12 +19,15 @@ import { GlobalFunction } from '../providers/globalfunction';
 export class RoompaymentbreakdownPage implements OnInit{
   Name; room; imgroom; breakfast; dur; price; PriceAvgMinPriceStr; roomnumber
   PriceAvgPlusOTAStr; roomtype; ExtraBedAndGalaDinerList; phuthu; PriceOTA; total; arr = []
-  constructor(public platform: Platform, public activatedRoute: ActivatedRoute, public navCtrl: NavController, public searchHotel: SearchHotel, public Roomif: RoomInfo, public gf: GlobalFunction) {
+  totalPrice: number;
+  constructor(public platform: Platform, public activatedRoute: ActivatedRoute, public navCtrl: NavController, public searchHotel: SearchHotel, public Roomif: RoomInfo, public gf: GlobalFunction,
+    public _voucherService: voucherService) {
     this.room = this.Roomif.arrroom;
     this.dur = this.activatedRoute.snapshot.paramMap.get('dur');
     this.roomnumber = this.activatedRoute.snapshot.paramMap.get('roomnumber');
     this.roomtype = this.Roomif.roomtype
     this.total = this.roomtype.PriceAvgPlusTAStr;
+    this.totalPrice = this.gf.convertStringToNumber(this.roomtype.PriceAvgPlusTAStr);
     this.imgroom = this.Roomif.imgRoom;
     var str = this.imgroom;
     if (str) {

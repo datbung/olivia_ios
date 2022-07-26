@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { MytripService } from '../providers/mytrip-service.service';
 import { flightService } from '../providers/flightService';
 import {  ValueGlobal } from './../providers/book-service';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentdoneeanPage page.
  *
@@ -52,7 +53,14 @@ export class RoompaymentdoneeanPage implements OnInit {
     public searchhotel: SearchHotel,
     private fb: Facebook, private _calendar: Calendar, public _mytripservice: MytripService,
     public _flightService: flightService,
-    public valueGlobal: ValueGlobal) {
+    public valueGlobal: ValueGlobal,
+    public _voucherService: voucherService) {
+      if(this._voucherService.selectVoucher){
+       
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this._voucherService.publicClearVoucherAfterPaymentDone(1);
     this.ischeckpayment = Roomif.ischeckpayment;
     this.Roomif.ischeckpoint = false;
     Roomif.priceshow = "";

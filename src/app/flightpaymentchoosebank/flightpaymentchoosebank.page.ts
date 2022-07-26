@@ -12,6 +12,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from '../providers/flightService';
 import * as moment from 'moment';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightpaymentchoosebank',
@@ -33,7 +34,8 @@ export class FlightpaymentchoosebankPage implements OnInit {
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking, 
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,private safariViewController: SafariViewController,
     public loadingCtrl: LoadingController,public _flightService : flightService, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
-    private backgroundmode: BackgroundMode) {
+    private backgroundmode: BackgroundMode,
+    public _voucherService: voucherService) {
       this.priceshow = this._flightService.itemFlightCache.totalPriceDisplay;
 
       this.platform.ready().then(()=>{
@@ -245,6 +247,13 @@ export class FlightpaymentchoosebankPage implements OnInit {
 
         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ? itemcache.pnr.bookingCode :  itemcache.pnr.resNo) + '&buyerPhone=' + itemcache.phone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
         se.gf.CreatePayoo(url).then(datapayoo => {
+          if(se._voucherService.selectVoucher){
+            se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+            se._voucherService.publicClearVoucherAfterPaymentDone(1);
+            setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+          }
           se.hideLoading();
           se.gf.hideLoading();
         //datapayoo = JSON.parse(datapayoo);

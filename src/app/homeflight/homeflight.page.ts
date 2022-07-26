@@ -1146,6 +1146,10 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         return moment(this.cin).diff(new Date(), 'days') <0 ? false : true;
       }
 
+      checkValidFromToDate() {
+        return moment(this.cout).diff(this.cin, 'days') <0 ? false : true;
+      }
+
       search(){
         var se = this;
         se._flightService.itemFlightCache = {};
@@ -1165,6 +1169,10 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         }
         if(!se.checkValidDate()){
           se.gf.showToastWarning('Ngày khởi hành không được nhỏ hơn ngày hiện tại.');
+          return;
+        }
+        if(!se.checkValidFromToDate()){
+          se.gf.showToastWarning('Ngày về không được nhỏ hơn ngày đi.');
           return;
         }
         se._flightService.objSearch = {

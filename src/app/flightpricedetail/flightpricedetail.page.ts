@@ -11,6 +11,7 @@ import { ValueGlobal, SearchHotel } from '../providers/book-service';
 import { DayConfig, CalendarModalOptions, CalendarResult, CalendarModal } from 'ion2-calendar';
 import {flightService} from './../providers/flightService';
 import * as request from 'requestretry';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightpricedetail',
@@ -57,6 +58,7 @@ export class FlightpricedetailPage implements OnInit {
   promotionCode="";
   discount=0;
   priceCathay: any;
+  totalPrice: number;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -66,7 +68,8 @@ export class FlightpricedetailPage implements OnInit {
     private actionsheetCtrl: ActionSheetController,
     public valueGlobal: ValueGlobal,
     public searchhotel: SearchHotel,
-    public _flightService: flightService) { 
+    public _flightService: flightService,
+    public _voucherService: voucherService) { 
         if(this._flightService.itemFlightCache){
           this.departFlight = this._flightService.itemFlightCache.departFlight;
           this.returnFlight = this._flightService.itemFlightCache.returnFlight;
@@ -197,13 +200,22 @@ export class FlightpricedetailPage implements OnInit {
              this.discount=this._flightService.itemFlightCache.discount;
              totalprice=totalprice-this.discount;
            }
+          //  else if(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed){
+          //     this.promotionCode= this._voucherService.selectVoucher.code;
+          //     this.discount= this._voucherService.selectVoucher.rewardsItem.price;
+          //     totalprice=totalprice-this.discount;
+          //  }
             //thêm cathay
             if(this._flightService.itemFlightCache.InsuranceType && this._flightService.itemFlightCache.priceCathay)
             {
               this.priceCathay=this._flightService.itemFlightCache.priceCathay;
               totalprice=totalprice+this._flightService.itemFlightCache.priceCathay;
             }
+            if(totalprice*1 <0){
+              totalprice = 0;
+            }
           this.totalpricedisplay = this.gf.convertNumberToString(totalprice);
+          this.totalPrice = this.gf.convertStringToNumber(totalprice);
         }
     }
 

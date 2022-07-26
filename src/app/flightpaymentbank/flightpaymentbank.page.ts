@@ -14,6 +14,7 @@ import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import * as moment from 'moment';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightpaymentbank',
   templateUrl: './flightpaymentbank.page.html',
@@ -44,7 +45,7 @@ export class FlightpaymentbankPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    
+    public _voucherService: voucherService,
     public clipboard: Clipboard,public _flightService: flightService,private modalCtrl: ModalController,
     private fb: Facebook) {
     this.ischeckvietin = true;
@@ -626,6 +627,13 @@ export class FlightpaymentbankPage implements OnInit {
       itemcache.ischeckpayment = 0;
       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone+ '&memberId=' + se.jti +'&version=2';
                   se.gf.CreatePayoo(url).then((data) => {
+                    if(se._voucherService.selectVoucher){
+                      se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
+                      se._voucherService.publicClearVoucherAfterPaymentDone(1);
+                      setTimeout(()=> {
+                      se._voucherService.selectVoucher = null;
+                    },300)
+                    }
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);
                         resolve(data.success);

@@ -156,6 +156,7 @@ hr
 .div-voucher{
   .div-flex{
     display: flex;
+    align-items: center;
 
     .div-first{
         width: 160px;
@@ -189,6 +190,7 @@ hr
       color: #222222;
       font-size: 14px;
       font-weight: 300;
+      margin-right: 5px;
     }
     .num-point {
       font-size: 12px;
@@ -201,6 +203,68 @@ hr
       align-self: center;
     }
   }
+
+}
+.m-width-280{
+  min-width: 280px;
+}
+.text-right {
+  text-align: right;
+}
+.width-10 {
+  width: 10% !important;
+}
+.width-100 {
+  width: 100%;
+}
+.width-200 {
+  width: 200%;
+}
+.width-150 {
+  width: 150%;
+}
+
+.div-icon{
+  display: flex;
+  align-items: center;
+  width: 16px;
+  
+}
+.div-text-center{
+  margin-right: 5px;
+  padding-left: 5px;
+  width: 85%;
+  display: flex;
+  font-size: 14px;
+  text-align: left;
+  color: #3f3b3b;
+
+  .text-sub {
+    color: #868998;
+  }
+
+  .text-point {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+    color: #868998;
+  }
+ 
+}
+
+.div-button{
+  text-align: right;
+  width: 15%;
+  height: 24px;
+
+  ion-toggle.toggle-icon.toggle-inner {
+    width: 24px;
+  }
+  
+}
+.div-line {
+  margin: 14px 0 18px 0;
+  border-bottom: solid 1px #f2f2f2;
 }
 .depart-title{
   font-size: 14px;
@@ -277,4 +341,41 @@ p {
     color: #26bed6 !important
   }
   
+}
+
+.div-voucher-apply {
+  display: flex;
+  margin: 14px 0 6px 0;
+
+  .width-100 {
+    width: 100%;
+  }
+
+  .text-normal {
+    font-size: 14px;
+    color: #3f3b3b;
+  }
+  .text-code {
+    font-size: 14px;
+    color: #f79321;
+  }
+
+  .text-normal {
+    font-size: 14px;
+    color: #3f3b3b;
+  }
+
+  .text-strike {
+    text-decoration: line-through;
+     text-align: right;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
 }

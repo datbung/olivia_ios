@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LaunchReview } from '@ionic-native/launch-review/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the FacilitiesPage page.
  *
@@ -30,8 +31,15 @@ export class FlightComboPaymentDonePage implements OnInit{
     objectFlight;room;nameroom
     constructor(public _platform: Platform,public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone, private launchReview: LaunchReview,
         public booking: Booking, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,
-        public bookCombo: Bookcombo, private activatedRoute: ActivatedRoute, public searchhotel: SearchHotel, private fb: Facebook, private _calendar: Calendar) {
-
+        public bookCombo: Bookcombo, private activatedRoute: ActivatedRoute, public searchhotel: SearchHotel, private fb: Facebook, private _calendar: Calendar,
+        public _voucherService: voucherService) {
+          if(this._voucherService.selectVoucher){
+            this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+            this._voucherService.selectVoucher = null;
+          }
+          this._voucherService.publicClearVoucherAfterPaymentDone(1);
+          this.bookCombo.promoCode="";
+          this.bookCombo.discountpromo=0;
           this.storage.get('checkreview').then(checkreview => {
             if (checkreview==0) {
               this.checkreview=0;

@@ -84,7 +84,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listDepartFilter && listDepartFilter.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Lựa chọn chuyến đi tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 div-width-150" >{{textsort}}</div>
-              <div class="text-refresh m-top-4 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
+              <div class="text-refresh m-top-4 div-width-50" (click)="doRefresh()">Cập nhật giá</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listDepartFilter && listDepartFilter.length >0 && (count >=1 || stoprequest) ) else nodepartFilterEmpty">
@@ -202,7 +202,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listDepart && listDepart.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Lựa chọn chuyến đi tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 div-width-150" >{{textsort}}</div>
-              <div class="text-refresh m-top-4 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
+              <div class="text-refresh m-top-4 div-width-50" (click)="doRefresh()">Cập nhật giá</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listDepart && listDepart.length >0 && (count >=1 || stoprequest) ) else nodepartEmpty">
@@ -320,8 +320,8 @@
 
         <ng-template #nosortdepart>
           <div class="d-flex" *ngIf="(bestpricedepart && bestpricedepart.length >0 && (count >=1 || stoprequest) )">
-            <div class="div-title-content p-bottom-8 div-width-150" >Lựa chọn tốt nhất</div>
-            <div class="text-refresh m-top-4 div-width-100"  (click)="doRefresh()">Cập nhật giá</div>
+            <div class="div-title-content p-bottom-8 div-width-150" >Lựa chọn chuyến đi tốt nhất</div>
+            <div class="text-refresh m-top-4 div-width-50"  (click)="doRefresh()">Cập nhật giá</div>
           </div>
           <div class="div-best-choice" *ngIf="(bestpricedepart && bestpricedepart.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == bestpricedepart.length-1 ? 'div-item-flight': (idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8') "  *ngFor="let item of bestpricedepart; let idx = index">
@@ -576,7 +576,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturnFilter && listReturnFilter.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn chuyến về tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >{{textsort}}</div>
-              <div class="text-refresh m-top-58 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
+              <div class="text-refresh m-top-58 div-width-50" (click)="doRefresh()">Cập nhật giá</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listReturnFilter && listReturnFilter.length >0 && (count >=1 || stoprequest) ) else noreturnFilterEmpty">
@@ -694,7 +694,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturn && listReturn.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn chuyến về tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >{{textsort}}</div>
-              <div class="text-refresh m-top-58 div-width-100" (click)="doRefresh()">Cập nhật giá</div>
+              <div class="text-refresh m-top-58 div-width-50" (click)="doRefresh()">Cập nhật giá</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listReturn && listReturn.length >0 && (count >=1 || stoprequest) ) else noreturnEmpty">
@@ -813,8 +813,8 @@
   
         <ng-template #nosortreturn>
           <div class="d-flex" *ngIf="(bestpricereturn && bestpricereturn.length >0 && (count >=1 || stoprequest) )">
-            <div class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn tốt nhất</div>
-            <div class="text-refresh m-top-58 div-width-100"  (click)="doRefresh()">Cập nhật giá</div>
+            <div class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn chuyến về tốt nhất</div>
+            <div class="text-refresh m-top-58 div-width-50"  (click)="doRefresh()">Cập nhật giá</div>
           </div>
           <div class="div-best-choice" *ngIf="(bestpricereturn && bestpricereturn.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == bestpricereturn.length-1 ? 'div-item-flight':(idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8')"  *ngFor="let item of bestpricereturn; let idx = index">
@@ -1023,8 +1023,8 @@
       </div>
         <ng-template #returnSeri>
           <div class="d-flex" *ngIf="(listReturnSeri && listReturnSeri.length >0 && (count >=1 || stoprequest) )">
-            <div class="div-title-content p-bottom-8 div-width-150" >Lựa chọn tốt nhất</div>
-            <div class="text-refresh div-width-100"  (click)="doRefresh()">Cập nhật giá</div>
+            <div class="div-title-content p-bottom-8 div-width-150" >Lựa chọn chuyến về tốt nhất</div>
+            <div class="text-refresh div-width-50"  (click)="doRefresh()">Cập nhật giá</div>
           </div>
           <div class="div-best-choice" *ngIf="(listReturnSeri && listReturnSeri.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == listReturnSeri.length-1 ? 'div-item-flight':(idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8')"  *ngFor="let item of listReturnSeri; let idx = index">

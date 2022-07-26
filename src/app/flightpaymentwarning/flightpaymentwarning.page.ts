@@ -11,6 +11,7 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { ValueGlobal } from '../providers/book-service';
 import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-flightpaymentwarning',
   templateUrl: './flightpaymentwarning.page.html',
@@ -29,7 +30,8 @@ export class FlightpaymentwarningPage implements OnInit {
     private backgroundmode: BackgroundMode,
     private platform: Platform,
     public valueGlobal: ValueGlobal,
-    private modalCtrl: ModalController) { 
+    private modalCtrl: ModalController,
+    public _voucherService: voucherService) { 
         this.totalpricedisplay= this._flightService.itemFlightCache.totalPriceDisplay;
         this.phone = this._flightService.itemFlightCache.phone;
         this.bookingNo = this._flightService.itemFlightCache.pnr.resNo;
@@ -54,6 +56,16 @@ export class FlightpaymentwarningPage implements OnInit {
         this._flightService.itemFlightCache.returnConditionInfo = null;
         this._flightService.itemFlightCache.isnewmodelseat = false;
         this._flightService.itemFlightCache.isnewmodelreturnseat = false;
+        if(this._voucherService.selectVoucher){
+          
+          this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+          this._voucherService.selectVoucher = null;
+          
+        }
+        this._voucherService.publicClearVoucherAfterPaymentDone(1);
+        this._flightService.itemFlightCache.promotionCode = "";
+              this._flightService.itemFlightCache.promocode = "";
+              this._flightService.itemFlightCache.discount = 0;
   }
 
   gohome(){

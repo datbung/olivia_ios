@@ -15,6 +15,7 @@ import { NetworkProvider } from './../network-provider.service';
 import { AdddiscountPage } from './../adddiscount/adddiscount.page';
 import * as $ from 'jquery';
 import { CalendarModalOptions, CalendarModal } from 'ion2-calendar';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-combocarnew',
   templateUrl: './combocarnew.page.html',
@@ -107,8 +108,8 @@ export class CombocarnewPage implements OnInit {
   pickup_pointsreturnt; pickup_pointsreturnd; addressreturnd; addressreturnt; id_pickup_pointsreturnd; id_pickup_pointsreturnt; id_pickup_pointsdepartd; id_pickup_pointsdepartt;
   discountpromo; msgwrn; msg; ischecktext = 0; ischeckerror = 0; ischeckbtnpromo = false; ischeckpromo = false; promocode; loadcarspricedone = false;
   pickup_pointsdep = []; drop_off_points_at_arrivedep = []; pickup_pointsret = []; drop_off_points_at_arriveret = []; diff_feedep; diff_feeret
-  public isConnected: boolean = true;pointshow
-  surchargedepd; surchargedept; surchargeretd; surchargerett;textpromotion="Nhập mã giảm giá";
+  public isConnected: boolean = true;pointshow;
+  surchargedepd; surchargedept; surchargeretd; surchargerett;textpromotion="iVIVU Voucher | Mobile Gift";
   surcharge_typedepd;surcharge_typedept;surcharge_typeretd;surcharge_typerett;
   cofdate: number;
   cotdate: number;
@@ -129,6 +130,7 @@ export class CombocarnewPage implements OnInit {
   column: any;
   arrBOD: any;
   statusRoom: any;
+  itemVoucherCarCombo: any;
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -138,7 +140,8 @@ export class CombocarnewPage implements OnInit {
     public Roomif: RoomInfo,
     public searchhotel: SearchHotel, public alertCtrl: AlertController, public networkProvider: NetworkProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController,
     private activityService: ActivityService,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    public _voucherService: voucherService) {
     this.storage.get('username').then(name => {
       if (name !== null) {
         this.username = name;
@@ -254,6 +257,9 @@ export class CombocarnewPage implements OnInit {
   }
   bindlunar() {
     var se = this;
+    if(!se.valueGlobal.listlunar){
+      return;
+    }
     for (let i = 0; i < se.valueGlobal.listlunar.length; i++) {
       var checkdate = moment(se.valueGlobal.listlunar[i].date).format('YYYY-MM-DD');
       if (checkdate==se.cin) {
@@ -358,7 +364,53 @@ export class CombocarnewPage implements OnInit {
       if(dataRoomChange){
           this.updateRoomChange(dataRoomChange);
       }
-  })
+    })
+
+    this._voucherService.getCarComboObservable().subscribe((itemVoucher)=> {
+      if(itemVoucher){
+        if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherCarCombo){
+          this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+          return;
+        }
+        this.zone.run(()=>{
+        if(itemVoucher.claimed){
+          this._voucherService.selectVoucher = itemVoucher;
+          this.itemVoucherCarCombo = itemVoucher;
+          this.promocode = itemVoucher.code;
+          this.discountpromo = itemVoucher.rewardsItem.price;
+          this.bookCombo.promoCode = itemVoucher.code;
+          this.bookCombo.discountpromo = this.discountpromo;
+          this.ischeckbtnpromo = true;
+          this.ischeckpromo = true;
+        }
+        else{
+          this._voucherService.selectVoucher = null;
+          this.itemVoucherCarCombo = null;
+          this.promocode = "";
+          this.discountpromo = 0;
+          this.bookCombo.promoCode = "";
+          this.bookCombo.discountpromo = 0;
+          this.ischeckbtnpromo = false;
+          this.ischeckpromo = false;
+        }
+          this.edit();
+        })
+        this.modalCtrl.dismiss();
+      }
+    })
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this._voucherService.selectVoucher = null;
+          this.itemVoucherCarCombo = null;
+          this.promocode = "";
+          this.discountpromo = 0;
+          this.bookCombo.promoCode = "";
+          this.bookCombo.discountpromo = 0;
+          this.ischeckbtnpromo = false;
+          this.ischeckpromo = false;
+      }
+    })
   }
   getHotelContractPrice(data) {
     var se = this;
@@ -428,6 +480,7 @@ export class CombocarnewPage implements OnInit {
                 se.AdultCombo = element.Rooms[0].IncludeAdults * se.elementMealtype.TotalRoom;
                 se.AdultCombo = se.AdultCombo > se.totalAdult ? se.totalAdult : se.AdultCombo;
                 se.statusRoom=element.MealTypeRates[0].Status;
+                se.bookCombo.mealTypeRates = se.elementMealtype;
                 se.calculateDiffPriceUnit();
                 se.getTransferData(true);
                 se.getBOD(element.MealTypeRates[0].RoomId);
@@ -466,10 +519,13 @@ export class CombocarnewPage implements OnInit {
     return el;
   }
   goback() {
+    this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+    this._voucherService.selectVoucher = null;
     this.bookCombo.idpointdepd = '';
     this.bookCombo.idpointdept = '';
     this.bookCombo.idpointretd = '';
     this.bookCombo.idpointrett = '';
+    this.valueGlobal.backValue = 'carcombo';
     //this.navCtrl.navigateBack(['/app/tabs/hoteldetail/' + this.booking.HotelId]);
     this.navCtrl.navigateBack('/hoteldetail/'+ this.booking.HotelId);
   }
@@ -557,6 +613,7 @@ export class CombocarnewPage implements OnInit {
       se.ischecktext = 0;
       se.ischeckerror = 0;
     }
+    se.checkVoucherClaimed();
   }
   async getTransferData(isDepart) {
     var se = this;
@@ -756,6 +813,8 @@ export class CombocarnewPage implements OnInit {
         this.Roomif.point = null;
       }
     }
+   
+    self.valueGlobal.backValue = '';
     self.Roomif.nameroom=self.nameroom;
     self.bookCombo.departObjectCar = self.departObject;
     self.bookCombo.returnObjectCar = self.returnObject;
@@ -780,6 +839,7 @@ export class CombocarnewPage implements OnInit {
       }
       total = self.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
     }
+    self.bookCombo.totalPriceBeforeApplyVoucher = total;
     if (self.ischeckbtnpromo) {
       //total = self.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
       self.bookCombo.ischeckbtnpromo = self.ischeckbtnpromo;
@@ -794,6 +854,10 @@ export class CombocarnewPage implements OnInit {
       self.Roomif.promocode = self.promocode;
       self.bookCombo.totalprice = total;
     }
+    // if(self._voucherService.selectVoucher && self._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
+    //   self.bookCombo.discountpromo= self._voucherService.selectVoucher.rewardsItem.price;
+    //   self.promocode = self._voucherService.selectVoucher.code;
+    // }
     var departPickup = {
       "Name":  self.pickup_pointsdepartd,
       "Fee": self.surchargedepd * this.totalAdult,
@@ -1500,6 +1564,7 @@ export class CombocarnewPage implements OnInit {
           se.total = se.PriceAvgPlusTAStr;
           se.PriceAvgPlusTAStr = se.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           se.loadcarspricedone=true;
+          se.checkVoucherClaimed();
           if (value == 0) {
             se.funccheckpoint();
           } else {
@@ -1683,7 +1748,7 @@ export class CombocarnewPage implements OnInit {
             if (se.ischeck) {
               total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
             }
-            se.discountpromo = json.data.discount;
+            se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.Pricepointshow = total - se.discountpromo;
             if (se.Pricepointshow > 0) {
               se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -1741,12 +1806,18 @@ export class CombocarnewPage implements OnInit {
             this.price = this.point.toLocaleString();
             var tempprice = this.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
             this.Pricepoint = tempprice - this.point - this.discountpromo;
+            if (this.Pricepoint<=0) {
+              this.Pricepoint=0;
+            }
             this.Pricepointshow = this.Pricepoint.toLocaleString();
             this.bookCombo.totalprice = this.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           } else {
             this.price = this.point.toLocaleString();
             var tempprice = this.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
             this.Pricepoint = tempprice - this.point;
+            if (this.Pricepoint<=0) {
+              this.Pricepoint=0;
+            }
             this.Pricepointshow = this.Pricepoint.toLocaleString();
             this.bookCombo.totalprice = this.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           }
@@ -1757,6 +1828,9 @@ export class CombocarnewPage implements OnInit {
           this.PriceAvgPlusTAStr = this.total.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           var tempprice = this.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
           this.Pricepointshow = tempprice - this.discountpromo;
+          if (this.Pricepointshow<=0) {
+            this.Pricepointshow=0;
+          }
           this.Pricepointshow = this.Pricepointshow.toLocaleString();
         }
         else {
@@ -1770,30 +1844,29 @@ export class CombocarnewPage implements OnInit {
       }
     })
     this.loadcarspricedone = true;
+    this.checkVoucherClaimed();
   }
   ionViewWillEnter() {
-    // var se=this;
-    // if (se.Roomif.point && se.Roomif.bookingCode) {
-    //   alert("Điểm tích luỹ "+se.Roomif.point+" đã được dùng cho booking "+se.Roomif.bookingCode+".Xin vui lòng thao tác lại booking!");
-    //   se.Roomif.bookingCode="";
-    // }
-    // if (se.Roomif.promocode && se.Roomif.bookingCode) {
-    //   alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.Roomif.bookingCode+".Xin vui lòng thao tác lại booking!");
-    //   se.Roomif.promocode="";
-    //   se.Roomif.bookingCode="";
-      
-    // }
-    this.point=0;
-    this.ischeck = false;
-    this.Roomif.point=null;
-    this.price=0;
-
-    this.textpromotion="Nhập mã giảm giá";
-    this.promocode="";
-    this.ischeckbtnpromo=false;
-    this.ischeckpromo=false;
-    this.msg="";
-    this.GetUserInfo();
+    
+    if(this.valueGlobal.backValue != 'combocarpaymentbreakdown'){
+      this.point=0;
+      this.ischeck = false;
+      this.Roomif.point=null;
+      this.price=0;
+  
+      this.textpromotion="iVIVU Voucher | Mobile Gift";
+      this.promocode="";
+      this.ischeckbtnpromo=false;
+      this.ischeckpromo=false;
+      this.msg="";
+      this._voucherService.selectVoucher = null;
+            this.itemVoucherCarCombo = null;
+            this.discountpromo = 0;
+            this.bookCombo.promoCode = "";
+            this.bookCombo.discountpromo = 0;
+      this.GetUserInfo();
+    }
+    
   }
   GetUserInfo() {
     var se = this;
@@ -1922,16 +1995,26 @@ export class CombocarnewPage implements OnInit {
     if (!this.ischeck) {
       $('.div-point').removeClass('div-disabled');
     this.valueGlobal.PriceAvgPlusTAStr=this.PriceAvgPlusTAStr;
-    this.textpromotion="Nhập mã giảm giá";
+    this.textpromotion="iVIVU Voucher | Mobile Gift";
     this.promocode="";
+    this.discountpromo = 0;
     this.ischeckbtnpromo=false;
     this.ischeckpromo=false;
+          this.itemVoucherCarCombo = null;
+          this.bookCombo.promoCode = "";
+          this.bookCombo.discountpromo = 0;
     this.msg="";
+    this._voucherService.openFrom = 'combocarnew';
     const modal: HTMLIonModalElement =
     await this.modalCtrl.create({
       component: AdddiscountPage,
     });
     modal.present();
+    if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+      this._voucherService.selectVoucher = null;
+    }
+    this.edit();
     modal.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
         this.zone.run(() => {
@@ -2031,13 +2114,16 @@ export class CombocarnewPage implements OnInit {
         })
       }
     }
-       for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
-      se._daysConfig.push({
-        date: se.valueGlobal.listlunar[j].date,
-        subTitle: se.valueGlobal.listlunar[j].name,
-        cssClass: 'lunarcalendar'
-      })
-      }
+    if(se.valueGlobal.listlunar){
+      for (let j = 0; j < se.valueGlobal.listlunar.length; j++) {
+        se._daysConfig.push({
+          date: se.valueGlobal.listlunar[j].date,
+          subTitle: se.valueGlobal.listlunar[j].name,
+          cssClass: 'lunarcalendar'
+        })
+        }
+    }
+       
     let Year=new Date().getFullYear()
     let Month=new Date().getMonth()
     let Day=new Date().getDate()
@@ -2348,6 +2434,7 @@ export class CombocarnewPage implements OnInit {
             se.RoomType=itemroom.RoomType;
             se.Roomif.payment = itemmealtype.Status;
             se.bookCombo.ComboDetail.comboDetail.roomId=itemroom.Rooms[0].RoomID;
+            se.bookCombo.mealTypeRates = itemmealtype;
             if(itemmealtype.Name != null && itemmealtype.Notes.length==0){
               se.breakfast = itemmealtype.Name;
             }
@@ -2470,5 +2557,18 @@ export class CombocarnewPage implements OnInit {
   }
   nextShuttlebus(){
     this.navCtrl.navigateForward("/shuttlebusnote");
+  }
+
+  checkVoucherClaimed(){
+    setTimeout(()=>{
+      if(this.itemVoucherCarCombo && this.itemVoucherCarCombo.claimed){
+        this._voucherService.vouchers.forEach((element)=>{
+          if(element.id == this.itemVoucherCarCombo.id){
+            element.claimed = true;
+          }
+        });
+      }
+    },1000)
+    
   }
 }

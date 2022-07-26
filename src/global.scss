@@ -1362,3 +1362,38 @@ height: 18px !important;
 .m-top-24 {
   margin-top: 24px;
 }
+
+.voucher-list .myvoucher-content{
+  flex-direction: column !important;
+  background-color: #ffffff !important;
+  height: auto !important;
+  overflow-y: scroll;
+
+  .div-content-item{
+    min-width: 272px;
+
+    @media (min-width: 350px) and (max-width: 374px) {
+      min-width: 250px !important;
+    }
+
+    @media (min-width: 414px) and (max-width: 480px) { 
+          min-width: 300px;
+    }
+  }
+
+  .div-item-voucher {
+    //box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    margin-right: 0 !important;
+    //margin-bottom: 16px !important;
+  }
+  .div-bottom-16 {
+    margin-bottom: 16px !important;
+  }
+
+  .div-box-shadow {
+    margin-right: 0px !important;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 6px 0 0 6px !important;
+    background: #ecf0f5;
+  }
+}

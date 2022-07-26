@@ -384,7 +384,7 @@ export class OrderRequestAddluggagePage implements OnInit {
     //console.log(this.activityService.objRequestAddLuggage.objectReturnLuggage);
     //return;
     this.gf.showLoading();
-    if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage){
+    if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage.items  && this.activityService.objRequestAddLuggage.objectDepartLuggage.items.length >0){
       let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
       let  headers = {
         "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",

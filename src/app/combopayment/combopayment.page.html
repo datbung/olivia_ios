@@ -61,6 +61,10 @@
     </ion-col>
   </ion-row>
   <hr >
+  <div class="div-voucher-apply" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">
+    <div class="width-200" *ngIf="bookCombo.promoCode"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{bookCombo.promoCode}}</span><span class="text-normal">)</span> </div>
+    <div class="width-100 text-normal text-right" *ngIf="bookCombo.discountpromo">{{gf.convertNumberToString(bookCombo.discountpromo)}}đ</div>
+  </div>
   <div class="cls-divpayment">
     <ion-row class="cls-rowheight">
       <ion-col size="5">
@@ -72,10 +76,13 @@
       <ion-col size="7">
         <p class="total-price" style="text-align: right">
           {{priceshow}}đ
-          <!-- <sup>
-            <img (click)="roompaymentbreakdow()" src="./assets/ic_green/ic_info.svg">
-          </sup> -->
         </p>
+        <p class="text-normal text-strike" *ngIf="bookCombo.totalPriceBeforeApplyVoucher">
+          {{gf.convertNumberToString(bookCombo.totalPriceBeforeApplyVoucher)}}đ
+        </p> 
+        <!-- <div class="text-total-price" *ngIf="bookCombo.promoCode">{{priceshow}}<span class="text-d">đ</span></div>
+        <div class="width-100 text-normal text-strike" *ngIf="bookCombo.totalPriceBeforeApplyVoucher">{{gf.convertNumberToString(bookCombo.totalPriceBeforeApplyVoucher)}}đ</div>
+        -->
       </ion-col>
     </ion-row>
   </div>

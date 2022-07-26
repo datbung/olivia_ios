@@ -630,3 +630,57 @@ hr
 .text-link-DK{
 color: #2f80ed
 }
+
+.div-voucher-apply {
+  display: flex;
+  margin: 14px 0 12px 0;
+
+  .width-100 {
+    width: 100%;
+  }
+  .width-200 {
+    width: 200%;
+  }
+
+  .text-normal {
+    font-size: 14px;
+    color: #3f3b3b;
+  }
+  .text-code {
+    font-size: 14px;
+    color: #f79321;
+  }
+
+  .text-normal {
+    font-size: 14px;
+    color: #3f3b3b;
+  }
+
+  .text-strike {
+    text-decoration: line-through;
+     text-align: right;
+  }
+}
+
+.text-normal {
+  font-size: 14px;
+  color: #3f3b3b;
+}
+
+.text-strike {
+  text-decoration: line-through;
+   text-align: right;
+   margin: 0;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.m-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.p-r-24 {
+  padding-right: 24px;
+}

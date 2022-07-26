@@ -14,6 +14,7 @@ import { ConfirmemailPage } from '../confirmemail/confirmemail.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { BizTravelService } from '../providers/bizTravelService';
+import { voucherService } from '../providers/voucherService';
 
 /**
  * Generated class for the FacilitiesPage page.
@@ -53,7 +54,8 @@ export class FlightComboAddDetailsPage implements OnInit {
     public searchhotel: SearchHotel, private booking: Booking, private bookcombo: Bookcombo, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction, public loadingCtrl: LoadingController,
     public Roomif:RoomInfo,public actionsheetCtrl: ActionSheetController,
     private fb: Facebook,
-    public bizTravelService: BizTravelService) {
+    public bizTravelService: BizTravelService,
+    public _voucherService: voucherService) {
       var id = 1;
       let num = 1;
       this.objectFlight = this.gf.getParams('flightcombo');

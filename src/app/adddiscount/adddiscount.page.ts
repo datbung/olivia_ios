@@ -5,14 +5,18 @@ import { C } from '../providers/constants';
 import { GlobalFunction } from '../providers/globalfunction';
 import * as request from 'requestretry';
 import { flightService } from './../providers/flightService';
+import { voucherService } from '../providers/voucherService';
 @Component({
   selector: 'app-adddiscount',
   templateUrl: './adddiscount.page.html',
   styleUrls: ['./adddiscount.page.scss'],
 })
 export class AdddiscountPage implements OnInit {
+  loginuser: any;
   ;discountpromo;msg;ischecktext=3;ischeckerror=0;ischeckbtnpromo = false;promocode;
-  constructor(public _flightService: flightService,public zone: NgZone,public valueGlobal:ValueGlobal, public modalCtrl: ModalController,private bookCombo:Bookcombo) { 
+  constructor(public _flightService: flightService,public zone: NgZone,public valueGlobal:ValueGlobal, public modalCtrl: ModalController,private bookCombo:Bookcombo,
+    public _voucherService: voucherService) { 
+  
   }
 
   ngOnInit() {
@@ -37,7 +41,7 @@ export class AdddiscountPage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: { code: se.promocode, totalAmount: this._flightService.itemFlightCache.totalPrice?this._flightService.itemFlightCache.totalPrice:se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, ''),comboDetailId: this.bookCombo.ComboId },
+        body: { code: se.promocode, totalAmount: !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice, comboDetailId: se.bookCombo.ComboId },
         json: true
       };
   
@@ -46,7 +50,7 @@ export class AdddiscountPage implements OnInit {
         se.zone.run(() => {
           var json = body;
           if (json.error==0) {
-            se.discountpromo=json.data.discount;
+            se.discountpromo=json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.msg=json.msg;
             se.ischecktext=0;
             se.ischeckerror=0;
