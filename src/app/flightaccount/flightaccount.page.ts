@@ -1308,7 +1308,6 @@ export class FlightaccountPage {
         }
         ionViewDidLeave(){
           this.gf.checkLogout().then((data) => {
-            console.log(data)
             if(!data)
             {
               this.storage.remove('auth_token');

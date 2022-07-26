@@ -382,7 +382,7 @@ export class TabsPage implements OnInit {
                   if(body && body != "[]"){
                       var data = JSON.parse(body);
                       if(data && data.length >0){
-                        console.log(data);
+
                         data.forEach(element => {
                           if(element.bookingCode == bookingCode){
                                 se.callUpdateStatus(element);

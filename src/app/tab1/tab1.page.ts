@@ -2289,10 +2289,10 @@ export class Tab1Page implements OnInit {
       return;
     }
     this.gbitem = item;
-    if (item.HotelName) {
-      this.input = item.HotelName;
+    if (item.hotelName) {
+      this.input = item.hotelName;
     } else {
-      this.input = item.RegionName;
+      this.input = item.regionName;
     }
     this.ischeckclose = false;
     // this.isenabled = false
@@ -2323,7 +2323,7 @@ export class Tab1Page implements OnInit {
     if (msg.regionName) {
       this.input = msg.regionName;
     } else {
-      this.input = msg.HotelName;
+      this.input = msg.hotelName;
     }
     this.isenabled = false;
     this.co = 2;
@@ -2511,8 +2511,8 @@ export class Tab1Page implements OnInit {
             this.cout
         );
       } else if (this.co == 0) {
-        if (this.gbitem.Type == 1) {
-          var id1 = { id: this.gbitem.HotelId };
+        if (this.gbitem.type == 1) {
+          var id1 = { id: this.gbitem.hotelId };
           if (this.recent) {
             var cocheck = 0;
             for (let i = 0; i < this.recent.length; i++) {
@@ -2525,8 +2525,8 @@ export class Tab1Page implements OnInit {
             if (cocheck == 0) {
               var item2 = {
                 type: "1",
-                hotelId: this.gbitem.HotelId,
-                hotelName: this.gbitem.HotelName,
+                hotelId: this.gbitem.hotelId,
+                hotelName: this.gbitem.hotelName,
                 regionId: "",
                 regionCode: "",
                 regionName: "",
@@ -2546,8 +2546,8 @@ export class Tab1Page implements OnInit {
           } else {
             var item2 = {
               type: "1",
-              hotelId: this.gbitem.HotelId,
-              hotelName: this.gbitem.HotelName,
+              hotelId: this.gbitem.hotelId,
+              hotelName: this.gbitem.hotelName,
               regionId: "",
               regionCode: "",
               regionName: "",
@@ -2560,7 +2560,7 @@ export class Tab1Page implements OnInit {
           }
           this.searchhotel.rootPage = "mainpage";
       
-          this.valueGlobal.logingoback= "/hoteldetail/" + se.gbitem.HotelId;
+          this.valueGlobal.logingoback= "/hoteldetail/" + se.gbitem.hotelId;
           var item: any ={};
           item.adult=this.searchhotel.adult;
           item.child=this.searchhotel.child;
@@ -2573,12 +2573,12 @@ export class Tab1Page implements OnInit {
           item.CheckOutDate=this.searchhotel.CheckOutDate;
           item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
           item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
-          item.id=this.gbitem.HotelId;
-          item.name=this.gbitem.HotelName;
+          item.id=this.gbitem.hotelId;
+          item.name=this.gbitem.hotelName;
           item.isType=0;
           //this.arrHistory.push(item);
           this.gf.setCacheSearch(item,0);
-          se.navCtrl.navigateForward('/hoteldetail/'+ se.gbitem.HotelId);
+          se.navCtrl.navigateForward('/hoteldetail/'+ se.gbitem.hotelId);
           // this.navCtrl.navigateForward(
           //   "/app/tabs/hoteldetail/" + this.gbitem.HotelId
           // );
@@ -2591,9 +2591,9 @@ export class Tab1Page implements OnInit {
               "|" +
               this.cout +
               "|" +
-              this.gbitem.HotelId +
+              this.gbitem.hotelId +
               "|" +
-              this.gbitem.HotelName
+              this.gbitem.hotelName
           );
         } else {
           if (this.recent) {
@@ -2609,9 +2609,9 @@ export class Tab1Page implements OnInit {
                 type: "2",
                 hotelId: "",
                 hotelName: "",
-                regionId: this.gbitem.RegionId,
-                regionCode: this.gbitem.RegionCode,
-                regionName: this.gbitem.RegionName,
+                regionId: this.gbitem.regionId,
+                regionCode: this.gbitem.regionCode,
+                regionName: this.gbitem.regionName,
                 flag: "0",
                 totalHotels: this.gbitem.totalHotels
               };
@@ -2630,9 +2630,9 @@ export class Tab1Page implements OnInit {
               type: "2",
               hotelId: "",
               hotelName: "",
-              regionId: this.gbitem.RegionId,
-              regionCode: this.gbitem.RegionCode,
-              regionName: this.gbitem.RegionName,
+              regionId: this.gbitem.regionId,
+              regionCode: this.gbitem.regionCode,
+              regionName: this.gbitem.regionName,
               flag: "0",
               totalHotels: this.gbitem.totalHotels
             };
@@ -2640,9 +2640,9 @@ export class Tab1Page implements OnInit {
             this.searchhotel.recent.push(item3);
           }
 
-          this.authService.region = this.gbitem.RegionName;
-          this.authService.regionid = this.gbitem.RegionId;
-          this.authService.regioncode = this.gbitem.RegionCode;
+          this.authService.region = this.gbitem.regionName;
+          this.authService.regionid = this.gbitem.regionId;
+          this.authService.regioncode = this.gbitem.regionCode;
           var obj = {
             regionName: this.authService.region,
             regionId: this.authService.regionid,
@@ -2668,9 +2668,9 @@ export class Tab1Page implements OnInit {
           item.CheckOutDate=this.searchhotel.CheckOutDate;
           item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
           item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
-          item.id=this.gbitem.RegionId;
-          item.name=this.gbitem.RegionName;
-          item.code = this.gbitem.RegionCode;
+          item.id=this.gbitem.regionId;
+          item.name=this.gbitem.regionName;
+          item.code = this.gbitem.regionCode;
           item.isType=1;
           this.searchhotel.objRecent=item;
           this.gf.setCacheSearch(item,0);
@@ -2690,7 +2690,7 @@ export class Tab1Page implements OnInit {
           );
         }
       } else if (this.co == 2) {
-        if (this.gbmsg.Type == 1) {
+        if (this.gbmsg.type == 1) {
           var id1 = { id: this.gbmsg.hotelId };
           this.searchhotel.rootPage = "mainpage";
           this.searchhotel.gbitem.hotelId = this.gbmsg.hotelId;
@@ -2707,8 +2707,8 @@ export class Tab1Page implements OnInit {
           item.CheckOutDate=this.searchhotel.CheckOutDate;
           item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
           item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
-          item.id=this.gbmsg.HotelId;
-          item.name=this.gbmsg.HotelName;
+          item.id=this.gbmsg.hotelId;
+          item.name=this.gbmsg.hotelName;
           item.isType=0;
           //this.arrHistory.push(item);
           this.gf.setCacheSearch(item,0);

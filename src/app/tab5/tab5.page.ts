@@ -250,7 +250,6 @@ export class Tab5Page implements OnInit {
     }
     ionViewDidLeave(){
       this.gf.checkLogout().then((data) => {
-        console.log(data)
         if(!data)
         {
           this.storage.remove('auth_token');
