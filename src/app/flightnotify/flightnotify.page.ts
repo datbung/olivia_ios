@@ -256,9 +256,13 @@ export class FlightnotifyPage {
                 se.mapBookingAndPayment(item.bookingCode);
             }
         } else { // show notifi
-            if (!item.dataLink) {
+            if (item.flyNotify=="1") {
+                se._flightService.tabFlightIndex = 1;
+                se._flightService.itemMenuFlightClick.emit(1);
+
+              }else{
                 se.presentToastNotifi(item.message);
-            }
+              }
          
         }
 
@@ -294,7 +298,6 @@ export class FlightnotifyPage {
                 }else{
                     se.getdatamytripHis().then((data) => {
                         se.gf.hideLoading();
-                        se.valueGlobal.listhistory=data;
                         se.valueGlobal.BookingCodeHis=BookingCode;
                         var idxMap = data.map( (item,index) =>{ 
                           return item.booking_id == BookingCode;
