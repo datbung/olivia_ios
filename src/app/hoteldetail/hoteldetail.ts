@@ -382,12 +382,12 @@ export class HotelDetailPage implements OnInit {
       });
       //this.value.logingoback = "HoteldetailPage";
       if (this.searchhotel.isRefreshDetail) {
-        this.HotelID = this.searchhotel.hotelID ? this.searchhotel.hotelID : (this.searchhotel.gbitem ? this.searchhotel.gbitem.HotelId : this.searchhotel.hotelID);
+        this.HotelID = this.searchhotel.hotelID ? this.searchhotel.hotelID : (this.searchhotel.gbitem ? this.searchhotel.gbitem.hotelId : this.searchhotel.hotelID);
       } else {
         if (this.searchhotel.rootPage == "listpage" || this.searchhotel.rootPage == "topdeal" || this.searchhotel.rootPage == "listmood" || this.searchhotel.rootPage == "likepage" || this.searchhotel.backPage == "roompaymentselect" || this.searchhotel.backPage == "roompaymentselect-ean" || this.searchhotel.rootPage == "MyTrip" || this.searchhotel.rootPage == "combolist" || this.searchhotel.rootPage == "topdeallist") {
           this.HotelID = this.searchhotel.hotelID;
         } else if (this.searchhotel.rootPage == "mainpage") {
-          this.HotelID = (this.searchhotel.gbitem ? this.searchhotel.gbitem.HotelId : this.searchhotel.hotelID);
+          this.HotelID = (this.searchhotel.gbitem ? this.searchhotel.gbitem.hotelId : this.searchhotel.hotelID);
           if(this.searchhotel.isRecent==1){
             this.HotelID=this.activeRoute.snapshot.paramMap.get('id');
           }

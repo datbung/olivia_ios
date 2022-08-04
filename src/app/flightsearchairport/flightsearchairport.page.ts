@@ -40,7 +40,7 @@ export class FlightsearchairportPage implements OnInit {
         if(!data){
           this.loadLocation();
         }else{
-          console.log(data);
+
           this.zone.run(()=>{
             data = data.filter((item) =>{ return item.code != 'FDF'});
             data.sort((a,b)=>{ return (a.country == "Việt Nam" && b.country != "Việt Nam" )  ? -1 : 1})

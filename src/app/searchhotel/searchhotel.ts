@@ -169,14 +169,14 @@ export class SearchHotelPage implements OnInit{
   }
   itemclick(msg) {
     this.searchHotel.gbitem = msg;
-    if (msg.RegionName) {
-      this.searchHotel.input = msg.RegionName;
+    if (msg.regionName) {
+      this.searchHotel.input = msg.regionName;
       // var obj = this.arrHistory.filter((item) =>  item.id == msg.RegionId);
 
       //this.arrHistory.push(item);
     // }
     } else {
-      this.searchHotel.input = msg.HotelName;
+      this.searchHotel.input = msg.hotelName;
       // var obj = this.arrHistory.filter((item) =>  item.id == msg.HotelId);
       
     }
@@ -195,9 +195,9 @@ export class SearchHotelPage implements OnInit{
       const val = ev.detail.value;
       var options = {
         method: 'GET',
-        url: 'https://www.ivivu.com/GListSuggestion',
+        url: C.urls.baseUrl.urlGate+'/search/searchhotel',
         timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-        qs: { key: val },
+        qs: { keyword: val },
         headers:
         {
         }
@@ -224,26 +224,28 @@ export class SearchHotelPage implements OnInit{
                 })
                 
               }else{
-                se.items.forEach(e => {
-                  e.show = false;
-                })
+                // se.items.forEach(e => {
+                //   e.show = false;
+                // })
 
-                lstitems.forEach(element => {
-                  let check = se.items.filter((i)=>{ return i.id == element.id });
-                  if(check && check.length == 0)
-                  {
-                    element.show = true;
+                // lstitems.forEach(element => {
+                //   let check = se.items.filter((i)=>{ return i.id == element.id });
+                //   if(check && check.length == 0)
+                //   {
+                //     element.show = true;
+                //     se.items.push(element);
+                //   }else{
+                //     check[0].show = true;
+                //   }
+                // })
+                se.items=[];
+                   lstitems.forEach(element => {
                     se.items.push(element);
-                  }else{
-                    check[0].show = true;
-                  }
                 })
               }
             
           }else{
-            se.items.forEach(element => {
-              element.show = false;
-            });
+            se.items=[];
             se.ischecktext=true;
             se.ischecklist = true;
           }

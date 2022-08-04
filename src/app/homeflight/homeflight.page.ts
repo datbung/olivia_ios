@@ -107,7 +107,6 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           })
             
             this.storage.get("itemFlightCache").then((data)=>{
-              console.log(data)
               if(data){
                 data = JSON.parse(data);
                 this._flightService.itemFlightCache = data;

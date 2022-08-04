@@ -2973,6 +2973,7 @@ export class FlightaddservicePage implements OnInit {
                 "voucher":{ voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
                 "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                 "bookingJsonData":bookingJsonData,//đi chung
+                "InsuranceType":se._flightService.itemFlightCache.InsuranceType
               }
               if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
               {
@@ -2991,7 +2992,7 @@ export class FlightaddservicePage implements OnInit {
                 body: JSON.stringify(objPass)
               };
               se.options = options;
-
+              console.log(options)
               request(options, function (error, response, body) {
                 let objError = {
                   page: "flightaddservice",

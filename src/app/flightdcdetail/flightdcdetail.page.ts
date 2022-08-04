@@ -147,7 +147,7 @@ export class FlightdcdetailPage implements OnInit {
         Time_Return_RoundTrip: {},
         Return_RoundTrip_planenumber: {},
 
-        slot: 1,
+        slot: this._flightService.itemFlightCache.pax,
         TotalPriceReturn: 0,
         TotalPriceGo: 0,
         User: { email: "", phone: "", fullName: "" }
