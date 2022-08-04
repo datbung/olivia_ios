@@ -447,18 +447,18 @@ export class TabsPage implements OnInit {
     //chuyển qua tab mytrip
     if(data && data.BookingCode && data.notifyAction != "cancel"){
       if(data.notifyAction == "sharereviewofhotel"){
-        //this.setNotification(data,"product");
+        this.setNotification(data,"product");
         this.navCtrl.navigateForward(['/app/tabs/tab3']);
         this.gf.setParams(data.BookingCode,'notifiBookingCode');
         this.gf.setParams(2,'selectedTab3');
       }
       else if(data.NotifyType == "blog" && data.notifyAction == "blogofmytrip"){
-        //this.setNotification(data,"product");
+        this.setNotification(data,"product");
         this.valueGlobal.backValue = "tab4";
         this.navCtrl.navigateForward("/blog/" + data.BookingCode);
       }
       else if(data.NotifyType == "fly" && data.notifyAction == "flychangeinfo"){
-        //this.setNotification(data,"product");
+        this.setNotification(data,"product");
         this.navCtrl.navigateForward(['/app/tabs/tab3']);
         this.gf.setParams(data.BookingCode,'notifiBookingCode');
         this.gf.setParams(data.switchObj,'notifiSwitchObj');
@@ -479,11 +479,12 @@ export class TabsPage implements OnInit {
         this.valueGlobal.backValue = "homeflight";
       }
       else if(data.dataLink){
-        //this.setNotification(data,"product");
+        this.setNotification(data,"product");
         this.navCtrl.navigateForward(data.dataLink);
       }
       else if(data.flyNotify){
         this._flightService.itemTabFlightActive.emit(true);
+        this.setNotification(data,"product");
         this.valueGlobal.backValue = "homeflight";
         this.navCtrl.navigateForward('/tabs/tab1');
       }
@@ -699,6 +700,7 @@ export class TabsPage implements OnInit {
 
       setTimeout(()=>{
         this.fcmNative.onNotification().subscribe( (data:any)=>{
+          debugger;
           if(data.wasTapped){
             this.showNotification(data);
             //update lại trạng thái bkg

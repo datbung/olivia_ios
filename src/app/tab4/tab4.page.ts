@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { ValueGlobal } from '../providers/book-service';
 import { Router } from '@angular/router';
 import { NetworkProvider } from '../network-provider.service';
+import { flightService } from '../providers/flightService';
 
 /**
  * Generated class for the InboxPage page.
@@ -50,7 +51,7 @@ export class Tab4Page implements OnInit{
     public networkProvider: NetworkProvider,public router: Router,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-    public activityService: ActivityService) {
+    public activityService: ActivityService, public _flightService: flightService,) {
     //google analytic
     gf.googleAnalytion('inbox','load','');
     //get phone
@@ -319,7 +320,14 @@ export class Tab4Page implements OnInit{
     }else{
       //show notifi
       if (!item.dataLink) {
-        se.presentToastNotifi(item.message);
+        if (item.flyNotify=="1") {
+          se._flightService.itemTabFlightActive.emit(true);
+          se.valueGlobal.backValue = "homeflight";
+          se.navCtrl.navigateForward('/tabs/tab1');
+        }else{
+          se.presentToastNotifi(item.message);
+        }
+      
       }
      
     }
@@ -532,18 +540,10 @@ export class Tab4Page implements OnInit{
         }else{
           se.getdatamytripHis().then((data) => {
             se.gf.hideLoading();
-            se.valueGlobal.listhistory=data;
             se.valueGlobal.BookingCodeHis=BookingCode;
-            var idxMap = data.map( (item,index) =>{ 
-              return item.booking_id == BookingCode;
-            });
-            var itemMap = data.filter((item) => { return item.booking_id == BookingCode });
-            if(itemMap && itemMap.length>0){
-              se.gf.setParams(BookingCode,'notifiBookingCode');
-              se.gf.setParams(3,'selectedTab3');
-              se.navCtrl.navigateForward(['/app/tabs/tab3']);
-              
-            }
+            se.gf.setParams(BookingCode,'notifiBookingCode');
+            se.gf.setParams(3,'selectedTab3');
+            se.navCtrl.navigateForward(['/app/tabs/tab3']);
           })
         }
       })
@@ -601,7 +601,7 @@ export class Tab4Page implements OnInit{
           var options = {
             method: 'GET',
             //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getmytrip?getall=true',
-            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=100',
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=25',
             headers:
             {
               'accept': 'application/json',
