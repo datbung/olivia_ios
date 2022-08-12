@@ -224,6 +224,13 @@
     *ngIf="ischeck == true && ischeckks == true "
     [ngClass]="isNotice ? 'cls-content-slide-notice' : 'cls-content-slide'"
   >
+  <div *ngIf="topSale>0" class="div-topSale">
+    <img class="img-fire" src="./assets/imgs/ic_fire_home.svg" />
+    <div class="text-topSale">
+      {{topSale}} khách đã đặt phòng trong 24h qua
+    </div>
+  
+  </div>
   <!-- tìm kiếm gần đây -->
 <ion-row *ngIf="arrHistory.length>0" style="margin-left: -5px;padding-top:16px" class="p-left-16">
 

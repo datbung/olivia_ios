@@ -167,6 +167,7 @@ export class Tab1Page implements OnInit {
   isNotice = false;
   allowShowCalendarFirstTime: any = true;
   arrHistory = [];
+  topSale: any;
   constructor(
     
     public navCtrl: NavController,
@@ -222,6 +223,7 @@ export class Tab1Page implements OnInit {
     })
         //lấy âm lịch
         this.getCalendarholidays();
+        this.gettopSale();
     //Lấy app version
     this.appVersion.getVersionNumber().then(version => {
       this.appversion = version;
@@ -324,6 +326,38 @@ export class Tab1Page implements OnInit {
     }
     //preload mytrip
     //se.getdatamytrip();
+  }
+  gettopSale() {
+    var se=this;
+    var options = {
+      method: "GET",
+      url: C.urls.baseUrl.urlMobile +"/mobile/OliviaApis/TopSale24hByHotel?hotelId=0",
+      timeout: 10000,
+      maxAttempts: 5,
+      retryDelay: 2000,
+      headers: {}
+    };
+    request(options, function(error, response, body) {
+      if (response.statusCode != 200) {
+        var objError = {
+          page: "main",
+          func: "getNewsBlog",
+          message: response.statusMessage,
+          content: response.body,
+          param: JSON.stringify(options),
+          type: "warning"
+        };
+        C.writeErrorLog(objError,response);
+      }
+      if (error) {
+        error.page = "main";
+        error.func = "getNewsBlog";
+        (error.param = JSON.stringify(options)), C.writeErrorLog(error,response);
+      }
+      var res=JSON.parse(body);
+      se.topSale=res.total;
+      console.log(JSON.parse(body));
+    });
   }
   public async ngOnInit(): Promise<void> {
     await this.onEnter();

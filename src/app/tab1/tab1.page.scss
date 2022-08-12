@@ -2383,3 +2383,18 @@ body{
     max-width: calc(calc(3.8 / var(--ion-grid-columns, 12)) * 100%) !important;
   }
 }
+.div-topSale{
+  background-color: #f4dcdb;
+  height: 36px;
+  padding: 8px 0px 7px 8px;
+  font-size: 16px;
+  color: #e52822;
+  display: flex;
+}
+.img-fire{
+  position: absolute;
+  top: 6px;
+}
+.text-topSale{
+  margin-left: 22px;
+}
