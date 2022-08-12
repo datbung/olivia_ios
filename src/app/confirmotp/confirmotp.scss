@@ -2,8 +2,8 @@
 .input-otp{
     border: solid 1px #bdbdbd;
     border-radius: 4px;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     text-align: center;
     margin-right: 10px;
 }
@@ -15,6 +15,7 @@
     padding: 0px 8px 0px 0px;
     align-self: center;
     text-align: right;
+    margin-right: 4px;
 }
 .label-otp{
     margin: 10px 0px 0px 0px;
@@ -23,6 +24,19 @@
     .content-confirm .native-input.sc-ion-input-md {
         text-align: center;
         margin-right: 10px;
+    }
+    .input-opt .sc-ion-input-md-h {
+        --padding-top: 10px ;
+        --padding-end: 0;
+        --padding-bottom: 10px;
+        --padding-start: 4px;
+    }
+    .ip-all {
+
+        .native-input.sc-ion-input-md {
+            text-align: left !important;
+            padding-left: 70px;
+        }
     }
 }
 .label-warning{
@@ -45,4 +59,22 @@
     font-size: 17px;
     font-weight: normal;
     margin-left: 0;
+}
+
+.ip-all {
+    position: absolute;
+    margin-top: -29px;
+    text-align: left !important;
+    padding-left: 70px !important;
+}
+.cls-hidden {
+    visibility: hidden;
+}
+.label-delete {
+    color: #26bed6;
+    padding-left: 4px;
+    text-decoration: underline;
+}
+.text-left {
+    text-align: left;
 }

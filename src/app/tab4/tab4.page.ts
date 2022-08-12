@@ -541,6 +541,7 @@ export class Tab4Page implements OnInit{
           se.getdatamytripHis().then((data) => {
             se.gf.hideLoading();
             se.valueGlobal.BookingCodeHis=BookingCode;
+            se.valueGlobal.listhistory = data;
             se.gf.setParams(BookingCode,'notifiBookingCode');
             se.gf.setParams(3,'selectedTab3');
             se.navCtrl.navigateForward(['/app/tabs/tab3']);

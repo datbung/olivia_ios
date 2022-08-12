@@ -148,16 +148,16 @@ export class LoginusernamePage implements OnInit {
                   name +=' ' +textfullname[i];
                 }
               }
-              info = { ho: textfullname[0], ten: name , phone: decoded.phone}
+              info = { ho: textfullname[0], ten: name , phone: decoded.phone, gender: decoded.gender}
             }else if(textfullname.length>1){
-              info = { ho: textfullname[0], ten: textfullname[1], phone: decoded.phone}
+              info = { ho: textfullname[0], ten: textfullname[1], phone: decoded.phone, gender: decoded.gender}
             }
             else if(textfullname.length==1){
-              info = { ho: textfullname[0], ten: "", phone: decoded.phone}
+              info = { ho: textfullname[0], ten: "", phone: decoded.phone, gender: decoded.gender}
             }
             se.storage.set("infocus", info);
           } else {
-            info = { ho: "", ten: "", phone: decoded.phone}
+            info = { ho: "", ten: "", phone: decoded.phone, gender: decoded.gender}
             se.storage.set("infocus", info);
           }
           if (Array.isArray(decoded.jti)) {

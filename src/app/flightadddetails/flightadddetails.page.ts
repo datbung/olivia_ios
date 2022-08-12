@@ -390,8 +390,8 @@ export class FlightadddetailsPage implements OnInit {
             if(!itema.name){
               itema.name =  se.hoten ? se.hoten : ( se.email ? se.email : '');
               if(se.gender){
-                itema.gender = (se.gender == 1 || se.gender.toLowerCase().indexOf('Ông') || se.gender.toLowerCase().indexOf('Nam') ) ? 1 : 2;
-                itema.genderdisplay = (se.gender == 1 || se.gender.toLowerCase().indexOf('ông') != -1 || se.gender.toLowerCase().indexOf('nam') != -1 ) ? 'Ông' : 'Bà';
+                itema.gender = (se.gender == 1 || se.gender.toLowerCase().indexOf('Ông') !=-1 || se.gender.toLowerCase().indexOf('Nam')!=-1 || se.gender.toLowerCase().indexOf('m') !=-1) ? 1 : 2;
+                itema.genderdisplay = (se.gender == 1 || se.gender.toLowerCase().indexOf('ông') != -1 || se.gender.toLowerCase().indexOf('nam') != -1 || se.gender.toLowerCase().indexOf('m') !=-1) ? 'Ông' : 'Bà';
               }
               
             }
@@ -408,7 +408,6 @@ export class FlightadddetailsPage implements OnInit {
                   se.jti = jti;
                   se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/api/Dashboard/GetListName?memberid='+jti, {},{}, 'flightadddetails', 'GetListName').then((data)=>{
                       if(data && data.length >0){
-
                         this.maxAgeOfChild = moment(new Date()).format('YYYY').toString();
                         let mindob ='2007', maxdob = '2020';
                         let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
@@ -576,7 +575,7 @@ export class FlightadddetailsPage implements OnInit {
              
               setTimeout(()=>{
                 se.setAdultProperty();
-              },100)
+              },200)
              
 
               se.storage.get('auth_token').then(auth_token => {
@@ -2440,14 +2439,35 @@ alert.present();
           se._flightService.itemFlightCache.backtochoiceseat = false;
           se.updatePassengerInfo().then((data)=>{
             if(!data.error){
-              se.gf.hideLoading();
+              
               se._flightService.itemFlightCache.pnr = data;
               if(se._flightService.itemFlightCache.totalPrice==0)
                           {
-                            se._flightService.itemFlightCache.ischeckpayment= 1;
-                            se.navCtrl.navigateForward('flightpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                           
+                            let itemcache = se._flightService.itemFlightCache;
+                            itemcache.ischeckpayment = 0;
+                            this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
+                              if(check){
+                                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
+                                            se.gf.CreatePayoo(url).then((data) => {
+                                              se.gf.hideLoading();
+                                            if(data.success){
+                                              se._flightService.itemFlightCache.ischeckpayment= 1;
+                                                  se.navCtrl.navigateForward('flightpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                                                }else{
+                                                  se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+                                                  se.gf.hideLoading();
+                                                }
+                                          })
+                                  }
+                                  else{
+                                    se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+                                    se.gf.hideLoading();
+                                  }
+                            })
                           }
                           else{
+                            se.gf.hideLoading();
                             se.navCtrl.navigateForward('/flightpaymentselect');
                           }
             }else{
@@ -3771,28 +3791,7 @@ alert.present();
                       se.storage.set("email", data.data.email);
                       se.storage.set("saveemail", data.data.email);
                       se.email = data.data.email;
-
-                      //se.confirmBeforeGoToPaymentPage();
-                      se.updatePassengerInfo().then((data)=>{
-                        if(!data.error){
-                          se.gf.hideLoading();
-                          se._flightService.itemFlightCache.pnr = data;
-                          if(se._flightService.itemFlightCache.totalPrice==0)
-                          {
-                            se._flightService.itemFlightCache.ischeckpayment= 1;
-                            se.navCtrl.navigateForward('flightpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-                          }
-                          else{
-                            
-                            se.navCtrl.navigateForward('/flightpaymentselect');
-                          }
-                         
-                          
-                        }else{
-                          se.gf.showToastWarning(data.error);
-                          se.gf.hideLoading();
-                        }
-                      })
+                      se.gotopaymentpage();
                     }
                   }
                   

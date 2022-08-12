@@ -13,6 +13,7 @@ import { Storage } from '@ionic/storage';
 import { Bookcombo, RoomInfo, ValueGlobal } from 'src/app/providers/book-service';
 import { MytripService } from 'src/app/providers/mytrip-service.service';
 import { foodService } from 'src/app/providers/foodService';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
   selector: 'app-confirmpayment',
@@ -49,7 +50,8 @@ export class ConfirmPaymentPage implements OnInit {
     public Roomif: RoomInfo,
     public _mytripservice: MytripService,
     public _foodService: foodService,
-    public valueGlobal: ValueGlobal) { 
+    public valueGlobal: ValueGlobal,
+    public keyboard: Keyboard) { 
         this.otpData = this.formBuilder.group({
             otp: ['', Validators.compose([Validators.required])],
           });
@@ -91,7 +93,12 @@ export class ConfirmPaymentPage implements OnInit {
 
   ngOnInit() {
   }
-
+  ionViewDidEnter() {
+    setTimeout(() => {
+      this.input.setFocus();
+    }, 150);
+    this.keyboard.show();
+  }
   goback(){
     this.navCtrl.back();
   }

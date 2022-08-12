@@ -1,5 +1,6 @@
 
 import {Injectable, EventEmitter} from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root' // <- ADD THIS
@@ -57,7 +58,14 @@ export class flightService{
   itemFlightPaymentLater: any = [];
   itemCheckTabActive = new EventEmitter();
   
-  
+  private ItemFlightReloadInfoSubject = new Subject<any>();
+  publicItemFlightReloadInfo(data: any) {
+    this.ItemFlightReloadInfoSubject.next(data);
+  }
+
+  getItemFlightReloadInfo(): Subject<any> {
+    return this.ItemFlightReloadInfoSubject;
+  }
   
   
   

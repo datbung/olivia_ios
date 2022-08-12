@@ -215,7 +215,7 @@ export class VoucherSlideHotelPage implements OnInit{
           });
           this.vouchers = [...data];
           this.zone.run(()=>{
-            this._voucherService.hasVoucher = true;
+            this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
           })
         }
         
@@ -244,7 +244,7 @@ export class VoucherSlideHotelPage implements OnInit{
           this.vouchers = [...data];
           this._voucherService.vouchers = [...data];
           this.zone.run(()=>{
-            this._voucherService.hasVoucher = true;
+            this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
           })
         }else if(data.error == 401){
           this.storage.get('jti').then((memberid) => {

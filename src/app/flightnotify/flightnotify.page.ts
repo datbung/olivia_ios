@@ -256,13 +256,16 @@ export class FlightnotifyPage {
                 se.mapBookingAndPayment(item.bookingCode);
             }
         } else { // show notifi
-            if (item.flyNotify=="1") {
-                se._flightService.tabFlightIndex = 1;
-                se._flightService.itemMenuFlightClick.emit(1);
-
-              }else{
-                se.presentToastNotifi(item.message);
-              }
+            if (!item.dataLink) {
+                if (item.flyNotify=="1") {
+                    se._flightService.tabFlightIndex = 1;
+                    se._flightService.itemMenuFlightClick.emit(1);
+    
+                  }else{
+                    se.presentToastNotifi(item.message);
+                  }
+            }
+           
          
         }
 

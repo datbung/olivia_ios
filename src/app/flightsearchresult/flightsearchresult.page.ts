@@ -200,7 +200,7 @@ export class FlightsearchresultPage implements OnInit {
       }
       else {
         this._flightService.itemTabFlightActive.emit(true);
-        this._flightService.itemFlightReloadInfo.emit(1);
+        this._flightService.publicItemFlightReloadInfo(1);
         this.valueGlobal.backValue = "homeflight";
         this.navCtrl.navigateBack('/tabs/tab1');
       }
@@ -297,7 +297,7 @@ export class FlightsearchresultPage implements OnInit {
       })
     }else{
       this._flightService.itemTabFlightActive.emit(true);
-      this._flightService.itemFlightReloadInfo.emit(1);
+      this._flightService.publicItemFlightReloadInfo(1);
       this.valueGlobal.backValue = "homeflight";
       //this.clearFilter();
       this.navCtrl.navigateBack('/tabs/tab1');
@@ -485,7 +485,7 @@ export class FlightsearchresultPage implements OnInit {
               se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
             }
           })
-          se._flightService.itemFlightReloadInfo.emit(1);
+          se._flightService.publicItemFlightReloadInfo(1);
 
           se._flightService.itemFlightCache.departSeatChoice = [];
           se._flightService.itemFlightCache.returnSeatChoice = [];
@@ -2991,12 +2991,12 @@ export class FlightsearchresultPage implements OnInit {
             if(se._flightService.objectFilterReturn &&
               (se._flightService.objectFilterReturn.minprice*1 != 0
               || se._flightService.objectFilterReturn.maxprice*1 != 15000000
-              || se._flightService.objectFilterReturn.departTimeRange.length >0
-              || se._flightService.objectFilterReturn.returnTimeRange.length >0
-              || se._flightService.objectFilterReturn.airlineSelected.length >0
-              || se._flightService.objectFilterReturn.classSelected.length >0
-              || se._flightService.objectFilterReturn.stopSelected.length >0
-              || se._flightService.objectFilterReturn.facilitySelected.length >0
+              || se._flightService.objectFilterReturn.departTimeRangeReturn.length >0
+              || se._flightService.objectFilterReturn.returnTimeRangeReturn.length >0
+              || se._flightService.objectFilterReturn.airlineSelectedReturn.length >0
+              || se._flightService.objectFilterReturn.classSelectedReturn.length >0
+              || se._flightService.objectFilterReturn.stopSelectedReturn.length >0
+              || se._flightService.objectFilterReturn.facilitySelectedReturn.length >0
               )){
               if(se.listReturn && se.listReturn.length >0){
                 se.listReturnFilter = se.filterByListFlight([...se.listReturn], 'return');
@@ -3012,6 +3012,7 @@ export class FlightsearchresultPage implements OnInit {
 
              if(se.step == 2){
                 se.enableFlightFilter = (totalItemDepartAfterFilter != totalItemDepartBeforeFilter) ? 1 : 0;
+                se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
              }else{
                 se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
              }

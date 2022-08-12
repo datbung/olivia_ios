@@ -401,7 +401,7 @@ export class FlightchangeinfoPage implements OnInit {
                 this.roundtriptext = "một chiều/khách";
                 this._flightService.itemFlightCache.roundTrip = false;
             }
-            this._flightService.itemFlightReloadInfo.emit(1);
+            this._flightService.publicItemFlightReloadInfo(1);
             }
 
         async searchFlight(index){
@@ -547,6 +547,8 @@ export class FlightchangeinfoPage implements OnInit {
 
               se._flightService.objSearch.departDate = se.cin;
               se._flightService.objSearch.returnDate = se.cout;
+              se._flightService.itemFlightCache.checkInDate = se.cin;
+              se._flightService.itemFlightCache.checkOutDate = se.cout;
               se.getDayName(se.cin, se.cout);
               se.storage.get("itemFlightCache").then((data)=>{
                 if(data){

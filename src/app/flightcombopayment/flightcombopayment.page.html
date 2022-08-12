@@ -51,7 +51,7 @@
       <!-- <div class="text-total-price" *ngIf="!(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed)">{{priceshow}}<span class="text-d">đ</span>
       </div> -->
       <div class="text-total-price">{{priceshow}}<span class="text-d">đ</span></div>
-      <div class="width-100 text-normal text-strike" *ngIf="bookCombo.totalPriceBeforeApplyVoucher">{{gf.convertNumberToString(bookCombo.totalPriceBeforeApplyVoucher)}}đ</div>
+      <div class="width-100 text-normal text-strike" *ngIf="bookCombo.promoCode && bookCombo.totalPriceBeforeApplyVoucher">{{gf.convertNumberToString(bookCombo.totalPriceBeforeApplyVoucher)}}đ</div>
       <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
       
     </div>

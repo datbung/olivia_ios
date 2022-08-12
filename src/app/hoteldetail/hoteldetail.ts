@@ -1103,26 +1103,28 @@ export class HotelDetailPage implements OnInit {
           se.booking.Address = jsondata.Address;
 
           se.id1 = { id: se.HotelID };
-          if(!isloaddata){
-            if (jsondata.HotelImages.length > 0 && (!se.slideData || se.slideData.length ==0) ) {
-              se.slideData = jsondata.HotelImages;
+          se.zone.run(()=> {
+            if(!isloaddata){
+              if (jsondata.HotelImages.length > 0 && (!se.slideData || se.slideData.length ==0 || jsondata.HotelImages.length != se.slideData.length) ) {
+                se.slideData = jsondata.HotelImages;
+              }
+              else {
+                var item = { LinkImage: jsondata.Avatar }
+                se.slideData.push(item);
+              }
+            }
+            if(!isloaddata){
+              for (let index = 0; index < se.slideData.length; index++) {
+                if (index == 0) {
+                  se.imgHotel = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") != -1) ? se.slideData[index].LinkImage : 'https:' + se.slideData[index].LinkImage;
+                }
+                se.slideData[index].LinkImage = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + se.slideData[index].LinkImage : se.slideData[index].LinkImage;
+              }
+              se.ischeck = true;
               
             }
-            else {
-              var item = { LinkImage: jsondata.Avatar }
-              se.slideData.push(item);
-            }
-          }
-          if(!isloaddata){
-            for (let index = 0; index < se.slideData.length; index++) {
-              if (index == 0) {
-                se.imgHotel = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") != -1) ? se.slideData[index].LinkImage : 'https:' + se.slideData[index].LinkImage;
-              }
-              se.slideData[index].LinkImage = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + se.slideData[index].LinkImage : se.slideData[index].LinkImage;
-            }
-            se.ischeck = true;
-            
-          }
+          })
+         
          
           se.lengthslide = se.slideData.length;
           se.name = jsondata.Name;

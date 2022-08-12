@@ -859,6 +859,18 @@
             right: 16px;
             bottom: 170px;
         }
+
+        @media (min-width:350px) and (max-width: 375px) {
+            .div-title-content{
+                font-size: 16px !important;
+            }
+            .m-top-4 {
+                margin-top: 1px !important;
+            }
+            .m-top-58 {
+                margin-top: 79px !important;
+            }
+        }
 }
 .action-sheets-flight-promo .div-close-promo{
             position: absolute;

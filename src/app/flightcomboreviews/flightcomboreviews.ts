@@ -539,7 +539,7 @@ export class FlightComboReviewsPage implements OnInit{
             this.bookCombo.discountpromo = this.discountpromo;
             this.ischeckbtnpromo = true;
             this.ischeckpromo = true;
-            
+            se.bookCombo.totalPriceBeforeApplyVoucher = total;
             this.Pricepointshow = total - this.discountpromo;
           }else{
             this.itemVoucherCombo = null;
@@ -548,7 +548,7 @@ export class FlightComboReviewsPage implements OnInit{
             this.bookCombo.discountpromo = 0;
             this.discountpromo = 0;
             this.ischeckbtnpromo = false;
-           
+            se.bookCombo.totalPriceBeforeApplyVoucher = null;
             this.Pricepointshow = total + itemVoucher.rewardsItem.price;
           }
           this.edit();
@@ -2268,8 +2268,9 @@ export class FlightComboReviewsPage implements OnInit{
       if (se.ischeck) {
         total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
       }
-    se.bookCombo.totalPriceBeforeApplyVoucher = total;
+    
     if (se.ischeckbtnpromo) {
+      
       se.Pricepointshow = total -  se.discountpromo;
       if (se.Pricepointshow>0) {
         se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");

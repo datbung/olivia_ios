@@ -1,21 +1,29 @@
 import { ValueGlobal } from './../providers/book-service';
 import { json } from 'body-parser';
 import { ToastController, NavController } from '@ionic/angular';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 var request = require("request");
 import { C } from '../providers/constants';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 @Component({
   selector: 'app-loginsms',
   templateUrl: './loginsms.page.html',
   styleUrls: ['./loginsms.page.scss'],
 })
 export class LoginsmsPage implements OnInit {
+  @ViewChild('ipphone') ipphone;
   phone
-  constructor(private toastCtrl: ToastController, public navCtrl: NavController, public valueGlobal: ValueGlobal) { }
+  constructor(private toastCtrl: ToastController, public navCtrl: NavController, public valueGlobal: ValueGlobal, public keyboard: Keyboard) { }
   ngOnInit() {
   }
   goback() {
     this.navCtrl.back();
+  }
+  ionViewDidEnter() {
+    setTimeout(() => {
+      this.ipphone.setFocus();
+    }, 150);
+    this.keyboard.show();
   }
   next() {
     if (this.phonenumber(this.phone)) {

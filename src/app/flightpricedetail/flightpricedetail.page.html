@@ -191,16 +191,12 @@
       </div>
           <div class="d-flex">
               <div class="div-width-100 v-align-center">
-                  <div class="text-pax">{{ adult }} người lớn</div>
-                  <div class="text-pax" *ngIf="child >0">{{ child }} trẻ em</div>
-                  <div class="text-pax" *ngIf="infant >0">{{ infant }} em bé</div>
+                <div class="text-pax m-top-6 text-bold f-16">Tổng cộng</div>
               </div>
               <div class="div-width-100 text-right">
                 <div class="text-total-price">{{totalpricedisplay}}đ</div>
-                <!-- <div class="text-total-price" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">{{ gf.convertNumberToString(totalPrice > 0 ? totalPrice : 0)}}đ</div> -->
-                <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
-                
               </div>
           </div>
+           <div class="text-sub  text-right">Giá đã bao gồm thuế & phí.</div>
       </div>
 </ion-content>

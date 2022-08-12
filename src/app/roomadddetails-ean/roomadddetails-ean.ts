@@ -716,7 +716,14 @@ export class RoomadddetailsEanPage implements OnInit {
         var item1;
         var co = 0;
         for (let i = 0; i < this.arr.length; i++) {
-            this.arr[i].hoten = this.arr[i].hoten.trim();
+            if(this.arr[i].hoten){
+                this.arr[i].hoten = this.arr[i].hoten.trim();
+            }else{
+                this.presentToastName();
+                return;
+            }
+            
+
             if (i == 0) {
                 if (this.arr[i].hoten) {
                     var checktext = this.hasWhiteSpace(this.arr[i].hoten);

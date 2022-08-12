@@ -80,6 +80,7 @@ export class FlightaddservicePage implements OnInit {
   isShowPromoCathay: boolean = false;
   itemVoucher: any;
   checkEmptyHotelCity: boolean;
+  jti: any;
   
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -322,6 +323,11 @@ export class FlightaddservicePage implements OnInit {
             }
             
           this.isShowPromoCathay = moment(this.dateShowCathay).diff(moment(moment(new Date()).format('YYYY-MM-DD'))) >= 0;
+          this.storage.get('jti').then(jti => {
+            if (jti) {
+              this.jti = jti;
+              }
+            })
         }
     }
 
@@ -2087,9 +2093,36 @@ export class FlightaddservicePage implements OnInit {
             se._flightService.itemFlightCache.backtochoiceseat = false;
             se.updatePassengerInfo().then((data)=>{
               if(!data.error){
-                se.gf.hideLoading();
                 se._flightService.itemFlightCache.pnr = data;
-                se.navCtrl.navigateForward('/flightpaymentselect');
+                //se.navCtrl.navigateForward('/flightpaymentselect');
+                if(se._flightService.itemFlightCache.totalPrice==0)
+                          {
+                            let itemcache = se._flightService.itemFlightCache;
+                            itemcache.ischeckpayment = 0;
+                            this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
+                              if(check){
+                                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
+                                            se.gf.CreatePayoo(url).then((data) => {
+                                              se.gf.hideLoading();
+                                            if(data.success){
+                                              se._flightService.itemFlightCache.ischeckpayment= 1;
+                                                  se.navCtrl.navigateForward('flightpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                                                }else{
+                                                  se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+                                                  se.gf.hideLoading();
+                                                }
+                                          })
+                                  }
+                                  else{
+                                    se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+                                    se.gf.hideLoading();
+                                  }
+                            })
+                          }
+                          else{
+                            se.gf.hideLoading();
+                            se.navCtrl.navigateForward('/flightpaymentselect');
+                          }
               }else{
                 se.gf.showToastWarning(data.error);
                 se.gf.hideLoading();

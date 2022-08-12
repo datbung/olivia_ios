@@ -25,8 +25,9 @@ export class LoginsmsverifyPage implements OnInit {
   @ViewChild('ipOTP4') ipOTP4;
   @ViewChild('ipOTP5') ipOTP5;
   @ViewChild('ipOTP6') ipOTP6;
+  @ViewChild('ipOTPALL') ipOTPALL;
   checkreview;
-  num1 = ""; num2 = ""; num3 = ""; num4 = ""; num5 = ""; num6 = ""; phone; obj; strwarning; public deviceToken;refreshTokenTimer;appversion
+  num1 = ""; num2 = ""; num3 = ""; num4 = ""; num5 = ""; num6 = ""; phone; obj; strwarning; public deviceToken;refreshTokenTimer;appversion;numall="";
   constructor(public modalCtrl: ModalController,public appVersion:AppVersion,public searchhotel: SearchHotel,
     private fcm: FCM, public zone: NgZone, public navCtrl: NavController, public keyboard: Keyboard, 
     public storage: Storage, public valueGlobal: ValueGlobal, public toastCtrl: ToastController, 
@@ -50,39 +51,81 @@ export class LoginsmsverifyPage implements OnInit {
   }
   ionViewDidEnter() {
     setTimeout(() => {
-      this.ipOTP1.setFocus();
+      this.ipOTPALL.setFocus();
     }, 150);
     this.keyboard.show();
   }
-  change1() {
-    if (this.num1) {
-      this.ipOTP2.setFocus();
-      this.keyboard.show();
+  changeAll(e){
+    console.log(e.detail.value);
+    let val = e.detail.value;
+    if (val && val.length==6) {
+      this.num1 = val.substring(0,1);
+      this.num2 = val.substring(1,2);
+      this.num3 = val.substring(2,3);
+      this.num4 = val.substring(3,4);
+      this.num5 = val.substring(4,5);
+      this.num6 = val.substring(5,6);
     }
-  }
-  change2() {
-    if (this.num2) {
-      this.ipOTP3.setFocus();
-      this.keyboard.show();
-    }
-  }
-  change3() {
-    if (this.num3) {
-      this.ipOTP4.setFocus();
-      this.keyboard.show();
-    }
-  }
-  change4() {
-    if (this.num4) {
-      this.ipOTP5.setFocus();
-      this.keyboard.show();
-    }
-  }
-  change5() {
-    if (this.num5) {
+    else if (val && val.length==5) {
+      this.num1 = val.substring(0,1);
+      this.num2 = val.substring(1,2);
+      this.num3 = val.substring(2,3);
+      this.num4 = val.substring(3,4);
+      this.num5 = val.substring(4,5);
       this.ipOTP6.setFocus();
-      this.keyboard.show();
     }
+    else if (val && val.length==4) {
+      this.num1 = val.substring(0,1);
+      this.num2 = val.substring(1,2);
+      this.num3 = val.substring(2,3);
+      this.num4 = val.substring(3,4);
+      this.ipOTP5.setFocus();
+    }
+    else if (val && val.length==3) {
+      this.num1 = val.substring(0,1);
+      this.num2 = val.substring(1,2);
+      this.num3 = val.substring(2,3);
+      this.ipOTP4.setFocus();
+    }
+    else if (val && val.length==2) {
+      this.num1 = val.substring(0,1);
+      this.num2 = val.substring(1,2);
+      this.ipOTP3.setFocus();
+    }
+    else if (val && val.length==1) {
+      this.num1 = val.substring(0,1);
+      this.ipOTP2.setFocus();
+    }
+  }
+  changeOTP(index){
+    if(index ==1 && this.num1) {
+        this.ipOTP2.setFocus();
+    }
+    else if(index ==2 && this.num2) {
+      this.ipOTP3.setFocus();
+    }
+    else if(index ==3 && this.num3) {
+      this.ipOTP4.setFocus();
+    }
+    else if(index ==4 && this.num4) {
+      this.ipOTP5.setFocus();
+    }
+    else if(index ==5 && this.num5) {
+      this.ipOTP6.setFocus();
+    }
+    this.keyboard.show();
+  }
+  clearOTP(){
+    this.zone.run(()=>{
+      this.num1 = "";
+      this.num2 = "";
+      this.num3 = "";
+      this.num4 = "";
+      this.num5 = "";
+      this.num6 = "";
+
+      this.ipOTP1.setFocus();
+    });
   }
   confirm() {
     var se = this;
@@ -136,16 +179,16 @@ export class LoginsmsverifyPage implements OnInit {
                     name +=' ' +textfullname[i];
                   }
                 }
-                info = { ho: textfullname[0], ten: name , phone: decoded.phone}
+                info = { ho: textfullname[0], ten: name , phone: decoded.phone, gender: decoded.gender}
               }else if(textfullname.length>1){
-                info = { ho: textfullname[0], ten: textfullname[1], phone: decoded.phone}
+                info = { ho: textfullname[0], ten: textfullname[1], phone: decoded.phone, gender: decoded.gender}
               }
               else if(textfullname.length==1){
-                info = { ho: textfullname[0], ten: "", phone: decoded.phone}
+                info = { ho: textfullname[0], ten: "", phone: decoded.phone, gender: decoded.gender}
               }
               se.storage.set("infocus", info);
             } else {
-              info = { ho: "", ten: "", phone: decoded.phone,fullname:""}
+              info = { ho: "", ten: "", phone: decoded.phone,fullname:"", gender: decoded.gender}
               se.storage.set("infocus", info);
             }
             if (Array.isArray(decoded.jti)) {
@@ -295,6 +338,11 @@ export class LoginsmsverifyPage implements OnInit {
         if (!body.result) {
           alert(body.msg);
         }
+        se.numall = "";
+        setTimeout(() => {
+          se.ipOTPALL.setFocus();
+        }, 100);
+        this.keyboard.show();
       });
     }
 

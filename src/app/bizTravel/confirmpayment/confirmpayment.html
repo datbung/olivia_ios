@@ -36,7 +36,7 @@
         <div>Vui lòng nhập mã OTP được gửi đến số điện thoại {{bizTravelService.phoneOtpShort}}</div>
 
             <form padding="true" style="padding: 0; border-bottom: solid 1px #ccc;" [formGroup]="otpData" >
-                <ion-input  #user  clearInput type="tel" [(ngModel)]="otp" formControlName="otp"></ion-input>
+                <ion-input  #user  clearInput type="tel" [(ngModel)]="otp" formControlName="otp" autocomplete="one-time-code"></ion-input>
             </form>
        
 

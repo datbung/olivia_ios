@@ -17,7 +17,8 @@ export class ConfirmotpPage implements OnInit {
   @ViewChild('ipOTP4') ipOTP4;
   @ViewChild('ipOTP5') ipOTP5;
   @ViewChild('ipOTP6') ipOTP6;
-  num1 = ""; num2 = ""; num3 = ""; num4 = ""; num5 = ""; num6 = ""; phone; obj; strwarning
+  @ViewChild('ipOTPALL') ipOTPALL;
+  num1 = ""; num2 = ""; num3 = ""; num4 = ""; num5 = ""; num6 = ""; phone; obj; strwarning;numall="";
   constructor(public modalCtrl: ModalController, public zone: NgZone, public navCtrl: NavController, public keyboard: Keyboard, public storage: Storage, public value: ValueGlobal, public toastCtrl: ToastController) {
     this.phone = this.value.phone;
     this.obj = this.value.objchangeinfo;
@@ -30,9 +31,20 @@ export class ConfirmotpPage implements OnInit {
   }
   ionViewDidEnter() {
     setTimeout(() => {
-      this.ipOTP1.setFocus();
+      this.ipOTPALL.setFocus();
     }, 150);
     this.keyboard.show();
+  }
+  changeAll(e){
+    let val = e.detail.value;
+    if (val && val.length==6) {
+      this.num1 = val.substring(0,1);
+      this.num2 = val.substring(1,2);
+      this.num3 = val.substring(2,3);
+      this.num4 = val.substring(3,4);
+      this.num5 = val.substring(4,5);
+      this.num6 = val.substring(5,6);
+    }
   }
   change1() {
     if (this.num1) {

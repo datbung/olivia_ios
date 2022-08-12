@@ -49,11 +49,11 @@
       <ion-input #ipOTP6 maxlength=1 [(ngModel)]="num6" type=tel class="input-otp" autofocus></ion-input>
     </ion-col>
   </ion-row>
-  <!-- <ion-row>
-    <ion-col style="padding-top: 12px;text-align: center" class="no-padding">
-      <ion-label class="label-sent-otp">Mã OTP đã gửi về SĐT của Quý Khách, hiệu lực trong vòng 3 phút.</ion-label>
+  <ion-row>
+    <ion-col [ngClass]="!numall ? 'no-padding ip-all' : 'no-padding ip-all cls-hidden' ">
+      <ion-input #ipOTPALL (ionChange)="changeAll($event)" [(ngModel)]="numall" type=tel autofocus autocomplete="one-time-code"></ion-input>
     </ion-col>
-  </ion-row> -->
+  </ion-row>
   <ion-row *ngIf="strwarning" style="margin-top: 10px;margin-right: 30px">
     <ion-col class="no-padding"><ion-label class="label-warning">{{strwarning}}</ion-label></ion-col>
 </ion-row>

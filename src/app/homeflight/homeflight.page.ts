@@ -232,7 +232,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 
               })
 
-              se._flightService.itemFlightReloadInfo.pipe().subscribe(data => {
+              se._flightService.getItemFlightReloadInfo().subscribe((data) => {
                 if(data ==1){
                     se.reloadInfoFlight();
                 }
@@ -391,7 +391,18 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             if(this._flightService.itemFlightCache.checkInDate){
               this.cin = this._flightService.itemFlightCache.checkInDate;
             }else{
+              if(this._flightService.itemFlightCache.checkInDisplayMonth){
+                let _checkInDisplayMonth = this._flightService.itemFlightCache.checkInDisplayMonth.replace(' tháng ',', ').replace(', ','-');
+                _checkInDisplayMonth = _checkInDisplayMonth.replace(', ','-');
+                _checkInDisplayMonth = _checkInDisplayMonth.replace(', ','-');
+                let _darrday:any = _checkInDisplayMonth.split('-');
+                let _d =new Date(Date.UTC(_darrday[2], _darrday[1] -1, _darrday[0], 0, 0, 0)), final = (_d.getTime() + Math.abs((_d.getTimezoneOffset()))*2 );
+                this.cin  = new Date(final).toISOString().replace('Z','');
+                this._flightService.itemFlightCache.checkInDate = this.cin;
+              }else{
                 this.cin = this.gf.getCinIsoDate(moment(new Date()).add(7,'days'));
+              }
+              
             }
             if(this._flightService.itemFlightCache.checkOutDate){
                 this.cout = this.gf.getCinIsoDate(this._flightService.itemFlightCache.checkOutDate);
