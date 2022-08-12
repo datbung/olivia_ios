@@ -68,6 +68,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
   allowclickcalendar: boolean = true;
   isNotice=false;
   isBizAccount: boolean;
+  topSale: any;
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -82,7 +83,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         public networkProvider: NetworkProvider,
         private platform: Platform,
         public bizTravelService: BizTravelService) {
-          this.getShowNotice();
+          this.gettopSale();
           this.storage.get('jti').then(jti => {
             if (jti) {
               this.memberid = jti;
@@ -1859,6 +1860,38 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             if (error) throw new Error(error);
             var data = JSON.parse(response.body);
             se.isNotice=data.show;
+          });
+        }
+        gettopSale() {
+          var se=this;
+          var options = {
+            method: "GET",
+            url: C.urls.baseUrl.urlFlight +"/gate/apiv1/GetStopSaleToday",
+            timeout: 10000,
+            maxAttempts: 5,
+            retryDelay: 2000,
+            headers: {}
+          };
+          request(options, function(error, response, body) {
+            if (response.statusCode != 200) {
+              var objError = {
+                page: "main",
+                func: "getNewsBlog",
+                message: response.statusMessage,
+                content: response.body,
+                param: JSON.stringify(options),
+                type: "warning"
+              };
+              C.writeErrorLog(objError,response);
+            }
+            if (error) {
+              error.page = "main";
+              error.func = "getNewsBlog";
+              (error.param = JSON.stringify(options)), C.writeErrorLog(error,response);
+            }
+            var res=JSON.parse(body);
+            se.topSale=res.total;
+            console.log(JSON.parse(body));
           });
         }
   }
