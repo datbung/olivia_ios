@@ -139,6 +139,7 @@ export class ValueGlobal {
   refreshFBAccessToken: any;
   arrsuggest: any;
   BookingCodeHis: any;
+  listhistory: any;
 }
 export class SearchHotel {
     recent: Array<ItemBook>;

@@ -312,6 +312,9 @@ export class Tab4Page implements OnInit{
         se.gf.setParams(item.bookingCode,'notifiBookingCode');
         se.gf.setParams(item.switchObj,'notifiSwitchObj');
       }
+      else if(item.notifyType == "alert" && item.notifyAction == "uservoucher"){
+        se.presentToastNotifi(item.message);
+      }
       else{
         se.gf.setParams(item.bookingCode,'notifiBookingCode');
         //se.navCtrl.navigateForward(['/app/tabs/tab3']);

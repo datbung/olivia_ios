@@ -248,7 +248,11 @@ export class FlightnotifyPage {
                 se.navCtrl.navigateForward(['/app/tabs/tab3']);
                 se.gf.setParams(item.bookingCode, 'notifiBookingCode');
                 se.gf.setParams(item.switchObj, 'notifiSwitchObj');
-            } else {
+            }
+            else if(item.notifyType == "alert" && item.notifyAction == "uservoucher"){
+                se.presentToastNotifi(item.message);
+              }
+             else {
                 se.gf.setParams(item.bookingCode, 'notifiBookingCode');
                 // se.navCtrl.navigateForward(['/app/tabs/tab3']);
 
