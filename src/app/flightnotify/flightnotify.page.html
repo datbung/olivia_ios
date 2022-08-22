@@ -63,11 +63,11 @@
         <div class="div-detail" (click)="updateStatusMessage(item)" >
           <div class="div-flex">
             <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
-            <img *ngIf="item.notifyType == 'booking'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
+            <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
             <div *ngIf="item.notifyType == 'product'"  class="noti-text">
               Sản phẩm
             </div>
-            <div *ngIf="item.notifyType == 'booking'"  class="noti-text">
+            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  class="noti-text">
               Đơn hàng
             </div>
             <div class="noti-text-time">
@@ -100,11 +100,11 @@
         <div *ngIf="item.notifyType==textnotifyType" class="div-detail" (click)="updateStatusMessage(item)" >
           <div class="div-flex">
             <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
-            <img *ngIf="item.notifyType == 'booking'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
+            <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
             <div *ngIf="item.notifyType == 'product'"  class="noti-text">
               Sản phẩm
             </div>
-            <div *ngIf="item.notifyType == 'booking'"  class="noti-text">
+            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  class="noti-text">
               Đơn hàng
             </div>
             <div class="noti-text-time">

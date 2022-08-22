@@ -162,9 +162,10 @@ ng-deep{
   font-size: 14px;
   line-height: 1.3;
   color: #38383d;
-
-  max-height: 84px;
-  -webkit-line-clamp: 4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 56px;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   height: auto;
   display: -webkit-box;

@@ -80,21 +80,41 @@ export class MyVoucherPage implements OnInit{
       }
       this.gf.RequestApi('GET', url, headers, {}, 'myvoucher', 'loadVoucher').then((data)=> {
         console.log(data);
-        if(data && data.length >0){
-          data.forEach(element => {
-            element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
-            if(element.isActive){
-              this.vouchers.push(element);
-            }else{
-              this.vouchersClaimed.push(element);
-            }
-          });
+        if(data.error){
+          this.storage.get('jti').then((memberid) => {
+            this.storage.get('deviceToken').then((devicetoken) => {
+              this.gf.refreshToken(memberid, devicetoken).then((token) => {
+                setTimeout(() => {
+                  this.storage.remove('auth_token').then(()=>{
+                    this.storage.set('auth_token', token);
+                    this.loadVoucherClaimed(token);
+                  })
+                  
+                }, 100)
+              });
+
+            })
+          })
+          this.loadvoucherdone = true;
         }else{
-          this.vouchers = [];
-          this.vouchersClaimed = [];
+          if(data && data.length >0){
+            data.forEach(element => {
+              element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
+              if(element.isActive){
+                this.vouchers.push(element);
+              }else{
+                this.vouchersClaimed.push(element);
+              }
+            });
+          }else{
+            this.vouchers = [];
+            this.vouchersClaimed = [];
+          }
+          this.loadvoucherdone = true;
         }
        
-        this.loadvoucherdone = true;
+       
+       
       })
     }
 

@@ -249,8 +249,8 @@ export class FlightnotifyPage {
                 se.gf.setParams(item.bookingCode, 'notifiBookingCode');
                 se.gf.setParams(item.switchObj, 'notifiSwitchObj');
             }
-            else if(item.notifyType == "alert" && item.notifyAction == "uservoucher"){
-                se.presentToastNotifi(item.message);
+            else if(item.notifyType == "alert"){
+                se.presentToastNotifi(item);
               }
              else {
                 se.gf.setParams(item.bookingCode, 'notifiBookingCode');
@@ -266,7 +266,7 @@ export class FlightnotifyPage {
                     se._flightService.itemMenuFlightClick.emit(1);
     
                   }else{
-                    se.presentToastNotifi(item.message);
+                    se.presentToastNotifi(item);
                   }
             }
            

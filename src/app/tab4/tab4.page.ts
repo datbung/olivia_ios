@@ -312,7 +312,7 @@ export class Tab4Page implements OnInit{
         se.gf.setParams(item.bookingCode,'notifiBookingCode');
         se.gf.setParams(item.switchObj,'notifiSwitchObj');
       }
-      else if(item.notifyType == "alert" && item.notifyAction == "uservoucher"){
+      else if(item.notifyType == "alert"){
         se.presentToastNotifi(item.message);
       }
       else{

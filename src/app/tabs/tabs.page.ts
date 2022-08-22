@@ -612,27 +612,43 @@ export class TabsPage implements OnInit {
       }
     }
     
-
-    let actionSheet = await se.actionSheetCtrl.create({
-      cssClass: 'action-sheets-notification '+iconStr + ' '+subclass,
-      header: data.title,
-      animated: true,
-      backdropDismiss: true,
-      mode: 'ios',
-      buttons: [
-        {
-          text: msg,
-          handler: () => {
-            se.showNotification(data);
+    if(data.notifyType == "alert"){
+      se.presentToastNotifi(data.message);
+    }else{
+      let actionSheet = await se.actionSheetCtrl.create({
+        cssClass: 'action-sheets-notification '+iconStr + ' '+subclass,
+        header: data.title,
+        animated: true,
+        backdropDismiss: true,
+        mode: 'ios',
+        buttons: [
+          {
+            text: msg,
+            handler: () => {
+              se.showNotification(data);
+            }
           }
-        }
-      ]
-    });
-    actionSheet.present();
-    setTimeout(()=>{
-        actionSheet.dismiss(); 
-    },5000)
+        ]
+      });
+      actionSheet.present();
+      setTimeout(()=>{
+          actionSheet.dismiss(); 
+      },5000)
+    }
+    
   }
+
+   /**
+   * Hàm show cảnh báo
+   */
+    async presentToastNotifi(msg) {
+      const toast = await this.toastCrl.create({
+        message: msg,
+        duration: 3000,
+        position: 'top',
+      });
+      toast.present();
+    }
 
   async showToast(msg){
     let toast = await this.toastCrl.create({
