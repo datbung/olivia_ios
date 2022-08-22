@@ -645,10 +645,18 @@
   }
   .div-topSale{
     background-color: #f4dcdb;
-    height: 36px;
-    padding: 8px 0px 7px 8px;
+    padding: 10px 0px 10px 8px;
     font-size: 16px;
     color: #e52822;
     display: flex;
+    align-items: center;
+  
+    .img-fire{
+      width: 20px;
+      height: 20px;
+    }
+    .text-topSale{
+      padding-top: 2px;
+    }
   }
  

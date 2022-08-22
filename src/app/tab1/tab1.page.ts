@@ -623,25 +623,41 @@ export class Tab1Page implements OnInit {
     if(data.notifyAction == 'flychangeinfo' || data.notifyAction == 'blogofmytrip'){
       subclass = 'fixheight-44';
     }
-
-    let actionSheet = await se.actionSheetCtrl.create({
-      cssClass: 'action-sheets-notification '+iconStr + ' '+subclass,
-      header: data.title,
-      animated: true,
-      backdropDismiss: true,
-      mode: 'ios',
-      buttons: [
-        {
-          text: data.message,
-          handler: () => {
-            se.showNotification(data);
+    if(data.notifyType == "alert"){
+      se.presentToastNotifi(data.message);
+    }else{
+      let actionSheet = await se.actionSheetCtrl.create({
+        cssClass: 'action-sheets-notification '+iconStr + ' '+subclass,
+        header: data.title,
+        animated: true,
+        backdropDismiss: true,
+        mode: 'ios',
+        buttons: [
+          {
+            text: data.message,
+            handler: () => {
+              se.showNotification(data);
+            }
           }
-        }
-      ]
-    });
-    actionSheet.present();
+        ]
+      });
+      actionSheet.present();
+    }
     
   }
+
+
+   /**
+   * Hàm show cảnh báo
+   */
+    async presentToastNotifi(msg) {
+      const toast = await this.alertCtrl.create({
+        message: msg,
+        duration: 3000,
+        position: 'top',
+      });
+      toast.present();
+    }
 
   async showToast(msg){
     let toast = await this.alertCtrl.create({

@@ -248,7 +248,11 @@ export class FlightnotifyPage {
                 se.navCtrl.navigateForward(['/app/tabs/tab3']);
                 se.gf.setParams(item.bookingCode, 'notifiBookingCode');
                 se.gf.setParams(item.switchObj, 'notifiSwitchObj');
-            } else {
+            }
+            else if(item.notifyType == "alert"){
+                se.presentToastNotifi(item);
+              }
+             else {
                 se.gf.setParams(item.bookingCode, 'notifiBookingCode');
                 // se.navCtrl.navigateForward(['/app/tabs/tab3']);
 
@@ -262,7 +266,7 @@ export class FlightnotifyPage {
                     se._flightService.itemMenuFlightClick.emit(1);
     
                   }else{
-                    se.presentToastNotifi(item.message);
+                    se.presentToastNotifi(item);
                   }
             }
            
