@@ -139,6 +139,7 @@ export class ValueGlobal {
   refreshFBAccessToken: any;
   arrsuggest: any;
   BookingCodeHis: any;
+  listhistory: any;
 }
 export class SearchHotel {
     recent: Array<ItemBook>;
@@ -156,7 +157,7 @@ export class SearchHotel {
     chuoi: string;
     CheckInDate: string;
     CheckOutDate: string;
-    arrchild: Array<child>;
+    arrchild: Array<child>=[];
     sortOrder: string;
     meal1check :boolean;
     meal2check :boolean;

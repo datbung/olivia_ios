@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { ValueGlobal, SearchHotel } from '../providers/book-service';
 import {flightService} from './../providers/flightService';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { foodService } from '../providers/foodService';
+import { tourService } from '../providers/tourService';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class FlightquickbackPage implements OnInit {
         public searchhotel: SearchHotel,
         public _flightService: flightService,
         private appVersion: AppVersion,
-        public _foodService: foodService) { 
+        public tourService: tourService) { 
           this.appVersion.getVersionNumber().then((version) => {
             console.log(version)
             this.zone.run(()=>{
@@ -68,9 +68,11 @@ export class FlightquickbackPage implements OnInit {
               
             }
             else if(pageIndex ==3){
-              //se.valueGlobal.backValue = "homefood";
-              //se._foodService.itemTabFood.emit(1);
-              //se.navCtrl.navigateBack('/homefood');
+              se.tourService.itemPaymentDone.emit(true);
+              se.valueGlobal.backValue = "hometour";
+              setTimeout(()=>{
+                se.navCtrl.navigateBack('/tabs/tab1');
+              },100)
             }
             se.clearFlightService();
             se.modalCtrl.dismiss();

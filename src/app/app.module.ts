@@ -113,6 +113,8 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
 import { ConfirmemailaccountPageModule } from './confirmemailaccount/confirmemailaccount.module';
 import { RequestRoomPageModule} from './requestroom/requestroom.module';
 import { VoucherDetailPageModule } from './voucher/voucherdetail/voucherdetail.module';
+import { TourListFilterPageModule } from './tour/tourlistfilter/tourlistfilter.module';
+import { tourService } from './providers/tourService';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -167,6 +169,7 @@ import { VoucherDetailPageModule } from './voucher/voucherdetail/voucherdetail.m
     FlightdcpickaddressinputPageModule,
     ConfirmemailaccountPageModule,
     VoucherDetailPageModule,
+    TourListFilterPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
@@ -224,6 +227,7 @@ import { VoucherDetailPageModule } from './voucher/voucherdetail/voucherdetail.m
     FileTransfer,
     File,
     FileOpener,
+    tourService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -1,0 +1,159 @@
+<ion-header>
+    <ion-toolbar style="min-height: 0px;text-align: center">
+        <ion-row>
+          <ion-col style="text-align: center;height: 48px;">
+            <div style="align-self: center" >
+              <div style="position: absolute;height: 48px;width: 48px;top: 8px;"  (click)="goback()">
+                  <img style="height: 48px; padding: 8px;margin-top: -9px;margin-left:-14px" src="./assets/imgs/ios-arrow-round-back.svg" >
+              </div>
+              
+              <div style="padding-top: 6px;font-size: 20px;font-weight: bold;" *ngIf="tourService.paymentType == 1"><label class="text-title">Thông tin khách</label></div>
+              <div style="padding-top: 6px;font-size: 20px;font-weight: bold;" *ngIf="tourService.paymentType == 3"><label class="text-title">Thông tin liên hệ</label></div>
+              <div style="padding-top: 6px;font-size: 20px;font-weight: bold;" *ngIf="tourService.paymentType == 2"><label class="text-title">Thông tin liên hệ</label></div>
+            </div>
+          </ion-col>
+        </ion-row>
+        </ion-toolbar>
+  </ion-header>
+<ion-content>
+  <div *ngIf="tourService.paymentType != 1">
+    <div class="p-all-16 div-request">
+        Quý khách vui lòng nhập thông tin yêu cầu.
+        Nhân viên iVIVU sẽ liên hệ lại ngay sau ít phút
+    </div>
+  </div>
+  <div class="p-all-16">
+    <div class="div-img-step" *ngIf="tourService.paymentType == 1">
+      <img class="img-step" src="./assets/ic_tour/tour_step1.png">
+    </div>
+  
+   
+    <div [ngClass]="tourService.paymentType == 1 ? 'm-top-24' : ''">
+      <ion-row >
+          <ion-col size="12">
+              <ion-item style="--padding-start: 0px">
+                  <ion-label class="label-name" position="floating">Họ và tên <span *ngIf="!hoten" class='cls-error'>*</span></ion-label>
+                  <ion-input class="label-input" [(ngModel)]="hoten" type="text" (ionInput)="inputFocus($event)" (ionBlur)="inputLostFocus(null)"  (ionFocus)="inputOnFocus(null, 9)" required></ion-input>
+              </ion-item>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item style="--padding-start: 0px">
+            <ion-label class="label-name" position="floating">Số điện thoại <span *ngIf="!phone" class='cls-error'>*</span></ion-label>
+            <ion-input class="label-input" [(ngModel)]="phone" maxlength=10 type="tel" required></ion-input>
+  
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item style="--padding-start: 0px">
+            <ion-label class="label-name" position="floating">Email</ion-label>
+            <ion-input class="label-input" [(ngModel)]="_email" type="text" required></ion-input>
+    
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div style="margin-left: -5px">
+        <ion-row>
+            <ion-col size="12">
+              <ion-item style="--padding-start: 0px">
+                <ion-label class="label-name" position="floating">Yêu cầu khác</ion-label>
+                <ion-input class="label-input" [(ngModel)]="note"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+      </div>
+
+      <div class='div-split-panel'></div>
+    <ion-row *ngIf="!Roomif.ExcludeVAT && tourService.paymentType == 1">
+      <div class='width-100 d-flex'>
+        <div class='width-100 div-align-bottom '><ion-label class="label-order">Yêu cầu xuất hóa đơn</ion-label></div>
+        <div class='width-50 div-align-bottom text-right div-flex-end'><ion-toggle (ionChange)="edit(0)" [(ngModel)]="ischeck" [checked] = "ischeck" color="secondary"></ion-toggle></div>
+      </div>
+    </ion-row>
+   
+      <div *ngIf="ischeck && !Roomif.ExcludeVAT && tourService.paymentType == 1">
+        <div class='div-check-order'>
+          <ion-checkbox (ionChange)="showNameMail($event)" [checked]="ishideNameMail" class="ion-checkbox" color="secondary"></ion-checkbox>
+          <ion-label class="label-input-order m-left-8" >Dùng thông tin liên hệ làm thông tin xuất hoá đơn</ion-label>
+        </div>
+
+        <ion-row style="margin-left: -5px">
+          <ion-col size="12">
+            <ion-item style="--padding-start: 0px">
+              <ion-label class="label-input-order" position="floating">Tên công ty</ion-label>
+              <ion-input class="label-input" [(ngModel)]="companyname" type="text" required></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item style="--padding-start: 0px">
+              <ion-label class="label-input-order" position="floating">Địa chỉ</ion-label>
+              <ion-input class="label-input" [(ngModel)]="address" type="text" required></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item style="--padding-start: 0px">
+              <ion-label class="label-input-order" position="floating">Mã số thuế</ion-label>
+              <ion-input class="label-input" [(ngModel)]="tax" type="text" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        
+        <div *ngIf="!ishideNameMail">
+          <ion-col size="12">
+            <ion-item style="--padding-start: 0px">
+              <ion-label class="cls-label" position="floating">Họ tên</ion-label>
+              <ion-input class="label-input" [(ngModel)]="hotenhddt" type="text" required></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item style="--padding-start: 0px">
+              <ion-label class="cls-label" position="floating">Email nhận hóa đơn</ion-label>
+              <ion-input class="label-input" [(ngModel)]="emailhddt" type="text" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </div>
+      </div>
+  </div>
+  
+</ion-content>
+<ion-footer>
+  <div class='div-close-paxhint' *ngIf="inputtext && listpaxhint && listpaxhint.length >0" (click)="hidePaxHint()"><img src='./assets/ic_close_b.svg'></div>
+  <div class="div-pax-hint" *ngIf="inputtext && listpaxhint && listpaxhint.length >0">
+                  
+    <div *ngFor="let itempax of listpaxhint" class="d-flex m-bottom-16" (click)="selectPaxHint(itempax)">
+        <div class="icon-pax">
+                <img src="./assets/ic_flight/icon-pax.svg">
+        </div>
+        <div class="text-pax-hint">
+            {{itempax.fullName}}
+        </div>
+    </div>
+    
+  </div>
+  <div class="div-touradddetail-footer d-flex">
+    <div class="width-50 div-footer-left" *ngIf="tourService.hasAllotment">
+        <div class="text-normal-footer"><span *ngIf="searchhotel.adult">{{searchhotel.adult}} người lớn</span><span *ngIf="searchhotel.child">, {{searchhotel.child}} trẻ em</span></div>
+        <div ><span class="text-price-footer">{{tourService.totalPriceStr}}</span><span class="text-price-sub">đ</span></div>
+    </div>
+    <div  class="width-50 " (click)="next()" *ngIf="tourService.hasAllotment && tourService.paymentType == 1">
+        <button *ngIf="tourService.hasAllotment" ion-button round outline class="button btn-departure-calendar">
+            Thanh toán
+        </button>
+    </div>
+    <div  class="width-100 " (click)="request(2)" *ngIf="tourService.paymentType == 2">
+      <button *ngIf="!tourService.hasAllotment" ion-button round outline class="button btn-departure-calendar">
+        Yêu cầu đặt
+    </button>
+    </div>
+
+    <div  class="width-100 " (click)="request(3)" *ngIf="tourService.paymentType == 3">
+      <button *ngIf="!tourService.hasAllotment" ion-button round outline class="button btn-departure-calendar">
+        Yêu cầu tư vấn
+    </button>
+  </div>
+</div>
+</ion-footer>

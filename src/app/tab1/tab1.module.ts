@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { Tab1Page } from './tab1.page';
 //import { HomefoodPageModule } from '../homefood/homefood.module';
 import { HomeflightPageModule } from '../homeflight/homeflight.module';
-
+import { HomeTourPageModule } from '../tour/hometour/hometour.module';
 const routes: Routes = [
   {
     path: '',
@@ -24,6 +24,7 @@ const routes: Routes = [
     //HomefoodPageModule,
     RouterModule.forChild(routes),
     HomeflightPageModule,
+    HomeTourPageModule,
   ],
   declarations: [Tab1Page],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

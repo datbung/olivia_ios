@@ -1,0 +1,135 @@
+<div class="div-itemtourslide">
+  <div *ngIf="slideData.length >0">
+    <div *ngFor="let itemSlide of slideData">
+      <div class="title-padding p-left-16 p-top-30 position-relative" *ngIf="itemSlide.Name" >
+        <ion-label class="text-title2">
+          {{ itemSlide.Name }}
+        </ion-label>
+        <div class="sub-title" *ngIf="itemSlide.Abbreviation">
+          <ion-label class="text-subtitle">
+           {{itemSlide.Abbreviation}}
+          </ion-label>
+        </div>
+        <div class="text-seemore" *ngIf="itemSlide.Name" (click)="showTourList(itemSlide)">
+          <img src="../../../../../assets/ic_tour/viewall.svg" />
+        </div>
+      </div>
+      <div class="sub-title p-left-16" *ngIf="itemSlide.Notes">
+        <ion-label class="text-subtitle">
+          {{ itemSlide.Notes }}
+        </ion-label>
+      </div>
+      <div
+        class="slide2-scroll"
+        (scroll)="onScroll($event)" *ngIf="itemSlide && itemSlide.TourGroupDetail && itemSlide.TourGroupDetail.length >0">
+        <div
+            (click)="showDetail(slide)"
+            [ngClass]="idx == 0 ? 'cls-deal position-relative' : 'cls-deal m-l-16 position-relative' "
+            *ngFor="let slide of itemSlide.TourGroupDetail; let idx = index">
+            <div class="div-wrap-deal"> 
+              <div class="div-wrap-image">
+                <img class="slide2 img" [src]="slide.AvartarLink" />
+                <div class="float-promo" *ngIf="slide.PromotionTitle">
+                  <p class="float-promo-description">
+                    {{ slide.PromotionTitle }}
+                  </p>
+                </div>
+              </div>
+              <div class="float-info">
+                <div class="div-hotel-name">
+                  <h2 class="hotel-name">
+                    {{ slide.Name }}
+                  </h2>
+                </div>
+               
+                <div class="d-flex m-top-8">
+                  <div class="d-flex width-50">
+                    <div><img class="icon_clock p-right-8" src="../../../../../assets/ic_tour/ic_clock.svg" /></div>
+                    <div class="cls-tour-duration"> {{slide.TourTimeName}}</div>
+                  </div>
+                  
+                  <div class="text-right div-icon-right">
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('máy bay') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/plane.svg" /></div>
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('ô tô') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/bus.svg" /></div>
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('du thuyền') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/boat.svg" /></div>
+                  </div>
+                </div>
+
+                <div class="d-flex div-top-place">
+                  <div *ngIf="slide.listTopPlace && slide.listTopPlace.length >0" class="div-wrap-item-topplace">
+                    <div *ngFor="let topplace of slide.listTopPlace" class="d-flex div-item-topplace">
+                      <div class="cls-dot">·</div>
+                      <div class="div-text-topplace">{{topplace}}</div>
+                    </div>
+                    
+                  </div>
+                </div>
+
+                <div class="d-flex m-top-8" *ngIf="slide.AvgPoint">
+                  <div class="div-badge">
+                      <div class="text-point">{{slide.AvgPoint}}</div>
+                      <div class="text-point-des" *ngIf="slide.AvgPoint >=9 && slide.AvgPoint <=10">Xuất sắc</div>
+                      <div  *ngIf="slide.NumOfReview"> | <span class="text-comment">{{slide.NumOfReview}} đánh giá</span></div>
+                  </div>
+                </div>
+
+                <div class="cls-price-strike" *ngIf="slide.AdultSalePrice > slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div>
+                <div class="cls-price m-top-0" *ngIf="slide.AdultSalePrice > slide.MinPrice">{{ gf.convertNumberToString(slide.MinPrice) }} đ</div>
+                <div class="cls-price" *ngIf="slide.AdultSalePrice <= slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div>
+              </div>
+            </div>
+            
+          </div>
+          <div *ngIf="showloadmore" class="div-loadmore">
+            <ion-spinner
+              name="bubbles"
+              class="spinner-bubbles hydrated"
+            ></ion-spinner>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="title-padding p-left-16 p-top-30" *ngIf="slidePopular.length >0">
+    <ion-label class="text-title2">
+      Các điểm du lịch phổ biến
+    </ion-label>
+  </div>
+  <div class="sub-title p-left-16" *ngIf="slidePopular.length >0">
+    <ion-label class="text-subtitle">
+      Bao la thế giới. Bốn bể là nhà
+    </ion-label>
+  </div>
+  <div class="d-flex p-all-16" *ngIf="slidePopular.length >0">
+    <div class="div-col1">
+      <div class="div-item m-right-8" *ngIf="slidePopular[0]" (click)="showTourList(slidePopular[0])">
+        <div class="div-item-image"><img class="item-img h-296" [src]="slidePopular[0].AvatarLink" /></div>
+        <div class="div-item-text">{{slidePopular[0].Name}}</div>
+      </div>
+    </div>
+    <div class="div-col2 ">
+      <div class="div-col2-row1 d-flex">
+        <div class="div-item m-right-8 m-bottom-4 width-50" *ngIf="slidePopular[1]" (click)="showTourList(slidePopular[1])">
+          <div class="div-item-image"><img class="item-img h-144" [src]="slidePopular[1].AvatarLink" /></div>
+          <div class="div-item-text">{{slidePopular[1].Name}}</div>
+        </div>
+        <div class="div-item m-bottom-4 width-50" *ngIf="slidePopular[2]" (click)="showTourList(slidePopular[2])">
+          <div class="div-item-image"><img class="item-img h-144" [src]="slidePopular[2].AvatarLink" /></div>
+          <div class="div-item-text">{{slidePopular[2].Name}}</div>
+        </div>
+      </div>
+      <div class="div-col2-row2 d-flex">
+        <div class="div-item m-right-8 m-bottom-4 width-50" *ngIf="slidePopular[3]" (click)="showTourList(slidePopular[3])">
+          <div class="div-item-image"><img class="item-img h-144" [src]="slidePopular[3].AvatarLink" /></div>
+        <div class="div-item-text">{{slidePopular[3].Name}}</div>
+        </div>
+        <div class="div-item m-bottom-4 width-50" *ngIf="slidePopular[4]" (click)="showTourList(slidePopular[4])">
+          <div class="div-item-image"><img class="item-img h-144" [src]="slidePopular[4].AvatarLink" /></div>
+        <div class="div-item-text">{{slidePopular[4].Name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+           
+
+</div>

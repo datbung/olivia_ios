@@ -221,6 +221,22 @@ const routes: Routes = [
   { path: 'accountdeletiondone', loadChildren: './accountdeletiondone/accountdeletiondone.module#AccountDeletionDonePageModule' },
 
   { path: 'myvoucher', loadChildren: './voucher/myvoucher/myvoucher.module#MyVoucherPageModule' },
+
+    //tour
+    { path: 'hometour', loadChildren: './tour/hometour/hometour.module#HomeTourPageModule' },
+    { path: 'tourdetail', loadChildren: './tour/tourdetail/tourdetail.module#TourDetailPageModule' },
+    { path: 'searchregion', loadChildren: './tour/hometour/hometourcomponent/searchregion/searchregion.module#SearchRegionPageModule' },
+    { path: 'searchdeparture', loadChildren: './tour/hometour/hometourcomponent/searchdeparture/searchdeparture.module#SearchDeparturePageModule' },
+    { path: 'tourlist', loadChildren: './tour/tourlist/tourlist.module#TourListPageModule' },
+    { path: 'tourdeparturecalendar', loadChildren: './tour/tourdeparturecalendar/tourdeparturecalendar.module#TourDepartureCalendarPageModule' },
+    { path: 'touradddetails', loadChildren: './tour/touradddetails/touradddetails.module#TourAddDetailsPageModule' },
+    { path: 'tourpaymentselect', loadChildren: './tour/tourpaymentselect/tourpaymentselect.module#TourPaymentSelectPageModule' },
+    { path: 'tourpaymentatm', loadChildren: './tour/tourpaymentatm/tourpaymentatm.module#TourPaymentAtmPageModule' },
+    { path: 'tourpaymentbank', loadChildren: './tour/tourpaymentbank/tourpaymentbank.module#TourPaymentBankPageModule' },
+    { path: 'tourpaymentatoffice', loadChildren: './tour/tourpaymentatoffice/tourpaymentatoffice.module#TourPaymentAtOfficePageModule' },
+    { path: 'tourpaymentpayoo/:code/:stt', loadChildren: './tour/tourpaymentpayoo/tourpaymentpayoo.module#TourPaymentPayooPageModule' },
+    { path: 'tourpaymentdone', loadChildren: './tour/tourpaymentdone/tourpaymentdone.module#TourPaymentDonePageModule' },
+    { path: 'tourrequestdone', loadChildren: './tour/tourrequestdone/tourrequestdone.module#TourRequestDonePageModule' },
 ];
 @NgModule({
   imports:

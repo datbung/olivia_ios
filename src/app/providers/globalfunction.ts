@@ -17,6 +17,7 @@ import * as clone from 'clone';
 import jwt_decode from 'jwt-decode';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { tourService } from './tourService';
 
 @Injectable({
     providedIn: 'root'  // <- ADD THIS
@@ -76,7 +77,9 @@ export class GlobalFunction{
       public loadCtrl: LoadingController,
       public _flightService: flightService,
       private fb: Facebook,
-      private fcm: FCM,private searchhotel: SearchHotel){
+      private fcm: FCM,
+      private searchhotel: SearchHotel,
+      public tourService: tourService){
 
     }
     
@@ -794,6 +797,85 @@ public getAppVersion() {
     )
   }
 
+  /**
+        * Hàm gọi api chung
+        * @param methodFunc phương thức GET/POST
+        * @param strUrl Chuỗi api
+        * @param headerObj object header nếu có
+        * @param bodyObj object body nếu có
+        * @param pageName Tên page gọi api
+        * @param funcName Tên fucntion gọi api
+        */
+   async RequestApiWithQueryString(methodFunc, strUrl, headerObj, queryObj, pageName, funcName): Promise<any> {
+    var se = this; 
+    return new Promise(
+        (resolve, reject) => {
+          var options;
+          if(queryObj && headerObj ){
+            options = {
+              method: methodFunc,
+              url: strUrl,
+              qs: queryObj,
+              headers: headerObj,
+              timeout: 180000,
+              maxAttempts: 3,
+              retryDelay: 2000
+            }
+          }
+
+            request(options, function (error, response, body) {
+                if (response && response.statusCode != 200) {
+                  if(response.statusCode == 401){//Token hết hạn
+                    //se.showConfirm("Phiên đăng nhập hết hạn. Xin vui lòng đăng nhập lại để sử dụng chức năng này.");
+                  }else{
+                      var objError = {
+                          page: pageName,
+                          func: funcName,
+                          message: response.statusMessage,
+                          content: response.body,
+                          type: "warning",
+                          param: JSON.stringify(options)
+                      };
+                      C.writeErrorLog(objError,response);
+                  }
+                }
+                if (error) {
+                    error.page = pageName;
+                    error.func = funcName;
+                    error.param = JSON.stringify(options);
+                    C.writeErrorLog(objError,response);
+                }
+                if (response && response.statusCode == 200) {
+                    resolve(JSON.parse(body));
+                }else{
+                  resolve([]);
+                }
+
+            })
+        }
+    )
+  }
+  async showAlertTourPaymentFail(msg){
+    var se = this;
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      header: 'Rất tiếc, thanh toán không thành công',
+      cssClass: "cls-alert-refreshPrice",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          //this.tourService.itemPaymentDone.emit(true);
+          //this.valueGlobal.backValue = "hometour";
+          //this.navCtrl.navigateBack('app/tabs/tab1');
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
   async checkAcceptBizCredit(methodFunc, strUrl, headerObj, bodyObj, pageName, funcName): Promise<any> {
       var se = this;
       return new Promise(

@@ -3945,18 +3945,18 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
-    if(currentIndex !=2 && currentIndex != 3){
+    if(currentIndex !=2 ){
       this.activeTab = currentIndex;
       this.valueGlobal.activeTab = currentIndex;
     }
     
-    if ( currentIndex === 3 ) {//blog
-      // this.countcart = this.foodService.listItemsCart.length;
-      // this.getAddress();
-      this.valueGlobal.backValue = "bloglist";
-      this._mytripservice.rootPage = "bloglist";
-      this.navCtrl.navigateForward('/bloglist');
-    }
+    // if ( currentIndex === 3 ) {//blog
+    //   // this.countcart = this.foodService.listItemsCart.length;
+    //   // this.getAddress();
+    //   this.valueGlobal.backValue = "bloglist";
+    //   this._mytripservice.rootPage = "bloglist";
+    //   this.navCtrl.navigateForward('/bloglist');
+    // }
     else if ( currentIndex === 2 ) {//Combo
         this.valueGlobal.backValue = "";
         this.searchhotel.adult=this.adult;
@@ -3990,7 +3990,44 @@ export class Tab1Page implements OnInit {
      
       this.getAddress();
       this.flightService.itemTabFlightFocus.emit(1);
-    }else{
+    }
+    else if (currentIndex === 3) {//Tour
+      this._mytripservice.rootPage = "hometour";
+      this.valueGlobal.logingoback = "";
+      if (document.querySelector(".tabbar")) {
+        document.querySelector(".tabbar")['style'].display = 'none';
+        if (document.querySelector(".tabbar")[1]) {
+          document.querySelector(".tabbar")[0]['style'].display = 'none';
+          document.querySelector(".tabbar")[1]['style'].display = 'none';
+        }
+      }
+      if (document.getElementsByClassName("homefood-footer").length > 0) {
+        document.getElementsByClassName("homefood-footer")[0]['style'].display = 'none';
+        if (document.getElementsByClassName("homefood-footer")[1]) {
+          document.getElementsByClassName("homefood-footer")[1]['style'].display = 'none';
+        }
+      }
+
+      if (document.getElementsByClassName("homeflight-footer").length > 0) {
+        document.getElementsByClassName("homeflight-footer")[0]['style'].display = 'none';
+        if (document.getElementsByClassName("homeflight-footer")[1]) {
+          document.getElementsByClassName("homeflight-footer")[1]['style'].display = 'none';
+        }
+      }
+
+      if (document.getElementsByClassName("hometour-footer").length > 0) {
+        document.getElementsByClassName("hometour-footer")[0]['style'].display = 'block';
+        if (document.getElementsByClassName("hometour-footer")[1]) {
+          document.getElementsByClassName("hometour-footer")[1]['style'].display = 'block';
+        }
+      }
+      
+      this.storage.remove('TabHomeActive').then(() => {
+        this.storage.set('TabHomeActive', 2);
+      })
+     
+    }
+    else{
       this._mytripservice.rootPage = "homehotel";
       $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
     if (document.querySelector(".tabbar")) {
