@@ -25,7 +25,7 @@
 </div>
 <div style="margin-top: 5px">
  
-  <div *ngIf='tourService.hasDeparture else paylater'>
+  <div *ngIf='tourService.paymentType == 1 else paylater'>
     <div>
       <ion-label class="text">
         Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="tourService.itemDetail.TourName">{{tourService.itemDetail.TourName}}</span>
@@ -55,7 +55,7 @@
     <div class="text p-top-12">
       <ion-label class="text" text-wrap>
         Mời quý khách thanh toán số tiền:
-        <span class="text-bold text-orange">{{total}}đ </span> trong vòng <span class="text-bold">12 tiếng</span>
+        <span class="text-bold text-orange">{{total}}đ </span> trong vòng <span class="text-bold">24 tiếng</span>
         để hoàn tất việc đặt tour
       </ion-label>
     </div>

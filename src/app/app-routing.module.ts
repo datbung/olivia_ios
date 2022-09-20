@@ -237,6 +237,7 @@ const routes: Routes = [
     { path: 'tourpaymentpayoo/:code/:stt', loadChildren: './tour/tourpaymentpayoo/tourpaymentpayoo.module#TourPaymentPayooPageModule' },
     { path: 'tourpaymentdone', loadChildren: './tour/tourpaymentdone/tourpaymentdone.module#TourPaymentDonePageModule' },
     { path: 'tourrequestdone', loadChildren: './tour/tourrequestdone/tourrequestdone.module#TourRequestDonePageModule' },
+    { path: 'mytriptourinfo', loadChildren: './tour/mytriptourinfo/mytriptourinfo.module#MyTripTourInfoPageModule' },
 ];
 @NgModule({
   imports:

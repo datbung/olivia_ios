@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActivityService } from './../../providers/globalfunction';
 import { tourService } from 'src/app/providers/tourService';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 /**
  * Generated class for the tourpaymentatmPage page.
@@ -41,17 +42,28 @@ export class TourPaymentAtmPage implements OnInit {
     private activatedRoute: ActivatedRoute,public activityService: ActivityService,public alertCtrl: AlertController,
     public valueGlobal: ValueGlobal,
     public tourService: tourService,
-    private safariViewController: SafariViewController) {
+    private safariViewController: SafariViewController,
+    private backgroundmode: BackgroundMode) {
     //google analytic
     gf.googleAnalytion('tourpaymentatm', 'load', '');
   }
   ngOnInit() {
-    this.bookingCode = this.tourService.dataBookResponse.Code;
-    this.totalPrice=this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+    this.bookingCode = this.tourService.BookingTourMytrip ? this.tourService.BookingTourMytrip.booking_id :this.tourService.dataBookResponse.Code;
+    //this.totalPrice=this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
     this.storage.get('infocus').then(infocus => {
       if (infocus) {
         this.phone = infocus.phone;
       }
+    })
+    this.platform.ready().then(()=>{
+      this.backgroundmode.on('activate').subscribe(()=>{
+          this.backgroundmode.enable();
+         
+          setTimeout(() => {
+              clearInterval(this.intervalID);
+          }, 1000 * 60 * 10);
+      })
+      
     })
   }
   ionViewWillEnter() {
@@ -80,6 +92,11 @@ export class TourPaymentAtmPage implements OnInit {
     this.CreateUrlOnePay(this.TokenId ? this.bankid : this.id);
 
   }
+  ionViewWillLeave(){
+    this.backgroundmode.on('activate').subscribe(()=>{
+      this.backgroundmode.disable();
+    })
+  }
  
   async presentToast() {
     let toast = await this.toastCtrl.create({
@@ -106,20 +123,21 @@ export class TourPaymentAtmPage implements OnInit {
             if(result.event === 'opened') console.log('Opened');
             else if(result.event === 'loaded') console.log('Loaded');
             else if(result.event === 'closed') {
-            let url = C.urls.baseUrl.urlFlight + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
+            se.gf.hideLoading();
+            let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
               se.gf.Checkpayment(url).then((datapayment)=>{
                 let checkpay=JSON.parse(datapayment);
-                if (checkpay.status == 3) { 
-                 se.gf.hideLoading();
+                if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
+                
                   if(se.safariViewController){
                     se.safariViewController.hide();
                   }
                   clearInterval(se.intervalID);
+                  se.tourService.BookingTourMytrip = null;
                   se.navCtrl.navigateForward('tourpaymentdone');
                 }
                 else
                 {
-                  se.gf.hideLoading();
                   clearInterval(se.intervalID);
                   se.gf.showAlertTourPaymentFail(checkpay.internalNote);
                 }
@@ -135,6 +153,7 @@ export class TourPaymentAtmPage implements OnInit {
 
       } else {
         // use fallback browser, example InAppBrowser
+        se.gf.hideLoading();
       }
     }
   );
@@ -206,25 +225,38 @@ export class TourPaymentAtmPage implements OnInit {
   CreateUrlOnePay(bankid) {
     var se=this;
     let itemcache = this.tourService;
-    se.createBookingTour().then((bookingCode) => {
-      if(bookingCode){
-        se.bookingCode = bookingCode;
-        let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
-        se.gf.CreatePayoo(url).then(datapayoo => {
-          if(datapayoo.success){
-            se.openWebpage(datapayoo.returnUrl);
-            se.zone.run(()=>{
-              se.setinterval();
-            })
-            se.gf.hideLoading();
-          }
-          else{
-            se.showAlertPaymentError();
-            se.gf.hideLoading();
-          }
-        })
-      }
-    })
+    if(se.tourService.BookingTourMytrip) {
+      se.bookingCode = se.tourService.BookingTourMytrip.booking_id;
+      se.createBookingUrl(se.tourService.BookingTourMytrip.amount_after_tax, bankid);
+    } else {
+      se.createBookingTour().then((bookingCode) => {
+        if(bookingCode){
+          se.bookingCode = bookingCode;
+          se.createBookingUrl(itemcache.totalPrice, bankid);
+        }
+      })
+    }
+    
+  }
+
+  createBookingUrl(totalPrice, bankid) {
+    let se = this;
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+          se.gf.CreatePayoo(url).then(datapayoo => {
+            if(datapayoo.success){
+              se.zone.run(()=>{
+                setTimeout(()=> {
+                  se.callSetInterval();
+                },5000)
+              })
+              se.gf.hideLoading();
+              se.openWebpage(datapayoo.returnUrl);
+            }
+            else{
+              se.showAlertPaymentError();
+              se.gf.hideLoading();
+            }
+          })
   }
 
   async showAlertPaymentError(){
@@ -250,7 +282,6 @@ export class TourPaymentAtmPage implements OnInit {
 
   createBookingTour():Promise<any> {
     var se = this;
-    this.gf.showLoading();
     return new Promise((resolve, reject) => {
       if (se.tourService.TourBooking.CustomerEmail) {
         var Invoice=0;
@@ -265,7 +296,7 @@ export class TourPaymentAtmPage implements OnInit {
           se.gf.RequestApi('POST', urlApi, headers, se.tourService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
             if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
               se.tourService.tourBookingCode = data.Response.BookingCode;
-              se.tourService.tourTotal = data.Response.Total;
+              se.tourService.totalPrice = data.Response.Total;
               resolve(data.Response.BookingCode)
             }else{
               resolve(false);
@@ -303,22 +334,24 @@ export class TourPaymentAtmPage implements OnInit {
   }
 
    
-  setinterval()
+  callSetInterval()
   {
     if (this.loader) {
       this.loader.dismiss();
     }
-    clearInterval(this.intervalID);
+    //clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
       let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+this.bookingCode;
       this.zone.run(() => {
-        this.gf.Checkpayment(url).then((checkpay) => {
+        this.gf.CheckPaymentTour(url).then((res) => {
+          let checkpay = JSON.parse(res);
           if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
             this.gf.hideLoading();
             if(this.safariViewController){
               this.safariViewController.hide();
             }
             clearInterval(this.intervalID);
+            this.tourService.BookingTourMytrip = null;
             this.navCtrl.navigateForward('tourpaymentdone');
           }
           else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -334,7 +367,7 @@ export class TourPaymentAtmPage implements OnInit {
         })
       })
       
-    }, 2000 * 1);
+    }, 5000 * 1);
 
     setTimeout(() => {
       clearInterval(this.intervalID);

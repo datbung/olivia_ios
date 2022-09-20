@@ -119,18 +119,21 @@
 }
 
 ::ng-deep{
-    .airport-searchbar .searchbar-input.sc-ion-searchbar-md {
+    .airport-searchbar .searchbar-input.sc-ion-searchbar-ios {
         padding-left: unset;
         padding-right: unset;
         -webkit-padding-start: 22px;
         padding-inline-start: 22px;
         -webkit-padding-end: 22px;
         padding-inline-end: 22px;
+       
     }
 
-    .searchbar-input.sc-ion-searchbar-md {
+    .searchbar-input.sc-ion-searchbar-ios {
         padding-inline-start: 12px;
         padding-inline-end: 0;
         text-align: left;
+        background-color: #fff;
+        padding-inline-start: 10px !important;
     }
 }

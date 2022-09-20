@@ -34,6 +34,9 @@
     height: 100%; 
     background-color: #f2f2f2;
 }
+.div-btn-payment {
+    padding-bottom: 36px;
+}
 .mytrip-detail-content .card-background-page-mytrips{
     padding-top: 8px !important;
     margin: 8px;
@@ -66,12 +69,150 @@
             height: 78px;
             object-fit: cover;
         }
+
     }
 
     .support{
         margin: 0 !important;
     }
 
+    
+    .item-booking-tour-detail {
+        padding-bottom: 24px;
+        .item-room {
+            min-height: 106px;
+            margin-bottom: 16px;
+        }
+        .div-wrapimg {
+            width: 100px !important;
+            height: 100px !important;
+            border-radius: 4px !important;
+        }
+        .img-avatar{
+            width: 100px !important;
+            height: 100px !important;
+        }
+
+        .label-tourname {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.48px;
+            color: #3f3b3b;
+            
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 3;
+            display: -webkit-box;
+            /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+            white-space: normal;
+        }
+        .d-flex {
+            display: flex;
+        }
+        .m-lr-5 {
+            margin: 0 5px !important;
+        }
+        .icon-tour-detail {
+            width: 16px;
+        }
+
+        .div-icon {
+            width: 16px;
+            margin-right: 4px;
+        }
+        .div-text {
+            font-size: 14px;
+            color: #3f3b3b;
+        }
+        .div-tour-pax {
+            background-color: #f2f2f2;
+            padding: 12px 16px;
+            margin: 0 -16px;
+        }
+
+        .div-item-tour-detail {
+            .text-tour-detail-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #3f3b3b;
+                margin: 8px 0;
+            }
+
+            .text-tour-detail-subtitle {
+                font-size: 14px;
+                font-weight: 600;
+                color: #000;
+                margin: 8px 5px;
+            }
+            .div-icon-tour {
+                display: flex;
+            }
+            .text-detail {
+                line-height: 1.6;
+                font-size: 14px;
+                text-align: justify;
+
+                img {
+                    margin: 16px 0;
+                  }
+                
+            }
+            .div-line-tour {
+                margin: 8px 0;
+                height: 1px;
+                background-color: #dde0e4;
+            }
+          
+        }
+
+        .div-maxwidth {
+            max-width: 167px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .div-wrap-includeprice .div-expand{
+            display: block;
+            animation: showNav 500ms ease-in-out both;
+          }
+          .div-wrap-tourinfo .div-expand{
+            display: block;
+            animation: showNav 500ms ease-in-out both;
+          }
+          .div-wrap-tournotes .div-expand{
+            display: block;
+            animation: showNav 500ms ease-in-out both;
+          }
+          .div-collapse {
+            transition: opacity 2s ease-out;
+            display: none;
+            opacity: 0; 
+            height: 20px;
+            overflow: hidden;
+            padding: 0;
+            animation: hideNav 500ms ease-in-out both;
+          }
+        
+          @keyframes showNav {
+            from {opacity: 0;}
+            to {opacity: 1;}
+          }
+        
+          @keyframes hideNav {
+            from {opacity: 1;}
+            to {opacity: 0;}
+          }
+          .text-right {
+            text-align: right;
+          }
+    }
+
+    @media(min-width:360px) and (max-width:440px){
+        .div-maxwidth {
+            max-width: 250px;
+        }
+    }
 }
 
 .first-content{
@@ -473,4 +614,10 @@
 
 .h-88{
     min-height: 88px !important;
+}
+.div-width-150 {
+    width: 150%;
+}
+.div-width-250 {
+    width: 250%;
 }

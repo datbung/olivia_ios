@@ -45,6 +45,8 @@ export class TourListFilterPage implements OnInit{
   regioncode: any;
   hasfilter: boolean;
   itemOrder: string;
+  ischeckbtnreset = true;
+  ischeckbtn = true;
   
   constructor(public platform: Platform,public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events:Events,
     public gf: GlobalFunction,public modalCtrl: ModalController,

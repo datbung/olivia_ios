@@ -41,6 +41,22 @@ $app-direction: ltr;
   --ion-color-tertiary-shade: #633ce0;
   --ion-color-tertiary-tint: #7e57ff;
 
+  /** payment **/
+  --ion-color-payment: #9fc43a;
+  --ion-color-tertiary-rgb: 159, 196, 58;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #9bc32c;
+  --ion-color-tertiary-tint: #caf74e;
+
+  /** waitpayment **/
+  --ion-color-waitpayment: #f79321;
+  --ion-color-warning-rgb: 255, 206, 0;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #e0b500;
+  --ion-color-warning-tint: #ffd31a;
+
   /** success **/
   --ion-color-success: #10dc60;
   --ion-color-success-rgb: 16, 220, 96;

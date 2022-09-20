@@ -16,6 +16,7 @@ import { BizTravelService } from '../../providers/bizTravelService';
 import { tourService } from 'src/app/providers/tourService';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { FlightquickbackPage } from 'src/app/flightquickback/flightquickback.page';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 
 @Component({
@@ -54,10 +55,33 @@ export class TourPaymentSelectPage implements OnInit {
     public bizTravelService: BizTravelService,
     public activityService: ActivityService,
     public tourService: tourService,
-    private safariViewController: SafariViewController) { 
+    private safariViewController: SafariViewController,
+    private backgroundmode: BackgroundMode,) { 
     
-    if(this.tourService.itemDetail){
-      let totalPrice = ((this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)* this.searchhotel.adult) + (this.tourService.itemDepartureCalendar.PriceChildAvg ? ((this.tourService.itemDepartureCalendar.PriceChildAvg || 0 )* (this.searchhotel.child || 0)) : 0);
+    if(tourService.BookingTourMytrip) {
+      let totalPrice = tourService.BookingTourMytrip.amount_after_tax;
+      this.zone.run(()=>{
+        this.tourService.totalPrice = totalPrice;
+        this.tourService.totalPriceStr = this.gf.convertNumberToString(totalPrice);
+      })
+
+      this.tourService.departureCalendarStr = this.gf.getDayOfWeek(tourService.BookingTourMytrip.checkInDate).dayname +', '+ moment(tourService.BookingTourMytrip.checkInDate).format('DD') + ' tháng ' + moment(tourService.BookingTourMytrip.checkInDate).format('MM') + ' ' + moment(tourService.BookingTourMytrip.checkInDate).format('YYYY')
+     
+      this.bookingCode = tourService.BookingTourMytrip.booking_id;
+
+      this.adult = tourService.BookingTourMytrip.extra_guest_info.split('|')[0] || 0;
+      this.child = tourService.BookingTourMytrip.extra_guest_info.split('|')[1] || 0;
+    }else if (this.tourService.itemDetail){
+      let totalPrice =0;
+      if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
+        totalPrice = this.tourService.itemDepartureCalendar.TotalRate;
+      }else{
+        totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+      }
+
+      if(this.tourService.TourBooking.IsInvoice && this.tourService.itemDetail.Inbound){
+          totalPrice = totalPrice *1.08;
+      }
       this.zone.run(()=>{
         this.tourService.totalPrice = totalPrice;
         this.tourService.totalPriceStr = this.gf.convertNumberToString(totalPrice);
@@ -106,23 +130,34 @@ export class TourPaymentSelectPage implements OnInit {
           }
         });
 
-    this.platform.ready().then(()=>{
-    
-      setTimeout(() => {
-        clearInterval(this.intervalID);
-    }, 1000 * 60 * 10);
-    })
+        this.platform.ready().then(()=>{
+          this.backgroundmode.on('activate').subscribe(()=>{
+              this.backgroundmode.enable();
+             
+              setTimeout(() => {
+                  clearInterval(this.intervalID);
+              }, 1000 * 60 * 10);
+          })
+          
+        })
 
    
     //C.writePaymentLog("flight", "paymentselect", "purchase", this.bookingCode);
   }
   ngOnInit() {
   }
+
+  ionViewWillLeave(){
+    this.backgroundmode.on('activate').subscribe(()=>{
+      this.backgroundmode.disable();
+    })
+  }
   
   goback()
   {
     var se = this;
-    this.navCtrl.back();
+    clearInterval(se.intervalID);
+    se.navCtrl.back();
   }
   
   tourpaymentbank()
@@ -133,11 +168,13 @@ export class TourPaymentSelectPage implements OnInit {
   tourpaymentatm()
   {
     clearInterval(this.intervalID);
+    this.tourService.paymentType = 1;
     this.navCtrl.navigateForward('tourpaymentatm');
   }
   tourpaymentvisa() {
    
     this.presentLoading();
+    this.tourService.paymentType = 1;
     this.GeTokensOfMember(1);
   }
 
@@ -159,21 +196,22 @@ export class TourPaymentSelectPage implements OnInit {
             else if(result.event === 'loaded') console.log('Loaded');
             else if(result.event === 'closed') {
             let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
-              se.gf.Checkpayment(url).then((res)=>{
+              se.hideLoading();
+              se.gf.hideLoading();
+              se.gf.CheckPaymentTour(url).then((res)=>{
                 let checkpay = JSON.parse(res);
                 if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
-                  se.hideLoading();
-                  se.gf.hideLoading();
+                  se.tourService.paymentType = 1;
                   if(se.safariViewController){
                     se.safariViewController.hide();
                   }
                   clearInterval(se.intervalID);
+                  se.tourService.BookingTourMytrip = null;
                   se.navCtrl.navigateForward('tourpaymentdone');
                 }
                 else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
                 {
-                  se.hideLoading();
-                  se.gf.hideLoading();
+                 
                   if(se.safariViewController){
                     se.safariViewController.hide();
                   }
@@ -215,7 +253,7 @@ export class TourPaymentSelectPage implements OnInit {
             else if(result.event === 'loaded') console.log('Loaded');
             else if(result.event === 'closed') {
               let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
-                se.gf.Checkpayment(url).then((res)=>{
+                se.gf.CheckPaymentTour(url).then((res)=>{
                   let checkpay = JSON.parse(res);
                   if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
                     se.hideLoading();
@@ -224,6 +262,7 @@ export class TourPaymentSelectPage implements OnInit {
                       se.safariViewController.hide();
                     }
                     clearInterval(se.intervalID);
+                    se.tourService.BookingTourMytrip = null;
                     se.navCtrl.navigateForward('tourpaymentdone');
                   }
                   else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -266,19 +305,17 @@ export class TourPaymentSelectPage implements OnInit {
     }
   }
   tourpaymentmomo(){
+    this.tourService.paymentType = 1;
     this.CreateBooking('momo');
   }
 
-  setinterval()
+  callSetInterval()
   {
-    if (this.loader) {
-      this.loader.dismiss();
-    }
-    clearInterval(this.intervalID);
+    //clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
         let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+this.bookingCode;
         this.zone.run(() => {
-          this.gf.Checkpayment(url).then((res) => {
+          this.gf.CheckPaymentTour(url).then((res) => {
             let checkpay = JSON.parse(res);
             if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
               this.hideLoading();
@@ -287,6 +324,7 @@ export class TourPaymentSelectPage implements OnInit {
                 this.safariViewController.hide();
               }
               clearInterval(this.intervalID);
+              this.tourService.BookingTourMytrip = null;
               this.navCtrl.navigateForward('tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -303,7 +341,7 @@ export class TourPaymentSelectPage implements OnInit {
           })
         })
       
-    }, 2000 * 1);
+    }, 5000 * 1);
 
     setTimeout(() => {
       clearInterval(this.intervalID);
@@ -311,7 +349,7 @@ export class TourPaymentSelectPage implements OnInit {
   }
 
   createBookingTourTransaction() {
-    let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+this.bookingCode;
+    let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+this.bookingCode+'&status=2';
     let headers = {
       apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
       apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -319,7 +357,7 @@ export class TourPaymentSelectPage implements OnInit {
     this.gf.RequestApi('GET', urlApiTrans, headers, null , 'tourpaymentbank', 'UpdateTransaction').then((dataTrans)=>{
       console.log(dataTrans);
       if(dataTrans){
-        this.navCtrl.navigateForward('/tourpaymentdone');
+        this.navCtrl.navigateForward('tourpaymentpayoo/' + this.bookingCode + '/0');
       }
     });
   }
@@ -389,26 +427,51 @@ export class TourPaymentSelectPage implements OnInit {
   {
     var se=this;
     let itemcache = this.tourService;
-    se.createBookingTour().then((bookingCode) => {
-      if(bookingCode){
-        se.bookingCode = bookingCode;
-        let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
-        se.gf.CreatePayoo(url).then(datapayoo => {
-          if(datapayoo.success){
-            se.openWebpage(datapayoo.returnUrl);
-            se.zone.run(()=>{
-              se.setinterval();
-            })
-            se.hideLoading();
-          }
-          else{
-            se.showAlertPaymentError();
-            se.hideLoading();
-          }
-        })
-      }
-    })
+    if(se.tourService.BookingTourMytrip) {
+      se.bookingCode = se.tourService.BookingTourMytrip.booking_id;
+      se.createBookingUrl(paymentType, se.tourService.BookingTourMytrip.amount_after_tax);
+    }else {
+      se.createBookingTour().then((bookingCode) => {
+        if(bookingCode){
+          se.bookingCode = bookingCode;
+          se.createBookingUrl(paymentType, itemcache.totalPrice);
+        }
+      })
+    }
     
+    
+  }
+
+  createBookingUrl(paymentType, totalPrice) {
+    let se = this, url='';
+    if(paymentType == 'momo'){
+      url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight&version=2';
+    }else{
+      url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+    }
+          se.gf.CreatePayoo(url).then(datapayoo => {
+            if(datapayoo.success){
+              se.gf.hideLoading();
+              se.hideLoading();
+              if(paymentType == 'momo'){
+                se.openWebpage(datapayoo.returnUrl.payUrl);
+              }else{
+                se.openWebpage(datapayoo.returnUrl);
+              }
+              
+              se.zone.run(()=>{
+                setTimeout(()=> {
+                  se.callSetInterval();
+                },5000)
+                
+              })
+              
+            }
+            else{
+              se.showAlertPaymentError();
+              se.hideLoading();
+            }
+          })
   }
   
   getCardName(text)
@@ -431,49 +494,68 @@ export class TourPaymentSelectPage implements OnInit {
   }
 
   tourpaymentpayoostore() {
-   //return;
-    let itemcache = this.tourService;
-    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + this.bookingCode + '&buyerPhone=' + this.phone+'&memberId='+this.jti+'&version=2';
-    this.gf.CreatePayoo(url).then(datapayoo => {
-      this.hideLoading();
-      //datapayoo = JSON.parse(datapayoo);
-      if (datapayoo.success) {
-        this.tourService.BillingCode = datapayoo.payooStoreData.BillingCode;
-        this.tourService.periodPaymentDate = datapayoo.payooStoreData.periodPayment;
-        if (this.loader) {
-          this.loader.dismiss();
-        }
-        // this.openWebpage(datapayoo.returnUrl);
-        // this.zone.run(()=>{
-        //   this.setinterval();
-        // })
-        this.navCtrl.navigateForward('tourpaymentpayoo/' + this.bookingCode + '/0');
-      }
-      else{
-        this.showAlertPaymentError();
-        this.hideLoading();
-      }
-    })
-  }
-  tourpaymentpayooqr() {
-    var se=this;
-    let itemcache = this.tourService;
+    let se = this;
     se.createBookingTour().then((bookingCode) => {
       if(bookingCode){
-        se.bookingCode = bookingCode;
-        let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
-        se.gf.CreatePayoo(url).then(datapayoo => {
-          se.hideLoading();
+        this.bookingCode = bookingCode;
+        let itemcache = this.tourService;
+        var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + this.bookingCode + '&buyerPhone=' + this.phone+'&memberId='+this.jti+'&version=2';
+        this.gf.CreatePayoo(url).then(datapayoo => {
+          this.gf.hideLoading();
+          this.hideLoading();
           if (datapayoo.success) {
-            se.tourService.qrimg = datapayoo.payooQrData.QRCodeUrl;
-            se.navCtrl.navigateForward('tourpaymentpayoo/' + se.bookingCode + '/1');
-          }else{
-            se.hideLoading();
-            se.showAlertPaymentError();
+            this.tourService.BillingCode = datapayoo.payooStoreData.BillingCode;
+            this.tourService.periodPaymentDate = datapayoo.payooStoreData.periodPayment;
+            if (this.loader) {
+              this.loader.dismiss();
+            }
+            
+            this.createBookingTourTransaction();
+            // this.navCtrl.navigateForward('tourpaymentpayoo/' + this.bookingCode + '/0');
+          }
+          else{
+            this.gf.hideLoading();
+            this.showAlertPaymentError();
+            this.hideLoading();
           }
         })
       }
     })
+    
+  }
+  tourpaymentpayooqr() {
+    var se=this;
+    this.tourService.paymentType = 1;
+    let itemcache = this.tourService;
+    if(se.tourService.BookingTourMytrip) {
+      se.bookingCode = se.tourService.BookingTourMytrip.booking_id;
+      se.createBookingUrlPayoo(se.tourService.BookingTourMytrip.amount_after_tax);
+    } else {
+      se.createBookingTour().then((bookingCode) => {
+        if(bookingCode){
+          se.bookingCode = bookingCode;
+          se.createBookingUrlPayoo(itemcache.totalPrice);
+        }
+      })
+    }
+    
+  }
+
+  createBookingUrlPayoo(totalPrice) {
+    let se = this;
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+          se.gf.CreatePayoo(url).then(datapayoo => {
+            se.gf.hideLoading();
+            se.hideLoading();
+            if (datapayoo.success) {
+              se.tourService.qrimg = datapayoo.payooQrData.QRCodeUrl;
+              se.navCtrl.navigateForward('tourpaymentpayoo/' + se.bookingCode + '/1');
+            }else{
+              se.gf.hideLoading();
+              se.hideLoading();
+              se.showAlertPaymentError();
+            }
+          })
   }
 
     tourpaymentatoffice(){
@@ -510,6 +592,7 @@ export class TourPaymentSelectPage implements OnInit {
               this.bizTravelService.paymentType = 1;
               this.flightPayment().then((checkvalid) => {
                 if(checkvalid){
+                  this.tourService.BookingTourMytrip = null;
                   this.navCtrl.navigateForward('tourpaymentdone');
                 }
                 
@@ -584,12 +667,12 @@ export class TourPaymentSelectPage implements OnInit {
             se.gf.RequestApi('POST', urlApi, headers, se.tourService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
               if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
                 se.tourService.tourBookingCode = data.Response.BookingCode;
-                se.tourService.tourTotal = data.Response.Total;
+                se.tourService.totalPrice = data.Response.Total;
                 resolve(data.Response.BookingCode)
               }else{
                 resolve(false);
               }
-              se.gf.hideLoading();
+             
             });
       }else{
         se.gf.hideLoading();

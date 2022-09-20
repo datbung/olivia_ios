@@ -77,7 +77,7 @@ export class SearchDeparturePage implements OnInit {
     }
 
     goback(){
-        this.navCtrl.back();
+        this.navCtrl.pop();
     }
 
     getItems(ev: any) {

@@ -61,16 +61,16 @@ export class TourPaymentAtOfficePage implements OnInit{
         se.gf.RequestApi('POST', urlApi, headers, se._tourService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
           if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
             se._tourService.tourBookingCode = data.Response.BookingCode;
-            se._tourService.tourTotal = data.Response.Total;
+            se._tourService.totalPrice = data.Response.Total;
 
-            let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+data.Response.BookingCode;
+            let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+data.Response.BookingCode+'&status=2';
             let headers = {
               apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
               apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
             };
             se.gf.RequestApi('GET', urlApiTrans, headers, null , 'tourpaymentbank', 'UpdateTransaction').then((dataTrans)=>{
-              console.log(dataTrans);
               if(dataTrans){
+                this._tourService.paymentType = -1;
                 this.navCtrl.navigateForward('/tourpaymentdone');
               }
             });

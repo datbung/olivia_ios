@@ -120,7 +120,7 @@
   </div>
   
 </ion-content>
-<ion-footer>
+<ion-footer class="bg-white">
   <div class='div-close-paxhint' *ngIf="inputtext && listpaxhint && listpaxhint.length >0" (click)="hidePaxHint()"><img src='./assets/ic_close_b.svg'></div>
   <div class="div-pax-hint" *ngIf="inputtext && listpaxhint && listpaxhint.length >0">
                   
@@ -135,11 +135,11 @@
     
   </div>
   <div class="div-touradddetail-footer d-flex">
-    <div class="width-50 div-footer-left" *ngIf="tourService.hasAllotment">
-        <div class="text-normal-footer"><span *ngIf="searchhotel.adult">{{searchhotel.adult}} người lớn</span><span *ngIf="searchhotel.child">, {{searchhotel.child}} trẻ em</span></div>
-        <div ><span class="text-price-footer">{{tourService.totalPriceStr}}</span><span class="text-price-sub">đ</span></div>
+    <div class="width-60 div-footer-left" *ngIf="tourService.hasAllotment">
+        <div class="text-normal-footer"><span *ngIf="searchhotel.adult">{{searchhotel.adult}} người lớn</span><span *ngIf="searchhotel.child">, {{searchhotel.child}} trẻ em</span><span *ngIf="ischeck && tourService.paymentType == 1"> (+VAT)</span></div>
+        <div ><span class="text-price-footer">{{totalPriceStr}}</span><span class="text-price-sub">đ</span></div>
     </div>
-    <div  class="width-50 " (click)="next()" *ngIf="tourService.hasAllotment && tourService.paymentType == 1">
+    <div  class="width-40 " (click)="next()" *ngIf="tourService.hasAllotment && tourService.paymentType == 1">
         <button *ngIf="tourService.hasAllotment" ion-button round outline class="button btn-departure-calendar">
             Thanh toán
         </button>

@@ -30,6 +30,7 @@ export class TourDepartureCalendarPage implements OnInit{
   allowclickcalendar: boolean=true;
   MsgError: any;
   hasDeparture:boolean=false;
+  infant = '<1';
   constructor(public platform: Platform,public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events:Events,
     public gf: GlobalFunction,public modalCtrl: ModalController, private pickerController: PickerController,
     public tourService: tourService) {
@@ -46,7 +47,7 @@ export class TourDepartureCalendarPage implements OnInit{
       else{
         this.hasDeparture = false;
       }
-       this.calculatePrice();
+       this.calculatePrice(0);
     }
   
   ngOnInit() {
@@ -57,24 +58,38 @@ export class TourDepartureCalendarPage implements OnInit{
     var se = this;
     return new Promise((resolve, reject) => {
       let body = { "TourId": se.tourService.tourDetailId,
-      "StartDate": moment(_date).format('YYYY-MM-DD'),
-      "AdultNo": se.searchhotel.adult,
-      "ChildNo": se.searchhotel.child ? se.searchhotel.child :0,
-      "ChildAges": se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""
+      "date": moment(_date).format('YYYY-MM-DD'),
+      "adult": se.searchhotel.adult,
+      "child": se.searchhotel.child ? se.searchhotel.child :0,
+      "childAges": se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""
       };
-        let urlApi = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking';
+        //let urlApi = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking';
         let headers = {
           apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
           apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
         };
-        se.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking', headers, body, 'touradddetails', 'CheckAllotmentPreBooking').then((data)=>{
-            if(data.Status != 'Error' && data.Status != 'False'){
+        se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(_date).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child :0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}`, headers, body, 'tourdeparturecalendar', 'GetMercuriusTourPrice').then((data)=>{
+            if(data.Status != 'Error' && data.Status != 'ER' && data.Status != 'False'){
               this.itemDepartureCalendar = data.Response.TourRate;
-              this.hasAllotment = true;
+             
+              this.zone.run(()=>{
+                if(this.itemDepartureCalendar.RateChildAvg){
+                  this.itemDepartureCalendar.PriceChildAvg = this.itemDepartureCalendar.RateChildAvg;
+                  this.itemDepartureCalendar.PriceChildAvgStr = this.gf.convertNumberToString(this.itemDepartureCalendar.RateChildAvg.toFixed(0));
+                  this.itemDepartureCalendar.PriceAdultAvgStr = this.gf.convertNumberToString(this.itemDepartureCalendar.RateAdultAvg.toFixed(0));
+                  this.tourService.itemDepartureCalendar = this.itemDepartureCalendar;
+                }
+                this.hasAllotment = this.itemDepartureCalendar.Status == 'AL';
+                this.tourService.hasAllotment = this.itemDepartureCalendar.Status == 'AL';
+              })
+              
               resolve(true);
             }else{
-              this.MsgError = data.Msg;
-              this.hasAllotment = false;
+              this.MsgError = data.Response.MSG;
+              this.zone.run(()=>{
+                this.hasAllotment = false;
+                this.tourService.hasAllotment = false;
+              })
               resolve(false);
             }
             
@@ -83,56 +98,101 @@ export class TourDepartureCalendarPage implements OnInit{
     
   }
 
-  calculatePrice() {
+  calculatePrice(isShowWarning) {
     let se = this;
     if(this.itemDepartureCalendar){
-      this.checkTourAllotment(this.itemDepartureCalendar.DepartureDate).then((check)=>{
+      let _date = this.itemDepartureCalendar.DepartureDate || this.itemDepartureCalendar.AllotmentDate;
+      se.searchhotel.CheckInDate =  moment(_date).format('YYYY-MM-DD');
+      this.checkTourAllotment(_date).then((check)=>{
         if(check){
+          this.tourService.itemDepartureCalendar = this.itemDepartureCalendar;
           let totalPrice = this.itemDepartureCalendar.TotalRate;
           this.zone.run(()=>{
             this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
             this.tourService.totalPrice = totalPrice;
             this.tourService.totalPriceStr = this.totalPriceStr;
+           
+            if(!se.tourService.itemDepartureCalendar){
+              let itemmap = se.tourService.departuresItemList.filter(i => i.DepartureDate == moment(_date).format('YYYY-MM-DD'));
+              if(itemmap && itemmap.length >0){
+               se.tourService.itemDepartureCalendar = itemmap[0];
+               se.tourService.hasDeparture = true;
+               se.tourService.DepartureDate = itemmap[0].DepartureDate;
+               
+              }
+            }else {
+              this.itemDepartureCalendar.AllotmentDateDisplay = moment(_date).format('DD-MM-YYYY');
+              this.tourService.itemDepartureCalendar.AllotmentDateDisplay = moment(_date).format('DD-MM-YYYY');
 
-            let itemmap = se.tourService.departuresItemList.filter(i => i.DepartureDate == moment(this.itemDepartureCalendar.DepartureDate).format('YYYY-MM-DD'));
-                    if(itemmap && itemmap.length >0){
-                     se.tourService.itemDepartureCalendar = itemmap[0];
-                     se.tourService.hasDeparture = true;
-                     se.tourService.DepartureDate = itemmap[0].DepartureDate;
-                    }
+            }
+            if(this.itemDepartureCalendar.RateChildAvg){
+              this.itemDepartureCalendar.PriceChildAvg = this.itemDepartureCalendar.RateChildAvg;
+              this.itemDepartureCalendar.PriceChildAvgStr = this.gf.convertNumberToString(this.itemDepartureCalendar.RateChildAvg.toFixed(0));
+            }
+            if(this.itemDepartureCalendar.RateAdultAvg) {
+              this.itemDepartureCalendar.PriceAdultAvgStr = this.gf.convertNumberToString(this.itemDepartureCalendar.RateAdultAvg.toFixed(0));
+            }
+            
+
           })
         }else if(this.tourService.itemDepartureCalendar){
-          let totalPrice = ((this.tourService.itemDepartureCalendar.PriceAdultAvg || 0) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.PriceChildAvg ||0) * this.searchhotel.child || 0)
+          let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0)
           this.zone.run(()=>{
             this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
             this.tourService.totalPrice = totalPrice;
             this.tourService.totalPriceStr = this.totalPriceStr;
+            this.itemDepartureCalendar.AllotmentDateDisplay = moment(_date).format('DD-MM-YYYY');
+            this.tourService.itemDepartureCalendar.AllotmentDateDisplay = moment(_date).format('DD-MM-YYYY');
+
+            if(this.itemDepartureCalendar.RateChildAvg){
+              this.itemDepartureCalendar.PriceChildAvg = this.itemDepartureCalendar.RateChildAvg;
+              this.itemDepartureCalendar.PriceChildAvgStr = this.gf.convertNumberToString(this.itemDepartureCalendar.RateChildAvg.toFixed(0));
+            }
+            if(this.itemDepartureCalendar.RateAdultAvg) {
+              this.itemDepartureCalendar.PriceAdultAvgStr = this.gf.convertNumberToString(this.itemDepartureCalendar.RateAdultAvg.toFixed(0));
+            }
           })
-          se.gf.showAlertMessageOnly(se.MsgError);
+          if(isShowWarning){
+            se.gf.showAlertMessageOnly(se.MsgError);
+          }
+          //
         }
       });
     }else{
-      let totalPrice = ((this.tourService.itemDepartureCalendar.PriceAdultAvg || 0) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.PriceChildAvg ||0) * this.searchhotel.child || 0)
-      this.zone.run(()=>{
-        this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
-        this.tourService.totalPrice = totalPrice;
-        this.tourService.totalPriceStr = this.totalPriceStr;
-      })
+      if(this.tourService.itemDepartureCalendar){
+        let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0)
+        this.zone.run(()=>{
+          this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
+          this.tourService.totalPrice = totalPrice;
+          this.tourService.totalPriceStr = this.totalPriceStr;
+        })
+      }else{
+        this.zone.run(()=>{
+          this.totalPriceStr = 0;
+          this.tourService.totalPrice = 0;
+          this.tourService.totalPriceStr = 0;
+        })
+      }
+      
     }
     
   }
 
   goback() {
+    //this.tourService.publicScrollToDepartureDiv(1);
     this.navCtrl.pop();
   }
 
   book(){
+    if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
+      return;
+    }
     if(!this.hasDeparture){
       return;
     }
     for (let i = 0; i < this.searchhotel.arrchild.length; i++) {
       const element = this.searchhotel.arrchild[i];
-      if(!element.numage)
+      if(!element.text)
       {
         this.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
         return;
@@ -144,6 +204,9 @@ export class TourDepartureCalendarPage implements OnInit{
   }
 
   addPax(type){
+    if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
+      return;
+    }
     if(!this.hasDeparture){
       return;
     }
@@ -154,9 +217,12 @@ export class TourDepartureCalendarPage implements OnInit{
       let arr = { text: 'Trẻ em' + ' ' + this.searchhotel.child, numage: "7" }
       this.searchhotel.arrchild.push(arr);
     }
-    this.calculatePrice();
+    this.calculatePrice(1);
   }
   removePax(type){
+    if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
+      return;
+    }
     if(!this.hasDeparture){
       return;
     }
@@ -166,7 +232,7 @@ export class TourDepartureCalendarPage implements OnInit{
         return;
       }
       this.searchhotel.adult--;
-      this.calculatePrice();
+      this.calculatePrice(1);
      
     }else{
       if(this.searchhotel.child<=0){
@@ -175,7 +241,7 @@ export class TourDepartureCalendarPage implements OnInit{
       }
       this.searchhotel.child--;
       this.searchhotel.arrchild.splice(this.searchhotel.arrchild.length - 1, 1);
-      this.calculatePrice();
+      this.calculatePrice(1);
     }
   }
   async openPickupCalendar(){
@@ -184,6 +250,9 @@ export class TourDepartureCalendarPage implements OnInit{
       return;
     }
     if(!se.allowclickcalendar){
+      return;
+    }
+    if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
       return;
     }
     
@@ -212,10 +281,10 @@ export class TourDepartureCalendarPage implements OnInit{
         closeLabel: "",
         doneLabel: "",
         step: 0,
-        defaultScrollTo: fromdate,
-        defaultDateRange: { from: fromdate, to: todate },
+        defaultScrollTo: this.itemDepartureCalendar ? (this.itemDepartureCalendar.DepartureDate ? new Date(this.itemDepartureCalendar.DepartureDate) : new Date(this.itemDepartureCalendar.AllotmentDate)) : fromdate,
+        defaultDate: this.itemDepartureCalendar ? (this.itemDepartureCalendar.DepartureDate ? new Date(this.itemDepartureCalendar.DepartureDate) : new Date(this.itemDepartureCalendar.AllotmentDate)) : fromdate,
         daysConfig: _daysConfig,
-        to: new Date(),
+        to: new Date(Year, Month-1, Day-1),
       };
   
       this.myCalendar = await this.modalCtrl.create({
@@ -286,42 +355,40 @@ export class TourDepartureCalendarPage implements OnInit{
               }, 300);
   
               se.checkTourAllotment(fromdate).then((check)=>{
-                se.zone.run(() => {
+                
                   if(check){
-                    // let itemmap = se.tourService.departuresItemList.filter(i => i.DepartureDate == moment(fromdate).format('YYYY-MM-DD'));
-                    // if(itemmap && itemmap.length >0){
-                    //  se.tourService.itemDepartureCalendar = itemmap[0];
-                    //  se.tourService.hasDeparture = true;
-                    //  se.tourService.DepartureDate = itemmap[0].DepartureDate;
-                    // }
-                    // se.zone.run(() => {
-                    //   se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
-                    //   se.searchhotel.cindisplay = moment(fromdate).format("DD-MM-YYYY");
-                    //   se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
-                    // });
+                    let totalPrice = se.itemDepartureCalendar.TotalRate;
+                      se.zone.run(()=>{
+                        se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
+                        se.searchhotel.cindisplay = moment(fromdate).format("DD-MM-YYYY");
+                        se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
 
-                    let totalPrice = this.itemDepartureCalendar.TotalRate;
-                    this.zone.run(()=>{
-                      se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
-                      se.searchhotel.cindisplay = moment(fromdate).format("DD-MM-YYYY");
-                      se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
-
-                      this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
-                      this.tourService.totalPrice = totalPrice;
-                      this.tourService.totalPriceStr = this.totalPriceStr;
-          
-                      let itemmap = se.tourService.departuresItemList.filter(i => i.DepartureDate == moment(fromdate).format('YYYY-MM-DD'));
-                              if(itemmap && itemmap.length >0){
-                               se.tourService.itemDepartureCalendar = itemmap[0];
-                               se.tourService.hasDeparture = true;
-                               se.tourService.DepartureDate = itemmap[0].DepartureDate;
-                              }
+                        se.totalPriceStr = se.gf.convertNumberToString(totalPrice);
+                        se.tourService.totalPrice = totalPrice;
+                        se.tourService.totalPriceStr = se.totalPriceStr;
+                        se.itemDepartureCalendar.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
+                          let itemmap = se.tourService.departuresItemList.filter(i => i.DepartureDate == moment(fromdate).format('YYYY-MM-DD'));
+                          if(itemmap && itemmap.length >0){
+                            se.tourService.itemDepartureCalendar = itemmap[0];
+                            se.tourService.hasDeparture = true;
+                            se.tourService.DepartureDate = itemmap[0].DepartureDate;
+                            se.tourService.itemDepartureCalendar.PriceChildAvg = se.itemDepartureCalendar.RateChildAvg;
+                            se.tourService.itemDepartureCalendar.RateChildAvg = se.itemDepartureCalendar.RateChildAvg;
+                            se.tourService.itemDepartureCalendar.PriceChildAvgStr = se.gf.convertNumberToString(se.itemDepartureCalendar.RateChildAvg.toFixed(0));
+                            se.tourService.itemDepartureCalendar.TotalRate = se.itemDepartureCalendar.TotalRate;
+                            
+                          }
                     })
-                  }else{
+                  }
+                  else{
+                    se.itemDepartureCalendar.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
+                    se.tourService.DepartureDate =  moment(fromdate).format('YYYY-MM-DD');
+                    se.tourService.itemDepartureCalendar.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
                     se.gf.showAlertMessageOnly(se.MsgError);
+                  
                   }
                   
-                })
+               
                })
             }
           }
@@ -334,23 +401,29 @@ export class TourDepartureCalendarPage implements OnInit{
   async selectAge(textchild){
     var se =this;
    
-    var columnOptions =['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'];
+    var columnOptions =['<1','1','2','3','4','5','6','7','8','9','10','11'];
 
     const picker = await this.pickerController.create({
-      columns: this.getColumns(1, 16, columnOptions, textchild),
+      columns: this.getColumns(1, 11, columnOptions, textchild),
       cssClass: 'action-sheets-select-age',
       buttons: [
         {
           text: textchild,
           cssClass: 'picker-header',
           handler: (value) => {
+           
            return false;
           }
         }
       ],
     });
 
-    $('.picker-wrapper.sc-ion-picker-md').append('<div class="div-button"><button (click)="getPickerValue()" ion-button round outline class="button button-done">Xong</button></div>');
+    if($('.picker-wrapper.sc-ion-picker-ios') && $('.picker-wrapper.sc-ion-picker-ios').length >0){
+      $('.picker-wrapper.sc-ion-picker-ios').append('<div class="div-button"><button (click)="getPickerValue()" ion-button round outline class="button button-done">Xong</button></div>');
+    }else if($('.picker-wrapper.sc-ion-picker-md') && $('.picker-wrapper.sc-ion-picker-md').length >0){
+      $('.picker-wrapper.sc-ion-picker-md').append('<div class="div-button"><button (click)="getPickerValue()" ion-button round outline class="button button-done">Xong</button></div>');
+    }
+    
     $('.action-sheets-select-age .button-done').on('click', ()=>{
       let value = $('.picker-opt.picker-opt-selected')[0].innerText;
       se.selectclick(value, textchild);
@@ -362,11 +435,12 @@ export class TourDepartureCalendarPage implements OnInit{
   selectclick(event, text) {
     for (let i = 0; i < this.searchhotel.arrchild.length; i++) {
       if (this.searchhotel.arrchild[i].text == text) {
-        this.searchhotel.arrchild[i].numage = event;
+        this.searchhotel.arrchild[i].numage = (event == "<1" ? 0 : event);
         break;
       }
 
     }
+    this.calculatePrice(1);
   }
 
   getColumns(numColumns, numOptions, columnOptions, textchild) {
@@ -383,7 +457,7 @@ export class TourDepartureCalendarPage implements OnInit{
 
   getColumnOptions(columnIndex, numOptions, columnOptions) {
     let options = [];
-    for (let i = 0; i < numOptions; i++) {
+    for (let i = 0; i <= numOptions; i++) {
       options.push({
         text: columnOptions[i],
         value: i
@@ -397,9 +471,12 @@ export class TourDepartureCalendarPage implements OnInit{
     if(!se.hasDeparture){
       return;
     }
+    if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
+      return;
+    }
     for (let i = 0; i < se.searchhotel.arrchild.length; i++) {
       const element = se.searchhotel.arrchild[i];
-      if(!element.numage)
+      if(!element.text)
       {
         se.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
         return;
@@ -411,9 +488,12 @@ export class TourDepartureCalendarPage implements OnInit{
   }
   requestQuote() {
     let se = this;
+    if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
+      return;
+    }
     for (let i = 0; i < se.searchhotel.arrchild.length; i++) {
       const element = se.searchhotel.arrchild[i];
-      if(!element.numage)
+      if(!element.text)
       {
         se.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
         return;

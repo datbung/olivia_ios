@@ -120,7 +120,10 @@ export class SearchRegionPage implements OnInit{
         if (response.statusCode == 200) {
           var res = JSON.parse(body);
           //se.topsale24Total = res.total;
-          se.loadregiondone = true;
+          se.zone.run(()=> {
+            se.loadregiondone = true;
+          })
+          
           if(res && res.Response && res.Response.length >0){
             se.json = res.Response;
             se.json.forEach(element => {
@@ -189,6 +192,7 @@ export class SearchRegionPage implements OnInit{
   selectItemHot(item) {
     this.tourService.input = item;
     this.tourService.itemSearchTour.emit(1);
-    this.navCtrl.navigateBack('/app/tabs/tab1');
+    //this.navCtrl.navigateBack('/app/tabs/tab1');
+    this.navCtrl.pop();
   }
 }

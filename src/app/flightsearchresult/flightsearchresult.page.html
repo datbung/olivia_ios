@@ -563,7 +563,7 @@
             </div>
             <div class="div-flight-info">
                 <div class="div-time-and-price">{{departFlight.timeDisplay}}   ·  {{departFlight.priceDisplay}}</div>
-                <div class="div-code">{{departFlight.airlineCode}}   ·  {{departFlight.from}} - {{departFlight.to}}</div>
+                <div class="div-code">{{departFlight.airlineCode}}   ·  {{departFlight.fromPlaceCode}} - {{departFlight.toPlaceCode}}</div>
             </div>
             <div class="div-text-change v-align-center" (click)="goback()">Thay đổi</div>
           </div>
@@ -571,7 +571,7 @@
         </div>
         <div *ngIf="(sortairline && !buttoniVIVUSelected) else nosortreturn">
   
-          <div *ngIf="enableFlightFilterReturn else noreturnFilter">
+          <div *ngIf="(enableFlightFilterReturn || (departFlight && departFlight.flightType.indexOf('outBound') != -1) ) else noreturnFilter">
          
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturnFilter && listReturnFilter.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 m-top-54 div-width-150" >Lựa chọn chuyến về tốt nhất</div>

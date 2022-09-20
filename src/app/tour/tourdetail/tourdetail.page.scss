@@ -108,14 +108,14 @@
 
         .text-point {
           margin-top: 8px 4px 0 0;
-          padding: 2px 8px 0 8px;
+          padding: 2px 0 0 0;
           border-radius: 6px;
           background-color: #9fc43a;
           color: #fff;
           height: 20px;
           font-size: 14px;
           margin-right: 4px;
-          width: 34px;
+          width: 36px;
           text-align: center;
         }
         .text-point-des {
@@ -156,10 +156,14 @@
             height: 23px;
           }
       }
-     
+     .div-icon-comment {
+      position: absolute;
+      right: 10px;
+     }
       .icon-comment {
           color: var(--ion-color-primary);
           font-size: 28px;
+          margin-top: 3px;
       }
       .div-h-28{
           height: 28px;
@@ -240,7 +244,15 @@
       .icon_boat {
         width: 16px;
       }
-
+      .icon_train {
+        width: 16px;
+        height: 16px;
+        opacity: 0.5;
+      }
+      .icon_treking {
+        width: 12px !important;
+        opacity: 0.5;
+      }
      .text-sub-headline {
       font-size: 16px;
       font-weight: 600;
@@ -350,6 +362,29 @@
 }
 
 .cls-tourdetail-header {
+  .div-width-48 {
+    width: 48px;
+  }
+  .div-width-100 {
+    width: 100%;
+  }
+  .header-tourname {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    color: #3f3b3b;
+    height: 44px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+  }
+  .img-back {
+    height: 48px; 
+    padding-left: 8px;
+  }
 
   .div-item {
     display: flex;
@@ -358,15 +393,17 @@
     justify-content: space-between;
     width: 90%;
     align-items: center;
+    background: #fff;
   }
 
   .div-icon {
     width: 10%;
+    background: #fff;
   }
 
   .item-tour-header {
     min-width: 138px;
-    color: #26bed6;
+    color: #3f3b3b;
     
     height: 100%;
     display: flex;
@@ -378,6 +415,7 @@
 
   .item-header-actived {
     border-bottom: solid 2px #26bed6;
+    color: #26bed6 !important;
   }
 
   .scroll-horizontal {
@@ -394,6 +432,14 @@
     }
     
   }
+
+  .cls-shadow {
+    background: #fff;
+    box-shadow: 0px 0px 2px 1px #dedede;
+  }
+  .cls-border-bottom {
+    border-bottom: solid 0.5px #bdbdbd;
+  }
 }
 .width-50 {
   width: 50%;
@@ -403,6 +449,9 @@
 }
 .width-45 {
   width: 45%;
+}
+.width-100 {
+  width: 100%;
 }
 .div-tourdetail-footer {
   margin: 8px 16px;
@@ -436,6 +485,14 @@
     color: #fff;
     width: 100%;
   }
+  .btn-advise {
+    margin: 0;
+    font-size: 17px !important;
+    background-color: #fff;
+    border: solid 1px #f79321;
+    color: #f79321;
+    width: 100%;
+  }
   
 }
 
@@ -445,4 +502,70 @@
           margin: 16px 0;
         }
       }
+}
+.f-bold {
+  font-weight: 600;
+}
+.div-scroll, .div-recommend, .div-review {
+  
+  .text-show-more-departure {
+    margin-top: 16px;
+    font-size: 16px;
+    color: #26bed6;
+  }
+    
+  // .div-collapse {
+  //   max-height: 258px;
+  //   overflow: hidden;
+  //   transition: opacity 1s ease-in;
+  // }
+
+  // .div-expand {
+  //   max-height: none;
+  //   transition: opacity 1s ease-out;
+  // }
+
+  .div-wrap-departure .div-expand{
+    display: block;
+    animation: showNav 500ms ease-in-out both;
+  }
+  .div-collapse {
+    transition: opacity 1s ease-out;
+    display: none;
+    opacity: 0; 
+    height: 258px;
+    overflow: hidden;
+    padding: 0;
+    animation: hideNav 500ms ease-in-out both;
+  }
+
+  @keyframes showNav {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes hideNav {
+    from {opacity: 1;}
+    to {opacity: 0;}
+  }
+
+  .img-seemoreroom{
+    margin-left: 4px;
+    height: 9px;
+  }
+}
+
+.p-right-24 {
+  padding-right: 24px;
+}
+.cls-no-departure {
+  opacity: 0.5;
+}
+@media(min-height:600px) and (max-height:667px){
+  .div-price {
+      max-width: 170px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+  }
 }

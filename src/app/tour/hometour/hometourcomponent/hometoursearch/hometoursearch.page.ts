@@ -84,10 +84,16 @@ export class HomeTourSearchPage implements OnInit {
       this.gf.showToastWarning('Vui lòng chọn điểm đến!');
       return;
     }
+    if(this.itemSearch && this.itemSearch.Id && this.itemSearch.TourCode){
+      this.tourService.tourDetailId = this.itemSearch.Id;
+      this.tourService.backPage = 'hometour';
+      this.navCtrl.navigateForward('/tourdetail');
+    }else {
+      this.tourService.itemSearchDestination = this.itemSearch;
+      this.tourService.itemShowList = null;
+      this.navCtrl.navigateForward('/tourlist');
+    }
     
-    this.tourService.itemSearchDestination = this.itemSearch;
-    this.tourService.itemShowList = null;
-    this.navCtrl.navigateForward('/tourlist');
   }
 
   opendeparture() {
@@ -117,7 +123,7 @@ export class HomeTourSearchPage implements OnInit {
         doneLabel: "",
         step: 0,
         defaultScrollTo: fromdate,
-        defaultDateRange: { from: fromdate, to: todate },
+        defaultDate: fromdate,
         daysConfig: [],
         to: new Date(Year+1, Month, Day),
       };

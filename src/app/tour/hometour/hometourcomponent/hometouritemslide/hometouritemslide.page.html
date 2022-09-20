@@ -1,7 +1,7 @@
 <div class="div-itemtourslide">
   <div *ngIf="slideData.length >0">
-    <div *ngFor="let itemSlide of slideData">
-      <div class="title-padding p-left-16 p-top-30 position-relative" *ngIf="itemSlide.Name" >
+    <div *ngFor="let itemSlide of slideData; let idx = index;" [ngClass]=" (idx%2) == 0 ? 'cls-itemtour-color' : ''">
+      <div class="title-padding p-left-16 p-right-48 p-top-30 position-relative" *ngIf="itemSlide.Name" >
         <ion-label class="text-title2">
           {{ itemSlide.Name }}
         </ion-label>
@@ -35,7 +35,7 @@
                   </p>
                 </div>
               </div>
-              <div class="float-info">
+              <div [ngClass]="itemSlide.hasTopSale ? 'float-info min-height-186' : 'float-info'">
                 <div class="div-hotel-name">
                   <h2 class="hotel-name">
                     {{ slide.Name }}
@@ -51,11 +51,13 @@
                   <div class="text-right div-icon-right">
                     <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('máy bay') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/plane.svg" /></div>
                     <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('ô tô') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/bus.svg" /></div>
-                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('du thuyền') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/boat.svg" /></div>
+                    <div *ngIf="slide && (slide.TransportName.toLowerCase().indexOf('du thuyền') != -1 || slide.TransportName.toLowerCase().indexOf('tàu biển') != -1 || slide.TransportName.toLowerCase().indexOf('cano') != -1)"><img class="icon_right" src="../../../../../assets/ic_tour/boat.svg" /></div>
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('tàu lửa') != -1" class="p-right-8"><img class="icon_clock icon_train" src="../../../assets/ic_tour/train.svg" /></div>
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('trekking') != -1"><img class="icon_right icon_treking" src="../../../../../assets/ic_tour/trekking.svg" /></div>
                   </div>
                 </div>
 
-                <div class="d-flex div-top-place">
+                <!-- <div class="d-flex div-top-place">
                   <div *ngIf="slide.listTopPlace && slide.listTopPlace.length >0" class="div-wrap-item-topplace">
                     <div *ngFor="let topplace of slide.listTopPlace" class="d-flex div-item-topplace">
                       <div class="cls-dot">·</div>
@@ -63,19 +65,30 @@
                     </div>
                     
                   </div>
-                </div>
+                </div> -->
 
-                <div class="d-flex m-top-8" *ngIf="slide.AvgPoint">
+                <div class="d-flex m-top-8" *ngIf="slide.AvgPoint else noAvgPoint">
                   <div class="div-badge">
                       <div class="text-point">{{slide.AvgPoint}}</div>
-                      <div class="text-point-des" *ngIf="slide.AvgPoint >=9 && slide.AvgPoint <=10">Xuất sắc</div>
+                      <div class="text-point-des" *ngIf="slide.AvgPoint>9 && slide.AvgPoint <=10">Xuất sắc</div>
+                      <div class="text-point-des" *ngIf="slide.AvgPoint>8 && slide.AvgPoint <=9">Rất tốt</div>
+                      <div class="text-point-des" *ngIf="slide.AvgPoint>7 && slide.AvgPoint <=8">Khá tốt</div>
+                      <div class="text-point-des" *ngIf="slide.AvgPoint>6 && slide.AvgPoint <=7">Tạm được</div>
+                      <div class="text-point-des" *ngIf="slide.AvgPoint>5 && slide.AvgPoint <=6">Không tốt</div>
                       <div  *ngIf="slide.NumOfReview"> | <span class="text-comment">{{slide.NumOfReview}} đánh giá</span></div>
                   </div>
                 </div>
+                <ng-template #noAvgPoint>
+                  <div class="text-point-des m-h-20 m-top-8">Chưa có đánh giá</div>
+                </ng-template>
 
-                <div class="cls-price-strike" *ngIf="slide.AdultSalePrice > slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div>
+                <!-- <div class="cls-price-strike" *ngIf="slide.AdultSalePrice > slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div>
                 <div class="cls-price m-top-0" *ngIf="slide.AdultSalePrice > slide.MinPrice">{{ gf.convertNumberToString(slide.MinPrice) }} đ</div>
-                <div class="cls-price" *ngIf="slide.AdultSalePrice <= slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div>
+                <div class="cls-price" *ngIf="slide.AdultSalePrice <= slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div> -->
+                <div class="d-flex m-top-8 div-button-sale" *ngIf="slide.TopSale">
+                  <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24h qua</ion-label>
+                </div>
+                <div class="cls-price" >{{ gf.convertNumberToString(slide.MinPrice) }}đ</div>
               </div>
             </div>
             
@@ -89,14 +102,14 @@
       </div>
     </div>
   </div>
-
+<div *ngIf="slidePopular.length >0" class="cls-itemtour-bkgwhite">
   <div class="title-padding p-left-16 p-top-30" *ngIf="slidePopular.length >0">
-    <ion-label class="text-title2">
+    <ion-label class="text-title2 f-22">
       Các điểm du lịch phổ biến
     </ion-label>
   </div>
   <div class="sub-title p-left-16" *ngIf="slidePopular.length >0">
-    <ion-label class="text-subtitle">
+    <ion-label class="text-subtitle f-16">
       Bao la thế giới. Bốn bể là nhà
     </ion-label>
   </div>
@@ -130,6 +143,8 @@
       </div>
     </div>
   </div>
+</div>
+  
            
 
 </div>

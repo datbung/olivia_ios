@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
+import { tourService } from '../providers/tourService';
 import * as moment from 'moment';
 import { ActionSheetController, IonRouterOutlet, NavController, ToastController ,AlertController,LoadingController} from '@ionic/angular';
 import { NetworkProvider } from '../network-provider.service';
@@ -51,6 +52,9 @@ export class MytripdetailPage implements OnInit {
   noLoginObj: any;
   childList: any;
   loader: any;
+  expandDivIncludePrice: boolean;
+  expandDivTourInfo: boolean;
+  expandDivTourNotes: boolean;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -64,11 +68,23 @@ export class MytripdetailPage implements OnInit {
     public _foodService: foodService,
     private nativePageTransitions: NativePageTransitions,
     private routerOutlet: IonRouterOutlet,
-    private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController) {
+    private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
+    public _tourService: tourService) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
         this.enableheader = true;
         this.loadDetailInfo();
+        if(this.trip.booking_type && this.trip.booking_type == "TOUR"){
+            this.getBookingTourDetail(this.trip);
+        }
+        if(this.trip.child_ages){
+          let countstring = this.trip.child_ages.match(/tuổi/g || []).length;
+          let inputstr = this.trip.child_ages;
+           for (let index = 0; index < countstring; index++) {
+              inputstr = inputstr.replace('tuổi','t');
+            }
+            this.trip.childAgesDisplay = inputstr;
+        }
         this.routerOutlet.swipeGesture = false;
       }
    }
@@ -425,6 +441,11 @@ export class MytripdetailPage implements OnInit {
       }
     
     }
+    else if(trip.booking_type == 'TOUR'){
+      se._tourService.BookingTourMytrip = trip;
+      se._tourService.itemDetail = null;
+      se.navCtrl.navigateForward("/tourpaymentselect");
+    }
     else {
       // stt 0:CKNH
       if (stt==0) {
@@ -726,5 +747,118 @@ export class MytripdetailPage implements OnInit {
     this.loader = await this.loadingCtrl.create({
     });
     this.loader.present();
+  }
+
+  
+  getBookingTourDetail(trip) {
+    let headers = {
+      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetTourById?id='+trip.hotel_id.replace('TO',''), headers, {}, 'order', 'getBookingTourDetail').then((data)=>{
+      if(data && data.Status == "Success" && data.Response){
+        trip.itemTourDetail = data.Response;
+        if(trip.itemTourDetail && trip.itemTourDetail.Image){
+          // let itemmap = this.tourService.listTopSale.filter((item) => item.Id == tourService.tourDetailId );
+          // if(itemmap && itemmap.length >0){
+          //   trip.TopSale = itemmap[0].TotalQuest;
+          // }
+          trip.itemTourDetail.ImagesSlide = trip.itemTourDetail.Image.split(', ');
+          let countstring = trip.itemTourDetail.ProgramContent.match(/cdn2/g || []).length;
+          for (let index = 0; index < countstring; index++) {
+            trip.itemTourDetail.ProgramContent = trip.itemTourDetail.ProgramContent.replace('src="//cdn2','src="https://cdn2');
+          }
+
+        }
+        if(trip.itemTourDetail.AvgPoint && (trip.itemTourDetail.AvgPoint.toString().length == 1 || trip.itemTourDetail.AvgPoint === 10)){
+          trip.itemTourDetail.AvgPoint = trip.itemTourDetail.AvgPoint +".0";
+        }
+      }
+    })
+  }
+
+  expandDiv(type){
+    if(type ==1){
+      this.expandDivIncludePrice = !this.expandDivIncludePrice;
+      
+      if(this.expandDivIncludePrice){
+        var divCollapse = $('.div-wrap-includeprice.div-collapse');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+       
+      }else{
+        var divCollapse = $('.div-wrap-includeprice.div-expand');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+      }
+    }
+    else if(type ==2){
+      this.expandDivTourInfo = !this.expandDivTourInfo;
+      
+      if(this.expandDivTourInfo){
+        var divCollapse = $('.div-wrap-tourinfo.div-collapse');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+       
+        setTimeout(()=>{
+          if($('#contentcontentIncludePrice') && $('#contentcontentIncludePrice').length >0){
+            document.getElementById('contentcontentIncludePrice').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }else{
+        var divCollapse = $('.div-wrap-tourinfo.div-expand');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+        setTimeout(()=>{
+          if($('#contentTourInfo') && $('#contentTourInfo').length >0){
+            document.getElementById('contentTourInfo').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }
+    }
+    else if(type ==3){
+      this.expandDivTourNotes = !this.expandDivTourNotes;
+      
+      if(this.expandDivTourNotes){
+        var divCollapse = $('.div-wrap-tournotes.div-collapse');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+       
+        setTimeout(()=>{
+          if($('#contentTourNotes') && $('#contentTourNotes').length >0){
+            document.getElementById('contentTourNotes').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }else{
+        var divCollapse = $('.div-wrap-tournotes.div-expand');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+       
+        setTimeout(()=>{
+          if($('#contentTourNotes') && $('#contentTourNotes').length >0){
+            document.getElementById('contentTourNotes').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }
+    }
+    else{
+
+    }
+  }
+
+  showTourInfo() {
+    this.navCtrl.navigateForward('/mytriptourinfo');
   }
 }

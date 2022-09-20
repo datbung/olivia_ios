@@ -358,12 +358,39 @@ export class FlightsearchresultPage implements OnInit {
         //Lọc vé seri chiều về theo availId
         if(item.id && item.id.indexOf('__seri') != -1){
           se.listReturnSeri = se.filterSeriItem(item);
-        }else{
-          if(se._flightService.objectFilter){
-            se.filterItem();
+        }
+       
+        else{
+          if(se.departFlight.flightType.indexOf("outBound") == -1){
+            if(se._flightService.objectFilter){
+              se.filterItem();
+            }
+  
+            se.filterNotSeriItem();
+          }else{
+              se.filterItem().then(()=>{
+                se.zone.run(()=>{
+                  if(se.listReturnFilter && se.listReturnFilter.length > 0){
+                    se.bestpricereturn = se.listReturnFilter.length >=2 ? [...se.listReturnFilter].splice(0,2) : [...se.listReturnFilter];
+                    if(se.listReturnFilter.length >2){
+                      let listotherpricereturn = [...se.listReturnFilter].splice(2,se.listReturnFilter.length);
+                      se.sortFlightsByPrice(listotherpricereturn).then((data)=>{
+                        se.bestpricereturn = [...se.bestpricereturn, data.splice(0,1)[0]];
+      
+                        let listotherpricereturnmustreorder = [...data];
+                        se.sortFlights("priceorder", listotherpricereturnmustreorder);
+      
+                        se.otherpricereturn = [...listotherpricereturnmustreorder];
+                      })
+                    }else{
+                      se.otherpricereturn = [];
+                    }
+                  }
+                })
+              })
+            
           }
-
-          se.filterNotSeriItem();
+          
         }
 
         // if(se._flightService.objectFilter){
@@ -388,6 +415,10 @@ export class FlightsearchresultPage implements OnInit {
       //Nếu đi và về cùng ngày thì check thêm dk giờ về phải lớn hơn giờ đi 3h
       if(se._flightService.objSearch.roundTrip)
       {
+        if(se.departFlight.flightType.indexOf("outBound") != -1 && item.flightType.indexOf("outBound") != -1 && se.departFlight.airlineCode != item.airlineCode){
+          se.showAlert('Không thể kết hợp chặng bay này. Vui lòng chọn chuyến bay cùng hãng của chiều đi');
+          return;
+        }
         se.checkRoundTripInDay(item).then((data) => {
           if(data){
               se.showAlert('Để thuận tiện, bạn nên chọn chuyến bay về có giờ khởi hành cách thời điểm chuyến bay đi hạ cánh ít nhất 3 tiếng');
@@ -437,13 +468,25 @@ export class FlightsearchresultPage implements OnInit {
       listFilter = [...filterSeri];
       return listFilter;
   }
+  filterOutBoundItem(itemOutBound){
+    var se = this;
+    let listFilter = [...se.listReturn];
+    let filterSeri = listFilter.filter((filterSeriItem) => {
+        return filterSeriItem.airlineCode == itemOutBound.airlineCode;
+      })
+      listFilter = [...filterSeri];
+      return listFilter;
+  }
   filterNotSeriItem(){
     var se = this;
     let listFilter = [...se.listReturn];
     let filterSeri = listFilter.filter((filterSeriItem) => {
         return filterSeriItem.id && filterSeriItem.id.indexOf('__seri') == -1;
       })
-      listFilter = [...filterSeri];
+      se.zone.run(()=> {
+        listFilter = [...filterSeri];
+      })
+      
       return listFilter;
   }
   /**
@@ -1423,15 +1466,6 @@ export class FlightsearchresultPage implements OnInit {
                 if((se.listDepart && se.listDepart.length == 0) || (se.listReturn && se.listReturn.length == 0)){
       
                 }else{
-                  // if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                  //   se.bestpricedepart = [...se.listDepartFilter].splice(0,3);
-                  //   se.otherpricedepart = [...se.listDepartFilter].splice(3,se.listDepartFilter.length);
-                  // }
-                
-                  // if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                  //   se.bestpricereturn = [...se.listReturnFilter].splice(0,3);
-                  //   se.otherpricereturn = [...se.listReturnFilter].splice(3,se.listReturnFilter.length);
-                  // }
                   if(se.listDepartFilter && se.listDepartFilter.length > 0) {
                     se.bestpricedepart = se.listDepartFilter.length >=2 ? [...se.listDepartFilter].splice(0,2) : [...se.listDepartFilter];
                     if(se.listDepartFilter.length > 2){
@@ -2729,7 +2763,7 @@ export class FlightsearchresultPage implements OnInit {
               })
               listFilter = [...filterAirline];
             }
-  
+
             if( se._flightService.objectFilter.classSelected && se._flightService.objectFilter.classSelected.length >0){
               let filterclass = listFilter.filter((filterclassitem) => {
                 let str;
@@ -2893,6 +2927,15 @@ export class FlightsearchresultPage implements OnInit {
               })
               listFilter = [...filterAirline];
             }
+
+            if(se.departFlight && se.departFlight.flightType.indexOf("outBound") != -1){
+              let filterAirline = listFilter.filter((filterairlineitem) => {
+                let str;
+                    str = str ? (str || filterairlineitem.airlineCode == se.departFlight.airlineCode ) : filterairlineitem.airlineCode == se.departFlight.airlineCode ;
+                return str;
+              })
+              listFilter = [...filterAirline];
+            }
   
             if( se._flightService.objectFilterReturn.classSelectedReturn && se._flightService.objectFilterReturn.classSelectedReturn.length >0){
               let filterclass = listFilter.filter((filterclassitem) => {
@@ -2999,7 +3042,11 @@ export class FlightsearchresultPage implements OnInit {
               || se._flightService.objectFilterReturn.facilitySelectedReturn.length >0
               )){
               if(se.listReturn && se.listReturn.length >0){
-                se.listReturnFilter = se.filterByListFlight([...se.listReturn], 'return');
+                se.zone.run(()=> {
+                  se.listReturnFilter = se.filterByListFlight([...se.listReturn], 'return');
+                })
+                
+                
                }
             }else{
               se.listReturnFilter =se.listReturn;
@@ -3012,7 +3059,18 @@ export class FlightsearchresultPage implements OnInit {
 
              if(se.step == 2){
                 se.enableFlightFilter = (totalItemDepartAfterFilter != totalItemDepartBeforeFilter) ? 1 : 0;
-                se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
+                
+                if(se.departFlight && se.departFlight.flightType.indexOf("outBound") != -1){
+                  let filterOutBound = se.listReturn.filter((filterairlineitem) => {
+                    return filterairlineitem.airlineCode == se.departFlight.airlineCode;
+                  })
+                  if(filterOutBound && filterOutBound.length != totalItemReturnAfterFilter){
+                    se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
+                  }
+                }else {
+                  se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
+                }
+                
              }else{
                 se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
              }

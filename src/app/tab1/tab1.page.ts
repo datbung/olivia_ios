@@ -55,7 +55,7 @@ import { AppVersion } from "@ionic-native/app-version/ngx";
 import { FirebaseDynamicLinks } from "@ionic-native/firebase-dynamic-links/ngx";
 import { tap } from 'rxjs/operators';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions/ngx';
-import { foodService } from '../providers/foodService';
+import { tourService } from '../providers/tourService';
 import { flightService } from '../providers/flightService';
 import { MytripService } from "../providers/mytrip-service.service";
 import { BizTravelService } from "../providers/bizTravelService";
@@ -198,7 +198,7 @@ export class Tab1Page implements OnInit {
     public actionSheetCtrl: ActionSheetController,
     public nativePageTransitions: NativePageTransitions,
     public activityService: ActivityService,
-    public foodService: foodService,
+    public tourService: tourService,
     public flightService: flightService,
     public _mytripservice: MytripService,
     public bizTravelService: BizTravelService
@@ -423,7 +423,7 @@ export class Tab1Page implements OnInit {
       }
     })
 
-    se.foodService.itemTabFood.pipe().subscribe((data) => {
+    se.tourService.itemPaymentDone.pipe().subscribe((data) => {
       if(data){
         se.setActiveTab(3);
       }
@@ -2893,67 +2893,30 @@ export class Tab1Page implements OnInit {
     }
     else if(this.valueGlobal.backValue =="homeflight"){
       this.hideStatusBar();
-      if(this.foodService.firstload ==0){
-        setTimeout(()=>{
-          this.activeTab=1;
-          this.setActiveTab(1);
-          this.foodService.firstload +=1;
-          this.valueGlobal.backValue = "";
-        },700)
-      }else{
         setTimeout(()=>{
           this.activeTab=1;
           this.setActiveTab(1);
           this.valueGlobal.backValue = "";
         },100)
-      }
     }else if( this.valueGlobal.backValue == "flightmytrip"){
-      if(this.foodService.firstload ==0){
-        setTimeout(()=>{
-          this.activeTab=1;
-          this.setActiveTab(1);
-          this.foodService.firstload +=1;
-          this.flightService.itemMenuFlightClick.emit(2);
-          $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-        },700)
-      }else{
         setTimeout(()=>{
           this.activeTab=1;
           this.setActiveTab(1);
           this.flightService.itemMenuFlightClick.emit(2);
           $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
         },100)
-      }
     }
     else{
       this.gf.clearActivatedTab();
       if (document.querySelector(".tabbar")) {
         document.querySelector(".tabbar")['style'].display = 'flex';
       }
-      this.setActiveTab(0);
-    }
-
-    if(this.valueGlobal.backValue == "foodbill" || this.valueGlobal.backValue =="foodaccount"){
-      if(!this.foodService.firstload){
-        setTimeout(()=>{
-          this.activeTab=1;
-          this.setActiveTab(1);
-          this.foodService.firstload +=1;
-          if(this.valueGlobal.backValue =="foodaccount"){
-            this.foodService.menuFooterClick.emit(4);
-            this.valueGlobal.backValue ="";
-          }
-        },700)
+      if(this.valueGlobal.activeTab ==3){
+        this.setActiveTab(3);
       }else{
-        setTimeout(()=>{
-          this.activeTab=1;
-          this.setActiveTab(1);
-          if(this.valueGlobal.backValue =="foodaccount"){
-            this.foodService.menuFooterClick.emit(4);
-            this.valueGlobal.backValue ="";
-          }
-        },100)
+        this.setActiveTab(0);
       }
+      
     }
     
     $(".homefood-header").removeClass("cls-visible").addClass("cls-disabled");
@@ -3653,17 +3616,6 @@ export class Tab1Page implements OnInit {
             el[0].classList.add('float-statusbar-disabled');
           }
         }
-        if(se.activeTab ==3 && se.foodService.tabFoodIndex == 1 && se.router.url.indexOf("foodcombodetail") == -1){
-          if(event.detail.scrollTop >= 400){
-            if(!$(".homefood-header").hasClass("cls-visible")){
-              $(".homefood-header").removeClass("cls-disabled").addClass("cls-visible");
-            }
-          }else{
-            $(".homefood-header").removeClass("cls-visible").addClass("cls-disabled");
-          }
-        }else{
-          $(".homefood-header").removeClass("cls-visible").addClass("cls-disabled");
-        }
 
         if(se.activeTab ==1){
           if(se.flightService.tabFlightIndex != 1){
@@ -3961,19 +3913,12 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
+    this.valueGlobal.activeTab = currentIndex;
     if(currentIndex !=2 ){
       this.activeTab = currentIndex;
-      this.valueGlobal.activeTab = currentIndex;
     }
-    
-    // if ( currentIndex === 3 ) {//blog
-    //   // this.countcart = this.foodService.listItemsCart.length;
-    //   // this.getAddress();
-    //   this.valueGlobal.backValue = "bloglist";
-    //   this._mytripservice.rootPage = "bloglist";
-    //   this.navCtrl.navigateForward('/bloglist');
-    // }
-    else if ( currentIndex === 2 ) {//Combo
+
+    if ( currentIndex === 2 ) {//Combo
         this.valueGlobal.backValue = "";
         this.searchhotel.adult=this.adult;
         this.searchhotel.child=this.child;
@@ -4004,44 +3949,34 @@ export class Tab1Page implements OnInit {
           }
          }
      
-      this.getAddress();
+      //this.getAddress();
       this.flightService.itemTabFlightFocus.emit(1);
     }
     else if (currentIndex === 3) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
+
+      $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
       if (document.querySelector(".tabbar")) {
-        document.querySelector(".tabbar")['style'].display = 'none';
-        if (document.querySelector(".tabbar")[1]) {
-          document.querySelector(".tabbar")[0]['style'].display = 'none';
-          document.querySelector(".tabbar")[1]['style'].display = 'none';
+      document.querySelector(".tabbar")['style'].display = 'flex';
+      if(document.querySelector(".tabbar")[1]){
+        document.querySelector(".tabbar")[0]['style'].display = 'flex';
+        document.querySelector(".tabbar")[1]['style'].display = 'flex';
+      }
+      }
+  
+      if(document.getElementsByClassName("homefood-footer").length >0){
+        document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+        if(document.getElementsByClassName("homefood-footer")[1]){
+          document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+        }
+       }
+       if(document.getElementsByClassName("homeflight-footer").length >0){
+        document.getElementsByClassName("homeflight-footer")[0]['style'].display ='none';
+        if(document.getElementsByClassName("homeflight-footer")[1]){
+          document.getElementsByClassName("homeflight-footer")[1]['style'].display ='none';
         }
       }
-      if (document.getElementsByClassName("homefood-footer").length > 0) {
-        document.getElementsByClassName("homefood-footer")[0]['style'].display = 'none';
-        if (document.getElementsByClassName("homefood-footer")[1]) {
-          document.getElementsByClassName("homefood-footer")[1]['style'].display = 'none';
-        }
-      }
-
-      if (document.getElementsByClassName("homeflight-footer").length > 0) {
-        document.getElementsByClassName("homeflight-footer")[0]['style'].display = 'none';
-        if (document.getElementsByClassName("homeflight-footer")[1]) {
-          document.getElementsByClassName("homeflight-footer")[1]['style'].display = 'none';
-        }
-      }
-
-      if (document.getElementsByClassName("hometour-footer").length > 0) {
-        document.getElementsByClassName("hometour-footer")[0]['style'].display = 'block';
-        if (document.getElementsByClassName("hometour-footer")[1]) {
-          document.getElementsByClassName("hometour-footer")[1]['style'].display = 'block';
-        }
-      }
-      
-      this.storage.remove('TabHomeActive').then(() => {
-        this.storage.set('TabHomeActive', 2);
-      })
-     
     }
     else{
       this._mytripservice.rootPage = "homehotel";
@@ -4067,53 +4002,10 @@ export class Tab1Page implements OnInit {
       }
     }
 
-     this.foodService.listimagereview = null;
-     this.foodService.objFoodReview = null;
      this.valueGlobal.backValue = "";
     }
     
     this.gf.setActivatedTab(1);
-  }
-  //Địa chỉ các quận giao hàng
-  getAddress() {
-    var se = this;
-    let url = C.urls.baseUrl.urlFood + "/api/FOAdmin/GetData";
-    this.gf.RequestApi("GET", url, {}, {}, "", "").then((data) => {
-      se.arrDistrict = [];
-      se.arrCity = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].levelId == 1) {
-          se.arrCity.push(data[i]);
-        }
-        if (data[i].levelId == 2) {
-          se.arrDistrict.push(data[i]);
-        }
-      }
-      se.dataDist();
-    })
-  }
-  dataDist() {
-    var se = this;
-    se.foodService.district = [];
-    for (let i = 0; i < se.arrCity.length; i++) {
-      var item;
-      var chuoi = "";
-      if (se.foodService.district.length>0) {
-        var str= se.foodService.district[i-1].namedist.length;
-        se.foodService.district[i-1].namedist=se.foodService.district[i-1].namedist.slice(0,str-2);
-      }
-      for (let j = 0; j < se.arrDistrict.length; j++) {
-        if (se.arrCity[i].id == se.arrDistrict[j].parentId) {
-          if (j == se.arrDistrict.length - 1) {
-            chuoi = chuoi + se.arrDistrict[j].name;
-          } else {
-            chuoi = chuoi + se.arrDistrict[j].name + ', ';
-          }
-        }
-      }
-      item = { namecity: se.arrCity[i].name, namedist: chuoi };
-      se.foodService.district.push(item);
-    }
   }
   getShowNotice() {
     var se = this;

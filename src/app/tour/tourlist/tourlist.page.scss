@@ -1,9 +1,22 @@
+.cls-header-tourlist {
 
+  .img-sort{
+    height: 48px; padding: 12px;right: -3px;
+  }
+
+  .img-back{
+    height: 48px;
+    padding: 8px;
+    margin-left: -3px;
+  }
+}
     .text-title{
       font-size: 18px;
       font-weight: bold;
       padding: 0;
       text-align: center;
+      margin: 0 48px;
+      width: 78%;
   }
   .header-text{
     text-align: center;
@@ -124,6 +137,10 @@
       background-position: right;
       width: 92%;
   }
+  .action-sheets-tourlist-sort .action-sheet-wrapper.sc-ion-action-sheet-ios {
+    margin-bottom: 0;
+  }
+
   }
   .img-blog
   { 
@@ -264,7 +281,7 @@
       letter-spacing: -0.34px;
       font-size: 12px;
       font-weight: 100;
-      margin-top: 3px;
+      margin-bottom: 2px;
     }
     .btn-topsale{
       color: #ffffff;
@@ -351,14 +368,14 @@
 
   .text-point {
     margin-top: 8px 4px 0 0;
-    padding: 2px 8px 0 8px;
+    padding: 2px 0 0 0;
     border-radius: 6px;
     background-color: #9fc43a;
     color: #fff;
     height: 20px;
     font-size: 14px;
     margin-right: 4px;
-    width: 34px;
+    width: 36px;
     text-align: center;
   }
   .text-point-des {
@@ -376,8 +393,13 @@
     color: #26bed6;
   }
 }
-.width-55 {
-  width: 55%;
+.div-flex-end {
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
+}
+.width-70 {
+  width: 70%;
 }
 .width-45 {
   width: 45%;
@@ -388,8 +410,13 @@
   text-align: right;
   color: #26bed6;
 }
+.text-noprice {
+  font-size: 22px;
+  font-weight: 500;
+  text-align: right;
+  color: #828282;
+}
 .cls-price-strike {
-  margin-top: 12px;
   font-size: 18px;
   font-weight: 500;
   text-align: right;

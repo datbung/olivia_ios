@@ -1,5 +1,12 @@
 .div-itemtourslide{
-
+  background-color: #f2f2f2;
+  margin-bottom: 68px;
+  .cls-itemtour-color{
+    background-color: #f6f8fa !important;
+  }
+  .cls-itemtour-bkgwhite {
+    background-color: #ffffff !important;
+  }
     .title-padding{
         padding:16px 0px 0px 0px;
     }
@@ -24,6 +31,12 @@
       font-weight: bold;
       font-size: 20px;
       color: #333333;
+    }
+    .f-22 {
+      font-size: 22px !important;
+    }
+    .f-16 {
+      font-size: 16px !important;
     }
     .text-seemore{
         margin-top: 5px;
@@ -68,7 +81,7 @@
 .div-wrap-deal{
     display: flex !important;
     flex-direction: column;
-    border-radius: 4px;
+    border-radius: 5px;
     box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
     border: solid 1px #dedfe3;
 
@@ -81,6 +94,9 @@
     .m-0 {
       margin:0;
     }
+    .min-height-186 {
+      min-height: 186px !important;
+    }
     
     .float-info{
       position: relative !important;
@@ -89,6 +105,7 @@
       background: #fff;
       padding: 8px;
       border-radius: 0 0 4px 4px;
+      min-height: 156px;
 
       .div-hotel-name {
         height: 45px;
@@ -108,6 +125,22 @@
         }
       }
      
+      .div-button-sale {
+        align-items: center;
+        justify-content: flex-end;
+        display: flex;
+        flex-direction: row;
+        font-size: 14px;
+    
+
+        .text-topsale {
+          padding: 4px 9px;
+          border-radius: 4px;
+          background-color: #e52822;
+          color: #fff;
+          height: 23px;
+        }
+    }
           
       .div-icon-right {
         width: 50%;
@@ -117,6 +150,10 @@
         .icon_right {
           width: 16px;
           margin-left: 6px;
+        }
+        .icon_treking {
+          width: 12px !important;
+          opacity: 0.5;
         }
       }
 
@@ -154,6 +191,11 @@
         font-weight: 600;
         text-align: right;
         color: var(--ion-color-primary);
+
+        position: absolute;
+        bottom: 12px;
+        right: 8px;
+
       }
       .cls-price-strike {
         margin-top: 12px;
@@ -172,23 +214,17 @@
 
         .text-point {
           margin-top: 8px 4px 0 0;
-          padding: 2px 8px 0 8px;
+          padding: 2px 0 0 0;
           border-radius: 6px;
           background-color: #9fc43a;
           color: #fff;
           height: 20px;
           font-size: 14px;
           margin-right: 4px;
-          width: 38px;
+          width: 36px;
           text-align: center;
         }
-        .text-point-des {
-          font-size: 14px;
-          letter-spacing: -0.4px;
-          text-align: left;
-          color: #3f3b3b;
-          margin-right: 4px;
-        }
+        
         .text-comment {
           font-size: 14px;
           letter-spacing: -0.4px;
@@ -196,6 +232,14 @@
           color: #3f3b3b;
           color: var(--ion-color-primary);
         }
+      }
+
+      .text-point-des {
+        font-size: 14px;
+        letter-spacing: -0.4px;
+        text-align: left;
+        color: #3f3b3b;
+        margin-right: 4px;
       }
     }
 
@@ -223,6 +267,7 @@
   .cls-deal {
     min-width: 278px;
     border-radius: 6px;
+    overflow-x: unset !important;
   }
   .m-l-16 {
     margin-left: 16px;
@@ -273,7 +318,9 @@
   .text-right {
     text-align: right;
   }
-
+  .p-right-48 {
+    padding-right: 48px !important;
+  }
   .p-right-8 {
     padding-right: 8px;
   }
@@ -292,6 +339,10 @@
   .div-col2 {
     width: 66%;
   }
+  .m-h-20 {
+    height: 20px;
+  }
+  
   .div-item{
     position: relative;
 
@@ -309,7 +360,7 @@
 
       color: #fff;
       padding: 10px;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
       width: 100%;
       font-size: 16px;
       font-weight: 600;

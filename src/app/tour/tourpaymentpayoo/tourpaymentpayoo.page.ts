@@ -41,6 +41,8 @@ export class TourPaymentPayooPage implements OnInit {
     this.stt= this.activatedRoute.snapshot.paramMap.get('stt');
     if (this.stt == 0) {
       this.BillingCode = this._tourService.BillingCode;
+      this.textHours = moment(this._tourService.periodPaymentDate).format("HH:mm");
+      this.PeriodPaymentDate = this._tourService.periodPaymentDate ? this.gf.getDayOfWeek(this._tourService.periodPaymentDate).dayname + ", " + moment(this._tourService.periodPaymentDate).format("DD") + " thg " + moment(this._tourService.periodPaymentDate).format("MM") : "";
     }
     else {
       this.qrimg = this._tourService.qrimg;
@@ -69,7 +71,9 @@ export class TourPaymentPayooPage implements OnInit {
   next() {
     var se = this;
     if (se.stt == 0) {
-      se.navCtrl.navigateBack('/app/tabs/tab1');
+      this._tourService.paymentType = -1;
+      this.navCtrl.navigateForward('/tourpaymentdone');
+      //se.navCtrl.navigateBack('/app/tabs/tab1');
     }
     else {
       clearInterval(se.intervalID);
@@ -94,6 +98,7 @@ export class TourPaymentPayooPage implements OnInit {
                 se.safariViewController.hide();
               }
               clearInterval(se.intervalID);
+              se._tourService.BookingTourMytrip = null;
               se.navCtrl.navigateForward('tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -128,7 +133,7 @@ export class TourPaymentPayooPage implements OnInit {
     var se = this;
     let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
         se.zone.run(() => {
-          se.gf.Checkpayment(url).then((res) => {
+          se.gf.CheckPaymentTour(url).then((res) => {
             let checkpay = JSON.parse(res);
             if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
               se.gf.hideLoading();
@@ -136,6 +141,7 @@ export class TourPaymentPayooPage implements OnInit {
                 se.safariViewController.hide();
               }
               clearInterval(se.intervalID);
+              se._tourService.BookingTourMytrip = null;
               se.navCtrl.navigateForward('tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -146,7 +152,7 @@ export class TourPaymentPayooPage implements OnInit {
               }
               clearInterval(se.intervalID);
               se.gf.showAlertTourPaymentFail(checkpay.internalNote);
-            }    
+            }
           
           })
         })

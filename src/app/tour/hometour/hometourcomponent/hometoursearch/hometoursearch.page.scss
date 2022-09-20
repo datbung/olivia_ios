@@ -54,7 +54,7 @@
   
       .label-home-hotel{
         color: #ffffff;
-        font-size: 20px;
+        font-size: 17px;
         line-height: 24px;
         font-weight: 600;
       }
@@ -138,6 +138,12 @@
         display: table-cell;
         vertical-align: middle;
         height: 48px;
+
+      }
+      .text-placeholder {
+        color: #828282;
+        font-size: 16px;
+        line-height: 20px;
       }
      
       .text-cin, .text-pax{
@@ -159,7 +165,7 @@
       }
       .font-thu
         {
-          margin-top: 6px;
+          margin-top: 2px;
           font-size: 12px;
           letter-spacing: -0.34px;
         }
@@ -198,7 +204,7 @@
           -webkit-line-clamp: 2;
           display: -webkit-box;
           /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
-          height: 36px;
+          height: 38px;
           margin-top: 7px;
         }
   }

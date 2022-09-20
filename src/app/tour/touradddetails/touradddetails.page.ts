@@ -27,7 +27,7 @@ import * as $ from 'jquery';
 })
 export class TourAddDetailsPage implements OnInit {
 
-  hoten;phone = ""; note; arr; roomnumber; room; ischeck: boolean; ishide;
+  hoten;phone = ""; note; arr; roomnumber; room; ischeck: boolean = false; ishide = false;
   companyname; address; tax; addressorder; bed; bedchuoi; priceshow; ischeckpoint; ischeckbtn
   timestamp; paymentMethod; jsonroom; ischeckpayment;public loader:any
   _email: any;
@@ -44,6 +44,7 @@ export class TourAddDetailsPage implements OnInit {
   currentSelectPax: any;
   jti: any;
   memberid: any='';
+  totalPriceStr: any;
   ngOnInit() {
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,
@@ -54,6 +55,14 @@ export class TourAddDetailsPage implements OnInit {
     public searchhotel: SearchHotel,
     public tourService: tourService) {
     this.ischeckpayment = Roomif.ischeckpayment;
+    let tp =0;
+    if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
+      tp = this.tourService.itemDepartureCalendar.TotalRate;
+    }else{
+      tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+    }
+    
+    this.totalPriceStr = this.gf.convertNumberToString(tp);
     this.storage.get('jti').then((memberid) => {
       this.memberid = memberid;
     })
@@ -110,7 +119,12 @@ export class TourAddDetailsPage implements OnInit {
     }
    
     this.GetUserInfo();
-
+    //tour nước ngoài mặc định tích chọn xuất HD
+      if(!this.tourService.itemDetail.Inbound){
+        this.ishide = true;
+        this.ischeck = true;
+      }
+    
     this.storage.get('jti').then(jti => {
       if (jti) {
         this.jti = jti;
@@ -149,8 +163,6 @@ export class TourAddDetailsPage implements OnInit {
             if (body) {
               var data = JSON.parse(body);
               se.zone.run(() => {
-                se.ishide = false;
-                se.ischeck = false;
                 var corpInfomations=data.corpInfomations[0];
                 if(corpInfomations){
                   se.companyname = corpInfomations.legalName;
@@ -160,8 +172,6 @@ export class TourAddDetailsPage implements OnInit {
                   // se.hotenhddt=corpInfomations.hotenhddt;
                   // se.emailhddt=corpInfomations.emailhddt;
                   // se.ishideNameMail=corpInfomations.ishideNameMail;
-                  se.ishide = true;
-                  se.ischeck = true;
                 }
                 else{
                   se.storage.get('order').then(order => {
@@ -173,8 +183,6 @@ export class TourAddDetailsPage implements OnInit {
                       se.hotenhddt=order.hotenhddt;
                       se.emailhddt=order.emailhddt;
                       se.ishideNameMail=order.ishideNameMail;
-                      se.ishide = true;
-                      se.ischeck = true;
                     }
                   })
                 }
@@ -189,8 +197,6 @@ export class TourAddDetailsPage implements OnInit {
                   se.hotenhddt=order.hotenhddt;
                   se.emailhddt=order.emailhddt;
                   se.ishideNameMail=order.ishideNameMail;
-                  se.ishide = true;
-                  se.ischeck = true;
                 }else {
                   se.ishide = false;
                   se.ischeck = false;
@@ -216,176 +222,217 @@ export class TourAddDetailsPage implements OnInit {
       this.auth_token = auth_token;
     })
   }
-  next() {
-    this.Roomif.notetotal = "";
-    this.gf.googleAnalytion('touradddetails', 'tour_payment_info', '');
-    if (this.hoten) {
-      this.hoten = this.hoten.trim();
-      var checktext=this.hasWhiteSpace(this.hoten);
-      if (!checktext) {
-        this.presentToastHo();
-        return;
-      }
-    }
-    else {
-      this.presentToastHo();
-      return;
-    }
-    
-  
-    //this.clearClonePage('page-roompaymentselect');
-    this.Roomif.order = "";
-    
-      if (this.phonenumber(this.phone)) {
-        //validate mail
-        if(!this.validateEmail(this._email) || !this._email || !this.gf.checkUnicodeCharactor(this._email)){
-          this.presentToastEmail();
-          this.validemail = false;
+  createObjectBooking(isPaymentDirect) : Promise<any>{
+    return new Promise((resolve, reject)=> {
+      this.Roomif.notetotal = "";
+      this.gf.googleAnalytion('touradddetails', 'tour_payment_info', '');
+      if (this.hoten) {
+        this.hoten = this.hoten.trim();
+        var checktext=this.hasWhiteSpace(this.hoten);
+        if (!checktext) {
+          this.presentToastHo();
+          resolve(false);
           return;
+          
         }
-        this.booking.CEmail = this._email;
-      
-        let objTourReq:any = {};
-        objTourReq.TourId = this.tourService.tourDetailId;
-        objTourReq.StartDate =  moment(this.tourService.DepartureDate).format('YYYY-MM-DD');
-        objTourReq.AdultNo = this.searchhotel.adult;
-        objTourReq.ChildNo = this.searchhotel.child ? this.searchhotel.child :0;
-        //objTourReq.ChildAges = this.searchhotel.child ? this.searchhotel.arrchild.join(',') : "";
-        objTourReq.NightNo = this.tourService.itemDetail.NightNo;
-        objTourReq.PaymentStatus = -1;
+      }
+      else {
+        this.presentToastHo();
+        resolve(false);
+        return;
         
-
-        if (this.ischeck) {
-          if (this.companyname && this.address && this.tax) {
-            this.companyname = this.companyname.trim();
-            this.address = this.address.trim();
-            this.tax = this.tax.trim();
-          }
-          else {
-            this.presentToastOrder();
+      }
+      
+    
+      //this.clearClonePage('page-roompaymentselect');
+      this.Roomif.order = "";
+      
+          if (!this.phonenumber(this.phone)) {
+            this.presentToastPhone();
+            resolve(false);
             return;
+            
           }
-
-          if (this.companyname && this.address && this.tax) {
-            this.Roomif.hoten = this.hoten;
-            this.Roomif.phone = this.phone;
-            this.Roomif.companyname = this.companyname;
-            this.Roomif.address = this.address;
-            this.Roomif.tax = this.tax;
-            this.Roomif.notetotal = this.note;
-            this.Roomif.addressorder = this._email;
-            this.Roomif.nameOrder = this.hoten;
+          //validate mail
+          if(!this.validateEmail(this._email) || !this._email || !this.gf.checkUnicodeCharactor(this._email)){
+            this.presentToastEmail();
+            this.validemail = false;
+            resolve(false);
+            return;
+            
+          }
+          this.booking.CEmail = this._email;
+        
+          let objTourReq:any = {};
+          objTourReq.TourId = this.tourService.tourDetailId;
+          objTourReq.StartDate =  moment(this.tourService.DepartureDate).format('YYYY-MM-DD');
+          objTourReq.AdultNo = this.searchhotel.adult;
+          objTourReq.ChildNo = this.searchhotel.child ? this.searchhotel.child :0;
+          //objTourReq.ChildAges = this.searchhotel.child ? this.searchhotel.arrchild.join(',') : "";
+          objTourReq.NightNo = this.tourService.itemDetail.NightNo;
+          objTourReq.PaymentStatus = -1;
+          
   
-            objTourReq.CustomerEmail = this._email;
-            objTourReq.CustomerName = this.hoten;
-            objTourReq.CustomerPhone = this.phone;
-            objTourReq.CustomerTitle = "";
-            objTourReq.BillingAddress = this.addressorder;
-            objTourReq.CompanyAddress = this.address;
-            objTourReq.CompanyTaxCode = this.tax;
-            objTourReq.CompanyName = this.companyname;
-            objTourReq.CooperatorEmail = "";
-            objTourReq.CooperatorName = "";
-            objTourReq.CooperatorPhone = "";
-            objTourReq.IsInvoice = 1;
+          if (this.ischeck && isPaymentDirect) {
+            if (this.companyname && this.address && this.tax) {
+              this.companyname = this.companyname.trim();
+              this.address = this.address.trim();
+              this.tax = this.tax.trim();
+            }
+            else {
+              this.presentToastOrder();
+              resolve(false);
+              return;
+              
+            }
   
-            if (!this.ishideNameMail ) {
-              if (this.emailhddt && this.hotenhddt) {
-                if(!this.validateEmail(this.emailhddt) || !this.gf.checkUnicodeCharactor(this.emailhddt)){
-                  this.gf.showToastWarning('email xuất hóa đơn không hợp lệ. Vui lòng kiểm tra lại');
-                  return;
+            if (this.companyname && this.address && this.tax) {
+              this.Roomif.hoten = this.hoten;
+              this.Roomif.phone = this.phone;
+              this.Roomif.companyname = this.companyname;
+              this.Roomif.address = this.address;
+              this.Roomif.tax = this.tax;
+              this.Roomif.notetotal = this.note;
+              this.Roomif.addressorder = this._email;
+              this.Roomif.nameOrder = this.hoten;
+    
+              objTourReq.CustomerEmail = this._email;
+              objTourReq.CustomerName = this.hoten;
+              objTourReq.CustomerPhone = this.phone;
+              objTourReq.CustomerTitle = "";
+              objTourReq.BillingAddress = this.addressorder;
+              objTourReq.CompanyAddress = this.address;
+              objTourReq.CompanyTaxCode = this.tax;
+              objTourReq.CompanyName = this.companyname;
+              objTourReq.CooperatorEmail = "";
+              objTourReq.CooperatorName = "";
+              objTourReq.CooperatorPhone = "";
+              objTourReq.IsInvoice = this.tourService.itemDetail.Inbound ? 1 : 0;
+    
+              if (!this.ishideNameMail ) {
+                if (this.emailhddt && this.hotenhddt) {
+                  if(!this.validateEmail(this.emailhddt) || !this.gf.checkUnicodeCharactor(this.emailhddt)){
+                    this.gf.showToastWarning('email xuất hóa đơn không hợp lệ. Vui lòng kiểm tra lại');
+                    resolve(false);
+                    return;
+                  }
+                  else{
+                    this.Roomif.addressorder = this.emailhddt;
+                    this.Roomif.nameOrder = this.hotenhddt;
+  
+                    var order1 = { companyname: this.companyname, address: this.address, tax: this.tax, addressorder: this.addressorder,ishideNameMail: this.ishideNameMail,hotenhddt:this.hotenhddt,emailhddt:this.emailhddt }
+                    this.storage.set("order", order1);
+                    this.Roomif.order = this.companyname + "," + this.address + "," + this.tax + "," + this.addressorder;
+                    this.Roomif.notetotal = this.note;
+                    this.Roomif.ischeck = this.ischeck;
+                    
+                    
+                  }
                 }
                 else{
-                  this.Roomif.addressorder = this.emailhddt;
-                  this.Roomif.nameOrder = this.hotenhddt;
-
-                  var order1 = { companyname: this.companyname, address: this.address, tax: this.tax, addressorder: this.addressorder,ishideNameMail: this.ishideNameMail,hotenhddt:this.hotenhddt,emailhddt:this.emailhddt }
-                  this.storage.set("order", order1);
-                  this.Roomif.order = this.companyname + "," + this.address + "," + this.tax + "," + this.addressorder;
-                  this.Roomif.notetotal = this.note;
-                  this.Roomif.ischeck = this.ischeck;
-                  
-                  this.tourService.order = this.companyname + "," + this.address + "," + this.tax + "," + this.addressorder;
-                  this.tourService.notetotal = this.note;
-                  this.tourService.ischeck = this.ischeck;
+                  this.presentToastOrder();
+                  resolve(false);
+                  return;
                 }
+              } 
+              
+            } else {
+              this.presentToastOrder();
+              resolve(false);
+              return;
+            }
+            this.tourService.order = this.companyname + "," + this.address + "," + this.tax + "," + this.addressorder;
+            this.tourService.notetotal = this.note;
+            this.tourService.ischeck = this.ischeck;
+            if(this.tourService.itemDetail.Inbound){
+              let tp =0;
+              if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
+                tp = this.tourService.itemDepartureCalendar.TotalRate;
+              }else{
+                tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
               }
-              else{
-                this.presentToastOrder();
-                return;
-              }
-            } 
-            
-          } else {
-            this.presentToastOrder();
-          }
-        } else{
-            objTourReq.CustomerTitle = "";
-            objTourReq.BillingAddress = "";
-            objTourReq.CompanyAddress = "";
-            objTourReq.CompanyTaxCode = "";
-            objTourReq.CompanyName = "";
-            objTourReq.CooperatorEmail = "";
-            objTourReq.CooperatorName = "";
-            objTourReq.CooperatorPhone = "";
-            objTourReq.IsInvoice = 0;
-        }
-
-            objTourReq.CustomerEmail = this._email;
-            objTourReq.CustomerName = this.hoten;
-            objTourReq.CustomerPhone = this.phone;
-            objTourReq.AdultNo = this.searchhotel.adult;
-            objTourReq.ChildNo = this.searchhotel.child;
-            if(this.searchhotel.arrchild && this.searchhotel.arrchild.length >0){
-              let arrChildAges = this.searchhotel.arrchild.map((a) => a.numage);
-              objTourReq.ChildAges = arrChildAges.join(',');
-            }else{
-              objTourReq.ChildAges ='';
+              tp = tp *1.08;
+              
+              this.zone.run(()=> {
+                this.totalPriceStr = this.gf.convertNumberToString(tp);
+              })
             }
             
-            objTourReq.LeadingTitle = "";
-            objTourReq.LeadingName = this.hoten;
-            objTourReq.LeadingPhone = this.phone;
-            objTourReq.LeadingEmail = this._email;
-            objTourReq.BookingChanel = 'Olivia_App';
-            objTourReq.BookingType = 'TOUR';
-            objTourReq.CancelRules = this.tourService.itemDetail.CancelRules;
-            objTourReq.CancelRulesChange = this.tourService.itemDetail.CancelRules;
-            objTourReq.Destinations = this.tourService.itemDetail.Destination;
-            objTourReq.IncludePrice = this.tourService.itemDetail.IncludePrice;
-            objTourReq.NoIncludePrice = this.tourService.itemDetail.NoIncludePrice;
-            objTourReq.InternalNote = this.tourService.itemDetail.CancelRules;
-            objTourReq.IsInLand = this.tourService.itemDetail.Inbound ? 1 :0 ;
-            objTourReq.TourNotes = this.note;
-            objTourReq.InternalNote = "";
-            objTourReq.PaxList = "";
-            objTourReq.MemberId = this.memberid;
-            objTourReq.UsePointPrice = 0;
-            objTourReq.Source = 8;
-            objTourReq.SupplierCode = "Internal";
-            objTourReq.SupplierOrderID = "";
-            objTourReq.RequestBookingXml = "";
-            objTourReq.BookingType = "Tour";
-            objTourReq.IsNonRefundable = false;
-            objTourReq.DiscountCode = "";
-            objTourReq.Discount = 0;
-            objTourReq.Username = "itsupport";
-            
-            this.tourService.TourBooking = objTourReq;
-            console.log(objTourReq.childAges);
-            this.checkTourAllotment().then((data)=>{
-              if(data.Status != 'Error' && data.Status != 'False'){
-                this.tourService.dataBookResponse = data.Response;
-                this.navCtrl.navigateForward('/tourpaymentselect');
+          } else{
+              objTourReq.CustomerTitle = "";
+              objTourReq.BillingAddress = "";
+              objTourReq.CompanyAddress = "";
+              objTourReq.CompanyTaxCode = "";
+              objTourReq.CompanyName = "";
+              objTourReq.CooperatorEmail = "";
+              objTourReq.CooperatorName = "";
+              objTourReq.CooperatorPhone = "";
+              objTourReq.IsInvoice = 0;
+          }
+  
+              objTourReq.CustomerEmail = this._email;
+              objTourReq.CustomerName = this.hoten;
+              objTourReq.CustomerPhone = this.phone;
+              objTourReq.AdultNo = this.searchhotel.adult;
+              objTourReq.ChildNo = this.searchhotel.child;
+              if(this.searchhotel.arrchild && this.searchhotel.arrchild.length >0){
+                let arrChildAges = this.searchhotel.arrchild.map((a) => a.numage);
+                objTourReq.ChildAges = arrChildAges.join(',');
               }else{
-                this.gf.showAlertMessageOnly(data.Msg);
+                objTourReq.ChildAges ='';
               }
-            })
+              
+              objTourReq.LeadingTitle = "";
+              objTourReq.LeadingName = this.hoten;
+              objTourReq.LeadingPhone = this.phone;
+              objTourReq.LeadingEmail = this._email;
+              objTourReq.BookingChanel = 'Olivia_App';
+              objTourReq.BookingType = 'TOUR';
+              objTourReq.CancelRules = this.tourService.itemDetail.CancelRules;
+              objTourReq.CancelRulesChange = this.tourService.itemDetail.CancelRules;
+              objTourReq.Destinations = this.tourService.itemDetail.Destination;
+              objTourReq.IncludePrice = this.tourService.itemDetail.IncludePrice;
+              objTourReq.NoIncludePrice = this.tourService.itemDetail.NoIncludePrice;
+              objTourReq.InternalNote = this.tourService.itemDetail.CancelRules;
+              objTourReq.IsInLand = this.tourService.itemDetail.Inbound ? 1 :0 ;
+              objTourReq.TourNotes = this.note || '';
+              objTourReq.InternalNote = "";
+              objTourReq.PaxList = "";
+              objTourReq.MemberId = this.memberid;
+              objTourReq.UsePointPrice = 0;
+              objTourReq.Source = 6;
+              objTourReq.SupplierCode = "Internal";
+              objTourReq.SupplierOrderID = "";
+              objTourReq.RequestBookingXml = "";
+              objTourReq.BookingType = "Tour";
+              objTourReq.IsNonRefundable = false;
+              objTourReq.DiscountCode = "";
+              objTourReq.Discount = 0;
+              objTourReq.Username = "itsupport";
+              
+              this.tourService.TourBooking = objTourReq;
+              resolve(true);
+    })
+    
+  }
+  next() {
+    this.createObjectBooking(1).then((checkvalid)=>{
+      if(checkvalid){
+        this.checkTourAllotment().then((data)=>{
+          if(data.Status != 'Error' && data.Status != 'False' && data.Response.TourRate && data.Response.TourRate.Status == 'AL'){
+            this.tourService.dataBookResponse = data.Response;
+            this.navCtrl.navigateForward('/tourpaymentselect');
+          }else{
+            this.gf.showAlertMessageOnly(data.Msg);
+          }
+        })
+      }
+      
+    })
+    
         
 
-      } else {
-        this.presentToastPhone();
-      }
+      
   }
   next1() {
     this.Roomif.notetotal = "";
@@ -448,10 +495,12 @@ export class TourAddDetailsPage implements OnInit {
           //this.pushdata();
         } else {
           this.presentToastOrder();
+          return;
         }
 
       } else {
         this.presentToastPhone();
+        return;
       }
     } else {
       if (this.phonenumber(this.phone)) {
@@ -469,6 +518,7 @@ export class TourAddDetailsPage implements OnInit {
 
       } else {
         this.presentToastPhone();
+        return;
       }
     }
   }
@@ -527,6 +577,20 @@ export class TourAddDetailsPage implements OnInit {
         this.ishide = false;
         this.ischeck = true;
       }
+      let tp =0;
+      if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
+        tp = this.tourService.itemDepartureCalendar.TotalRate;
+      }else{
+        tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+      }
+
+      if(this.ischeck && this.tourService.itemDetail.Inbound){
+          tp = tp *1.08;
+      }
+
+      this.zone.run(()=> {
+        this.totalPriceStr = this.gf.convertNumberToString(tp);
+      })
     })
 
   }
@@ -578,151 +642,6 @@ export class TourAddDetailsPage implements OnInit {
   }
   goback() {
     this.navCtrl.navigateBack('tourdeparturecalendar');
-  }
-  paymentnotAL() {
-    this.presentLoading();
-    var se = this;
-    // var arrMealTypeRates = [];
-    // var room1 = [];
-    // arrMealTypeRates.push(this.room[0].MealTypeRates[this.booking.indexmealtype]);
-    // var itemroom1 = {
-    //   Penalty_Type: this.room[0].Rooms[0].Penalty_Type, RoomID: this.room[0].Rooms[0].RoomID, RoomPriceBreak: this.room[0].Rooms[0].RoomPriceBreak,
-    //   SupplierRef: this.room[0].Rooms[0].SupplierRef, SalesTax: this.room[0].Rooms[0].SalesTax
-    // }
-    // room1.push(itemroom1);
-    // this.jsonroom.RoomClasses = this.room;
-    // this.jsonroom.RoomClasses[0].MealTypeRates = arrMealTypeRates;
-    // this.jsonroom.RoomClasses[0].Rooms = room1;
-    // this.jsonroom.RoomClassesHidden = [];
-    // this.booking.Hotels = this.jsonroom
-    se.jsonroom.RoomClasses = se.room;
-    se.timestamp = Date.now();
-    if(se._email){
-      se.booking.CEmail = se._email;
-    }
-    //29/11/2019: Cho phép book không cần đăng nhập => bỏ validate auth_token, chỉ cần email
-    //se.storage.get('auth_token').then(auth_token => {
-      if (se.booking.CEmail) {
-        var Invoice = 0;
-        if (se.Roomif.order) {
-          Invoice = 1;
-        }
-        var options = {
-          method: 'POST',
-          url: C.urls.baseUrl.urlPost + '/mInsertBooking',
-          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-          headers:
-          {
-            'content-type': 'application/json'
-          },
-          body:
-          {
-            RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
-            CName: se.Roomif.hoten,
-            CEmail: se._email,
-            CPhone: se.Roomif.phone,
-            timestamp: se.timestamp,
-            HotelID: se.booking.HotelId,
-            paymentMethod: "51",
-            note: se.Roomif.notetotal,
-            source: '8',
-            MemberToken: se.auth_token,
-            CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
-            UsePointPrice: se.Roomif.pricepoint,
-            NoteCorp: se.Roomif.order,
-            Invoice: Invoice,
-            UserPoints: se.Roomif.point,
-            CheckInDate: se.jsonroom.CheckInDate,
-            CheckOutDate: se.jsonroom.CheckOutDate,
-            TotalNight: se.jsonroom.TotalNight,
-            MealTypeIndex: se.booking.indexmealtype,
-            CompanyName: se.Roomif.companyname,
-            CompanyAddress: se.Roomif.address,
-            CompanyTaxCode: se.Roomif.tax,
-            BillingAddress: se.Roomif.addressorder,
-            promotionCode:se.Roomif.promocode,
-            comboid:se.bookCombo.ComboId,
-            PenaltyDescription:se.Roomif.textcancel,
-            companycontactname: se.Roomif.nameOrder
-          },
-          json: true
-        };
-        request(options, function (error, response, body) {
-          if (response.statusCode != 200) {
-            var objError = {
-              page: "roomadddetails",
-              func: "next",
-              message: response.statusMessage,
-              content: response.body,
-              type: "warning",
-              param: JSON.stringify(options)
-            };
-            C.writeErrorLog(objError,response);
-          }
-          if (error) {
-            error.page = "roomadddetails";
-            error.func = "next";
-            error.param = JSON.stringify(options);
-            C.writeErrorLog(error,response);
-          };
-          if(body)
-          {
-            if (body.error == 0) {
-              // console.log(body.code);
-              var code = body.code;
-              var stt = body.bookingStatus;
-              var priceBooking:any = "";
-              
-              if(se.Roomif.priceshow){
-                priceBooking = se.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
-              }else if(se.booking.cost){
-                priceBooking = se.booking.cost.replace(/\./g, '').replace(/\,/g, '');
-              }
-              if(priceBooking){
-                let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + priceBooking + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
-                se.gf.CreateUrl(url);
-              }
-              
-              se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + se.Roomif.payment);
-              se.loader.dismiss();
-              //se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
-            }
-            else {
-              se.loader.dismiss();
-              se.storage.get('jti').then((memberid) => {
-                if(memberid){
-                  se.storage.get('deviceToken').then((devicetoken) => {
-                    if(devicetoken){
-                      se.gf.refreshToken(memberid, devicetoken).then((token) =>{
-                        setTimeout(()=>{
-                          se.auth_token = token;
-                        },100)
-                      });
-                    }else{
-                      se.showAlertMessageOnly(body.Msg);
-                    }
-                  })
-                }else{
-                  se.showAlertMessageOnly(body.Msg);
-                }
-                
-              })
-            }
-          }
-          else{
-            error.page = "roomadddetails";
-            error.func = "paymentnotAL";
-            error.param = JSON.stringify(options);
-            C.writeErrorLog(error,response);
-            se.loader.dismiss();
-            se.gf.showAlertMessageOnly("Đã có sự cố xảy ra, vui lòng thử lại!");
-          }
-         
-        });
-
-      }
-    //})
-
   }
 
   async showAlertMessageOnly(msg){
@@ -1004,7 +923,8 @@ export class TourAddDetailsPage implements OnInit {
                 apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
                 apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
               };
-              se.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking', headers, body, 'touradddetails', 'CheckAllotmentPreBooking').then((data)=>{
+              //se.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking', headers, body, 'touradddetails', 'CheckAllotmentPreBooking').then((data)=>{
+                se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child :0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}`, headers, body, 'touradddetails', 'GetMercuriusTourPrice').then((data)=>{
                   resolve(data);
                })
             })
@@ -1012,7 +932,17 @@ export class TourAddDetailsPage implements OnInit {
 
           request(type){
             let se = this;
-            //if(type ==3){
+            if(type ==2){
+              se.createObjectBooking(0);
+              se.createBookingTour().then((code)=>{
+                se.gf.hideLoading();
+                if(code){
+                  se.tourService.tourBookingCode = code;
+                  se.createBookingTourTransaction(code);
+                  se.navCtrl.navigateForward('/tourrequestdone');
+                }
+              })
+            }else{
               se.gf.showLoading();
               let urlApi = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/CreateRequestQuote?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child || 0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}&nightNo=${se.tourService.itemDetail.NightNo}&totalRate=${se.tourService.totalPrice}&act=book&paymentMethod=1&receiverAddress&customerName=${this.hoten}&customerphone=${this.phone}&customeremail=${this._email}&notes=${this.note}&qty=1`;
                   let headers = {
@@ -1029,10 +959,55 @@ export class TourAddDetailsPage implements OnInit {
                       se.gf.showAlertMessageOnly(data.Msg);
                      }
                   })
-            // }
-            // else if(type==2){
+            }
+            
+          }
 
-            // }
+          createBookingTourTransaction(code) {
+            let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+code;
+            let headers = {
+              apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+              apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+            };
+            this.gf.RequestApi('GET', urlApiTrans, headers, null , 'tourpaymentbank', 'UpdateTransaction').then((dataTrans)=>{
+              console.log(dataTrans);
+              if(dataTrans){
+                this.navCtrl.navigateForward('/tourrequestdone');
+              }
+            });
+          }
+
+          createBookingTour():Promise<any> {
+            var se = this;
+            this.gf.showLoading();
+            return new Promise((resolve, reject) => {
+              if (se._email) {
+                var Invoice=0;
+                if (se.tourService.order) {
+                  Invoice=1;
+                }
+                  let urlApi = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CreateBookingVerApi';
+                  let headers = {
+                    apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+                    apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+                  };
+                  se.gf.RequestApi('POST', urlApi, headers, se.tourService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
+                    if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
+                      se.tourService.tourBookingCode = data.Response.BookingCode;
+                      se.tourService.tourTotal = data.Response.Total;
+                      resolve(data.Response.BookingCode)
+                    }else{
+                      resolve(false);
+                    }
+                    se.gf.hideLoading();
+                  });
+            }else{
+              se.gf.hideLoading();
+              se.gf.showToastWarning('Email không hợp lệ. Vui lòng kiểm tra lại.');
+              resolve(false);
+            }
+            })
+               
           }
 }
 

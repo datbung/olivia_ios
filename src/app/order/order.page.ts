@@ -27,6 +27,7 @@ import {
   clearInterval
 } from 'timers';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
+import { tourService } from '../providers/tourService';
 
 @Component({
     selector: 'app-order',
@@ -131,6 +132,9 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
   cincomboarrival: string;
   noLoginObj: any;
   childList: any;
+  expandDivTourNotes: boolean;
+  expandDivTourInfo: boolean;
+  expandDivIncludePrice: boolean;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -144,7 +148,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
         public _flightService: flightService,public clipboard: Clipboard,
         public _mytripservice: MytripService,
         public _foodService: foodService,
-        private nativePageTransitions: NativePageTransitions) {
+        private nativePageTransitions: NativePageTransitions,
+        public _tourService: tourService) {
         this.handleSplashScreen();
         
         //this.getdata();
@@ -213,6 +218,14 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
 
         se._flightService.itemMenuFlightClick.pipe().subscribe((data)=> {
           if(data == 2){
+            se.zone.run(()=>{
+                se.enableheader = true;
+              })
+          }
+        })
+
+        se._tourService.itemPaymentDone.pipe().subscribe((data)=> {
+          if(data){
             se.zone.run(()=>{
                 se.enableheader = true;
               })
@@ -709,6 +722,14 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                     if (element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1) {
                       element.booking_type = "COMBO_VXR";
                     }
+                    //tour
+                    else if(element.booking_id && (element.booking_id.indexOf("DL") != -1 || element.booking_id.indexOf("TO") != -1 )){
+                      element.booking_type = "TOUR";
+                      element.tourCheckinDisplay = moment(element.checkInDate).format('DD-MM-YYYY');
+                      let _listpax = element.totalPaxStr.split('|');
+                      _listpax = _listpax.map((p)=>{ return  p.trim().split(' ').slice(1).join(' ').replace('n','N').replace('t','T') + ' x' + p.trim().split(' ')[0] });
+                      element.tourListPax = _listpax;
+                    }
                     element.isFlyBooking = false;
                     
                     //if (element.payment_status != 3 && element.payment_status != -2) {
@@ -891,6 +912,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       
                     //}
                   }
+                  
                   //list vmb
                   else{
                     if(element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1){
@@ -1517,10 +1539,11 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
               se.hasdata = false;
             }
             se.zone.run(()=>{
+           
+
               se.hasloaddata = true;
               se.hasdata = true;
             })
-           
             setTimeout(() => {
               if (se.myloader) {
                 se.myloader.dismiss();
@@ -1530,7 +1553,20 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
               } else {
                 se.nexttripcounttext = "";
               }
-    
+              console.log(se.listMyTrips.length);
+              //check case 1bkg tour
+              if(se.listMyTrips && se.listMyTrips.length ==1 && se.listMyTrips[0].booking_type == 'TOUR'){
+                if(se.listMyTrips[0].child_ages){
+                  let countstring = se.listMyTrips[0].child_ages.match(/tuổi/g || []).length;
+                  let inputstr = se.listMyTrips[0].child_ages;
+                  for (let index = 0; index < countstring; index++) {
+                      inputstr = inputstr.replace('tuổi','t');
+                    }
+                    se.listMyTrips[0].childAgesDisplay = inputstr;
+                }
+                se.getBookingTourDetail(se.listMyTrips[0]);
+              }
+
             }, 300);
             se.getListSupportByUser(this.loginuser);
           }
@@ -1563,6 +1599,14 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                 elementHis.isFlyBooking = false;
                 if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
                   elementHis.booking_type = "COMBO_VXR";
+                }
+                //tour
+                else if(elementHis.booking_id && (elementHis.booking_id.indexOf("DL") != -1 || elementHis.booking_id.indexOf("TO") != -1 )){
+                  elementHis.booking_type = "TOUR";
+                  elementHis.tourCheckinDisplay = moment(elementHis.checkInDate).format('DD-MM-YYYY');
+                  let _listpax = elementHis.totalPaxStr.split('|');
+                  _listpax = _listpax.map((p)=>{ return  p.trim().split(' ').slice(1).join(' ').replace('n','N').replace('t','T') + ' x' + p.trim().split(' ')[0] });
+                  elementHis.tourListPax = _listpax;
                 }
                 if(elementHis.booking_type == "20" || elementHis.booking_id.indexOf('OFF') != -1 || elementHis.booking_id.indexOf('TO') != -1){
                   
@@ -1713,6 +1757,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                   
                 //}
               }
+           
               //list vmb
               else{
                 if(elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1){
@@ -2077,6 +2122,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
         }
         
       }
+
     
       checkishistorytrip() {
         var se = this;
@@ -4090,6 +4136,11 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
           }
         
         }
+        else if(trip.booking_type == 'TOUR'){
+          se._tourService.BookingTourMytrip = trip;
+          se._tourService.itemDetail = null;
+          se.navCtrl.navigateForward("/tourpaymentselect");
+        }
         else {
           // stt 0:CKNH
           if (stt==0) {
@@ -5068,4 +5119,116 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
             });
             toast.present();
           }
+
+
+  getBookingTourDetail(trip) {
+    let headers = {
+      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetTourById?id='+trip.hotel_id.replace('TO',''), headers, {}, 'order', 'getBookingTourDetail').then((data)=>{
+      if(data && data.Status == "Success" && data.Response){
+        trip.itemTourDetail = data.Response;
+        if(trip.itemTourDetail && trip.itemTourDetail.Image){
+         
+          trip.itemTourDetail.ImagesSlide = trip.itemTourDetail.Image.split(', ');
+          let countstring = trip.itemTourDetail.ProgramContent.match(/cdn2/g || []).length;
+          for (let index = 0; index < countstring; index++) {
+            trip.itemTourDetail.ProgramContent = trip.itemTourDetail.ProgramContent.replace('src="//cdn2','src="https://cdn2');
+          }
+
+        }
+        if(trip.itemTourDetail.AvgPoint && (trip.itemTourDetail.AvgPoint.toString().length == 1 || trip.itemTourDetail.AvgPoint === 10)){
+          trip.itemTourDetail.AvgPoint = trip.itemTourDetail.AvgPoint +".0";
+        }
+        
+      }
+    })
+  }
+
+  expandDiv(type){
+    if(type ==1){
+      this.expandDivIncludePrice = !this.expandDivIncludePrice;
+      
+      if(this.expandDivIncludePrice){
+        var divCollapse = $('.div-wrap-includeprice.div-collapse');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+       
+      }else{
+        var divCollapse = $('.div-wrap-includeprice.div-expand');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+      }
+    }
+    else if(type ==2){
+      this.expandDivTourInfo = !this.expandDivTourInfo;
+      
+      if(this.expandDivTourInfo){
+        var divCollapse = $('.div-wrap-tourinfo.div-collapse');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+       
+        setTimeout(()=>{
+          if($('#contentcontentIncludePrice') && $('#contentcontentIncludePrice').length >0){
+            document.getElementById('contentcontentIncludePrice').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }else{
+        var divCollapse = $('.div-wrap-tourinfo.div-expand');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+        setTimeout(()=>{
+          if($('#contentTourInfo') && $('#contentTourInfo').length >0){
+            document.getElementById('contentTourInfo').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }
+    }
+    else if(type ==3){
+      this.expandDivTourNotes = !this.expandDivTourNotes;
+      
+      if(this.expandDivTourNotes){
+        var divCollapse = $('.div-wrap-tournotes.div-collapse');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+       
+        setTimeout(()=>{
+          if($('#contentTourNotes') && $('#contentTourNotes').length >0){
+            document.getElementById('contentTourNotes').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }else{
+        var divCollapse = $('.div-wrap-tournotes.div-expand');
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+       
+        setTimeout(()=>{
+          if($('#contentTourNotes') && $('#contentTourNotes').length >0){
+            document.getElementById('contentTourNotes').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+          }
+        },50)
+
+      }
+    }
+    else{
+
+    }
+  }
+
+  showTourInfo() {
+    this._mytripservice.tripdetail = this.listMyTrips[0];
+    this.navCtrl.navigateForward('/mytriptourinfo');
+  }
   }

@@ -6,8 +6,6 @@ import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../../providers/constants';
 import { GlobalFunction, ActivityService } from '../../providers/globalfunction';
-import { InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { tourService } from 'src/app/providers/tourService';
 import * as moment from 'moment';
@@ -40,7 +38,6 @@ export class TourPaymentBankPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    public iab: InAppBrowser,
     public clipboard: Clipboard,
     public tourService: tourService,
     public searchhotel: SearchHotel,
@@ -582,9 +579,9 @@ export class TourPaymentBankPage implements OnInit {
                 console.log(data);
                 if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
                   se.tourService.tourBookingCode = data.Response.BookingCode;
-                  se.tourService.tourTotal = data.Response.Total;
+                  se.tourService.totalPrice = data.Response.Total;
 
-                  let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+data.Response.BookingCode;
+                  let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+data.Response.BookingCode+'&status=2';
                   let headers = {
                     apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
                     apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -592,6 +589,7 @@ export class TourPaymentBankPage implements OnInit {
                   se.gf.RequestApi('GET', urlApiTrans, headers, null , 'tourpaymentbank', 'UpdateTransaction').then((dataTrans)=>{
                     console.log(dataTrans);
                     if(dataTrans){
+                      this.tourService.paymentType = -1;
                       this.navCtrl.navigateForward('/tourpaymentdone');
                     }
                   });

@@ -5,8 +5,8 @@
       <ion-icon class="icon-tab" name="home"></ion-icon>
       <ion-label>Trang chủ</ion-label>
     </ion-tab-button>
-    <div class="div-split"></div>
-    <ion-tab-button class="tab-button" tab="tab2">
+    <div class="div-split" *ngIf="valueGlobal.activeTab != 3"></div>
+    <ion-tab-button class="tab-button" tab="tab2" *ngIf="valueGlobal.activeTab != 3">
       <ion-icon class="icon-tab" name="heart"></ion-icon>
       <ion-label>Yêu thích</ion-label>
     </ion-tab-button>

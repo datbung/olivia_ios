@@ -1064,6 +1064,23 @@ public Checkpayment(url): Promise<any>{
   })
 } 
 
+public CheckPaymentTour(url): Promise<any>{
+  return new Promise((resolve, reject) => {
+    var options = {
+      'method': 'GET',
+      'url': url,
+      'headers': {
+        apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+        apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+      }
+    };
+    request(options, function (error, response) { 
+      if (error) throw new Error(error);
+      resolve(response.body);
+    });
+  })
+} 
+
 public CheckpaymentFood(url): Promise<any>{
   return new Promise((resolve, reject) => {
     var options = {

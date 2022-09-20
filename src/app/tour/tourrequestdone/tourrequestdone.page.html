@@ -25,7 +25,7 @@
   <div>
     <div>
       <ion-label class="text">
-        Gửi yêu cầu thành công.
+        Gửi yêu cầu thành công. <span *ngIf="tourService.tourBookingCode" class="text">Mã yêu cầu đặt: <span class="text-bold text-tealish">{{tourService.tourBookingCode}}</span></span>
       </ion-label>
     </div>
     <div class="p-top-8">  

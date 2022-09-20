@@ -16,7 +16,7 @@
               font-size: 16px;width: 97%;
               padding-right: 0;
               margin-left:8px;height: 41px; display: table;padding: 0px;margin-top: 6px;border-radius: 6px;"
-           id="input" class="ip-search-tour" autocomplete="on" autocorrect="true" debounce="500" placeholder="Nhập tên khách sạn,thành phố,khu vực..." (ionChange)="getItems($event)" ></ion-searchbar>
+           id="input" class="ip-search-tour" autocomplete="on" autocorrect="true" debounce="500" placeholder="Nhập tên tour,thành phố,khu vực..." (ionChange)="getItems($event)" ></ion-searchbar>
         </form>
       </div>
       <div *ngIf="inputText" class="img-close" (click)="clearText()">
@@ -29,7 +29,7 @@
   <div class="p-all-16">
     <div *ngIf="loadregiondone else loadsdk">
 
-      <div *ngIf="recent && recent.length >0">
+      <div *ngIf="recent && recent.length >0 && !ischecklist">
         <div class="div-popular">
           <ion-label class="text-recent">
            Gần đây
@@ -38,7 +38,7 @@
 
         <div  *ngFor="let itemRecent of recent; let i = index" class='m-tb-16'>
           <div *ngIf="!(itemRecent.Id && itemRecent.TourCode) else itemRecentHot">
-            <div class="div-item-hot d-flex" (click)="selectItemHot(itemRecent)">
+            <div class="div-item-hot d-flex" (click)="selectItemHot(itemRecent)" *ngIf="itemRecent.Image && itemRecent.Tours">
               <div class="div-avatar">
                 <img class="img-avatar" [src]="itemRecent.Image">
               </div>
@@ -46,6 +46,26 @@
                 <div class="text-region">{{itemRecent.RegionName}}</div>
                 <div class="text-tealish">{{itemRecent.Tours}} tours</div>
               </div>
+            </div>
+            <div *ngIf="!(itemRecent.Image && itemRecent.Tours)">
+              <ion-row class="cls-row-width">
+                <ion-col text-left style="padding:16px 0px">
+                 
+                  <ion-label *ngIf="!itemRecent.IndexType" class="label-item-search">
+                    <img src="./assets/ic_facility/Group.svg"> {{ itemRecent.RegionName }}
+                  </ion-label>
+      
+                  <ion-label *ngIf="itemRecent.IndexType" class="label-item-search">
+                    <img src="./assets/ic_facility/ic_hotel.svg"> {{ itemRecent.Name }}
+                  </ion-label>
+      
+                </ion-col>
+                <ion-col *ngIf="itemRecent.TotalTour && !itemRecent.IndexType" text-right style="padding:16px 0px">
+                  <ion-label style="color: #26bed6">
+                    {{itemRecent.TotalTour}} Tours
+                  </ion-label>
+                </ion-col>
+              </ion-row>
             </div>
             <div class="div-split">
             </div>

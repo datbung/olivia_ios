@@ -24,16 +24,20 @@
     </div>
     <div class="cls-divpayment">
     
-    <div class="text-tourname" *ngIf="tourService.itemDetail">{{tourService.itemDetail.TourName}}</div>
+    <div class="text-tourname" *ngIf="tourService.itemDetail">{{tourService.itemDetail.Name}}</div>
+    <div class="text-tourname" *ngIf="tourService.BookingTourMytrip && tourService.BookingTourMytrip.hotel_name">{{tourService.BookingTourMytrip.hotel_name}}</div>
     <div class="m-top-6 text-pax">{{tourService.departureCalendarStr}}</div>
     <div class="div-split"></div>
     <div class="d-flex ">
       <div class="div-width-100 div-flex-left">
-          <div class="text-pax" *ngIf="searchhotel.adult">{{searchhotel.adult}} người lớn</div>
-          <div class="text-pax m-top-4 h-16" ><span *ngIf="searchhotel.child">{{searchhotel.child}} trẻ em</span></div>
+          <div class="text-pax" *ngIf="searchhotel.adult && !adult">{{searchhotel.adult}} người lớn</div>
+          <div class="text-pax m-top-4 h-16" *ngIf="!adult"><span *ngIf="searchhotel.child">{{searchhotel.child}} trẻ em</span></div>
+
+          <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
+          <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div>
       </div>
       <div class="div-width-100 text-right m-bottom-16">
-        <div class="text-total-price">{{tourService.totalPriceStr}}
+        <div class="text-total-price">{{tourService.totalPriceStr}}<span class="text-price-sub">đ</span>
         </div>
         <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
         
@@ -98,26 +102,26 @@
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-20"></ion-icon>
         </ion-item>
-        <ion-item  (click)="tourpaymentpayoostore()" class="cls-minheight">
+        <ion-item  (click)="tourpaymentpayoostore()" class="cls-minheight" *ngIf="!tourService.BookingTourMytrip">
           <label class="text-list">
             Trực tiếp tại cửa hàng tiện lợi <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward"  class="m-right-20" ></ion-icon>
-          <div  class="text-hotfare">(Không áp dụng cho vé khuyến mãi)</div>
+          
         </ion-item>
-        <ion-item (click)="tourpaymentbank()" class="cls-minheight">
+        <ion-item (click)="tourpaymentbank()" class="cls-minheight" *ngIf="!tourService.BookingTourMytrip">
             <label class="text-list">
               Chuyển khoản ngân hàng
             </label>
             <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
-            <div class="text-hotfare">(Không áp dụng cho vé khuyến mãi)</div>
+            
         </ion-item>
-        <ion-item (click)="tourpaymentatoffice()" class="cls-minheight">
+        <ion-item (click)="tourpaymentatoffice()" class="cls-minheight" *ngIf="!tourService.BookingTourMytrip">
           <label class="text-list">
             Trực tiếp tại văn phòng
           </label>
           <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
-          <div class="text-hotfare">(Không áp dụng cho vé khuyến mãi)</div>
+          
         </ion-item>
 
       </ion-list>

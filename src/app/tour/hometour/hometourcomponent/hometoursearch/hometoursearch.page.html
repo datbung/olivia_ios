@@ -28,7 +28,7 @@
                 {{ itemSearch.RegionName }}
               </div>
               <ng-template #tourname>
-                <div *ngIf="itemSearch && itemSearch.Name" [ngClass]="itemSearch.Name.length > 68 ? 'text-search text-middle' : 'text-middle' ">
+                <div *ngIf="itemSearch && itemSearch.Name" [ngClass]="itemSearch.Name.length > 60 ? 'text-search text-middle' : 'text-middle' ">
                   {{ itemSearch.Name }}
                 </div>
               </ng-template>

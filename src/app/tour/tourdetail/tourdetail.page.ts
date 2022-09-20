@@ -10,6 +10,9 @@ import * as moment from 'moment';
 import { SearchHotel } from 'src/app/providers/book-service';
 import { HotelreviewsimagePage } from 'src/app/hotelreviewsimage/hotelreviewsimage';
 
+import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
+import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-tourdetail',
   templateUrl: './tourdetail.page.html',
@@ -41,14 +44,22 @@ export class TourDetailPage {
   totalReview: any=0;
   AvgPoint: any=0;
   tourReviews: any=[];
+  expanddivdepature = false;
+  expanddivreview = false;
+  loaddeparturedone: boolean;
+  loadslidedone = false;
+  youtubeId: any;
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
         private zone: NgZone,
         private storage: Storage,
         public tourService: tourService,
-        public searchHotel: SearchHotel) {
+        public searchHotel: SearchHotel,
+        private youtube: YoutubeVideoPlayer,
+        private domSanitizer: DomSanitizer) {
             if(tourService.tourDetailId){
+              this.tourService.itemDepartureCalendar = null;
               let headers = {
                 apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
                 apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -57,28 +68,46 @@ export class TourDetailPage {
                 if(data && data.Status == "Success" && data.Response){
                   this.itemDetail = data.Response;
                   if(this.itemDetail && this.itemDetail.Image){
-                    
+                    let itemmap = this.tourService.listTopSale.filter((item) => item.Id == tourService.tourDetailId );
+                    if(itemmap && itemmap.length >0){
+                      this.itemDetail.TopSale = itemmap[0].TotalPax;
+                    }
                     this.itemDetail.ImagesSlide = this.itemDetail.Image.split(', ');
+                    setTimeout(()=>{
+                      this.loadslidedone = true;
+                    }, 3000)
                     let countstring = this.itemDetail.ProgramContent.match(/cdn2/g || []).length;
                     for (let index = 0; index < countstring; index++) {
                       this.itemDetail.ProgramContent = this.itemDetail.ProgramContent.replace('src="//cdn2','src="https://cdn2');
                     }
-
+                    if(this.itemDetail.YoutubeId){
+                      this.youtubeId = this.itemDetail.YoutubeId;
+                      this.itemDetail.trustedVideoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+this.itemDetail.YoutubeId);
+                    }
                     this.gf.RequestApiWithQueryString('GET', `https://www.ivivu.com/hotelrequest/morereviews?hotelSlug=${this.itemDetail.Code}&total=100&offset=0&mode=2&timespan=${new Date().getTime()}`, headers,{}, 'tourDetail', 'morereviews').then((data)=>{
                       if(data && data.reviews){
                         
                         if(data.reviews && data.reviews.length >0){
-                          this.totalReview = data.loaded;
-                          this.AvgPoint = (data.reviews.reduce((total,b) => {return total+ (b.ReviewPoint*1 || 0); },0)/data.loaded).toFixed(1);
-                          this.tourReviews = data.reviews;
+                          this.zone.run(()=>{
+                            this.totalReview = data.loaded;
+                            this.AvgPoint = (data.reviews.reduce((total,b) => {return total+ (b.ReviewPoint*1 || 0); },0)/data.loaded).toFixed(1);
+                            this.tourReviews = data.reviews;
+                          })
+                         
+                          
+                         
+                         
                         }
                       }
                     })
                   }
+                  if(this.itemDetail.AvgPoint && (this.itemDetail.AvgPoint.toString().length == 1 || this.itemDetail.AvgPoint === 10)){
+                    this.itemDetail.AvgPoint = this.itemDetail.AvgPoint +".0";
+                  }
                 }
               })
               this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: tourService.tourDetailId, date: moment(this.searchHotel.CheckInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
-                if(data && data.Status == "Success" && data.Response && data.Response != []){
+                if(data && data.Status == "Success" && data.Response && data.Response.length >0){
                     let itemDefault =  data.Response[0];
                     if(itemDefault && itemDefault.Contract){
                       this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusTourDetail', headers,{TourId: tourService.tourDetailId, date: moment(itemDefault.Contract[0].AllotmentDate).format('YYYY-MM-DD'), DefaultAdultForRate: itemDefault.DefaultAdultForRate }, 'tourDetail', 'GetMercuriusTourDetail').then((data1)=>{
@@ -110,14 +139,33 @@ export class TourDetailPage {
                                 if(itemdeparturemap && itemdeparturemap.length >0){
                                   this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
                                   this.tourService.DepartureDate = itemdeparturemap[0].DepartureDate;
-                                  this.tourService.itemDepartureCalendar = itemdeparturemap[0];
+                                  this.zone.run(()=> {
+                                    this.tourService.itemDepartureCalendar = itemdeparturemap[0];
+                                  });
+                                  
                                 }else{
-                                  this.departureDate = moment(data1.Response.TourRate.AllotmentDate).format('DD/MM/YYYY');
-                                  this.tourService.DepartureDate = this.listDepartureDate[0].DepartureDate;
-                                  this.tourService.itemDepartureCalendar = this.listDepartureDate[0];
-                                }
-                              } else {
+
+                                  let listDepartureDateSort = [...this.listDepartureDate];
+                                  listDepartureDateSort.forEach((itemd) => {
+                                    itemd.subtractDayDepartured = moment(this.searchHotel.CheckInDate).diff(moment(itemd.DepartureDate));
+                                    if(itemd.subtractDayDepartured <0){
+                                      itemd.subtractDayDepartured= itemd.subtractDayDepartured*-1;
+                                    }
+                                  });
+                                  this.zone.run(() => listDepartureDateSort.sort(function (a, b) {
+                                    return a['subtractDayDepartured'] - b['subtractDayDepartured'];
+                                  }));
                                 
+                                  
+                                  this.departureDate = moment(listDepartureDateSort[0].DepartureDate).format('DD/MM/YYYY');
+                                  this.tourService.DepartureDate = listDepartureDateSort[0].DepartureDate;
+                                  this.zone.run(()=> {
+                                    this.tourService.itemDepartureCalendar = listDepartureDateSort[0];
+                                  });
+                                }
+                                this.loaddeparturedone = true;
+                              } else {
+                                this.loaddeparturedone = true;
                               }
                             })
                           }
@@ -130,7 +178,8 @@ export class TourDetailPage {
                     }
                     
                   }else{
-                    
+                    this.tourService.departuresItemList = [];
+                    this.loaddeparturedone = true;
                   }
                 })
 
@@ -138,7 +187,14 @@ export class TourDetailPage {
             }
            
         }
-        ngOnInit() { }
+        ngOnInit() { 
+          this.tourService.getObservableScrollToDepartureDiv().subscribe((data) => {
+            if(data){
+              this.changeItemHeader(3);
+            }
+          })
+         
+        }
 
         goback() {
           if(this.tourService.backPage == 'hometour'){
@@ -277,26 +333,19 @@ export class TourDetailPage {
       changeItemHeader(index) {
           var se = this;
           if(index) {
-            //   for (let index = 0; index < $('.item-tour-header').length; index++) {
-            //       const element = $('.item-tour-header')[index];
-            //       $(element).removeClass('item-header-actived');
-            //   }
             $($('.item-tour-header')[index-1]).siblings().removeClass('item-header-actived');
             $($('.item-tour-header')[index-1]).addClass('item-header-actived');
 
              setTimeout(()=>{
-                // $('html, body')[0].animate({
-                //     scrollLeft: parseInt($("#header"+index)[0].offsetLeft.toString())
-                // }, 500);
-
                 document.getElementById('header'+index).scrollLeft = parseInt($("#header"+index)[0].offsetLeft.toString())
-                $('#header'+index).animate({'scrollLeft': $('#header'+index).position().left + 120}, 500);
+                $('#header'+index).animate({'scrollLeft': $('#header'+index).position().left + 220}, 500);
                 //this.scrollYArea.scrollToPoint(0, $('#content'+index).position().top +50, 350);
                 if($('#content'+index) && $('#content'+index).length >0){
-                  $('.div-tourdetail-content').animate({ scrollTop : $('#content'+index).position().top +50 }, 350);
-                  document.getElementById('content'+index).scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('content'+index).scrollIntoView({ behavior: 'smooth', block: 'center'  });
                 }
-                
+                if($('.div-item').hasClass('scroll-horizontal')){
+                  this.changeStyleHeader();
+                }
             },50)
           }
       }
@@ -313,7 +362,7 @@ export class TourDetailPage {
       }
 
       showDepartureCalendar (itemdeparture){
-        if(!this.tourService.itemDepartureCalendar){
+        if(!this.loaddeparturedone){
           this.gf.showToastWarning('Đang tải dữ liệu, vui lòng chờ trong giây lát!');
           return;
         }
@@ -321,9 +370,13 @@ export class TourDetailPage {
           this.tourService.itemDepartureCalendar = itemdeparture;
           this.tourService.hasDeparture = true;
         }
-        
+        if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
+          return;
+        }
         this.tourService.itemDetail = this.itemDetail;
+       
         this.navCtrl.navigateForward('/tourdeparturecalendar');
+      
       }
 
       async imgreview(arrimgreview, indeximgreview,CustomerName,DateStayed) {
@@ -337,5 +390,75 @@ export class TourDetailPage {
           });
         modal.present();
       }
-      
+
+      expandDeparture(value){
+        if(value ==1){
+          var divCollapse = $('.div-wrap-departure.div-collapse');
+          if(divCollapse && divCollapse.length >0){
+            divCollapse.removeClass('div-collapse').addClass('div-expand');
+          }
+          this.expanddivdepature = true;
+          //this.scrollToTopGroup(1);
+        }else{
+          var divCollapse = $('.div-wrap-departure.div-expand');
+          if(divCollapse && divCollapse.length >0){
+            divCollapse.removeClass('div-expand').addClass('div-collapse');
+          }
+
+          this.expanddivdepature = false;
+          this.scrollToTopGroup(2);
+        }
+        
+      }
+
+      expandReview(value){
+        if(value ==1){
+          var divCollapse = $('.div-item-review.div-collapse');
+          if(divCollapse && divCollapse.length >0){
+            divCollapse.removeClass('div-collapse').addClass('div-expand');
+          }
+          this.expanddivreview = true;
+          this.scrollToTopGroupReview(1);
+        }else{
+          var divCollapse = $('.div-item-review.div-expand');
+          if(divCollapse && divCollapse.length >0){
+            divCollapse.removeClass('div-expand').addClass('div-collapse');
+          }
+
+          this.expanddivreview = false;
+          this.scrollToTopGroupReview(2);
+        }
+      }
+
+
+      scrollToTopGroup(value){
+        //scroll to top of group
+        setTimeout(()=>{
+          var objHeight = value == 2 ? $('.div-departure') : $('.div-wrap-departure').last();
+          if(objHeight && objHeight.length >0){
+            var h = 0;
+            h = value == 2 ? objHeight[0].offsetTop - 150 : objHeight[0].offsetTop - 50;
+            if(this.scrollYArea){
+              this.scrollYArea.scrollToPoint(0,h,500);
+            }
+            
+          }
+        },100)
+      }
+
+      scrollToTopGroupReview(value){
+        //scroll to top of group
+        setTimeout(()=>{
+          var objHeight =  $('.div-review');
+          if(objHeight && objHeight.length >0){
+            var h = 0;
+            h = value == 2 ? objHeight[0].offsetTop - 200 : objHeight[0].offsetTop - 50;
+            if(this.scrollYArea){
+              this.scrollYArea.scrollToPoint(0,h,500);
+            }
+            
+          }
+        },100)
+      }
+
     }

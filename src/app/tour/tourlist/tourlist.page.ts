@@ -14,6 +14,7 @@ import { tourService } from '../../providers/tourService';
 import * as $ from 'jquery';
 import { TourListFilterPage } from '../tourlistfilter/tourlistfilter.page';
 import { OverlayEventDetail } from '@ionic/core';
+import { CalendarModal, CalendarModalOptions, DayConfig } from 'ion2-calendar';
 
 @Component({
   selector: 'app-tourlist',
@@ -37,7 +38,10 @@ export class TourListPage implements OnInit{
   buttoniVIVUSelected: boolean= true;
   buttonTourDuration: boolean;
   buttonTourName: boolean;
-  listTourCode = ['tailor-tour-ivivu','tour-nuoc-ngoai-cao-cap','trai-nghiem-dia-phuong','cung-duong-dong-tay-bac'];
+  arrslk = [1,2,3,4,5,6];
+  listTourCode = ['tailor-tour-ivivu','tour-nuoc-ngoai-cao-cap','cung-duong-dong-tay-bac'];
+  allowclickcalendar: boolean = true;
+  myCalendar: HTMLIonModalElement;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
@@ -54,39 +58,58 @@ export class TourListPage implements OnInit{
       storage.get('jti').then((uid:any)=>{
         this.memberid = uid;
       })
-      this.loaddatadone = false;
-      if(this.tourService.itemShowList && this.tourService.itemShowList.Code && this.listTourCode.indexOf(this.tourService.itemShowList.Code) == -1){
-        this.loadTourListByRegionCode(this.tourService.itemShowList.Code);
-      }
-      else if(this.tourService.itemShowList && this.tourService.itemShowList.groupListId){
-        this.loadTourListByListId(this.tourService.itemShowList.groupListId);
-      }
-      else if(this.tourService.itemSearchDestination){
-        if(this.tourService.itemSearchDestination && this.tourService.itemSearchDestination.RegionId){
-          this.loadTourListDestination(this.tourService.itemSearchDestination.RegionId);
-        }
-        if(this.tourService.itemSearchDestination && this.tourService.itemSearchDestination.Id){
-          this.loadTourListByListId(this.tourService.itemSearchDestination.Id);
-        }
-        else{
-          this.getTourListIdByRegion().then((listId)=> {
-            this.loadTourListByListId(listId)
-          })
-        }
-        
-        
-      }
-
-      if(this.searchhotel.CheckInDate){
-        this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
-      }
-
-      if(this.tourService.itemShowList && this.tourService.itemShowList.Name){
-        this.name = this.tourService.itemShowList.Name;
-      }
-      
+     
+      this.loadData();
+      this.gf.hideStatusBar();
   }
 
+  
+  loadData() {
+    this.loaddatadone = false;
+    if(this.tourService.itemShowList && this.tourService.itemShowList.tourTopicId){
+      this.loadTourList(this.tourService.itemShowList.tourTopicId);
+    }
+    else if(this.tourService.itemShowList && this.tourService.itemShowList.groupListId){
+      this.loadTourListByListId(this.tourService.itemShowList.groupListId);
+    }
+    else if(this.tourService.itemSearchDestination){
+      if(this.tourService.itemSearchDestination && this.tourService.itemSearchDestination.TourCode && this.tourService.itemSearchDestination.NameCode){
+        if(this.tourService.itemSearchDestination.Name){
+          this.name = this.tourService.itemSearchDestination.Name;
+        }
+        this.loadTourListByDestinationId(this.tourService.itemSearchDestination.NameCode);
+      }
+      else if(this.tourService.itemSearchDestination && this.tourService.itemSearchDestination.RegionCode){
+        if(this.tourService.itemSearchDestination.Name){
+          this.name = this.tourService.itemSearchDestination.Name;
+        }
+        this.loadTourListByDestinationId(this.tourService.itemSearchDestination.RegionCode);
+      }
+      else{
+        this.getTourListIdByRegion().then((listId)=> {
+          this.loadTourListByListId(listId)
+        })
+      }
+    }
+    else if(this.tourService.itemShowList && this.tourService.itemShowList.Code){
+      this.loadTourListByDestinationId(this.tourService.itemShowList.Code);
+    }
+
+    if(this.searchhotel.CheckInDate){
+      this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
+    }
+
+    if(this.tourService.itemShowList && this.tourService.itemShowList.Name){
+      this.name = this.tourService.itemShowList.Name;
+    }
+    else if(this.tourService.itemSearchDestination){
+      this.name = this.tourService.itemSearchDestination.RegionName;
+    }
+
+    if(this.tourService.itemDeparture){
+      this.fromPlace = this.tourService.itemDeparture.Name;
+    }
+  }
   
   public async ngOnInit(){
     var se = this;
@@ -100,7 +123,7 @@ export class TourListPage implements OnInit{
 
   loadTourList(id) {
     let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?tourTopicId='+id;
+    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?tourTopicId='+id+`&departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}`;
     let headers = {
       apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
       apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -109,23 +132,65 @@ export class TourListPage implements OnInit{
       let res = JSON.parse(data);
       console.log(res.Response);
       se.slideData = res.Response;
-      if(se.slideData && se.slideData.length >0){
-        se.name = se.slideData[0].Destination;
-      }
       se.slideData.forEach(element => {
-        element.TopSale = se.tourService.listTopSale.map((item) => item.Id == element.Id ? item.TotalQuest : 0 );
-        //console.log(element.TopSale);
+        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id && item.TotalQuest >0 );
+        if(itemmap && itemmap.length >0){
+          element.TopSale = itemmap[0].TotalPax;
+        }
+        if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
+          let arr = element.TourTimeName.split(' ');
+          element.sortTourTime = arr[0]*1 + arr[2]*1;
+        }else{
+          element.sortTourTime = 0;
+        }
+
         if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
           element.AvartarLink = 'https:'+element.AvartarLink;
         }
+        se.convertAvgPoint(element);
       });
-      se.loaddatadone = true;
+
+      se.mapingPriceTour();
     })
+  }
+
+
+  mapingPriceTour() {
+    let se = this;
+    let headers = {
+      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    if(se.slideData && se.slideData.length >0){
+      let listIds = se.slideData.map(item => item.Id).join(',');
+      se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}, 'tourList', 'GetMercuriusPriceByTourIds').then((data)=>{
+        if(data && data.Status == "Success" && data.Response && data.Response.length >0){
+          for (let index = 0; index < se.slideData.length; index++) {
+            const element = se.slideData[index];
+            
+            data.Response.forEach((p)=> {
+              if( p.Contract && p.Contract[0] && p.Contract[0].PriceAdult && p.Code == "TO"+element.Id){
+                element.PriceAdult = p.Contract[0].PriceAdult;
+                if(p.Contract[0].PriceAdult < element.MinPrice) {
+                  element.priceShow = se.gf.convertNumberToString(p.Contract[0].PriceAdult);
+                }else {
+                  element.priceShow = se.gf.convertNumberToString(element.MinPrice);
+                }
+                
+              }
+            })
+          }
+          se.loaddatadone = true;
+        }else {
+          se.loaddatadone = true;
+        }
+      })
+    }
   }
 
   loadTourListDestination(id) {
     let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?destinationId='+id;
+    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?tourTopicId='+id+`&departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}`;
     let headers = {
       apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
       apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -138,7 +203,10 @@ export class TourListPage implements OnInit{
         //se.name = se.slideData[0].Destination;
       }
       se.slideData.forEach(element => {
-        element.TopSale = se.tourService.listTopSale.map((item) => item.Id == element.Id ? item.TotalQuest : 0 );
+        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
+        if(itemmap && itemmap.length >0){
+          element.TopSale = itemmap[0].TotalPax;
+        }
         if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
           let arr = element.TourTimeName.split(' ');
           element.sortTourTime = arr[0]*1 + arr[2]*1;
@@ -149,14 +217,15 @@ export class TourListPage implements OnInit{
         if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
           element.AvartarLink = 'https:'+element.AvartarLink;
         }
+        se.convertAvgPoint(element);
       });
-      se.loaddatadone = true;
+      se.mapingPriceTour();
     })
   }
 
   loadTourListByListId(listId) {
     let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?lsIdTour='+listId;
+    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?lsIdTour='+listId+`&departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}`;
     let headers = {
       apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
       apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -169,7 +238,10 @@ export class TourListPage implements OnInit{
       //   se.name = se.slideData[0].Destination;
       // }
       se.slideData.forEach(element => {
-        element.TopSale = se.tourService.listTopSale.map((item) => item.Id == element.Id ? item.TotalQuest : 0 );
+        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
+        if(itemmap && itemmap.length >0){
+          element.TopSale = itemmap[0].TotalPax;
+        }
         if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
           let arr = element.TourTimeName.split(' ');
           element.sortTourTime = arr[0]*1 + arr[2]*1;
@@ -179,8 +251,9 @@ export class TourListPage implements OnInit{
         if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
           element.AvartarLink = 'https:'+element.AvartarLink;
         }
+        se.convertAvgPoint(element);
       });
-      se.loaddatadone = true;
+      se.mapingPriceTour();
     })
   }
 
@@ -191,10 +264,14 @@ export class TourListPage implements OnInit{
       let res = JSON.parse(data);
       se.slideData = res;
       if(se.slideData && se.slideData.length >0){
-        //se.name = se.slideData[0].Destination;
+        //se.name = se.slideData[0].RegionName;
       }
       se.slideData.forEach(element => {
-        element.TopSale = se.tourService.listTopSale.map((item) => item.Id == element.Id ? item.TotalQuest : 0 );
+        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
+        if(itemmap && itemmap.length >0){
+          element.TopSale = itemmap[0].TotalPax;
+        }
+        //element.TopSale = se.tourService.listTopSale.map((item) => item.Id == element.Id ? item.TotalQuest : 0 );
         if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
           let arr = element.TourTimeName.split(' ');
           element.sortTourTime = arr[0]*1 + arr[2]*1;
@@ -204,9 +281,16 @@ export class TourListPage implements OnInit{
         if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
           element.AvartarLink = 'https:'+element.AvartarLink;
         }
+        se.convertAvgPoint(element);
       });
-      se.loaddatadone = true;
+      se.mapingPriceTour();
     })
+  }
+
+  convertAvgPoint(element){
+    if(element.AvgPoint && (element.AvgPoint.toString().length == 1 || element.AvgPoint === 10)){
+      element.AvgPoint = element.AvgPoint +".0";
+    }
   }
 
   getTourListIdByRegion() :Promise<any>{
@@ -228,6 +312,59 @@ export class TourListPage implements OnInit{
     
   }
 
+  getRegionIdByRegionCode(code) :Promise<any>{
+    let se = this;
+    return new Promise((resolve, reject) => {
+      let url = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetRegionByDestination?destination=${code}`;
+      se.gf.RequestApi('GET', url, null, null, 'tourlist', 'getRegionIdByRegionCode').then((data) => {
+        let res = JSON.parse(data);
+        if(res.Response && res.Response.Id){
+          resolve(res.Response.Id);
+        }
+        else {
+          resolve('');
+        }
+      })
+    })
+  }
+
+  loadTourListByDestinationId(code) {
+    let se = this;
+    se.getRegionIdByRegionCode(code).then((desId)=>{
+      let url = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/SearchTourDestination?departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}&destinationId=${desId}`;
+      let headers = {
+        apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+        apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+      };
+      se.gf.RequestApi('GET', url, headers, null, 'tourlist', 'loadTourList').then((data) => {
+        let res = JSON.parse(data);
+        console.log(res.Response);
+        se.slideData = res.Response;
+        if(se.slideData && se.slideData.length >0){
+          //se.name = se.slideData[0].Destination;
+        }
+        se.slideData.forEach(element => {
+          let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
+          if(itemmap && itemmap.length >0){
+            element.TopSale = itemmap[0].TotalPax;
+          }
+          if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
+            let arr = element.TourTimeName.split(' ');
+            element.sortTourTime = arr[0]*1 + arr[2]*1;
+          }else{
+            element.sortTourTime = 0;
+          }
+  
+          if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
+            element.AvartarLink = 'https:'+element.AvartarLink;
+          }
+          se.convertAvgPoint(element);
+        });
+        se.mapingPriceTour();
+      })
+    });
+    
+  }
 
   async openSortTour(){
     // if(!this.loadpricedone){
@@ -328,14 +465,6 @@ export class TourListPage implements OnInit{
       else{
         return b[col].localeCompare(a[col]);
       }
-      if (a[col] * 1 < b[col] * 1) {
-        //return property == 'duration' ? 1 * direction : -1 * direction;
-        return 1 * direction;
-      }
-      else if (a[col] * 1 > b[col] * 1) {
-        //return property != 'duration' ? -1 * direction : 1 * direction;
-        return -1 * direction;
-      }
     }));
   }
 
@@ -359,6 +488,8 @@ export class TourListPage implements OnInit{
   }
 
   goback(){
+    this.tourService.itemSearchDestination = "";
+    this.tourService.itemShowList = "";
     this.navCtrl.navigateBack('/app/tabs/tab1');
   }
 
@@ -367,4 +498,121 @@ export class TourListPage implements OnInit{
     this.tourService.backPage = 'tourlist';
     this.navCtrl.navigateForward('/tourdetail');
   }
+  closecalendar(){
+    this.modalCtrl.dismiss();
+  }
+  async changeInfo(){
+    let se = this;
+    if(!se.allowclickcalendar){
+      return;
+    }
+    
+    se.allowclickcalendar = false;
+    let fromdate = new Date(se.searchhotel.CheckInDate);
+    let todate = new Date(se.searchhotel.CheckOutDate);
+    let _daysConfig: DayConfig[] = [];
+    if(se.tourService.departures && se.tourService.departures.length >0) {
+      for (let j = 0; j < se.tourService.departures.length; j++) {
+        _daysConfig.push({
+          date: se.tourService.departures[j],
+          disable: false
+        })
+      }
+    }
+    let Year=new Date().getFullYear();
+    let Month=new Date().getMonth();
+    let Day=new Date().getDate();
+      const options: CalendarModalOptions = {
+        pickMode: "single",
+        title: "Chọn ngày",
+        monthFormat: "MM / YYYY",
+        weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+        weekStart: 1,
+        closeLabel: "",
+        doneLabel: "",
+        step: 0,
+        defaultScrollTo: fromdate,
+        defaultDate: fromdate,
+        daysConfig: _daysConfig,
+        to: new Date(Year+1, Month, Day),
+      };
+  
+      se.myCalendar = await se.modalCtrl.create({
+        component: CalendarModal,
+        animated: true,
+        componentProps: { options },
+        cssClass: 'hotel-calendar-custom',
+      });
+      se.myCalendar.present().then(() => {
+        se.allowclickcalendar = true;
+        $(".days-btn").click(e => se.clickedElement(e));
+
+        $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+        //add event close header
+        $('.hotel-calendar-custom .header-img-close').click((e => se.closecalendar()));
+      });
+
+      const event: any = await se.myCalendar.onDidDismiss();
+      const date = event.data;
+      if (event.data) {
+         se.zone.run(() => {
+           se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
+           se.searchhotel.datecin = new Date(event.data.from);
+           se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
+         })
+      }
+  }
+   /**
+   * Hàm bắt sự kiện click chọn ngày trên lịch bằng jquery
+   * @param e biến event
+   */
+    async clickedElement(e: any) {
+      var obj: any = e.currentTarget;
+      if ($(obj).hasClass('on-selected')) {
+        if (this.modalCtrl) {
+          let fday: any;
+          let tday: any;
+          var monthenddate: any;
+          var yearenddate: any;
+          var monthstartdate: any;
+          var yearstartdate: any;
+          var objTextMonthEndDate: any;
+          var objTextMonthStartDate: any;
+          if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
+            fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+          } else {
+            fday = $('.on-selected > p')[0].textContent;
+            tday = fday;
+            objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
+            objTextMonthEndDate = objTextMonthStartDate;
+          }
+          if (
+            objTextMonthEndDate &&
+            objTextMonthEndDate.length > 0 &&
+            objTextMonthStartDate &&
+            objTextMonthStartDate.length > 0
+          ) {
+            monthstartdate = objTextMonthStartDate.split("/")[0];
+            yearstartdate = objTextMonthStartDate.split("/")[1];
+            monthenddate = objTextMonthEndDate.split("/")[0];
+            yearenddate = objTextMonthEndDate.split("/")[1];
+            var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
+            var todate = new Date(yearenddate, monthenddate - 1, tday*1 +1);
+            if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {
+              var se = this;
+              setTimeout(() => {
+                se.modalCtrl.dismiss();
+              }, 300);
+              se.zone.run(() => {
+                se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
+                se.searchhotel.datecin = fromdate;
+                se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
+              })
+              se.loadData();
+              
+            }
+          }
+        }
+      }
+    }
 }

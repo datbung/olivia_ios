@@ -14,15 +14,26 @@ export class tourService{
   
   
   private filterTourSubject = new Subject<any>();
+  private scrollToDepartureDivSubject = new Subject<any>();
   listTourTopic: any[];
   dataBookResponse: any;
   periodPaymentDate: any;
+  BookingTourMytrip: any;
+  
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }
 
   getObservableFilterTour(): Subject<any> {
     return this.filterTourSubject;
+  }
+
+  publicScrollToDepartureDiv(data: any) {
+    this.scrollToDepartureDivSubject.next(data);
+  }
+
+  getObservableScrollToDepartureDiv(): Subject<any> {
+    return this.scrollToDepartureDivSubject;
   }
   
   itemDeparture: any;

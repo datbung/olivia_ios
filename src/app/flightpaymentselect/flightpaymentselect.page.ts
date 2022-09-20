@@ -29,7 +29,7 @@ import { voucherService } from '../providers/voucherService';
 export class FlightPaymentSelectPage implements OnInit {
   priceshow; listmenu = []; arrmenu; ischeckvisa = false
   public loader: any; returnUrl; arrbankrmb = [];tokenid
-  bookingCode = ""; startDate; endDate; ischeckpay = true; jti;isbtn=false;
+  bookingCode = ""; startDate; endDate; ischeckpay = true; jti='';isbtn=false;
   adult: any;
   child: any;
   totalpricedisplay: any;

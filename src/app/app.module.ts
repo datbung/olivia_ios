@@ -115,6 +115,7 @@ import { RequestRoomPageModule} from './requestroom/requestroom.module';
 import { VoucherDetailPageModule } from './voucher/voucherdetail/voucherdetail.module';
 import { TourListFilterPageModule } from './tour/tourlistfilter/tourlistfilter.module';
 import { tourService } from './providers/tourService';
+import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -228,6 +229,7 @@ import { tourService } from './providers/tourService';
     File,
     FileOpener,
     tourService,
+    YoutubeVideoPlayer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

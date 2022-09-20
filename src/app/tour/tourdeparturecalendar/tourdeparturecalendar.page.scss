@@ -23,8 +23,8 @@
         margin-bottom: 8px;
 
     }
-    .f-18 {
-        font-size: 18px;
+    .f-20 {
+        font-size: 20px !important;
     }
     .text-center {
         text-align: center;
@@ -45,9 +45,10 @@
     .width-30 {
         width: 30%;
     }
-    .cls-no-departure {
-        opacity: 0.5;
+    .width-42 {
+        width: 42%;
     }
+    
     .v-align-center {
         display: flex;
         flex-direction: column;
@@ -153,45 +154,45 @@
 }
 
 ::ng-deep{
-    .action-sheets-select-age .action-sheet-container.sc-ion-action-sheet-md{
+    .action-sheets-select-age .action-sheet-container.sc-ion-action-sheet-ios{
         padding: 0;
     }
-    .action-sheets-select-age .action-sheet-group.sc-ion-action-sheet-md:last-child{
+    .action-sheets-select-age .action-sheet-group.sc-ion-action-sheet-ios:last-child{
         margin: 0;
         border-radius: 0;
         overflow: auto;
     }
-    .action-sheets-select-age .action-sheet-title.sc-ion-action-sheet-md{
+    .action-sheets-select-age .action-sheet-title.sc-ion-action-sheet-ios{
         font-size: 14px;
         font-weight: 300;
         text-align: center;
-        color: #000;
+        color: #222222;
     }
-    .action-sheets-select-age .action-sheet-button-inner.sc-ion-action-sheet-md{
+    .action-sheets-select-age .action-sheet-button-inner.sc-ion-action-sheet-ios{
         justify-content: center;
     }
-    .action-sheets-select-age .action-sheet-button.sc-ion-action-sheet-md{
+    .action-sheets-select-age .action-sheet-button.sc-ion-action-sheet-ios{
         font-size: 17px;
         color: #bdbdbd;
         height: 48px;
     }
-    .action-sheets-select-age .no-border-bottom.action-sheet-button.sc-ion-action-sheet-md{
+    .action-sheets-select-age .no-border-bottom.action-sheet-button.sc-ion-action-sheet-ios{
         border-bottom: none;
         background-position: no;
     }
     .action-sheets-select-age {
-        .picker-wrapper.sc-ion-picker-md{
-            height: 298px;
-            //margin-bottom: calc(env(safe-area-inset-bottom) + 24px);
+        .picker-wrapper.sc-ion-picker-ios{
+            height: 332px;
+            margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
+            position: absolute;
         }
-        .picker-toolbar.sc-ion-picker-md{
+        .picker-toolbar-button.sc-ion-picker-ios{
             text-align: center;
         }
-        .picker-button.ion-activatable.picker-header.sc-ion-picker-md{
+        .picker-button.ion-activatable.picker-header.sc-ion-picker-ios{
             font-weight: 300;
-            color: #000;
+            color: #222222;
             font-size: 14px;
-            text-transform: none;
         }
 
         .button-done{
@@ -226,9 +227,22 @@
         width: 100%;
       }
   }
+  .width-40 {
+    width: 40%;
+}
   .width-50 {
     width: 50%;
     } 
+    .width-60 {
+        width: 60%;
+    }
     .m-r-8 {
         margin-right: 8px !important;
     }
+
+    .cls-no-departure {
+        opacity: 0.5;
+    }
+    .bg-white {
+        background: #fff;
+      }
