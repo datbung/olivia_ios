@@ -736,10 +736,10 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           }
                             arrday = arrpaymentdate[0].split('-');
                           if(arrday && arrday.length>0){
-                            day = arrday[2].toString()+"-"+arrday[1].toString();
+                            day = arrday[2].toString()+"/"+arrday[1].toString();
                           }
                         }
-                        element.deliveryPaymentDisplay = "Trước " +hour + ", " + day;
+                        element.deliveryPaymentDisplay = "" +hour + ", " + day;
                         
                         let arrhours = arrpaymentdate[1].split(":");
                         let today = new Date();
@@ -750,8 +750,10 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           element.deliveryPaymentDisplay = "";
                         }
                         else{
-                          element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-                          if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
+                          //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+
+                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");                          if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
                             var obj=se.gf.getbank(element.pay_method);
                             element.urlimgbank =obj.urlimgbank;
                             element.textbank =obj.textbank;
@@ -786,12 +788,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           }
                         }
                         if (element.amount_after_tax) {
-                          //element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          if(element.paid_amount){
-                            element.priceShow = Math.round(element.amount_after_tax - element.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }else{
-                            element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }
+                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         }
                       }
 
@@ -817,12 +814,13 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
 
                       element.isRequestTrip = false;
                       //date display
-                      element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD') +" thg "+moment(element.checkInDate).format('MM');
-                      element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD') +" thg "+moment(element.checkOutDate).format('MM');
+                      element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM-YYYY');
+                      element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
 
-                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD') +" thg "+moment(element.checkInDate).format('MM');
-                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD') +" thg "+moment(element.checkOutDate).format('MM');
-                      
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+                      element.departAirport = se.getAirportByCode(element.departCode);
+                      element.returnAirport = se.getAirportByCode(element.arrivalCode);
                       se.getRatingStar(element);
                       se.listMyTrips.push(element);
                       se.mytripcount++;
@@ -846,7 +844,9 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           element.bookingsComboData[0].flightTimeDisplay = h + m;
                         }
                         let ddate = element.checkInDate;
-                        element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM');
+                        // element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM');
+                        element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD-MM-YYYY');
+
                         if(element.bookingsComboData[1]){
                           let diffhours = element.bookingsComboData[1].arrivalTime ? element.bookingsComboData[1].arrivalTime.replace(':','')*1 - element.bookingsComboData[1].departureTime.replace(':','')*1 : 0;
                           if(diffhours){
@@ -859,7 +859,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           }
           
                           let rdate = element.checkOutDate;
-                          element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD') +" thg "+moment(rdate).format('MM')
+                          element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD-MM-YYYY');
                         }
                         element.arrPickupDropoff = [];
                         element.bookingsComboData.forEach(el => {
@@ -870,7 +870,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                               if(el.departureDate){
                                 let newdate = el.departureDate.split('/');
                                 if(newdate && newdate.length >1){
-                                  el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                                  let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                                  el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
                                 }
                                 
                               }
@@ -918,7 +919,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                             if(minutes < 10){
                               minutes = "0"+minutes;
                             }
-                            element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                            element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                            element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
                             //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
                             if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
                               var obj=se.gf.getbank(element.pay_method);
@@ -934,11 +936,11 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           }
                             
                         }
-                        element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).dayname +", "+ moment(element.checkInDate).format("DD") + " thg " + moment(element.checkInDate).format("MM");
-                        element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).dayname +", "+ moment(element.checkOutDate).format("DD") + " thg " + moment(element.checkOutDate).format("MM");
+                        element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).dayname +", "+ moment(element.checkInDate).format("DD-MM-YYYY");
+                        element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).dayname +", "+ moment(element.checkOutDate).format("DD-MM-YYYY");
 
-                        element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD') +" thg "+moment(element.checkInDate).format('MM');
-                        element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD') +" thg "+moment(element.checkOutDate).format('MM');
+                        element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM');
+                        element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
 
                         let departFlight = element.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(element.checkInDate).format('DD-MM-YYYY')&& f.airlineCode });
                         if(departFlight && departFlight.length >0){
@@ -1036,7 +1038,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                               if(el.departureDate){
                                 let newdate = el.departureDate.split('/');
                                 if(newdate && newdate.length >1){
-                                  el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                                  let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                                  el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
                                 }
                                 
                               }
@@ -1187,12 +1190,14 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           }
                             arrday = arrpaymentdate[0].split('-');
                           if(arrday && arrday.length>0){
-                            day = arrday[2].toString()+"-"+arrday[1].toString();
+                            day = arrday[2].toString()+"/"+arrday[1].toString();
                           }
                         }
-                        element.deliveryPaymentDisplay = "Trước " +hour + ", " + day;
-                        element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-                        let arrhours = arrpaymentdate[1].split(":");
+                        element.deliveryPaymentDisplay = "" +hour + ", " + day;
+                        // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+
+                        element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                        element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");                        let arrhours = arrpaymentdate[1].split(":");
                         let today = new Date();
                         let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
                         let diffminutes = moment(d).diff(today, 'minutes');
@@ -1213,12 +1218,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           }
                         }
                         if(element.amount_after_tax){
-                          //element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          if(element.paid_amount){
-                            element.priceShow = Math.round(element.amount_after_tax - element.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }else{
-                            element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }
+                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         }
                       }
                       element.isRequestTrip = false;
@@ -1308,8 +1308,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
                       element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
   
-                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
-                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY');
   
                       element.address = element.hotelAddress;
                       element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
@@ -1349,22 +1349,19 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                   }else{
             
                         //Map số bkg trong listtrip để focus vào bkg được notifi
-                        if(se.valueGlobal.listhistory && se.valueGlobal.listhistory.length >0){
-                          var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
-                            return item.booking_id == se.valueGlobal.BookingCodeHis;
-                          });
-                          if (idxMaphis && idxMaphis.length > 0) {
-                            var idxhis = idxMaphis.findIndex((el) => { return el == true });
-                            se.currentTrip = idxhis;
-                            se.gf.setParams('','notifiBookingCode');
-                            if (idxhis!=-1) {
-                              se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
-                            }else{
-                              se.getdata(null,true);
-                            }
+                        var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                          return item.booking_id == se.valueGlobal.BookingCodeHis;
+                        });
+                        if (idxMaphis && idxMaphis.length > 0) {
+                          var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                          se.currentTrip = idxhis;
+                          se.gf.setParams('','notifiBookingCode');
+                          if (idxhis!=-1) {
+                            se.showtripdetail(se.listHistoryTrips[idxhis]);
+                          }else{
+                            se.getdata(null,true);
                           }
                         }
-                        
                       
                     }
                   
@@ -1554,8 +1551,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                 } else {
                   elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                 }
-                elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM');
-                elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM');
+                elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
+                elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
                 se.getRatingStar(elementHis);
         
                 //map thông tin giống với trip future
@@ -1602,10 +1599,10 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       }
                         arrday = arrpaymentdate[0].split('-');
                       if(arrday && arrday.length>0){
-                        day = arrday[2].toString()+"-"+arrday[1].toString();
+                        day = arrday[2].toString()+"/"+arrday[1].toString();
                       }
                     }
-                      elementHis.deliveryPaymentDisplay = "Trước " +hour + ", " + day;
+                      elementHis.deliveryPaymentDisplay = "" +hour + ", " + day;
                         let arrhours = arrpaymentdate[1].split(":");
                         let today = new Date();
                         let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
@@ -1625,21 +1622,16 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       }
                     }
                     if (elementHis.amount_after_tax) {
-                      //elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                      if(elementHis.paid_amount){
-                        elementHis.priceShow = Math.round(elementHis.amount_after_tax - elementHis.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                      }else{
-                        elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                      }
+                      elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                     }
                   }
                   elementHis.isRequestTrip = false;
                   //date display
-                  elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM');
-                  elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM');
+                  elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM');
+                  elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM');
 
-                  elementHis.checkInDisplayShort = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM');
-                  elementHis.checkOutDisplayShort = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM');
+                  elementHis.checkInDisplayShort = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM');
+                  elementHis.checkOutDisplayShort = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
 
                   se.getRatingStar(elementHis);
                   if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
@@ -1662,7 +1654,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
                     }
                     let ddate = elementHis.checkInDate;
-                    elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM')
+                    elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD-MM-YYYY');
                     if(elementHis.bookingsComboData[1]){
                       let diffhours = elementHis.bookingsComboData[1].arrivalTime ? elementHis.bookingsComboData[1].arrivalTime.replace(':','')*1 - elementHis.bookingsComboData[1].departureTime.replace(':','')*1 : 0;
                       if(diffhours){
@@ -1686,7 +1678,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                         if(el.departureDate){
                           let newdate = el.departureDate.split('/');
                           if(newdate && newdate.length >1){
-                            el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                            let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                            el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
                           }
                           
                         }
@@ -1733,8 +1726,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                     elementHis.isFlyBooking = true;
                     elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
                    
-                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD") + " thg " + moment(elementHis.checkInDate).format("MM");
-                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname +", "+ moment(elementHis.checkOutDate).format("DD") + " thg " + moment(elementHis.checkOutDate).format("MM");
+                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD-MM-YYYY");
+                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname +", "+ moment(elementHis.checkOutDate).format("DD-MM-YYYY");
                     let departFlight = elementHis.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(elementHis.checkInDate).format('DD-MM-YYYY')&& f.airlineCode });
                     if(departFlight && departFlight.length >0){
                       elementHis.itemdepart = departFlight[0];
@@ -1821,7 +1814,8 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           if(el.departureDate){
                             let newdate = el.departureDate.split('/');
                             if(newdate && newdate.length >1){
-                              el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                              let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                              el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
                             }
                             
                           }
@@ -2028,20 +2022,33 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
       
             se._mytripservice.listHistoryTrips = se.listHistoryTrips;
       
-            if (se.gf.getParams('notifiBookingCode') && se.gf.getParams('selectedTab3') || se.checkishistorytrip()) {
+            if (se.valueGlobal.BookingCodeHis && se.gf.getParams('selectedTab3') ) {
               se.activeTabTrip = 3;
               se.tabtrip = 'historytrip';
               //Map số bkg trong listtriphistory để focus vào bkg được notifi
-              var idxMap = se.listHistoryTrips.map((item, index) => {
-                return item.booking_id == se.gf.getParams('notifiBookingCode');
-              });
-              if (idxMap && idxMap.length > 0) {
-                var idx = idxMap.findIndex((el) => { return el == true });
-                if (se.checkIsSharingTrip()) {
-                  se.gf.setParams('','notifiBookingCode');
-                  se.feedback(se.listHistoryTrips[idx]);
+              // var idxMap = se.listHistoryTrips.map((item, index) => {
+              //   return item.booking_id == se.gf.getParams('notifiBookingCode');
+              // });
+              // if (idxMap && idxMap.length > 0) {
+              //   var idx = idxMap.findIndex((el) => { return el == true });
+              //   if (se.checkIsSharingTrip()) {
+              //     se.gf.setParams('','notifiBookingCode');
+              //     se.feedback(se.listHistoryTrips[idx]);
+              //   }
+              // }
+                //Map số bkg trong listtrip để focus vào bkg được notifi
+                var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                  return item.booking_id == se.valueGlobal.BookingCodeHis;
+                });
+                if (idxMaphis && idxMaphis.length > 0) {
+                  var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                  se.currentTrip = idxhis;
+                  if (idxhis!=-1) {
+                    se.showtripdetail(se.listHistoryTrips[idxhis]);
+                  }else{
+                    se.getdata(null,true);
+                  }
                 }
-              }
               //Sau khi map được trip thì set giá trị về null
               se.gf.setParams(null, 'notifiBookingCode');
               se.gf.setParams(null, 'selectedTab3');
@@ -3032,18 +3039,16 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
               }else{
         
                     //Map số bkg trong listtrip để focus vào bkg được notifi
-                    if(se.valueGlobal.listhistory && se.valueGlobal.listhistory.length >0){
-                      var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
-                        return item.booking_id == se.valueGlobal.BookingCodeHis;
-                      });
-                      if (idxMaphis && idxMaphis.length > 0) {
-                        var idxhis = idxMaphis.findIndex((el) => { return el == true });
-                        se.currentTrip = idxhis;
-                        if (idxhis!=-1) {
-                          se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
-                        }else{
-                          se.getdata(null,true);
-                        }
+                    var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                      return item.booking_id == se.valueGlobal.BookingCodeHis;
+                    });
+                    if (idxMaphis && idxMaphis.length > 0) {
+                      var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                      se.currentTrip = idxhis;
+                      if (idxhis!=-1) {
+                        se.showtripdetail(se.listHistoryTrips[idxhis]);
+                      }else{
+                        se.getdata(null,true);
                       }
                     }
                   

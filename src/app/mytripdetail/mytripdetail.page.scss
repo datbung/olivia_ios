@@ -5,7 +5,6 @@
 }
 
 .div-header-title {
-    padding-top: 0px !important;
     .div-title{
       margin-top: 4px;
     }
@@ -75,7 +74,7 @@
 }
 
 .first-content{
-    padding: 0px 3px 0px 3px;
+
 
     .m-0{
         margin: 0;
@@ -91,11 +90,13 @@
         text-align: left;
     }
     .text-hold-ticket{
-        font-size: 14px;
-        color: var(--ion-color-primary);
-        font-weight: 500;
-        line-height: 1.5;
-        letter-spacing: -0.28px;
+        font-size: 18px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #f79321;
     }
 
     .div-ticket{
@@ -214,7 +215,7 @@
         padding: 7px 0px 7px 8px;
         margin: 0 5px !important;
         border-radius: 2px;
-        background-color: rgba(242, 242, 242, 0.5);
+        background-color: #f9fbfc;
 
         font-size: 14px;
         font-weight: 300;
@@ -300,6 +301,7 @@
     }
     .m-l-4{
         margin-left: 4px;
+        width: 43%;
     }
 
     .p-l-44{
@@ -390,7 +392,7 @@
     font-size: 14px;
     line-height: 1.5;
     letter-spacing: -0.14px;
-    color: #00c1de;
+    color: #2f80ed;
  }
  .div-cathay{
     text-align: right;
@@ -474,3 +476,287 @@
 .h-88{
     min-height: 88px !important;
 }
+.img-logo-new{
+    height: 14px;
+    width: 43px;
+    margin-top: 5px;
+}
+.div-gird{
+    display: grid;
+}
+.div-pnr{
+    position: absolute;
+    right: 7px;
+    background-color: #ecf0f5;
+}
+.margin-5-8{
+    margin: 5px 8px;
+}
+.m-top-6{
+    margin-top: 6px;
+}
+.text-info{
+    font-size: 14px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3f3b3b;
+}
+.m-top-14{
+    margin-top: 14px;
+}
+.m-l-6{
+    margin-left: 6px;
+}
+.placepoint{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid #CCCCCC;
+    margin-left: 6px;
+    margin-top: 14px;
+}
+.placeline
+{   content: "";
+    position: absolute;
+    height: 42px;
+    width: 1px;
+    top: 81px;
+    border-left: dotted 1.5px #bdbdbd;
+    left: 68px;
+}
+.placeline-return
+{   content: "";
+    position: absolute;
+    height: 42px;
+    width: 1px;
+    top: 93px;
+    border-left: dotted 1.5px #bdbdbd;
+    left: 65px;
+}
+.placeline-return-stops
+{   content: "";
+    position: absolute;
+    height: 42px;
+    width: 1px;
+    bottom: 19px;
+    border-left: dotted 1.5px #bdbdbd;
+    left: 65px;
+}
+.placeline-combo
+{   content: "";
+    position: absolute;
+    height: 42px;
+    width: 1px;
+    top: 152px;
+    border-left: dotted 1.5px #bdbdbd;
+    left: 68px;
+}
+.placeline-return-combo
+{   content: "";
+    position: absolute;
+    height: 42px;
+    width: 1px;
+    top: 318px;
+    border-left: dotted 1.5px #bdbdbd;
+    left: 68px;
+}
+.text-time-depart{
+    font-size: 18px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #26bed6;
+    margin-top: 7px;
+    width: 51px;
+}
+.text-time-return{
+    font-size: 18px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #868998;
+    margin-top: 7px;
+    width: 51px;
+}
+.img-copy{
+    width: 18px;
+    height: 18px;
+    margin-left: 8px;
+}
+.font-weight-500{
+    font-weight: bold;
+}
+.font-weight-600{
+    font-weight: 600;
+}
+.text-center{
+    text-align: center;
+}
+.text-name-airport{
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #868998;
+}
+.m-top-7{
+    margin-top: -7px;
+}
+.m-left-4{
+    margin-left: 4px;
+}
+.m-top-13-5{
+    margin-top: 13.5px;
+}
+.witdh-65{
+    width: 65px;
+}
+.m-top-13{
+    margin-top: 13px !important;
+}
+.padding-12-16{
+    padding: 12px 16px;
+}
+.position-absolute{
+    position: absolute;
+    right: 16px;
+}
+.position-absolute-24{
+    position: absolute;
+    right: 24px;
+}
+.div-total{
+    background-color: #f2f2f2;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+.div-total-payment{
+    background-color: #feeec7;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+.witdh-80{
+    width: 80px;
+}
+.m-top-8{
+    margin-top: 8px
+}
+.m-top-2{
+    margin-top: 2px
+}
+.m-l-8{
+    margin-left: 8px;
+}
+.button2{
+    border-color: #F79221;
+    background-color: #F79221;
+    width: 90%;
+    height: 48px;
+    font-size: 17px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    border-radius: 4px;
+}
+.text-red{
+    color: #e52822
+}
+.text-orange{
+    color: #f79321
+}
+.div-panel-1px{
+    height: 1px;
+    background-color: #dde0e4;
+    margin: 11px 6px 16px 0px;
+}
+.div-panel-no-margin{
+    height: 1px;
+    background-color: #dde0e4;
+}
+.witdh-50{
+    width: 50%;
+}
+.text-waitpayment{
+    font-size: 18px;
+    font-weight: 600;
+}
+.div-stops{
+    margin-top: 8px;
+    align-self: center;
+    padding: 8px 0px 8px 8px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    background-color: #f9fbfc;
+}
+.placeline-stops{
+    content: "";
+    position: absolute;
+    height: 42px;
+    width: 1px;
+    border-left: dotted 1.5px #bdbdbd;
+    left: 68px;
+    top: 129px;
+}
+.item-room-detail{
+    padding: 16px 8px;
+}
+.margin-8{
+    margin: 8px;
+}
+.m-top-16{
+    margin-top: 16px ;
+}
+.text-info-1{
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: normal;
+    color: #868998;
+}
+.text-info-2{
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    color: #3f3b3b;
+}
+.m-left-20{
+    margin-left: 20px;
+}
+.m-top-12{
+    margin-top: 12px;
+}
+.div-bookingid{
+    padding: 12px 8px;
+    border-radius: 6px;
+    background-color: #ecf0f5;
+    margin-right: 8px;
+}
+.text-booking-id{
+    font-size: 18px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #f58220;
+}
+
+

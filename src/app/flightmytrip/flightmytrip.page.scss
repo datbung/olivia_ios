@@ -176,19 +176,18 @@
     font-size: 17px !important;
 }
 .card-background-page-mytrips{
-    .item-room{
-        position: relative;
-        min-height: 104px;
-        margin: 0 5px;
-        margin-top: 13px;
-    }
+    // .item-room{
+    //     position: relative;
+    //     min-height: 104px;
+    //     margin: 0 5px;
+    //     margin-top: 13px;
+    // }
     .div-split-color{
         height: 7px;
         background-color: #f2f2f2;
     }
     .div-wrapimg {
         position: absolute;
-        height:104px;
         width: 104px;
         overflow: hidden;
         border-radius: 5px;
@@ -248,10 +247,10 @@
         }
     }
     .d-flex{
-        display: flex;
-        margin: 0 5px;
-        font-weight: 300;
-        letter-spacing: -0.4px;
+        // display: flex;
+        // margin: 0 5px;
+        // font-weight: 300;
+        // letter-spacing: -0.4px;
 
         .div-left{
             width: 20px;
@@ -630,7 +629,6 @@ h2{
 //////////////combo
 .label-comboname{
     white-space: normal;
-    padding-left: 5px;
     font-size: 18px;
     font-weight: 500;
 }
@@ -1420,8 +1418,6 @@ $content-ios-transition-background: #ffffff;
     .padding-5{
         padding: 0 8px;
         position: relative;
-        margin-bottom: 32px;
-        padding-top: 16px;
     }
     .m-top-8{
         margin-top: 8px;
@@ -1433,7 +1429,6 @@ $content-ios-transition-background: #ffffff;
         bottom: 16px !important;
     }
     .div-arrival{
-        margin-top: 32px;
         min-height: 120px;
         padding: 0 5px;
         position: relative;
@@ -1841,4 +1836,8 @@ $content-ios-transition-background: #ffffff;
 }
 .text-red{
     color: #e52822
+}
+.text-waitpayment{
+    font-size: 18px;
+    font-weight: 600;
 }

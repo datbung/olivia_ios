@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,NgZone } from '@angular/core';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
 import * as moment from 'moment';
@@ -11,7 +11,8 @@ import { foodService } from '../providers/foodService';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { C } from '../providers/constants';
 import * as $ from 'jquery';
-
+import * as request from 'requestretry';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -51,6 +52,21 @@ export class MytripdetailPage implements OnInit {
   noLoginObj: any;
   childList: any;
   loader: any;
+  baggageHandedDepart;baggageHandedReturn;totalVMB=0;
+  totalService: number;
+  luggageSignedDepart: any;
+  departConditionInfo: any;
+  returnConditionInfo: any;
+  luggageSignedReturn: any;
+  isdkv=false;
+  ishdnp=false;
+  isptp=false;
+  booking_json_data: any;
+  ischeckStops=false;
+  cin: any;
+  cout: any;
+  departAirport:any;
+  returnAirport:any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -64,11 +80,40 @@ export class MytripdetailPage implements OnInit {
     public _foodService: foodService,
     private nativePageTransitions: NativePageTransitions,
     private routerOutlet: IonRouterOutlet,
-    private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController) {
+    private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController,private safariViewController: SafariViewController,public zone: NgZone) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
+
         this.enableheader = true;
-        this.loadDetailInfo();
+    
+        if (this.trip.isFlyBooking) {
+          this.getDetailTicket(0).then((data) => {
+            if (this.trip.textReturn && this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
+              this.getDetailTicket(1).then((data) => {
+                this.loadDetailInfo();
+              })
+            }else{
+              this.loadDetailInfo();
+            }
+          })
+        }else{
+          if(this.trip.booking_type == 'COMBO_FLIGHT'){
+            this.departAirport=this.getAirportByCode(this.trip.bookingsComboData[0].departCode);
+            this.returnAirport=this.getAirportByCode(this.trip.bookingsComboData[1].departCode);
+            this.getDetailTicket(0).then((data) => {
+              if (this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
+                this.getDetailTicket(1).then((data) => {
+                  this.loadDetailInfo();
+                  this.getdata();
+                })
+              }
+            })
+          }else{
+            this.loadDetailInfo();
+            this.getdata();
+          }
+          
+        }
         this.routerOutlet.swipeGesture = false;
       }
    }
@@ -235,14 +280,56 @@ export class MytripdetailPage implements OnInit {
                   let nd = new Date(arrca[2], arrca[1] - 1, arrca[0]);
                   se.cincomboarrival= moment(nd).format('YYYY-MM-DD');
                 }
+                
               }
-
+              
 
             }
               
               
           });
         }
+        // if (se.trip.bookingsComboData && se.trip.bookingsComboData.length > 1) {
+        //   for (let i = 0; i < 2; i++) {
+        //     const element = se.trip.bookingsComboData[i];
+        //     se.totalVMB=se.totalVMB+Number(element.totalCost);
+            
+        //   }
+        // }else{
+        //   se.totalVMB=Number(se.trip.bookingsComboData[0].totalCost);
+        // }
+        se.totalService=se.totalVMB-se.trip.amount_after_tax;
+        //chặng dừng nếu có
+        if (this.trip.booking_json_data) {
+          this.booking_json_data= JSON.parse(this.trip.booking_json_data);
+          this.booking_json_data.forEach(item => {
+           if(item.Transits && item.Transits.length>1) {
+            this.ischeckStops=true;
+           }
+          })
+          if(this.ischeckStops){
+            this.booking_json_data.forEach(item => {
+              if(item.Transits) {
+                for (let i = 0; i < item.Transits.length; i++) {
+                  item.Transits[i].departAirport = this.getAirportByCode(item.Transits[i].FromPlaceCode);
+                  item.Transits[i].returnAirport = this.getAirportByCode(item.Transits[i].ToPlaceCode);
+                  item.Transits[i].DepartureTime =moment(item.Transits[i].DepartTime).format('HH:mm')
+                  item.Transits[i].ArrivalTime =moment(item.Transits[i].LandingTime).format('HH:mm')
+                  if(i>0){
+                    var DepartureDate :any=this.parseDatetime(item.DepartureDate,item.Transits[i].DepartureTime)
+                    var LandingTime:any=this.parseDatetime(item.DepartureDate,item.Transits[i-1].ArrivalTime)
+                    let hours = (DepartureDate - LandingTime) / 36e5;
+                    // item.Transits[i].hours =hours;
+                    let layminutes:any = hours - (Math.floor(hours));
+                    item.Transits[i].timeOverStop =  Math.floor(hours) + " tiếng " + (layminutes > 0 ? (+Math.round(layminutes*60) + " phút") : '') ;
+                  }
+                }
+              
+              }
+             })
+          }
+        }
+       
   }
 
   ngOnInit() {
@@ -726,5 +813,197 @@ export class MytripdetailPage implements OnInit {
     this.loader = await this.loadingCtrl.create({
     });
     this.loader.present();
+  }
+  getDetailTicket(stt) : Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject) => {
+      if (stt==0) {
+        var airlineCode=this.getairlineCode(stt);
+        var ticketClass=this.trip.bookingsComboData[0].ticketClass;
+      }else{
+        var airlineCode=this.getairlineCode(stt);
+        var ticketClass=this.trip.bookingsComboData[1].ticketClass;
+      }
+  
+      var options = {
+        method: 'GET',
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass,
+        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+        headers: {
+         
+        }
+      };
+      request(options, function (error, response, body) {
+        let objError = {
+          page: "flightsearchresult",
+          func: "selectTicket",
+          message: response.statusMessage,
+          content: response.body,
+          type: "warning",
+          param: JSON.stringify(options)
+        };
+        if (error) {
+          error.page = "flightsearchresult";
+          error.func = "selectTicket";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(objError,response);
+        }
+        if (response.statusCode == 200) {
+          let result = JSON.parse(body);
+          if (stt==0) {
+            se.baggageHandedDepart=result.ticketCondition.baggageHanded;
+            se.luggageSignedDepart=result.ticketCondition.luggageSigned;
+            se.departConditionInfo=result;
+              se.trip.bookingsComboData[0].passengers.forEach(element => {
+                element.hanhLyshow="";
+                if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+result.ticketCondition.luggageSigned;
+                }else{
+                  if (element.hanhLy){
+                    element.hanhLyshow=element.hanhLy;
+                  }else{
+                    element.hanhLyshow=result.ticketCondition.luggageSigned;
+                  }
+                 
+                }
+                if (element.hanhLyshow) {
+                  element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                }
+              });
+            
+          }else{
+            se.baggageHandedReturn=result.ticketCondition.baggageHanded;
+            se.luggageSignedReturn=result.ticketCondition.luggageSigned
+            se.returnConditionInfo=result;
+            se.trip.bookingsComboData[1].passengers.forEach(element => {
+              element.hanhLyshow="";
+              if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+result.ticketCondition.luggageSigned;
+              }else{
+                if (element.hanhLy){
+                  element.hanhLyshow=element.hanhLy;
+                }else{
+                  element.hanhLyshow=result.ticketCondition.luggageSigned;
+                }
+               
+              }
+              if (element.hanhLyshow) {
+                element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+              }
+            });
+          }
+          resolve(result);
+          
+      }
+    })
+    })
+  }
+  getairlineCode(stt) {
+    var airlineName="";
+    if (this.trip.bookingsComboData) {
+      if (stt==0) {
+        if (this.trip.bookingsComboData[0].airlineName.indexOf('VIETJET') != -1) {
+          airlineName="VietJetAir"
+        }else if (this.trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || this.trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+          airlineName="VietnamAirlines"
+        }else{
+          airlineName="BambooAirways"
+        }
+      }else{
+        if (this.trip.bookingsComboData[1].airlineName.indexOf('VIETJET') != -1) {
+          airlineName="VietJetAir"
+        }else if (this.trip.bookingsComboData[1].airlineName.indexOf('Vietnam Airlines') != -1  || this.trip.bookingsComboData[1].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+          airlineName="VietnamAirlines"
+        }else{
+          airlineName="BambooAirways"
+        }
+      }
+    }
+   
+    return airlineName;
+  }
+  dkv(){
+    this.isdkv=!this.isdkv
+  }
+  policy(){
+    this.ishdnp=!this.ishdnp;
+    // this.getdata();
+  }
+  phuthuP(){
+    this.isptp=!this.isptp;
+    // this.getdata();
+  }
+  openWebpage() {
+    var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
+    this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    })
+  }
+  parseDatetime(date: string, time: string) {
+    let dateObj = date.split("/");
+    let dtStr = dateObj[1] + "/" + dateObj[0] + "/" + dateObj[2] + " " + time;
+    return new Date(dtStr);
+  }
+  getAirportByCode(code){
+    var se = this, res ="";
+    if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+      let itemmap = se._flightService.listAirport.filter((item) => { return item.code == code});
+      res = (itemmap && itemmap.length >0) ? itemmap[0].airport : ""; 
+    }
+    return res;
+  }
+  getdata() {
+    var se=this;
+    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.hotel_id;
+    var options = {
+      method: 'POST',
+      url: url,
+      timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+    };
+    request(options, function (error, response, body) {
+      if(response.statusCode != 200){
+        var objError ={
+            page: "policy",
+            func: "getdata",
+            message : response.statusMessage,
+            content : response.body,
+            type: "warning",
+            param: JSON.stringify(options)
+          };
+        C.writeErrorLog(objError,response);
+      }
+      if (error) {
+        error.page="policy";
+        error.func="loaddata";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(objError,response);
+      }
+      if(response.statusCode== 200){
+        let jsondata = JSON.parse(body);
+        se.zone.run(()=>{
+          se.cin = jsondata.CheckinTime;
+          se.cout = jsondata.CheckoutTime;
+        })
+
+      }
+    })
   }
 }

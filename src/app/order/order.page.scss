@@ -96,13 +96,13 @@
         letter-spacing: -0.36px;
     }
     .label-text-waitpayment{
-        padding: 2px 6px;
-        background-color: var(--ion-color-danger);
+        background-color: #f79321;
         border-radius: 2px;
         color: white;
         font-size: 12px;
         font-weight: 600;
         letter-spacing: -0.36px;
+        padding: 2px;
     }
     .label-text-roomconfirm{
         padding: 2px 6px;
@@ -116,7 +116,7 @@
 
     .label-text-request{
         padding: 2px 6px;
-        background-color: var(--ion-color-tertiary);
+        background-color: #26bed6;
         border-radius: 2px;
         color: white;
         font-size: 12px;
@@ -126,7 +126,7 @@
 
     .label-text-issueticket{
         padding: 2px 6px;
-        background-color: var(--ion-color-tertiary);
+        background-color: #26bed6;
         border-radius: 2px;
         color: white;
         font-size: 12px;
@@ -168,7 +168,6 @@
         padding-top: 6px;
     }
     .first-content{
-        padding: 3px;
         padding-bottom: 0;
         font-size: 14px;
 
@@ -178,13 +177,13 @@
 
         .col-bookingid{
             align-self: baseline;
-            padding-left: 5px;
-
+            padding: 0px;
+            margin-top: 4px;
             .label-bkg-id{
                 //padding: 2px 5px;
                 font-size: 14px;
                 font-weight: 300;
-                color: #222222;
+                color: #868998;
             }
         }
         .p-r-0{
@@ -196,8 +195,6 @@
             font-size: 12px;
             color:#003c71;
             padding: 5px 0px;
-            margin-left: -5px;
-            
         }
         .fly-bkg-code{
             font-size: 14px;
@@ -395,6 +392,7 @@
         padding-left: 4px;
         font-size: 14px;
         font-weight: bold;
+        color: #003c71;
     }
     .bkg-list-id{
         padding-left: 0px;
@@ -404,8 +402,8 @@
     }
     
     .row-bkg-id{
-        align-items: center;
-        background-color: rgba(242, 242, 242, 0.5);
+        // align-items: center;
+        // background-color: rgba(242, 242, 242, 0.5);
         margin: -3px;
         padding: 11px 2px;
     }
@@ -536,15 +534,16 @@
 
     .card-background-page-mytrips{
         height: 100%;
-        padding-top: calc( env(safe-area-inset-top) + 58px);
+        padding-top: calc( env(safe-area-inset-top) + 85px);
         .min-height-84{
             min-height: 84px !important;
         }
         .item-room{
-            position: relative;
-            min-height: 124px;
-            margin: 0 5px;
-            margin-top: 12px;
+            // position: relative;
+            // min-height: 124px;
+            // margin: 0 5px;
+            // margin-top: 12px;
+            padding: 16px 16px 0px 16px;
         }
         .div-split-color{
             margin: 12px -16px 16px -16px;
@@ -553,23 +552,39 @@
         }
         .div-wrapimg {
             position: absolute;
-            height:78px;
+            height:120px;
             width: 104px;
             overflow: hidden;
         }
         .div-wrapimg.img-list{
-            height:104px;
+            height:120px;
         }
         .img-avatar {
             left: 0;
             bottom: 0;
             object-fit: cover;
-            min-height: 104px;
+            height: 120px;
+            //max-width: 300px;
+            //max-height: 200px;
+        }
+        .div-wrapimg.img-list-1{
+            height:135px;
+        }
+        .img-avatar-1 {
+            left: 0;
+            bottom: 0;
+            object-fit: cover;
+            height: 135px;
             //max-width: 300px;
             //max-height: 200px;
         }
         .img-avatar.ava-list{
             border-radius: 4px;
+            height: 120px !important;
+        }
+        .img-avatar.no-ava-list{
+            border-radius: 4px;
+            height: 80px !important;
         }
         .col-mytrip-text-description,.col-historytrip-text-description{
             padding-left: 112px;
@@ -619,10 +634,7 @@
             }
         }
         .d-flex{
-            display: flex;
-            margin: 0 5px;
-            font-weight: 300;
-            letter-spacing: -0.4px;
+
 
             .div-left{
                 width: 20px;
@@ -709,10 +721,7 @@
         }
 
         .item-bkgoff{
-            position: relative;
-            margin: 0 5px;
-            margin-top: 12px;
-            padding-bottom: 16px;
+            padding: 16px;
         }
         //bkg off
         .div-bkgoff-listitem{
@@ -765,12 +774,11 @@
     }
     //////////////combo
     .label-comboname{
-        padding-top: 12px;
         white-space: normal;
-        padding-left: 5px;
         font-size: 16px;
         font-weight: 600;
         line-height: 1.5;
+        color: #003c71;        ;
     }
     .text-tripcomboname{
         padding-top: 4px;
@@ -1505,7 +1513,7 @@
         margin-top:28px;
     }
     .padding-5{
-        padding: 0 5px;
+        padding: 0 8px;
         position: relative;
     }
     .m-top-8{
@@ -1518,7 +1526,6 @@
         bottom: 16px !important;
     }
     .div-arrival{
-        margin-top: 32px;
         min-height: 120px;
         padding: 0 5px;
         position: relative;
@@ -1566,18 +1573,18 @@
             position: absolute;
             height: 34px;
             width: 1px;
-            top: 16px;
+            top: 22px;
             border-left: dotted 1.5px #bdbdbd;
             left: 47px;
         }
         .placepoint{
-            position: absolute;
-            top: 46%;
+       
             width: 8px;
             height: 8px;
             border-radius: 50%;
             border: 1px solid #CCCCCC;
-            left: 44px;
+            margin-left: 6px;
+            margin-top: 11px;
         }
         .placepoint-return{
             position: absolute;
@@ -1585,7 +1592,7 @@
             height: 8px;
             border-radius: 50%;
             border: 1px solid #CCCCCC;
-            top: 6px;
+            top: 12px;
             left: 44px;
         }
     }
@@ -1600,8 +1607,6 @@
 }
 
 .div-pax{
-    padding: 12px 5px 0 5px;
-
     .pax-label{
         font-size: 18px;
         font-weight: 600;
@@ -1661,6 +1666,10 @@
 {
     margin-top: 16px;
 }
+.mt24
+{
+    margin-top: 24px;
+}
 .text-payment-info{
     white-space: normal !important;
     font-size: 14px;
@@ -1694,13 +1703,20 @@
     padding-left: 8px;
 }
 .div-delivery_payment{
-    background: rgba(254,237,199, 0.4);
-    padding: 10px 8px;
+    background-color: #feeec7;
     font-size: 14px;
-    font-weight: 300;
-    letter-spacing: -0.34px;
-    text-align: center;
-    color: #333333;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #f79321;
+    height: 46px;
+    margin-left: -8px;
+    margin-right: -8px;
+    padding: 12px 16px;
+
 }
 .text-red{
 color: #e52822
@@ -1773,8 +1789,6 @@ color: #e52822
 .div-item-flight{
     position: relative;
     margin: 0 !important;
-    margin-top: 12px !important;
-
     .text-fn{
         font-size: 14px;
         font-weight: 500;
@@ -1815,7 +1829,7 @@ color: #e52822
     }
 
     .text-flight-title{
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
         line-height: 1.5;
         letter-spacing: -0.28px;
@@ -1832,13 +1846,12 @@ color: #e52822
             height: 32px;
             position: absolute;
             left: 0;
-            top: -8px;
+            top: 25px;
           }
 
           .img-oneway{
             width: 12px !important;
             margin-left: 8px;
-            top: -5px;
           }
         }
     }
@@ -2100,7 +2113,7 @@ color: #e52822
         padding: 7px 0px 7px 8px;
         margin: 0 5px !important;
         border-radius: 2px;
-        background-color: rgba(242, 242, 242, 0.5);
+        background-color: #f9fbfc;
 
         font-size: 14px;
         font-weight: 300;
@@ -2116,23 +2129,17 @@ color: #e52822
 
     .div-dc-label-title{
         font-size: 14px;
-        font-weight: 500;
-        text-align: left;
-        color: #333333;
-        min-width: 40px;
+        color: #868998;
     }
 
     //.div-dc-label-info{
        // padding-left: 12px;
 
         .div-dc-label-time{
-            min-width: 48px;
-            font-size: 16px;
-            font-weight: 600;
-            line-height: 1.4;
-            letter-spacing: -0.46px;
+            font-size: 14px;
+            letter-spacing: -0.28px;
             text-align: left;
-            color: var(--ion-color-primary);
+            color: #3f3b3b;
         }
 
         .div-dc-label-address{
@@ -2144,15 +2151,14 @@ color: #e52822
         }
 
         .cls-text-limit{
-            font-size: 13px;
-            letter-spacing: -0.37px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #3f3b3b;
             text-overflow: ellipsis;
             overflow: hidden;
-            //width: 80px;
             max-height: 16px;
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
-            height: auto;
             display: -webkit-box;
             -webkit-box-orient: vertical;
              /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
@@ -2186,6 +2192,7 @@ color: #e52822
     }
     .m-l-4{
         margin-left: 4px;
+        width: 43%;
     }
 
     .p-l-44{
@@ -2201,7 +2208,6 @@ color: #e52822
         margin-top: 3px;
     }
 }
-
 .text-hold-ticket{
     font-size: 14px;
     color: var(--ion-color-primary);
@@ -2469,3 +2475,107 @@ color: #e52822
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.padding-9-16{
+    padding: 9px 16px;
+}
+.div-line-new{
+    height: 8px;
+    background-color: #f5f6f7;
+}
+.div-line-new-1{
+    height: 1px;
+    background-color: #dde0e4;
+}
+.div-people{
+    padding: 8px 0px 8px 0px;
+}
+.mt4{
+    margin-left: 4px;
+}
+.cls-icon-img-detail{
+    width: 24px !important;
+    padding: 0 5px;
+ }
+ .p-absolute-16{
+    position: absolute;
+    right: 16px;
+ }
+ .div-waitpayment{
+    background-color: #f79321;
+    width: 130px;
+    height: 36px;
+}
+.text-timepayment{
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: -0.28px;
+}
+.btn-waitpayment{
+    width: 115px;
+    height: 42px;
+    border-radius: 4px;
+    background-color: #f79321;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+.div-btn-waitpayment{
+    width: 50%;
+    text-align: right;
+}
+.div-left-waitpayment{
+    font-size: 14px;
+    color: #e52822;;
+}
+.div-right-waitpayment{
+    font-size: 24px;
+    font-weight: 600;
+    color: #26bed6;
+}
+.padding-8-16{
+    padding: 8px 16px;
+}
+.margin-0-16{
+    margin: 0px 16px;
+}
+.text-code-fly{
+    font-size: 14px;
+    font-weight: 500;
+    color: #868998;
+}
+.text-time-fly{
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.48px;
+    color: #26bed6;
+}
+.text-time-fly-1{
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.48px;
+    color: #868998;
+}
+.mt-30{
+    margin-top: 30px;
+}
+.text-color-blue{
+    font-size: 16px;
+    font-weight: 600;
+    color: #26bed6;
+    margin-right: 2px;
+}
+.margin-8-16{
+    margin: 8px 16px;
+}
+.mt-19{
+    margin-top: 19px;
+}
+.padding-16{
+    padding:16px
+}
+.div-comboname{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

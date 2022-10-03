@@ -51,24 +51,21 @@
     }
     
     .item-room{
-        position: relative;
-        min-height: 124px;
-        margin: 0 5px;
-        margin-top: 12px;
+        padding: 16px 16px 0px 16px;
     }
     .div-wrapimg {
         position: absolute;
-        height: 104px;
         width: 104px;
         overflow: hidden;
         border-radius: 5px;
-
+        height: 120px;
         .img-width-history{
             width: 110px;
         }
         img {
             object-fit: cover !important;
             min-height: 104px !important;
+            height: 120px;
         }
     }
     img {
@@ -228,11 +225,7 @@
 
 //bkgoff
 .item-bkgoff{
-    position: relative;
-    margin: 0 5px;
-    margin-top: 12px;
-    //margin-bottom: 16px;
-    padding-bottom: 16px;
+    padding: 16px;
 }
 //bkg off
 .div-bkgoff-listitem{
@@ -424,7 +417,7 @@
 
 .label-text-request{
     padding: 2px 6px;
-    background-color: var(--ion-color-tertiary);
+    background-color: #26bed6;
     border-radius: 2px;
     color: white;
     font-size: 12px;
@@ -434,7 +427,7 @@
 
 .label-text-done{
     padding: 2px 6px;
-    background-color: var(--ion-color-tertiary);
+    background-color: #26bed6;
     border-radius: 2px;
     color: white;
     font-size: 12px;
@@ -448,21 +441,43 @@
 
 .div-item-flight {
     position: relative;
-    margin: 0 5px !important;
-    margin-top: 12px !important;
 }
 
 .col-mytrip-text-description{
     padding-left: 112px;
 }
 
-.div-mytrip{
-    padding-bottom: 0 !important;
-    
-}
+
 .p-bottom-0{
     padding-bottom: 0 !important;
 }
 .p-l-4{
     padding-left: 4px;
+}
+.padding-9-16{
+    padding: 9px 16px;
+}
+.div-line-new{
+    height: 8px;
+    background-color: #f5f6f7;
+}
+.padding-8-16{
+    padding: 8px 16px;
+}
+.margin-0-16{
+    margin: 0px 16px;
+}
+.text-code-fly{
+    font-size: 14px;
+    font-weight: 500;
+    color: #868998;
+}
+.text-time-fly{
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.48px;
+    color: #26bed6;
+}
+.mt-30{
+    margin-top: 30px;
 }
