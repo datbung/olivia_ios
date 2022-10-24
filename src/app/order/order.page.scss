@@ -1606,7 +1606,7 @@
         }
         .div-info-departure, .div-info-return{
             position: absolute;
-            left: 60px;
+            left: 76px;
             top: 0;
         }
         .placeline
@@ -1646,6 +1646,7 @@
         margin: 0;
     }
 }
+
 
 .div-pax{
     padding: 12px 5px 0 5px;
@@ -2674,6 +2675,14 @@ color: #e52822
         max-width: 250px !important;
     }
 }
+@media(min-width: 340px) and (max-width:359px){
+    .text-placecode {
+        max-width: 244px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
 .div-width-250 {
     width: 250%;
     }
@@ -2686,4 +2695,227 @@ color: #e52822
     }
     .div-width-100 {
         width: 100%;
+    }
+
+
+    ///////
+    .div-VMBQT {
+        background: #fff;
+        padding: 8px;
+        .d-flex-later {
+            margin: -16px -8px 0;
+        }
+        .div-text-payment {
+            margin: 0 -8px 16px;
+        }
+        .div-info-departure,.div-info-return {
+            left: 70px !important;
+        }
+        .placepoint {
+            left: 58px !important;
+        }
+        .placeline {
+            left: 61px !important;
+            height: 40px !important;
+        }
+        
+        .placepoint-return {
+            left: 58px !important;
+        }
+        .flight-info {
+            width: 150%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+
+            .icon-copy {
+                max-width: 42px;
+                max-height: 24px;
+                margin-right: 4px;
+            }
+            .div-flightnumber {
+                align-items: center;
+                display: flex;
+            }
+        }
+
+        .ticket-code {
+            margin-left: 12px;
+            width: 100%;
+            padding: 5px 8px;
+            border-radius: 4px;
+            background-color: #ecf0f5;
+
+            .div-text-code {
+                font-size: 14px;
+                text-align: center;
+                color: #3f3b3b;
+            }
+            .div-code {
+                justify-content: center;
+
+                .text-code {
+                    font-size: 18px;
+                    font-weight: 600;
+                    text-align: center;
+                    color: #f79321;
+                }
+                .div-icon {
+                    margin-left: 8px;
+                }
+            }
+        }
+
+        .div-time-departure {
+            font-size: 18px;
+            font-weight: 500;
+            text-align: left;
+            color: #26bed6;
+
+            width: 60px !important;
+        }
+
+        .div-time-landing {
+            font-size: 18px;
+            font-weight: 500;
+            text-align: left;
+            color: #868998;
+        }
+        .text-place {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            color: #3f3b3b;
+        }
+        .text-placecode {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            color: #868998;
+        }
+
+        .div-overlay {
+            background-color: #f2f2f2;
+            padding: 8px;
+            min-height: 33px;
+            margin: 8px 0;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .div-line-vmbqt {
+            height: 1px;
+            flex-grow: 0;
+            background-color: #dde0e4;
+            margin: 8px 0;
+            margin-top: 24px;
+        }
+
+        .total-cost {
+            padding: 12px 16px;
+            margin: 12px -16px;
+            background-color: #f2f2f2;
+            .text-normal {
+                font-size: 14px;
+                text-align: left;
+                color: #3f3b3b;
+            }
+            .text-sub {
+                font-size: 14px;
+                text-align: left;
+                color: #6d6e71;
+            }
+            .text-align-right {
+                text-align: right;
+            }
+        }
+
+        .div-line-total {
+            margin: 8px 0;
+            height: 1px;
+            flex-grow: 0;
+            background-color: #dde0e4;
+        }
+
+        .div-flex-end {
+            justify-content: flex-end;
+            text-align: right;
+          }
+          .text-title {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: left;
+            color: #3f3b3b;
+          }
+          .h-36 {
+            height: 36px;
+          }
+          .v-align-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          }
+          .img-expand {
+            height: 18px;
+            width: 18px;
+            max-width: 18px;
+          }
+
+          .div-bkgno {
+
+            .text-bkg {
+                width: 80px;
+                font-size: 14px;
+                text-align: left;
+                color: #868998;
+            }
+            .bkg-no {
+                width: 40%;
+                margin-left: 4px;
+                font-size: 16px;
+                font-weight: 600;
+                text-align: left;
+                color: var(--ion-color-tertiary);
+            }
+            .div-btn-payment {
+                width: 35%;
+                margin-top: 0;
+                text-align: right;
+                padding: 0 !important;
+            }
+
+            
+          }
+
+          .div-waiting-payment {
+            padding: 12px 8px;
+            background-color: #feeec7;
+            color: #f79321;
+            font-weight: 600;
+            margin: 8px -8px 16px;
+            margin-top: 0;
+
+            .text-time-payment {
+                font-size: 18px;
+            }
+        }
+        @media (min-width: 340px) and (max-width:360px){
+            .text-time-payment {
+                font-size: 17px !important;
+            }
+            .div-waiting-payment { 
+                padding-right: 0 !important;
+            }
+        }
+    }
+    .div-detail-booking {
+        .div-waiting-payment {
+            margin: 8px -16px 16px !important;
+        }
+    }
+    .f-bold {
+        font-weight: 600;
+    }
+    .f-16 {
+        font-size: 16px !important;
     }

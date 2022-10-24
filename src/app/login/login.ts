@@ -300,9 +300,10 @@ export class LoginPage implements OnInit{
         }
         if (se.valueGlobal.logingoback) {
           se.valueGlobal.backValue = "";
-          if(se.valueGlobal.logingoback =="flightadddetails"){
+          if(se.valueGlobal.logingoback =="flightadddetails" || se.valueGlobal.logingoback == "flightadddetailsinternational"){
             se._flightService.itemFlightLogin.emit(1);
           }
+         
           se.navCtrl.navigateBack([se.valueGlobal.logingoback]);
         }
         else{
@@ -851,7 +852,7 @@ export class LoginPage implements OnInit{
         }
         if (se.valueGlobal.logingoback) {
           se.valueGlobal.backValue = "";
-          if(se.valueGlobal.logingoback =="flightadddetails"){
+          if(se.valueGlobal.logingoback =="flightadddetails" || se.valueGlobal.logingoback == "flightadddetailsinternational"){
             se._flightService.itemFlightLogin.emit(1);
           }
           se.navCtrl.navigateBack([se.valueGlobal.logingoback]);

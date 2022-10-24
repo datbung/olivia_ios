@@ -28,6 +28,7 @@ import {
 } from 'timers';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { tourService } from '../providers/tourService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({
     selector: 'app-order',
@@ -135,6 +136,10 @@ import { tourService } from '../providers/tourService';
   expandDivTourNotes: boolean;
   expandDivTourInfo: boolean;
   expandDivIncludePrice: boolean;
+  bookingjson: any;
+  totalCost=0;
+  flightRoundTripStr: string;
+  totalPaxStr: any;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -149,7 +154,8 @@ import { tourService } from '../providers/tourService';
         public _mytripservice: MytripService,
         public _foodService: foodService,
         private nativePageTransitions: NativePageTransitions,
-        public _tourService: tourService) {
+        public _tourService: tourService,
+        private safariViewController: SafariViewController,) {
         this.handleSplashScreen();
         
         //this.getdata();
@@ -928,6 +934,57 @@ import { tourService } from '../providers/tourService';
                       }
                       if(element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL") ){
                         element.isFlyBooking = true;
+
+                        if(element.hotel_name.indexOf("VMB QT") != -1){
+                            element.isBookingVMBQT = true;
+
+                            if(element.booking_json_data){
+                              console.log(JSON.parse(element.booking_json_data));
+                              element.bookingjson = JSON.parse(element.booking_json_data);
+                              if(element.bookingjson && element.bookingjson.length >0){
+                                element.totalCost = 0;
+                                element.bookingjson.forEach(elementbkg => {
+                                  if(elementbkg && elementbkg.Transits){
+                                    element.totalCost += elementbkg.TotalCost*1;
+                                    if(elementbkg.Transits.length >1){
+                                      let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
+                                      let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
+                                      let diffminutes = moment(dt).diff(lt, 'minutes');
+                                      if(diffminutes){
+                                        let hours:any = Math.floor(diffminutes/60);
+                                        let minutes:any = diffminutes - (hours*60);
+                                        if(hours < 10){
+                                          hours = hours != 0?  "0"+hours : "0";
+                                        }
+                                        if(minutes < 10){
+                                          minutes = "0"+minutes;
+                                        }
+                                        elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                      }
+                                     
+                                    }
+                                    elementbkg.Transits.forEach(element => {
+                                        element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                        element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                        element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                                        element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                                        let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                                        element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                      });
+                                      //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                                    
+                                    
+                                  }
+                                });
+                                
+                              }
+                              element.flightRoundTripStr = 'Vé máy bay ' + (element.bookingjson.length >1 ? 'khứ hồi' : 'một chiều');
+                              if(element.totalPaxStr){
+                                element.totalPaxStrVMBQT = element.totalPaxStr.replace(' |',',');
+                              }
+                            }
+                        }
+                        
                         element.totalpricedisplay = se.gf.convertNumberToString(Math.round(element.amount_after_tax));
                         if(element.payment_status == 0 && element.delivery_payment_date){
                           let diffminutes = moment(new Date()).diff(moment(element.delivery_payment_date), 'minutes');
@@ -940,6 +997,8 @@ import { tourService } from '../providers/tourService';
                             if(minutes < 10){
                               minutes = "0"+minutes;
                             }
+                            element.time_payment = moment(element.delivery_payment_date).format("HH:mm");
+                            element.date_payment = moment(element.delivery_payment_date).format("DD-MM-YYYY");
                             element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
                             //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
                             if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
@@ -1776,6 +1835,50 @@ import { tourService } from '../providers/tourService';
                   }
                   if(elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1 || elementHis.booking_type == "CB_FLY_HOTEL"){
                     elementHis.isFlyBooking = true;
+                    if(elementHis.hotel_name.indexOf("VMB QT") != -1){
+                      elementHis.isBookingVMBQT = true;
+                      if(elementHis.booking_json_data){
+                        console.log(JSON.parse(elementHis.booking_json_data));
+                        elementHis.bookingjson = JSON.parse(elementHis.booking_json_data);
+                        if(elementHis.bookingjson && elementHis.bookingjson.length >0){
+                          elementHis.bookingjson.forEach(elementbkg => {
+                            if(elementbkg && elementbkg.Transits){
+                              elementHis.totalCost += elementbkg.TotalCost*1;
+                              let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
+                                      let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
+                                      let diffminutes = moment(dt).diff(lt, 'minutes');
+                                      if(diffminutes){
+                                        let hours:any = Math.floor(diffminutes/60);
+                                        let minutes:any = diffminutes - (hours*60);
+                                        if(hours < 10){
+                                          hours = hours != 0?  "0"+hours : "0";
+                                        }
+                                        if(minutes < 10){
+                                          minutes = "0"+minutes;
+                                        }
+                                        elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                      }
+                              elementbkg.Transits.forEach(element => {
+                                  element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                  element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                  element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                                  element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                                  let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                });
+                                //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                              
+                              
+                            }
+                          });
+                          
+                        }
+                        elementHis.flightRoundTripStr = 'Vé máy bay ' + (elementHis.bookingjson.length >1 ? 'khứ hồi' : 'một chiều');
+                        if(elementHis.totalPaxStr){
+                          elementHis.totalPaxStrVMBQT = elementHis.totalPaxStr.replace(' |',',');
+                        }
+                      }
+                  }
                     elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
                    
                     elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD") + " thg " + moment(elementHis.checkInDate).format("MM");
@@ -4127,6 +4230,17 @@ import { tourService } from '../providers/tourService';
           }
        
         } 
+        else if(trip.isBookingVMBQT){
+          se.activityService.objPaymentMytrip = trip;
+          this.gf.showLoading();
+          let url = C.urls.baseUrl.urlFlightInt + `api/bookings/${trip.booking_id}/summary?${new Date().getTime()}`;
+          this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
+            this.gf.hideLoading();
+            this._flightService.itemFlightCache.dataSummaryBooking = data.data;
+            se.navCtrl.navigateForward("/flightinternationalpaymentselect");
+          })
+          
+        }
         else if(trip.isFlyBooking){
           if (stt==0) {
             se.navCtrl.navigateForward("/mytripaymentflightselect/0");
@@ -4141,6 +4255,7 @@ import { tourService } from '../providers/tourService';
           se._tourService.itemDetail = null;
           se.navCtrl.navigateForward("/tourpaymentselect");
         }
+       
         else {
           // stt 0:CKNH
           if (stt==0) {
@@ -5230,5 +5345,34 @@ import { tourService } from '../providers/tourService';
   showTourInfo() {
     this._mytripservice.tripdetail = this.listMyTrips[0];
     this.navCtrl.navigateForward('/mytriptourinfo');
+  }
+  openLinkCondition() {
+    this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          this.safariViewController.show({
+            url: 'https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong',
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+          .subscribe((result: any) => {
+              if(result.event === 'opened') console.log('Opened');
+              else if(result.event === 'loaded') console.log('Loaded');
+              else if(result.event === 'closed') 
+              {
+                
+              }
+          
+            },
+            (error: any) => console.error(error)
+          );
+  
+        } else {
+        }
+      }
+    );
   }
   }

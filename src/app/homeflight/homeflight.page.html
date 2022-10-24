@@ -1,41 +1,26 @@
 <div class="div-flight-content" *ngIf="flightTabActive == 1">
-    <!-- <div [ngClass]="isNotice ? 'background mb50' : 'background'"> -->
         <div [ngClass]="isNotice ? (flighttype == 'twoway' ? 'background cls-bg-twoway' : 'background cls-bg-oneway') : (flighttype == 'twoway' ? 'background cls-bg-twoway' : 'background cls-bg-oneway') ">
-        <!-- <img [ngClass]="isNotice ? 'img-background-notice' : 'img-background'"  src="./assets/ic_flight/flight_bg.jpg"> -->
         <img [ngClass]="isNotice ? (flighttype == 'twoway' ? 'img-background-notice cls-bg-twoway' : 'img-background-notice cls-bg-oneway') : (flighttype == 'twoway' ? 'img-background cls-bg-twoway' : 'img-background cls-bg-oneway') " src="./assets/ic_flight/flight_bg.jpg">
         <div class="div-wrap-background"></div>
         <div class="text-center">
             <img class="img-logo" src="./assets/logo/logo.svg" />
         </div>
         <div class="padding div-wrap-content">
-            <!-- <div [ngClass]="isNotice ? 'text-home-hotel-notice' : 'text-home-hotel'"  > -->
-                <div class="text-home-hotel"  >
-                <label class="label-home-hotel">
-                    Lựa chọn thông minh - Hành trình như ý
-                </label>
-            </div>
+                <div class="text-home-hotel "  >
+                    <div><label class="label-home-hotel">
+                        Lựa chọn thông minh - Hành trình như ý
+                        </label>
+                    </div>
+                    <div><label class="label-home-hotel">
+                        Quốc nội & Quốc Tế
+                    </label></div>
+                    
+                </div>
             <div [ngClass]="flighttype == 'twoway' ? 'div-wrap-search-input div-wc-twoway' : 'div-wrap-search-input div-wc-oneway' "></div>
             <div class="div-direction">
-                <!-- <ion-row>
-                    <ion-list class="div-list-flighttype">
-                        <ion-radio-group name="rdgroup" class="list-flighttype d-flex" [(ngModel)]="flighttype" mode="md">
-                            <div class="div-twoway d-flex rd-active">
-                                <ion-radio style="--color-checked:#fff;width: 19px; height: 19px;--border-width: 0.5px;" value="twoway" class="rd-departure" (click)="radioCheck(1)" checked="true" mode="md"></ion-radio>
-                                <div class="rd-text" (click)="radioCheck(1)">Khứ hồi</div>
-                            </div>
-                               <div class="div-oneway d-flex">
-                                <ion-radio value="oneway" class="rd-departure" style="padding-left:32px;width: 47px; height: 19px;--color-checked:#fff;--border-width: 0.5px;" (click)="radioCheck(2)" mode="md"></ion-radio>
-                                <div class="rd-text" (click)="radioCheck(2)">Một chiều</div>
-                               </div>
-                                
-                        </ion-radio-group>
-                        
-                </ion-list>
-                </ion-row> -->
-                
             </div>
 
-            <ion-row class="row-flight m-top-16">
+            <ion-row class="row-flight ">
                 <div class="div-width div-relative">
                     <div class="img-input"  (click)="searchFlight(1)">
                         <img class="img-padding img-location" src="./assets/ic_flight/flight_cin.svg"/>
@@ -140,7 +125,6 @@
                         <div class="div-input-right div-flex-center">
                             <div class="text-pax">
                                 <div class="div-adult">{{ adult }} người lớn<span *ngIf="child">, {{ child }}  trẻ em</span><span *ngIf="infant">, {{ infant }} em bé</span></div>
-                                <!-- <div class="div-child text-color">{{ child }} trẻ em, {{ infant }} trẻ sơ sinh</div> -->
                             </div>
                         </div>
                     </div>

@@ -37,18 +37,18 @@
   }
 
   .cls-bg-twoway {
-    height: calc(env(safe-area-inset-top) + 604px) !important;
+    height: calc(env(safe-area-inset-top) + 634px) !important;
   }
   .cls-bg-oneway {
-    height: calc(env(safe-area-inset-top) + 548px) !important;
+    height: calc(env(safe-area-inset-top) + 578px) !important;
   }
 
   .div-wc-twoway{
-    height: 388px !important;
+    height: 408px !important;
   }
 
   .div-wc-oneway{
-    height: 330px !important;
+    height: 350px !important;
   }
 
   .div-roundtrip {
@@ -77,7 +77,7 @@
         z-index: -1;
         width: 95.8%;
         height: 370px;
-        margin-top: -34px;
+        margin-top: -58px;
       }
       
       
@@ -129,7 +129,6 @@
           }
         }
         .div-direction{
-            margin-top: 12px;
 
             .rd-active{
                 opacity: 1 !important;
@@ -186,11 +185,11 @@
 
             .text-home-hotel{
               
-                margin-top: 116px;
+                margin-top: 122px;
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 17px;
+                  font-size: 16px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;
@@ -202,7 +201,7 @@
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 17px;
+                  font-size: 16px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;

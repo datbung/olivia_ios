@@ -2,7 +2,7 @@ import { Bookcombo, SearchHotel } from './../../providers/book-service';
 
 import { Booking } from '../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
-import { NavController, ToastController, LoadingController, Platform, AlertController } from '@ionic/angular';
+import { NavController, ToastController, LoadingController, Platform, AlertController, ModalController } from '@ionic/angular';
 import { RoomInfo } from '../../providers/book-service';
 import { C } from '../../providers/constants';
 import * as request from 'requestretry';
@@ -13,6 +13,10 @@ import { tourService } from 'src/app/providers/tourService';
 import * as moment from 'moment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as $ from 'jquery';
+import { voucherService } from '../../providers/voucherService';
+import { AdddiscountPage } from 'src/app/adddiscount/adddiscount.page';
+import { OverlayEventDetail } from '@ionic/core';
+
 /**
  * Generated class for the RoomadddetailsPage page.
  *
@@ -28,7 +32,7 @@ import * as $ from 'jquery';
 export class TourAddDetailsPage implements OnInit {
 
   hoten;phone = ""; note; arr; roomnumber; room; ischeck: boolean = false; ishide = false;
-  companyname; address; tax; addressorder; bed; bedchuoi; priceshow; ischeckpoint; ischeckbtn
+  companyname; address; tax; addressorder; bed; bedchuoi; priceshow; ischeckbtn
   timestamp; paymentMethod; jsonroom; ischeckpayment;public loader:any
   _email: any;
   validemail: boolean= true;
@@ -45,7 +49,62 @@ export class TourAddDetailsPage implements OnInit {
   jti: any;
   memberid: any='';
   totalPriceStr: any;
+  point: number;
+  promocode:string='';
+  discountpromo:number=0;
+  itemVoucherTour: any;
+  ischeckpoint = false;
+  msg: string;
+  textpromotion: any;
+  Pricepointshow: any;
+  ischeckpromo: boolean;
+  usePointPrice: number;
   ngOnInit() {
+    this._voucherService.getTourObservable().subscribe((itemVoucher)=> {
+      if(itemVoucher){
+        if(itemVoucher.applyFor && itemVoucher.applyFor != 'tour'){
+          this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} không áp dụng cho chương trình này. Quý khách vui lòng kiểm tra lại.`);
+          return;
+        }
+        if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherTour){
+          this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+          return;
+        }
+        if(itemVoucher.claimed){
+          this._voucherService.selectVoucher = itemVoucher;
+          this.itemVoucherTour = itemVoucher;
+          this.promocode = itemVoucher.code;
+          this.discountpromo = itemVoucher.rewardsItem.price;
+          this.ischeckpromo = true;
+          this.tourService.promocode = itemVoucher.code;
+          this.tourService.discountpromo = this.discountpromo;
+        }else{
+          this._voucherService.selectVoucher = null;
+          this.itemVoucherTour = null;
+          this.promocode = "";
+          this.discountpromo = 0;
+          this.ischeckpromo = false;
+          this.tourService.promocode = "";
+          this.tourService.discountpromo = 0;
+        }
+        this.edit(2);
+        this.modalCtrl.dismiss();
+      }
+    })
+    
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this._voucherService.selectVoucher = null;
+          this.itemVoucherTour = null;
+          this.promocode = "";
+          this.discountpromo = 0;
+          //this.ischeckbtnpromo = false;
+          //this.ischeckpromo = false;
+          this.edit(2);
+      }
+    })
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,
     private toastCtrl: ToastController, public Roomif: RoomInfo, public storage: Storage, public loadingCtrl: LoadingController,
@@ -53,7 +112,9 @@ export class TourAddDetailsPage implements OnInit {
     private alertCtrl: AlertController,
     public activityService: ActivityService,
     public searchhotel: SearchHotel,
-    public tourService: tourService) {
+    public tourService: tourService,
+    public _voucherService: voucherService,
+    private modalCtrl: ModalController) {
     this.ischeckpayment = Roomif.ischeckpayment;
     let tp =0;
     if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
@@ -159,7 +220,22 @@ export class TourAddDetailsPage implements OnInit {
             error.func = "GetUserInfo";
             error.param = JSON.stringify(options);
             C.writeErrorLog(error, response);
-          } else {
+          } else if (response.statusCode == 401) {
+            se.storage.get('jti').then((memberid) => {
+                se.storage.get('deviceToken').then((devicetoken) => {
+                    se.gf.refreshToken(memberid, devicetoken).then((token) => {
+                        se.storage.remove('auth_token').then(() => {
+                            se.storage.set('auth_token', token);
+                        })
+                        setTimeout(() => {
+                            se.GetUserInfo();
+                        }, 300)
+                    });
+
+                })
+            })
+          }
+           else {
             if (body) {
               var data = JSON.parse(body);
               se.zone.run(() => {
@@ -185,6 +261,11 @@ export class TourAddDetailsPage implements OnInit {
                       se.ishideNameMail=order.ishideNameMail;
                     }
                   })
+                }
+                if (data.point) {
+                  se.Roomif.point = data.point;
+                  se.point = data.point * 1000;
+                  //se.price = se.point.toLocaleString();
                 }
               })
             }else{
@@ -221,6 +302,16 @@ export class TourAddDetailsPage implements OnInit {
     this.storage.get('auth_token').then(auth_token => {
       this.auth_token = auth_token;
     })
+
+    this._voucherService.selectVoucher = null;
+          this.itemVoucherTour = null;
+          this.promocode = "";
+          this.discountpromo = 0;
+          this.ischeckpromo = false;
+          this.tourService.promocode = "";
+          this.tourService.discountpromo = 0;
+          this.tourService.totalPriceBeforeDiscount = 0;
+          this.tourService.discountPrice = 0;
   }
   createObjectBooking(isPaymentDirect) : Promise<any>{
     return new Promise((resolve, reject)=> {
@@ -399,16 +490,17 @@ export class TourAddDetailsPage implements OnInit {
               objTourReq.InternalNote = "";
               objTourReq.PaxList = "";
               objTourReq.MemberId = this.memberid;
-              objTourReq.UsePointPrice = 0;
+              objTourReq.UsePointPrice = this.ischeckpoint ? this.usePointPrice: 0;
               objTourReq.Source = 6;
               objTourReq.SupplierCode = "Internal";
               objTourReq.SupplierOrderID = "";
               objTourReq.RequestBookingXml = "";
               objTourReq.BookingType = "Tour";
               objTourReq.IsNonRefundable = false;
-              objTourReq.DiscountCode = "";
-              objTourReq.Discount = 0;
+              objTourReq.DiscountCode = this.promocode || "";
+              objTourReq.Discount = this.discountpromo || 0;
               objTourReq.Username = "itsupport";
+              objTourReq.PaymentMethod = 2;
               
               this.tourService.TourBooking = objTourReq;
               resolve(true);
@@ -420,8 +512,22 @@ export class TourAddDetailsPage implements OnInit {
       if(checkvalid){
         this.checkTourAllotment().then((data)=>{
           if(data.Status != 'Error' && data.Status != 'False' && data.Response.TourRate && data.Response.TourRate.Status == 'AL'){
-            this.tourService.dataBookResponse = data.Response;
-            this.navCtrl.navigateForward('/tourpaymentselect');
+            if(this.tourService.discountPrice == 0 && (this.tourService.promocode || this.ischeckpoint)){
+              this.gf.showLoading();
+              this.createBookingTour().then((code)=>{
+                this.gf.hideLoading();
+                if(code){
+                  this.tourService.tourBookingCode = code;
+                  this.createBookingTourDiscountTransaction(code);
+               
+                }
+              })
+            }else{
+              this.tourService.dataBookResponse = data.Response;
+              this.tourService.BookingTourMytrip = null;
+              this.navCtrl.navigateForward('/tourpaymentselect');
+            }
+            
           }else{
             this.gf.showAlertMessageOnly(data.Msg);
           }
@@ -564,32 +670,62 @@ export class TourAddDetailsPage implements OnInit {
 
     toast.present();
   }
+  
+  
   edit(co) {
     this.zone.run(() => {
-      if (co == 0) {
-        if (this.ischeck) {
+      if(co != 2){//use point
+        if (co == 0) {
+          if (this.ischeck) {
+            this.ishide = false;
+          } else {
+            this.ishide = true;
+          }
+        }
+        else {
           this.ishide = false;
-        } else {
-          this.ishide = true;
+          this.ischeck = true;
         }
       }
-      else {
-        this.ishide = false;
-        this.ischeck = true;
-      }
+      
       let tp =0;
       if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
         tp = this.tourService.itemDepartureCalendar.TotalRate;
       }else{
         tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
       }
+      this.tourService.totalPriceBeforeDiscount = tp;
+      if(this.ischeckpoint && this.point >0) {
+        if(this.point >= tp){
+          this.usePointPrice = tp;
+        }else {
+          this.usePointPrice = this.point;
+        }
+        tp = tp - this.point;
+        
+        this.tourService.discountPrice = tp;
+        if(tp == 0) {
+          this.Pricepointshow = 0;
+        }
+      }
+
+      if(this.discountpromo){
+        tp = this.ischeckpromo ? tp - this.discountpromo : tp;
+        this.tourService.discountPrice = tp;
+        if(tp == 0) {
+          this.Pricepointshow = 0;
+        }
+      }
 
       if(this.ischeck && this.tourService.itemDetail.Inbound){
           tp = tp *1.08;
+          if(this.tourService.discountPrice) {
+            this.tourService.discountPrice = this.tourService.discountPrice *1.08;
+          }
       }
-
+      this.tourService.totalPrice = tp;
       this.zone.run(()=> {
-        this.totalPriceStr = this.gf.convertNumberToString(tp);
+        this.totalPriceStr = tp >0 ? this.gf.convertNumberToString(tp) : "0";
       })
     })
 
@@ -977,6 +1113,22 @@ export class TourAddDetailsPage implements OnInit {
             });
           }
 
+          createBookingTourDiscountTransaction(code) {
+            let urlApiTrans = C.urls.baseUrl.urlMobile+'/tour/api/BookingsApi/UpdateTransaction?bookingCode='+code+'&status=2';
+            let headers = {
+              apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+              apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+            };
+            this.gf.RequestApi('GET', urlApiTrans, headers, null , 'tourpaymentbank', 'UpdateTransaction').then((dataTrans)=>{
+              console.log(dataTrans);
+              if(dataTrans){
+                this.tourService.paymentType = 1;
+                this.tourService.BookingTourMytrip = null;
+                this.navCtrl.navigateForward('/tourpaymentdone');
+              }
+            });
+          }
+
           createBookingTour():Promise<any> {
             var se = this;
             this.gf.showLoading();
@@ -1008,6 +1160,144 @@ export class TourAddDetailsPage implements OnInit {
             }
             })
                
+          }
+
+          usePoint() {
+
+          }
+
+          async showdiscount(){
+            
+            $('.div-point').removeClass('div-disabled');
+            this.promocode="";
+            this.discountpromo=0;
+            this._voucherService.openFrom = 'touradddetails';
+            this.msg="";
+            const modal: HTMLIonModalElement =
+            await this.modalCtrl.create({
+              component: AdddiscountPage,
+            });
+            modal.present();
+            if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+              this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+              this._voucherService.selectVoucher = null;
+            }
+            this.edit(2);
+            modal.onDidDismiss().then((data: OverlayEventDetail) => {
+              if (data.data) {
+                let vc = data.data;
+                if(vc.applyFor && vc.applyFor != 'tour'){
+                  this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
+                  this._voucherService.rollbackSelectedVoucher.emit(vc);
+                  return;
+                }else {
+                  this.zone.run(() => {
+                    if (data.data.promocode) {
+                      $('.div-point').addClass('div-disabled');
+                      this.promocode=data.data.promocode;
+                      this.textpromotion=data.data.promocode;
+                      this.tourService.promocode = data.data.promocode;
+
+                      this.promofunc(vc.applyFor && vc.applyFor == 'tour' ? vc : '');
+                      
+                    }
+                  })
+                }
+                
+              }
+            })
+            //}
+          }
+
+          promofunc(vc) {
+            var se = this;
+            if (se.promocode) {
+              var options = {
+                method: 'POST',
+                url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+                headers:
+                {
+                  'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+                  'cache-control': 'no-cache',
+                  'content-type': 'application/json'
+                },
+                body: { code: se.promocode, totalAmount: se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, '') ,comboDetailId: "", 
+                couponData: vc ? {
+                  "tour": {
+                    "tourId": se.tourService.itemDetail.tourDetailId,
+                    "totalAdult": se.searchhotel.adult,
+                    "totalChild": se.searchhotel.child,
+                    "jsonObject": "",
+                    "checkIn": se.searchhotel.CheckInDate,
+                    "checkOut": se.searchhotel.CheckOutDate
+                  }
+                } : ''
+                },
+                json: true
+              };
+          
+              request(options, function (error, response, body) {
+                if (error) throw new Error(error);
+                se.zone.run(() => {
+                  var json = body;
+                  if (json.error==0) {
+                    var total = se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, '');
+                    if (se.ischeckpoint) {
+                      total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
+                    }
+                    se.discountpromo= json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+                    se.Pricepointshow = total -  se.discountpromo;
+                    se.tourService.discountpromo = se.discountpromo;
+                    if (se.Pricepointshow>0) {
+                      se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      //se.ischeckpromo = true;
+                      se.ischeckpromo=true;
+                    }
+                    else
+                    {
+                      //se.ischeckbtnpromo = true;
+                      se.Pricepointshow=0;
+                    }
+                    se.msg=json.msg;
+                    se.edit(2);
+                    //se.ischecktext=0;
+                    //se.ischeckerror=0;
+                  }
+                  else if(json.error==1)
+                  {
+                    se.ischeckpromo = false;
+                    se.msg=json.msg;
+                    se.discountpromo=0;
+                    //se.ischecktext=1;
+                    //se.ischeckerror=1;
+                  }
+                  else if(json.error==2)
+                  {
+                    //se.ischeckbtnpromo = false;
+                    se.ischeckpromo = false;
+                    se.msg=json.msg;
+                    se.discountpromo=0;
+                    //se.ischecktext=2;
+                    //se.ischeckerror=1;
+                  }
+                  else{
+                    //se.ischeckbtnpromo = false;
+                    se.ischeckpromo = false;
+                    se.msg = json.msg;
+                    se.discountpromo = 0;
+                    //se.ischecktext = 2;
+                    //se.ischeckerror = 1;
+                  }
+                })
+              });
+            }
+          }
+
+          scrollToElement(type){
+            let el = type == 1 ? 'ipEmail' : 'ipNote';
+            if($('#'+el) && $('#'+el).length >0){
+              document.getElementById(el).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+            }
           }
 }
 

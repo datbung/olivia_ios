@@ -116,6 +116,11 @@ import { VoucherDetailPageModule } from './voucher/voucherdetail/voucherdetail.m
 import { TourListFilterPageModule } from './tour/tourlistfilter/tourlistfilter.module';
 import { tourService } from './providers/tourService';
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
+import { FlightInfoInternationalPageModule } from './flightinternational/flightinfointernationnal/flightinfointernational.module';
+import { FlightDepartureDetailInternationalPageModule } from './flightinternational/flightdeparturedetailinternational/flightdeparturedetailinternational.module';
+import { FlightInternationalSearchfilterPageModule } from './flightinternational/flightinternationalsearchfilter/flightinternationalsearchfilter.module';
+import { FlightDetailInternationalPageModule } from './flightinternational/flightdetailinternational/flightdetailinternational.module';
+import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -171,6 +176,11 @@ import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
     ConfirmemailaccountPageModule,
     VoucherDetailPageModule,
     TourListFilterPageModule,
+    FlightInfoInternationalPageModule,
+    FlightDepartureDetailInternationalPageModule,
+    FlightInternationalSearchfilterPageModule,
+    FlightDetailInternationalPageModule,
+    FlightConditionAndPriceInternationalPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

@@ -1,0 +1,142 @@
+<ion-header class="flightpage-header">
+    <ion-row>
+      <ion-col class="col-header">
+        <div class="d-flex">
+          <div class="div-header-title">
+            <div class="div-title">Thông tin chuyến bay</div>
+          </div>
+  
+          <div class="div-close" (click)="close()">
+            <img class="header-img-close" src="./assets/imgs/ios-arrow-round-back.svg" >
+        </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-header>
+  
+  <ion-content class="flight-info-content">
+    <div class="p-16">
+        <div *ngIf="itemFlight && loadticketinfodone else loadsdk">
+          <div *ngIf="itemDepart" class="div-flight-info">
+            <div class="text-normal m-bottom-16">Chiều đi | {{departTimeDisplay}}</div>
+            <div class="d-flex m-bottom-16">
+              <div class="d-flex width-100">
+                <div class="div-logo m-right-2">
+                  <img class="icon-logo" [src]="itemDepart.urlLogo" *ngIf=" !itemDepart.operatedByLogo">
+                  <img class="icon-logo" [src]="itemDepart.operatedByLogo" *ngIf=" itemDepart.operatedByLogo">
+                </div>
+
+                <div class="div-airline-info" *ngIf="itemDepart.airline">
+                  <div class="text-airline">{{itemDepart.airline}} </div>
+                </div>
+
+              </div>
+              <div class="width-100 ">
+                <div class="text-normal text-right">{{departFlightNumber}} </div>
+              </div>
+            </div>
+            <div class="d-flex">
+                <div class="div-first">
+                    <div class="div-time">{{departFlightDepartTime}}</div>
+                    <div class="div-airport">{{itemDepart.fromPlace}}</div>
+                </div>
+                <div class="div-second">
+                  <img class="img-next" src="./assets/ic_tour/ic_next.svg" />
+                </div>
+
+                <div class="div-third">
+                  <div class="div-time">{{departFlightLandingTime}} <span class="div-stop" *ngIf="textDepartStops">{{textDepartStops}}</span></div>
+                  <div class="div-airport">{{itemDepart.toPlace}}</div>
+                </div>
+            </div>
+              
+          </div>
+
+          <div class="div-line"></div>
+
+          <div *ngIf="itemReturn" class="div-flight-info">
+            <div class="text-normal m-bottom-16">Chiều về | {{returnTimeDisplay}}</div>
+            <div class="d-flex m-bottom-16">
+              <div class="d-flex width-100">
+                <div class="div-logo m-right-2">
+                  <img class="icon-logo" [src]="itemReturn.urlLogo" *ngIf=" !itemReturn.operatedByLogo">
+                  <img class="icon-logo" [src]="itemReturn.operatedByLogo" *ngIf=" itemReturn.operatedByLogo">
+                </div>
+
+                <div class="div-airline-info" *ngIf="itemReturn.airline">
+                  <div class="text-airline">{{itemReturn.airline}} </div>
+                </div>
+
+              </div>
+              <div class="width-100 ">
+                <div class="text-normal text-right">{{returnFlightNumber}} </div>
+              </div>
+            </div>
+            <div class="d-flex">
+                <div class="div-first">
+                    <div class="div-time">{{returnFlightDepartTime}}</div>
+                    <div class="div-airport">{{itemReturn.fromPlace}}</div>
+                </div>
+                <div class="div-second">
+                  <img class="img-next" src="./assets/ic_tour/ic_next.svg" />
+                </div>
+
+                <div class="div-third">
+                  <div class="div-time">{{returnFlightLandingTime}} <span class="div-stop" *ngIf="textReturnStops">{{textReturnStops}}</span></div>
+                  <div class="div-airport">{{itemReturn.toPlace}}</div>
+                </div>
+            </div>
+              
+          </div>
+
+          <div class="div-line"></div>
+          <div class="text-normal " (click)="showFlightInfo()">Xem chi tiết <span class="text-primary">điều kiện giá vé <img src="./assets/ic_flight_international/chevrons-close.svg"></span></div>
+          <div class="div-line"></div>
+          <div class="text-total m-bottom-8">Chi phí</div>
+          <div class="d-flex">
+            <div class="width-100 text-normal" *ngIf="priceAdult">Người lớn</div>
+            <div class="width-100 text-normal text-right" *ngIf="priceAdult">{{quantityAdult}} x {{gf.convertNumberToString(priceAdult/quantityAdult)}}</div>
+          </div>
+          <div class="d-flex">
+            <div class="width-100 text-normal" *ngIf="priceChild">Trẻ em</div>
+            <div class="width-100 text-normal text-right" *ngIf="priceChild">{{quantityChild}} x {{gf.convertNumberToString(priceChild/quantityChild)}}</div>
+          </div>
+          <div class="d-flex">
+            <div class="width-100 text-normal" *ngIf="priceInfant">Em bé</div>
+            <div class="width-100 text-normal text-right" *ngIf="priceInfant">{{quantityInfant}} x {{gf.convertNumberToString(priceInfant/quantityInfant)}}</div>
+          </div>
+          <div class="d-flex">
+            <div class="width-100 text-normal" *ngIf="priceTax">Thuế và phí</div>
+            <div class="width-100 text-normal text-right" *ngIf="priceTax">{{gf.convertNumberToString(priceTax)}}</div>
+          </div>
+          <div class="div-line"></div>
+          <div class="d-flex">
+            <div class="width-100 text-normal f-bold">Tổng giá vé</div>
+            <div class="width-100 text-total-price text-right">{{gf.convertNumberToString(_flightService.itemFlightInternational.fare.price)}}đ</div>
+          </div>
+
+        </div>
+
+        <ng-template #loadsdk>
+          <ion-skeleton-text animated style="width: 100%;height: 20px;margin-bottom: 16px;border-radius: 4px;"></ion-skeleton-text>
+          <div class="d-flex" *ngFor="let sdk of arrsdk">
+            <ion-skeleton-text animated style="width: 10%;height: 16px;margin-bottom: 8px; margin-right: 8px; border-radius: 4px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%;height: 16px;margin-bottom: 8px;border-radius: 4px;"></ion-skeleton-text>
+          </div>
+
+          <ion-skeleton-text animated style="width: 100%;height: 20px;margin-bottom: 16px;border-radius: 4px;"></ion-skeleton-text>
+          <div class="d-flex" *ngFor="let sdk of arrsdk">
+            <ion-skeleton-text animated style="width: 10%;height: 16px;margin-bottom: 8px; margin-right: 8px; border-radius: 4px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%;height: 16px;margin-bottom: 8px;border-radius: 4px;"></ion-skeleton-text>
+          </div>
+
+          <ion-skeleton-text animated style="width: 100%;height: 20px;margin-bottom: 16px;border-radius: 4px;"></ion-skeleton-text>
+          <div class="d-flex" *ngFor="let sdk of arrsdk">
+            <ion-skeleton-text animated style="width: 10%;height: 16px;margin-bottom: 8px; margin-right: 8px; border-radius: 4px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%;height: 16px;margin-bottom: 8px;border-radius: 4px;"></ion-skeleton-text>
+          </div>
+          
+
+        </ng-template>
+    </div>
+  </ion-content>

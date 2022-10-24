@@ -8,6 +8,7 @@ import { GlobalFunction } from './../../providers/globalfunction';
 import { VoucherDetailPage } from '../voucherdetail/voucherdetail.page';
 import { voucherService } from 'src/app/providers/voucherService';
 import * as moment from 'moment';
+import { flightService } from 'src/app/providers/flightService';
 
 @Component({
   selector: 'app-voucherslide',
@@ -24,10 +25,12 @@ export class VoucherSlidePage implements OnInit{
     public isShowConfirm = false;
     public intervalID;
     vouchers = [];
+  msgApplyFor: any;
     constructor(public platform: Platform,public navCtrl: NavController,public toastCtrl: ToastController,
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
         public _voucherService: voucherService,
+        public _flightService: flightService,
         public bookCombo: Bookcombo){
           storage.get('auth_token').then(auth_token => {
             if (auth_token) {
@@ -133,24 +136,34 @@ export class VoucherSlidePage implements OnInit{
       if(voucher.rewardsItem.price <= 0){
         this.showVoucherDetail(voucher);
       }else{
-        this.checkVoucherActive(voucher).then((check) => {
-          if(!check){
-            this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
-            return;
-          }else{
-                for (let index = 0; index < this._voucherService.vouchers.length; index++) {
-                  const element = this._voucherService.vouchers[index];
-                  if(element.id != voucher.id){
-                    element.claimed = false;
+        if(voucher.applyFor && voucher.applyFor != 'flight'){
+          this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ voucher.applyFor == 'hotel' ? 'khách sạn' : 'tour'}. Quý khách vui lòng chọn lại mã khác!`);
+          return;
+        } else{
+          this.checkVoucherActive(voucher).then((check) => {
+            if(!check){
+              if(this.msgApplyFor){
+                this.gf.showAlertMessageOnly(this.msgApplyFor);
+              } else {
+                this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+              }
+              
+              return;
+            }else{
+                  for (let index = 0; index < this._voucherService.vouchers.length; index++) {
+                    const element = this._voucherService.vouchers[index];
+                    if(element.id != voucher.id){
+                      element.claimed = false;
+                    }
+                    
                   }
-                  
-                }
-                voucher.claimed = !voucher.claimed;
-                console.log(this.item);
-                //this._voucherService.itemSelectVoucher.emit(voucher);
-                this._voucherService.publicVoucherClicked(voucher);
-            }
-          })
+                  voucher.claimed = !voucher.claimed;
+                  console.log(this.item);
+                  //this._voucherService.itemSelectVoucher.emit(voucher);
+                  this._voucherService.publicVoucherClicked(voucher);
+              }
+            })
+        }
       }
     }
 
@@ -167,7 +180,56 @@ export class VoucherSlidePage implements OnInit{
                 'cache-control': 'no-cache',
                 'content-type': 'application/json'
               },
-              body: { code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: this.bookCombo.ComboId },
+              body: { bookingCode: '' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: 0,
+              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? {
+                  "tickets": this._flightService.itemFlightCache.roundTrip ? [
+                    {
+                      "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
+                      "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                      "departTime": se._flightService.itemFlightCache.departFlight.departTime,
+                      "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
+                      "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
+                      "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
+                      "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
+                      "stops": se._flightService.itemFlightCache.departFlight.stops,
+                      "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
+                      "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                      "jsonObject": ""
+                    },
+                    {
+                      "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
+                      "airLineCode": se._flightService.itemFlightCache.returnFlight.airLineCode,
+                      "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
+                      "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
+                      "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
+                      "fromPlaceCode": se._flightService.itemFlightCache.returnFlight.fromPlaceCode,
+                      "toPlaceCode": se._flightService.itemFlightCache.returnFlight.toPlaceCode,
+                      "stops": se._flightService.itemFlightCache.returnFlight.stops,
+                      "ticketClass": se._flightService.itemFlightCache.returnFlight.ticketClass,
+                      "fareBasis": se._flightService.itemFlightCache.returnFlight.fareBasis,
+                      "jsonObject": ""
+                    }
+                  ] : 
+                  [
+                    {
+                      "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
+                      "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                      "departTime": se._flightService.itemFlightCache.departFlight.departTime,
+                      "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
+                      "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
+                      "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
+                      "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
+                      "stops": se._flightService.itemFlightCache.departFlight.stops,
+                      "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
+                      "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                      "jsonObject": ""
+                    }
+                  ],
+                  "totalAdult": se._flightService.itemFlightCache.adult,
+                  "totalChild": se._flightService.itemFlightCache.child,
+                  "totalInfant": se._flightService.itemFlightCache.infant
+                ,
+              } : '' },
               json: true
             };
       
@@ -178,6 +240,9 @@ export class VoucherSlidePage implements OnInit{
                   resolve(true);
                 }
                 else{
+                  if(json.msg && itemVoucher.applyFor && itemVoucher.applyFor == 'flight'){
+                    se.msgApplyFor = json.msg;
+                  }
                   resolve(false);
                 }
             });

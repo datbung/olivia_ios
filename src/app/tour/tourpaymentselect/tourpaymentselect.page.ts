@@ -73,15 +73,21 @@ export class TourPaymentSelectPage implements OnInit {
       this.child = tourService.BookingTourMytrip.extra_guest_info.split('|')[1] || 0;
     }else if (this.tourService.itemDetail){
       let totalPrice =0;
-      if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
-        totalPrice = this.tourService.itemDepartureCalendar.TotalRate;
+      if(this.tourService.discountPrice){
+        totalPrice = this.tourService.discountPrice;
       }else{
-        totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
-      }
+        if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
+          totalPrice = this.tourService.itemDepartureCalendar.TotalRate;
+        }else{
+          totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+        }
 
-      if(this.tourService.TourBooking.IsInvoice && this.tourService.itemDetail.Inbound){
+        if(this.tourService.TourBooking.IsInvoice && this.tourService.itemDetail.Inbound){
           totalPrice = totalPrice *1.08;
+        }
       }
+      
+     
       this.zone.run(()=>{
         this.tourService.totalPrice = totalPrice;
         this.tourService.totalPriceStr = this.gf.convertNumberToString(totalPrice);

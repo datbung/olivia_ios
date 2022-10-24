@@ -142,11 +142,9 @@
     <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
       <div class="width-200">
         <span class="text-normal">Ưu đãi (</span>
-        <!-- <span class="text-code" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{_voucherService.selectVoucher.code}}</span> -->
         <span class="text-code" *ngIf="promocode">{{promocode}}</span>
         <span class="text-normal">)</span> 
       </div>
-      <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
       <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}đ</div>
     </div>
     <ion-row> 

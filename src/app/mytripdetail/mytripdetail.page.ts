@@ -12,6 +12,7 @@ import { foodService } from '../providers/foodService';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { C } from '../providers/constants';
 import * as $ from 'jquery';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({
   selector: 'app-mytripdetail',
@@ -55,6 +56,12 @@ export class MytripdetailPage implements OnInit {
   expandDivIncludePrice: boolean;
   expandDivTourInfo: boolean;
   expandDivTourNotes: boolean;
+  bookingjson: any;
+  departTransits: any;
+  returnTransits: any;
+  totalCost= 0;
+  totalPaxStr: any;
+  flightRoundTripStr: string;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -69,9 +76,55 @@ export class MytripdetailPage implements OnInit {
     private nativePageTransitions: NativePageTransitions,
     private routerOutlet: IonRouterOutlet,
     private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
-    public _tourService: tourService) {
+    public _tourService: tourService,
+    private safariViewController: SafariViewController,) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
+        if(this.trip.booking_json_data){
+          console.log(JSON.parse(this.trip.booking_json_data));
+          this.bookingjson = JSON.parse(this.trip.booking_json_data);
+          if(this.bookingjson && this.bookingjson.length >0){
+            this.bookingjson.forEach(elementbkg => {
+              if(elementbkg && elementbkg.Transits){
+                this.totalCost += elementbkg.TotalCost*1;
+                if(elementbkg.Transits.length >1){
+                  let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
+                  let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
+                  let diffminutes = moment(dt).diff(lt, 'minutes');
+                  if(diffminutes){
+                    let hours:any = Math.floor(diffminutes/60);
+                    let minutes:any = diffminutes - (hours*60);
+                    if(hours < 10){
+                      hours = hours != 0?  "0"+hours : "0";
+                    }
+                    if(minutes < 10){
+                      minutes = "0"+minutes;
+                    }
+                    elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
+                  }
+                }
+                
+                elementbkg.Transits.forEach(element => {
+                    element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                    element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                    element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                    element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                    let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                    element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                  });
+                  //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                
+                
+              }
+            });
+            
+          }
+          this.flightRoundTripStr = 'Vé máy bay ' + (this.bookingjson.length >1 ? 'khứ hồi' : 'một chiều');
+          if(this.trip.totalPaxStr){
+            this.totalPaxStr = this.trip.totalPaxStr.replace(' |',',');
+          }
+        }
+        
         this.enableheader = true;
         this.loadDetailInfo();
         if(this.trip.booking_type && this.trip.booking_type == "TOUR"){
@@ -860,5 +913,44 @@ export class MytripdetailPage implements OnInit {
 
   showTourInfo() {
     this.navCtrl.navigateForward('/mytriptourinfo');
+  }
+
+  getAirportByCode(code){
+    var se = this, res ="";
+    if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+      let itemmap = se._flightService.listAirport.filter((item) => { return item.code == code});
+      res = (itemmap && itemmap.length >0) ? itemmap[0].airport : ""; 
+    }
+    return res;
+  }
+
+  openLinkCondition() {
+    this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          this.safariViewController.show({
+            url: 'https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong',
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+          .subscribe((result: any) => {
+              if(result.event === 'opened') console.log('Opened');
+              else if(result.event === 'loaded') console.log('Loaded');
+              else if(result.event === 'closed') 
+              {
+                
+              }
+          
+            },
+            (error: any) => console.error(error)
+          );
+  
+        } else {
+        }
+      }
+    );
   }
 }

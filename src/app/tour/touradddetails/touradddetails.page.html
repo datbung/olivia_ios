@@ -50,7 +50,7 @@
         <ion-col size="12">
           <ion-item style="--padding-start: 0px">
             <ion-label class="label-name" position="floating">Email</ion-label>
-            <ion-input class="label-input" [(ngModel)]="_email" type="text" required></ion-input>
+            <ion-input #ipEmail class="label-input" [(ngModel)]="_email" type="text" (ionFocus)="scrollToElement(1)" required></ion-input>
     
           </ion-item>
         </ion-col>
@@ -66,6 +66,82 @@
             </ion-col>
           </ion-row>
       </div>
+
+      <hr class="cls-hr" *ngIf="tourService.paymentType == 1">
+      <div class="div-voucher" *ngIf="tourService.paymentType == 1">
+        <div class="div-flex" *ngIf="point>0">
+         
+            <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ivvpoint_tealish.svg"/></div>
+            <div class="div-text-center">
+              <div class="width-150">Sử dụng iVIVU point</div>
+              <div class="width-100 text-point text-right">-{{gf.convertNumberToString(point)}}đ</div>
+            </div>
+            <div class="div-button"><ion-toggle style="margin-top: -4px;" class="toggle-promo" (ionChange)="edit(2)" [(ngModel)]="ischeckpoint"></ion-toggle></div>
+        </div>
+      
+        <div class="div-line"></div>
+        <div class="div-flex" (click)="showdiscount()" *ngIf="!promocode">
+          <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
+          <div class="div-text-center ">
+            <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
+          </div>
+          <div class="div-button width-10 text-right"><img src="./assets/ic_ordersupport/next.svg"></div>
+        </div>
+        <div class="div-voucher-apply d-flex" *ngIf="promocode" (click)="showdiscount()">
+          <div class="width-200">
+            <span class="text-normal">Ưu đãi (</span>
+            <span class="text-code" *ngIf="promocode">{{promocode}}</span>
+            <span class="text-normal">)</span> 
+          </div>
+          <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}đ</div>
+        </div>
+        <ion-row> 
+          <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
+          <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+        </ion-row>
+    
+        <!-- <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher"> -->
+        <app-voucherslidetour></app-voucherslidetour>
+          <!-- <div *ngIf="ischeck||ischeckbtnpromo" >
+            <ion-row>
+              <ion-col size="5" style="padding: 0;">
+                <div>
+                  <h2 class="text-name" style="font-size: 18px;" position="stacked">Tổng cộng</h2>
+                  <p style="font-size: 10px;font-weight: 300;margin-top: -10px">Giá đã bao gồm thuế & phí</p>
+                </div>
+              </ion-col>
+              <ion-col (click)="roompaymentbreakdow()" size="7" style="padding: 0;">
+                <p  class="total-price" style="text-align: right">
+                  {{Pricepointshow}}đ
+                  <sup>
+                    <img  src="./assets/ic_green/ic_info.svg">
+                  </sup>
+                </p>
+                <p *ngIf="Pricepointshow!=0" class="text-room-price-ota">
+                  {{PriceAvgPlusTAStr}}đ
+                </p>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div *ngIf="!ischeck&&!ischeckbtnpromo" >
+              <ion-row>
+                <ion-col size="5" style="padding: 0;">
+                  <div>
+                    <h2 class="text-name" style="font-size: 18px;" position="stacked">Tổng cộng</h2>
+                    <p style="font-size: 10px;font-weight: 300;margin-top: -10px">Giá đã bao gồm thuế & phí</p>
+                  </div>
+                </ion-col>
+                <ion-col (click)="roompaymentbreakdow()" size="7" style="padding: 0;">
+                  <p  class="total-price" style="text-align: right">
+                      {{PriceAvgPlusTAStr}}đ
+                      <sup>
+                        <img  src="./assets/ic_green/ic_info.svg">
+                      </sup>
+                    </p>
+                </ion-col>
+              </ion-row>
+            </div> -->
+        </div>
 
       <div class='div-split-panel'></div>
     <ion-row *ngIf="!Roomif.ExcludeVAT && tourService.paymentType == 1">
@@ -137,7 +213,11 @@
   <div class="div-touradddetail-footer d-flex">
     <div class="width-60 div-footer-left" *ngIf="tourService.hasAllotment">
         <div class="text-normal-footer"><span *ngIf="searchhotel.adult">{{searchhotel.adult}} người lớn</span><span *ngIf="searchhotel.child">, {{searchhotel.child}} trẻ em</span><span *ngIf="ischeck && tourService.paymentType == 1"> (+VAT)</span></div>
-        <div ><span class="text-price-footer">{{totalPriceStr}}</span><span class="text-price-sub">đ</span></div>
+        <div *ngIf="!tourService.discountPrice"><span class="text-price-footer">{{totalPriceStr}}</span><span class="text-price-sub">đ</span></div>
+        <div *ngIf="tourService.discountPrice">
+          <div class="text-price-strike-footer"><span >{{gf.convertNumberToString(tourService.totalPriceBeforeDiscount)}}đ</span></div>
+          <div><span class="text-price-footer">{{gf.convertNumberToString(tourService.discountPrice)}}</span><span class="text-price-sub">đ</span></div>
+        </div>
     </div>
     <div  class="width-40 " (click)="next()" *ngIf="tourService.hasAllotment && tourService.paymentType == 1">
         <button *ngIf="tourService.hasAllotment" ion-button round outline class="button btn-departure-calendar">

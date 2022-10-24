@@ -2460,7 +2460,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
     return new Promise((resolve, reject) => {
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "gate/apiv1/CheckAvailable?resid="+data.reservationId,
+        url: C.urls.baseUrl.urlFlightInt + "gate/apiv1/CheckAvailable?resid="+data.reservationId,
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
@@ -2479,6 +2479,43 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         if (error) {
           error.page = "globalfunction";
           error.func = "checkTicketAvaiable";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(objError,response);
+        }
+        if (response.statusCode == 200) {
+          resolve(body);
+        }else{
+          resolve(false)
+        }
+      })
+    })
+    
+  }
+
+  checkTicketInternationalAvaiable(data) : Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject) => {
+      var options = {
+        method: 'GET',
+        url: C.urls.baseUrl.urlFlightInt + `api/bookings/${data.id}/avaiable`,
+        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+        headers: {
+          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      };
+      request(options, function (error, response, body) {
+        let objError = {
+          page: "globalfunction",
+          func: "checkTicketInternationalAvaiable",
+          message: response.statusMessage,
+          content: response.body,
+          type: "warning",
+          param: JSON.stringify(options)
+        };
+        if (error) {
+          error.page = "globalfunction";
+          error.func = "checkTicketInternationalAvaiable";
           error.param = JSON.stringify(options);
           C.writeErrorLog(objError,response);
         }
@@ -2516,6 +2553,37 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         role: 'OK',
         handler: () => {
           se.goToSearchFlight();
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
+
+  async showAlertOutOfTicketInternational(itemFlight, type){
+    var se = this;
+    let msg ='';
+    if(itemFlight.errorHoldTicket == 1){
+        msg = 'Chuyến bay '+itemFlight.itemFlightInternationalDepart.airlineCode + ' từ ' + itemFlight.departCity + ' đi ' + itemFlight.returnCity + ' vào ' + itemFlight.checkInDisplay + ' lúc ' + moment(itemFlight.itemFlightInternationalDepart.departTime).format('HH:mm') + ' → ' + moment(itemFlight.itemFlightInternationalDepart.landingTime).format('HH:mm') + ' đã hết vé. Vui lòng chọn chuyến bay khác.';
+    }
+    else if(itemFlight.errorHoldTicket == 2){
+        msg = 'Chuyến bay '+itemFlight.itemFlightInternationalReturn.airlineCode + ' từ ' + itemFlight.returnCity + ' đi ' + itemFlight.departCity + ' vào ' + itemFlight.checkOutDisplay + ' lúc ' + moment(itemFlight.itemFlightInternationalReturn.departTime).format('HH:mm') + ' → ' + moment(itemFlight.itemFlightInternationalReturn.landingTime).format('HH:mm') + ' đã hết vé. Vui lòng chọn chuyến bay khác.';
+    }
+    else{
+        msg = 'Các chuyến bay đã chọn không giữ được vé. Vui lòng chọn chuyến bay khác!';
+    }
+    //let msg = 'Chuyến bay '+itemFlight.departFlight.airlineCode + ' từ ' + itemFlight.departCity + ' đi ' + itemFlight.returnCity + ' vào ' + itemFlight.checkInDisplay + ' lúc ' + moment(itemFlight.departFlight.departTime).format('HH:mm') + ' → ' + moment(itemFlight.departFlight.landingTime).format('HH:mm') + ' đã hết vé. Vui lòng chọn chuyến bay khác.';
+    let alert = await se.alertCtrl.create({
+      message: msg,
+      header: type == 1 ? 'Rất tiếc, vé máy bay đã hết' : 'Rất tiếc, vé không giữ được',
+      cssClass: "cls-alert-refreshPrice",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          se.goToSearchFlightInternational();
         }
       }
     ]
@@ -2585,6 +2653,12 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
     this._flightService.itemFlightCache.step = 2;
     this._flightService.itemChangeTicketFlight.emit(1);
     this.navCtrl.navigateBack('/flightsearchresult');
+  }
+
+  goToSearchFlightInternational(){
+    this._flightService.itemFlightCache.step = 2;
+    this._flightService.itemChangeTicketFlight.emit(1);
+    this.navCtrl.navigateBack('/flightsearchresultinternational');
   }
 
   deepClone<T>(value): T{

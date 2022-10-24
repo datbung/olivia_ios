@@ -21,6 +21,9 @@
     padding: 13px 0 11px 16px;
     background-color: #f2f2f2;
 }
+ion-icon {
+    display: none;
+}
 
 .flightsearchairport-header{
     background: #26bed6;
@@ -121,5 +124,9 @@
     }
     .ip-search-flight .searchbar-input-container.sc-ion-searchbar-ios {
         height: 48px;
+    }
+
+    .searchbar-search-icon.sc-ion-searchbar-ios {
+        display: none;
     }
 }

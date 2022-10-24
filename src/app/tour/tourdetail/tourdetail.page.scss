@@ -154,6 +154,7 @@
             color: #fff;
             margin-right: 8px;
             height: 23px;
+            min-width: 120px;
           }
       }
      .div-icon-comment {
@@ -249,9 +250,9 @@
         height: 16px;
         opacity: 0.5;
       }
-      .icon_treking {
-        width: 12px !important;
-        opacity: 0.5;
+      .icon_right {
+        width: 16px;
+        height: 16px;
       }
      .text-sub-headline {
       font-size: 16px;
@@ -484,6 +485,7 @@
     background-color: #f79321;
     color: #fff;
     width: 100%;
+    padding: 0 20%;
   }
   .btn-advise {
     margin: 0;

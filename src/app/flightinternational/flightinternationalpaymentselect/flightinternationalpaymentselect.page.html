@@ -1,0 +1,183 @@
+<ion-header class="flightpage-header">
+  <ion-row>
+    <ion-col class="col-header">
+      <div class="d-flex">
+        <div class="div-goback" (click)="goback()">
+            <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
+        </div>
+        <div class="div-header-title">
+          <div class="div-title">Thanh toán</div>
+        </div>
+
+        <div class="div-quick-back" (click)="showQuickBack()">
+          ...
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-header>
+
+<ion-content padding>
+  <div class="div-img-step m-bottom-16">
+    <img class="img-step" src="./assets/ic_flight/step_3.svg">
+  </div>
+  <div class="cls-divpayment">
+    
+    <div class="d-flex" (click)="showPriceDetail()">
+    
+        <div class="text-flight-title div-width-600 d-flex">
+            <div *ngIf="(activityService.objPaymentMytrip && _flightService.itemFlightCache.dataSummaryBooking) else bkgnormal">
+                <div>{{ _flightService.itemFlightCache.dataSummaryBooking.departFlightData.fromPlace }}</div>
+                <div class="text-flight-datetime">{{ checkInDisplayFullYear }} </div>
+            </div>
+            <ng-template #bkgnormal>
+              <div>
+                <div>{{ itemflight.departCity }} ({{ itemflight.departCode }})</div>
+                <div class="text-flight-datetime">{{ checkInDisplayFullYear }} </div>
+            </div>
+            </ng-template>
+            <div class="div-flight-inout">
+                <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout.svg" *ngIf="showline else oneway">
+                <ng-template #oneway><img class="img-flight-inout img-oneway" src="./assets/imgs/ic_arrow.svg"></ng-template>
+            </div> 
+            <div *ngIf="(activityService.objPaymentMytrip && _flightService.itemFlightCache.dataSummaryBooking) else bkgnormalreturn">
+                <div>{{ _flightService.itemFlightCache.dataSummaryBooking.departFlightData.toPlace }}</div>
+                <div class="text-flight-datetime" *ngIf="showline">{{ checkOutDisplayFullYear }} </div>
+            </div>
+            <ng-template #bkgnormalreturn>
+              <div>
+                <div>{{ itemflight.returnCity }}  ({{ itemflight.returnCode }})</div>
+                <div class="text-flight-datetime" *ngIf="showline">{{ checkOutDisplayFullYear }} </div>
+            </div>
+            </ng-template>
+        </div>
+      
+        <div class="div-width-60 v-align-center" >
+           <img src="./assets/ic_flight/icon_down.svg">
+        </div>
+    </div>
+    
+    <div class="div-split"></div>
+    <div class="div-voucher-apply" *ngIf="_flightService.itemFlightCache.promotionCode">
+      <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_flightService.itemFlightCache.promotionCode}}</span><span class="text-normal">)</span> </div>
+      <div class="width-100 text-normal text-right">{{gf.convertNumberToString(_flightService.itemFlightCache.discount)}}đ</div>
+    </div>
+    <div class="d-flex ">
+      <div class="div-width-100">
+          <div class="text-pax">{{ adult }} người lớn</div>
+          <div class="text-pax" *ngIf="child && child >0">{{ child }} trẻ em</div>
+          <div class="text-pax" *ngIf="infant && infant >0">{{ infant }} em bé</div>
+      </div>
+      <div class="div-width-100 text-right m-bottom-16">
+        <!-- <div class="text-total-price" *ngIf="!(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed)">{{_flightService.itemFlightCache.totalPriceDisplay}}đ
+          <sup>
+            <img src="./assets/ic_green/ic_info.svg">
+          </sup>
+        </div> -->
+        <div class="text-total-price" (click)="showPriceDetail()">{{totalpricedisplay}}đ
+          <sup>
+            <img src="./assets/ic_green/ic_info.svg">
+          </sup>
+        </div>
+        <div class="text-normal text-right text-strike" *ngIf="_flightService.itemFlightCache.totalPriceBeforeApplyVoucher && _flightService.itemFlightCache.discount">{{gf.convertNumberToString(_flightService.itemFlightCache.totalPriceBeforeApplyVoucher)}}đ
+        </div>
+        <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
+        
+      </div>
+    </div>
+
+  </div>
+      <div class="div-split-panel"></div>
+      <ion-list class="cls-list">
+
+        <ion-item *ngIf="bizTravelService.isCompany" (click)="paymentbiztravel()" [ngClass]="blockPayCard ? 'cls-minheight h-54' : 'cls-minheight h-54'">
+          <label  class="text-list m-bottom-8">
+            Tài khoản công ty
+          </label>
+          <div class="text-warning-creadit" *ngIf="bizTravelService.bizAccount && (bizTravelService.bizAccount.balanceAvaiable - _flightService.itemFlightCache.totalPrice)<=0">Số dư Credit không đủ để thực hiện thanh toán</div>
+          <ion-icon slot="end" name="ios-arrow-round-forward" *ngIf="bizTravelService.bizAccount && (bizTravelService.bizAccount.balanceAvaiable - _flightService.itemFlightCache.totalPrice) >0" class='m-right-16'></ion-icon>
+        </ion-item>
+
+        <ion-item (click)="flightpaymentatm()" [ngClass]="blockPayCard ? 'cls-minheight' : 'cls-minheight'">
+            <label  class="text-list">
+              Thẻ ATM nội địa /Internet Banking
+            </label>
+            <ion-icon slot="end" name="ios-arrow-round-forward" *ngIf="!blockPayCard" class='m-right-16'></ion-icon>
+        </ion-item>
+        <ion-item [ngClass]="(arrbankrmb.length>0&&ischeckvisa) ? 'cls-minheight no-border-bottom ion-item1' : 'cls-minheight no-border-bottom ion-item1'  " (click)="flightpaymentvisa()">
+          <label  class="text-list ion-item1" >
+            Thẻ tín dụng <img class="img-visa" src="./assets/imgs/ic_visa.png">
+          </label>
+          <ion-icon slot="end"  *ngIf="!ischeckvisa && !blockPayCard" name="ios-arrow-round-forward" class='m-right-16'></ion-icon>
+          <img slot="end"  *ngIf="ischeckvisa" style="margin-right: -9px;" src="./assets/imgs/ic_down.svg">
+        </ion-item>
+        <ion-radio-group *ngIf="arrbankrmb.length>0&&ischeckvisa">
+          <ion-item *ngFor="let item of arrbankrmb" [ngClass]="blockPayCard ? 'ion-item' : 'ion-item'">
+            <ion-radio mode="md" [checked]="item.checked" (click)="chooseacc(item)"></ion-radio>
+            <!-- <img class="imgcard ml8" src={{item.imgbank}}> -->
+            <ion-label  class="text-list text-infobank ml8">
+              {{item.name_Bank}}
+            </ion-label>
+            <ion-label class="text-infobank "><span style="vertical-align: middle;"> •••• •••• ••••</span>
+              {{item.vpc_CardNum}}</ion-label>
+          </ion-item>
+          <ion-item [ngClass]="blockPayCard ? 'ion-item' : 'ion-item'">
+            <ion-radio mode="md" (click)="nochooseacc()"></ion-radio>
+            <ion-label  class="text-list text-infobank ml8">
+              Chọn tài khoản khác
+            </ion-label>
+            </ion-item>
+        </ion-radio-group>
+        <div style="margin-left: 15px;margin-bottom: 15px">
+          <ion-checkbox [disabled]="isdisable" (ionChange)="rememberCard()"  class="ion-checkbox" [checked]="isremember" color="secondary"></ion-checkbox>
+          <ion-label class="label-input" >Lưu và bảo mật thẻ để đặt dịch vụ nhanh hơn lần sau</ion-label>
+        </div>
+        <div class="div-split-item"></div>
+        <ion-item  (click)="flightpaymentmomo()" [ngClass]="blockPayCard ? 'cls-minheight' : 'cls-minheight' ">
+          <label class="text-list">
+            Thanh toán qua  <img class="img-momo" src="https://res.ivivu.com/payment/img/momo/logo.png">
+          </label>
+          <ion-icon slot="end" name="ios-arrow-round-forward" [ngClass]="blockPayCard ? 'm-right-16' : 'm-right-16' " *ngIf="!blockPayCard"></ion-icon>
+        </ion-item>
+        
+        <ion-item (click)="flightpaymentpayooqr()" [ngClass]="blockPayCard ? 'cls-minheight' : 'cls-minheight'">
+          <label class="text-list">
+            Thanh toán bằng mã QR <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
+          </label>
+          <ion-icon slot="end" name="ios-arrow-round-forward"  [ngClass]="blockPayCard ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPayCard"></ion-icon>
+        </ion-item>
+        
+        <ion-item  (click)="flightpaymentpayoostore()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'"  *ngIf="!isPaymentMytrip">
+          <label class="text-list">
+            Trực tiếp tại cửa hàng tiện lợi <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
+          </label>
+          <ion-icon slot="end" name="ios-arrow-round-forward"  [ngClass]="blockPaylate ? 'm-right-16' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
+          <div  class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
+        </ion-item>
+        <ion-item (click)="flightpaymentbank()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'">
+            <label class="text-list">
+              Chuyển khoản ngân hàng
+            </label>
+            <ion-icon slot="end" item-end name="ios-arrow-round-forward" [ngClass]="blockPaylate ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
+            <div class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
+        </ion-item>
+        <ion-item (click)="flightpaymentatoffice()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'" *ngIf="!isPaymentMytrip">
+          <label class="text-list">
+            Trực tiếp tại văn phòng
+          </label>
+          <ion-icon slot="end" item-end name="ios-arrow-round-forward" [ngClass]="blockPaylate ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
+          <div class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
+        </ion-item>
+      </ion-list>
+      <div class="div-DK">
+        <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkDk()"></ion-checkbox>
+        <div class="text-DK">
+          Tôi đồng ý với các <span (click)="openWebpageDK('https://www.ivivu.com/dieu-kien-dieu-khoan')" class="text-link-DK">điều kiện và điều khoản</span> về đặt dịch vụ trên app iVIVU.com
+        </div>
+      </div>
+</ion-content>
+<ion-footer *ngIf="isbtn && !blockPayCard">
+  <div style="background-color: #ffffff; text-align: center">
+    <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Thanh toán và xuất vé</button>
+  </div>
+</ion-footer>

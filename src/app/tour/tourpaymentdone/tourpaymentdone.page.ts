@@ -46,7 +46,11 @@ export class TourPaymentDonePage implements OnInit {
       })
 
       if(tourService.itemDetail) {
-        this.total = tourService.totalPriceStr;
+        if(this.tourService.discountPrice){
+          this.total = this.tourService.discountPrice;
+        }else{
+          this.total = tourService.totalPriceStr;
+        }
       }
       this.tourService.BookingTourMytrip = null;
   }
@@ -58,7 +62,12 @@ export class TourPaymentDonePage implements OnInit {
 
   async ionViewWillEnter() {
     this.bookingCode = this.tourService.tourBookingCode;
-    this.total = this.gf.convertNumberToString(this.tourService.totalPrice);
+    if(this.tourService.discountPrice){
+      this.total = this.gf.convertNumberToString(this.tourService.discountPrice);
+    }else{
+      this.total = this.gf.convertNumberToString(this.tourService.totalPrice);
+    }
+    
     let se = this;
     se.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'tour', start_date: se.tourService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.tourService.itemSearchDestination ? this.tourService.itemSearchDestination.Name || this.tourService.itemSearchDestination.RegionCode : '', destination: se.tourService.itemDetail.Destinations, value: se.tourService.tourTotal, currency: "VND" });
 

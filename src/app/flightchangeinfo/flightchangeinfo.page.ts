@@ -206,6 +206,7 @@ export class FlightchangeinfoPage implements OnInit {
 
 
             se._flightService.itemFlightCache.objSearch = se._flightService.objSearch;
+            se._flightService.itemFlightCache.isInternationalFlight = (se._flightService.itemFlightCache.isExtenalDepart || se._flightService.itemFlightCache.isExtenalReturn);
             // if(se.itemSameCity){
             //   se._flightService.itemFlightCache.itemSameCity = se.itemSameCity;
             //   se._flightService.itemFlightCache.itemDepartSameCity = se.itemDepartSameCity;
@@ -299,7 +300,10 @@ export class FlightchangeinfoPage implements OnInit {
               this.cout = this.cin;
               $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
             }else{
-              this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
+              if(!this._flightService.itemFlightCache.isInternationalFlight){
+                this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
+              }
+              
               $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
             }
   
@@ -882,6 +886,7 @@ export class FlightchangeinfoPage implements OnInit {
       changeLocationInfo(data, isdepart){
         var se = this;
         if(isdepart){
+          se._flightService.itemFlightCache.isExtenalDepart = data.internal != 1 ? true : false;
           if(!data.SameCity){
             se.departCode = data.code;
             se.departCity = data.city;
@@ -900,6 +905,7 @@ export class FlightchangeinfoPage implements OnInit {
             se.departCode ="";
           }
         }else{
+          se._flightService.itemFlightCache.isExtenalReturn = data.internal != 1 ? true : false;
           if(!data.SameCity){
             se.returnCode = data.code;
             se.returnCity = data.city;

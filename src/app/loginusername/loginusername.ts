@@ -200,7 +200,7 @@ export class LoginusernamePage implements OnInit {
               se._flightService.itemMenuFlightClick.emit(4);
             }
           if (se.valueGlobal.logingoback) {
-            if(se.valueGlobal.logingoback =="flightadddetails"){
+            if(se.valueGlobal.logingoback =="flightadddetails" || se.valueGlobal.logingoback == "flightadddetailsinternational"){
               se._flightService.itemFlightLogin.emit(1);
             }
             se.navCtrl.navigateBack([se.valueGlobal.logingoback]);

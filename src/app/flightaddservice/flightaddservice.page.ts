@@ -491,15 +491,22 @@ export class FlightaddservicePage implements OnInit {
       this.totalPriceAll(0);
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
         if (data.data) {
-          this._voucherService.isFlightPage = false;
-          this.zone.run(() => {
-            if (data.data.promocode) {
-              $('.div-point').addClass('div-disabled');
-              this.promocode=data.data.promocode;
-              //this.textpromotion=data.data.promocode;
-              this.promofunc();
-            }
-          })
+          let vc = data.data;
+          if(vc.applyFor && vc.applyFor != 'flight'){
+            this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
+            this._voucherService.rollbackSelectedVoucher.emit(vc);
+            return;
+          }else {
+            this._voucherService.isFlightPage = false;
+            this.zone.run(() => {
+              if (data.data.promocode) {
+                $('.div-point').addClass('div-disabled');
+                this.promocode=data.data.promocode;
+                //this.textpromotion=data.data.promocode;
+                this.promofunc(data.data);
+              }
+            })
+          }
         }
       })
     }
@@ -3372,7 +3379,7 @@ export class FlightaddservicePage implements OnInit {
     }
   }
   
-  promofunc() {
+  promofunc(vc) {
     var se = this;
     if (se.promocode) {
       var options = {
@@ -3384,7 +3391,55 @@ export class FlightaddservicePage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice},
+        body: JSON.stringify({bookingCode: '' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight') ? {
+            "tickets": this._flightService.itemFlightCache.roundTrip ? [
+              {
+                "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
+                "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                "departTime": se._flightService.itemFlightCache.departFlight.departTime,
+                "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
+                "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
+                "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
+                "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
+                "stops": se._flightService.itemFlightCache.departFlight.stops,
+                "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
+                "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                "jsonObject": ""
+              },
+              {
+                "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
+                "airLineCode": se._flightService.itemFlightCache.returnFlight.airLineCode,
+                "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
+                "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
+                "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
+                "fromPlaceCode": se._flightService.itemFlightCache.returnFlight.fromPlaceCode,
+                "toPlaceCode": se._flightService.itemFlightCache.returnFlight.toPlaceCode,
+                "stops": se._flightService.itemFlightCache.returnFlight.stops,
+                "ticketClass": se._flightService.itemFlightCache.returnFlight.ticketClass,
+                "fareBasis": se._flightService.itemFlightCache.returnFlight.fareBasis,
+                "jsonObject": ""
+              }
+            ] : 
+            [
+              {
+                "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
+                "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                "departTime": se._flightService.itemFlightCache.departFlight.departTime,
+                "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
+                "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
+                "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
+                "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
+                "stops": se._flightService.itemFlightCache.departFlight.stops,
+                "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
+                "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                "jsonObject": ""
+              }
+            ],
+            "totalAdult": se._flightService.itemFlightCache.adult,
+            "totalChild": se._flightService.itemFlightCache.child,
+            "totalInfant": se._flightService.itemFlightCache.infant
+          ,
+        } : '' }),
         json: true
       };
 

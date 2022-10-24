@@ -75,17 +75,13 @@ export class FlightPaymentSelectPage implements OnInit {
         this.blockPayCard = this._flightService.itemFlightCache.pnr.blockPayCard;
       }
      
-      //this.departInfoDisplay =this._flightService.itemFlightCache.departInfoDisplay;
-      //this.returnInfoDisplay =this._flightService.itemFlightCache.returnInfoDisplay;
+      
       this.adult = this._flightService.itemFlightCache.adult;
       this.child = this._flightService.itemFlightCache.child;
       this.infant = this._flightService.itemFlightCache.infant;
       this.totalpricedisplay=this._flightService.itemFlightCache.totalPriceDisplay;
       this.totalPrice = this.gf.convertStringToNumber(this._flightService.itemFlightCache.totalPriceDisplay);
-      //thêm luồng voucher heniken
-      // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
-      //   this.totalPrice = this.totalPrice - this._voucherService.selectVoucher.rewardsItem.price;
-      // }
+      
       this.departtitle = this._flightService.itemFlightCache.departPaymentTitleDisplay + moment(this._flightService.itemFlightCache.departFlight.departTime).format("HH:mm") + " - " + moment(this._flightService.itemFlightCache.departFlight.landingTime).format("HH:mm")+ " · " +this._flightService.itemFlightCache.departFlight.airlineCode;
       
       if(this._flightService.itemFlightCache.returnFlight){

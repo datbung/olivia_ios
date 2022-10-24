@@ -26,7 +26,7 @@ export class FlightpaymentatofficePage implements OnInit{
   text; isenabled = true; ischeck; timestamp; paymentMethod;auth_token: any;
   allowCheckHoldTicket: boolean = true;
   bookingCode: any;
-  jti: any;
+  jti: any='';
 ; room; jsonroom;loader:any;
   constructor(public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,
     public _flightService: flightService,

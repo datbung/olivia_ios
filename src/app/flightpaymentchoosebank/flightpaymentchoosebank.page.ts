@@ -21,7 +21,7 @@ import { voucherService } from '../providers/voucherService';
 })
 export class FlightpaymentchoosebankPage implements OnInit {
 
-  ischeck; timestamp; public ischeckbox; jti
+  ischeck; timestamp; public ischeckbox; jti='';
   Avatar; Name; Address; cin; cout; dur; room; nameroom; jsonroom; ischecktext = true
   roomnumber; adults; children; breakfast; PriceAvgPlusTAStr; priceshow
   imgroom; roomtype; indexme; indexroom; cin1; cout1; checkpayment; book; id; pricetemp; hotelid

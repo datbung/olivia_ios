@@ -3131,6 +3131,9 @@ export class FlightsearchresultPage implements OnInit {
     
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
             if(data && data.data){
+              if(se._flightService.itemFlightCache.isInternationalFlight){
+                se.navCtrl.navigateForward('/flightsearchresultinternational');
+              }
               let obj = se._flightService.objSearch;
               
                 se.resetValue();

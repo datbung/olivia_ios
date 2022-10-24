@@ -15,6 +15,7 @@ export class voucherService{
   deSelectedVoucher: any= new EventEmitter();
   itemSelectVoucherFlightCombo: any= new EventEmitter();
   itemSelectVoucherHotel: any = new EventEmitter();
+  itemSelectVoucherTour: any = new EventEmitter();
   openFrom: string;
 
   private clearVoucherSubject = new Subject<any>();
@@ -30,6 +31,7 @@ export class voucherService{
   private voucherFlightComboSubject = new Subject<any>();
   private voucherHotelSubject = new Subject<any>();
   private voucherCarComboSubject = new Subject<any>();
+  private voucherTourSubject = new Subject<any>();
 
   publicVoucherClicked(data: any) {
     this.voucherSubject.next(data);
@@ -61,5 +63,13 @@ export class voucherService{
 
   getCarComboObservable(): Subject<any> {
     return this.voucherCarComboSubject;
+  }
+
+  publicVoucherTourClicked(data: any) {
+    this.voucherTourSubject.next(data);
+  }
+
+  getTourObservable(): Subject<any> {
+    return this.voucherTourSubject;
   }
 }
