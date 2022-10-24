@@ -60,6 +60,10 @@ export class TourPaymentSelectPage implements OnInit {
     
     if(tourService.BookingTourMytrip) {
       let totalPrice = tourService.BookingTourMytrip.amount_after_tax;
+      if(tourService.BookingTourMytrip.promotionDiscountAmount){
+        tourService.totalPriceBeforeDiscount = tourService.BookingTourMytrip.amount_after_tax + tourService.BookingTourMytrip.promotionDiscountAmount;
+      }
+      
       this.zone.run(()=>{
         this.tourService.totalPrice = totalPrice;
         this.tourService.totalPriceStr = this.gf.convertNumberToString(totalPrice);
@@ -73,15 +77,21 @@ export class TourPaymentSelectPage implements OnInit {
       this.child = tourService.BookingTourMytrip.extra_guest_info.split('|')[1] || 0;
     }else if (this.tourService.itemDetail){
       let totalPrice =0;
-      if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
-        totalPrice = this.tourService.itemDepartureCalendar.TotalRate;
+      if(this.tourService.discountPrice){
+        totalPrice = this.tourService.discountPrice;
       }else{
-        totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
-      }
+        if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
+          totalPrice = this.tourService.itemDepartureCalendar.TotalRate;
+        }else{
+          totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+        }
 
-      if(this.tourService.TourBooking.IsInvoice && this.tourService.itemDetail.Inbound){
+        if(this.tourService.TourBooking.IsInvoice && this.tourService.itemDetail.Inbound){
           totalPrice = totalPrice *1.08;
+        }
       }
+      
+     
       this.zone.run(()=>{
         this.tourService.totalPrice = totalPrice;
         this.tourService.totalPriceStr = this.gf.convertNumberToString(totalPrice);
@@ -206,7 +216,7 @@ export class TourPaymentSelectPage implements OnInit {
                     se.safariViewController.hide();
                   }
                   clearInterval(se.intervalID);
-                  se.tourService.BookingTourMytrip = null;
+                  se.tourService.paymentType = 1;
                   se.navCtrl.navigateForward('tourpaymentdone');
                 }
                 else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -220,7 +230,7 @@ export class TourPaymentSelectPage implements OnInit {
                 }    
               })
             }
-            clearInterval(se.intervalID);
+            //clearInterval(se.intervalID);
             setTimeout(() => {
               clearInterval(this.intervalID);
             }, 60000 * 15);
@@ -262,7 +272,7 @@ export class TourPaymentSelectPage implements OnInit {
                       se.safariViewController.hide();
                     }
                     clearInterval(se.intervalID);
-                    se.tourService.BookingTourMytrip = null;
+                    se.tourService.paymentType = 1;
                     se.navCtrl.navigateForward('tourpaymentdone');
                   }
                   else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -278,7 +288,7 @@ export class TourPaymentSelectPage implements OnInit {
 
                 })
               }
-                clearInterval(se.intervalID);
+                //clearInterval(se.intervalID);
                 setTimeout(() => {
                   clearInterval(this.intervalID);
                 }, 60000 * 15);
@@ -311,7 +321,7 @@ export class TourPaymentSelectPage implements OnInit {
 
   callSetInterval()
   {
-    //clearInterval(this.intervalID);
+    clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
         let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+this.bookingCode;
         this.zone.run(() => {
@@ -324,7 +334,7 @@ export class TourPaymentSelectPage implements OnInit {
                 this.safariViewController.hide();
               }
               clearInterval(this.intervalID);
-              this.tourService.BookingTourMytrip = null;
+              this.tourService.paymentType = 1;
               this.navCtrl.navigateForward('tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -427,6 +437,7 @@ export class TourPaymentSelectPage implements OnInit {
   {
     var se=this;
     let itemcache = this.tourService;
+    
     if(se.tourService.BookingTourMytrip) {
       se.bookingCode = se.tourService.BookingTourMytrip.booking_id;
       se.createBookingUrl(paymentType, se.tourService.BookingTourMytrip.amount_after_tax);
@@ -592,7 +603,7 @@ export class TourPaymentSelectPage implements OnInit {
               this.bizTravelService.paymentType = 1;
               this.flightPayment().then((checkvalid) => {
                 if(checkvalid){
-                  this.tourService.BookingTourMytrip = null;
+                  this.tourService.paymentType = 1;
                   this.navCtrl.navigateForward('tourpaymentdone');
                 }
                 

@@ -13,6 +13,7 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import { LaunchReview } from '@ionic-native/launch-review/ngx';
 import { tourService } from 'src/app/providers/tourService';
+import { voucherService } from 'src/app/providers/voucherService';
 @Component({
   selector: 'app-tourpaymentdone',
   templateUrl: './tourpaymentdone.page.html',
@@ -36,7 +37,8 @@ export class TourPaymentDonePage implements OnInit {
     private fb: Facebook,
     private _calendar: Calendar,
     private _platform: Platform, public alertCtrl: AlertController, private launchReview: LaunchReview,
-    public tourService: tourService) {
+    public tourService: tourService,
+    public _voucherService: voucherService) {
       this.storage.get('checkreview').then(checkreview => {
         if (checkreview == 0) {
           this.checkreview = 0;
@@ -46,9 +48,13 @@ export class TourPaymentDonePage implements OnInit {
       })
 
       if(tourService.itemDetail) {
-        this.total = tourService.totalPriceStr;
+        if(this.tourService.discountPrice){
+          this.total = this.tourService.discountPrice;
+        }else{
+          this.total = tourService.totalPriceStr;
+        }
       }
-      this.tourService.BookingTourMytrip = null;
+      
   }
 
 
@@ -57,17 +63,31 @@ export class TourPaymentDonePage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    this.bookingCode = this.tourService.tourBookingCode;
-    this.total = this.gf.convertNumberToString(this.tourService.totalPrice);
+    this.gf.hideLoading();
+    if(this.tourService.BookingTourMytrip) {
+      this.bookingCode = this.tourService.BookingTourMytrip.booking_id;
+      this.total = this.gf.convertNumberToString(this.tourService.BookingTourMytrip.amount_after_tax);
+    }else{
+      this.bookingCode = this.tourService.tourBookingCode;
+      if(this.tourService.discountPrice){
+        this.total = this.gf.convertNumberToString(this.tourService.discountPrice);
+      }else{
+        this.total = this.gf.convertNumberToString(this.tourService.totalPrice);
+      }
+    }
+    
     let se = this;
     se.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'tour', start_date: se.tourService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.tourService.itemSearchDestination ? this.tourService.itemSearchDestination.Name || this.tourService.itemSearchDestination.RegionCode : '', destination: se.tourService.itemDetail.Destinations, value: se.tourService.tourTotal, currency: "VND" });
-
+      se._voucherService.publicClearVoucherAfterPaymentDone(1);
+      se.tourService.promocode = "";
+      se.tourService.discountpromo = 0;
   }
 
   next() {
     this.gf.hideLoading();
     this.tourService.itemPaymentDone.emit(true);
     this.valueGlobal.backValue = "hometour";
+    this.tourService.BookingTourMytrip = null;
     // this._flightService.itemMenuFlightClick.emit(2);
     // this._flightService.bookingCodePayment = this.bookingCode;
     // this._flightService.bookingSuccess = true;

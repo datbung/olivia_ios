@@ -89,11 +89,11 @@
                     <div class="text-right div-icon-right width-50">
                         <div *ngFor="let itemTransfer of itemDetail.TourTranfers">
                             
-                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('máy bay') != -1" class="p-right-8"><img class="icon_clock" src="../../../assets/ic_tour/plane.svg" /></div>
-                            <div *ngIf="itemTransfer && (itemTransfer.Name.toLowerCase().indexOf('du thuyền') != -1 || itemTransfer.Name.toLowerCase().indexOf('tàu biển') != -1 || itemTransfer.Name.toLowerCase().indexOf('cano') != -1)" class="p-right-8"><img class="icon_boat" src="../../../assets/ic_tour/boat.svg" /></div>
-                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('ô tô') != -1" class="p-right-8"><img class="icon_clock" src="../../../assets/ic_tour/bus.svg" /></div>
-                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('tàu lửa') != -1" class="p-right-8"><img class="icon_clock icon_train" src="../../../assets/ic_tour/train.svg" /></div>
-                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('trekking') != -1"><img class="icon_right icon_treking" src="../../../../../assets/ic_tour/trekking.svg" /></div>
+                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('máy bay') != -1" class="p-right-8"><img class="icon_right" src="../../../assets/ic_tour/plane.svg" /></div>
+                            <div *ngIf="itemTransfer && (itemTransfer.Name.toLowerCase().indexOf('du thuyền') != -1 || itemTransfer.Name.toLowerCase().indexOf('tàu biển') != -1 || itemTransfer.Name.toLowerCase().indexOf('cano') != -1)" class="p-right-8"><img class="icon_right" src="../../../assets/ic_tour/boat.svg" /></div>
+                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('ô tô') != -1" class="p-right-8"><img class="icon_right" src="../../../assets/ic_tour/bus.svg" /></div>
+                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('tàu lửa') != -1" class="p-right-8"><img class="icon_right" src="../../../assets/ic_tour/train.svg" /></div>
+                            <div *ngIf="itemTransfer && itemTransfer.Name.toLowerCase().indexOf('trekking') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/trekking.svg" /></div>
                         </div>
                     </div>
                   </div>
@@ -209,32 +209,32 @@
                 <ion-slides #slideTourTab (ionSlideDidChange)="slidetabchange()" [options]="slideOpts">
                     <ion-slide style="display: block;justify-content: flex-start;
                     text-align: left;height: 480px;overflow: scroll; font-size: 16px;
-                    margin: 16px 0;" >
+                    margin: 16px 0;line-height: 1.5;" >
                         <div [innerHTML]="itemDetail.IncludePrice"></div>
                     </ion-slide>
     
                     <ion-slide style="display: block;justify-content: flex-start;
                     text-align: left;height: 480px;overflow: scroll; font-size: 16px;
-                    margin: 16px 0;" >
+                    margin: 16px 0;line-height: 1.5;" >
                         <div [innerHTML]="itemDetail.NoIncludePrice"></div>
                     </ion-slide>
     
                     <ion-slide style="display: block;justify-content: flex-start;
                     text-align: left;height: 480px;overflow: scroll; font-size: 16px;
-                    margin: 16px 0;" >
+                    margin: 16px 0;line-height: 1.5;" >
                         <div [innerHTML]="itemDetail.SurchargeReason"></div>
                     </ion-slide>
     
                     <ion-slide style="display: block;justify-content: flex-start;
                     text-align: left;height: 480px;overflow: scroll; font-size: 16px;
-                    margin: 16px 0;" >
+                    margin: 16px 0;line-height: 1.5;" >
                         <div [innerHTML]="itemDetail.CancelRules"></div>
                         <div [innerHTML]="itemDetail.CancelRulesChange"></div>
                     </ion-slide>
     
                     <ion-slide style="display: block;justify-content: flex-start;
                     text-align: left;height: 480px;overflow: scroll; font-size: 16px;
-                    margin: 16px 0;" >
+                    margin: 16px 0;line-height: 1.5;" >
                         <div [innerHTML]="itemDetail.Notes"></div>
                     </ion-slide>
                    

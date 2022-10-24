@@ -52,8 +52,8 @@
                     <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('máy bay') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/plane.svg" /></div>
                     <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('ô tô') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/bus.svg" /></div>
                     <div *ngIf="slide && (slide.TransportName.toLowerCase().indexOf('du thuyền') != -1 || slide.TransportName.toLowerCase().indexOf('tàu biển') != -1 || slide.TransportName.toLowerCase().indexOf('cano') != -1)"><img class="icon_right" src="../../../../../assets/ic_tour/boat.svg" /></div>
-                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('tàu lửa') != -1" class="p-right-8"><img class="icon_clock icon_train" src="../../../assets/ic_tour/train.svg" /></div>
-                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('trekking') != -1"><img class="icon_right icon_treking" src="../../../../../assets/ic_tour/trekking.svg" /></div>
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('tàu lửa') != -1"><img class="icon_right icon_train" src="../../../assets/ic_tour/train.svg" /></div>
+                    <div *ngIf="slide && slide.TransportName.toLowerCase().indexOf('trekking') != -1"><img class="icon_right" src="../../../../../assets/ic_tour/trekking.svg" /></div>
                   </div>
                 </div>
 
@@ -86,7 +86,7 @@
                 <div class="cls-price m-top-0" *ngIf="slide.AdultSalePrice > slide.MinPrice">{{ gf.convertNumberToString(slide.MinPrice) }} đ</div>
                 <div class="cls-price" *ngIf="slide.AdultSalePrice <= slide.MinPrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }} đ</div> -->
                 <div class="d-flex m-top-8 div-button-sale" *ngIf="slide.TopSale">
-                  <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24h qua</ion-label>
+                  <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24 giờ qua</ion-label>
                 </div>
                 <div class="cls-price" >{{ gf.convertNumberToString(slide.MinPrice) }}đ</div>
               </div>

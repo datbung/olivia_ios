@@ -6,6 +6,8 @@ import { GlobalFunction } from '../providers/globalfunction';
 import * as request from 'requestretry';
 import { flightService } from './../providers/flightService';
 import { voucherService } from '../providers/voucherService';
+import { tourService } from '../providers/tourService';
+
 @Component({
   selector: 'app-adddiscount',
   templateUrl: './adddiscount.page.html',
@@ -15,7 +17,8 @@ export class AdddiscountPage implements OnInit {
   loginuser: any;
   ;discountpromo;msg;ischecktext=3;ischeckerror=0;ischeckbtnpromo = false;promocode;
   constructor(public _flightService: flightService,public zone: NgZone,public valueGlobal:ValueGlobal, public modalCtrl: ModalController,private bookCombo:Bookcombo,
-    public _voucherService: voucherService) { 
+    public _voucherService: voucherService,
+    public _tourService: tourService) { 
   
   }
 
@@ -41,7 +44,7 @@ export class AdddiscountPage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: { code: se.promocode, totalAmount: !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice, comboDetailId: se.bookCombo.ComboId },
+        body: { code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice), comboDetailId: se.bookCombo.ComboId },
         json: true
       };
   

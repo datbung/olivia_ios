@@ -27,8 +27,12 @@
  
   <div *ngIf='tourService.paymentType == 1 else paylater'>
     <div>
-      <ion-label class="text">
+      <ion-label class="text" *ngIf="tourService.itemDetail">
         Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="tourService.itemDetail.TourName">{{tourService.itemDetail.TourName}}</span>
+      </ion-label>
+
+      <ion-label class="text" *ngIf="tourService.BookingTourMytrip">
+        Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="tourService.BookingTourMytrip && tourService.BookingTourMytrip.hotel_name">{{tourService.BookingTourMytrip.hotel_name}}</span>
       </ion-label>
     </div>
     <div class="p-top-12">  

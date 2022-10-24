@@ -9,6 +9,7 @@ import { ValueGlobal } from '../providers/book-service';
 import { Router } from '@angular/router';
 import { NetworkProvider } from '../network-provider.service';
 import { flightService } from '../providers/flightService';
+import { tourService } from '../providers/tourService';
 
 /**
  * Generated class for the InboxPage page.
@@ -51,7 +52,8 @@ export class Tab4Page implements OnInit{
     public networkProvider: NetworkProvider,public router: Router,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-    public activityService: ActivityService, public _flightService: flightService,) {
+    public activityService: ActivityService, public _flightService: flightService,
+    public tourService: tourService) {
     //google analytic
     gf.googleAnalytion('inbox','load','');
     //get phone
@@ -288,7 +290,16 @@ export class Tab4Page implements OnInit{
             se.callUpdateStatus(element);
           }
           if(element.dataLink){
-            se.navCtrl.navigateForward(element.dataLink);
+            if(element.dataLink.indexOf('tourdetail') != -1){
+              let arr = element.dataLink.replace('/','').split('/');
+              if(arr && arr.length ==2){
+                this.tourService.tourDetailId = arr[1];
+                this.tourService.backPage = 'hometour';
+                this.navCtrl.navigateForward('/tourdetail');
+              }
+            } else {
+              se.navCtrl.navigateForward(element.dataLink);
+            }
           }
         })
       }

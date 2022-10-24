@@ -59,7 +59,11 @@ export class TourPaymentPayooPage implements OnInit {
         clearInterval(this.intervalID);
       }, 60000 * 15);
     }
-    this.total = this._tourService.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    if(this._tourService.discountPrice){
+      this.total = this._tourService.discountPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    }else{
+      this.total = this._tourService.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    }
   }
   goback() {
     if (this.stt == 1) {
@@ -98,7 +102,7 @@ export class TourPaymentPayooPage implements OnInit {
                 se.safariViewController.hide();
               }
               clearInterval(se.intervalID);
-              se._tourService.BookingTourMytrip = null;
+              se._tourService.paymentType = 1;
               se.navCtrl.navigateForward('tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
@@ -141,7 +145,7 @@ export class TourPaymentPayooPage implements OnInit {
                 se.safariViewController.hide();
               }
               clearInterval(se.intervalID);
-              se._tourService.BookingTourMytrip = null;
+              se._tourService.paymentType = 1;
               se.navCtrl.navigateForward('tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)

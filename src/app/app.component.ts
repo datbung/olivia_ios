@@ -21,6 +21,7 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from './providers/flightService';
+import {tourService} from './providers/tourService';
 
 //import { Geolocation } from '@ionic-native/geolocation/ngx';
 
@@ -64,6 +65,7 @@ export class AppComponent {
     private loadCtrl: LoadingController,private deeplinks: Deeplinks,
     private safariViewController: SafariViewController,
     public _flightService: flightService,
+    public tourService: tourService
   ) {
     this.initializeApp();
     // this.storage.remove('listblogtripdefault');
@@ -248,6 +250,13 @@ export class AppComponent {
             let arrurl = objlink.path.split('/');
             let id = arrurl[arrurl.length-1];
             this.navCtrl.navigateForward('/hoteldetail/'+id);
+          }
+          else if(objlink.path.indexOf("tourdetail") != -1){
+            let arrurl = objlink.path.split('/');
+            let id = arrurl[arrurl.length-1];
+            this.tourService.tourDetailId = id;
+            this.tourService.backPage = 'hometour';
+            this.navCtrl.navigateForward('/tourdetail');
           }
           else if(objlink.path.indexOf("flightpage") != -1 || objlink.path.indexOf("home-flight") != -1 ){
             this._flightService.itemTabFlightActive.emit(true);

@@ -133,7 +133,7 @@ export class TourPaymentAtmPage implements OnInit {
                     se.safariViewController.hide();
                   }
                   clearInterval(se.intervalID);
-                  se.tourService.BookingTourMytrip = null;
+                  se.tourService.paymentType = 1;
                   se.navCtrl.navigateForward('tourpaymentdone');
                 }
                 else
@@ -143,7 +143,7 @@ export class TourPaymentAtmPage implements OnInit {
                 }
               })
             }
-            clearInterval(se.intervalID);
+            //clearInterval(se.intervalID);
             setTimeout(() => {
               clearInterval(this.intervalID);
             }, 60000 * 15);
@@ -351,7 +351,7 @@ export class TourPaymentAtmPage implements OnInit {
               this.safariViewController.hide();
             }
             clearInterval(this.intervalID);
-            this.tourService.BookingTourMytrip = null;
+            this.tourService.paymentType = 1;
             this.navCtrl.navigateForward('tourpaymentdone');
           }
           else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)

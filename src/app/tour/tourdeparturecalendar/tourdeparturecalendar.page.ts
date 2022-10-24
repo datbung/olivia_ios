@@ -10,6 +10,7 @@ import { tourService } from 'src/app/providers/tourService';
 import * as moment from 'moment';
 import * as $ from 'jquery';
 import { CalendarModal, CalendarModalOptions, DayConfig } from 'ion2-calendar';
+import { Storage } from '@ionic/storage';
 /**
  * Generated class for the SearchHotelFilterPage page.
  *
@@ -31,8 +32,10 @@ export class TourDepartureCalendarPage implements OnInit{
   MsgError: any;
   hasDeparture:boolean=false;
   infant = '<1';
+  point: number=0;
+  pointbkg = '';
   constructor(public platform: Platform,public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events:Events,
-    public gf: GlobalFunction,public modalCtrl: ModalController, private pickerController: PickerController,
+    public gf: GlobalFunction,public modalCtrl: ModalController, private pickerController: PickerController,private storage: Storage,
     public tourService: tourService) {
       if(!searchhotel.adult){
         searchhotel.adult = 2;
@@ -48,6 +51,7 @@ export class TourDepartureCalendarPage implements OnInit{
         this.hasDeparture = false;
       }
        this.calculatePrice(0);
+       this.GetUserInfo();
     }
   
   ngOnInit() {
@@ -108,6 +112,7 @@ export class TourDepartureCalendarPage implements OnInit{
           this.tourService.itemDepartureCalendar = this.itemDepartureCalendar;
           let totalPrice = this.itemDepartureCalendar.TotalRate;
           this.zone.run(()=>{
+            this.pointbkg = Math.floor(totalPrice/100000).toFixed(0);
             this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
             this.tourService.totalPrice = totalPrice;
             this.tourService.totalPriceStr = this.totalPriceStr;
@@ -138,6 +143,7 @@ export class TourDepartureCalendarPage implements OnInit{
         }else if(this.tourService.itemDepartureCalendar){
           let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0)
           this.zone.run(()=>{
+            this.pointbkg = Math.floor(totalPrice/100000).toFixed(0);
             this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
             this.tourService.totalPrice = totalPrice;
             this.tourService.totalPriceStr = this.totalPriceStr;
@@ -162,12 +168,14 @@ export class TourDepartureCalendarPage implements OnInit{
       if(this.tourService.itemDepartureCalendar){
         let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0)
         this.zone.run(()=>{
+          this.pointbkg = Math.floor(totalPrice/100000).toFixed(0);
           this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
           this.tourService.totalPrice = totalPrice;
           this.tourService.totalPriceStr = this.totalPriceStr;
         })
       }else{
         this.zone.run(()=>{
+          this.pointbkg = '';
           this.totalPriceStr = 0;
           this.tourService.totalPrice = 0;
           this.tourService.totalPriceStr = 0;
@@ -503,5 +511,60 @@ export class TourDepartureCalendarPage implements OnInit{
     se.tourService.paymentType = 3;
     se.navCtrl.navigateForward('/touradddetails');
     
+  }
+
+  GetUserInfo() {
+    var se = this;
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+        var text = "Bearer " + auth_token;
+        var options = {
+          method: 'GET',
+          url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetUserInfo',
+          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+          headers:
+          {
+            'cache-control': 'no-cache',
+            'content-type': 'application/json',
+            authorization: text
+          }
+        };
+        request(options, function (error, response, body) {
+          if (error) {
+            error.page = "roomdetailreview";
+            error.func = "GetUserInfo";
+            error.param = JSON.stringify(options);
+            C.writeErrorLog(error, response);
+          } 
+          else if (response.statusCode == 401) {
+            se.storage.get('jti').then((memberid) => {
+                se.storage.get('deviceToken').then((devicetoken) => {
+                    se.gf.refreshToken(memberid, devicetoken).then((token) => {
+                        se.storage.remove('auth_token').then(() => {
+                            se.storage.set('auth_token', token);
+                        })
+                        setTimeout(() => {
+                            se.GetUserInfo();
+                        }, 300)
+                    });
+
+                })
+            })
+          }
+          else {
+            if (body) {
+              var data = JSON.parse(body);
+              se.zone.run(() => {
+                
+                if (data.point) {
+                  se.point = data.point * 1000;
+                }
+              })
+            }
+
+          }
+        });
+      }
+    })
   }
 }

@@ -19,6 +19,11 @@ export class tourService{
   dataBookResponse: any;
   periodPaymentDate: any;
   BookingTourMytrip: any;
+  discountPrice: number;
+  totalPriceBeforeDiscount: number;
+  promocode: any;
+  discountpromo: number;
+  usePointPrice: number;
   
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);

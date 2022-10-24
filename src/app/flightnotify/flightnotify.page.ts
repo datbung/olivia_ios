@@ -15,6 +15,7 @@ import * as request from 'requestretry';
 import * as moment from 'moment';
 import {ValueGlobal} from '../providers/book-service';
 import {flightService} from '../providers/flightService';
+import { tourService } from '../providers/tourService';
 
 @Component({selector: 'app-flightnotify', templateUrl: './flightnotify.page.html', styleUrls: ['./flightnotify.page.scss']})
 export class FlightnotifyPage {
@@ -42,7 +43,8 @@ export class FlightnotifyPage {
     isOrder = false;
     objnotication : any;
     textnotifyType = "";countNoti
-    constructor(private navCtrl : NavController, private gf : GlobalFunction, public _flightService : flightService, public platform : Platform, private badge : Badge, private storage : Storage, private zone : NgZone, public toastCtrl : ToastController, public valueGlobal : ValueGlobal, private modalCtrl : ModalController, private alertCtrl : AlertController, public activityService : ActivityService) { // get phone
+    constructor(private navCtrl : NavController, private gf : GlobalFunction, public _flightService : flightService, public platform : Platform, private badge : Badge, private storage : Storage, private zone : NgZone, public toastCtrl : ToastController, public valueGlobal : ValueGlobal, private modalCtrl : ModalController, private alertCtrl : AlertController, public activityService : ActivityService,
+        public tourService: tourService) { // get phone
         this.storage.get('phone').then(data => {
             if (data) {
                 this.phone = data;
@@ -228,7 +230,16 @@ export class FlightnotifyPage {
                         se.callUpdateStatus(element);
                     }
                     if (element.dataLink) {
-                        se.navCtrl.navigateForward(element.dataLink);
+                        if(element.dataLink.indexOf('tourdetail') != -1){
+                            let arr = element.dataLink.replace('/','').split('/');
+                            if(arr && arr.length ==2){
+                              this.tourService.tourDetailId = arr[1];
+                              this.tourService.backPage = 'hometour';
+                              this.navCtrl.navigateForward('/tourdetail');
+                            }
+                          } else {
+                            se.navCtrl.navigateForward(element.dataLink);
+                          }
                     }
                 })
             }

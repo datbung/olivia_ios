@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,NgZone } from '@angular/core';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
 import { tourService } from '../providers/tourService';
@@ -12,7 +12,7 @@ import { foodService } from '../providers/foodService';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { C } from '../providers/constants';
 import * as $ from 'jquery';
-
+import * as request from 'requestretry';
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -55,6 +55,7 @@ export class MytripdetailPage implements OnInit {
   expandDivIncludePrice: boolean;
   expandDivTourInfo: boolean;
   expandDivTourNotes: boolean;
+  cin;cout
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -69,9 +70,10 @@ export class MytripdetailPage implements OnInit {
     private nativePageTransitions: NativePageTransitions,
     private routerOutlet: IonRouterOutlet,
     private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
-    public _tourService: tourService) {
+    public _tourService: tourService,public zone: NgZone) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
+        this.getmhoteldetail();
         this.enableheader = true;
         this.loadDetailInfo();
         if(this.trip.booking_type && this.trip.booking_type == "TOUR"){
@@ -263,6 +265,12 @@ export class MytripdetailPage implements OnInit {
 
   ngOnInit() {
    
+  }
+
+  ionViewWillEnter(){
+    this.expandDivIncludePrice = false;
+        this.expandDivTourInfo = false;
+        this.expandDivTourNotes = false;
   }
 
   goback(){
@@ -857,8 +865,46 @@ export class MytripdetailPage implements OnInit {
 
     }
   }
-
   showTourInfo() {
     this.navCtrl.navigateForward('/mytriptourinfo');
+  }
+  getmhoteldetail() {
+    var se=this;
+    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.hotel_id;
+    var options = {
+      method: 'POST',
+      url: url,
+      timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+    };
+    request(options, function (error, response, body) {
+      if(response.statusCode != 200){
+        var objError ={
+            page: "policy",
+            func: "getdata",
+            message : response.statusMessage,
+            content : response.body,
+            type: "warning",
+            param: JSON.stringify(options)
+          };
+        C.writeErrorLog(objError,response);
+      }
+      if (error) {
+        error.page="policy";
+        error.func="loaddata";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(objError,response);
+      }
+      if(response.statusCode== 200){
+        if (body) {
+          let jsondata = JSON.parse(body);
+          se.zone.run(()=>{
+            se.cin = jsondata.CheckinTime;
+            se.cout = jsondata.CheckoutTime;
+          })
+        }
+       
+
+      }
+    })
   }
 }

@@ -214,6 +214,7 @@ import { tourService } from '../providers/tourService';
         se._mytripservice.orderPageState.pipe().subscribe((data) => {
             se.ionViewWillEnter();
             se.enableheader = true;
+          
         })
 
         se._flightService.itemMenuFlightClick.pipe().subscribe((data)=> {
@@ -248,6 +249,9 @@ import { tourService } from '../providers/tourService';
             se.foodtextorder= "";
             se.pageIndex=1;
             se.isConnected = true;
+            se.expandDivIncludePrice = false;
+            se.expandDivTourInfo = false;
+            se.expandDivTourNotes = false;
             if (se.networkProvider.isOnline()) {
               se.getdata(null, false);
               se.getdata(null, true);
@@ -335,6 +339,7 @@ import { tourService } from '../providers/tourService';
         se.storage.get('auth_token').then(auth_token => {
           se.loginuser = auth_token;
         });
+
       }
     
       loadPageData() {
@@ -426,9 +431,11 @@ import { tourService } from '../providers/tourService';
       ionViewWillLeave() {
         this.zone.run(() => {
           clearInterval(this.intervalID);
+        
         })
         this.hasloaddata = false;
         this.loaddatadone = false;
+       
       }
     
       async presentLoadingData() {
@@ -1534,7 +1541,7 @@ import { tourService } from '../providers/tourService';
                   se.arrinsurrance = [];
                 }
               }
-    
+              this.getmhoteldetail();
             } else {
               se.hasdata = false;
             }
@@ -5230,5 +5237,41 @@ import { tourService } from '../providers/tourService';
   showTourInfo() {
     this._mytripservice.tripdetail = this.listMyTrips[0];
     this.navCtrl.navigateForward('/mytriptourinfo');
+  }
+  getmhoteldetail() {
+    var se=this;
+    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+se.listMyTrips[0].hotel_id;
+    var options = {
+      method: 'POST',
+      url: url,
+      timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+    };
+    request(options, function (error, response, body) {
+      if(response.statusCode != 200){
+        var objError ={
+            page: "policy",
+            func: "getdata",
+            message : response.statusMessage,
+            content : response.body,
+            type: "warning",
+            param: JSON.stringify(options)
+          };
+        C.writeErrorLog(objError,response);
+      }
+      if (error) {
+        error.page="policy";
+        error.func="loaddata";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(objError,response);
+      }
+      if(response.statusCode== 200){
+        let jsondata = JSON.parse(body);
+        se.zone.run(()=>{
+          se.cin = jsondata.CheckinTime;
+          se.cout = jsondata.CheckoutTime;
+        })
+
+      }
+    })
   }
   }

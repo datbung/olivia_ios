@@ -206,6 +206,7 @@ export class TourDetailPage {
           }
           
         }
+
     getCalendarDeparture(comboId) {
         this.storage.get('auth_token').then(auth_token => {
             if (auth_token) {

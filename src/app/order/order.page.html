@@ -174,6 +174,10 @@
                     </div>
                      <!-- <div class="text-pax m-lr-5" *ngIf="idx == 1 && listMyTrips[0].child_price_net">{{listMyTrips[0].child_ages}}</div> -->
                   </div>
+                  <div *ngIf="listMyTrips[0].deal_no && listMyTrips[0].promotionDiscountAmount" class="d-flex">
+                    <div class="text-pax div-width-250">Ưu đãi</div>
+                    <div class="text-price text-right div-width-100">{{gf.convertNumberToString(listMyTrips[0].promotionDiscountAmount)}}</div>
+                  </div>
       
                   <div class="div-line-tour"></div>
       
@@ -432,14 +436,14 @@
                       <div class="div-cin-cout" *ngIf="!isFlyBooking && trip.checkInDisplay && trip.checkOutDisplay">
                           <!-- cin -->
                           <div class="div-cin">
-                            <div class="div-label-date" *ngIf="!trip.bookingOffType">Nhận phòng sau 14:00</div>
+                            <div class="div-label-date" *ngIf="!trip.bookingOffType">Nhận phòng sau {{cin}}</div>
                             <div class="div-label-date" *ngIf="trip.bookingOffType">Ngày đi</div>
               
                               <div class="div-date">{{trip.checkInDisplay}}</div>
                           </div>
                           <!-- cout -->
                           <div class="div-cout">
-                              <div class="div-label-date" *ngIf="!trip.bookingOffType">Trả phòng trước 12:00</div>
+                              <div class="div-label-date" *ngIf="!trip.bookingOffType">Trả phòng trước {{cout}}</div>
                               <div class="div-label-date" *ngIf="trip.bookingOffType">Ngày về</div>
                               <div class="div-date-cout">{{trip.checkOutDisplay}}</div>
                           </div>
@@ -1389,14 +1393,14 @@
                                   <div class="div-cin-cout" *ngIf="trip.checkInDisplay && trip.checkInDisplay">
                                     <!-- cin -->
                                     <div class="div-cin">
-                                      <div class="div-label-date" *ngIf="!trip.bookingOffType">Nhận phòng sau 14:00</div>
+                                      <div class="div-label-date" *ngIf="!trip.bookingOffType">Nhận phòng sau {{cin}}</div>
                                       <div class="div-label-date" *ngIf="trip.bookingOffType">Ngày đi</div>
                         
                                         <div class="div-date">{{trip.checkInDisplay}}</div>
                                     </div>
                                     <!-- cout -->
                                     <div class="div-cout">
-                                        <div class="div-label-date" *ngIf="!trip.bookingOffType">Trả phòng trước 12:00</div>
+                                        <div class="div-label-date" *ngIf="!trip.bookingOffType">Trả phòng trước {{cout}}</div>
                                         <div class="div-label-date" *ngIf="trip.bookingOffType">Ngày về</div>
                                         <div class="div-date-cout">{{trip.checkOutDisplay}}</div>
                                     </div>

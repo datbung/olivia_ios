@@ -10,6 +10,7 @@ import { VoucherSlidePageModule } from '../voucher/voucherslide/voucherslide.mod
 import { VoucherSlideCarComboPageModule } from '../voucher/voucherslidecarcombo/voucherslidecarcombo.module';
 import { VoucherSlideHotelPageModule } from '../voucher/voucherslidehotel/voucherslidehotel.module';
 import { VoucherSlideFlightComboPageModule } from '../voucher/voucherslideflightcombo/voucherslideflightcombo.module';
+import { VoucherSlideTourPageModule } from '../voucher/voucherslidetour/voucherslidetour.module';
 
 const routes: Routes = [
   {
@@ -27,6 +28,7 @@ const routes: Routes = [
     VoucherSlideHotelPageModule,
     VoucherSlideCarComboPageModule,
     VoucherSlideFlightComboPageModule,
+    VoucherSlideTourPageModule,
     RouterModule.forChild(routes)
   ],
   declarations: [AdddiscountPage],

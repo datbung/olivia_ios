@@ -20,6 +20,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Market } from '@ionic-native/market/ngx';
 import { flightService } from '../providers/flightService';
 import * as moment from 'moment';
+import {tourService} from '../providers/tourService';
  
 @Component({
   selector: 'app-tabs',
@@ -48,7 +49,8 @@ export class TabsPage implements OnInit {
     private appVersion: AppVersion,
     private market: Market,
     public _flightService: flightService,
-    public activityService: ActivityService) { }
+    public activityService: ActivityService,
+    public tourService: tourService) { }
 
   ngOnInit() {
     //get phone
@@ -479,8 +481,20 @@ export class TabsPage implements OnInit {
         this.valueGlobal.backValue = "homeflight";
       }
       else if(data.dataLink){
-        this.setNotification(data,"product");
-        this.navCtrl.navigateForward(data.dataLink);
+        if(data.dataLink.indexOf('tourdetail') != -1){
+          this.setNotification(data,"product");
+          let arr = data.dataLink.replace('/','').split('/');
+          if(arr && arr.length ==2){
+            this.tourService.tourDetailId = arr[1];
+            this.tourService.backPage = 'hometour';
+            this.navCtrl.navigateForward('/tourdetail');
+          }
+        
+        }else {
+          this.setNotification(data,"product");
+          this.navCtrl.navigateForward(data.dataLink);
+        }
+        
       }
       else if(data.flyNotify){
         this._flightService.itemTabFlightActive.emit(true);
@@ -560,8 +574,19 @@ export class TabsPage implements OnInit {
     }
     var msg = data.message;
     if(data.dataLink){
-      se.setNotification(data,"product");
-      se.navCtrl.navigateForward(data.dataLink);
+      if(data.dataLink.indexOf('tourdetail') != -1){
+        this.setNotification(data,"product");
+        let arr = data.dataLink.replace('/','').split('/');
+        if(arr && arr.length ==2){
+          this.tourService.tourDetailId = arr[1];
+          this.tourService.backPage = 'hometour';
+          this.navCtrl.navigateForward('/tourdetail');
+        }
+      } else {
+        se.setNotification(data,"product");
+        se.navCtrl.navigateForward(data.dataLink);
+      }
+      
     }
     else if(data.flyNotify){
       se.setNotification(data,"product");

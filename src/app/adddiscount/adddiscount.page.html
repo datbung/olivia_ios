@@ -22,8 +22,8 @@
       </ion-col>
   </ion-row>
   <ion-row>
-    <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
-    <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+    <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px; margin-bottom: 12px">{{msg}}</ion-label>
+    <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px; margin-bottom: 12px">{{msg}}</ion-label>
   </ion-row>
 </div>
 </ion-header>
@@ -35,5 +35,6 @@
     <app-voucherslidehotel class="voucher-list cls-roomdetailreview" *ngIf="_voucherService.openFrom == 'roomdetailreview'"></app-voucherslidehotel>
     <app-voucherslidecarcombo class="voucher-list cls-carcomboreview" *ngIf="_voucherService.openFrom == 'combocarnew'"></app-voucherslidecarcombo>
     <app-voucherslideflightcombo class="voucher-list cls-flightcomboreview" *ngIf="_voucherService.openFrom == 'flightcomboreview'"></app-voucherslideflightcombo>
+    <app-voucherslidetour class="voucher-list cls-flightaddservice" *ngIf="_voucherService.openFrom == 'touradddetails'"></app-voucherslidetour>
 </div>
 </ion-content>
