@@ -22,6 +22,7 @@ import { flightService } from '../providers/flightService';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { MytripService } from '../providers/mytrip-service.service';
 import { foodService } from '../providers/foodService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { 
   setInterval,
   clearInterval
@@ -131,6 +132,25 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
   cincomboarrival: string;
   noLoginObj: any;
   childList: any;
+
+  baggageHandedDepart;baggageHandedReturn;totalVMB=0;
+  totalService: number;
+  luggageSignedDepart: any;
+  departConditionInfo: any;
+  returnConditionInfo: any;
+  luggageSignedReturn: any;
+  isdkv=false;
+  ishdnp=false;
+  isptp=false;
+  isttt=false;
+  booking_json_data: any;
+  PromotionNote:any;
+  ischeckStops=false;
+
+  departAirport:any;
+  returnAirport:any;
+  totalDichung=0;
+  coutDC: number;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -144,7 +164,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
         public _flightService: flightService,public clipboard: Clipboard,
         public _mytripservice: MytripService,
         public _foodService: foodService,
-        private nativePageTransitions: NativePageTransitions) {
+        private nativePageTransitions: NativePageTransitions,private safariViewController: SafariViewController) {
         this.handleSplashScreen();
         
         //this.getdata();
@@ -822,7 +842,10 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       element.departAirport = se.getAirportByCode(element.departCode);
                       element.returnAirport = se.getAirportByCode(element.arrivalCode);
                       se.getRatingStar(element);
-                      se.listMyTrips.push(element);
+                      // if (element.booking_id=='IVIVU1002887') {
+                      //   se.listMyTrips.push(element);
+                      // }
+                       se.listMyTrips.push(element);
                       se.mytripcount++;
                       if (element.insuranceInfo && element.insuranceInfo.adultList.length > 0) {
                         if (se.checkItemHasNotClaim(element.insuranceInfo.adultList) || se.checkItemHasNotClaim(element.insuranceInfo.childList)) {
@@ -871,7 +894,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                                 let newdate = el.departureDate.split('/');
                                 if(newdate && newdate.length >1){
                                   let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                                  el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
+                                  el.departureDateDisplay =  moment(d).format("DD-MM");
                                 }
                                 
                               }
@@ -1039,7 +1062,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                                 let newdate = el.departureDate.split('/');
                                 if(newdate && newdate.length >1){
                                   let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                                  el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
+                                  el.departureDateDisplay = moment(d).format("DD-MM");
                                 }
                                 
                               }
@@ -1271,8 +1294,11 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                         
           
                       if(element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL") ){
-                          se.listMyTrips.push(element);
-                          se.mytripcount++;
+                        // if (element.booking_id=='IVIVU1002887') {
+                        //   se.listMyTrips.push(element);
+                        // }
+                        se.listMyTrips.push(element);
+                        se.mytripcount++;
                           //se.nextflightcounttext ="(" + se.mytripcount +")";
                       }
                     
@@ -1314,7 +1340,10 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       element.address = element.hotelAddress;
                       element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                       se.getRatingStar(element);
-                      se.listMyTrips.push(element);
+                      // if (element.booking_id=='IVIVU1002887') {
+                      //   se.listMyTrips.push(element);
+                      // }
+                       se.listMyTrips.push(element);
                       se.mytripcount++;
                     }
                     
@@ -1381,6 +1410,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
               }
 
               if(se.listMyTrips.length ==1 && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length >0){
+
                 se.listMyTrips[0].bookingsComboData.forEach(element => {
                 if (element.airlineName.toLowerCase().indexOf('cathay') != -1) {
                   //Add bảo hiểm
@@ -1508,8 +1538,92 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                 if(!se.listMyTrips[0].hasCathay){
                   se.arrinsurrance = [];
                 }
+               
               }
+              if (se.listMyTrips[0].isFlyBooking) {
+                this.getDetailTicket(0).then((data) => {
+                  if (se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
+                    this.getDetailTicket(1).then((data) => {
+
+                    })
+                  }
+                  this.getmhoteldetail();
+                })
+              }else{
+                if(se.listMyTrips[0].booking_type == 'COMBO_FLIGHT'){
+                  this.departAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[0].departCode);
+                  this.returnAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[1].departCode);
+                  this.getDetailTicket(0).then((data) => {
+                    if (se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
+                      this.getDetailTicket(1).then((data) => {
+
+                        this.getmhoteldetail();
+                      })
+                    }
+                  })
+                }else{
+                  this.getmhoteldetail();
+                }
+                
+              }
+              this.totalVMB=0;
+        se.totalService=0;
+        //chặng dừng nếu có
+        if (se.listMyTrips[0].booking_json_data) {
+          this.booking_json_data= JSON.parse(se.listMyTrips[0].booking_json_data);
+          let TotalPriceReturn=0;
+          let TotalPriceGo=0;
+          this.booking_json_data.forEach(item => {
+            if (item.Passengers) {
+              item.Passengers.forEach(element => {
+                se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
+              });
+            }
+          if (item.PromotionNote) {
+            this.PromotionNote=JSON.parse(item.PromotionNote);
+             TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
+             TotalPriceGo=this.PromotionNote.TotalPriceGo;
+          }
     
+           if(item.Transits && item.Transits.length>1) {
+            this.ischeckStops=true;
+           }
+          })
+          if(this.ischeckStops){
+            this.booking_json_data.forEach(item => {
+              if(item.Transits) {
+                for (let i = 0; i < item.Transits.length; i++) {
+                  item.Transits[i].departAirport = this.getAirportByCode(item.Transits[i].FromPlaceCode);
+                  item.Transits[i].returnAirport = this.getAirportByCode(item.Transits[i].ToPlaceCode);
+                  item.Transits[i].DepartureTime =moment(item.Transits[i].DepartTime).format('HH:mm')
+                  item.Transits[i].ArrivalTime =moment(item.Transits[i].LandingTime).format('HH:mm')
+                  if(i>0){
+                    var DepartureDate :any=this.parseDatetime(item.DepartureDate,item.Transits[i].DepartureTime)
+                    var LandingTime:any=this.parseDatetime(item.DepartureDate,item.Transits[i-1].ArrivalTime)
+                    let hours = (DepartureDate - LandingTime) / 36e5;
+                    // item.Transits[i].hours =hours;
+                    let layminutes:any = hours - (Math.floor(hours));
+                    item.Transits[i].timeOverStop =  Math.floor(hours) + " tiếng " + (layminutes > 0 ? (+Math.round(layminutes*60) + " phút") : '') ;
+                          }
+                        }
+              
+                      }
+                  })
+                }
+                let coutDCdepart=0;
+                let coutDCreturn=0;
+                if (TotalPriceGo>0) {
+                  coutDCdepart=2;
+                }
+                if (TotalPriceReturn>0) {
+                  coutDCreturn=2;
+                }
+                se.coutDC=coutDCdepart+coutDCreturn;
+                se.totalDichung=TotalPriceGo+TotalPriceReturn;
+                se.totalVMB=se.listMyTrips[0].amount_after_tax-se.totalService-se.totalDichung+se.listMyTrips[0].promotionDiscountAmount;
+             
+              }
+            
             } else {
               se.hasdata = false;
             }
@@ -1679,7 +1793,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                           let newdate = el.departureDate.split('/');
                           if(newdate && newdate.length >1){
                             let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                            el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
+                            el.departureDateDisplay = moment(d).format("DD-MM");
                           }
                           
                         }
@@ -1815,7 +1929,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                             let newdate = el.departureDate.split('/');
                             if(newdate && newdate.length >1){
                               let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                              el.departureDateDisplay = se.gf.getDayOfWeek(d).daynameshort +", "+ moment(d).format("DD-MM");
+                              el.departureDateDisplay = moment(d).format("DD-MM");
                             }
                             
                           }
@@ -2082,7 +2196,12 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
             }
           })
         }
-        
+        // if (this.listMyTrips.length ==1) {
+        //   this.enableheader = false;
+        //   this._mytripservice.tripdetail = this.listMyTrips[0];
+        //   this._mytripservice.currentTrip = this.currentTrip;
+        //   this.navCtrl.navigateForward('mytripdetail', {animated: true});
+        // }
       }
     
       checkishistorytrip() {
@@ -4119,14 +4238,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
         this.navCtrl.navigateForward("mytriphistory");
       }
     
-      getAirportByCode(code){
-        var se = this, res ="";
-        if(se._flightService.listAirport && se._flightService.listAirport.length >0){
-          let itemmap = se._flightService.listAirport.filter((item) => { return item.code == code});
-          res = (itemmap && itemmap.length >0) ? itemmap[0].airport : ""; 
-        }
-        return res;
-      }
+
       
 
       showtripdetail(trip){
@@ -4134,18 +4246,21 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
           this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
           return;
         }
-        if(trip){
-          this.enableheader = false;
-          this._mytripservice.tripdetail = trip;
-          this._mytripservice.currentTrip = this.currentTrip;
-          //this.nativePageTransitions.slide(this.options);
-          if(this._mytripservice.rootPage == "homeflight"){
-            this._mytripservice.backroute = "tabs/tab1";
-          }else{
-            this._mytripservice.backroute = "/app/tabs/tab3";
+        if (trip.payment_status==1 || trip.payment_status==5 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay)) {
+          if(trip){
+            this.enableheader = false;
+            this._mytripservice.tripdetail = trip;
+            this._mytripservice.currentTrip = this.currentTrip;
+            //this.nativePageTransitions.slide(this.options);
+            if(this._mytripservice.rootPage == "homeflight"){
+              this._mytripservice.backroute = "tabs/tab1";
+            }else{
+              this._mytripservice.backroute = "/app/tabs/tab3";
+            }
+            this.navCtrl.navigateForward('mytripdetail', {animated: true});
           }
-          this.navCtrl.navigateForward('mytripdetail', {animated: true});
         }
+       
       }
     
       getRatingStar(trip){
@@ -5073,4 +5188,204 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
             });
             toast.present();
           }
-  }
+
+          getDetailTicket(stt) : Promise<any>{
+            var se = this;
+            return new Promise((resolve, reject) => {
+              if (stt==0) {
+                var airlineCode=this.getairlineCode(stt);
+                var ticketClass=se.listMyTrips[0].bookingsComboData[0].ticketClass;
+              }else{
+                var airlineCode=this.getairlineCode(stt);
+                var ticketClass=se.listMyTrips[0].bookingsComboData[1].ticketClass;
+              }
+          
+              var options = {
+                method: 'GET',
+                url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass,
+                timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+                headers: {
+                 
+                }
+              };
+              request(options, function (error, response, body) {
+                let objError = {
+                  page: "flightsearchresult",
+                  func: "selectTicket",
+                  message: response.statusMessage,
+                  content: response.body,
+                  type: "warning",
+                  param: JSON.stringify(options)
+                };
+                if (error) {
+                  error.page = "flightsearchresult";
+                  error.func = "selectTicket";
+                  error.param = JSON.stringify(options);
+                  C.writeErrorLog(objError,response);
+                }
+                if (response.statusCode == 200) {
+                  let result = JSON.parse(body);
+                  if (stt==0) {
+                    se.baggageHandedDepart=result.ticketCondition.baggageHanded;
+                    se.luggageSignedDepart=result.ticketCondition.luggageSigned;
+                    se.departConditionInfo=result;
+                      se.listMyTrips[0].bookingsComboData[0].passengers.forEach(element => {
+                        element.hanhLyshow="";
+                        if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                          element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+                        }else{
+                          if (element.hanhLy){
+                            element.hanhLyshow=element.hanhLy;
+                          }else{
+                            element.hanhLyshow=result.ticketCondition.luggageSigned;
+                          }
+                         
+                        }
+                        if (element.hanhLyshow) {
+                          element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                        }
+                      });
+                    
+                  }else{
+                    se.baggageHandedReturn=result.ticketCondition.baggageHanded;
+                    se.luggageSignedReturn=result.ticketCondition.luggageSigned
+                    se.returnConditionInfo=result;
+                    se.listMyTrips[0].bookingsComboData[1].passengers.forEach(element => {
+                      element.hanhLyshow="";
+                      if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                        element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+                      }else{
+                        if (element.hanhLy){
+                          element.hanhLyshow=element.hanhLy;
+                        }else{
+                          element.hanhLyshow=result.ticketCondition.luggageSigned;
+                        }
+                       
+                      }
+                      if (element.hanhLyshow) {
+                        element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                      }
+                    });
+                  }
+                  resolve(result);
+                  
+              }
+            })
+            })
+          }
+          getairlineCode(stt) {
+            var se = this;
+            var airlineName="";
+            if (se.listMyTrips[0].bookingsComboData) {
+              if (stt==0) {
+                if (se.listMyTrips[0].bookingsComboData[0].airlineName.indexOf('VIETJET') != -1) {
+                  airlineName="VietJetAir"
+                }else if (se.listMyTrips[0].bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || se.listMyTrips[0].bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+                  airlineName="VietnamAirlines"
+                }else{
+                  airlineName="BambooAirways"
+                }
+              }else{
+                if (se.listMyTrips[0].bookingsComboData[1].airlineName.indexOf('VIETJET') != -1) {
+                  airlineName="VietJetAir"
+                }else if (se.listMyTrips[0].bookingsComboData[1].airlineName.indexOf('Vietnam Airlines') != -1  || se.listMyTrips[0].bookingsComboData[1].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+                  airlineName="VietnamAirlines"
+                }else{
+                  airlineName="BambooAirways"
+                }
+              }
+            }
+           
+            return airlineName;
+          }
+          dkv(){
+            this.isdkv=!this.isdkv
+          }
+          policy(){
+            this.ishdnp=!this.ishdnp;
+          }
+          phuthuP(){
+            this.isptp=!this.isptp;
+          }
+          info(){
+            this.isttt=!this.isttt;
+          }
+          openWebpage() {
+            var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
+            this.safariViewController.isAvailable()
+            .then((available: boolean) => {
+              if (available) {
+                this.safariViewController.show({
+                  url: url,
+                  hidden: false,
+                  animated: false,
+                  transition: 'curl',
+                  enterReaderModeIfAvailable: true,
+                  tintColor: '#23BFD8'
+                })
+                .subscribe((result: any) => {
+        
+                  },
+                  (error: any) => console.error(error)
+                );
+        
+              } else {
+                // use fallback browser, example InAppBrowser
+              }
+            })
+          }
+          parseDatetime(date: string, time: string) {
+            let dateObj = date.split("/");
+            let dtStr = dateObj[1] + "/" + dateObj[0] + "/" + dateObj[2] + " " + time;
+            return new Date(dtStr);
+          }
+          getAirportByCode(code){
+            var se = this, res ="";
+            if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+              let itemmap = se._flightService.listAirport.filter((item) => { return item.code == code});
+              res = (itemmap && itemmap.length >0) ? itemmap[0].airport : ""; 
+            }
+            return res;
+          }
+          getmhoteldetail() {
+            var se=this;
+            let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+se.listMyTrips[0].hotel_id;
+            var options = {
+              method: 'POST',
+              url: url,
+              timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+            };
+            request(options, function (error, response, body) {
+              if(response.statusCode != 200){
+                var objError ={
+                    page: "policy",
+                    func: "getdata",
+                    message : response.statusMessage,
+                    content : response.body,
+                    type: "warning",
+                    param: JSON.stringify(options)
+                  };
+                C.writeErrorLog(objError,response);
+              }
+              if (error) {
+                error.page="policy";
+                error.func="loaddata";
+                error.param = JSON.stringify(options);
+                C.writeErrorLog(objError,response);
+              }
+              if(response.statusCode== 200){
+                if (body) {
+                  let jsondata = JSON.parse(body);
+                  se.zone.run(()=>{
+                    se.cin = jsondata.CheckinTime;
+                    se.cout = jsondata.CheckoutTime;
+                  })
+                }
+        
+              }
+            })
+          }
+        }
+        
+          
+  

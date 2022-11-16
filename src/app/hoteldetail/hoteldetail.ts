@@ -1025,6 +1025,7 @@ export class HotelDetailPage implements OnInit {
         error.param = JSON.stringify(options);
         C.writeErrorLog(objError,response);
       }
+      
         if (response.statusCode == 200) {
           
           let jsondata = JSON.parse(body);

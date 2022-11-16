@@ -77,28 +77,25 @@ export class Tab4Page implements OnInit{
     if(document.querySelector(".tabbar")){
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
-    this.storage.get('objnotication').then(data =>{
-      if(data){
-        this.objnotication = data;
-      }
+   
       se.loadUserNotification();
-    })
+    
     //19/07/2019: Load thông tin notification
     //this.loadUserNotification();
-    se.storage.get('auth_token').then(auth_token => {
-      if (auth_token) {
-        se.storage.get('listUserNotification').then((data)=> {
-          if(data){
-           se.loadDataNotify(data);
-          }else{
-            se.loadUserNotification();
-          }
-        })
-      }else{
-        se.items = [];
-        se.loaddatadone = true;
-      }
-    })
+    // se.storage.get('auth_token').then(auth_token => {
+    //   if (auth_token) {
+    //     se.storage.get('listUserNotification').then((data)=> {
+    //       if(data){
+    //        se.loadDataNotify(data);
+    //       }else{
+    //         se.loadUserNotification();
+    //       }
+    //     })
+    //   }else{
+    //     se.items = [];
+    //     se.loaddatadone = true;
+    //   }
+    // })
     
     // se.storage.get('listUserNotification').then((data)=> {
     //   if(data){
@@ -138,18 +135,15 @@ export class Tab4Page implements OnInit{
         this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
         return;
       }
-      se.storage.get('auth_token').then(auth_token => {
-          if (auth_token) {
-              var text = "Bearer " + auth_token;
+
               var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUser?pageIndex='+se.pageIndex +'&pageSize=' + se.pageSize,
+              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex='+se.pageIndex +'&pageSize=' + se.pageSize,
               timeout: 10000, maxAttempts: 5, retryDelay: 2000,
               headers:
               {
                   'cache-control': 'no-cache',
-                  'content-type': 'application/json',
-                  authorization: text
+                  'content-type': 'application/json'
               }
               };
               request(options, function (error, response, body) {
@@ -180,16 +174,9 @@ export class Tab4Page implements OnInit{
                   }
               }
               });
-          }
-          else{
-            se.zone.run(()=>{
-              se.loaddatadone = true;
-              se.items = [];
-              se.valueGlobal.countNotifi= 0;
-            })
-            //se.showConfirm("Phiên đăng nhập hết hạn. Xin vui lòng đăng nhập lại để sử dụng chức năng này.");
-          }
-      })
+          
+         
+      
   }
 
   loadDataNotify(data){
@@ -289,6 +276,11 @@ export class Tab4Page implements OnInit{
           }
           if(element.dataLink){
             se.navCtrl.navigateForward(element.dataLink);
+          }else{
+            if (element.memberId=='alluser') {
+              se.navCtrl.navigateForward(element.bookingCode);
+              
+            }
           }
         })
       }
@@ -316,9 +308,12 @@ export class Tab4Page implements OnInit{
         se.presentToastNotifi(item.message);
       }
       else{
-        se.gf.setParams(item.bookingCode,'notifiBookingCode');
-        //se.navCtrl.navigateForward(['/app/tabs/tab3']);
-        this.mapBookingAndPayment(item.bookingCode);
+        if (item.memberId!='alluser') {
+          se.gf.setParams(item.bookingCode,'notifiBookingCode');
+          //se.navCtrl.navigateForward(['/app/tabs/tab3']);
+          this.mapBookingAndPayment(item.bookingCode);
+        }
+     
       }
     }else{
       //show notifi
@@ -440,18 +435,7 @@ export class Tab4Page implements OnInit{
 
   doRefresh(event){
     var se = this;
-    se.storage.get('auth_token').then(auth_token => {
-      if(auth_token){
-        // se.storage.get('listUserNotification').then((data)=> {
-        //   if(data){
-        //     se.loadDataNotify(data);
-        //   }else{
-        //     se.loadUserNotification();
-        //   }
-        // })
-        se.loadUserNotification();
-      }
-     });
+    se.loadUserNotification();
      setTimeout(()=>{
       event.target.complete();
      }, 1000)

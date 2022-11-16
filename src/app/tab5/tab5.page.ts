@@ -1424,40 +1424,44 @@ export class Tab5Page implements OnInit {
             if(data && data.data && data.data.email){
               if(data.data.email){
                 se.storage.get('jti').then((memberid) => {
-                  var options = {
-                    method: 'GET',
-                    url: C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateEmailMemberUser?userid='+memberid+'&email='+data.data.email,
-                    timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-                    headers:
-                    {
-                     
-                    }
-                  };
-                  request(options, function (error, response, body) {
-                    if (error) {
-                      error.page = "roomdetailreview";
-                      error.func = "GetUserInfo";
-                      error.param = JSON.stringify(options);
-                      C.writeErrorLog(error, response);
-                    } else {
-                      if (body) {
-                        var data = JSON.parse(body);
-                        if (data.status==1) {
-                          se.deleteAcc();
-                        }else if(data.status==-1){
-                          alert('Gửi mail bị lỗi. Vui lòng thử lại sau');
+                  se.storage.get('auth_token').then(auth_token => {
+                    var text = "Bearer " + auth_token;
+                    if (auth_token) {
+                      var options = {
+                        method: 'GET',
+                        url: C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateEmailMemberUser?userid='+memberid+'&email='+data.data.email,
+                        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+                        headers:
+                        {
+                          'cache-control': 'no-cache',
+                          'content-type': 'application/json',
+                          authorization: text
                         }
-
-                      }
-          
+                      };
+                      request(options, function (error, response, body) {
+                        if (error) {
+                          error.page = "roomdetailreview";
+                          error.func = "GetUserInfo";
+                          error.param = JSON.stringify(options);
+                          C.writeErrorLog(error, response);
+                        } else {
+                          if (body) {
+                            var data = JSON.parse(body);
+                            if (data.status==1) {
+                              se.deleteAcc();
+                            }else if(data.status==-1){
+                              alert('Gửi mail bị lỗi. Vui lòng thử lại sau');
+                            }
+    
+                          }
+              
+                        }
+                      });
                     }
-                  });
-                 
+                  })
               })
               }
             }
-            
-           
           })
     }
     showUserVoucher(){

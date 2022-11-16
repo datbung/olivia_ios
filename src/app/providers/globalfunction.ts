@@ -604,33 +604,50 @@ export class GlobalFunction{
    pushTokenAndMemberID(authentoken, devicetoken, appversion){
     var se = this;
     console.log(devicetoken);
+    var options ;
     if (authentoken) {
-        var text = "Bearer " + authentoken;
-        var options = {
-        method: 'POST',
-        url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/PushTokenOfUser',
-        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-        headers:
-        {
-            'cache-control': 'no-cache',
-            'content-type': 'application/json-patch+json',
-            authorization: text
-        },
-        body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, '') },
-        json: true
-      };
-      request(options, function (error, response, body) {
-          if (error) {
-              error.page = "login";
-              error.func = "pushTokenAndMemberID";
-              error.param = JSON.stringify(options);
-              C.writeErrorLog(error,response);
-          }else if(body){
-              var obj = JSON.parse(body);
-             
-          }
-      })
+      var text = "Bearer " + authentoken;
+       options = {
+      method: 'POST',
+      url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/PushTokenOfUser',
+      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      headers:
+      {
+          'cache-control': 'no-cache',
+          'content-type': 'application/json-patch+json',
+          authorization: text
+      },
+      body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, ''),source:6 },
+      json: true
+    };
+   
+    }else{
+      options = {
+      method: 'POST',
+      url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/PushTokenUser',
+      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      headers:
+      {
+          'cache-control': 'no-cache',
+          'content-type': 'application/json-patch+json',
+      },
+      body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, ''),source:6 },
+      json: true
+    };
+
     }
+    request(options, function (error, response, body) {
+      if (error) {
+          error.page = "login";
+          error.func = "pushTokenAndMemberID";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(error,response);
+      }else if(body){
+          var obj = JSON.parse(body);
+         
+      }
+  })   
+    
   }
 
   DeleteTokenOfUser(deviceToken, userToken, appversion) {

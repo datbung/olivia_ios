@@ -61,12 +61,16 @@ export class MytripdetailPage implements OnInit {
   isdkv=false;
   ishdnp=false;
   isptp=false;
+  isttt=false;
   booking_json_data: any;
   ischeckStops=false;
   cin: any;
   cout: any;
   departAirport:any;
   returnAirport:any;
+  totalDichung=0;
+  coutDC: number;
+  PromotionNote:any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -91,6 +95,7 @@ export class MytripdetailPage implements OnInit {
             if (this.trip.textReturn && this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
               this.getDetailTicket(1).then((data) => {
                 this.loadDetailInfo();
+                this.getmhoteldetail();
               })
             }else{
               this.loadDetailInfo();
@@ -104,13 +109,13 @@ export class MytripdetailPage implements OnInit {
               if (this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
                 this.getDetailTicket(1).then((data) => {
                   this.loadDetailInfo();
-                  this.getdata();
+                  this.getmhoteldetail();
                 })
               }
             })
           }else{
             this.loadDetailInfo();
-            this.getdata();
+            this.getmhoteldetail();
           }
           
         }
@@ -289,20 +294,25 @@ export class MytripdetailPage implements OnInit {
               
           });
         }
-        // if (se.trip.bookingsComboData && se.trip.bookingsComboData.length > 1) {
-        //   for (let i = 0; i < 2; i++) {
-        //     const element = se.trip.bookingsComboData[i];
-        //     se.totalVMB=se.totalVMB+Number(element.totalCost);
-            
-        //   }
-        // }else{
-        //   se.totalVMB=Number(se.trip.bookingsComboData[0].totalCost);
-        // }
-        se.totalService=se.totalVMB-se.trip.amount_after_tax;
+        this.totalVMB=0;
+        se.totalService=0;
         //chặng dừng nếu có
         if (this.trip.booking_json_data) {
+          let TotalPriceReturn=0;
+          let TotalPriceGo=0;
           this.booking_json_data= JSON.parse(this.trip.booking_json_data);
           this.booking_json_data.forEach(item => {
+            if (item.Passengers) {
+              item.Passengers.forEach(element => {
+                se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
+              });
+            }
+            if (item.PromotionNote) {
+              this.PromotionNote=JSON.parse(item.PromotionNote);
+               TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
+               TotalPriceGo=this.PromotionNote.TotalPriceGo;
+            }
+    
            if(item.Transits && item.Transits.length>1) {
             this.ischeckStops=true;
            }
@@ -327,9 +337,21 @@ export class MytripdetailPage implements OnInit {
               
               }
              })
+
           }
+                let coutDCdepart=0;
+                let coutDCreturn=0;
+                if (TotalPriceGo>0) {
+                  coutDCdepart=2;
+                }
+                if (TotalPriceReturn>0) {
+                  coutDCreturn=2;
+                }
+                se.coutDC=coutDCdepart+coutDCreturn;
+                se.totalDichung=TotalPriceGo+TotalPriceReturn;
+                se.totalVMB=se.trip.amount_after_tax-se.totalService-se.totalDichung+se.trip.promotionDiscountAmount;
         }
-       
+        
   }
 
   ngOnInit() {
@@ -857,7 +879,7 @@ export class MytripdetailPage implements OnInit {
               se.trip.bookingsComboData[0].passengers.forEach(element => {
                 element.hanhLyshow="";
                 if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+result.ticketCondition.luggageSigned;
+                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
                 }else{
                   if (element.hanhLy){
                     element.hanhLyshow=element.hanhLy;
@@ -878,7 +900,7 @@ export class MytripdetailPage implements OnInit {
             se.trip.bookingsComboData[1].passengers.forEach(element => {
               element.hanhLyshow="";
               if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+result.ticketCondition.luggageSigned;
+                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
               }else{
                 if (element.hanhLy){
                   element.hanhLyshow=element.hanhLy;
@@ -927,11 +949,12 @@ export class MytripdetailPage implements OnInit {
   }
   policy(){
     this.ishdnp=!this.ishdnp;
-    // this.getdata();
   }
   phuthuP(){
     this.isptp=!this.isptp;
-    // this.getdata();
+  }
+  info(){
+    this.isttt=!this.isttt;
   }
   openWebpage() {
     var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
@@ -970,7 +993,7 @@ export class MytripdetailPage implements OnInit {
     }
     return res;
   }
-  getdata() {
+  getmhoteldetail() {
     var se=this;
     let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.hotel_id;
     var options = {
@@ -997,11 +1020,14 @@ export class MytripdetailPage implements OnInit {
         C.writeErrorLog(objError,response);
       }
       if(response.statusCode== 200){
-        let jsondata = JSON.parse(body);
-        se.zone.run(()=>{
-          se.cin = jsondata.CheckinTime;
-          se.cout = jsondata.CheckoutTime;
-        })
+        if (body) {
+          let jsondata = JSON.parse(body);
+          se.zone.run(()=>{
+            se.cin = jsondata.CheckinTime;
+            se.cout = jsondata.CheckoutTime;
+          })
+        }
+       
 
       }
     })
