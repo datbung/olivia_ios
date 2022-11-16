@@ -616,7 +616,7 @@ export class GlobalFunction{
             'content-type': 'application/json-patch+json',
             authorization: text
         },
-        body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, '') },
+        body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, ''),source:6 },
         json: true
       };
       request(options, function (error, response, body) {

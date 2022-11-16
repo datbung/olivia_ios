@@ -334,12 +334,15 @@ export class MytripHistoryPage implements OnInit {
   }
 
   showtripdetail(trip){
-    if(trip){
-      trip.isHistoryItem = true;
-      this._mytripservice.tripdetail = trip;
-      this._mytripservice.backroute = "mytriphistory";
-      this.navCtrl.navigateForward('mytripdetail');
+    if (trip.payment_status==1 || trip.payment_status==5) {
+      if(trip){
+        trip.isHistoryItem = true;
+        this._mytripservice.tripdetail = trip;
+        this._mytripservice.backroute = "mytriphistory";
+        this.navCtrl.navigateForward('mytripdetail');
+      }
     }
+  
   }
 
   /***

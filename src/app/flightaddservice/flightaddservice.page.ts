@@ -3493,7 +3493,8 @@ export class FlightaddservicePage implements OnInit {
   var se = this;
     var options = {
       method: 'GET',
-      url: C.urls.baseUrl.urlMobile+'/api/Dashboard/CheckAirportDiChung?airportCode_First='+this._flightService.itemFlightCache.departCode+'&airportCode_Second='+this._flightService.itemFlightCache.returnCode+'&internal_AirporFirst='+se._flightService.itemFlightCache.dataBooking.fromPlace.internal+'&internal_AirporSecond='+se._flightService.itemFlightCache.dataBooking.toPlace.internal+'',
+      url: C.urls.baseUrl.urlMobile+'/api/Dashboard/CheckAirportDiChung?airportCode_First='+this._flightService.itemFlightCache.departCode+'&airportCode_Second='+this._flightService.itemFlightCache.returnCode+'&internal_AirporFirst='+se._flightService.itemFlightCache.dataBooking.fromPlace.internal+
+      '&internal_AirporSecond='+se._flightService.itemFlightCache.dataBooking.toPlace.internal+'&firstDepartTime='+this.departFlight.departTime+'&secondDepartTime='+this.returnFlight.departTime,
       timeout: 180000, maxAttempts: 5, retryDelay: 20000,
       headers: {
       }
