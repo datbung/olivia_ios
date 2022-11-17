@@ -4,6 +4,11 @@
 			"type": "podspec",
 			"src": "GoogleMaps",
 			"spec": "~> 2.7.0"
+		},
+		"XCDYouTubeKit": {
+			"type": "podspec",
+			"src": "XCDYouTubeKit",
+			"spec": "~> 2.7"
 		}
 	},
 	"sources": {},
