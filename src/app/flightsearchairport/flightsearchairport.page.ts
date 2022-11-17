@@ -52,15 +52,7 @@ export class FlightsearchairportPage implements OnInit {
             
             this.itemsfull.forEach(element => {
               element.show = true;
-              // if(this._flightService.searchDepartCode){
-              //   if(this._flightService.itemFlightCache.returnCode){
-              //     element.show = element.code != this._flightService.itemFlightCache.returnCode;
-              //   }
-              // }else{
-              //   if(this._flightService.itemFlightCache.departCode){
-              //     element.show = element.code != this._flightService.itemFlightCache.departCode;
-              //   }
-              // }
+             
               
             });
         })
@@ -80,9 +72,8 @@ export class FlightsearchairportPage implements OnInit {
 
     loadLocation(){
         var se = this;
-        //let urlPath = "https://www.ivivu.com/ve-may-bay/data/allplace.json";
-        //let urlPath = "https://beta-air.ivivu.com/data/allplace.json";
-        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace?token=3b760e5dcf038878925b5613c32615ea3ds";
+        //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace?token=3b760e5dcf038878925b5613c32615ea3ds";
+        let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
           var options = {
             method: 'GET',
             url: urlPath,
@@ -102,11 +93,11 @@ export class FlightsearchairportPage implements OnInit {
               throw new Error(error)
             };
             let result = JSON.parse(body);
-            if(result && result.length >0){
-              result = result.filter((item) =>{ return item.country == "Việt Nam" && item.code != 'FDF'});
+            if(result && result.data && result.data.length >0){
+              //result = result.filter((item) =>{ return item.country == "Việt Nam" && item.code != 'FDF'});
                 se.zone.run(()=>{
-                    se.items = [...result];
-                    se.itemsfull = [...result];
+                    se.items = [...result.data];
+                    se.itemsfull = [...result.data];
                     se.items.forEach(element => {
                       element.show = true;
                     });
@@ -180,12 +171,14 @@ export class FlightsearchairportPage implements OnInit {
         se._flightService.itemFlightCache.departAirport = item.airport;
         se._flightService.itemFlightCache.itemDepartLocation = item;
         se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
+        se._flightService.itemFlightCache.isExtenalDepart = item.country != "Việt Nam" ? true : false;
       }else{
         se._flightService.itemFlightCache.returnCode = item.code;
         se._flightService.itemFlightCache.returnCity = item.city;
         se._flightService.itemFlightCache.returnAirport = item.airport;
         se._flightService.itemFlightCache.itemReturnLocation = item;
         se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
+        se._flightService.itemFlightCache.isExtenalReturn = item.country != "Việt Nam" ? true : false;
       }
       se._flightService.itemFlightChangeLocation.emit(item);
       if(se.valueGlobal.backValue == "flightchangeinfo"){

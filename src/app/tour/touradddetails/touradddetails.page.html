@@ -103,6 +103,45 @@
         <!-- <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher"> -->
         <app-voucherslidetour></app-voucherslidetour>
          
+          <!-- <div *ngIf="ischeck||ischeckbtnpromo" >
+            <ion-row>
+              <ion-col size="5" style="padding: 0;">
+                <div>
+                  <h2 class="text-name" style="font-size: 18px;" position="stacked">Tổng cộng</h2>
+                  <p style="font-size: 10px;font-weight: 300;margin-top: -10px">Giá đã bao gồm thuế & phí</p>
+                </div>
+              </ion-col>
+              <ion-col (click)="roompaymentbreakdow()" size="7" style="padding: 0;">
+                <p  class="total-price" style="text-align: right">
+                  {{Pricepointshow}}đ
+                  <sup>
+                    <img  src="./assets/ic_green/ic_info.svg">
+                  </sup>
+                </p>
+                <p *ngIf="Pricepointshow!=0" class="text-room-price-ota">
+                  {{PriceAvgPlusTAStr}}đ
+                </p>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div *ngIf="!ischeck&&!ischeckbtnpromo" >
+              <ion-row>
+                <ion-col size="5" style="padding: 0;">
+                  <div>
+                    <h2 class="text-name" style="font-size: 18px;" position="stacked">Tổng cộng</h2>
+                    <p style="font-size: 10px;font-weight: 300;margin-top: -10px">Giá đã bao gồm thuế & phí</p>
+                  </div>
+                </ion-col>
+                <ion-col (click)="roompaymentbreakdow()" size="7" style="padding: 0;">
+                  <p  class="total-price" style="text-align: right">
+                      {{PriceAvgPlusTAStr}}đ
+                      <sup>
+                        <img  src="./assets/ic_green/ic_info.svg">
+                      </sup>
+                    </p>
+                </ion-col>
+              </ion-row>
+            </div> -->
         </div>
 
       <div class='div-split-panel'></div>

@@ -257,5 +257,4 @@ export class VoucherSlideTourPage implements OnInit{
        
       })
     }
-
 }

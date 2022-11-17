@@ -40,7 +40,7 @@ export class FlightpaymentbankPage implements OnInit {
   bankid: number;
   bankTransfer: string;
   allowCheckHoldTicket: boolean=true;
-  jti: any;
+  jti: any='';
   constructor(public platform: Platform,public Roomif: RoomInfo, public zone: NgZone, public storage: Storage, 
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,

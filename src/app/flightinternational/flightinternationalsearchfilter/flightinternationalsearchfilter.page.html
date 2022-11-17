@@ -1,0 +1,93 @@
+<ion-header class="flightpage-header">
+  <ion-row>
+    <ion-col class="col-header">
+      <div class="d-flex">
+        <div class="div-header-title">
+          <div class="div-title">Lọc</div>
+        </div>
+
+        <div class="div-close" (click)="close()">
+          <img class="header-img-close m-top-5" src="./assets/imgs/ios-arrow-round-back.svg" >
+      </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-header>
+
+<ion-content class="flight-search-filter-content">
+  <div class="p-16">
+    <div class="text-title">Các chặng dừng</div>
+    <ion-radio-group >
+      <div class="d-flex m-top-12">
+        <div class="div-check">
+          <ion-radio value="1"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected.indexOf(1) != -1" 
+          [disabled]="listStops.indexOf(1) == -1"
+          (ionSelect)="checkItem(1, $event, 1)"></ion-radio>
+        </div>
+        <div [ngClass]="listStops.indexOf(1) == -1 ? 'text-normal v-align-center  cls-disabled-text' : 'text-normal v-align-center' " >Chỉ bay thẳng<span *ngIf="count0Stops"> ({{count0Stops}})</span></div>
+      </div>
+
+      <div class="d-flex m-top-12">
+        <div class="div-check">
+          <ion-radio value="2"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected.indexOf(2) != -1"
+          [disabled]="listStops.indexOf(2) == -1"
+          (ionSelect)="checkItem(1, $event, 2)"></ion-radio>
+        </div>
+         <div [ngClass]="listStops.indexOf(2) == -1 ? 'text-normal v-align-center cls-disabled-text' :'text-normal v-align-center' " >Tối đa 1 điểm dừng<span *ngIf="count1Stops"> ({{count1Stops}})</span></div>
+      </div>
+
+      <div class="d-flex m-top-12">
+        <div class="div-check">
+          <ion-radio value="3"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected.indexOf(3) != -1"
+          [disabled]="listStops.indexOf(3) == -1"
+          (ionSelect)="checkItem(1, $event, 3)"></ion-radio>
+        </div>
+        <div [ngClass]="listStops.indexOf(3) == -1 ? 'text-normal v-align-center cls-disabled-text' : 'text-normal v-align-center'" >Số điểm dừng bất kỳ<span *ngIf="count2Stops"> ({{count2Stops}})</span></div>
+      </div>
+    </ion-radio-group>
+    
+
+    <div class="text-title m-top-21">Hãng hàng không</div>
+    <div class="d-flex m-top-12">
+      <div class="div-check">
+        <ion-checkbox id="chkAll" color="primary" (ionChange)="checkAll($event)"></ion-checkbox>
+      </div>
+      <div class="text-normal v-align-center">Chọn tất cả</div>
+    </div>
+    <div class="d-flex m-top-12" *ngFor="let itemAirline of listAirlines">
+      <div class="div-check">
+        <ion-checkbox color="primary" class="chkAirline" id="{{itemAirline.value}}" (ionChange)="checkItem(2, itemAirline, $event)"></ion-checkbox>
+      </div>
+      <div class="text-normal v-align-center">{{itemAirline.name}}</div>
+    </div>
+
+    <div class="text-title m-top-21">Thời gian quá cảnh</div>
+    <div class="div-fitler-price d-flex">
+      <div class="div-left text-price">{{minoverlaydisplay}} - {{maxoverlaydisplay}}</div>
+      <!-- <div class="div-right text-price">{{maxoverlaydisplay}}</div> -->
+    </div>
+    <div><ion-range class="flight-filter-stops" step=1 [pin]="true" [(ngModel)]="pinoverlayvalue" (ionChange)="changeoverlay($event)" [min]="minoverlayvalue" [max]="maxoverlayvalue" dualKnobs="false" [(ngModel)]="overlayobject" ></ion-range></div>
+
+    <div class="text-title m-top-21">Giá vé</div>
+    <div class="div-fitler-price d-flex">
+      <div class="div-left text-price">{{minpricedisplay}} - {{maxpricedisplay}}</div>
+      <!-- <div class="div-right text-price">{{maxpricedisplay}}</div> -->
+    </div>
+    <div>
+      <ion-range class="flight-filter-range" step=1 [pin]="true" [(ngModel)]="pinvalue" (ionChange)="changeprice($event)" [min]="minvalue" [max]="maxvalue" dualKnobs="false" [(ngModel)]="priceobject"></ion-range>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-row>
+    <ion-col style="padding:0">
+      <div class="div-flightfilter-footer">
+        <div class="div-button-flex">
+          <button  (click)="clearFilter()" ion-button round outline class="button button-clear">Xóa lọc</button>
+          <button (click)="filter()" ion-button round outline class="button button-filter">Lọc</button>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+</ion-footer>

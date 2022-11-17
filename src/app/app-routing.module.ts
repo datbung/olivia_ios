@@ -238,6 +238,23 @@ const routes: Routes = [
     { path: 'tourpaymentdone', loadChildren: './tour/tourpaymentdone/tourpaymentdone.module#TourPaymentDonePageModule' },
     { path: 'tourrequestdone', loadChildren: './tour/tourrequestdone/tourrequestdone.module#TourRequestDonePageModule' },
     { path: 'mytriptourinfo', loadChildren: './tour/mytriptourinfo/mytriptourinfo.module#MyTripTourInfoPageModule' },
+
+    //VMBQT
+    { path: 'flightsearchresultinternational', loadChildren: './flightinternational/flightsearchresultinternational/flightsearchresultinternational.module#FlightSearchResultInternationalPageModule' },
+    //flightadddetailsinternational
+    { path: 'flightadddetailsinternational', loadChildren: './flightinternational/flightadddetailsinternational/flightadddetailsinternational.module#FlightAdddetailsInternationalPageModule' },
+    { path: 'flightinternationalpaymentselect', loadChildren: './flightinternational/flightinternationalpaymentselect/flightinternationalpaymentselect.module#FlightInternationalPaymentSelectPageModule' },
+    { path: 'flightinternationalpaymentatoffice', loadChildren: './flightinternational/flightinternationalpaymentatoffice/flightinternationalpaymentatoffice.module#FlightInternationalPaymentatOfficePageModule' },
+    { path: 'flightinternationalpaymentbank', loadChildren: './flightinternational/flightinternationalpaymentbank/flightinternationalpaymentbank.module#FlightInternationalPaymentBankPageModule' },
+    { path: 'flightinternationalpaymentchoosebank', loadChildren: './flightinternational/flightinternationalpaymentchoosebank/flightinternationalpaymentchoosebank.module#FlightInternationalPaymentChooseBankPageModule' },
+    { path: 'flightinternationalpaymentdone/:code/:startdate/:enddate', loadChildren: './flightinternational/flightinternationalpaymentdone/flightinternationalpaymentdone.module#FlightInternationalPaymentDoneModule' },
+    { path: 'flightinternationalpaymentdonebank/:code/:startdate/:enddate', loadChildren: './flightinternational/flightinternationalpaymentdonebank/flightinternationalpaymentdonebank.module#FlightInternationalPaymentDoneBankPageModule' },
+    { path: 'flightinternationalpaymentdonepayoo/:code/:startdate/:enddate', loadChildren: './flightinternational/flightinternationalpaymentdonepayoo/flightinternationalpaymentdonepayoo.module#FlightInternationalPaymentDonePayooPageModule' },
+    { path: 'flightinternationalpaymenterror', loadChildren: './flightinternational/flightinternationalpaymenterror/flightinternationalpaymenterror.module#FlightInternationalPaymentErrorPageModule' },
+    { path: 'flightinternationalpaymentpayoo/:code/:stt', loadChildren: './flightinternational/flightinternationalpaymentpayoo/flightinternationalpaymentpayoo.module#FlightInternationalPaymentPayooPageModule' },
+    { path: 'flightinternationalpaymenttimeout', loadChildren: './flightinternational/flightinternationalpaymenttimeout/flightinternationalpaymenttimeout.module#FlightInternationalPaymentTimeoutPageModule' },
+    { path: 'flightinternationalpaymentwarning', loadChildren: './flightinternational/flightinternationalpaymentwarning/flightinternationalpaymentwarning.module#FlightInternationalPaymentwarningPageModule' },
+
 ];
 @NgModule({
   imports:

@@ -1,0 +1,299 @@
+<ion-header class="flightpage-header">
+    <ion-row>
+      <ion-col class="col-header">
+        <div class="d-flex">
+          <div class="div-header-title">
+            <div class="div-title">Thông tin chuyến bay</div>
+          </div>
+  
+          <div class="div-close" (click)="close()">
+            <img class="header-img-close" src="./assets/imgs/ios-arrow-round-back.svg" >
+        </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-header>
+  
+  <ion-content class="flight-info-content">
+    <div class="p-16">
+        <div *ngIf="itemFlight && loadticketinfodone else loadsdk">
+         <div class="m-bottom-24">
+          <div class="d-flex a-baseline">
+            <div class="div-logo m-right-2">
+              <img class="icon-logo" [src]="itemFlight.urlLogo" *ngIf="!itemFlightTicket.operatedBy && !itemFlightTicket.operatedByLogo">
+              <img class="icon-logo" [src]="itemFlightTicket.operatedByLogo" *ngIf="itemFlightTicket.operatedBy && itemFlightTicket.operatedByLogo">
+            </div>
+            <div class="div-airline">
+                <div class="div-airline-info" *ngIf="itemFlight">
+                  <div class="text-airline">{{itemFlight.airline}} </div>
+                </div>
+                <div class="div-relative">
+                  <div class="p-absolute f-36 m-lr-6">·</div>
+                </div>
+                
+                <div class="div-airline-info" *ngIf="itemFlight">
+                  <div class="text-flightNumber">{{itemFlight.flightNumber}}</div>
+                </div>
+
+                <div class="div-relative">
+                  <div class="p-absolute f-36 m-lr-6">·</div>
+                </div>
+
+                <div class="div-airline-info" *ngIf="itemFlight.aircraftStr">
+                  <div class="text-flightNumber">{{itemFlight.aircraftStr}}</div>
+                </div>
+
+            </div>
+           
+          </div>
+          <div class="div-operatedby" *ngIf="itemFlightTicket.operatedBy">{{itemFlightTicket.operatedBy}}</div>
+         </div>
+          
+         
+          
+
+          <!-- Chi tiết vé -->
+          <div class="text-title">Chi tiết vé</div>
+
+          <div class="d-flex" *ngIf="itemFlight.ticketClass">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/ticket.svg" ></div>
+            <div class="text-normal">Hạng vé: {{itemFlight.ticketClass}}</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.seatPosition">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_recline.svg" ></div>
+            <div class="text-normal" *ngIf="itemFlight.addon.seatPosition == 'Standard'">Ghế tựa tiêu chuẩn</div>
+            <div class="text-normal" *ngIf="itemFlight.addon.seatPosition == 'Recliner'">Ghế tựa nghiêng bổ sung</div>
+          </div>
+
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.airlineSeatRecline">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_recline.svg" ></div>
+            <div class="text-normal">Ghế ngả lưng chuẩn</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.airlineSeatReclineExtra">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_recline_extra.svg" ></div>
+            <div class="text-normal">Ghế ngả lưng bổ sung</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.airlineSeatFlat">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_flat.svg" ></div>
+            <div class="text-normal">Ghế nằm phẳng</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.airlineSeatFlatAngled">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_flat_angled.svg" ></div>
+            <div class="text-normal">Ghế có góc nghiêng</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.airlineSeatIndividualSuite">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_individual_suite.svg" ></div>
+            <div class="text-normal">Buồng cá nhân</div>
+          </div>
+
+          <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.mealAndBeverage">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/restaurant.svg" ></div>
+            <div class="text-normal">{{itemFlight.addon.mealAndBeverage}}</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.seat && itemFlight.ticketCondition.seat.indexOf('Không') == -1">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+            <div class="text-normal">Chọn ghế: {{itemFlight.ticketCondition.seat}}</div>
+          </div>
+          
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.baggageHanded">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/work_outline.svg" ></div>
+            <div class="text-normal">Hành lý xách tay: {{itemFlight.ticketCondition.baggageHanded}}</div>
+          </div>
+
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.luggageSigned">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/work_outline.svg" ></div>
+            <div class="text-normal">Hành lý ký gửi: {{itemFlight.ticketCondition.luggageSigned}}</div>
+          </div>
+
+          <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.lounge">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/breakfast.svg" ></div>
+            <div class="text-normal">{{itemFlight.addon.lounge}}</div>
+          </div>
+
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.priorityCI">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/checkin.svg" ></div>
+            <div class="text-normal">Checkin riêng</div>
+          </div>
+          <div class="d-flex" *ngIf="itemFlight.ticketCondition && itemFlight.ticketCondition.priorityBoarding">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/boarding.svg" ></div>
+            <div class="text-normal">Boarding ưu tiên</div>
+          </div>
+
+    <div class="text-title">Điều kiện hoàn hủy</div>      
+    <!-- Thay đổi vé -->
+          <div class="d-flex" *ngIf="!changeDepartTime else _changeDepartTime">
+            <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+            <div class="text-normal">Thay đổi vé: Đang cập nhật</div>
+         </div>
+         <ng-template #_changeDepartTime>
+          <div class="d-flex">
+            <div class="div-icon">
+              <img class="icon-info" src="./assets/ic_flight_international/monetization.svg">
+            </div>
+            <div class="text-normal">Thay đổi vé: {{changeDepartTime}}</div>
+          </div>
+        </ng-template>
+        <!-- Hủy vé -->
+        <div class="d-flex" *ngIf="!ticketRefund else _ticketRefund">
+          <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+          <div class="text-normal">Hủy vé: Đang cập nhật</div>
+        </div>
+        <ng-template #_ticketRefund>
+          <div class="d-flex">
+            <div class="div-icon">
+              <img class="icon-info" src="./assets/ic_flight_international/monetization.svg">
+            </div>
+            <div class="text-normal">Hủy vé: {{ticketRefund}}</div>
+          </div>
+        </ng-template>
+
+        <div class="d-flex" *ngIf="((itemFlight.ticketCondition && itemFlight.ticketCondition.changeSegment && itemFlight.ticketCondition.changeSegment.toLowerCase().indexOf('không') != -1 ) || (itemFlight.ticketCondition && !itemFlight.ticketCondition.isChangeSegment) || !itemFlight.ticketCondition) else changeSegment">
+          <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+          <div class="text-normal">Thay đổi nơi khởi hành/ Nơi đến: Đang cập nhật</div>
+       </div>
+       <ng-template #changeSegment>
+        <div class="d-flex">
+          <div class="div-icon">
+            <img class="icon-info" src="./assets/ic_flight_international/monetization.svg" *ngIf="itemFlight.ticketCondition.changeSegment.toLowerCase().indexOf('miễn phí') == -1">
+            <img class="icon-info" src="./assets/ic_flight_international/check.svg" *ngIf="itemFlight.ticketCondition.changeSegment.toLowerCase().indexOf('miễn phí') != -1">
+          </div>
+          <div class="text-normal">Thay đổi nơi khởi hành/ Nơi đến: {{itemFlight.ticketCondition.changeSegment}}</div>
+        </div>
+      </ng-template>
+
+      <div class="d-flex" *ngIf="((itemFlight.ticketCondition && itemFlight.ticketCondition.changeInfoPax && itemFlight.ticketCondition.changeInfoPax.toLowerCase().indexOf('không') != -1 ) || (itemFlight.ticketCondition && !itemFlight.ticketCondition.isChangeInfoPax) || !itemFlight.ticketCondition) else changeInfoPax">
+        <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+        <div class="text-normal">Thay đổi tên hành khách: Đang cập nhật</div>
+     </div>
+     <ng-template #changeInfoPax>
+      <div class="d-flex">
+        <div class="div-icon">
+          <img class="icon-info" src="./assets/ic_flight_international/monetization.svg" *ngIf="itemFlight.ticketCondition.changeInfoPax.toLowerCase().indexOf('miễn phí') == -1">
+            <img class="icon-info" src="./assets/ic_flight_international/check.svg" *ngIf="itemFlight.ticketCondition.changeInfoPax.toLowerCase().indexOf('miễn phí') != -1">
+        </div>
+        <div class="text-normal">Thay đổi tên hành khách: {{itemFlight.ticketCondition.changeInfoPax}}</div>
+      </div>
+    </ng-template>
+
+    <div class="d-flex" *ngIf="((itemFlight.ticketCondition && !itemFlight.ticketCondition.isUpgradeTicket) || !itemFlight.ticketCondition ) else upgradeTicket">
+      <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+      <div class="text-normal">Nâng hạng vé: Đang cập nhật</div>
+   </div>
+   <ng-template #upgradeTicket>
+    <div class="d-flex">
+      <div class="div-icon">
+        <img class="icon-info" src="./assets/ic_flight_international/monetization.svg" *ngIf="itemFlight.ticketCondition.upgradeTicket.toLowerCase().indexOf('miễn phí') == -1">
+            <img class="icon-info" src="./assets/ic_flight_international/check.svg" *ngIf="itemFlight.ticketCondition.upgradeTicket.toLowerCase().indexOf('miễn phí') != -1">
+      </div>
+      <div class="text-normal">Nâng hạng vé: {{itemFlight.ticketCondition.upgradeTicket}}</div>
+    </div>
+  </ng-template>
+
+  <div class="d-flex" *ngIf="(itemFlight.ticketCondition && itemFlight.ticketCondition.noShow ) else updatingnoshow">
+    <div class="div-icon" *ngIf="itemFlight.ticketCondition.noShow.toLowerCase().indexOf('không') != -1"><img class="icon-info" src="./assets/ic_flight_international/disturb.svg" ></div>
+    <div class="div-icon" *ngIf="itemFlight.ticketCondition.noShow.toLowerCase().indexOf('không') == -1"><img class="icon-info" src="./assets/ic_flight_international/monetization.svg" ></div>
+    <div class="text-normal">{{itemFlight.ticketCondition.noShow}}</div>
+ </div>
+ <ng-template #updatingnoshow>
+  <div class="d-flex">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+    <div class="text-normal">Bỏ chuyến (Noshow): Đang cập nhật</div>
+  </div>
+ </ng-template>
+
+ <div class="d-flex" *ngIf="(itemFlight.ticketCondition && itemFlight.ticketCondition.goshow ) else updatinggoshow">
+  <div class="div-icon" *ngIf="itemFlight.ticketCondition.goshow.toLowerCase().indexOf('không') != -1"><img class="icon-info" src="./assets/ic_flight_international/disturb.svg" ></div>
+  <div class="div-icon" *ngIf="itemFlight.ticketCondition.goshow.toLowerCase().indexOf('không') == -1"><img class="icon-info" src="./assets/ic_flight_international/monetization.svg" ></div>
+  <div class="text-normal">{{itemFlight.ticketCondition.goshow}}</div>
+</div>
+<ng-template #updatinggoshow>
+  <div class="d-flex">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+    <div class="text-normal">Goshow: Đang cập nhật</div>
+  </div>
+ </ng-template>
+
+  <!-- Tiện ích -->
+  <div class="text-title"
+  *ngIf="itemFlight.addon && (itemFlight.addon.seatSpace ||itemFlight.addon.entertainment
+  ||itemFlight.addon.personalVideo ||itemFlight.addon.wifi ||itemFlight.addon.laptopPower ||itemFlight.addon.chargingUSB
+  ||itemFlight.addon.bonusMiles ||itemFlight.addon.tapAndPlay || (itemFlight.addon.unknowAddonValues && itemFlight.addon.unknowAddonValues.length >0))">Tiện ích trên máy bay</div>
+
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.seatSpace">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_legroom_extra.svg" ></div>
+    <div class="text-normal" *ngIf="itemFlight.addon.seatSpace">{{itemFlight.addon.seatSpace}}</div>
+    <!-- <div class="text-normal" *ngIf="itemFlight.addon.seatSpace && itemFlight.addon.seatSpace >=79 && itemFlight.addon.seatSpace <86">Chỗ duỗi chân trung bình ({{itemFlight.addon.seatSpace}}cm)</div>
+    <div class="text-normal" *ngIf="itemFlight.addon.seatSpace && itemFlight.addon.seatSpace <79">Chỗ duỗi chân dưới trung bình ({{itemFlight.addon.seatSpace}}cm)</div> -->
+  </div>
+
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.entertainment">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/ondemand_video.svg" ></div>
+    <div class="text-normal">{{itemFlight.addon.entertainment}}</div>
+  </div>
+
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.lcd">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/ondemand_video.svg" ></div>
+    <div class="text-normal">{{itemFlight.addon.lcd}}</div>
+  </div>
+
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.wifi">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/wifi.svg" ></div>
+    <div class="text-normal">Wifi có tính phí</div>
+  </div>
+
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.chargingUSB">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/power.svg" ></div>
+    <div class="text-normal" *ngIf="itemFlight.addon.chargingUSB">Nguồn sạc USB: Có</div>
+    <div class="text-normal" *ngIf="!itemFlight.addon.chargingUSB">Nguồn sạc USB: Không có</div>
+  </div>
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.laptopPower">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/power.svg" ></div>
+    <div class="text-normal">Nguồn sạc laptop: {{itemFlight.addon.laptopPower}}</div>
+  </div>
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.powerType && itemFlight.addon.powerType.toLowerCase().indexOf('không') == -1">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/power.svg" ></div>
+    <div class="text-normal">{{itemFlight.addon.powerType}}</div>
+  </div>
+  
+
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.bonusMiles">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/plus_mil.svg" ></div>
+    <div class="text-normal">{{itemFlight.addon.bonusMiles}}</div>
+  </div>
+  <div class="d-flex" *ngIf="itemFlight.addon && itemFlight.addon.tapAndPlay">
+    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/tap_and_play.svg" ></div>
+    <div class="text-normal">Phát trực tuyến nội dung đa phương tiện trên thiết bị</div>
+  </div>
+
+  <div *ngIf="itemFlight.addon && itemFlight.addon.unknowAddonValues && itemFlight.addon.unknowAddonValues.length >0">
+    <div class="d-flex" *ngFor="let unkvalue of itemFlight.addon.unknowAddonValues">
+      <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/info.svg" ></div>
+      <div class="text-normal">{{unkvalue}}</div>
+    </div>
+  </div>
+
+        </div>
+
+        <ng-template #loadsdk>
+          <ion-skeleton-text animated style="width: 100%;height: 20px;margin-bottom: 16px;border-radius: 4px;"></ion-skeleton-text>
+          <div class="d-flex" *ngFor="let sdk of arrsdk">
+            <ion-skeleton-text animated style="width: 10%;height: 16px;margin-bottom: 8px; margin-right: 8px; border-radius: 4px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%;height: 16px;margin-bottom: 8px;border-radius: 4px;"></ion-skeleton-text>
+          </div>
+
+          <ion-skeleton-text animated style="width: 100%;height: 20px;margin-bottom: 16px;border-radius: 4px;"></ion-skeleton-text>
+          <div class="d-flex" *ngFor="let sdk of arrsdk">
+            <ion-skeleton-text animated style="width: 10%;height: 16px;margin-bottom: 8px; margin-right: 8px; border-radius: 4px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%;height: 16px;margin-bottom: 8px;border-radius: 4px;"></ion-skeleton-text>
+          </div>
+
+          <ion-skeleton-text animated style="width: 100%;height: 20px;margin-bottom: 16px;border-radius: 4px;"></ion-skeleton-text>
+          <div class="d-flex" *ngFor="let sdk of arrsdk">
+            <ion-skeleton-text animated style="width: 10%;height: 16px;margin-bottom: 8px; margin-right: 8px; border-radius: 4px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%;height: 16px;margin-bottom: 8px;border-radius: 4px;"></ion-skeleton-text>
+          </div>
+          
+
+        </ng-template>
+    </div>
+  </ion-content>

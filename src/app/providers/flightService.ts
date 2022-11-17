@@ -59,6 +59,17 @@ export class flightService{
   itemCheckTabActive = new EventEmitter();
   
   private ItemFlightReloadInfoSubject = new Subject<any>();
+  itemFlightInternationalInfo: any;
+  itemFlightInternationalDepartureDetail: any;
+  listflightInternationalFilter = [];
+  listAllFlightInternational = [];
+  objectFilterInternational:any = {};
+  listAirlinesFilter: any;
+  listStops: any;
+  itemFlightInternational: any;
+  indexFlightInternational: any;
+  indexReturnFlightInternational: any;
+
   publicItemFlightReloadInfo(data: any) {
     this.ItemFlightReloadInfoSubject.next(data);
   }
@@ -67,6 +78,14 @@ export class flightService{
     return this.ItemFlightReloadInfoSubject;
   }
   
+  private ItemFlightInternationalFilterSubject = new Subject<any>();
+  publicItemFlightInternationalFilter(data: any) {
+    this.ItemFlightInternationalFilterSubject.next(data);
+  }
+
+  getItemFlightInternationalFilter(): Subject<any> {
+    return this.ItemFlightInternationalFilterSubject;
+  }
   
   
   

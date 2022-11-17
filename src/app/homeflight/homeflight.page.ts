@@ -69,6 +69,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
   isNotice=false;
   isBizAccount: boolean;
   topSale: any;
+  isExtenalDepart: boolean;
+  isExtenalReturn: boolean;
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -163,7 +165,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 this.coutdisplay = moment(_cout).format("DD-MM-YYYY");
 
                 this.isExtenal = data.isExtenal;
-
+                this._flightService.itemFlightCache.isInternationalFlight = data.isInternationalFlight;
+                this.isExtenalDepart = data.isExtenalDepart;
+                this.isExtenalReturn = data.isExtenalReturn;
                 if(data.itemSameCity){
                   this.itemSameCity = data.itemSameCity,
                   this.itemDepartSameCity= data.itemDepartSameCity,
@@ -316,7 +320,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           var se = this;
           //let urlPath = "https://www.ivivu.com/ve-may-bay/data/allplace.json";
           //let urlPath = "https://beta-air.ivivu.com/data/allplace.json";
-          let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace?token=3b760e5dcf038878925b5613c32615ea3ds";
+          //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace?token=3b760e5dcf038878925b5613c32615ea3ds";
+          let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
             var options = {
               method: 'GET',
               url: urlPath,
@@ -336,10 +341,10 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 throw new Error(error)
               };
               let result = JSON.parse(body);
-              if(result && result.length >0){
+              if(result && result.data && result.data.length >0){
                 //result = result.filter((item) =>{ return item.country == "Việt Nam"});
-                se.storage.set("listAirport", result);
-                se._flightService.listAirport = result;
+                se.storage.set("listAirport", result.data);
+                se._flightService.listAirport = result.data;
               }
           })
       }
@@ -347,6 +352,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         changeLocationInfo(data, isdepart){
             var se = this;
             if(isdepart){
+              se.isExtenalDepart = data.internal != 1 ? true : false;
               if(!data.SameCity){
                 se.departCode = data.code;
                 se.departCity = data.city;
@@ -365,6 +371,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 se.departCode ="";
               }
             }else{
+              se.isExtenalReturn = data.internal != 1 ? true : false;
               if(!data.SameCity){
                 se.returnCode = data.code;
                 se.returnCity = data.city;
@@ -383,8 +390,8 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               }
               
             }
-            se.isExtenal = data.country != "Việt Nam" ? true : false;
-            se._flightService.itemFlightCache.isExtenal = data.country != "Việt Nam" ? true : false;
+            se.isExtenal = data.internal != 1 ? true : false;
+            se._flightService.itemFlightCache.isExtenal = data.internal != 1 ? true : false;
         }
 
         reloadInfoFlight(){
@@ -1165,6 +1172,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         var se = this;
         se._flightService.itemFlightCache = {};
         se._flightService.objectFilter = {};
+        se._flightService.objectFilterInternational = {};
         se._flightService.objectFilterReturn = {};
         se._flightService.itemFlightCache.departFlight = null;
         se._flightService.itemFlightCache.returnFlight = null;
@@ -1247,6 +1255,10 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           se._flightService.itemFlightCache.itemDepartSameCity = se.itemDepartSameCity;
           se._flightService.itemFlightCache.itemReturnSameCity = se.itemReturnSameCity;
         }
+        se._flightService.itemFlightCache.isExtenalDepart = se.isExtenalDepart;
+        se._flightService.itemFlightCache.isExtenalReturn = se.isExtenalReturn;
+
+        se._flightService.itemFlightCache.isInternationalFlight = (se.isExtenalDepart || se.isExtenalReturn);
 
         se.storage.get("itemFlightCache").then((data)=>{
           if(data){
@@ -1261,8 +1273,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
       
 
 
-
-        se.navCtrl.navigateForward("/flightsearchresult");
+        if(se._flightService.itemFlightCache.isInternationalFlight){
+          se.navCtrl.navigateForward("/flightsearchresultinternational");
+        } else {
+          se.navCtrl.navigateForward("/flightsearchresult");
+        }
+        
        
       }
 
@@ -1282,7 +1298,11 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             }
             se._flightService.itemFlightCache= data;
             se._flightService.objSearch = data.objSearch;
-            se.navCtrl.navigateForward("/flightsearchresult");
+            if(se._flightService.itemFlightCache.isInternationalFlight){
+              se.navCtrl.navigateForward("/flightsearchresultinternational");
+            } else {
+              se.navCtrl.navigateForward("/flightsearchresult");
+            }
           }
           
         })
