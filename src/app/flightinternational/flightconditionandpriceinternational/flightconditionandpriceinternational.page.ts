@@ -15,6 +15,7 @@ export class FlightConditionAndPriceInternationalPage implements OnInit {
   ticketDepartRefund: any;
   changeReturnTime: any;
   ticketReturnRefund: any;
+  showDepart: boolean;
   
   constructor(public modalCtrl: ModalController, public zone: NgZone, public navCtrl: NavController,
     public gf: GlobalFunction,public _flightService: flightService,
@@ -23,7 +24,7 @@ export class FlightConditionAndPriceInternationalPage implements OnInit {
         this.departCondition = this._flightService.itemFlightCache.dataSummaryBooking.departCondition;
         this.returnCondition = this._flightService.itemFlightCache.dataSummaryBooking.returnCondition;
       }
-      
+      this.showDepart = this._flightService.itemFlightCache.showConditionAndPriceType ==1;
       if(this._flightService.itemFlightCache.itemFlightInternationalDepart && this._flightService.itemFlightCache.itemFlightInternationalDepart.penaltyFlighs && this._flightService.itemFlightCache.itemFlightInternationalDepart.penaltyFlighs.length >0 ){
         let itemmap = this._flightService.itemFlightCache.itemFlightInternationalDepart.penaltyFlighs.filter((i) => i.penaltyType == 1 && i.feePenalty >0 && i.descriptionPenalty);
         let itemmapcancel = this._flightService.itemFlightCache.itemFlightInternationalDepart.penaltyFlighs.filter((i) => i.penaltyType == 2 && i.feePenalty >0 && i.descriptionPenalty);

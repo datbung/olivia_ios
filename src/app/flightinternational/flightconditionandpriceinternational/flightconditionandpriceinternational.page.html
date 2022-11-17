@@ -1,4 +1,5 @@
 <ion-header class="flightpage-header">
+  <ion-toolbar>
     <ion-row>
       <ion-col class="col-header">
         <div class="d-flex">
@@ -12,12 +13,14 @@
         </div>
       </ion-col>
     </ion-row>
+  </ion-toolbar>
+    
   </ion-header>
   
   <ion-content class="flight-info-content">
     <div class="p-16">
         
-          <div *ngIf="departCondition" class="div-flight-info">
+          <div *ngIf="departCondition && showDepart" class="div-flight-info">
               <div class="text-title m-bottom-8">
                 Chiều đi
               </div>
@@ -27,7 +30,7 @@
               <div class="text-normal m-bottom-8" *ngIf="ticketDepartRefund"><span class="text-bold">Hủy vé: </span><span>{{ticketDepartRefund}}</span></div>
           </div>
 
-          <div *ngIf="returnCondition" class="div-flight-info m-top-24">
+          <div *ngIf="returnCondition && !showDepart" class="div-flight-info">
             <div class="text-title m-bottom-8">
               Chiều về
             </div>

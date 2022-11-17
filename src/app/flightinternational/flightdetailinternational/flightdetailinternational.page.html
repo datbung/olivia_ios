@@ -1,9 +1,10 @@
 <ion-header class="flightpage-header">
+  <ion-toolbar>
     <ion-row>
       <ion-col class="col-header">
         <div class="d-flex">
           <div class="div-header-title">
-            <div class="div-title">Thông tin chuyến bay</div>
+            <div class="div-title">Chi tiết vé</div>
           </div>
   
           <div class="div-close" (click)="close()">
@@ -12,108 +13,182 @@
         </div>
       </ion-col>
     </ion-row>
+  </ion-toolbar>
+    
   </ion-header>
   
   <ion-content class="flight-info-content">
     <div class="p-16">
         <div *ngIf="itemFlight && loadticketinfodone else loadsdk">
+
+          <div class="text-flight-title d-flex">
+              <div>
+                <div>{{ itemDepart.fromPlace }}</div>
+              </div>
+           
+            <div class="div-flight-inout">
+                <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout.svg" *ngIf="itemReturn else oneway">
+                <ng-template #oneway><img class="img-flight-inout img-oneway" src="./assets/imgs/ic_arrow.svg"></ng-template>
+            </div> 
+            <div>
+                <div>{{ itemDepart.toPlace }}</div>
+            </div>
+            
+        </div>
+
           <div *ngIf="itemDepart" class="div-flight-info">
-            <div class="text-normal m-bottom-16">Chiều đi | {{departTimeDisplay}}</div>
-            <div class="d-flex m-bottom-16">
-              <div class="d-flex width-100">
+            <div class="text-title m-bottom-2">Chiều đi | {{departTimeDisplay}}</div>
+
+            <div class="div-airline-info" *ngIf="itemDepart.airline">
+              <div class="text-airline">{{itemDepart.airline}} </div>
+            </div>
+
+            <div class="d-flex m-bottom-8">
+              <div class=" width-100">
                 <div class="div-logo m-right-2">
                   <img class="icon-logo" [src]="itemDepart.urlLogo" *ngIf=" !itemDepart.operatedByLogo">
                   <img class="icon-logo" [src]="itemDepart.operatedByLogo" *ngIf=" itemDepart.operatedByLogo">
                 </div>
-
-                <div class="div-airline-info" *ngIf="itemDepart.airline">
-                  <div class="text-airline">{{itemDepart.airline}} </div>
+                <div class="text-normal">{{departFlightNumber}} </div>
+              </div>
+              <div class="width-100  ">
+                <div class="d-flex d-flex-end">
+                  <div class="div-time text-right">{{departFlightDepartTime}}</div>
+                  <div >
+                    <img class="img-next" src="./assets/ic_flight_international/ic_arrow.svg" />
+                  </div>
+                  <div class="div-time">{{departFlightLandingTime}}</div>
+                 
                 </div>
 
-              </div>
-              <div class="width-100 ">
-                <div class="text-normal text-right">{{departFlightNumber}} </div>
+                <div class="d-flex d-flex-end">
+                  <div class="text-code">{{itemDepart.fromPlaceCode}} · </div>
+                  <div class="text-time"> {{itemDepart.flightTimeDisplay}} · </div>
+                  <div class="text-code"> {{itemDepart.toPlaceCode}}</div>
+                </div>
               </div>
             </div>
-            <div class="d-flex">
-                <div class="div-first">
-                    <div class="div-time">{{departFlightDepartTime}}</div>
-                    <div class="div-airport">{{itemDepart.fromPlace}}</div>
+            
+            <div class="div-stops  d-flex">
+              <div class="div-width-100">
+                <div class="text-stops has-stops" *ngIf="itemDepart.stops && itemDepart.stops >0"  (click)="showDepartureDetail(itemDepart)">
+                  <div>{{itemDepart.stops}} chặng dừng <span class="text-overlay" *ngIf="itemDepart.flightLayoverDisplay">({{itemDepart.flightLayoverDisplay}})</span></div>
                 </div>
-                <div class="div-second">
-                  <img class="img-next" src="./assets/ic_tour/ic_next.svg" />
-                </div>
+                <div class="text-stops" *ngIf="!itemDepart.stops">Bay thẳng</div>
+              </div>
 
-                <div class="div-third">
-                  <div class="div-time">{{departFlightLandingTime}} <span class="div-stop" *ngIf="textDepartStops">{{textDepartStops}}</span></div>
-                  <div class="div-airport">{{itemDepart.toPlace}}</div>
-                </div>
-            </div>
+              <div class="div-width-100 text-right" (click)="showFlightInfo(1)">
+                Điều kiện giá vé chiều đi
+              </div>
               
+            </div>
           </div>
 
-          <div class="div-line"></div>
+          <!-- <div class="div-line"></div> -->
 
           <div *ngIf="itemReturn" class="div-flight-info">
-            <div class="text-normal m-bottom-16">Chiều về | {{returnTimeDisplay}}</div>
-            <div class="d-flex m-bottom-16">
+            <div class="text-title m-top-8 m-bottom-2">Chiều về | {{returnTimeDisplay}}</div>
+          
+            <div class="div-airline-info" *ngIf="itemReturn.airline">
+              <div class="text-airline">{{itemReturn.airline}} </div>
+            </div>
+
+            <div class="d-flex m-bottom-8">
               <div class="d-flex width-100">
                 <div class="div-logo m-right-2">
                   <img class="icon-logo" [src]="itemReturn.urlLogo" *ngIf=" !itemReturn.operatedByLogo">
                   <img class="icon-logo" [src]="itemReturn.operatedByLogo" *ngIf=" itemReturn.operatedByLogo">
                 </div>
-
-                <div class="div-airline-info" *ngIf="itemReturn.airline">
-                  <div class="text-airline">{{itemReturn.airline}} </div>
-                </div>
-
-              </div>
-              <div class="width-100 ">
                 <div class="text-normal text-right">{{returnFlightNumber}} </div>
               </div>
+              <div class="width-100 ">
+                <div class="d-flex d-flex-end">
+                  <div class="div-time">{{returnFlightDepartTime}}</div>
+                  <div >
+                    <img class="img-next" src="./assets/ic_flight_international/ic_arrow.svg" />
+                  </div>
+                  <div class="div-time">{{returnFlightLandingTime}}</div>
+  
+                </div>
+
+                <div class="d-flex d-flex-end">
+                  <div class="text-code">{{itemReturn.fromPlaceCode}} · </div>
+                  <div class="text-time"> {{itemReturn.flightTimeDisplay}} · </div>
+                  <div class="text-code"> {{itemReturn.toPlaceCode}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="div-stops  d-flex">
+              <div class="div-width-100">
+                <div class="text-stops has-stops" *ngIf="itemReturn.stops && itemReturn.stops >0"  (click)="showDepartureDetail(itemReturn)">
+                  <div>{{itemReturn.stops}} chặng dừng <span class="text-overlay" *ngIf="itemReturn.flightLayoverDisplay">({{itemReturn.flightLayoverDisplay}})</span></div>
+                </div>
+                <div class="text-stops" *ngIf="!itemReturn.stops">Bay thẳng</div>
+              </div>
+
+              <div class="div-width-100 text-right" (click)="showFlightInfo(2)">
+                Điều kiện giá vé chiều về
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="text-total m-top-12 m-bottom-16">Chi tiết giá</div>
+          <div class="text-title m-bottom-8">Chiều đi  ·  {{departTimeDisplayTotal}}</div>
+          <div *ngIf="itemDepart">
+            <div class="d-flex">
+              <div class="width-100 text-normal" *ngIf="itemDepart.priceAdult">Người lớn</div>
+              <div class="width-100 text-normal text-right" *ngIf="itemDepart.priceAdult"><span class="text-sub">{{itemDepart.quantityAdult}} x </span>{{gf.convertNumberToString(itemDepart.priceAdult)}}</div>
             </div>
             <div class="d-flex">
-                <div class="div-first">
-                    <div class="div-time">{{returnFlightDepartTime}}</div>
-                    <div class="div-airport">{{itemReturn.fromPlace}}</div>
-                </div>
-                <div class="div-second">
-                  <img class="img-next" src="./assets/ic_tour/ic_next.svg" />
-                </div>
-
-                <div class="div-third">
-                  <div class="div-time">{{returnFlightLandingTime}} <span class="div-stop" *ngIf="textReturnStops">{{textReturnStops}}</span></div>
-                  <div class="div-airport">{{itemReturn.toPlace}}</div>
-                </div>
+              <div class="width-100 text-normal" *ngIf="itemDepart.priceChild">Trẻ em</div>
+              <div class="width-100 text-normal text-right" *ngIf="itemDepart.priceChild"><span class="text-sub">{{itemDepart.quantityChild}} x </span>{{gf.convertNumberToString(itemDepart.priceChild)}}</div>
             </div>
-              
-          </div>
+            <div class="d-flex">
+              <div class="width-100 text-normal" *ngIf="itemDepart.priceInfant">Em bé</div>
+              <div class="width-100 text-normal text-right" *ngIf="itemDepart.priceInfant"><span class="text-sub">{{itemDepart.quantityInfant}} x </span>{{gf.convertNumberToString(itemDepart.priceInfant)}}</div>
+            </div>
+            <!-- <div class="d-flex">
+              <div class="width-100 text-normal" *ngIf="itemDepart.priceTax">Thuế và phí</div>
+              <div class="width-100 text-normal text-right" *ngIf="itemDepart.priceTax">{{gf.convertNumberToString(itemDepart.priceTax)}}</div>
+            </div> -->
 
-          <div class="div-line"></div>
-          <div class="text-normal " (click)="showFlightInfo()">Xem chi tiết <span class="text-primary">điều kiện giá vé <img src="./assets/ic_flight_international/chevrons-close.svg"></span></div>
-          <div class="div-line"></div>
-          <div class="text-total m-bottom-8">Chi phí</div>
-          <div class="d-flex">
-            <div class="width-100 text-normal" *ngIf="priceAdult">Người lớn</div>
-            <div class="width-100 text-normal text-right" *ngIf="priceAdult">{{quantityAdult}} x {{gf.convertNumberToString(priceAdult/quantityAdult)}}</div>
+            <div *ngIf="itemReturn" class="text-title m-top-8 m-bottom-8">Chiều về  ·  {{returnTimeDisplayTotal}}</div>
+            <div *ngIf="itemReturn">
+              <div class="d-flex">
+                <div class="width-100 text-normal" *ngIf="itemReturn.priceAdult">Người lớn</div>
+                <div class="width-100 text-normal text-right" *ngIf="itemReturn.priceAdult"><span class="text-sub">{{itemReturn.quantityAdult}} x </span>{{gf.convertNumberToString(itemReturn.priceAdult)}}</div>
+              </div>
+              <div class="d-flex">
+                <div class="width-100 text-normal" *ngIf="itemReturn.priceChild">Trẻ em</div>
+                <div class="width-100 text-normal text-right" *ngIf="itemReturn.priceChild"><span class="text-sub">{{itemReturn.quantityChild}} x </span>{{gf.convertNumberToString(itemReturn.priceChild)}}</div>
+              </div>
+              <div class="d-flex">
+                <div class="width-100 text-normal" *ngIf="itemReturn.priceInfant">Em bé</div>
+                <div class="width-100 text-normal text-right" *ngIf="itemReturn.priceInfant"><span class="text-sub">{{itemReturn.quantityInfant}} x </span>{{gf.convertNumberToString(itemReturn.priceInfant)}}</div>
+              </div>
+              <!-- <div class="d-flex">
+                <div class="width-100 text-normal" *ngIf="itemReturn.priceTax">Thuế và phí</div>
+                <div class="width-100 text-normal text-right" *ngIf="itemReturn.priceTax">{{gf.convertNumberToString(itemReturn.priceTax)}}</div>
+              </div> -->
+            </div>
+
+            <div class="d-flex  m-top-8 m-bottom-8">
+              <div class="width-100 text-title" *ngIf="itemDepart.priceTax">Thuế và phí <span class="text-sub" *ngIf="!roundTrip">(1 chiều)</span> <span class="text-sub" *ngIf="roundTrip">(2 chiều)</span></div>
+              <div class="width-100 text-normal text-right" *ngIf="itemDepart.priceTax">{{gf.convertNumberToString(itemDepart.priceTax)}}</div>
+            </div> 
           </div>
-          <div class="d-flex">
-            <div class="width-100 text-normal" *ngIf="priceChild">Trẻ em</div>
-            <div class="width-100 text-normal text-right" *ngIf="priceChild">{{quantityChild}} x {{gf.convertNumberToString(priceChild/quantityChild)}}</div>
+          <div class="d-flex  m-top-8">
+            <div class="width-100 text-total">Tổng cộng</div>
+            <div class="width-100 text-normal text-right f-bold">{{gf.convertNumberToString(itemFlight.fare.price)}}</div>
           </div>
-          <div class="d-flex">
-            <div class="width-100 text-normal" *ngIf="priceInfant">Em bé</div>
-            <div class="width-100 text-normal text-right" *ngIf="priceInfant">{{quantityInfant}} x {{gf.convertNumberToString(priceInfant/quantityInfant)}}</div>
-          </div>
-          <div class="d-flex">
-            <div class="width-100 text-normal" *ngIf="priceTax">Thuế và phí</div>
-            <div class="width-100 text-normal text-right" *ngIf="priceTax">{{gf.convertNumberToString(priceTax)}}</div>
-          </div>
-          <div class="div-line"></div>
+          
+          <!-- <div class="div-line"></div>
           <div class="d-flex">
             <div class="width-100 text-normal f-bold">Tổng giá vé</div>
             <div class="width-100 text-total-price text-right">{{gf.convertNumberToString(_flightService.itemFlightInternational.fare.price)}}đ</div>
-          </div>
+          </div> -->
 
         </div>
 

@@ -123,11 +123,22 @@ export class FlightInternationalSearchfilterPage implements OnInit {
             this.count2Stops = this._flightService.listAllFlightInternational.length;
             if(this._flightService.listAllFlightInternational && this._flightService.listAllFlightInternational.length >0){
               this._flightService.listAllFlightInternational.forEach(element => {
-                  if( (element.departFlights[0] && element.departFlights[0].stops ==1) || (element.returnFlights[0] && element.returnFlights[0].stops ==1)){
+                if(this._flightService.itemFlightCache.roundTrip) {
+                  if( (element.departFlights[0] && element.departFlights[0].stops <=1) && (element.returnFlights[0] && element.returnFlights[0].stops <=1) && !(element.departFlights[0] && element.returnFlights[0] && element.departFlights[0].stops ==0 && element.returnFlights[0].stops ==0 )){
                     this.count1Stops +=1;
-                  }else if((element.departFlights[0] && element.departFlights[0].stops ==0) || (element.returnFlights[0] && element.returnFlights[0].stops ==0)){
+                  } 
+                  if((element.departFlights[0] && element.departFlights[0].stops ==0) && (element.returnFlights[0] && element.returnFlights[0].stops ==0)){
                     this.count0Stops +=1;
                   }
+                }else {
+                  if( (element.departFlights[0] && element.departFlights[0].stops ==1)){
+                    this.count1Stops +=1;
+                  } 
+                  if((element.departFlights[0] && element.departFlights[0].stops ==0)){
+                    this.count0Stops +=1;
+                  }
+                }
+                  
                   
               });
             }
@@ -180,7 +191,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
     clearFilter(){
       
         this._flightService.objectFilterInternational = {};
-        this._flightService.objectFilterInternational.stopSelected = [];
+        this._flightService.objectFilterInternational.stopSelected = -1;
         this._flightService.objectFilterInternational.airlineSelected = [];
           let listcheckboxs = $('.chkAirline');
           for (let index = 0; index < listcheckboxs.length; index++) {
@@ -214,6 +225,9 @@ export class FlightInternationalSearchfilterPage implements OnInit {
 
     checkItem(type, item, value) {
       if(type ==2) {
+        if(!this._flightService.objectFilterInternational){
+          this._flightService.objectFilterInternational = {};
+        }
         if(!this._flightService.objectFilterInternational.airlineSelected){
           this._flightService.objectFilterInternational.airlineSelected = [];
         }
@@ -233,10 +247,13 @@ export class FlightInternationalSearchfilterPage implements OnInit {
             this.gf.removeItem(this._flightService.objectFilterInternational.airlineSelected, item.value);
           }
       }else if(type ==1) {
+        if(!this._flightService.objectFilterInternational){
+          this._flightService.objectFilterInternational = {};
+        }
         item.stopEventDefault;
-        this._flightService.objectFilterInternational.stopSelected = [];
+        this._flightService.objectFilterInternational.stopSelected = -1;
         if(item.detail.checked){
-          this._flightService.objectFilterInternational.stopSelected.push(value);
+          this._flightService.objectFilterInternational.stopSelected = value;
         }
       }
 

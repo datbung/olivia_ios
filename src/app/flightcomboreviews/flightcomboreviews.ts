@@ -2931,6 +2931,13 @@ export class FlightComboReviewsPage implements OnInit{
         //     }
         //   }
         // }
+        let divmonth = $('.month-box');
+              if(divmonth && divmonth.length >0){
+                for (let index = 0; index < divmonth.length; index++) {
+                  const em = divmonth[index];
+                  $('#'+em.id).addClass('cls-animation-calendar');
+                }
+              }
     });
   }
   async clickedElement(e: any) {

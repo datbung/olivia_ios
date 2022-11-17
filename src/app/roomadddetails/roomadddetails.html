@@ -32,7 +32,7 @@
   <ion-row >
       <ion-col size="12">
           <ion-item style="--padding-start: 0px">
-              <ion-label class="cls-label" position="floating">Họ Tên</ion-label>
+              <ion-label class="cls-label" position="stacked">Họ Tên</ion-label>
               <ion-input class="label-input" [(ngModel)]="hoten" type="text" (ionInput)="inputFocus($event)" (ionBlur)="inputLostFocus(null)" (ionFocus)="inputOnFocus(null, 9)" required></ion-input>
           </ion-item>
       </ion-col>
@@ -40,7 +40,7 @@
   <ion-row>
     <ion-col size="12">
       <ion-item style="--padding-start: 0px">
-        <ion-label class="cls-label" position="floating">Điện thoại</ion-label>
+        <ion-label class="cls-label" position="stacked">Điện thoại</ion-label>
         <ion-input class="label-input" [(ngModel)]="phone" maxlength=10 type="tel" required></ion-input>
 
       </ion-item>
@@ -49,7 +49,7 @@
   <ion-row *ngIf="!validemail">
     <ion-col size="12">
       <ion-item style="--padding-start: 0px">
-        <ion-label class="cls-label" position="floating">Email</ion-label>
+        <ion-label class="cls-label" position="stacked">Email</ion-label>
         <ion-input class="label-input" [(ngModel)]="_email" type="email" required></ion-input>
 
       </ion-item>
@@ -74,7 +74,7 @@
     <ion-row>
         <ion-col size="12">
           <ion-item style="--padding-start: 0px;margin-left: -5px;">
-            <ion-label class="cls-label" position="floating">Yêu cầu khác</ion-label>
+            <ion-label class="cls-label" position="stacked">Yêu cầu khác</ion-label>
             <ion-input class="label-input" [(ngModel)]="note"></ion-input>
           </ion-item>
         </ion-col>
@@ -88,19 +88,19 @@
     <ion-row style="margin-left: -5px">
       <ion-col size="12">
         <ion-item style="--padding-start: 0px">
-          <ion-label class="cls-label" position="floating">Tên công ty</ion-label>
+          <ion-label class="cls-label" position="stacked">Tên công ty</ion-label>
           <ion-input class="label-input" [(ngModel)]="companyname" type="text" (ionInput)="textChange()" required></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="12">
         <ion-item style="--padding-start: 0px">
-          <ion-label class="cls-label" position="floating">Địa chỉ</ion-label>
+          <ion-label class="cls-label" position="stacked">Địa chỉ</ion-label>
           <ion-input class="label-input" [(ngModel)]="address" type="text" required></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="12">
         <ion-item style="--padding-start: 0px">
-          <ion-label class="cls-label" position="floating">Mã số thuế</ion-label>
+          <ion-label class="cls-label" position="stacked">Mã số thuế</ion-label>
           <ion-input class="label-input" [(ngModel)]="tax" type="text" required></ion-input>
         </ion-item>
       </ion-col>
@@ -112,13 +112,13 @@
     <div *ngIf="!ishideNameMail">
       <ion-col size="12">
         <ion-item style="--padding-start: 0px">
-          <ion-label class="cls-label" position="floating">Họ tên</ion-label>
+          <ion-label class="cls-label" position="stacked">Họ tên</ion-label>
           <ion-input class="label-input" [(ngModel)]="hotenhddt" type="text" required></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="12">
         <ion-item style="--padding-start: 0px">
-          <ion-label class="cls-label" position="floating">Email nhận HĐ</ion-label>
+          <ion-label class="cls-label" position="stacked">Email nhận HĐ</ion-label>
           <ion-input class="label-input" [(ngModel)]="emailhddt" type="text" required></ion-input>
         </ion-item>
       </ion-col>

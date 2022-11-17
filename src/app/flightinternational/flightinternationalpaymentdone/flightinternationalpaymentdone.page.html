@@ -21,26 +21,25 @@
     <img class="img-empty" src="./assets/empty/imgdone.svg">
 </div>
 <div style="margin-top: 5px">
-  <div>
-    <ion-label class="text">
-      Cảm ơn Quý khách đã sử dụng dịch vụ iVIVU.com
+  <div class="m-bottom-8">
+    <ion-label class="text text-tealish">
+      Xác nhận thanh toán thành công
     </ion-label>
   </div>
   <div *ngIf='stt==1 else paylater'>
+    <div class="text p-top-12">
+      Mã booking <span class='text-bold text-tealish'>{{bookingCode}}</span>
+    </div>
     <div class="p-top-12">  
-      <ion-label *ngIf="total>0" class="text">
-        Thanh toán số tiền <span style="font-weight: bold">{{gf.numberToCurrency(total, '.')}}đ</span> thành công cho đơn hàng <span class="text-bold">{{bookingCode}}</span>
-      </ion-label>
-      <ion-label *ngIf="total==0" class="text">
-        Giao dịch thanh toán thành công. Mã đơn hàng <span class="text-bold">{{bookingCode}}</span>
+      <ion-label class="text">
+        Vé điện tử đang được xử lý sẽ được <span class='text-tealish'>iVIVU</span> gửi đến email của Quý khách trong vòng <span class="text-bold">24h tiếp theo.</span>
+        Cám ơn Quý khách đã sử dụng dịch vụ <span class='text-tealish'>iVIVU.com</span>
       </ion-label>
     </div>
-    <div class="p-top-12">
-      <ion-label class="text" text-wrap>
-        Thông tin đơn hàng sẽ được gửi đến email <span class="text-tealish">{{_email}}</span> trong vòng vài phút. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư <span class="text-bold">Spam</span> hoặc <span class="text-bold">Junk Folder</span>
-      </ion-label>
+    <div class="text p-top-12">
+        Nếu cần sự hỗ trợ Quý khách vui lòng liên hệ tổng đài <span class="text-orange">1900 1870</span> để được trợ giúp.
     </div>
-    
+   
 
   </div>
 

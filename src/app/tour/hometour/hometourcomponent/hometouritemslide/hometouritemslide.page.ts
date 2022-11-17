@@ -52,7 +52,13 @@ export class HomeTourItemSlidePage implements OnInit {
         se.slideData.forEach(element => {
           if(element.TourGroupDetail && element.TourGroupDetail.length >0){
             element.groupListId = element.TourGroupDetail.map((item) => item.Id).join(',');
-            element.tourTopicId = element.TourGroupDetail[0].TourTopicId;
+            
+            let arrSplit = element.Link.split('/');
+            if(arrSplit && arrSplit.length >0){
+              element.tourTopicId = arrSplit[arrSplit.length-1].replace('c','');
+            }else{
+              element.tourTopicId = element.TourGroupDetail[0].TourTopicId;
+            }
             se.sortTourOrder(element.TourGroupDetail, 'SortOrder').then(()=>{
               element.TourGroupDetail.forEach(group => {
                 if(group.AvartarLink && group.AvartarLink.indexOf('http') == -1){
@@ -65,11 +71,14 @@ export class HomeTourItemSlidePage implements OnInit {
                   group.AvgPoint = group.AvgPoint + ".0";
                 }
 
-                let itemmap = this.tourService.listTopSale.filter((item) => item.Id == group.Id );
-                if(itemmap && itemmap.length >0 && itemmap[0].TotalPax){
-                  group.TopSale = itemmap[0].TotalPax;
-                  element.hasTopSale = true;
+                if(this.tourService.listTopSale && this.tourService.listTopSale.length >0){
+                  let itemmap = this.tourService.listTopSale.filter((item) => item.Id == group.Id );
+                  if(itemmap && itemmap.length >0 && itemmap[0].TotalPax){
+                    group.TopSale = itemmap[0].TotalPax;
+                    element.hasTopSale = true;
+                  }
                 }
+                
               });
             });
             se.tourService.listTourTopic = se.slideData;

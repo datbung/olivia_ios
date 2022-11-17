@@ -166,7 +166,7 @@
                         </div>
                     </ion-row>
 
-                    <div (click)="showFlightPriority()" class="div-timepriorityconfig">
+                    <div (click)="showFlightPriority()" class="div-timepriorityconfig" *ngIf="!isInternationalFlight">
                         <div *ngIf="(!timedepartpriorityconfig && !timereturnpriorityconfig) else haspriorityconfig">
                             <span>Bạn có giờ bay ưu tiên? <span class="cls-sub-color"> Chọn ngay <img class="img-right" src="./assets/ic_flight/ic_right_tealish.svg"/></span></span>
                         </div>

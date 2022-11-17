@@ -769,6 +769,11 @@ export class Tab1Page implements OnInit {
       }
       
       if (this.searchhotel.CheckInDate && moment(this.searchhotel.CheckInDate).diff(moment(moment(new Date()).format('YYYY-MM-DD')), 'days') >=0) {
+        let diffcincout = moment(this.searchhotel.CheckOutDate).diff(this.searchhotel.CheckInDate, 'days');
+        if(diffcincout <=0){
+          this.searchhotel.CheckOutDate = moment(this.searchhotel.CheckInDate).add(1, 'days').format('YYYY-MM-DD');
+        }
+
         this.cin = this.searchhotel.CheckInDate;
         this.cout = this.searchhotel.CheckOutDate;
   
@@ -1942,7 +1947,7 @@ export class Tab1Page implements OnInit {
     for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
       _daysConfig.push({
         date: this.valueGlobal.listlunar[j].date,
-        subTitle: this.valueGlobal.listlunar[j].name,
+        subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name,
         cssClass: 'lunarcalendar'
       })
     }
@@ -1978,6 +1983,36 @@ export class Tab1Page implements OnInit {
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
       //add event close header
       $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
+
+      // let divmonth = $('.month-box');
+      //         if(divmonth && divmonth.length >0){
+      //           for (let index = 0; index < divmonth.length; index++) {
+      //             const em = divmonth[index];
+      //             $('#'+em.id).addClass('cls-animation-calendar');
+      //           }
+      //         }
+      //Custom ngày lễ
+      let divmonth = $('.month-box');
+      if(divmonth && divmonth.length >0){
+        for (let index = 0; index < divmonth.length; index++) {
+          const em = divmonth[index];
+          $('#'+em.id).addClass('cls-animation-calendar');
+            let divsmall = $('#'+em.id+' small');
+            if(divsmall && divsmall.length >0){
+              $('#'+em.id).append("<div class='div-month-text-small'></div>");
+              
+              for (let i = 0; i < divsmall.length; i++) {
+                const es = divsmall[i];
+                let arres = es.innerHTML.split(':');
+                $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                if(arres && arres.length >1){
+                  es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                }
+                $('.sm-'+em.id+'-'+i).append(es);
+              }
+            }
+        }
+      }
     });
     var se = this;
     const event: any = await this.myCalendar.onDidDismiss();
@@ -3913,10 +3948,12 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
-    this.valueGlobal.activeTab = currentIndex;
-    if(currentIndex !=2 ){
-      this.activeTab = currentIndex;
-    }
+    this.zone.run(()=>{
+      this.valueGlobal.activeTab = currentIndex;
+      if(currentIndex !=2 ){
+        this.activeTab = currentIndex;
+      }
+    })
 
     if ( currentIndex === 2 ) {//Combo
         this.valueGlobal.backValue = "";
@@ -3928,6 +3965,7 @@ export class Tab1Page implements OnInit {
     else if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
       this._mytripservice.rootPage = "homeflight";
+      this.flightService.itemTabFlightFocus.emit(1);
         if (document.querySelector(".tabbar")) {
           document.querySelector(".tabbar")['style'].display = 'none';
           if(document.querySelector(".tabbar")[1]){
@@ -3950,7 +3988,7 @@ export class Tab1Page implements OnInit {
          }
      
       //this.getAddress();
-      this.flightService.itemTabFlightFocus.emit(1);
+      
     }
     else if (currentIndex === 3) {//Tour
       this._mytripservice.rootPage = "hometour";
@@ -4003,6 +4041,7 @@ export class Tab1Page implements OnInit {
     }
 
      this.valueGlobal.backValue = "";
+     this.loaddata();
     }
     
     this.gf.setActivatedTab(1);

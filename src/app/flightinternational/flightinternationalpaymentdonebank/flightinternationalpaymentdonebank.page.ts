@@ -46,8 +46,12 @@ export class FlightInternationalPaymentDoneBankPage implements OnInit {
       this.paymentbank = this.Roomif.paymentbank;
       this.total = this._flightService.itemFlightCache.totalPriceDisplay;
       this._email = this._flightService.itemFlightCache.email;
+      if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.pnr){
       this.bookingCode = this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
       this.bookingFlight = this._flightService.itemFlightCache;
+      }else {
+        this.bookingCode =  this._flightService.itemFlightCache.dataSummaryBooking.reservationNo;
+      }
       this.getbank();
       this.storage.get('checkreview').then(checkreview => {
         if (checkreview==0) {

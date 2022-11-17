@@ -1,5 +1,8 @@
 .flightpage-header .m-top-5{
     margin-top: 5px !important;
+    .div-close {
+        left: -1px !important;
+    }
 }
 ion-footer {
     background-color: #ffffff;
@@ -8,8 +11,10 @@ ion-radio {
     width: 30px;
     height: 30px;
     border: solid 1.5px rgba(var(--ion-text-color-rgb,0,0,0),0.23);
-    background: var(--ion-color-primary);
     --color-checked: #fff;
+  }
+  .radio-checked {
+    background: var(--ion-color-primary);
   }
 .flight-search-filter-content{
     .p-16{
@@ -30,6 +35,9 @@ ion-radio {
     .m-top-12 {
         margin-top: 12px;
     }
+    .m-left-2 {
+        margin-left: 2px;
+    }
     .v-align-center {
         display: flex;
         //flex-direction: column;
@@ -45,8 +53,7 @@ ion-radio {
         --knob-background: #26bed6;
         --bar-height: 10px;
         --bar-border-radius: 6px;
-        left: 8px;
-        margin-right: 16px;
+        margin-right: 12px;
     }
     .text-title{
         font-size: 18px;

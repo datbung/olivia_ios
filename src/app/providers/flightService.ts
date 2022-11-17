@@ -69,6 +69,7 @@ export class flightService{
   itemFlightInternational: any;
   indexFlightInternational: any;
   indexReturnFlightInternational: any;
+  loadFlightInfoType: any;
 
   publicItemFlightReloadInfo(data: any) {
     this.ItemFlightReloadInfoSubject.next(data);

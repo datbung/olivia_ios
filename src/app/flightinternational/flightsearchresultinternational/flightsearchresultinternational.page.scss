@@ -100,7 +100,9 @@
         text-align: left;
         color: #3f3b3b;
     }
-
+    .m-r-0{
+        margin-right: 0 !important;
+    }
     .width-30 {
         width: 26%;
     }
@@ -217,12 +219,14 @@
                 margin: 0 4px 0 8px;
                 .icon-logo {
                     max-width: 36px;
-                    height: 20px;
+                    height: 24px;
                     object-fit: scale-down;
                     margin-bottom: -2px;
                 }
             }
-
+            .d-flex-wrap {
+                flex-wrap: wrap;
+            }
             .div-airline-info {
                 font-size: 14px;
                 text-align: left;
@@ -237,6 +241,12 @@
                 font-size: 14px;
                 margin-top: 4px;
 
+                .f-12{
+                    font-size: 12px !important;
+                }
+                .m-r-4 {
+                    margin-right: 4px;
+                }
             }
             
             .text-flightNumber {
@@ -254,6 +264,7 @@
                 height: 13px;
                 .icon-info {
                     position: absolute;
+                    margin-top: 1px;
                 }
             }
 
@@ -336,7 +347,7 @@
                 ion-toggle {
                     zoom: 0.7;
                     position: absolute;
-                    bottom: -6px;
+                    //bottom: -6px;
                   }
             }
            

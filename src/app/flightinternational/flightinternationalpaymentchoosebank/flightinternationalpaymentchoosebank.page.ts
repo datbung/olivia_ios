@@ -164,11 +164,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
               }
               else if(result.event === 'closed') 
               {
-                  //Có chọn khách sạn thì gọi check theo luồng check ks
-                  if(se._flightService.itemFlightCache.objHotelCitySelected){
-                    se.checkComboHotelCityPayment();
-                  }else{
-                  let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode;
+                  let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+ (se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode);
                   se.gf.Checkpayment(url).then((datapayment) => {
                     var checkpay=JSON.parse(datapayment);
                     if (checkpay.ipnCall == "CALLED_OK") {
@@ -179,7 +175,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
                           se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
                             se._flightService.itemFlightCache.dataSummaryBooking = databkg;
                           })
-                          se.navCtrl.navigateForward('flightpaymentdone/'+se.bookingCode+'/'+se.startDate+'/'+se.endDate);
+                          se.navCtrl.navigateForward('flightinternationalpaymentdone/'+se.bookingCode+'/'+se.startDate+'/'+se.endDate);
                     }
                     else//case còn lại không thành công
                     {
@@ -188,11 +184,11 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
                       se._flightService.paymentError = checkpay;
-                      se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+                      se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
                     }
                   
                   })
-                }
+                
               }
             },
             (error: any) => console.error(error)
@@ -248,7 +244,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
     }
   }
   goback() {
-    this.navCtrl.navigateBack('flightpaymentselect');
+    this.navCtrl.pop();
   }
   async presentToastr(msg) {
     let toast = await this.toastCtrl.create({
@@ -511,11 +507,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
     }
     clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
-      //Có chọn khách sạn thì gọi check theo luồng check ks
-      if(this._flightService.itemFlightCache.objHotelCitySelected){
-        this.checkComboHotelCityPayment();
-      }else{
-        let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+this._flightService.itemFlightCache.reservationId ? this._flightService.itemFlightCache.reservationId : this.bookingCode;
+        let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+ (this._flightService.itemFlightCache.reservationId ? this._flightService.itemFlightCache.reservationId : this.bookingCode);
         this.gf.Checkpayment(url).then((data) => {
           var checkpay=JSON.parse(data);
           if (checkpay.ipnCall == "CALLED_OK") {
@@ -539,7 +531,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
                       this.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
                     }
         })
-      }
+      
     }, 1000 * 1);
     setTimeout(() => {
       clearInterval(this.intervalID);
@@ -688,7 +680,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
 
   checkPayment(){
     var se = this;
-    let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode;
+    let url = C.urls.baseUrl.urlFlight + ("gate/apiv1/PaymentCheck?id="+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode);
     se.gf.Checkpayment(url).then((data) => {
       var checkpay=JSON.parse(data);
       if (!checkpay.status) {

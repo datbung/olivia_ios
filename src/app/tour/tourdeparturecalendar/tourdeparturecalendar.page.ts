@@ -1,4 +1,4 @@
-import { SearchHotel } from '../../providers/book-service';
+import { SearchHotel, ValueGlobal } from '../../providers/book-service';
 import { Component, NgZone,OnInit } from '@angular/core';
 import { NavController, Events, Platform, ModalController, PickerController } from '@ionic/angular';
 import * as request from 'request';
@@ -34,9 +34,11 @@ export class TourDepartureCalendarPage implements OnInit{
   infant = '<1';
   point: number=0;
   pointbkg = '';
+  loaddeparturedone: boolean = false;
   constructor(public platform: Platform,public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events:Events,
     public gf: GlobalFunction,public modalCtrl: ModalController, private pickerController: PickerController,private storage: Storage,
-    public tourService: tourService) {
+    public tourService: tourService,
+    public valueGlobal: ValueGlobal) {
       if(!searchhotel.adult){
         searchhotel.adult = 2;
       }
@@ -46,6 +48,7 @@ export class TourDepartureCalendarPage implements OnInit{
       if(tourService.itemDepartureCalendar){
         this.hasDeparture = true;
         this.itemDepartureCalendar = tourService.itemDepartureCalendar;
+        this.loaddeparturedone = true;
       }
       else{
         this.hasDeparture = false;
@@ -273,17 +276,35 @@ export class TourDepartureCalendarPage implements OnInit{
     let _daysConfig: DayConfig[] = [];
     if(this.tourService.departures && this.tourService.departures.length >0) {
       for (let j = 0; j < this.tourService.departures.length; j++) {
+        let lunarhasdeparture =  (this.valueGlobal.listlunar && this.valueGlobal.listlunar.length >0) ? this.valueGlobal.listlunar.filter((itemlunar)=>{return moment(itemlunar.date).format('YYYY-MM-DD') == moment(this.tourService.departures[j]).format('YYYY-MM-DD') }) : '';
+        //console.log(this.valueGlobal.listlunar[j]);
+        //debugger
         _daysConfig.push({
           date: this.tourService.departures[j],
-          disable: false
+          disable: false,
+          cssClass: 'days-allotment',
+          subTitle: lunarhasdeparture && lunarhasdeparture.length >0 ? moment(lunarhasdeparture[0].date).format("DD/MM") + ': ' +lunarhasdeparture[0].name : '',
         })
       }
+
+      let minDeparture = this.tourService.departures[0];
+      var minmonth = moment(minDeparture).format('MM');
+      var maxDeparture = this.tourService.departures[this.tourService.departures.length-1];
+      var maxmonth = moment(maxDeparture).format('MM');
     }
-    
+
+    // for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+    //   _daysConfig.push({
+    //     date: this.valueGlobal.listlunar[j].date,
+    //     subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
+    //     cssClass: 'lunarcalendar'
+    //  })
+    // }
+    //debugger
       const options: CalendarModalOptions = {
         pickMode: "single",
-        title: "Chọn ngày",
-        monthFormat: "MM / YYYY",
+        title: "Chọn ngày khởi hành",
+        monthFormat: "MM YYYY",
         weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
         weekStart: 1,
         closeLabel: "",
@@ -299,15 +320,47 @@ export class TourDepartureCalendarPage implements OnInit{
         component: CalendarModal,
         animated: true,
         componentProps: { options },
-        cssClass: 'hotel-calendar-custom',
+        cssClass: 'tour-calendar-custom',
       });
       this.myCalendar.present().then(() => {
         se.allowclickcalendar = true;
         $(".days-btn").click(e => this.clickedElement(e));
-
-        $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+       
+        $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/imgs/icon_back.svg' ></div>");
         //add event close header
-        $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
+        $('.tour-calendar-custom .header-img-close').click((e => this.closecalendar()));
+
+        $('.tour-calendar-custom ion-calendar-modal').append(`<div class='div-tour-text-departure'>Ngày màu xanh lá có lịch khởi hành</div>`);
+
+        let divmonthtitle =  $('.month-title');
+        if(divmonthtitle && divmonthtitle.length >0){
+          for (let index = 0; index < divmonthtitle.length; index++) {
+            $(divmonthtitle[index])[0].innerHTML = 'Tháng ' + $(divmonthtitle[index])[0].innerHTML;
+          }
+        }
+
+        //Custom ngày lễ
+        let divmonth = $('.month-box');
+        if(divmonth && divmonth.length >0){
+          for (let index = 0; index < divmonth.length; index++) {
+            const em = divmonth[index];
+            $('#'+em.id).addClass('cls-animation-calendar');
+              let divsmall = $('#'+em.id+' small');
+              if(divsmall && divsmall.length >0){
+                $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                
+                for (let i = 0; i < divsmall.length; i++) {
+                  const es = divsmall[i];
+                  let arres = es.innerHTML.split(':');
+                  $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                  if(arres && arres.length >1){
+                    es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                  }
+                  $('.sm-'+em.id+'-'+i).append(es);
+                }
+              }
+          }
+        }
       });
 
       const event: any = await this.myCalendar.onDidDismiss();
@@ -338,6 +391,9 @@ export class TourDepartureCalendarPage implements OnInit{
           var objTextMonthStartDate: any;
           if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
             fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+            tday = fday;
+            objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
+            objTextMonthEndDate = objTextMonthStartDate;
           } else {
             fday = $('.on-selected > p')[0].textContent;
             tday = fday;
@@ -350,10 +406,10 @@ export class TourDepartureCalendarPage implements OnInit{
             objTextMonthStartDate &&
             objTextMonthStartDate.length > 0
           ) {
-            monthstartdate = objTextMonthStartDate.split("/")[0];
-            yearstartdate = objTextMonthStartDate.split("/")[1];
-            monthenddate = objTextMonthEndDate.split("/")[0];
-            yearenddate = objTextMonthEndDate.split("/")[1];
+            monthstartdate = objTextMonthStartDate.split(" ")[0];
+            yearstartdate = objTextMonthStartDate.split(" ")[1];
+            monthenddate = objTextMonthEndDate.split(" ")[0];
+            yearenddate = objTextMonthEndDate.split(" ")[1];
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday*1 +1);
             if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {
@@ -363,7 +419,7 @@ export class TourDepartureCalendarPage implements OnInit{
               }, 300);
   
               se.checkTourAllotment(fromdate).then((check)=>{
-                
+                  se.loaddeparturedone = true;
                   if(check){
                     let totalPrice = se.itemDepartureCalendar.TotalRate;
                       se.zone.run(()=>{
@@ -380,9 +436,13 @@ export class TourDepartureCalendarPage implements OnInit{
                             se.tourService.itemDepartureCalendar = itemmap[0];
                             se.tourService.hasDeparture = true;
                             se.tourService.DepartureDate = itemmap[0].DepartureDate;
-                            se.tourService.itemDepartureCalendar.PriceChildAvg = se.itemDepartureCalendar.RateChildAvg;
-                            se.tourService.itemDepartureCalendar.RateChildAvg = se.itemDepartureCalendar.RateChildAvg;
-                            se.tourService.itemDepartureCalendar.PriceChildAvgStr = se.gf.convertNumberToString(se.itemDepartureCalendar.RateChildAvg.toFixed(0));
+                           
+                              se.tourService.itemDepartureCalendar.PriceChildAvg = se.itemDepartureCalendar.RateChildAvg;
+                              se.tourService.itemDepartureCalendar.RateChildAvg = se.itemDepartureCalendar.RateChildAvg;
+                            if(se.itemDepartureCalendar.RateChildAvg){
+                              se.tourService.itemDepartureCalendar.PriceChildAvgStr = se.gf.convertNumberToString(se.itemDepartureCalendar.RateChildAvg.toFixed(0));
+                            }
+                            
                             se.tourService.itemDepartureCalendar.TotalRate = se.itemDepartureCalendar.TotalRate;
                             
                           }

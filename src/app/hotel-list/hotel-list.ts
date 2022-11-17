@@ -121,7 +121,7 @@ export class HotelListPage implements OnInit{
     }
 
     public ngOnDestroy(): void {
-      //this.subscription.unsubscribe();
+      this.subscription.unsubscribe();
     }
 
   async handleSplashScreen(): Promise<void> {
@@ -665,24 +665,29 @@ export class HotelListPage implements OnInit{
           }
         }, 10);
         //se.nodata=true;
-        for (let i = 0; i < se.json1.length; i++) {
-          const element = se.json1[i];
-          if (se.ischeckAL) {
-            if (element.MinPriceOTAStr && element.HasCheckPrice) {
-              se.nodata=false;
-              break;
+        if (se.ischeckAL) {
+            setTimeout(() => {
+            for (let i = 0; i < se.json1.length; i++) {
+              const element = se.json1[i];
+              if (se.ischeckAL) {
+                if (element.MinPriceOTAStr && element.HasCheckPrice) {
+                  se.nodata=false;
+                  break;
+                }
+              } else {
+                se.nodata=false;
+                break;
+              }
             }
-          } else {
-            se.nodata=false;
-            break;
-          }
+              let itemsprice = se.json1.some(item => item.MinPriceOTAStr && item.HasCheckPrice);
+              se.nodata = !itemsprice;
+              if(se.nodata)
+              {
+                se.json1=[];
+              }
+          },1200)
         }
-        let itemsprice = se.json1.some(item => item.MinPriceOTAStr && item.HasCheckPrice);
-        se.nodata = !itemsprice;
-        if(se.nodata)
-        {
-          se.json1=[];
-        }
+       
       })
     })
 

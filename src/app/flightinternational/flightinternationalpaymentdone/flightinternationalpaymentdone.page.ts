@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { NavController, ModalController, Platform ,AlertController} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { flightService } from '../../providers/flightService';
-import { GlobalFunction } from '../../providers/globalfunction';
+import { ActivityService, GlobalFunction } from '../../providers/globalfunction';
 import { FlightquickbackPage } from '../../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../../providers/CustomAnimations';
 import { Facebook } from '@ionic-native/facebook/ngx';
@@ -34,12 +34,17 @@ export class FlightInternationalPaymentDone implements OnInit {
     private fb: Facebook,
     private _platform: Platform,
     private _calendar: Calendar,
-    public _voucherService: voucherService) { 
+    public _voucherService: voucherService,
+    public activityService: ActivityService) { 
       if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.pnr){
         this.total = this._flightService.itemFlightCache.totalPrice;
         this._email = this._flightService.itemFlightCache.email;
         this.bookingCode =  this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
         this.bookingFlight = this._flightService.itemFlightCache;
+      }
+      else if(this.activityService.objPaymentMytrip && this._flightService.itemFlightCache.dataSummaryBooking){
+        this.bookingCode =  this._flightService.itemFlightCache.dataSummaryBooking.reservationNo;
+        this.total = this._flightService.itemFlightCache.totalPrice;
       }
       this.storage.get('checkreview').then(checkreview => {
         if (checkreview==0) {
@@ -49,14 +54,6 @@ export class FlightInternationalPaymentDone implements OnInit {
           this.checkreview=checkreview;
         }
       })
-      // if(this._voucherService.selectVoucher){
-      //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-      //   this._voucherService.selectVoucher = null;
-      // }
-      // this._voucherService.publicClearVoucherAfterPaymentDone(1);
-      //   this._flightService.itemFlightCache.promotionCode = "";
-      //   this._flightService.itemFlightCache.promocode = "";
-      //   this._flightService.itemFlightCache.discount = 0;
     }
 
  

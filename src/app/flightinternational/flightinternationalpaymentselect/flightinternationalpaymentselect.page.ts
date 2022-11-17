@@ -329,7 +329,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
                 if(se._flightService.itemFlightCache.objHotelCitySelected){
                   se.checkComboHotelCityPayment();
                 }else{
-                  let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode;
+                  let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+ (se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode);
                   se.gf.Checkpayment(url).then((datapayment)=>{
                     let checkpay=JSON.parse(datapayment);
                     if (checkpay.ipnCall == "CALLED_OK") { 
@@ -454,82 +454,30 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       return;
     }
     this.presentLoading();
-    this.checkAllowRepay().then((check) => {
-      if(check){
-        clearInterval(this.intervalID);
-        
-        this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 4, "","").then(datatype => {
-          if (datatype && datatype.isHoldSuccess) {
-            // this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
-              let itemcache = this._flightService.itemFlightCache;
-              var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=momo&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode +'&rememberToken='+this.isremember+ '&buyerPhone=' + itemcache.phone +'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight'+ '&memberId=' + this.jti+'&version=2&isFlightInt=true';
-              this.gf.CreatePayoo(url).then((data) => {
-                //let data = JSON.parse(datapayoo);
-                if (data.success) {
-                  // if(this._voucherService.selectVoucher){
-                  //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-                  //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
-                  //   this._voucherService.selectVoucher = null;
-                  // }
+    this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 4, "","").then(datatype => {
+      if (datatype && datatype.isHoldSuccess) {
 
-                  this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-                  this.openWebpage(data.returnUrl.payUrl);
-                  this.zone.run(()=>{
-                    this.setinterval(null);
-                  })
-                  
-                }else{
-                  this.hideLoading();
-                  this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-                }
+          let itemcache = this._flightService.itemFlightCache;
+          var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=momo&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&buyerPhone=' + itemcache.phone +'&rememberToken='+this.isremember+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight'+ '&memberId=' + this.jti+'&version=2';
+          this.gf.CreatePayoo(url).then((data) => {
+            if (data.success) {
+              this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+              this._flightService.itemFlightCache.ischeckpayment = 1;
+              this.openWebpage(data.returnUrl.payUrl);
+              this.zone.run(()=>{
+                this.setinterval(null);
               })
             }else{
-              this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-              clearInterval(this.intervalID);
               this.hideLoading();
+              this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
             }
           })
-      }else{
-          this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-            if(check){
-              this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 4, "","").then(datatype => {
-                if (datatype && datatype.isHoldSuccess) {
-
-                  //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
-                    let itemcache = this._flightService.itemFlightCache;
-                    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=momo&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&buyerPhone=' + itemcache.phone +'&rememberToken='+this.isremember+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight'+ '&memberId=' + this.jti+'&version=2';
-                    this.gf.CreatePayoo(url).then((data) => {
-                      //let data = JSON.parse(datapayoo);
-                      if (data.success) {
-                        // if(this._voucherService.selectVoucher){
-                        //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-                        //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
-                        //   this._voucherService.selectVoucher = null;
-                        // }
-
-                        this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-                        this.openWebpage(data.returnUrl.payUrl);
-                        this.zone.run(()=>{
-                          this.setinterval(null);
-                        })
-                      }else{
-                        this.hideLoading();
-                        this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-                      }
-                    })
-                  }else{
-                    this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-                    clearInterval(this.intervalID);
-                    this.hideLoading();
-                  }
-                })
-              }else{
-                this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 1);
-                clearInterval(this.intervalID);
-              }
-            })
-          }
-        })
+        }else{
+          this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
+          clearInterval(this.intervalID);
+          this.hideLoading();
+        }
+      })
   }
 
   setinterval(timeout)
@@ -543,7 +491,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       if(this._flightService.itemFlightCache.objHotelCitySelected){
         //this.checkComboHotelCityPayment();
       }else{
-        let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+this._flightService.itemFlightCache.reservationId;
+        let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+ (this._flightService.itemFlightCache.reservationId ? this._flightService.itemFlightCache.reservationId : this.bookingCode);
         this.zone.run(()=>{
           this.gf.Checkpayment(url).then((data) => {
             var checkpay=JSON.parse(data);
@@ -789,7 +737,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
                   if (this.loader) {
                     this.loader.dismiss();
                   }
-                  this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/0');
+                  this.navCtrl.navigateForward('flightinternationalpaymentpayoo/' + this.bookingCode + '/0');
                 }else{
                   this.hideLoading();
                   this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
@@ -802,44 +750,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
               this.hideLoading();
             }
         })
-    // this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-    //   if(check){
-    //       this.presentLoading();
-    //       this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 5, "","").then(datatype => {
-    //         if (datatype && datatype.isHoldSuccess) {
-              
-    //               let itemcache = this._flightService.itemFlightCache;
-    //                 var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
-    //                 this.gf.CreatePayoo(url).then((data) => {
-    //                   this.hideLoading();
-    //                   //let data = JSON.parse(datapayoo);
-    //                   if (data.success) {
-                    
-    //                     this._flightService.itemFlightCache.BillingCode = data.payooStoreData.BillingCode;
-    //                     this._flightService.itemFlightCache.periodPaymentDate = data.payooStoreData.periodPayment;
-    //                     console.log(this._flightService.itemFlightCache.periodPaymentDate);
-    //                     if (this.loader) {
-    //                       this.loader.dismiss();
-    //                     }
-    //                     this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/0');
-    //                   }else{
-    //                     this.hideLoading();
-    //                     this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-    //                     clearInterval(this.intervalID);
-    //                   }
-    //                 })
-    //               }else{
-    //                 this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-    //                 clearInterval(this.intervalID);
-    //                 this.hideLoading();
-    //               }
-    //           })
-    //         }else{
-    //           this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 1);
-    //           clearInterval(this.intervalID);
-    //           this.hideLoading();
-    //         }
-    //       })
+    
   }
   flightpaymentpayooqr() {
     if(this.blockPayCard){
@@ -849,14 +760,14 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 6, "","").then(datatype => {
       if (datatype && datatype.isHoldSuccess) {
         let itemcache = this._flightService.itemFlightCache;
-        let totalprice = itemcache.totalprice;
+        let totalprice = itemcache.totalPrice;
         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2&isFlightInt=true';
         this.gf.CreatePayoo(url).then((data) => {
           this.hideLoading();
           if (data.success) {
             this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
             this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
-            this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/1');
+            this.navCtrl.navigateForward('flightinternationalpaymentpayoo/' + this.bookingCode + '/1');
           }else{
             this.hideLoading();
             this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
@@ -868,83 +779,6 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
         this.hideLoading();
       }
     })
-    // this.checkAllowRepay().then((check) => {
-    //   if(check){
-        
-    //     this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 6, "","").then(datatype => {
-    //       if (datatype && datatype.isHoldSuccess) {
-    //         let itemcache = this._flightService.itemFlightCache;
-    //         //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
-    //         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
-    //         this.gf.CreatePayoo(url).then((data) => {
-    //           this.hideLoading();
-    //           //let data = JSON.parse(datapayoo);
-    //           if (data.success) {
-    //             // if(this._voucherService.selectVoucher){
-    //             //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-    //             //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
-    //             //   this._voucherService.selectVoucher = null;
-    //             // }
-                
-
-    //             this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-    //             this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
-    //             this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/1');
-    //           }else{
-    //             this.hideLoading();
-    //             this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-    //           }
-    //         })
-    //       }else{
-    //         this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-    //         clearInterval(this.intervalID);
-    //         this.hideLoading();
-    //       }
-    //     })
-    //   }
-    //   else{
-    //       this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-    //         if(check){
-    //           //this.presentLoading();
-    //               this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 6, "","").then(datatype => {
-    //                 if (datatype && datatype.isHoldSuccess) {
-    //                   let itemcache = this._flightService.itemFlightCache;
-    //                   //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
-    //                   var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
-    //                   this.gf.CreatePayoo(url).then((data) => {
-    //                     this.hideLoading();
-    //                     //let data = JSON.parse(datapayoo);
-    //                     if (data.success) {
-    //                       // if(this._voucherService.selectVoucher){
-    //                       //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-    //                       //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
-    //                       //   this._voucherService.selectVoucher = null;
-    //                       // }
-    //                       this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-    //                       this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
-    //                       if (this.loader) {
-    //                         this.loader.dismiss();
-    //                       }
-    //                       this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/1');
-    //                       //console.log(datapayoo.payooStoreData.BillingCode);
-    //                     }else{
-    //                       this.hideLoading();
-    //                       this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-    //                     }
-    //                   })
-    //                 }else{
-    //                   this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 2);
-    //                   clearInterval(this.intervalID);
-    //                   this.hideLoading();
-    //                 }
-    //               })
-    //             }else{
-    //               this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 1);
-    //               clearInterval(this.intervalID);
-    //             }
-    //           })
-    //         }
-    //       })
   }
 
   callCheckPayment(){
@@ -955,7 +789,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
   checkPayment(){
     var se = this;
     //if(se._flightService.itemFlightCache && se._flightService.itemFlightCache.reservationId){
-      let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode;
+      let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+ (se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode);
       se.gf.Checkpayment(url).then((data) => {
         var checkpay=JSON.parse(data);
         if (checkpay.status == 0) {
@@ -1160,7 +994,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
               this.bizTravelService.paymentType = 1;
               this.flightPayment().then((checkvalid) => {
                 if(checkvalid){
-                  this.bizTravelService.routeBackWhenCancel = 'flightsearchresult';
+                  this.bizTravelService.routeBackWhenCancel = 'flightsearchresultinternational';
                   this.navCtrl.navigateForward('confirmpayment');
                 }
                 

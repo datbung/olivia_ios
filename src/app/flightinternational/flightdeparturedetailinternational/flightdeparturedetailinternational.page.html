@@ -1,9 +1,10 @@
 <ion-header class="flightpage-header">
+  <ion-toolbar>
     <ion-row>
       <ion-col class="col-header">
         <div class="d-flex">
           <div class="div-header-title">
-            <div class="div-title">Chi tiết chuyến bay</div>
+            <div class="div-title">Thông tin chuyến bay</div>
           </div>
   
           <div class="div-close" (click)="close()">
@@ -12,6 +13,8 @@
         </div>
       </ion-col>
     </ion-row>
+  </ion-toolbar>
+    
   </ion-header>
   
   <ion-content class="flight-detail-content">
@@ -19,36 +22,39 @@
         <div *ngFor="let itemdeparture of itemFlight.details; let idx = index">
 
           <div class="m-bottom-16">
-            <div class="d-flex a-baseline ">
-              <div class="div-logo m-right-2">
-                <!-- <img class="icon-logo" [src]="itemdeparture.logoUrl" > -->
-                <img class="icon-logo" [src]="itemdeparture.logoUrl" *ngIf="!itemdeparture.operatedByLogo">
-                <img class="icon-logo" [src]="itemdeparture.operatedByLogo" *ngIf="itemdeparture.operatedByLogo">
-              </div>
-            
-              <div class="div-airline-info" *ngIf="itemdeparture">
-                <div class="text-airline">{{itemdeparture.airline}} </div>
-              </div>
-              <div class="div-relative">
-                <div class="p-absolute f-36 m-lr-6">·</div>
+            <div class="d-flex ">
+              <div class="d-flex">
+                <div class="div-logo m-right-2">
+                  <img class="icon-logo" [src]="itemdeparture.logoUrl" *ngIf="!itemdeparture.operatedByLogo">
+                  <img class="icon-logo" [src]="itemdeparture.operatedByLogo" *ngIf="itemdeparture.operatedByLogo">
+                </div>
+                <div>
+                    <div  class="d-flex  a-baseline">
+                      <div class="div-airline-info" *ngIf="itemdeparture">
+                        <div class="text-airline">{{itemdeparture.airline}} </div>
+                      </div>
+                      <div class="div-relative">
+                        <div class="p-absolute f-36 m-lr-6">·</div>
+                      </div>
+                      
+                      <div class="div-airline-info" *ngIf="itemdeparture">
+                        <div class="text-flightNumber">{{itemdeparture.flightNumber}}</div>
+                      </div>
+          
+                      <div class="div-relative" *ngIf="itemdeparture.aircraftStr">
+                        <div class="p-absolute f-36 m-lr-6">·</div>
+                      </div>
+                      <div class="div-airline-info" *ngIf="itemdeparture.aircraftStr">
+                        <div class="text-flightNumber">{{itemdeparture.aircraftStr}}</div>
+                      </div>
+                    </div>
+                    <div class="div-operatedby" *ngIf="itemdeparture.operatedBy">{{itemdeparture.operatedBy}}</div>
+                    <div class="div-airline-info" *ngIf="itemdeparture.ticketClass">
+                      <div class="text-ticketClass">{{itemdeparture.ticketClass}}</div>
+                    </div>
+                </div>
               </div>
               
-              <div class="div-airline-info" *ngIf="itemdeparture">
-                <div class="text-flightNumber">{{itemdeparture.flightNumber}}</div>
-              </div>
-  
-              <div class="div-relative" *ngIf="itemdeparture.aircraftStr">
-                <div class="p-absolute f-36 m-lr-6">·</div>
-              </div>
-  
-              <div class="div-airline-info" *ngIf="itemdeparture.aircraftStr">
-                <div class="text-flightNumber">{{itemdeparture.aircraftStr}}</div>
-              </div>
-             
-              <div class="div-airline-info" *ngIf="itemdeparture.ticketClass">
-                <div class="text-ticketClass"> | {{itemdeparture.ticketClass}}</div>
-              </div>
-              <div class="div-operatedby" *ngIf="itemdeparture.operatedBy">{{itemdeparture.operatedBy}}</div>
             </div>
             
           </div>

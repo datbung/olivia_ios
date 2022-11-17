@@ -7,9 +7,9 @@ import { OverlayEventDetail } from '@ionic/core';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import * as request from 'requestretry';
-import { SearchHotel } from 'src/app/providers/book-service';
+import { SearchHotel, ValueGlobal } from 'src/app/providers/book-service';
 import { tourService } from 'src/app/providers/tourService';
-import { CalendarModal, CalendarModalOptions } from 'ion2-calendar';
+import { CalendarModal, CalendarModalOptions, DayConfig } from 'ion2-calendar';
 // import { SelectDateRangePage } from 'src/app/selectdaterange/selectdaterange.page';
 
 @Component({
@@ -32,7 +32,8 @@ export class HomeTourSearchPage implements OnInit {
     private actionsheetCtrl: ActionSheetController,
     private platform: Platform,
     public searchhotel: SearchHotel,
-    public tourService: tourService) {
+    public tourService: tourService,
+    public valueGlobal: ValueGlobal) {
   }
 
   ngOnInit(){
@@ -109,14 +110,22 @@ export class HomeTourSearchPage implements OnInit {
     se.allowclickcalendar = false;
     let fromdate = new Date(this.searchhotel.CheckInDate);
     let todate = new Date(this.searchhotel.CheckOutDate);
+    let _daysConfig: DayConfig[] = [];
+    for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+      _daysConfig.push({
+        date: this.valueGlobal.listlunar[j].date,
+        subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
+        cssClass: 'lunarcalendar'
+     })
+    }
 
     let Year=new Date().getFullYear();
     let Month=new Date().getMonth();
     let Day=new Date().getDate();
       const options: CalendarModalOptions = {
         pickMode: "single",
-        title: "Chọn ngày",
-        monthFormat: "MM / YYYY",
+        title: "Chọn ngày khởi hành",
+        monthFormat: "MM YYYY",
         weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
         weekStart: 1,
         closeLabel: "",
@@ -124,23 +133,60 @@ export class HomeTourSearchPage implements OnInit {
         step: 0,
         defaultScrollTo: fromdate,
         defaultDate: fromdate,
-        daysConfig: [],
+        daysConfig: _daysConfig,
         to: new Date(Year+1, Month, Day),
       };
-  
+      
       this.myCalendar = await this.modalCtrl.create({
         component: CalendarModal,
         animated: true,
         componentProps: { options },
-        cssClass: 'hotel-calendar-custom',
+        cssClass: 'tour-calendar-custom',
       });
       this.myCalendar.present().then(() => {
         se.allowclickcalendar = true;
         $(".days-btn").click(e => this.clickedElement(e));
 
-        $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+        $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/imgs/icon_back.svg' ></div>");
         //add event close header
-        $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
+        $('.tour-calendar-custom .header-img-close').click((e => this.closecalendar()));
+
+        let divmonthtitle =  $('.month-title');
+        if(divmonthtitle && divmonthtitle.length >0){
+          for (let index = 0; index < divmonthtitle.length; index++) {
+            $(divmonthtitle[index])[0].innerHTML = 'Tháng ' + $(divmonthtitle[index])[0].innerHTML;
+          }
+        }
+
+        // let divmonth = $('.month-box');
+        // if(divmonth && divmonth.length >0){
+        //   for (let index = 0; index < divmonth.length; index++) {
+        //     const em = divmonth[index];
+        //     $('#'+em.id).addClass('cls-animation-calendar');
+        //   }
+        // }
+        //Custom ngày lễ
+        let divmonth = $('.month-box');
+        if(divmonth && divmonth.length >0){
+          for (let index = 0; index < divmonth.length; index++) {
+            const em = divmonth[index];
+            $('#'+em.id).addClass('cls-animation-calendar');
+              let divsmall = $('#'+em.id+' small');
+              if(divsmall && divsmall.length >0){
+                $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                
+                for (let i = 0; i < divsmall.length; i++) {
+                  const es = divsmall[i];
+                  let arres = es.innerHTML.split(':');
+                  $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                  if(arres && arres.length >1){
+                    es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                  }
+                  $('.sm-'+em.id+'-'+i).append(es);
+                }
+              }
+          }
+        }
       });
 
       const event: any = await this.myCalendar.onDidDismiss();
@@ -172,6 +218,9 @@ export class HomeTourSearchPage implements OnInit {
           var objTextMonthStartDate: any;
           if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
             fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+            tday = fday;
+            objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
+            objTextMonthEndDate = objTextMonthStartDate;
           } else {
             fday = $('.on-selected > p')[0].textContent;
             tday = fday;
@@ -184,10 +233,10 @@ export class HomeTourSearchPage implements OnInit {
             objTextMonthStartDate &&
             objTextMonthStartDate.length > 0
           ) {
-            monthstartdate = objTextMonthStartDate.split("/")[0];
-            yearstartdate = objTextMonthStartDate.split("/")[1];
-            monthenddate = objTextMonthEndDate.split("/")[0];
-            yearenddate = objTextMonthEndDate.split("/")[1];
+            monthstartdate = objTextMonthStartDate.split(" ")[0];
+            yearstartdate = objTextMonthStartDate.split(" ")[1];
+            monthenddate = objTextMonthEndDate.split(" ")[0];
+            yearenddate = objTextMonthEndDate.split(" ")[1];
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday*1 +1);
             if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {

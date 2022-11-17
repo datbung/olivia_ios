@@ -104,6 +104,9 @@ export class TourDetailPage {
                   if(this.itemDetail.AvgPoint && (this.itemDetail.AvgPoint.toString().length == 1 || this.itemDetail.AvgPoint === 10)){
                     this.itemDetail.AvgPoint = this.itemDetail.AvgPoint +".0";
                   }
+                }else{
+                  this.gf.showAlertMessageOnly('Trang hết hiệu lực. Quý khách vui lòng tải lại trang mới!');
+                  this.goback();
                 }
               })
               this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: tourService.tourDetailId, date: moment(this.searchHotel.CheckInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
@@ -114,7 +117,8 @@ export class TourDetailPage {
                         if(data1 && data1.Status == "Success" && data1.Response && data1.Response.TourRate){
                        
                           if(data1.Response.StrListDepartures){
-                            this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDeparture', headers, {TourId: tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures},'tourDetail','MercuriusTourDeparture').then((data2)=>{
+                            //this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDeparture', headers, {TourId: tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures},'tourDetail','MercuriusTourDeparture').then((data2)=>{
+                              this.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDepartureDate', headers, {TourCode: tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures.split(',')},'tourDetail','MercuriusTourDeparture').then((data2)=>{
                               if(data2 && data2.Status == 'Success'){
                                 let lstDepartures = JSON.parse(data2.Response);
                                 console.log(lstDepartures);
@@ -338,12 +342,18 @@ export class TourDetailPage {
             $($('.item-tour-header')[index-1]).addClass('item-header-actived');
 
              setTimeout(()=>{
+              if(index != 7){
                 document.getElementById('header'+index).scrollLeft = parseInt($("#header"+index)[0].offsetLeft.toString())
                 $('#header'+index).animate({'scrollLeft': $('#header'+index).position().left + 220}, 500);
                 //this.scrollYArea.scrollToPoint(0, $('#content'+index).position().top +50, 350);
                 if($('#content'+index) && $('#content'+index).length >0){
                   document.getElementById('content'+index).scrollIntoView({ behavior: 'smooth', block: 'center'  });
                 }
+                
+              }else{
+                this.scrollToTopGroupReview(1)
+              }
+              
                 if($('.div-item').hasClass('scroll-horizontal')){
                   this.changeStyleHeader();
                 }
@@ -460,6 +470,10 @@ export class TourDetailPage {
             
           }
         },100)
+      }
+
+      ionViewWillEnter(){
+        this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
       }
 
     }

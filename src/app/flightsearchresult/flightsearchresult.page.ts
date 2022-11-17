@@ -3132,9 +3132,10 @@ export class FlightsearchresultPage implements OnInit {
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
             if(data && data.data){
               if(se._flightService.itemFlightCache.isInternationalFlight){
+                se._flightService.itemChangeTicketFlight.emit(1);
                 se.navCtrl.navigateForward('/flightsearchresultinternational');
-              }
-              let obj = se._flightService.objSearch;
+              }else{
+                let obj = se._flightService.objSearch;
               
                 se.resetValue();
                 se.title = obj.title;
@@ -3150,6 +3151,8 @@ export class FlightsearchresultPage implements OnInit {
                   }
                 })
                 se.loadFlightData(obj, true);
+              }
+              
                 
             }
           })
@@ -3223,7 +3226,7 @@ export class FlightsearchresultPage implements OnInit {
           se._flightService.itemFlightCache.step = 2;
           se._flightService.objectFilter = null;
           se._flightService.objectFilterReturn = null;
-
+          se._flightService.itemFlightCache.pnr = null;
 
           if(se._flightService && se._flightService.objSearch){
             let obj = se._flightService.objSearch;
@@ -3498,12 +3501,18 @@ export class FlightsearchresultPage implements OnInit {
             if(divmonth && divmonth.length >0){
               for (let index = 0; index < divmonth.length; index++) {
                 const em = divmonth[index];
+                $('#'+em.id).addClass('cls-animation-calendar');
                   let divsmall = $('#'+em.id+' small');
                   if(divsmall && divsmall.length >0){
-                    $('#'+em.id).append("<div class='div-month-text-small'></div>")
+                    $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                    
                     for (let i = 0; i < divsmall.length; i++) {
                       const es = divsmall[i];
-                      $('#'+em.id+' .div-month-text-small').append("<div class='sm-"+em.id+'-'+i+"'></div>");
+                      let arres = es.innerHTML.split(':');
+                      $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                      if(arres && arres.length >1){
+                        es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                      }
                       $('.sm-'+em.id+'-'+i).append(es);
                     }
                   }

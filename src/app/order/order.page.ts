@@ -36,10 +36,11 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
     styleUrls: ['./order.page.scss'],
   })
   export class OrderPage {
-    @Input('myScrollVanish') scrollArea;
+    
     @ViewChild(IonContent) content: IonContent;
     @ViewChild('mySlider') slider: IonSlides;
     @Input() rootpage: any;
+    @ViewChild('scrollArea') scrollArea: IonContent;
     
     public listMyTrips = [];
     public listHistoryTrips = [];
@@ -140,6 +141,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
   totalCost=0;
   flightRoundTripStr: string;
   totalPaxStr: any;
+  loadsummarydone: any;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -953,33 +955,63 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                                 element.bookingjson.forEach(elementbkg => {
                                   if(elementbkg && elementbkg.Transits){
                                     element.totalCost += elementbkg.TotalCost*1;
-                                    if(elementbkg.Transits.length >1){
-                                      let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
-                                      let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
-                                      let diffminutes = moment(dt).diff(lt, 'minutes');
-                                      if(diffminutes){
-                                        let hours:any = Math.floor(diffminutes/60);
-                                        let minutes:any = diffminutes - (hours*60);
-                                        if(hours < 10){
-                                          hours = hours != 0?  "0"+hours : "0";
-                                        }
-                                        if(minutes < 10){
-                                          minutes = "0"+minutes;
-                                        }
-                                        elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
-                                      }
+                                    // if(elementbkg.Transits.length >1){
+                                    //   let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
+                                    //   let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
+                                    //   let diffminutes = moment(dt).diff(lt, 'minutes');
+                                    //   if(diffminutes){
+                                    //     let hours:any = Math.floor(diffminutes/60);
+                                    //     let minutes:any = diffminutes - (hours*60);
+                                    //     if(hours < 10){
+                                    //       hours = hours != 0?  "0"+hours : "0";
+                                    //     }
+                                    //     if(minutes < 10){
+                                    //       minutes = "0"+minutes;
+                                    //     }
+                                    //     elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                    //   }
                                      
-                                    }
-                                    elementbkg.Transits.forEach(element => {
+                                    // }
+                                    // elementbkg.Transits.forEach(element => {
+                                    //     element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                    //     element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                    //     element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                                    //     element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                                    //     let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                                    //     element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                    //   });
+                                      //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                                    for (let index = 0; index < elementbkg.Transits.length; index++) {
+                                        const element = elementbkg.Transits[index];
                                         element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
                                         element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                        element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+                                        element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+
                                         element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                         element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
                                         let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
                                         element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                                      });
-                                      //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
-                                    
+                                        
+                                        let elementNext = elementbkg.Transits[index+1];
+                                        if(elementNext){
+                      
+                                          let dt = elementNext.DepartTime.replace('/Date(','').replace(')/','')*1;
+                                          let lt = element.LandingTime.replace('/Date(','').replace(')/','')*1;
+                                          let diffminutes = moment(dt).diff(lt, 'minutes');
+                                          if(diffminutes){
+                                            let hours:any = Math.floor(diffminutes/60);
+                                            let minutes:any = diffminutes - (hours*60);
+                                            if(hours < 10){
+                                              hours = hours != 0?  "0"+hours : "0";
+                                            }
+                                            if(minutes < 10){
+                                              minutes = "0"+minutes;
+                                            }
+                                            element.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                          }
+                                        }
+                                      }
                                     
                                   }
                                 });
@@ -1633,6 +1665,32 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                 se.getBookingTourDetail(se.listMyTrips[0]);
               }
 
+              else if(se.listMyTrips && se.listMyTrips.length ==1 && se.listMyTrips[0].isBookingVMBQT){
+                se.getSummaryBooking(se.listMyTrips[0]);
+                if(se.listMyTrips[0].off_hotel_paypolicy && se.listMyTrips[0].off_hotel_paypolicy.indexOf('\r\n')){
+                  let arrpolicy = se.listMyTrips[0].off_hotel_paypolicy.split('\r\n');
+                  se.listMyTrips[0].listpolicy =[];
+                  arrpolicy.forEach(element => {
+                     if(element && element.toLowerCase().indexOf('đổi chiều đi') != -1){
+                      se.listMyTrips[0].hasdepartpolicy = true;
+                      se.listMyTrips[0].listpolicy.push({type: 1, name: element.replace('-',''), isdepart: true});
+                     }else if(element && element.toLowerCase().indexOf('đổi chiều về') != -1){
+                      se.listMyTrips[0].hasreturnpolicy = true;
+                      se.listMyTrips[0].listpolicy.push({type: 1, name: element.replace('-',''), isdepart: false});
+                     }
+                     else if(element && element.toLowerCase().indexOf('hủy chiều đi') != -1){
+                      se.listMyTrips[0].hasdepartpolicy = true;
+                      se.listMyTrips[0].listpolicy.push({type: 2, name: element.replace('-',''), isdepart: true});
+                     }else if(element && element.toLowerCase().indexOf('hủy chiều về') != -1){
+                      se.listMyTrips[0].hasreturnpolicy = true;
+                      se.listMyTrips[0].listpolicy.push({type: 2, name: element.replace('-',''), isdepart: false});
+                     }
+                   });
+                 }
+              }
+
+              
+
             }, 300);
             se.getListSupportByUser(this.loginuser);
           }
@@ -1851,30 +1909,64 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           elementHis.bookingjson.forEach(elementbkg => {
                             if(elementbkg && elementbkg.Transits){
                               elementHis.totalCost += elementbkg.TotalCost*1;
-                              let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
-                                      let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
-                                      let diffminutes = moment(dt).diff(lt, 'minutes');
-                                      if(diffminutes){
-                                        let hours:any = Math.floor(diffminutes/60);
-                                        let minutes:any = diffminutes - (hours*60);
-                                        if(hours < 10){
-                                          hours = hours != 0?  "0"+hours : "0";
-                                        }
-                                        if(minutes < 10){
-                                          minutes = "0"+minutes;
-                                        }
-                                        elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
-                                      }
-                              elementbkg.Transits.forEach(element => {
+                              // if(elementbkg.Transits.length >1){
+                              // let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
+                              //         let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
+                              //         let diffminutes = moment(dt).diff(lt, 'minutes');
+                              //         if(diffminutes){
+                              //           let hours:any = Math.floor(diffminutes/60);
+                              //           let minutes:any = diffminutes - (hours*60);
+                              //           if(hours < 10){
+                              //             hours = hours != 0?  "0"+hours : "0";
+                              //           }
+                              //           if(minutes < 10){
+                              //             minutes = "0"+minutes;
+                              //           }
+                              //           elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
+                              //         }
+                              //       }
+                              // elementbkg.Transits.forEach(element => {
+                              //     element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                              //     element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                              //     element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                              //     element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                              //     let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                              //     element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                              //   });
+                                //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                                for (let index = 0; index < elementbkg.Transits.length; index++) {
+                                  const element = elementbkg.Transits[index];
                                   element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
                                   element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+
+                                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+                                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+
+
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
                                   let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
                                   element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                                });
-                                //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
-                              
+                                  
+                                  let elementNext = elementbkg.Transits[index+1];
+                                  if(elementNext){
+                
+                                    let dt = elementNext.DepartTime.replace('/Date(','').replace(')/','')*1;
+                                    let lt = element.LandingTime.replace('/Date(','').replace(')/','')*1;
+                                    let diffminutes = moment(dt).diff(lt, 'minutes');
+                                    if(diffminutes){
+                                      let hours:any = Math.floor(diffminutes/60);
+                                      let minutes:any = diffminutes - (hours*60);
+                                      if(hours < 10){
+                                        hours = hours != 0?  "0"+hours : "0";
+                                      }
+                                      if(minutes < 10){
+                                        minutes = "0"+minutes;
+                                      }
+                                      element.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                    }
+                                  }
+                                }
                               
                             }
                           });
@@ -4238,6 +4330,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
        
         } 
         else if(trip.isBookingVMBQT){
+          se._flightService.itemFlightInternational = null;
           se.activityService.objPaymentMytrip = trip;
           this.gf.showLoading();
           let url = C.urls.baseUrl.urlFlightInt + `api/bookings/${trip.booking_id}/summary?${new Date().getTime()}`;
@@ -5379,7 +5472,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
         error.param = JSON.stringify(options);
         C.writeErrorLog(objError,response);
       }
-      if(response.statusCode== 200){
+      if(response.statusCode== 200 && body){
         let jsondata = JSON.parse(body);
         se.zone.run(()=>{
           se.cin = jsondata.CheckinTime;
@@ -5418,5 +5511,97 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
         }
       }
     );
+  }
+
+
+  getSummaryBooking(trip) {
+    let url = C.urls.baseUrl.urlFlightInt + `api/bookings/${trip.booking_id}/summary?${new Date().getTime()}`;
+    this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
+      if(data.data){
+        trip.dataSummaryBooking = data.data;
+        console.log(data.data);
+        this.loadsummarydone= true;
+        if(trip.dataSummaryBooking.departFlightData){
+          this.getDetailTicket(trip.dataSummaryBooking.departFlightData, trip, 1);
+        }
+
+        if(trip.dataSummaryBooking.returnFlightData && trip.dataSummaryBooking.returnFlightData.id){
+          this.getDetailTicket(trip.dataSummaryBooking.returnFlightData, trip, 0);
+        }
+      }
+     
+    })
+  }
+
+  getDetailTicket(item, trip, isdepart){
+    let se = this;
+    let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType}&airbusCode=${item.aircraft}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(trip.bookingDate).format('YYYY-MM-DD')}`;
+    this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
+      if(data){
+        se.zone.run(()=> {
+          trip.loadsummarydone = true;
+          if(isdepart){
+            trip.departTicketInfo = data;
+          }else{
+            trip.returnTicketInfo = data;
+          }
+        })
+      }
+    })
+  }
+
+  expandCondition(trip){
+    if(!trip.loadsummarydone){
+      this.gf.showAlertMessageOnly('Đang tải chi tiết vé, xin vui lòng đợi trong giây lát!');
+      return;
+    }
+    trip.expanddivcondition = !trip.expanddivcondition;
+    if(trip.expanddivcondition){
+      var divCollapse = $('.div-wrap-condition.div-collapse');
+      if(divCollapse && divCollapse.length >0){
+        divCollapse.removeClass('div-collapse').addClass('div-expand');
+      }
+   
+    }else{
+      var divCollapse = $('.div-wrap-condition.div-expand');
+      if(divCollapse && divCollapse.length >0){
+        divCollapse.removeClass('div-expand').addClass('div-collapse');
+      }
+      this.scrollToTopGroup(1);
+    }
+    
+  }
+
+  expandRefund(trip){
+    trip.expanddivrefund = !trip.expanddivrefund;
+    if(trip.expanddivrefund){
+      var divCollapse = $('.div-wrap-refund.div-collapse');
+      if(divCollapse && divCollapse.length >0){
+        divCollapse.removeClass('div-collapse').addClass('div-expand');
+      }
+   
+    }else{
+      var divCollapse = $('.div-wrap-refund.div-expand');
+      if(divCollapse && divCollapse.length >0){
+        divCollapse.removeClass('div-expand').addClass('div-collapse');
+      }
+      this.scrollToTopGroup(2);
+    }
+    
+  }
+
+  scrollToTopGroup(value){
+    //scroll to top of group
+    setTimeout(()=>{
+      var objHeight = value == 1 ? $('.div-condition') : $('.div-refund').last();
+      if(objHeight && objHeight.length >0){
+        var h = 0;
+        h = objHeight[0].offsetTop;
+        if(this.scrollArea){
+          this.scrollArea.scrollToPoint(0,h,500);
+        }
+        
+      }
+    },100)
   }
 }

@@ -3392,7 +3392,7 @@ async bookcombo() {
       for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
           date: this.valueGlobal.listlunar[j].date,
-          subTitle: this.valueGlobal.listlunar[j].name,
+          subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name,
           cssClass:'lunarcalendar'
         })
       }
@@ -3430,19 +3430,42 @@ async bookcombo() {
         $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
-      if(se.valueGlobal.dayhot && se.valueGlobal.dayhot.length>0){
-        let divmonth = $('.month-box');
-        if(divmonth && divmonth.length >0){
-          for (let index = 0; index < divmonth.length; index++) {
-             const em = divmonth[index];
-            //   let divsmall = $('#'+em.id+' dayhot');
-            //   if(divsmall && divsmall.length >0){
-                $('#'+em.id).append("<div class='div-month-text-small'></div>")
-                $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
-              // }
+          if(se.valueGlobal.dayhot && se.valueGlobal.dayhot.length>0){
+            let divmonth = $('.month-box');
+            if(divmonth && divmonth.length >0){
+              for (let index = 0; index < divmonth.length; index++) {
+                const em = divmonth[index];
+                //   let divsmall = $('#'+em.id+' dayhot');
+                //   if(divsmall && divsmall.length >0){
+                    $('#'+em.id).append("<div class='div-month-text-small'></div>")
+                    $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+                  // }
+              }
+            }
           }
-        }
-      }
+
+           //Custom ngày lễ
+           let divmonth = $('.month-box');
+           if(divmonth && divmonth.length >0){
+             for (let index = 0; index < divmonth.length; index++) {
+               const em = divmonth[index];
+               $('#'+em.id).addClass('cls-animation-calendar');
+                 let divsmall = $('#'+em.id+' small');
+                 if(divsmall && divsmall.length >0){
+                   $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                   
+                   for (let i = 0; i < divsmall.length; i++) {
+                     const es = divsmall[i];
+                     let arres = es.innerHTML.split(':');
+                     $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                     if(arres && arres.length >1){
+                       es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                     }
+                     $('.sm-'+em.id+'-'+i).append(es);
+                   }
+                 }
+             }
+           }
       });
       let se = this;
       const event: any = await this.myCalendar.onDidDismiss();

@@ -793,7 +793,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: this.valueGlobal.listlunar[j].name,
+            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name,
             //subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M')+ ':  '+ this.valueGlobal.listlunar[j].description,
             cssClass: 'lunarcalendar'
         })
@@ -895,25 +895,27 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 $('.div-calendar-cincout').click(e => this.showCalendarCinCout());
               }
               //Custom ngày lễ
-              // let divmonth = $('.month-box');
-              // if(divmonth && divmonth.length >0){
-              //   for (let index = 0; index < divmonth.length; index++) {
-              //     const em = divmonth[index];
-              //       let divsmall = $('#'+em.id+' small');
-              //       if(divsmall && divsmall.length >0){
-              //         $('#'+em.id).append("<div class='div-month-text-small'></div>")
-              //         for (let i = 0; i < divsmall.length; i++) {
-              //           const es = divsmall[i];
-              //           let arres = es.innerHTML.split(':');
-              //           $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
-              //           if(arres && arres.length >1){
-              //             es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>"+"<span>"+arres[1]+"</span>";
-              //           }
-              //           $('.sm-'+em.id+'-'+i).append(es);
-              //         }
-              //       }
-              //   }
-              // }
+              let divmonth = $('.month-box');
+              if(divmonth && divmonth.length >0){
+                for (let index = 0; index < divmonth.length; index++) {
+                  const em = divmonth[index];
+                  $('#'+em.id).addClass('cls-animation-calendar');
+                    let divsmall = $('#'+em.id+' small');
+                    if(divsmall && divsmall.length >0){
+                      $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                      
+                      for (let i = 0; i < divsmall.length; i++) {
+                        const es = divsmall[i];
+                        let arres = es.innerHTML.split(':');
+                        $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                        if(arres && arres.length >1){
+                          es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                        }
+                        $('.sm-'+em.id+'-'+i).append(es);
+                      }
+                    }
+                }
+              }
 
               let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
             this.storage.get(key).then((data)=>{
@@ -1276,6 +1278,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         if(se._flightService.itemFlightCache.isInternationalFlight){
           se.navCtrl.navigateForward("/flightsearchresultinternational");
         } else {
+          se._flightService.itemFlightCache.isExtenalDepart = false;
+          se._flightService.itemFlightCache.isExtenalReturn = false;
+          se._flightService.itemFlightCache.isInternationalFlight = false;
           se.navCtrl.navigateForward("/flightsearchresult");
         }
         
@@ -1301,6 +1306,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             if(se._flightService.itemFlightCache.isInternationalFlight){
               se.navCtrl.navigateForward("/flightsearchresultinternational");
             } else {
+              se._flightService.itemFlightCache.isExtenalDepart = false;
+              se._flightService.itemFlightCache.isExtenalReturn = false;
+              se._flightService.itemFlightCache.isInternationalFlight = false;
               se.navCtrl.navigateForward("/flightsearchresult");
             }
           }
@@ -1483,6 +1491,40 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 
           se._flightService.itemFlightCache.objSearch = se._flightService.objSearch;  
   
+         
+
+          
+          if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+            let placeFrom = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == item.depart.fromPlace});
+            let placeTo = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == item.depart.toPlace});
+            if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+              
+              se._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
+              se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+              se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+              if(se._flightService.itemFlightCache.isInternationalFlight){
+                se.navCtrl.navigateForward("/flightsearchresultinternational");
+              }else{
+                  se._flightService.itemFlightCache.isInternationalFlight = false;
+                  se._flightService.itemFlightCache.isExtenalDepart = false;
+                  se._flightService.itemFlightCache.isExtenalReturn = false;
+                  se.navCtrl.navigateForward("/flightsearchresult");
+              }
+              
+            }else {
+              se._flightService.itemFlightCache.isInternationalFlight = false;
+              se._flightService.itemFlightCache.isExtenalDepart = false;
+              se._flightService.itemFlightCache.isExtenalReturn = false;
+              se.navCtrl.navigateForward("/flightsearchresult");
+            }
+          }else{
+            se._flightService.itemFlightCache.isInternationalFlight = false;
+            se._flightService.itemFlightCache.isExtenalDepart = false;
+            se._flightService.itemFlightCache.isExtenalReturn = false;
+            se.navCtrl.navigateForward("/flightsearchresult");
+          }
+         
+         
           se.storage.get("itemFlightCache").then((data)=>{
             if(data){
               se.storage.remove("itemFlightCache").then(()=>{
@@ -1493,9 +1535,6 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
             }
           })
-
-          se.navCtrl.navigateForward("/flightsearchresult");
-         
         }
         
 

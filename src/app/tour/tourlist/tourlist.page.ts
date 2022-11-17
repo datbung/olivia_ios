@@ -62,7 +62,11 @@ export class TourListPage implements OnInit{
       this.loadData();
       this.gf.hideStatusBar();
   }
-
+  ionViewWillEnter(){
+    if(this.searchhotel.CheckInDate){
+      this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
+    }
+  }
   
   loadData() {
     this.loaddatadone = false;
@@ -519,13 +523,23 @@ export class TourListPage implements OnInit{
         })
       }
     }
+    if(this.valueGlobal.listlunar && this.valueGlobal.listlunar.length >0){
+      for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+        _daysConfig.push({
+          date: this.valueGlobal.listlunar[j].date,
+          subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
+          cssClass: 'lunarcalendar'
+       })
+      }
+    }
+    
     let Year=new Date().getFullYear();
     let Month=new Date().getMonth();
     let Day=new Date().getDate();
       const options: CalendarModalOptions = {
         pickMode: "single",
-        title: "Chọn ngày",
-        monthFormat: "MM / YYYY",
+        title: "Chọn ngày khởi hành",
+        monthFormat: "MM YYYY",
         weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
         weekStart: 1,
         closeLabel: "",
@@ -541,15 +555,45 @@ export class TourListPage implements OnInit{
         component: CalendarModal,
         animated: true,
         componentProps: { options },
-        cssClass: 'hotel-calendar-custom',
+        cssClass: 'tour-calendar-custom',
       });
       se.myCalendar.present().then(() => {
         se.allowclickcalendar = true;
         $(".days-btn").click(e => se.clickedElement(e));
 
-        $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
+        $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/imgs/icon_back.svg' ></div>");
         //add event close header
-        $('.hotel-calendar-custom .header-img-close').click((e => se.closecalendar()));
+        $('.tour-calendar-custom .header-img-close').click((e => se.closecalendar()));
+
+        let divmonthtitle =  $('.month-title');
+        if(divmonthtitle && divmonthtitle.length >0){
+          for (let index = 0; index < divmonthtitle.length; index++) {
+            $(divmonthtitle[index])[0].innerHTML = 'Tháng ' + $(divmonthtitle[index])[0].innerHTML;
+          }
+        }
+
+       //Custom ngày lễ
+       let divmonth = $('.month-box');
+       if(divmonth && divmonth.length >0){
+         for (let index = 0; index < divmonth.length; index++) {
+           const em = divmonth[index];
+           $('#'+em.id).addClass('cls-animation-calendar');
+             let divsmall = $('#'+em.id+' small');
+             if(divsmall && divsmall.length >0){
+               $('#'+em.id).append("<div class='div-month-text-small'></div>");
+               
+               for (let i = 0; i < divsmall.length; i++) {
+                 const es = divsmall[i];
+                 let arres = es.innerHTML.split(':');
+                 $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                 if(arres && arres.length >1){
+                   es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                 }
+                 $('.sm-'+em.id+'-'+i).append(es);
+               }
+             }
+         }
+       }
       });
 
       const event: any = await se.myCalendar.onDidDismiss();
@@ -580,6 +624,9 @@ export class TourListPage implements OnInit{
           var objTextMonthStartDate: any;
           if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
             fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+            tday = fday;
+            objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
+            objTextMonthEndDate = objTextMonthStartDate;
           } else {
             fday = $('.on-selected > p')[0].textContent;
             tday = fday;
@@ -592,10 +639,10 @@ export class TourListPage implements OnInit{
             objTextMonthStartDate &&
             objTextMonthStartDate.length > 0
           ) {
-            monthstartdate = objTextMonthStartDate.split("/")[0];
-            yearstartdate = objTextMonthStartDate.split("/")[1];
-            monthenddate = objTextMonthEndDate.split("/")[0];
-            yearenddate = objTextMonthEndDate.split("/")[1];
+            monthstartdate = objTextMonthStartDate.split(" ")[0];
+            yearstartdate = objTextMonthStartDate.split(" ")[1];
+            monthenddate = objTextMonthEndDate.split(" ")[0];
+            yearenddate = objTextMonthEndDate.split(" ")[1];
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday*1 +1);
             if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {

@@ -2206,7 +2206,7 @@ export class FlightaddservicePage implements OnInit {
           if(item){
             var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+item.airlineCode +"&ticketType="+item.ticketType+"&airbusCode="+item.aircraft+"&flightNumber="+item.flightNumber+"&fromPlace="+(item.fromPlaceCode ? item.fromPlaceCode : item.from)+"&toPlace="+(item.toPlaceCode ? item.toPlaceCode : item.to),
+              url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+item.airlineCode +"&ticketType="+item.ticketType+"&airbusCode="+item.aircraft+"&flightNumber="+item.flightNumber+"&fromPlace="+(item.fromPlaceCode ? item.fromPlaceCode : item.from)+"&toPlace="+(item.toPlaceCode ? item.toPlaceCode : item.to)+"&departDate="+moment(item.departTime).format("MM-DD-YYYY")+"&bookingDate="+moment(new Date()).format("MM-DD-YYYY"),
               timeout: 180000, maxAttempts: 5, retryDelay: 20000,
               headers: {
                 "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
@@ -3677,6 +3677,8 @@ getHotelCityPrice(key){
       if (response.statusCode == 200) {
         let result = JSON.parse(body);
         resolve(result);
+      }else {
+        resolve(false);
       }
     })
   })

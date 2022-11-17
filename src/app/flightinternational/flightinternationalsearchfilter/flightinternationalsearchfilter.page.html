@@ -1,17 +1,19 @@
 <ion-header class="flightpage-header">
-  <ion-row>
-    <ion-col class="col-header">
-      <div class="d-flex">
-        <div class="div-header-title">
-          <div class="div-title">Lọc</div>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col class="col-header">
+        <div class="d-flex">
+          <div class="div-header-title">
+            <div class="div-title">Lọc</div>
+          </div>
+  
+          <div class="div-close" (click)="close()">
+            <img class="header-img-close m-top-5" src="./assets/imgs/ios-arrow-round-back.svg" >
         </div>
-
-        <div class="div-close" (click)="close()">
-          <img class="header-img-close m-top-5" src="./assets/imgs/ios-arrow-round-back.svg" >
-      </div>
-      </div>
-    </ion-col>
-  </ion-row>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="flight-search-filter-content">
@@ -20,29 +22,28 @@
     <ion-radio-group >
       <div class="d-flex m-top-12">
         <div class="div-check">
-          <ion-radio value="1"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected.indexOf(1) != -1" 
+          <ion-radio value="1"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==1" 
           [disabled]="listStops.indexOf(1) == -1"
           (ionSelect)="checkItem(1, $event, 1)"></ion-radio>
         </div>
-        <div [ngClass]="listStops.indexOf(1) == -1 ? 'text-normal v-align-center  cls-disabled-text' : 'text-normal v-align-center' " >Chỉ bay thẳng<span *ngIf="count0Stops"> ({{count0Stops}})</span></div>
+        <div [ngClass]="listStops.indexOf(1) == -1 ? 'text-normal v-align-center  cls-disabled-text' : 'text-normal v-align-center' " >Chỉ bay thẳng <span class="m-left-2" *ngIf="count0Stops"> ({{count0Stops}})</span></div>
       </div>
 
       <div class="d-flex m-top-12">
         <div class="div-check">
-          <ion-radio value="2"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected.indexOf(2) != -1"
+          <ion-radio value="2"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==2"
           [disabled]="listStops.indexOf(2) == -1"
           (ionSelect)="checkItem(1, $event, 2)"></ion-radio>
         </div>
-         <div [ngClass]="listStops.indexOf(2) == -1 ? 'text-normal v-align-center cls-disabled-text' :'text-normal v-align-center' " >Tối đa 1 điểm dừng<span *ngIf="count1Stops"> ({{count1Stops}})</span></div>
+         <div [ngClass]="listStops.indexOf(2) == -1 ? 'text-normal v-align-center cls-disabled-text' :'text-normal v-align-center' " >Tối đa 1 điểm dừng <span class="m-left-2" *ngIf="count1Stops"> ({{count1Stops}})</span></div>
       </div>
 
       <div class="d-flex m-top-12">
         <div class="div-check">
-          <ion-radio value="3"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected.indexOf(3) != -1"
-          [disabled]="listStops.indexOf(3) == -1"
+          <ion-radio value="3"  [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==3"
           (ionSelect)="checkItem(1, $event, 3)"></ion-radio>
         </div>
-        <div [ngClass]="listStops.indexOf(3) == -1 ? 'text-normal v-align-center cls-disabled-text' : 'text-normal v-align-center'" >Số điểm dừng bất kỳ<span *ngIf="count2Stops"> ({{count2Stops}})</span></div>
+        <div class="text-normal v-align-center" >Số điểm dừng bất kỳ <span class="m-left-2" *ngIf="count2Stops"> ({{count2Stops}})</span></div>
       </div>
     </ion-radio-group>
     
@@ -62,14 +63,14 @@
     </div>
 
     <div class="text-title m-top-21">Thời gian quá cảnh</div>
-    <div class="div-fitler-price d-flex">
+    <div class="div-fitler-price d-flex m-bottom-16">
       <div class="div-left text-price">{{minoverlaydisplay}} - {{maxoverlaydisplay}}</div>
       <!-- <div class="div-right text-price">{{maxoverlaydisplay}}</div> -->
     </div>
     <div><ion-range class="flight-filter-stops" step=1 [pin]="true" [(ngModel)]="pinoverlayvalue" (ionChange)="changeoverlay($event)" [min]="minoverlayvalue" [max]="maxoverlayvalue" dualKnobs="false" [(ngModel)]="overlayobject" ></ion-range></div>
 
     <div class="text-title m-top-21">Giá vé</div>
-    <div class="div-fitler-price d-flex">
+    <div class="div-fitler-price d-flex m-bottom-16">
       <div class="div-left text-price">{{minpricedisplay}} - {{maxpricedisplay}}</div>
       <!-- <div class="div-right text-price">{{maxpricedisplay}}</div> -->
     </div>

@@ -58,6 +58,7 @@ export class FlightchangeinfoPage implements OnInit {
   timedepartpriorityconfig: any;
   timereturnpriorityconfig: any;
   allowclickcalendar: any = true;
+  isInternationalFlight: any;
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -118,6 +119,9 @@ export class FlightchangeinfoPage implements OnInit {
                         })
                       }
                   })
+
+                 this.isInternationalFlight = this._flightService.itemFlightCache.isInternationalFlight;
+                 this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
                 }
         }
 
@@ -137,6 +141,7 @@ export class FlightchangeinfoPage implements OnInit {
         }
 
         close(){
+          
           this.search();
             //this.modalCtrl.dismiss();
         }
@@ -206,7 +211,11 @@ export class FlightchangeinfoPage implements OnInit {
 
 
             se._flightService.itemFlightCache.objSearch = se._flightService.objSearch;
-            se._flightService.itemFlightCache.isInternationalFlight = (se._flightService.itemFlightCache.isExtenalDepart || se._flightService.itemFlightCache.isExtenalReturn);
+            se.zone.run(()=>{
+              se._flightService.itemFlightCache.isInternationalFlight = (se._flightService.itemFlightCache.isExtenalDepart || se._flightService.itemFlightCache.isExtenalReturn);
+              se.isInternationalFlight = (se._flightService.itemFlightCache.isExtenalDepart || se._flightService.itemFlightCache.isExtenalReturn);
+            })
+            
             // if(se.itemSameCity){
             //   se._flightService.itemFlightCache.itemSameCity = se.itemSameCity;
             //   se._flightService.itemFlightCache.itemDepartSameCity = se.itemDepartSameCity;
@@ -301,7 +310,15 @@ export class FlightchangeinfoPage implements OnInit {
               $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
             }else{
               if(!this._flightService.itemFlightCache.isInternationalFlight){
-                this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
+                let diff = moment(this.cout).diff(this.cin,'days');
+                if(diff <1){
+                  this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
+                }
+              }else {
+                let diff = moment(this.cout).diff(this.cin,'days');
+                if(diff <2){
+                  this.cout = moment(this.cin).add(2,'days').format("YYYY-MM-DD");
+                }
               }
               
               $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
@@ -606,7 +623,7 @@ export class FlightchangeinfoPage implements OnInit {
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: this.valueGlobal.listlunar[j].name,
+            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name,
             //subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M') + ':  '+ this.valueGlobal.listlunar[j].description,
             cssClass: 'lunarcalendar'
         })
@@ -705,25 +722,26 @@ export class FlightchangeinfoPage implements OnInit {
               }
               
               //Custom ngày lễ
-              // let divmonth = $('.month-box');
-              // if(divmonth && divmonth.length >0){
-              //   for (let index = 0; index < divmonth.length; index++) {
-              //     const em = divmonth[index];
-              //       let divsmall = $('#'+em.id+' small');
-              //       if(divsmall && divsmall.length >0){
-              //         $('#'+em.id).append("<div class='div-month-text-small'></div>");
-              //         for (let i = 0; i < divsmall.length; i++) {
-              //           const es = divsmall[i];
-              //           let arres = es.innerHTML.split(':');
-              //           $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
-              //           if(arres && arres.length >1){
-              //             es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>"+"<span>"+arres[1]+"</span>";
-              //           }
-              //           $('.sm-'+em.id+'-'+i).append(es);
-              //         }
-              //       }
-              //   }
-              // }
+              let divmonth = $('.month-box');
+              if(divmonth && divmonth.length >0){
+                for (let index = 0; index < divmonth.length; index++) {
+                  const em = divmonth[index];
+                    let divsmall = $('#'+em.id+' small');
+                    $('#'+em.id).addClass('cls-animation-calendar');
+                    if(divsmall && divsmall.length >0){
+                      $('#'+em.id).append("<div class='div-month-text-small'></div>");
+                      for (let i = 0; i < divsmall.length; i++) {
+                        const es = divsmall[i];
+                        let arres = es.innerHTML.split(':');
+                        $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                        if(arres && arres.length >1){
+                          es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                        }
+                        $('.sm-'+em.id+'-'+i).append(es);
+                      }
+                    }
+                }
+              }
 
               let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
             this.storage.get(key).then((data)=>{
@@ -747,20 +765,23 @@ export class FlightchangeinfoPage implements OnInit {
         if (event.data) {
         const from: CalendarResult = date.from;
         const to: CalendarResult = date.to;
-        se.cin = moment(from.dateObj).format("YYYY-MM-DD");
-        se.cout = moment(to.dateObj).format("YYYY-MM-DD");
-        se.zone.run(() => {
-            se.datecin = this.gf.getCinIsoDate(new Date(se.cin));
-            se.datecout = this.gf.getCinIsoDate(new Date(se.cout));
-            se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
-            se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-            se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
-            se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
-            se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
-            se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
-            se.getDayName(se.datecin, se.datecout);
-            
-        });
+        if(from || to){
+          se.cin = moment(from.dateObj).format("YYYY-MM-DD");
+          se.cout = moment(to.dateObj).format("YYYY-MM-DD");
+          se.zone.run(() => {
+              se.datecin = this.gf.getCinIsoDate(new Date(se.cin));
+              se.datecout = this.gf.getCinIsoDate(new Date(se.cout));
+              se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
+              se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
+              se.cindisplaymonth = moment(se.datecin).format("DD") + " tháng " + moment(se.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+              se.coutdisplaymonth = moment(se.datecout).format("DD") + " tháng " + moment(se.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+              se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
+              se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
+              se.getDayName(se.datecin, se.datecout);
+              
+          });
+        }
+       
         }
     }
 
@@ -924,6 +945,7 @@ export class FlightchangeinfoPage implements OnInit {
           }
           
         }
+        se.isInternationalFlight = (se._flightService.itemFlightCache.isExtenalDepart || se._flightService.itemFlightCache.isExtenalReturn);
     }
 
     reloadInfo(){
@@ -1212,7 +1234,6 @@ export class FlightchangeinfoPage implements OnInit {
 
       this.reloadInfoOneway(!ev.currentTarget.checked);
       this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
-      
     }
 
 }

@@ -1614,7 +1614,7 @@
             position: absolute;
             height: 34px;
             width: 1px;
-            top: 16px;
+            top: 19px;
             border-left: dotted 1.5px #bdbdbd;
             left: 47px;
         }
@@ -2717,7 +2717,7 @@ color: #e52822
         }
         .placeline {
             left: 61px !important;
-            height: 40px !important;
+            height: 53px !important;
         }
         
         .placepoint-return {
@@ -2766,7 +2766,11 @@ color: #e52822
                 }
             }
         }
-
+        .text-day-departure {
+            font-size: 12px !important;
+            font-weight: 500;
+            text-align: left;
+        }
         .div-time-departure {
             font-size: 18px;
             font-weight: 500;
@@ -2797,11 +2801,12 @@ color: #e52822
 
         .div-overlay {
             background-color: #f2f2f2;
-            padding: 8px;
+            padding: 10px;
             min-height: 33px;
-            margin: 8px 0;
+            margin: 10px 0;
             margin-top: 20px;
             border-radius: 4px;
+            font-size: 16px;
         }
 
         .div-line-vmbqt {
@@ -2890,6 +2895,7 @@ color: #e52822
 
           .div-waiting-payment {
             padding: 12px 8px;
+            padding-left: 16px;
             background-color: #feeec7;
             color: #f79321;
             font-weight: 600;
@@ -2920,3 +2926,68 @@ color: #e52822
     .f-16 {
         font-size: 16px !important;
     }
+
+    .div-wrap-condition .div-expand{
+        display: block;
+        animation: showNav 500ms ease-in-out both;
+      }
+      .div-wrap-refund .div-expand{
+        display: block;
+        animation: showNav 500ms ease-in-out both;
+      }
+      .div-collapse {
+        transition: opacity 1s ease-out;
+        display: none;
+        opacity: 0; 
+        //height: 258px;
+        overflow: hidden;
+        padding: 0;
+        animation: hideNav 500ms ease-in-out both;
+      }
+    
+      @keyframes showNav {
+        from {opacity: 0;}
+        to {opacity: 1;}
+      }
+    
+      @keyframes hideNav {
+        from {opacity: 1;}
+        to {opacity: 0;}
+      }
+    
+      .img-seemoreroom{
+        margin-left: 4px;
+        height: 9px;
+      }
+
+      .div-wrap-condition, .div-wrap-refund {
+        margin: 0 0 16px 0;
+
+        .d-flex{
+            //align-items: center;
+            line-height: 23px;
+        }
+      }
+
+      .div-icon {
+        display: flex;
+        width: 16px;
+        margin-right: 6px;
+
+        .icon-info {
+            height: 23px;
+            max-width: 16px;
+        }
+        }
+        .text-normal {
+            font-size: 14px;
+            text-align: left;
+            color: #3f3b3b;
+        }
+        .text-sub-title {
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: left;
+            color: #3f3b3b;
+        }

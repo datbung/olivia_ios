@@ -102,144 +102,12 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
     }
   }
 
-  checkHoldTicket(data){
-    var se = this, res = false;
-    let url = C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+data.pnr.resNo;
-    
-        se.callCheckHoldTicket(url, data).then((check) => {
-          if (!check && se.allowCheckHoldTicket) {
-              res = false;
-              setTimeout(() => {
-                se.checkHoldTicket(data);
-              }, 3000);
-          }else{
-            let startDate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-            let endDate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
-            if(check){
-              se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
-                se._flightService.itemFlightCache.dataSummaryBooking = databkg;
-              })
-              if(!se._flightService.itemFlightCache.ischeckpayment){
-                //se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-                se.gf.hideLoading();
-                se.gf.createFlightTransaction(se._flightService.itemFlightCache);
-                clearInterval(se.intervalID);
-                se.navCtrl.navigateForward('flightinternationalpaymentdone/'+se.bookingCode+'/'+ startDate+'/'+endDate);
-              }else{
-                //se.safariViewController.hide();
-                clearInterval(se.intervalID);
-                se.navCtrl.navigateForward('flightinternationalpaymentdone/'+se.bookingCode+'/'+startDate+'/'+endDate);
-              }
-             
-            }else{//hold vé thất bại về trang tìm kiếm
-              se.gf.hideLoading();
-              if(!se._flightService.itemFlightCache.ischeckpayment){
-                  se.gf.showAlertOutOfTicketInternational(se._flightService.itemFlightCache, 1);
-                  clearInterval(se.intervalID);
-              }
-              else{
-                  //hold vé thất bại về trang tìm kiếm
-                  se.navCtrl.navigateForward('/flightinternationalpaymentwarning');
-              }
-            }
-                
-          }
-        })
-      
-
-      setTimeout(() => {
-       
-        se.allowCheckHoldTicket = false;
-       
-      }, 1000 * 60 * 9.1);
-   
-  }
-
-  callCheckHoldTicket(url, data){
-    var res = false, se = this;
-    return new Promise((resolve, reject) => {
-      var options = {
-        method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+data.pnr.resNo,
-        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
-        headers: {
-          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      };
-      request(options, function (error, response, body) {
-        if (error) {
-          error.page = "globalfunction";
-          error.func = "updatePaymentMethod";
-          error.param = JSON.stringify(options);
-        }
-        if (response.statusCode == 200) {
-          let result = JSON.parse(body);
-          if(se._flightService){
-            se._flightService.itemFlightCache.dataSummaryBooking = result;
-          }
-          //Thêm case check thanh toán thành công nhưng quá hạn giữ vé
-          if(result.expIssueTicket){
-              se.allowCheckHoldTicket = false;
-              resolve(false);
-          }else{
-              if(data.ischeckpayment == 0)//trả sau
-              {
-                  if(result.isRoundTrip){//khứ hồi
-                    if(result.departFlight.atBookingCode != null && result.departFlight.atBookingCode.indexOf("T__") == -1 && result.returnFlight.atBookingCode != null && result.returnFlight.atBookingCode.indexOf("T__") == -1){
-                      resolve(true);
-                    }else{
-                      if(!result.departFlight.atBookingCode || result.departFlight.atBookingCode.indexOf("T__") != -1){
-                        se._flightService.itemFlightCache.errorHoldTicket = 1;// không hold dc vé chiều đi
-                      }
-                      else if(!result.returnFlight.atBookingCode || result.returnFlight.atBookingCode.indexOf("T__") != -1){
-                        se._flightService.itemFlightCache.errorHoldTicket = 2;// không hold dc vé chiều về
-                      }
-                      else if( (!result.returnFlight.atBookingCode || result.returnFlight.atBookingCode.indexOf("T__") != -1) && (!result.departFlight.atBookingCode || result.departFlight.atBookingCode.indexOf("T__") != -1) ){
-                        se._flightService.itemFlightCache.errorHoldTicket = 3;// không hold dc vé 2 chiều
-                      }
-                      resolve(false);
-                    }
-                  }else{
-                    if(result.departFlight.atBookingCode != null && result.departFlight.atBookingCode.indexOf("T__") == -1){
-                      resolve(true);
-                    }else{
-                      se._flightService.itemFlightCache.errorHoldTicket = 1;// không hold dc vé chiều đi
-                      resolve(false);
-                    }
-                  }
-              }else{//trả trước
-      
-                if(result.isRoundTrip){//khứ hồi
-                  //Có mã giữ chỗ và trạng thái đã xuất vé cả 2 chiều thì trả về true - hoàn thành
-                  if(result.departFlight.atBookingCode != null && result.departFlight.atBookingCode.indexOf("T__") == -1 && result.returnFlight.atBookingCode != null && result.returnFlight.atBookingCode.indexOf("T__") == -1
-                  && result.departFlight.status == 4 && result.returnFlight.status == 4){
-                    resolve(true);
-                  }else{
-                    resolve(false);
-                  }
-                }else{//Có mã giữ chỗ và trạng thái đã xuất vé thì trả về true - hoàn thành
-                  if(result.departFlight.atBookingCode != null && result.departFlight.atBookingCode.indexOf("T__") == -1 && result.departFlight.status == 4){
-                    resolve(true);
-                  }else{
-                    resolve(false);
-                  }
-                }
-              }
-            }
-        }
-      })
-     
-      
-    })
-  }
-  
   checkqrcode()
   {
     var se=this;
     var options = {
       'method': 'GET',
-      'url': C.urls.baseUrl.urlFlight+'/gate/apiv1/PaymentCheck?id='+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode,
+      'url': C.urls.baseUrl.urlFlight+'/gate/apiv1/PaymentCheck?id='+ (se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode),
       'headers': {
         "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
           'Content-Type': 'application/json; charset=utf-8'
@@ -258,8 +126,6 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
         //se.safariViewController.hide();
         clearInterval(se.intervalID);
         se.navCtrl.navigateForward('flightinternationalpaymentdone/'+se.bookingCode+'/'+startDate+'/'+endDate);
-         //21-09-2020: Bỏ check hold vé, trả về màn hình thành công sau khi check đã thanh toán
-        //se.checkHoldTicket(se._flightService.itemFlightCache);
       }
       else if(rs.ipnCall == "CALLED_FAIL" && rs.errorCode == '99')//hủy
       {
@@ -300,77 +166,10 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
       
   }
 
-  checkComboHotelCityPayment() {
-    var se = this;
-    //wait 5s
-    var options = {
-      method: 'GET',
-      url: C.urls.baseUrl.urlPost + '/mCheckBooking',
-      qs: { code: se.bookingCode },
-      headers:
-      {
-      }
-    };
-    request(options, function (error, response, body) {
-      if (response.statusCode != 200) {
-        var objError = {
-          page: "flightpaymentpayoo",
-          func: "checkComboHotelCityPayment",
-          message: response.statusMessage,
-          content: response.body,
-          type: "warning",
-          param: JSON.stringify(options)
-        };
-        C.writeErrorLog(objError, response);
-      }
-      if (error) {
-        error.page = "flightpaymentpayoo";
-        error.func = "checkComboHotelCityPayment";
-        error.param = JSON.stringify(options);
-        C.writeErrorLog(error, response);
-      };
-      if (body) {
-        var rs = JSON.parse(body);
-        
-        if (rs.StatusBooking == 3&& !rs.error) {
-          se.gf.hideLoading();
-          se.safariViewController.hide();
-          clearInterval(se.intervalID);
-          se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
-            se._flightService.itemFlightCache.dataSummaryBooking = databkg;
-          })
-          let startDate = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-          let endDate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
-          se.navCtrl.navigateForward('flightinternationalpaymentdone/'+se.bookingCode+'/'+startDate+'/'+endDate);
-        }
-        else if(rs.error){
-          setTimeout(()=>{
-            se.checkComboHotelCityPayment();
-          },1000)
-        }
-      }
-      else {
-        error.page = "roomchoosebank";
-        error.func = "mCheckBooking";
-        error.param = JSON.stringify(options);
-        C.writeErrorLog(error, response);
-        se.gf.hideLoading();
-        clearInterval(se.intervalID);
-        se._flightService.paymentError = rs.error;
-        se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
-      }
-
-    });
-  }
-
-
   checkPayment(){
     var se = this;
-    //Có chọn khách sạn thì gọi check theo luồng check ks
-    if(se._flightService.itemFlightCache.objHotelCitySelected){
-      se.checkComboHotelCityPayment();
-    }else{
-      let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode;
+    
+      let url = C.urls.baseUrl.urlFlight + "gate/apiv1/PaymentCheck?id="+ (se._flightService.itemFlightCache.reservationId ? se._flightService.itemFlightCache.reservationId : se.bookingCode);
       se.gf.Checkpayment(url).then((data) => {
         var checkpay=JSON.parse(data);
         
@@ -400,7 +199,7 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
           },1000)
         }
       })
-    }
+    
   }
 
   openWebpagePayoo() {

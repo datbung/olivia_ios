@@ -197,21 +197,21 @@
     <div class="div-user-info">
       <div [ngClass]=" ( (hasinput && !hoten) || hoteninvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-          <ion-label class="sub-label m-bottom-6 f-13" position="floating">Họ tên</ion-label>
+          <ion-label class="sub-label m-bottom-6" position="floating">Họ tên</ion-label>
           <ion-input [(ngModel)]="hoten" type="text" (ionInput)="inputFocus(null, $event)" (ionBlur)="inputLostFocus(null)" (ionFocus)="inputOnFocus(null, 9)"></ion-input>
         </ion-item>
       </div>
 
       <div [ngClass]=" ( (hasinput && !phone) || sodienthoaiinvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-          <ion-label class="sub-label m-bottom-6 f-13" position="floating">Số điện thoại</ion-label>
+          <ion-label class="sub-label m-bottom-6" position="floating">Số điện thoại</ion-label>
           <ion-input [(ngModel)]="phone" maxlength=11 required (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
         </ion-item>
       </div>
 
       <div [ngClass]=" ( (hasinput && !_email) || emailinvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-          <ion-label class="sub-label m-bottom-6 f-13" position="floating">Email</ion-label>
+          <ion-label class="sub-label m-bottom-6" position="floating">Email</ion-label>
           <ion-input [(ngModel)]="_email" type="email" (ionBlur)="checkInputUserInfo(3)" (ionFocus)="inputOnFocus(null, 11)"></ion-input>
         </ion-item>
       </div>

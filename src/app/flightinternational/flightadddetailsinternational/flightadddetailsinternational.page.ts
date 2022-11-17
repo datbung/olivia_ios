@@ -2,7 +2,7 @@ import { Component,OnInit, NgZone, HostListener } from '@angular/core';
 import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController } from '@ionic/angular';
 import { SearchHotel } from '../../providers/book-service';
 import { C } from '../../providers/constants';
-import { GlobalFunction } from '../../providers/globalfunction';
+import { ActivityService, GlobalFunction } from '../../providers/globalfunction';
 import { ValueGlobal } from '../../providers/book-service';
 import * as $ from 'jquery';
 import { flightService } from '../../providers/flightService';
@@ -94,7 +94,8 @@ export class FlightAdddetailsInternationalPage implements OnInit {
     public formBuilder: FormBuilder,
     private _keyboard: Keyboard,
     private storage: Storage,public alertCtrl: AlertController,
-    private fb: Facebook) {
+    private fb: Facebook,
+    public activityService: ActivityService) {
         if(this._flightService.itemFlightCache){
           this.getSummaryBooking();
           this.listcountry = this.gf.getNationList();
@@ -2097,7 +2098,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
         cssClass: 'button-payment',
         handler: () => {
           alert.dismiss();
-          se.gonextstep();
+          se.gotopaymentpage();
         }
         
       },
@@ -2174,7 +2175,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
         cssClass: 'button-payment',
         handler: () => {
           alert.dismiss();
-          se.gonextstep();
+          se.gotopaymentpage();
         }
         
       },
@@ -2207,7 +2208,7 @@ async showAlertInvalidSubName(iteminvalid){
       cssClass: 'button-payment',
       handler: () => {
         alert.dismiss();
-        se.gonextstep();
+        se.gotopaymentpage();
       }
       
     },
@@ -2250,7 +2251,7 @@ async showAlertInvalidFirtNameAndLastName(item){
       cssClass: 'button-payment',
       handler: () => {
         alert.dismiss();
-        se.gonextstep();
+        se.gotopaymentpage();
       }
       
     },
@@ -2285,7 +2286,7 @@ async showAlertDuplicateFirtNameAndLastName(item){
       cssClass: 'button-payment',
       handler: () => {
         alert.dismiss();
-        se.gonextstep();
+        se.gotopaymentpage();
       }
       
     },
@@ -2423,7 +2424,7 @@ alert.present();
         gotopaymentpage(){
           var se = this;
           se._flightService.itemFlightCache.backtochoiceseat = false;
-
+          se.activityService.objPaymentMytrip = null;
           se._flightService.itemFlightCache.adults = se.adults;
            se._flightService.itemFlightCache.childs = se.childs;
     
@@ -3899,8 +3900,8 @@ alert.present();
       })
       
       if(ev != 'dropdownicon'&& ev.detail && ev.detail.data ){
-        se.textCountrySearch = ev.detail.data;
-        const val =  ev.detail.data.toLowerCase();
+        se.textCountrySearch = $(ev.currentTarget).val();
+        const val =  $(ev.currentTarget).val().toLowerCase();
         let filteritems = se.listcountryFull.filter((element) => { return se.gf.convertFontVNI(element.name.toLowerCase()).indexOf(val) != -1 });
 
         se.zone.run(()=>{
@@ -3955,8 +3956,8 @@ alert.present();
       })
       
       if(ev != 'dropdownicon' && ev.detail && ev.detail.data){
-        se.textPassportCountrySearch = ev.detail.data;
-        const val =  ev.detail.data.toLowerCase();
+        se.textPassportCountrySearch = $(ev.currentTarget).val();
+        const val =  $(ev.currentTarget).val().toLowerCase();
         let filteritems = se.listcountryFull.filter((element) => { return se.gf.convertFontVNI(element.name.toLowerCase()).indexOf(val) != -1 });
 
         se.zone.run(()=>{

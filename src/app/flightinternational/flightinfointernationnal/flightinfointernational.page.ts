@@ -16,19 +16,27 @@ export class FlightInfoInternationalPage implements OnInit {
   itemFlightTicket: any;
   changeDepartTime: boolean;
   ticketRefund: any;
+  hasFeeChangeDepartTime: boolean;
+  hasFeeTicketRefund: boolean;
   
   constructor(public modalCtrl: ModalController, public zone: NgZone, public navCtrl: NavController,
     public gf: GlobalFunction,public _flightService: flightService,
     ) {
      this.itemFlightTicket = this._flightService.itemFlightInternationalInfo;
      if(this.itemFlightTicket.penaltyFlighs && this.itemFlightTicket.penaltyFlighs.length >0 ){
-      let itemmap = this.itemFlightTicket.penaltyFlighs.filter((i) => i.penaltyType == 1 && i.feePenalty >0 && i.descriptionPenalty);
-      let itemmapcancel = this.itemFlightTicket.penaltyFlighs.filter((i) => i.penaltyType == 2 && i.feePenalty >0 && i.descriptionPenalty);
+      let itemmap = this.itemFlightTicket.penaltyFlighs.filter((i) => i.penaltyType == 1 && i.descriptionPenalty);
+      let itemmapcancel = this.itemFlightTicket.penaltyFlighs.filter((i) => i.penaltyType == 2 && i.descriptionPenalty);
       if(itemmap && itemmap.length >0){
-        this.changeDepartTime = itemmap[0].descriptionPenalty;
+        this.changeDepartTime = itemmap[0].descriptionPenalty ;
+        if(itemmap[0].feePenalty){
+          this.hasFeeChangeDepartTime = true;
+        }
       }
       if(itemmapcancel && itemmapcancel.length >0){
         this.ticketRefund = itemmapcancel[0].descriptionPenalty;
+        if(itemmapcancel[0].feePenalty){
+          this.hasFeeTicketRefund = true;
+        }
       }
      }
      
@@ -38,16 +46,17 @@ export class FlightInfoInternationalPage implements OnInit {
   loadTicketInfo() {
     let url = C.urls.baseUrl.urlFlightInt + "api/bookings/get-airline-details";
     let body = {
-      "Aircraft" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.aircraft : this._flightService.itemFlightInternationalInfo.aircraft,
-      "AircraftStr" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.aircraftStr : this._flightService.itemFlightInternationalInfo.aircraftStr,
-      "Airline" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.airline : this._flightService.itemFlightInternationalInfo.airline,
-      "FlightNumber" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber : this._flightService.itemFlightInternationalInfo.flightNumber,
-      "FromPlaceCode" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode : this._flightService.itemFlightInternationalInfo.fromPlaceCode,
+      "Aircraft" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.aircraft : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      "AircraftStr" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.aircraftStr :  ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      "Airline" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.airline : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      "FlightNumber" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.flightNumber : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      "FromPlaceCode" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.fromPlaceCode : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
       "SessionId" : this._flightService.itemFlightCache.SessionId,
-      "TicketClass" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass : this._flightService.itemFlightInternationalInfo.ticketClass,
-      "TicketClassShort" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClassShort : this._flightService.itemFlightInternationalInfo.ticketClassShort,
-      "ToPlaceCode" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode : this._flightService.itemFlightInternationalInfo.toPlaceCode,
-      "UrlLogo" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.urlLogo : this._flightService.itemFlightInternationalInfo.urlLogo,
+      "TicketClass" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.ticketClass : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      "TicketClassShort" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.ticketClassShort : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      "ToPlaceCode" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.toPlaceCode : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ),
+      "UrlLogo" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.urlLogo : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ) ,
+      //"departFlightId" : this._flightService.itemFlightInternationalInfo?this._flightService.itemFlightInternationalInfo.id : ( (!this._flightService.loadFlightInfoType || this._flightService.loadFlightInfoType == 1) ? this._flightService.itemFlightCache.itemFlightInternationalDepart : this._flightService.itemFlightCache.itemFlightInternationalReturn ),
       "departFlightId" : this._flightService.itemFlightCache.itemFlightInternationalDepart ? this._flightService.itemFlightCache.itemFlightInternationalDepart.id : this._flightService.itemFlightInternationalInfo.id,
       "fareId" : this._flightService.itemFlightInternational.fare.key,
       "returnFlightId" : this._flightService.itemFlightCache.roundTrip ? this._flightService.itemFlightCache.itemFlightInternationalReturn ? this._flightService.itemFlightCache.itemFlightInternationalReturn.id : (this._flightService.itemFlightInternational.returnFlights && this._flightService.itemFlightInternational.returnFlights.length -1 >= this._flightService.indexFlightInternational ? this._flightService.itemFlightInternational.returnFlights[this._flightService.indexFlightInternational].id: 0 ) : ""

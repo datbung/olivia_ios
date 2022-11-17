@@ -241,7 +241,6 @@ const routes: Routes = [
 
     //VMBQT
     { path: 'flightsearchresultinternational', loadChildren: './flightinternational/flightsearchresultinternational/flightsearchresultinternational.module#FlightSearchResultInternationalPageModule' },
-    //flightadddetailsinternational
     { path: 'flightadddetailsinternational', loadChildren: './flightinternational/flightadddetailsinternational/flightadddetailsinternational.module#FlightAdddetailsInternationalPageModule' },
     { path: 'flightinternationalpaymentselect', loadChildren: './flightinternational/flightinternationalpaymentselect/flightinternationalpaymentselect.module#FlightInternationalPaymentSelectPageModule' },
     { path: 'flightinternationalpaymentatoffice', loadChildren: './flightinternational/flightinternationalpaymentatoffice/flightinternationalpaymentatoffice.module#FlightInternationalPaymentatOfficePageModule' },
@@ -252,7 +251,7 @@ const routes: Routes = [
     { path: 'flightinternationalpaymentdonepayoo/:code/:startdate/:enddate', loadChildren: './flightinternational/flightinternationalpaymentdonepayoo/flightinternationalpaymentdonepayoo.module#FlightInternationalPaymentDonePayooPageModule' },
     { path: 'flightinternationalpaymenterror', loadChildren: './flightinternational/flightinternationalpaymenterror/flightinternationalpaymenterror.module#FlightInternationalPaymentErrorPageModule' },
     { path: 'flightinternationalpaymentpayoo/:code/:stt', loadChildren: './flightinternational/flightinternationalpaymentpayoo/flightinternationalpaymentpayoo.module#FlightInternationalPaymentPayooPageModule' },
-    { path: 'flightinternationalpaymenttimeout', loadChildren: './flightinternational/flightinternationalpaymenttimeout/flightinternationalpaymenttimeout.module#FlightInternationalPaymentTimeoutPageModule' },
+    { path: 'flightinternationalpaymenttimeout/:stt', loadChildren: './flightinternational/flightinternationalpaymenttimeout/flightinternationalpaymenttimeout.module#FlightInternationalPaymentTimeoutPageModule' },
     { path: 'flightinternationalpaymentwarning', loadChildren: './flightinternational/flightinternationalpaymentwarning/flightinternationalpaymentwarning.module#FlightInternationalPaymentwarningPageModule' },
 
 ];

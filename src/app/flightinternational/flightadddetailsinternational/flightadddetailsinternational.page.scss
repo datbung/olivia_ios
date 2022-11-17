@@ -7,7 +7,7 @@
 
 .content-flightadddetails{
     padding: 16px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
 
     
@@ -29,13 +29,27 @@
     }
 
     .div-left{
-        width: 120px;
+        width: 100%;
         margin-right: 16px;
         border-bottom: solid 0.2px #cdcdcd;
         position: relative;
     }
+    .div-notice {
+        background-color: #f2f2f2;
+        padding: 8px 16px 30px 16px;
+        margin: 0 -16px;
+        margin-top: 16px;
+        margin-bottom: -16px;
+        .text-normal {
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: left;
+            color: #3f3b3b;
+        }
+    }
+    
     .sub-label{
-        font-size: 10px;
+        font-size: 14px;
         font-weight: 300;
         color: #828282;
     }
@@ -51,7 +65,7 @@
         top: 14px;
 
         z-index: 2;
-        width: 50%;
+        width: 90%;
     }
     .m-left-8{
         margin-left: 8px;
@@ -76,7 +90,7 @@
     }
     .label-passport {
         position: absolute;
-        top: 9px;
+        top: 8px;
     }
     .label-passportcountry{
         
@@ -88,7 +102,7 @@
         top: 18px;
     }
     .cls-passport-transition{
-        top: -12px;
+        top: -14px;
         transition: top 0.1s ease-out;
     }
     .cls-country{
@@ -96,7 +110,7 @@
         z-index: -1;
     }
     .cls-country-transition{
-        top: -11px;
+        top: -13px;
         //transition: top 0.1s ease-out;
     }
 
@@ -203,10 +217,10 @@
         margin-bottom: -8px;
     }
     .text-gender{
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 500;
         letter-spacing: -0.34px;
-        margin-top: 27px;
+        margin-top: 38px;
     }
     .text-bold{
         font-weight: 600 !important;
@@ -220,7 +234,7 @@
     .cls-datetofbirth{
         padding: 0;
         line-height: 28px;
-        font-size: 14px;
+        font-size: 16px;
         //margin-top: 4px;
         margin-top: 27px;
         border-bottom: solid 0.2px #cdcdcd;
@@ -231,7 +245,7 @@
         position: relative;
     }
     .top-dob-24{
-        top: -24px !important;
+        top: -26px !important;
     }
     .m-top-16{
         margin-top: 16px !important;
@@ -299,7 +313,7 @@
     }
 }
 .cls-input-custom{
-    margin-top: 21px;
+    margin-top: 17px;
     border-bottom: 0.2px solid rgb(205, 205, 205);
 }
 .no-border{
@@ -309,16 +323,36 @@
     border-bottom: solid 0.2px #cdcdcd;
 }
 .cls-passportcountry{
-    width: 190% !important;
+    width: 100% !important;
 }
 .f-13{
     font-size: 13px !important;
 }
 .div-vat{
     margin-top: 20px;
+
+    .div-text-invoice{
+        display: flex;
+        align-items: center;
+
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: -0.4px;
+        text-align: left;
+        color: #3f3b3b;
+    }
+}
+.div-width-100 {
+    width: 100%;
+}
+.text-right {
+    text-align: right;
 }
 .m-top-10{
     margin-top: 6px;
+}
+.m-top--16{
+    margin-top: -16px;
 }
 .div-width-100{
     width: 100%;
@@ -410,7 +444,7 @@
     .cls-input-custom .native-input.sc-ion-input-ios{
         padding: 0;
         line-height: 28px;
-        font-size: 14px;
+        font-size: 16px !important;
     }
 
     .text-bold .sc-ion-action-sheet-md{
@@ -471,4 +505,19 @@
 
   .p-top-6{
     padding-top: 6px;
+}
+.m-top-50 {
+    margin-top: 50px;
+}
+.m-top-17 {
+    margin-top: 17px;
+}
+.m-top-19 {
+    margin-top: 19px;
+}
+.m-r-8 {
+    margin-right: 8px;
+}
+.m-top-36 {
+    margin-top: 36px;
 }

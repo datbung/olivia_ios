@@ -23,7 +23,7 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
   allowrepay: boolean = false;
   errorCode: string='';
   errorMsg: string = '';
-  showbutton: boolean = false;
+  showbutton: boolean = true;
   constructor(public activityService: ActivityService,private navCtrl:NavController, public gf: GlobalFunction,
     private activatedRoute: ActivatedRoute,private _flightService: flightService,private safariViewController: SafariViewController,
     private platform: Platform,
@@ -37,29 +37,29 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
 
   ngOnInit() {
     this.stt= this.activatedRoute.snapshot.paramMap.get('stt');
-    if (this.stt==0) {
-      this.errorMsg = this._flightService.paymentError.noteIpn;
-      this.callCheckHoldTicket('',this._flightService.itemFlightCache).then((check) => {
-            if(this._flightService.itemFlightCache.dataSummaryBooking && this._flightService.itemFlightCache.dataSummaryBooking.urlPaymentAgain){
-              this.zone.run(()=>{
-                this.allowrepay = true;
-              })
+    // if (this.stt==0) {
+    //   this.errorMsg = this._flightService.paymentError.noteIpn;
+    //   this.callCheckHoldTicket('',this._flightService.itemFlightCache).then((check) => {
+    //         if(this._flightService.itemFlightCache.dataSummaryBooking && this._flightService.itemFlightCache.dataSummaryBooking.urlPaymentAgain){
+    //           this.zone.run(()=>{
+    //             this.allowrepay = true;
+    //           })
                 
-            }
-          })
-    }
-    else{
-      this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
-      this.callCheckHoldTicketNew('',this.bookingCode).then((check) => {
-        if(this._flightService.itemFlightCache.dataSummaryBooking && this._flightService.itemFlightCache.dataSummaryBooking.urlPaymentAgain){
-          this.zone.run(()=>{
-            this.allowrepay = true;
-          })
+    //         }
+    //       })
+    // }
+    // else{
+    //   this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
+    //   this.callCheckHoldTicketNew('',this.bookingCode).then((check) => {
+    //     if(this._flightService.itemFlightCache.dataSummaryBooking && this._flightService.itemFlightCache.dataSummaryBooking.urlPaymentAgain){
+    //       this.zone.run(()=>{
+    //         this.allowrepay = true;
+    //       })
             
-        }
-      })
-    }
-   
+    //     }
+    //   })
+    // }
+    this.allowrepay = true;
   }
 
   callCheckHoldTicket(url, data){
@@ -161,7 +161,7 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
         return;
       }
        this._flightService.itemChangeTicketFlight.emit(1);
-        this.navCtrl.navigateBack('/flightsearchresult');
+        this.navCtrl.navigateBack('flightsearchresultinternational');
     }
     else{
       this._flightService.itemTabFlightActive.emit(true);
@@ -195,7 +195,7 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
               this._flightService.itemFlightCache.promotionCode = "";
               this._flightService.itemFlightCache.promocode = "";
               this._flightService.itemFlightCache.discount = 0;
-              this.navCtrl.navigateBack('/flightsearchresult');
+              this.navCtrl.navigateBack('flightsearchresultinternational');
               alert.dismiss();
             }
           }
@@ -205,7 +205,7 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
       return;
     }
     if (this.stt==0) {
-      this.navCtrl.navigateBack('/flightpaymentselect');
+      this.navCtrl.navigateBack('flightinternationalpaymentselect');
     } else {
       this.navCtrl.back();
     }

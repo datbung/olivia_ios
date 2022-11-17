@@ -44,6 +44,7 @@ ion-footer button{
 }
 ion-header{
     padding-top: env(safe-area-inset-top);
+    box-shadow: 1px 0px 2px 0px #828282 !important;
 }
 ion-header {
   .div-close{
@@ -172,6 +173,7 @@ ion-toggle {
   padding: 12px 0 !important;
   padding-bottom: 0 !important;
   height: 38px !important;
+  //border-top: solid 0.5px #fff !important;
 }
 .flight-calendar-custom .week-toolbar{
   height: 38px;
@@ -196,6 +198,20 @@ ion-toggle {
 .flight-calendar-custom ion-header {
   padding-top: 0 !important;
 }
+
+.tour-calendar-custom .week-toolbar .week-title{
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-top: solid 0.5px #fff !important;
+}
+
+.tour-calendar-custom .month-box .month-title{
+  font-size: 16px;
+  color: #3f3b3b;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
 @media (min-width: 350px) and (max-width: 414px) {
   .flight-calendar-custom ion-header ion-toolbar:first-child {
     margin-top: 0 !important;
@@ -370,6 +386,7 @@ ion-toggle {
     }
 
     .div-month-text-small{
+      transition: visibility 1s, opacity 1s linear;
       margin-left: 26px;
       display: flex;
       flex-direction: row;
@@ -391,6 +408,21 @@ ion-toggle {
       }
       .text-red {
         color: #e52822;
+      }
+      .text-black {
+        color: #3f3b3b;
+      }
+
+      @media (min-width: 350px) and (max-width: 375px) {
+        margin-left: 18px !important;
+      }
+  
+      @media (min-width: 376px) and (max-width: 390px) {
+        margin-left: 19px !important;
+      }
+  
+      @media (min-width: 391px) and (max-width: 414px) {
+        margin-left: 21px !important;
       }
     }
 
@@ -1395,5 +1427,97 @@ height: 18px !important;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
     border-radius: 6px 0 0 6px !important;
     background: #ecf0f5;
+  }
+}
+.tour-calendar-custom .days-btn.on-selected {
+  background: #9fc43a !important;
+}
+.days-allotment.on-selected {
+  p{
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+}
+.days-allotment {
+  p{
+      color: #9fc43a !important;
+      font-weight: 600 !important;
+  }
+}
+.div-tour-text-departure {
+    font-size: 18px;
+    color: #9fc43a;
+    padding: 16px;
+    border-top: solid 1px #f2f2f2;
+    text-align: center;
+}
+.days-btn.days-allotment {
+  border: solid 1px #9fc43a;
+}
+
+.days-allotment.on-selected {
+  background: #9fc43a !important;
+  color: #fff !important
+}
+
+.tour-calendar-custom .week-toolbar .week-title{
+  border-top: solid 0.5px #fff !important;
+}
+.month-box {
+  //transition: opacity 1s ease-out;
+    opacity: 0; 
+  //  animation: hideNav 500ms ease-in-out both;
+}
+
+.cls-animation-calendar{
+  animation: showNav 500ms ease-in-out both;
+}
+
+@keyframes showNav {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.tour-calendar-custom {
+
+  .div-month-text-small{
+    transition: visibility 1s, opacity 1s linear;
+    margin-left: 26px;
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+
+    .div-border-small {
+      padding: 6px 12px;
+      padding-top: 4px;
+      border: solid 0.5px #cccccc;
+      border-radius: 4px;
+      margin-right: 12px;
+    }
+    
+    small{
+      visibility: visible;
+      bottom: 0 !important;
+      margin: 0 !important;
+      white-space: nowrap;
+    }
+    .text-red {
+      color: #e52822;
+    }
+    .text-black {
+      color: #3f3b3b;
+    }
+
+    @media (min-width: 350px) and (max-width: 375px) {
+      margin-left: 18px !important;
+    }
+
+    @media (min-width: 376px) and (max-width: 390px) {
+      margin-left: 19px !important;
+    }
+
+    @media (min-width: 391px) and (max-width: 414px) {
+      margin-left: 21px !important;
+    }
   }
 }

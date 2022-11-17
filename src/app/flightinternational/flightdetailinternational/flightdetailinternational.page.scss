@@ -34,7 +34,7 @@ ion-header {
         top: -18px;
     }
     
-    .text-airline,.text-primary {
+    .text-primary {
         color: #26bed6;
     }
     .text-flightNumber {
@@ -68,15 +68,39 @@ ion-header {
     .text-right {
         text-align: right !important;
     }
+    .text-title {
+        font-size: 16px;
+        line-height: 1.4;
+        text-align: left;
+        color: #3f3b3b;
+    }
     .text-normal {
         font-size: 14px;
         text-align: left;
         color: #3f3b3b;
     }
+    .text-airline {
+        font-size: 14px;
+        text-align: left;
+        color: #828282;
+    }
     .text-title {
-        margin: 20px 0 12px 0;
         font-size: 14px;
         font-weight: 600;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .text-sub {
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        color: #828282;
+    }
+    .text-total {
+        //margin-top: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 1.4;
         text-align: left;
         color: #3f3b3b;
     }
@@ -85,8 +109,35 @@ ion-header {
         font-weight: 600;
         color: #26bed6;
     }
+    .text-code {
+        font-size: 12px;
+        color: #868998;
+    }
+    .text-time {
+        font-size: 12px;
+        color: #828282;
+    }
+    .div-stops {
+        background-color: #f2f2f2;
+        margin: 0 -16px;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: #2f80ed;
+
+        .text-stops {
+            font-size: 14px;
+            text-align: left;
+            color: #2f80ed;
+        }
+    }
+    .img-next {
+        margin: 0 4px;
+    }
+    .d-flex-end {
+        justify-content: flex-end;
+    }
     .div-time {
-        font-size: 18px;
+        font-size: 16px;
         text-align: left;
         color: #3f3b3b;
         font-weight: 600;
@@ -114,4 +165,35 @@ ion-header {
     .f-bold {
         font-weight: 600;
     }
+
+    .text-flight-title{
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.5;
+        letter-spacing: -0.51px;
+        color: #000000;
+      }
+      .v-align-center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .img-oneway{
+        width: 12px !important;
+        margin-left: 12px;
+      }
+      .div-flight-inout{
+        padding: 0px 18px;
+        width: 32px;
+        height: 32px;
+        position: relative;
+  
+        .img-flight-inout{
+          width: 32px;
+          height: 32px;
+          position: absolute;
+          left: 0;
+          top: -2px;
+        }
+      }
 }

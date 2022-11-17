@@ -13,6 +13,7 @@
                 <div class="item-tour-header item-visa" (click)="changeItemHeader(4)"  id="header4">Thông tin Visa</div>
                 <div class="item-tour-header item-tourguide" (click)="changeItemHeader(5)"  id="header5">Hướng dẫn viên</div>
                 <div class="item-tour-header item-charge" (click)="changeItemHeader(6)"  id="header6">Chi phí dự kiến</div>
+                <div *ngIf="tourReviews && tourReviews.length >0" class="item-tour-header item-charge" (click)="changeItemHeader(7)"  id="header7">Đánh giá</div>
             </div>
             <div class="div-icon" (click)="changeStyleHeader()"><img class="icon-down" src="./assets/ic_tour/chevron-down.svg" /></div>
             

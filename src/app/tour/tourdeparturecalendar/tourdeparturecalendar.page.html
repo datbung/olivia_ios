@@ -20,7 +20,12 @@
                 </div>
                 <div class="width-50 d-flex" (click)="openPickupCalendar()">
                     <div class="v-align-center m-r-8"><img src="./assets/ic_tour/ic_calendar.svg"></div>
-                    <div class="text-normal align-right v-align-center f-20" *ngIf="itemDepartureCalendar && itemDepartureCalendar.AllotmentDateDisplay">{{itemDepartureCalendar.AllotmentDateDisplay}}</div>
+                    <div class="text-normal align-right v-align-center f-20" *ngIf="itemDepartureCalendar && itemDepartureCalendar.AllotmentDateDisplay && loaddeparturedone else loadingsk">{{itemDepartureCalendar.AllotmentDateDisplay}}</div>
+                    <ng-template #loadingsk>
+                      <div class="text-normal align-right v-align-center" >
+                        <ion-skeleton-text animated style="width: 100%;height: 24px;border-radius: 4px;"></ion-skeleton-text>
+                      </div>
+                    </ng-template>
                 </div>
             </div>
 
@@ -28,9 +33,15 @@
               <div class="width-30">
                   Người lớn
               </div>
-              <div class="text-price width-42" >
+              <div class="text-price width-42" *ngIf="loaddeparturedone else loadingsk">
                <span *ngIf="tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceAdultAvgStr">x {{tourService.itemDepartureCalendar.PriceAdultAvgStr}}</span>
               </div>
+              <ng-template #loadingsk>
+                <div class="text-price width-42">
+                  <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
+                </div>
+             </ng-template>
+
               <div class="width-40 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(1)">-</div>
                   <div class="div-item-center">{{searchhotel.adult}}</div>
@@ -42,10 +53,15 @@
               <div class="width-30">
                   Trẻ em
               </div>
-              <div class="text-price width-42">
-                <span *ngIf="tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceChildAvgStr">x {{tourService.itemDepartureCalendar.PriceChildAvgStr}}</span>
-                <span *ngIf="tourService.itemDepartureCalendar && !tourService.itemDepartureCalendar.PriceChildAvgStr">x 0</span>
+              <div class="text-price width-42" *ngIf="loaddeparturedone else loadingsk">
+                <span *ngIf="tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceChildAvgStr ">x {{tourService.itemDepartureCalendar.PriceChildAvgStr}}</span>
+                <!-- <span *ngIf="tourService.itemDepartureCalendar && !tourService.itemDepartureCalendar.PriceChildAvgStr">x 0</span> -->
               </div>
+              <ng-template #loadingsk>
+                <div class="text-price width-42">
+                  <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
+                </div>
+             </ng-template>
               <div class="width-40 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(2)">-</div>
                   <div class="div-item-center">{{searchhotel.child}}</div>

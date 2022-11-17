@@ -849,6 +849,14 @@ export class InsurrancedetailPage implements OnInit {
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
+
+        let divmonth = $('.month-box');
+        if(divmonth && divmonth.length >0){
+          for (let index = 0; index < divmonth.length; index++) {
+            const em = divmonth[index];
+            $('#'+em.id).addClass('cls-animation-calendar');
+          }
+        }
     });
     
     var se = this;

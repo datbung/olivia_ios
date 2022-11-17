@@ -417,21 +417,21 @@
             <div class="div-user-info">
                     <div  [ngClass]=" ( (hasinput && !hoten) || hoteninvalid || subnameinvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
                         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="floating">Họ tên</ion-label>
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Họ tên</ion-label>
                             <ion-input [(ngModel)]="hoten" type="text"  (ionBlur)="inputLostFocus(null)" (ionInput)="inputFocus(null, $event)" (ionFocus)="inputOnFocus(null, 9)"></ion-input>
                         </ion-item>
                     </div>
                     
                     <div [ngClass]="((hasinput && !sodienthoai) || sodienthoaiinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
                         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="floating">Số điện thoại</ion-label>
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Số điện thoại</ion-label>
                             <ion-input [(ngModel)]="sodienthoai" maxlength=11 required  (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
                         </ion-item>
                     </div>
     
                     <div [ngClass]="((hasinput && !email) || emailinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
                         <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="floating">Email</ion-label>
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Email</ion-label>
                             <ion-input [(ngModel)]="email" type="email" (ionBlur)="checkInputUserInfo(3)" (ionFocus)="inputOnFocus(null, 11)"></ion-input>
                         </ion-item>
                     </div>
@@ -510,19 +510,19 @@
                     <div *ngIf="ischeck">
                         <div class="m-bottom-12">
                           <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="floating">Tên công ty</ion-label>
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Tên công ty</ion-label>
                             <ion-input class="cls-input-custom" [(ngModel)]="companyname" type="text" required></ion-input>
                           </ion-item>
                         </div>
                         <div class="m-bottom-12">
                           <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="floating">Địa chỉ</ion-label>
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Địa chỉ</ion-label>
                             <ion-input class="cls-input-custom" [(ngModel)]="address" type="text" required></ion-input>
                           </ion-item>
                         </div>
                         <div class="m-bottom-12">
                           <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="floating">Mã số thuế</ion-label>
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Mã số thuế</ion-label>
                             <ion-input class="cls-input-custom" [(ngModel)]="tax" type="text" required></ion-input>
                           </ion-item>
                         </div>
@@ -533,13 +533,13 @@
                           <div *ngIf="!ishideNameMail">
                             <ion-col size="12">
                               <ion-item style="--padding-start: 0px">
-                                <ion-label class="sub-label m-bottom-6 f-13" position="floating">Họ tên</ion-label>
+                                <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Họ tên</ion-label>
                                 <ion-input class="cls-input-custom" [(ngModel)]="hotenhddt" type="text" required></ion-input>
                               </ion-item>
                             </ion-col>
                             <ion-col size="12">
                               <ion-item style="--padding-start: 0px">
-                                <ion-label class="sub-label m-bottom-6 f-13" position="floating">Email nhận HĐ</ion-label>
+                                <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Email nhận HĐ</ion-label>
                                 <ion-input class="cls-input-custom"  [(ngModel)]="emailhddt" type="text" required></ion-input>
                               </ion-item>
                             </ion-col>
