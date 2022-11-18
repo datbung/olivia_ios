@@ -50,28 +50,30 @@
                 <img class="icon-detail-fix" src="./assets/iocnsearch/ic_people.svg">
             </div>
             <div class="room-class-info">
-                <span *ngIf="objectRoom.Rooms[0].MaxAdults != objectRoom.Rooms[0].IncludeAdults" class="text-room-class-description">Tối đa
+                <span *ngIf="objectRoom.Rooms[0].MaxAdults != objectRoom.Rooms[0].IncludeAdults && objectRoom.Rooms[0].MaxAdults >0" class="text-room-class-description">Tối đa
                     {{objectRoom.Rooms[0].MaxAdults}}
                     người lớn |
                     {{objectRoom.Rooms[0].IncludeAdults}}
                     người lớn &
                     {{objectRoom.Rooms[0].MaxChils}}
                     trẻ em</span>
-                <span *ngIf="objectRoom.Rooms[0].MaxAdults == objectRoom.Rooms[0].IncludeAdults" class="text-room-class-description">Tối đa
+                <span *ngIf="objectRoom.Rooms[0].MaxAdults == objectRoom.Rooms[0].IncludeAdults && objectRoom.Rooms[0].MaxAdults >0" class="text-room-class-description">Tối đa
                     {{objectRoom.Rooms[0].MaxAdults}}
                     người lớn &
                     {{objectRoom.Rooms[0].MaxPax - objectRoom.Rooms[0].MaxAdults}}
                     trẻ em</span>
+                    <span *ngIf="objectRoom.Rooms[0].MaxAdults == 0" class="text-room-class-description">Tối đa
+                        {{objectRoom.Rooms[0].MaxPax}} khách</span>
             </div>
 
-        <div class="p-top-8">
+        <div *ngIf="objectRoom.Rooms[0] && (objectRoom.Rooms[0].RoomInfomations.SubRoomHotels || objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile || (objectRoom.Rooms[0].BedTypes && objectRoom.Rooms[0].BedTypes.length >0))" class="p-top-8">
             <div class="room-class-icon">
                 <img class="icon-detail-fix" src="./assets/ic_hoteldetail/ic_bed.svg">
             </div>
             <div class="room-class-info">
-                <div *ngIf="objectRoom.Rooms[0].RoomInfomations.SubRoomHotels && objectRoom.Rooms[0].RoomInfomations.SubRoomHotels.length>0">{{objectRoom.Rooms[0].RoomInfomations.SubRoomHotels[0].Quantity}} phòng ngủ </div>
-                <div *ngIf="objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile">{{objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile.join(' | ')}}</div>
-                <div *ngIf="!objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile && objectRoom.Rooms[0].BedTypes.length >0">{{objectRoom.Rooms[0].BedTypes[0].description}}</div>
+                <div *ngIf="objectRoom.Rooms[0] && objectRoom.Rooms[0].RoomInfomations.SubRoomHotels && objectRoom.Rooms[0].RoomInfomations.SubRoomHotels.length>0">{{objectRoom.Rooms[0].RoomInfomations.SubRoomHotels[0].Quantity}} phòng ngủ </div>
+                <div *ngIf="objectRoom.Rooms[0] && objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile">{{objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile.join(' | ')}}</div>
+                <div *ngIf="objectRoom.Rooms[0] && !objectRoom.Rooms[0].RoomInfomations.BedSummaryDisplaysMobile && objectRoom.Rooms[0].BedTypes && objectRoom.Rooms[0].BedTypes.length >0">{{objectRoom.Rooms[0].BedTypes[0].description}}</div>
             </div>
         </div>
 
@@ -181,6 +183,16 @@
                         </div>
                         <div class="room-class-info">
                            {{Fac.Name}}
+                        </div>
+                    </div>
+                    <div  *ngFor="let item of objectRoom.Rooms[0].RoomInfomations.RoomClassFacility" class="p-top-8">
+                        <div class="no-padding room-class-icon">
+                          
+                            <img  class="icon-detail-fix" src="./assets/ic_flight/icon_info_gray.svg">
+                      
+                        </div>
+                        <div class="room-class-info">
+                           {{item}}
                         </div>
                     </div>
           

@@ -323,17 +323,27 @@ export class TabsPage implements OnInit {
             })
             this.showActionSheetNoti(data);
           };
-          
-          this.fcmNative.onTokenRefresh().subscribe(token =>{
-            //PDANH 19/07/2019: Push memberid & devicetoken
-            this.storage.get('auth_token').then(auth_token =>{
-              if(token){
-                this.storage.set('deviceToken',token);
-                this.gf.pushTokenAndMemberID(auth_token, token, this.appversion);
-              }
-            })
+
+          // this.fcmNative.getToken().then(token => {
+          //   this.storage.get('checktoken').then(checktoken => {
+          //     if (!checktoken) {
+          //       this.storage.set('checktoken',"1");
+          //       //PDANH 19/07/2019: Push memberid & devicetoken
+          //         this.gf.pushTokenAndMemberID("", token, this.appversion);
+          //       }
+          //   })
+         
+          // });
+          // this.fcmNative.onTokenRefresh().subscribe(token =>{
+          //   //PDANH 19/07/2019: Push memberid & devicetoken
+          //   this.storage.get('auth_token').then(auth_token =>{
+          //     if(token){
+          //       this.storage.set('deviceToken',token);
+          //       this.gf.pushTokenAndMemberID(auth_token, token, this.appversion);
+          //     }
+          //   })
             
-          })
+          // })
         })
 
         
@@ -449,18 +459,18 @@ export class TabsPage implements OnInit {
     //chuyển qua tab mytrip
     if(data && data.BookingCode && data.notifyAction != "cancel"){
       if(data.notifyAction == "sharereviewofhotel"){
-        this.setNotification(data,"product");
+        // this.setNotification(data,"product");
         this.navCtrl.navigateForward(['/app/tabs/tab3']);
         this.gf.setParams(data.BookingCode,'notifiBookingCode');
         this.gf.setParams(2,'selectedTab3');
       }
       else if(data.NotifyType == "blog" && data.notifyAction == "blogofmytrip"){
-        this.setNotification(data,"product");
+        // this.setNotification(data,"product");
         this.valueGlobal.backValue = "tab4";
         this.navCtrl.navigateForward("/blog/" + data.BookingCode);
       }
       else if(data.NotifyType == "fly" && data.notifyAction == "flychangeinfo"){
-        this.setNotification(data,"product");
+        // this.setNotification(data,"product");
         this.navCtrl.navigateForward(['/app/tabs/tab3']);
         this.gf.setParams(data.BookingCode,'notifiBookingCode');
         this.gf.setParams(data.switchObj,'notifiSwitchObj');
@@ -482,7 +492,7 @@ export class TabsPage implements OnInit {
       }
       else if(data.dataLink){
         if(data.dataLink.indexOf('tourdetail') != -1){
-          this.setNotification(data,"product");
+          //this.setNotification(data,"product");
           let arr = data.dataLink.replace('/','').split('/');
           if(arr && arr.length ==2){
             this.tourService.tourDetailId = arr[1];
@@ -491,14 +501,14 @@ export class TabsPage implements OnInit {
           }
         
         }else {
-          this.setNotification(data,"product");
+          //this.setNotification(data,"product");
           this.navCtrl.navigateForward(data.dataLink);
         }
         
       }
       else if(data.flyNotify){
         this._flightService.itemTabFlightActive.emit(true);
-        this.setNotification(data,"product");
+        // this.setNotification(data,"product");
         this.valueGlobal.backValue = "homeflight";
         this.navCtrl.navigateForward('/tabs/tab1');
       }
@@ -558,7 +568,7 @@ export class TabsPage implements OnInit {
       iconStr = 'ic_bus2';
     }else if(data.NotifyType == 'blog' || data.notifyAction == 'blogofmytrip')
     {
-      se.setNotification(data,"product");
+      // se.setNotification(data,"product");
       iconStr = 'ic_message';
     }
     else if(data.notifyAction == 'bookingbegoingcombofly' || data.notifyAction == 'flychangeinfo')
@@ -575,7 +585,7 @@ export class TabsPage implements OnInit {
     var msg = data.message;
     if(data.dataLink){
       if(data.dataLink.indexOf('tourdetail') != -1){
-        this.setNotification(data,"product");
+        //this.setNotification(data,"product");
         let arr = data.dataLink.replace('/','').split('/');
         if(arr && arr.length ==2){
           this.tourService.tourDetailId = arr[1];
@@ -583,13 +593,13 @@ export class TabsPage implements OnInit {
           this.navCtrl.navigateForward('/tourdetail');
         }
       } else {
-        se.setNotification(data,"product");
+        //se.setNotification(data,"product");
         se.navCtrl.navigateForward(data.dataLink);
       }
       
     }
     else if(data.flyNotify){
-      se.setNotification(data,"product");
+      // se.setNotification(data,"product");
       se._flightService.itemTabFlightActive.emit(true);
       se.valueGlobal.backValue = "homeflight";
       se.navCtrl.navigateForward('/tabs/tab1');
@@ -981,7 +991,7 @@ export class TabsPage implements OnInit {
               var text = "Bearer " + auth_token;
               var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUser?pageIndex=1&pageSize=50' ,
+              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex=1&pageSize=50' ,
               timeout: 10000, maxAttempts: 5, retryDelay: 2000,
               headers:
               {
@@ -1277,23 +1287,23 @@ export class TabsPage implements OnInit {
 
     });
   }
-  setNotification(data,notifyType){
-    this.storage.get("objnotication").then((datanoti)=>{
-      if (!datanoti) {
-        datanoti=[];
-      }
-      let checkNoti = datanoti.filter((item) => { return item.dataLink== data.dataLink});
-      if (checkNoti.length==0) {
-        data.created=moment().format();
-        data.status=0;
-        data.id=Date.now();
-        data.status=0;
-        data.notifyType=notifyType;
+  // setNotification(data,notifyType){
+  //   this.storage.get("objnotication").then((datanoti)=>{
+  //     if (!datanoti) {
+  //       datanoti=[];
+  //     }
+  //     let checkNoti = datanoti.filter((item) => { return item.dataLink== data.dataLink});
+  //     if (checkNoti.length==0) {
+  //       data.created=moment().format();
+  //       data.status=0;
+  //       data.id=Date.now();
+  //       data.status=0;
+  //       data.notifyType=notifyType;
         
-        datanoti.push(data);
-        this.storage.set("objnotication",datanoti);
-      }
+  //       datanoti.push(data);
+  //       this.storage.set("objnotication",datanoti);
+  //     }
   
-    })
-  }
+  //   })
+  // }
 }

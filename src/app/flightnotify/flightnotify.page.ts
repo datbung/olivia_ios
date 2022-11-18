@@ -79,19 +79,16 @@ export class FlightnotifyPage {
      */
     loadUserNotification() {
         var se = this;
-        se.storage.get('auth_token').then(auth_token => {
-            if (auth_token) {
-                var text = "Bearer " + auth_token;
+
                 var options = {
                     method: 'GET',
-                    url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/GetNotificationByUser?pageIndex=' + se.pageIndex + '&pageSize=' + se.pageSize,
+                    url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex=' + se.pageIndex + '&pageSize=' + se.pageSize,
                     timeout: 10000,
                     maxAttempts: 5,
                     retryDelay: 2000,
                     headers: {
                         'cache-control': 'no-cache',
                         'content-type': 'application/json',
-                        authorization: text
                     }
                 };
                 request(options, function (error, response, body) {
@@ -174,15 +171,7 @@ export class FlightnotifyPage {
                         }
                     }
                 });
-            } else {
-                se.zone.run(() => {
-                    se.items = [];
-                    se.valueGlobal.countNotifi = 0;
-                    se.loaddatadone = true;
-                })
-                se.refreshToken();
-            }
-        })
+  
     }
     /**
      * Thực hiện sort theo date
@@ -240,6 +229,11 @@ export class FlightnotifyPage {
                           } else {
                             se.navCtrl.navigateForward(element.dataLink);
                           }
+                      }
+                      else{
+                        if (element.memberId=='alluser') {
+                          se.navCtrl.navigateForward(element.bookingCode);
+                        }
                     }
                 })
             }
@@ -264,11 +258,12 @@ export class FlightnotifyPage {
                 se.presentToastNotifi(item);
               }
              else {
-                se.gf.setParams(item.bookingCode, 'notifiBookingCode');
-                // se.navCtrl.navigateForward(['/app/tabs/tab3']);
-
-             
-                se.mapBookingAndPayment(item.bookingCode);
+                
+                if (item.memberId!='alluser') {
+                    se.gf.setParams(item.bookingCode,'notifiBookingCode');
+                    //se.navCtrl.navigateForward(['/app/tabs/tab3']);
+                    this.mapBookingAndPayment(item.bookingCode);
+                  }
             }
         } else { // show notifi
             if (!item.dataLink) {

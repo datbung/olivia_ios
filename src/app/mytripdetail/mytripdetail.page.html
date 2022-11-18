@@ -293,7 +293,7 @@
           <div class="item-room-detail" *ngIf="!isFlyBooking && !trip.bookingOffType">
             <div [ngClass]="!trip.combo_name? 'div-wrapimg img-list' : 'div-wrapimg-1 img-list-1'" class="div-wrapimg img-list" >
               <div *ngIf="trip.avatar else noavatar">
-                <img *ngIf="trip.avatar.indexOf('http') == -1" [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'"  src="https:{{trip.avatar}}">
+                <img  [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'"  src="{{trip.avatar}}">
                 <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'" src="{{trip.avatar}}">
               </div>
               <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar ava-list" src="https:{{trip.avatar}}"> -->
@@ -1306,6 +1306,18 @@
               </div>
               <div class="placeline">
               </div>
+              <div  *ngIf="ishdnp"  class="position-absolute">
+                <img src="./assets/imgs/ic_expand_down.svg" />
+              </div>
+            </div>
+                 <!--   Hướng dẫn nhận phòng -->
+          <div class="m-top-24"  *ngIf="ishdnp">
+            <div>Nhận phòng: <span class="font-weight-600">{{cin}}</span> - Trả phòng: <span class="font-weight-600">{{cout}}</span></div>
+            <div *ngFor="let msg of trip.hotelNotes">
+              <div *ngIf="msg.title=='Hướng dẫn nhận phòng'">
+                <label [innerHTML]="msg.description">
+                </label>
+              </div>
             </div>
             
             <div class="div-return m-top-28">
@@ -1318,6 +1330,17 @@
                 <div class="text-placecode">{{ itemtransit.landingAirport }} | {{ itemtransit.ToPlaceCode }}</div>
               </div>
               <div class="placepoint-return">
+              </div>
+              <div  *ngIf="isttt" class="position-absolute">
+                <img src="./assets/imgs/ic_expand_down.svg" />
+              </div>
+            </div>
+            <div (click)="openWebpage()" class="mt22"  *ngIf="isttt">
+              <div class="text-link" >
+                <u>Hướng dẫn thủ tục hàng không</u>
+              </div>
+              <div class="text-link mt22">
+                <u>Cẩm nang du lịch</u>
               </div>
             </div>
             <!-- <div class="div-overlay" *ngIf="idxtransit != itembkg.Transits.length-1"><span *ngIf="itembkg.timeOverlay">Quá cảnh {{ itembkg.timeOverlay }} tại {{ itemtransit.ToPlaceCode }}</span></div> -->
@@ -1770,7 +1793,7 @@
       </div>
   <ng-template #otherbooking>
     <div [ngClass]="i == 0 ? 'div-mytrip m-top-24' : 'div-mytrip'">
-      <div [ngClass]="i == 0 ? 'first-content m-top-42' : 'first-content'">
+      <div [ngClass]="i == 0 ? 'first-content padding-left-0 m-top-42' : 'first-content padding-left-0'">
         <ion-item-group>
           <!-- Vùng booking fly -->
           <div>

@@ -1025,6 +1025,7 @@ export class HotelDetailPage implements OnInit {
         error.param = JSON.stringify(options);
         C.writeErrorLog(objError,response);
       }
+      
         if (response.statusCode == 200) {
           
           let jsondata = JSON.parse(body);
@@ -1380,7 +1381,8 @@ export class HotelDetailPage implements OnInit {
           GetVinHms: 1,
           GetSMD: 1,
           IsB2B: true,
-          IsSeri: true
+          IsSeri: true,
+          IsAgoda: true
         };
         if (se.searchhotel.arrchild) {
           for (var i = 0; i < se.searchhotel.arrchild.length; i++) {
@@ -1920,7 +1922,8 @@ async getdataroom() {
     GetVinHms: 1,
     GetSMD: 1,
     IsB2B: true,
-    IsSeri: true
+    IsSeri: true,
+    IsAgoda: true
   };
   if (self.searchhotel.arrchild) {
     self.arrchild1 = [];
@@ -2570,6 +2573,7 @@ excuteLoadHotelRoom(data){
         self.Roomif.textcancel="";
         self.Roomif.ExcludeVAT=self.ExcludeVAT;
         this.bookCombo.ischeckShowupgrade=false;
+        self.Roomif.DescriptionTaxFee=null;
         if (this.arrroom[0].MealTypeRates[indexme].Supplier == 'Internal') {
           var options = {
             method: 'GET',
@@ -2697,6 +2701,7 @@ excuteLoadHotelRoom(data){
           self.Roomif.payment = this.arrroom[0].MealTypeRates[indexme].Penaltys[0].IsPenaltyFree;
           self.Roomif.ischeckpayment=true;
           self.Roomif.roomcancelhbed=0;
+          self.Roomif.DescriptionTaxFee=MealTypeRates.DescriptionTaxFee
           //setTimeout(()=>{
             self.navCtrl.navigateForward('/roomdetailreview');
           //},250)

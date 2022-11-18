@@ -69,7 +69,7 @@
                       <div class="div-wrapimg img-list">
                         <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar ava-list" src="https:{{trip.avatar}}"> -->
                         <div *ngIf="trip.avatar else noavatar">
-                          <img *ngIf="trip.avatar.indexOf('http') == -1" class="img-avatar" src="https:{{trip.avatar}}">
+                          <img class="img-avatar" src="{{trip.avatar}}">
                           <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}">
                         </div>
                         <ng-template #noavatar>

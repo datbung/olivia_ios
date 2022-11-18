@@ -634,6 +634,18 @@ export class GlobalFunction{
           }
       })
     }
+    request(options, function (error, response, body) {
+      if (error) {
+          error.page = "login";
+          error.func = "pushTokenAndMemberID";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(error,response);
+      }else if(body){
+          var obj = JSON.parse(body);
+         
+      }
+  })   
+    
   }
 
   DeleteTokenOfUser(deviceToken, userToken, appversion) {

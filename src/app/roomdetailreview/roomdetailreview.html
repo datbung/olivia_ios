@@ -112,6 +112,22 @@
                 <ion-label  *ngIf="statusRoom!='AL'" >Xác nhận trong 60 phút</ion-label>
               </div>
             </div>
+            <div class="div-TaxFee" *ngIf="Roomif.DescriptionTaxFee && Roomif.DescriptionTaxFee.include.length>0">
+              <div class="text-normal" style="font-weight: bold">
+                Giá đã bao gồm:
+              </div>
+              <div class="text-normal" *ngFor="let item of Roomif.DescriptionTaxFee.include">
+                {{item}}
+              </div>
+            </div>
+            <div class="div-TaxFee" *ngIf="Roomif.DescriptionTaxFee && Roomif.DescriptionTaxFee.exclude.length>0">
+              <div class="text-normal" style="font-weight: bold">
+                Không bao gồm (trả tại khách sạn):
+              </div>
+              <div class="text-normal" *ngFor="let item of Roomif.DescriptionTaxFee.exclude">
+                {{item}}
+              </div>
+            </div>
   </div>
   <hr  *ngIf="ischeckroom!='Internal'"class="cls-hr">
    <div *ngIf="ischeckroom!='Internal'">

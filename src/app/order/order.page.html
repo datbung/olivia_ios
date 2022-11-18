@@ -804,6 +804,113 @@
                                 {{trip.bankName}}
                                 </ion-label>
                               </div>
+                              <div class="m-top-14 d-flex">
+                                <div class="text-time-depart">
+                                  {{trip.itemdepart.departureTime}}
+                                </div>
+                                <div class="placepoint">
+                                </div>
+                                <div class="m-l-6">
+                                  <div class="text-info font-weight-500">{{trip.flightFrom}}</div>
+                                  <div class="text-name-airport m-0">{{ trip.departAirport}} | {{ trip.itemdepart.departCode }}</div>
+                                </div>
+                                </div>
+                                <!-- <div [ngClass]="trip.payment_status == 0 && trip.delivery_payment_date_display?'placeline-waitpayment-od':'placeline-od'" > -->
+                                  <div class="placeline-stops" ></div>
+                     
+                                <div class="d-flex" style="margin-top: -16px">
+                                  <div class="text-time-return">
+                                    {{trip.itemdepart.arrivalTime}}
+                                  </div>
+                                  <div  class="placepoint">
+                                  </div>
+                                  <div class="m-l-6">
+                                    <div class="text-info font-weight-500">{{trip.flightTo}}</div>
+                                    <div class="text-name-airport m-0">{{ trip.returnAirport}} | {{ trip.itemdepart.arrivalCode }}</div>
+                                  </div>
+                                  </div>
+                      
+                          </div>
+                          <!-- Chiều về -->
+                          <div *ngIf="trip.textReturn && trip.bookingsComboData[1].airlineCode && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ">
+                            <div class="div-split"></div>
+            
+                              <div class="d-flex text-thin m-0">
+                                <div class="div-gird ">
+                                  <div class="div-width-100">{{ trip.checkOutDisplay }}</div>
+                                  <div class="d-flex m-top-6">
+                                    <div class="div-width-200 d-flex">
+                                      <div class="div-img-logo-new">
+                                        <img class="img-logo-new" *ngIf="trip.itemreturn.airlineName.indexOf('VIETJET') != -1 "
+                                          src="./assets/ic_airticket/vj.png">
+                                        <img class="img-logo-new logo_vna"
+                                          *ngIf="(trip.itemreturn.airlineName.indexOf('Vietnam Airlines') != -1  || trip.itemreturn.airlineName.indexOf('VIETNAM AIRLINES') != -1 ) && !trip.operatedBy "
+                                          src="./assets/ic_airticket/vna.png">
+                                        <img class="img-logo-new logo_vna"
+                                          *ngIf="(trip.itemreturn.airlineName.indexOf('Vietnam Airlines') != -1  || trip.itemreturn.airlineName.indexOf('VIETNAM AIRLINES') != -1 ) && trip.operatedBy"
+                                          src="./assets/ic_airticket/vna.png">
+                                        <img class="img-logo-new" *ngIf="trip.itemreturn.airlineName.indexOf('JETSTAR') != -1"
+                                          src="./assets/ic_airticket/ic_jetstar_b.png">
+                                        <img class="img-logo-new" *ngIf="trip.itemreturn.airlineName.indexOf('BAMBOO') != -1 "
+                                          src="./assets/ic_airticket/bb.png">
+                  
+                                      </div>
+                                      <div class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                                      </div>
+                                    </div>
+                                 
+                                  </div>
+                                </div>
+                                <div class="div-gird div-pnr-od">
+                                  <div class="padding-5-8">
+                                    <div >
+                                      <div class="text-info text-center">Mã đặt chỗ</div>
+                                    </div>
+                                    <div class="d-flex"
+                                    *ngIf="trip.itemreturn.ticketCode.indexOf('T__') == -1">
+                                    <div class="text-hold-ticket">{{ trip.itemreturn.ticketCode }}</div>
+                                    <img class="img-copy" (click)="copyClipboard(trip.itemdepart.ticketCode)"
+                                    src="./assets/imgs/ic_copy.png">
+                                  </div>
+                               
+                                </div>
+                                </div>
+                                </div>
+                                <div class="m-top-14 d-flex">
+                                  <div class="text-time-depart">
+                                    {{trip.itemreturn.departureTime}}
+                                  </div>
+                                  <div class="placepoint">
+                                  </div>
+                                  <div class="m-l-6">
+                                    <div class="text-info font-weight-500">{{trip.flightTo}}</div>
+                                    <div class="text-name-airport m-0">{{ trip.returnAirport}} | {{ trip.itemreturn.departCode }}</div>
+                                  </div>
+                                  </div>
+                                  <div class="placeline-stops">
+                                  </div>
+                                  <div class="d-flex" style="margin-top: -16px">
+                                    <div class="text-time-return">
+                                      {{trip.itemreturn.arrivalTime}}
+                                    </div>
+                                    <div class="placepoint">
+                                    </div>
+                                    <div class="m-l-6">
+                                      <div class="text-info font-weight-500">{{trip.flightFrom}}</div>
+                                      <div class="text-name-airport m-0">{{ trip.departAirport}} | {{ trip.itemreturn.arrivalCode }}</div>
+                                    </div>
+                                    </div>
+            
+                          </div>
+                      </div>
+                      
+                        <div *ngIf="ischeckStops">
+                          <div  *ngFor="let item of booking_json_data[0].Transits;let i=index">
+                            <div *ngIf="i!=0" class="div-stops">
+          
+                              <span class="text-info">
+                                Quá cảnh {{item.timeOverStop}} tại {{item.FromPlaceName}} ({{item.FromPlaceCode}})
+                              </span>
                             </div>
                             <div class="div-text-payment">
                               <p class="text-payment-info" text-wrap>
