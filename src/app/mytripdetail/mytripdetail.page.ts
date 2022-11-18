@@ -995,7 +995,7 @@ export class MytripdetailPage implements OnInit {
   }
   getmhoteldetail() {
     var se=this;
-    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.hotel_id;
+    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.booking_id;
     var options = {
       method: 'POST',
       url: url,

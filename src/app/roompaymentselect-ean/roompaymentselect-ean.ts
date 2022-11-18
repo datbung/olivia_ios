@@ -587,7 +587,7 @@ export class RoompaymentselectEanPage implements OnInit{
           }
           //pdanh 12/03/2021 luồng book VIN
           else if(se.roomtype.Supplier == "VINPEARL" 
-          || se.roomtype.Supplier == "SMD" || se.Roomif.roomtype.Supplier == 'SERI'
+          || se.roomtype.Supplier == "SMD" || se.Roomif.roomtype.Supplier == 'SERI' || se.Roomif.roomtype.Supplier == 'AGD'
           ){
             var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
             if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){

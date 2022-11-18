@@ -92,7 +92,8 @@ export class RoomInfo {
     bookingCode:string;
     PeriodPaymentDate:string;
     ExcludeVAT:any;
-  RoomClass: any;
+    RoomClass: any;
+    DescriptionTaxFee:any
 }
 export class ValueGlobal {
     checksendcb:boolean;

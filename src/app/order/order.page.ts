@@ -744,6 +744,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                         }
                         element.avatar = urlavatar + "-" + "104x104" + tail;
                       }
+                      element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : 'https:' +  element.avatar;
                       if (element.delivery_payment_date) {
                         let arrpaymentdate = element.delivery_payment_date.split("T");
                         let hour ='',day='';
@@ -1328,6 +1329,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       }else{
                         element.avatar = element.hotelAvatar;
                       }
+                      element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : 'https:' +  element.avatar;
                       
                       element.isRequest = true;
                       element.booking_id = element.request_id;
@@ -1340,7 +1342,7 @@ import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/na
                       element.address = element.hotelAddress;
                       element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                       se.getRatingStar(element);
-                      // if (element.booking_id=='IVIVU1002887') {
+                      // if (element.booking_id=='IVIVU1003428') {
                       //   se.listMyTrips.push(element);
                       // }
                        se.listMyTrips.push(element);

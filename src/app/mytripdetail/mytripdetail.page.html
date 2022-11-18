@@ -286,7 +286,7 @@
           <div class="item-room-detail" *ngIf="!isFlyBooking && !trip.bookingOffType">
             <div [ngClass]="!trip.combo_name? 'div-wrapimg img-list' : 'div-wrapimg-1 img-list-1'" class="div-wrapimg img-list" >
               <div *ngIf="trip.avatar else noavatar">
-                <img *ngIf="trip.avatar.indexOf('http') == -1" [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'"  src="https:{{trip.avatar}}">
+                <img  [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'"  src="{{trip.avatar}}">
                 <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'" src="{{trip.avatar}}">
               </div>
               <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar ava-list" src="https:{{trip.avatar}}"> -->

@@ -812,21 +812,21 @@
                                 </ion-row>
                               
                                 <div class="div-btnbook"
-                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && (mealtype.Status=='AL')&&hotelroom.RoomType!='villa'">
+                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) &&  !mealtype.MSG && (mealtype.Status=='AL')&&hotelroom.RoomType!='villa'">
                                   <button
                                     (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
                                     ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
                                     phòng</button>
                                 </div>
                                 <div class="div-btnbook"
-                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status=='AL' &&hotelroom.RoomType=='villa'">
+                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG && mealtype.Status=='AL' &&hotelroom.RoomType=='villa'">
                                   <button
                                     (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
                                     ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
                                     villa</button>
                                 </div>
                                 <div class="div-btnbook"
-                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status!='AL'">
+                                  *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG && mealtype.Status!='AL'">
                                   <button
                                     (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
                                     ion-button round outline class="button btn-book-outline">Yêu cầu đặt</button>
