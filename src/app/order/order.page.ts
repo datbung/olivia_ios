@@ -134,7 +134,6 @@ import { tourService } from '../providers/tourService';
   cincomboarrival: string;
   noLoginObj: any;
   childList: any;
-<<<<<<< HEAD
   expandDivTourNotes: boolean;
   expandDivTourInfo: boolean;
   expandDivIncludePrice: boolean;
@@ -143,8 +142,6 @@ import { tourService } from '../providers/tourService';
   flightRoundTripStr: string;
   totalPaxStr: any;
   loadsummarydone: any;
-=======
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
 
   baggageHandedDepart;baggageHandedReturn;totalVMB=0;
   totalService: number;
@@ -177,13 +174,9 @@ import { tourService } from '../providers/tourService';
         public _flightService: flightService,public clipboard: Clipboard,
         public _mytripservice: MytripService,
         public _foodService: foodService,
-<<<<<<< HEAD
         private nativePageTransitions: NativePageTransitions,
         public _tourService: tourService,
         private safariViewController: SafariViewController,) {
-=======
-        private nativePageTransitions: NativePageTransitions,private safariViewController: SafariViewController) {
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
         this.handleSplashScreen();
         
         //this.getdata();
@@ -1470,11 +1463,7 @@ import { tourService } from '../providers/tourService';
                       element.address = element.hotelAddress;
                       element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                       se.getRatingStar(element);
-<<<<<<< HEAD
                       // if (element.booking_id=='IVIVU1002887') {
-=======
-                      // if (element.booking_id=='IVIVU1003428') {
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
                       //   se.listMyTrips.push(element);
                       // }
                        se.listMyTrips.push(element);
@@ -1675,15 +1664,9 @@ import { tourService } from '../providers/tourService';
                
               }
               if (se.listMyTrips[0].isFlyBooking) {
-<<<<<<< HEAD
                 this.getDetailTicketFromDat(0).then((data) => {
                   if (se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
                     this.getDetailTicketFromDat(1).then((data) => {
-=======
-                this.getDetailTicket(0).then((data) => {
-                  if (se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
-                    this.getDetailTicket(1).then((data) => {
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
 
                     })
                   }
@@ -1693,15 +1676,9 @@ import { tourService } from '../providers/tourService';
                 if(se.listMyTrips[0].booking_type == 'COMBO_FLIGHT'){
                   this.departAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[0].departCode);
                   this.returnAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[1].departCode);
-<<<<<<< HEAD
                   this.getDetailTicketFromDat(0).then((data) => {
                     if (se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
                       this.getDetailTicketFromDat(1).then((data) => {
-=======
-                  this.getDetailTicket(0).then((data) => {
-                    if (se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
-                      this.getDetailTicket(1).then((data) => {
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
 
                         this.getmhoteldetail();
                       })
@@ -1712,10 +1689,7 @@ import { tourService } from '../providers/tourService';
                 }
                 
               }
-<<<<<<< HEAD
               this.getmhoteldetail();
-=======
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
               this.totalVMB=0;
         se.totalService=0;
         //chặng dừng nếu có
@@ -5485,7 +5459,6 @@ import { tourService } from '../providers/tourService';
             toast.present();
           }
 
-<<<<<<< HEAD
 
   getBookingTourDetail(trip) {
     let headers = {
@@ -5721,9 +5694,6 @@ import { tourService } from '../providers/tourService';
   }
 //}
           getDetailTicketFromDat(stt) : Promise<any>{
-=======
-          getDetailTicket(stt) : Promise<any>{
->>>>>>> d6a734dbe0f449d2f02ab244153c58dd24b86892
             var se = this;
             return new Promise((resolve, reject) => {
               if (stt==0) {
