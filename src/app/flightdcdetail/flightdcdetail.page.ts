@@ -441,7 +441,7 @@ export class FlightdcdetailPage implements OnInit {
         this.ListProductsGo = Product;
         se.InfoGo = dataGet.info;
         se.SendGo = dataGet.send;
-        se.departPriceGo = this.RoundPrice((this.InfoGo != undefined && this.InfoGo.price  ? this.InfoGo.price.value : 0) * 1.1);
+        se.departPriceGo = this.RoundPrice((this.InfoGo != undefined && this.InfoGo.price  ? this.InfoGo.price.value : 0) * 1.08);
         if (se.InfoGo != undefined && se.InfoGo.hasOwnProperty('price')) {
           this.CountTrip++;
           se.Vehicle_Go = se.SendGo != undefined ? se.SendGo.vehicle.type.search("Xe") != -1 ? se.SendGo.vehicle.type.slice(3) : se.SendGo.vehicle.type : "";
@@ -468,7 +468,7 @@ export class FlightdcdetailPage implements OnInit {
         se.ListProductsReturn = Product;
         se.returnInfoGo = dataGet.info;
         se.returnSendGo = dataGet.send;
-        se.returnPriceGo = se.RoundPrice((se.returnInfoGo != undefined && se.returnInfoGo.price ? se.returnInfoGo.price.value : 0) * 1.1);
+        se.returnPriceGo = se.RoundPrice((se.returnInfoGo != undefined && se.returnInfoGo.price ? se.returnInfoGo.price.value : 0) * 1.08);
         if (se.returnInfoGo != undefined && se.returnInfoGo.hasOwnProperty('price')) {
           this.CountTrip++;
           se.returnVehicle_Go = se.returnSendGo != undefined ? se.returnSendGo.vehicle.name.search("Xe") != -1 ? se.returnSendGo.vehicle.name.slice(3) : se.returnSendGo.vehicle.name : "";
@@ -499,7 +499,7 @@ export class FlightdcdetailPage implements OnInit {
         this.ListProductsGo_RoundTrip = Product;
         se.InfoReturn = dataGet.info;
         se.SendReturn = dataGet.send;
-        se.departPriceTo = se.RoundPrice((se.InfoReturn != undefined && se.InfoReturn.price ? se.InfoReturn.price.value : 0) * 1.1);
+        se.departPriceTo = se.RoundPrice((se.InfoReturn != undefined && se.InfoReturn.price ? se.InfoReturn.price.value : 0) * 1.08);
         if (se.departPriceTo==0) {
           se.funcTotalPrice(stt);
         }
@@ -521,7 +521,7 @@ export class FlightdcdetailPage implements OnInit {
         this.ListProductsReturn_RoundTrip = Product;
         se.returnInfoReturn = dataGet.info;
         se.returnSendReturn = dataGet.send;
-        se.returnPriceTo = se.RoundPrice((se.returnInfoReturn != undefined && se.returnInfoReturn.price ? se.returnInfoReturn.price.value : 0) * 1.1);
+        se.returnPriceTo = se.RoundPrice((se.returnInfoReturn != undefined && se.returnInfoReturn.price ? se.returnInfoReturn.price.value : 0) * 1.08);
         if (se.returnInfoReturn != undefined && se.returnInfoReturn.hasOwnProperty('price')) {
           this.CountTrip++;
           se.returnVehicle_Return = se.returnSendReturn != undefined ? se.returnSendReturn.vehicle.name.search("Xe") != -1 ? se.returnSendReturn.vehicle.name.slice(3) : se.returnSendReturn.vehicle.name : "";

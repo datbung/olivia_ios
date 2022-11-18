@@ -69,7 +69,7 @@
         
                           <!-- Vùng booking fly -->
                         <div *ngIf="hasloaddata && tabflight == 1">
-                          <div class="div-delivery_payment" *ngIf="trip.delivery_payment_date_display">{{ trip.delivery_payment_date_display}}</div>
+                          <div class="div-delivery_payment" *ngIf="trip.delivery_payment_date_display">Chờ thanh toán tới <span class="text-waitpayment">{{ trip.delivery_payment_time_display}}</span> ngày <span class="text-waitpayment">{{ trip.delivery_payment_date_display}}</span></div>
                             <div class="div-flybooking">
                                 <!-- Chiều đi -->
                                 <div class="padding-5">

@@ -22,13 +22,13 @@ import { flightService } from '../providers/flightService';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { MytripService } from '../providers/mytrip-service.service';
 import { foodService } from '../providers/foodService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { 
   setInterval,
   clearInterval
 } from 'timers';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { tourService } from '../providers/tourService';
-import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({
     selector: 'app-order',
@@ -142,6 +142,25 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
   flightRoundTripStr: string;
   totalPaxStr: any;
   loadsummarydone: any;
+
+  baggageHandedDepart;baggageHandedReturn;totalVMB=0;
+  totalService: number;
+  luggageSignedDepart: any;
+  departConditionInfo: any;
+  returnConditionInfo: any;
+  luggageSignedReturn: any;
+  isdkv=false;
+  ishdnp=false;
+  isptp=false;
+  isttt=false;
+  booking_json_data: any;
+  PromotionNote:any;
+  ischeckStops=false;
+
+  departAirport:any;
+  returnAirport:any;
+  totalDichung=0;
+  coutDC: number;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -772,10 +791,10 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           }
                             arrday = arrpaymentdate[0].split('-');
                           if(arrday && arrday.length>0){
-                            day = arrday[2].toString()+"-"+arrday[1].toString();
+                            day = arrday[2].toString()+"/"+arrday[1].toString();
                           }
                         }
-                        element.deliveryPaymentDisplay = "Trước " +hour + ", " + day;
+                        element.deliveryPaymentDisplay = "" +hour + ", " + day;
                         
                         let arrhours = arrpaymentdate[1].split(":");
                         let today = new Date();
@@ -786,7 +805,10 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           element.deliveryPaymentDisplay = "";
                         }
                         else{
-                          element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                          //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+
+                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");                          
                           if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
                             var obj=se.gf.getbank(element.pay_method);
                             element.urlimgbank =obj.urlimgbank;
@@ -822,12 +844,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           }
                         }
                         if (element.amount_after_tax) {
-                          //element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          if(element.paid_amount){
-                            element.priceShow = Math.round(element.amount_after_tax - element.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }else{
-                            element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }
+                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         }
                       }
 
@@ -853,14 +870,18 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
                       element.isRequestTrip = false;
                       //date display
-                      element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD') +" thg "+moment(element.checkInDate).format('MM');
-                      element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD') +" thg "+moment(element.checkOutDate).format('MM');
+                      element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM-YYYY');
+                      element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
 
-                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD') +" thg "+moment(element.checkInDate).format('MM');
-                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD') +" thg "+moment(element.checkOutDate).format('MM');
-                      
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+                      element.departAirport = se.getAirportByCode(element.departCode);
+                      element.returnAirport = se.getAirportByCode(element.arrivalCode);
                       se.getRatingStar(element);
-                      se.listMyTrips.push(element);
+                      // if (element.booking_id=='IVIVU1002887') {
+                      //   se.listMyTrips.push(element);
+                      // }
+                       se.listMyTrips.push(element);
                       se.mytripcount++;
                       if (element.insuranceInfo && element.insuranceInfo.adultList.length > 0) {
                         if (se.checkItemHasNotClaim(element.insuranceInfo.adultList) || se.checkItemHasNotClaim(element.insuranceInfo.childList)) {
@@ -882,7 +903,9 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           element.bookingsComboData[0].flightTimeDisplay = h + m;
                         }
                         let ddate = element.checkInDate;
-                        element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM');
+                        // element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM');
+                        element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD-MM-YYYY');
+
                         if(element.bookingsComboData[1]){
                           let diffhours = element.bookingsComboData[1].arrivalTime ? element.bookingsComboData[1].arrivalTime.replace(':','')*1 - element.bookingsComboData[1].departureTime.replace(':','')*1 : 0;
                           if(diffhours){
@@ -895,7 +918,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           }
           
                           let rdate = element.checkOutDate;
-                          element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD') +" thg "+moment(rdate).format('MM')
+                          element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD-MM-YYYY');
                         }
                         element.arrPickupDropoff = [];
                         element.bookingsComboData.forEach(el => {
@@ -906,7 +929,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                               if(el.departureDate){
                                 let newdate = el.departureDate.split('/');
                                 if(newdate && newdate.length >1){
-                                  el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                                  let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                                  el.departureDateDisplay =  moment(d).format("DD-MM");
                                 }
                                 
                               }
@@ -1039,6 +1063,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                             element.time_payment = moment(element.delivery_payment_date).format("HH:mm");
                             element.date_payment = moment(element.delivery_payment_date).format("DD-MM-YYYY");
                             element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                            element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                            element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
                             //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
                             if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
                               var obj=se.gf.getbank(element.pay_method);
@@ -1054,11 +1080,11 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           }
                             
                         }
-                        element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).dayname +", "+ moment(element.checkInDate).format("DD") + " thg " + moment(element.checkInDate).format("MM");
-                        element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).dayname +", "+ moment(element.checkOutDate).format("DD") + " thg " + moment(element.checkOutDate).format("MM");
+                        element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).dayname +", "+ moment(element.checkInDate).format("DD-MM-YYYY");
+                        element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).dayname +", "+ moment(element.checkOutDate).format("DD-MM-YYYY");
 
-                        element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD') +" thg "+moment(element.checkInDate).format('MM');
-                        element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD') +" thg "+moment(element.checkOutDate).format('MM');
+                        element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM');
+                        element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
 
                         let departFlight = element.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(element.checkInDate).format('DD-MM-YYYY')&& f.airlineCode });
                         if(departFlight && departFlight.length >0){
@@ -1156,7 +1182,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                               if(el.departureDate){
                                 let newdate = el.departureDate.split('/');
                                 if(newdate && newdate.length >1){
-                                  el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                                  let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                                  el.departureDateDisplay = moment(d).format("DD-MM");
                                 }
                                 
                               }
@@ -1307,12 +1334,14 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           }
                             arrday = arrpaymentdate[0].split('-');
                           if(arrday && arrday.length>0){
-                            day = arrday[2].toString()+"-"+arrday[1].toString();
+                            day = arrday[2].toString()+"/"+arrday[1].toString();
                           }
                         }
-                        element.deliveryPaymentDisplay = "Trước " +hour + ", " + day;
-                        element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-                        let arrhours = arrpaymentdate[1].split(":");
+                        element.deliveryPaymentDisplay = "" +hour + ", " + day;
+                        // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+
+                        element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                        element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");                        let arrhours = arrpaymentdate[1].split(":");
                         let today = new Date();
                         let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
                         let diffminutes = moment(d).diff(today, 'minutes');
@@ -1333,12 +1362,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           }
                         }
                         if(element.amount_after_tax){
-                          //element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          if(element.paid_amount){
-                            element.priceShow = Math.round(element.amount_after_tax - element.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }else{
-                            element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                          }
+                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                         }
                       }
                       element.isRequestTrip = false;
@@ -1391,8 +1415,11 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                         
           
                       if(element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL") ){
-                          se.listMyTrips.push(element);
-                          se.mytripcount++;
+                        // if (element.booking_id=='IVIVU1002887') {
+                        //   se.listMyTrips.push(element);
+                        // }
+                        se.listMyTrips.push(element);
+                        se.mytripcount++;
                           //se.nextflightcounttext ="(" + se.mytripcount +")";
                       }
                     
@@ -1428,13 +1455,16 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                       element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
                       element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
   
-                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
-                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY');
   
                       element.address = element.hotelAddress;
                       element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                       se.getRatingStar(element);
-                      se.listMyTrips.push(element);
+                      // if (element.booking_id=='IVIVU1002887') {
+                      //   se.listMyTrips.push(element);
+                      // }
+                       se.listMyTrips.push(element);
                       se.mytripcount++;
                     }
                     
@@ -1469,22 +1499,19 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                   }else{
             
                         //Map số bkg trong listtrip để focus vào bkg được notifi
-                        if(se.valueGlobal.listhistory && se.valueGlobal.listhistory.length >0){
-                          var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
-                            return item.booking_id == se.valueGlobal.BookingCodeHis;
-                          });
-                          if (idxMaphis && idxMaphis.length > 0) {
-                            var idxhis = idxMaphis.findIndex((el) => { return el == true });
-                            se.currentTrip = idxhis;
-                            se.gf.setParams('','notifiBookingCode');
-                            if (idxhis!=-1) {
-                              se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
-                            }else{
-                              se.getdata(null,true);
-                            }
+                        var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                          return item.booking_id == se.valueGlobal.BookingCodeHis;
+                        });
+                        if (idxMaphis && idxMaphis.length > 0) {
+                          var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                          se.currentTrip = idxhis;
+                          se.gf.setParams('','notifiBookingCode');
+                          if (idxhis!=-1) {
+                            se.showtripdetail(se.listHistoryTrips[idxhis]);
+                          }else{
+                            se.getdata(null,true);
                           }
                         }
-                        
                       
                     }
                   
@@ -1504,6 +1531,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
               }
 
               if(se.listMyTrips.length ==1 && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length >0){
+
                 se.listMyTrips[0].bookingsComboData.forEach(element => {
                 if (element.airlineName.toLowerCase().indexOf('cathay') != -1) {
                   //Add bảo hiểm
@@ -1631,8 +1659,93 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                 if(!se.listMyTrips[0].hasCathay){
                   se.arrinsurrance = [];
                 }
+               
+              }
+              if (se.listMyTrips[0].isFlyBooking) {
+                this.getDetailTicketFromDat(0).then((data) => {
+                  if (se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
+                    this.getDetailTicketFromDat(1).then((data) => {
+
+                    })
+                  }
+                  this.getmhoteldetail();
+                })
+              }else{
+                if(se.listMyTrips[0].booking_type == 'COMBO_FLIGHT'){
+                  this.departAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[0].departCode);
+                  this.returnAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[1].departCode);
+                  this.getDetailTicketFromDat(0).then((data) => {
+                    if (se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
+                      this.getDetailTicketFromDat(1).then((data) => {
+
+                        this.getmhoteldetail();
+                      })
+                    }
+                  })
+                }else{
+                  this.getmhoteldetail();
+                }
+                
               }
               this.getmhoteldetail();
+              this.totalVMB=0;
+        se.totalService=0;
+        //chặng dừng nếu có
+        if (se.listMyTrips[0].booking_json_data) {
+          this.booking_json_data= JSON.parse(se.listMyTrips[0].booking_json_data);
+          let TotalPriceReturn=0;
+          let TotalPriceGo=0;
+          this.booking_json_data.forEach(item => {
+            if (item.Passengers) {
+              item.Passengers.forEach(element => {
+                se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
+              });
+            }
+          if (item.PromotionNote) {
+            this.PromotionNote=JSON.parse(item.PromotionNote);
+             TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
+             TotalPriceGo=this.PromotionNote.TotalPriceGo;
+          }
+    
+           if(item.Transits && item.Transits.length>1) {
+            this.ischeckStops=true;
+           }
+          })
+          if(this.ischeckStops){
+            this.booking_json_data.forEach(item => {
+              if(item.Transits) {
+                for (let i = 0; i < item.Transits.length; i++) {
+                  item.Transits[i].departAirport = this.getAirportByCode(item.Transits[i].FromPlaceCode);
+                  item.Transits[i].returnAirport = this.getAirportByCode(item.Transits[i].ToPlaceCode);
+                  item.Transits[i].DepartureTime =moment(item.Transits[i].DepartTime).format('HH:mm')
+                  item.Transits[i].ArrivalTime =moment(item.Transits[i].LandingTime).format('HH:mm')
+                  if(i>0){
+                    var DepartureDate :any=this.parseDatetime(item.DepartureDate,item.Transits[i].DepartureTime)
+                    var LandingTime:any=this.parseDatetime(item.DepartureDate,item.Transits[i-1].ArrivalTime)
+                    let hours = (DepartureDate - LandingTime) / 36e5;
+                    // item.Transits[i].hours =hours;
+                    let layminutes:any = hours - (Math.floor(hours));
+                    item.Transits[i].timeOverStop =  Math.floor(hours) + " tiếng " + (layminutes > 0 ? (+Math.round(layminutes*60) + " phút") : '') ;
+                          }
+                        }
+              
+                      }
+                  })
+                }
+                let coutDCdepart=0;
+                let coutDCreturn=0;
+                if (TotalPriceGo>0) {
+                  coutDCdepart=2;
+                }
+                if (TotalPriceReturn>0) {
+                  coutDCreturn=2;
+                }
+                se.coutDC=coutDCdepart+coutDCreturn;
+                se.totalDichung=TotalPriceGo+TotalPriceReturn;
+                se.totalVMB=se.listMyTrips[0].amount_after_tax-se.totalService-se.totalDichung+se.listMyTrips[0].promotionDiscountAmount;
+             
+              }
+            
             } else {
               se.hasdata = false;
             }
@@ -1714,8 +1827,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                 } else {
                   elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                 }
-                elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM');
-                elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM');
+                elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
+                elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
                 se.getRatingStar(elementHis);
         
                 //map thông tin giống với trip future
@@ -1770,10 +1883,10 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                       }
                         arrday = arrpaymentdate[0].split('-');
                       if(arrday && arrday.length>0){
-                        day = arrday[2].toString()+"-"+arrday[1].toString();
+                        day = arrday[2].toString()+"/"+arrday[1].toString();
                       }
                     }
-                      elementHis.deliveryPaymentDisplay = "Trước " +hour + ", " + day;
+                      elementHis.deliveryPaymentDisplay = "" +hour + ", " + day;
                         let arrhours = arrpaymentdate[1].split(":");
                         let today = new Date();
                         let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
@@ -1793,21 +1906,16 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                       }
                     }
                     if (elementHis.amount_after_tax) {
-                      //elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                      if(elementHis.paid_amount){
-                        elementHis.priceShow = Math.round(elementHis.amount_after_tax - elementHis.paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                      }else{
-                        elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                      }
+                      elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                     }
                   }
                   elementHis.isRequestTrip = false;
                   //date display
-                  elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM');
-                  elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM');
+                  elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM');
+                  elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM');
 
-                  elementHis.checkInDisplayShort = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM');
-                  elementHis.checkOutDisplayShort = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM');
+                  elementHis.checkInDisplayShort = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM');
+                  elementHis.checkOutDisplayShort = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
 
                   se.getRatingStar(elementHis);
                   if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
@@ -1830,7 +1938,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                       elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
                     }
                     let ddate = elementHis.checkInDate;
-                    elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM')
+                    elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD-MM-YYYY');
                     if(elementHis.bookingsComboData[1]){
                       let diffhours = elementHis.bookingsComboData[1].arrivalTime ? elementHis.bookingsComboData[1].arrivalTime.replace(':','')*1 - elementHis.bookingsComboData[1].departureTime.replace(':','')*1 : 0;
                       if(diffhours){
@@ -1854,7 +1962,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                         if(el.departureDate){
                           let newdate = el.departureDate.split('/');
                           if(newdate && newdate.length >1){
-                            el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                            let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                            el.departureDateDisplay = moment(d).format("DD-MM");
                           }
                           
                         }
@@ -1980,8 +2089,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                   }
                     elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
                    
-                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD") + " thg " + moment(elementHis.checkInDate).format("MM");
-                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname +", "+ moment(elementHis.checkOutDate).format("DD") + " thg " + moment(elementHis.checkOutDate).format("MM");
+                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD-MM-YYYY");
+                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname +", "+ moment(elementHis.checkOutDate).format("DD-MM-YYYY");
                     let departFlight = elementHis.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(elementHis.checkInDate).format('DD-MM-YYYY')&& f.airlineCode });
                     if(departFlight && departFlight.length >0){
                       elementHis.itemdepart = departFlight[0];
@@ -2068,7 +2177,8 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
                           if(el.departureDate){
                             let newdate = el.departureDate.split('/');
                             if(newdate && newdate.length >1){
-                              el.departureDateDisplay = newdate[0] + "." + newdate[1];
+                              let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                              el.departureDateDisplay = moment(d).format("DD-MM");
                             }
                             
                           }
@@ -2275,20 +2385,33 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
       
             se._mytripservice.listHistoryTrips = se.listHistoryTrips;
       
-            if (se.gf.getParams('notifiBookingCode') && se.gf.getParams('selectedTab3') || se.checkishistorytrip()) {
+            if (se.valueGlobal.BookingCodeHis && se.gf.getParams('selectedTab3') ) {
               se.activeTabTrip = 3;
               se.tabtrip = 'historytrip';
               //Map số bkg trong listtriphistory để focus vào bkg được notifi
-              var idxMap = se.listHistoryTrips.map((item, index) => {
-                return item.booking_id == se.gf.getParams('notifiBookingCode');
-              });
-              if (idxMap && idxMap.length > 0) {
-                var idx = idxMap.findIndex((el) => { return el == true });
-                if (se.checkIsSharingTrip()) {
-                  se.gf.setParams('','notifiBookingCode');
-                  se.feedback(se.listHistoryTrips[idx]);
+              // var idxMap = se.listHistoryTrips.map((item, index) => {
+              //   return item.booking_id == se.gf.getParams('notifiBookingCode');
+              // });
+              // if (idxMap && idxMap.length > 0) {
+              //   var idx = idxMap.findIndex((el) => { return el == true });
+              //   if (se.checkIsSharingTrip()) {
+              //     se.gf.setParams('','notifiBookingCode');
+              //     se.feedback(se.listHistoryTrips[idx]);
+              //   }
+              // }
+                //Map số bkg trong listtrip để focus vào bkg được notifi
+                var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                  return item.booking_id == se.valueGlobal.BookingCodeHis;
+                });
+                if (idxMaphis && idxMaphis.length > 0) {
+                  var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                  se.currentTrip = idxhis;
+                  if (idxhis!=-1) {
+                    se.showtripdetail(se.listHistoryTrips[idxhis]);
+                  }else{
+                    se.getdata(null,true);
+                  }
                 }
-              }
               //Sau khi map được trip thì set giá trị về null
               se.gf.setParams(null, 'notifiBookingCode');
               se.gf.setParams(null, 'selectedTab3');
@@ -2322,7 +2445,12 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
             }
           })
         }
-        
+        // if (this.listMyTrips.length ==1) {
+        //   this.enableheader = false;
+        //   this._mytripservice.tripdetail = this.listMyTrips[0];
+        //   this._mytripservice.currentTrip = this.currentTrip;
+        //   this.navCtrl.navigateForward('mytripdetail', {animated: true});
+        // }
       }
 
     
@@ -3280,18 +3408,16 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
               }else{
         
                     //Map số bkg trong listtrip để focus vào bkg được notifi
-                    if(se.valueGlobal.listhistory && se.valueGlobal.listhistory.length >0){
-                      var idxMaphis = se.valueGlobal.listhistory.map((item, index) => {
-                        return item.booking_id == se.valueGlobal.BookingCodeHis;
-                      });
-                      if (idxMaphis && idxMaphis.length > 0) {
-                        var idxhis = idxMaphis.findIndex((el) => { return el == true });
-                        se.currentTrip = idxhis;
-                        if (idxhis!=-1) {
-                          se.showtripdetail(se.valueGlobal.listhistory[idxhis]);
-                        }else{
-                          se.getdata(null,true);
-                        }
+                    var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                      return item.booking_id == se.valueGlobal.BookingCodeHis;
+                    });
+                    if (idxMaphis && idxMaphis.length > 0) {
+                      var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                      se.currentTrip = idxhis;
+                      if (idxhis!=-1) {
+                        se.showtripdetail(se.listHistoryTrips[idxhis]);
+                      }else{
+                        se.getdata(null,true);
                       }
                     }
                   
@@ -4380,14 +4506,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
         this.navCtrl.navigateForward("mytriphistory");
       }
     
-      getAirportByCode(code){
-        var se = this, res ="";
-        if(se._flightService.listAirport && se._flightService.listAirport.length >0){
-          let itemmap = se._flightService.listAirport.filter((item) => { return item.code == code});
-          res = (itemmap && itemmap.length >0) ? itemmap[0].airport : ""; 
-        }
-        return res;
-      }
+
       
 
       showtripdetail(trip){
@@ -4395,18 +4514,21 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
           this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
           return;
         }
-        if(trip){
-          this.enableheader = false;
-          this._mytripservice.tripdetail = trip;
-          this._mytripservice.currentTrip = this.currentTrip;
-          //this.nativePageTransitions.slide(this.options);
-          if(this._mytripservice.rootPage == "homeflight"){
-            this._mytripservice.backroute = "tabs/tab1";
-          }else{
-            this._mytripservice.backroute = "/app/tabs/tab3";
+        if (trip.payment_status==1 || trip.payment_status==5 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay)) {
+          if(trip){
+            this.enableheader = false;
+            this._mytripservice.tripdetail = trip;
+            this._mytripservice.currentTrip = this.currentTrip;
+            //this.nativePageTransitions.slide(this.options);
+            if(this._mytripservice.rootPage == "homeflight"){
+              this._mytripservice.backroute = "tabs/tab1";
+            }else{
+              this._mytripservice.backroute = "/app/tabs/tab3";
+            }
+            this.navCtrl.navigateForward('mytripdetail', {animated: true});
           }
-          this.navCtrl.navigateForward('mytripdetail', {animated: true});
         }
+       
       }
     
       getRatingStar(trip){
@@ -5446,42 +5568,6 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
     this._mytripservice.tripdetail = this.listMyTrips[0];
     this.navCtrl.navigateForward('/mytriptourinfo');
   }
-  getmhoteldetail() {
-    var se=this;
-    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+se.listMyTrips[0].hotel_id;
-    var options = {
-      method: 'POST',
-      url: url,
-      timeout: 180000, maxAttempts: 5, retryDelay: 2000,
-    };
-    request(options, function (error, response, body) {
-      if(response.statusCode != 200){
-        var objError ={
-            page: "policy",
-            func: "getdata",
-            message : response.statusMessage,
-            content : response.body,
-            type: "warning",
-            param: JSON.stringify(options)
-          };
-        C.writeErrorLog(objError,response);
-      }
-      if (error) {
-        error.page="policy";
-        error.func="loaddata";
-        error.param = JSON.stringify(options);
-        C.writeErrorLog(objError,response);
-      }
-      if(response.statusCode== 200 && body){
-        let jsondata = JSON.parse(body);
-        se.zone.run(()=>{
-          se.cin = jsondata.CheckinTime;
-          se.cout = jsondata.CheckoutTime;
-        })
-
-      }
-    })
-  }
 
   openLinkCondition() {
     this.safariViewController.isAvailable()
@@ -5604,4 +5690,204 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
       }
     },100)
   }
-}
+//}
+          getDetailTicketFromDat(stt) : Promise<any>{
+            var se = this;
+            return new Promise((resolve, reject) => {
+              if (stt==0) {
+                var airlineCode=this.getairlineCode(stt);
+                var ticketClass=se.listMyTrips[0].bookingsComboData[0].ticketClass;
+              }else{
+                var airlineCode=this.getairlineCode(stt);
+                var ticketClass=se.listMyTrips[0].bookingsComboData[1].ticketClass;
+              }
+          
+              var options = {
+                method: 'GET',
+                url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass,
+                timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+                headers: {
+                 
+                }
+              };
+              request(options, function (error, response, body) {
+                let objError = {
+                  page: "flightsearchresult",
+                  func: "selectTicket",
+                  message: response.statusMessage,
+                  content: response.body,
+                  type: "warning",
+                  param: JSON.stringify(options)
+                };
+                if (error) {
+                  error.page = "flightsearchresult";
+                  error.func = "selectTicket";
+                  error.param = JSON.stringify(options);
+                  C.writeErrorLog(objError,response);
+                }
+                if (response.statusCode == 200) {
+                  let result = JSON.parse(body);
+                  if (stt==0) {
+                    se.baggageHandedDepart=result.ticketCondition.baggageHanded;
+                    se.luggageSignedDepart=result.ticketCondition.luggageSigned;
+                    se.departConditionInfo=result;
+                      se.listMyTrips[0].bookingsComboData[0].passengers.forEach(element => {
+                        element.hanhLyshow="";
+                        if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                          element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+                        }else{
+                          if (element.hanhLy){
+                            element.hanhLyshow=element.hanhLy;
+                          }else{
+                            element.hanhLyshow=result.ticketCondition.luggageSigned;
+                          }
+                         
+                        }
+                        if (element.hanhLyshow) {
+                          element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                        }
+                      });
+                    
+                  }else{
+                    se.baggageHandedReturn=result.ticketCondition.baggageHanded;
+                    se.luggageSignedReturn=result.ticketCondition.luggageSigned
+                    se.returnConditionInfo=result;
+                    se.listMyTrips[0].bookingsComboData[1].passengers.forEach(element => {
+                      element.hanhLyshow="";
+                      if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                        element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+                      }else{
+                        if (element.hanhLy){
+                          element.hanhLyshow=element.hanhLy;
+                        }else{
+                          element.hanhLyshow=result.ticketCondition.luggageSigned;
+                        }
+                       
+                      }
+                      if (element.hanhLyshow) {
+                        element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                      }
+                    });
+                  }
+                  resolve(result);
+                  
+              }
+            })
+            })
+          }
+          getairlineCode(stt) {
+            var se = this;
+            var airlineName="";
+            if (se.listMyTrips[0].bookingsComboData) {
+              if (stt==0) {
+                if (se.listMyTrips[0].bookingsComboData[0].airlineName.indexOf('VIETJET') != -1) {
+                  airlineName="VietJetAir"
+                }else if (se.listMyTrips[0].bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || se.listMyTrips[0].bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+                  airlineName="VietnamAirlines"
+                }else{
+                  airlineName="BambooAirways"
+                }
+              }else{
+                if (se.listMyTrips[0].bookingsComboData[1].airlineName.indexOf('VIETJET') != -1) {
+                  airlineName="VietJetAir"
+                }else if (se.listMyTrips[0].bookingsComboData[1].airlineName.indexOf('Vietnam Airlines') != -1  || se.listMyTrips[0].bookingsComboData[1].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+                  airlineName="VietnamAirlines"
+                }else{
+                  airlineName="BambooAirways"
+                }
+              }
+            }
+           
+            return airlineName;
+          }
+          dkv(){
+            this.isdkv=!this.isdkv
+          }
+          policy(){
+            this.ishdnp=!this.ishdnp;
+          }
+          phuthuP(){
+            this.isptp=!this.isptp;
+          }
+          info(){
+            this.isttt=!this.isttt;
+          }
+          openWebpage() {
+            var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
+            this.safariViewController.isAvailable()
+            .then((available: boolean) => {
+              if (available) {
+                this.safariViewController.show({
+                  url: url,
+                  hidden: false,
+                  animated: false,
+                  transition: 'curl',
+                  enterReaderModeIfAvailable: true,
+                  tintColor: '#23BFD8'
+                })
+                .subscribe((result: any) => {
+        
+                  },
+                  (error: any) => console.error(error)
+                );
+        
+              } else {
+                // use fallback browser, example InAppBrowser
+              }
+            })
+          }
+          parseDatetime(date: string, time: string) {
+            let dateObj = date.split("/");
+            let dtStr = dateObj[1] + "/" + dateObj[0] + "/" + dateObj[2] + " " + time;
+            return new Date(dtStr);
+          }
+          getAirportByCode(code){
+            var se = this, res ="";
+            if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+              let itemmap = se._flightService.listAirport.filter((item) => { return item.code == code});
+              res = (itemmap && itemmap.length >0) ? itemmap[0].airport : ""; 
+            }
+            return res;
+          }
+          getmhoteldetail() {
+            var se=this;
+            let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+se.listMyTrips[0].hotel_id;
+            var options = {
+              method: 'POST',
+              url: url,
+              timeout: 180000, maxAttempts: 5, retryDelay: 2000,
+            };
+            request(options, function (error, response, body) {
+              if(response.statusCode != 200){
+                var objError ={
+                    page: "policy",
+                    func: "getdata",
+                    message : response.statusMessage,
+                    content : response.body,
+                    type: "warning",
+                    param: JSON.stringify(options)
+                  };
+                C.writeErrorLog(objError,response);
+              }
+              if (error) {
+                error.page="policy";
+                error.func="loaddata";
+                error.param = JSON.stringify(options);
+                C.writeErrorLog(objError,response);
+              }
+              if(response.statusCode== 200){
+                if (body) {
+                  let jsondata = JSON.parse(body);
+                  se.zone.run(()=>{
+                    se.cin = jsondata.CheckinTime;
+                    se.cout = jsondata.CheckoutTime;
+                  })
+                }
+        
+              }
+            })
+          }
+        }
+        
+          
+  

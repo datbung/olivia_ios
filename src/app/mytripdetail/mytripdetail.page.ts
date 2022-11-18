@@ -14,7 +14,6 @@ import { C } from '../providers/constants';
 import * as $ from 'jquery';
 import * as request from 'requestretry';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
-
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -77,6 +76,23 @@ export class MytripdetailPage implements OnInit {
   listpolicy = [];
   hasreturnpolicy: boolean;
   hasdepartpolicy: boolean;
+  baggageHandedDepart;baggageHandedReturn;totalVMB=0;
+  totalService: number;
+  luggageSignedDepart: any;
+  departConditionInfo: any;
+  returnConditionInfo: any;
+  luggageSignedReturn: any;
+  isdkv=false;
+  ishdnp=false;
+  isptp=false;
+  isttt=false;
+  booking_json_data: any;
+  ischeckStops=false;
+  departAirport:any;
+  returnAirport:any;
+  totalDichung=0;
+  coutDC: number;
+  PromotionNote:any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -183,6 +199,35 @@ export class MytripdetailPage implements OnInit {
               inputstr = inputstr.replace('tuổi','t');
             }
             this.trip.childAgesDisplay = inputstr;
+        }
+        
+        if (this.trip.isFlyBooking) {
+          this.getDetailTicketFromDat(0).then((data) => {
+            if (this.trip.textReturn && this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
+              this.getDetailTicketFromDat(1).then((data) => {
+                this.loadDetailInfo();
+                this.getmhoteldetail();
+              })
+            }else{
+              this.loadDetailInfo();
+            }
+          })
+        }else{
+          if(this.trip.booking_type == 'COMBO_FLIGHT'){
+            this.departAirport=this.getAirportByCode(this.trip.bookingsComboData[0].departCode);
+            this.returnAirport=this.getAirportByCode(this.trip.bookingsComboData[1].departCode);
+            this.getDetailTicketFromDat(0).then((data) => {
+              if (this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
+                this.getDetailTicketFromDat(1).then((data) => {
+                  this.loadDetailInfo();
+                  this.getmhoteldetail();
+                })
+              }
+            })
+          }else{
+            this.loadDetailInfo();
+            this.getmhoteldetail();
+          }
         }
         this.routerOutlet.swipeGesture = false;
       }
@@ -350,14 +395,73 @@ export class MytripdetailPage implements OnInit {
                   let nd = new Date(arrca[2], arrca[1] - 1, arrca[0]);
                   se.cincomboarrival= moment(nd).format('YYYY-MM-DD');
                 }
+                
               }
-
+              
 
             }
               
               
           });
         }
+        this.totalVMB=0;
+        se.totalService=0;
+        //chặng dừng nếu có
+        if (this.trip.booking_json_data) {
+          let TotalPriceReturn=0;
+          let TotalPriceGo=0;
+          this.booking_json_data= JSON.parse(this.trip.booking_json_data);
+          this.booking_json_data.forEach(item => {
+            if (item.Passengers) {
+              item.Passengers.forEach(element => {
+                se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
+              });
+            }
+            if (item.PromotionNote) {
+              this.PromotionNote=JSON.parse(item.PromotionNote);
+               TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
+               TotalPriceGo=this.PromotionNote.TotalPriceGo;
+            }
+    
+           if(item.Transits && item.Transits.length>1) {
+            this.ischeckStops=true;
+           }
+          })
+          if(this.ischeckStops){
+            this.booking_json_data.forEach(item => {
+              if(item.Transits) {
+                for (let i = 0; i < item.Transits.length; i++) {
+                  item.Transits[i].departAirport = this.getAirportByCode(item.Transits[i].FromPlaceCode);
+                  item.Transits[i].returnAirport = this.getAirportByCode(item.Transits[i].ToPlaceCode);
+                  item.Transits[i].DepartureTime =moment(item.Transits[i].DepartTime).format('HH:mm')
+                  item.Transits[i].ArrivalTime =moment(item.Transits[i].LandingTime).format('HH:mm')
+                  if(i>0){
+                    var DepartureDate :any=this.parseDatetime(item.DepartureDate,item.Transits[i].DepartureTime)
+                    var LandingTime:any=this.parseDatetime(item.DepartureDate,item.Transits[i-1].ArrivalTime)
+                    let hours = (DepartureDate - LandingTime) / 36e5;
+                    // item.Transits[i].hours =hours;
+                    let layminutes:any = hours - (Math.floor(hours));
+                    item.Transits[i].timeOverStop =  Math.floor(hours) + " tiếng " + (layminutes > 0 ? (+Math.round(layminutes*60) + " phút") : '') ;
+                  }
+                }
+              
+              }
+             })
+
+          }
+                let coutDCdepart=0;
+                let coutDCreturn=0;
+                if (TotalPriceGo>0) {
+                  coutDCdepart=2;
+                }
+                if (TotalPriceReturn>0) {
+                  coutDCreturn=2;
+                }
+                se.coutDC=coutDCdepart+coutDCreturn;
+                se.totalDichung=TotalPriceGo+TotalPriceReturn;
+                se.totalVMB=se.trip.amount_after_tax-se.totalService-se.totalDichung+se.trip.promotionDiscountAmount;
+        }
+        
   }
 
   ngOnInit() {
@@ -1161,5 +1265,155 @@ export class MytripdetailPage implements OnInit {
         
       }
     },100)
+  }
+
+  getDetailTicketFromDat(stt) : Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject) => {
+      if (stt==0) {
+        var airlineCode=this.getairlineCode(stt);
+        var ticketClass=this.trip.bookingsComboData[0].ticketClass;
+      }else{
+        var airlineCode=this.getairlineCode(stt);
+        var ticketClass=this.trip.bookingsComboData[1].ticketClass;
+      }
+  
+      var options = {
+        method: 'GET',
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass,
+        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+        headers: {
+         
+        }
+      };
+      request(options, function (error, response, body) {
+        let objError = {
+          page: "flightsearchresult",
+          func: "selectTicket",
+          message: response.statusMessage,
+          content: response.body,
+          type: "warning",
+          param: JSON.stringify(options)
+        };
+        if (error) {
+          error.page = "flightsearchresult";
+          error.func = "selectTicket";
+          error.param = JSON.stringify(options);
+          C.writeErrorLog(objError,response);
+        }
+        if (response.statusCode == 200) {
+          let result = JSON.parse(body);
+          if (stt==0) {
+            se.baggageHandedDepart=result.ticketCondition.baggageHanded;
+            se.luggageSignedDepart=result.ticketCondition.luggageSigned;
+            se.departConditionInfo=result;
+              se.trip.bookingsComboData[0].passengers.forEach(element => {
+                element.hanhLyshow="";
+                if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+                }else{
+                  if (element.hanhLy){
+                    element.hanhLyshow=element.hanhLy;
+                  }else{
+                    element.hanhLyshow=result.ticketCondition.luggageSigned;
+                  }
+                 
+                }
+                if (element.hanhLyshow) {
+                  element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                }
+              });
+            
+          }else{
+            se.baggageHandedReturn=result.ticketCondition.baggageHanded;
+            se.luggageSignedReturn=result.ticketCondition.luggageSigned
+            se.returnConditionInfo=result;
+            se.trip.bookingsComboData[1].passengers.forEach(element => {
+              element.hanhLyshow="";
+              if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+              }else{
+                if (element.hanhLy){
+                  element.hanhLyshow=element.hanhLy;
+                }else{
+                  element.hanhLyshow=result.ticketCondition.luggageSigned;
+                }
+               
+              }
+              if (element.hanhLyshow) {
+                element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+              }
+            });
+          }
+          resolve(result);
+          
+      }
+    })
+    })
+  }
+  getairlineCode(stt) {
+    var airlineName="";
+    if (this.trip.bookingsComboData) {
+      if (stt==0) {
+        if (this.trip.bookingsComboData[0].airlineName.indexOf('VIETJET') != -1) {
+          airlineName="VietJetAir"
+        }else if (this.trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || this.trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+          airlineName="VietnamAirlines"
+        }else{
+          airlineName="BambooAirways"
+        }
+      }else{
+        if (this.trip.bookingsComboData[1].airlineName.indexOf('VIETJET') != -1) {
+          airlineName="VietJetAir"
+        }else if (this.trip.bookingsComboData[1].airlineName.indexOf('Vietnam Airlines') != -1  || this.trip.bookingsComboData[1].airlineName.indexOf('VIETNAM AIRLINES') != -1){
+          airlineName="VietnamAirlines"
+        }else{
+          airlineName="BambooAirways"
+        }
+      }
+    }
+   
+    return airlineName;
+  }
+  dkv(){
+    this.isdkv=!this.isdkv
+  }
+  policy(){
+    this.ishdnp=!this.ishdnp;
+  }
+  phuthuP(){
+    this.isptp=!this.isptp;
+  }
+  info(){
+    this.isttt=!this.isttt;
+  }
+  openWebpage() {
+    var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
+    this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    })
+  }
+  parseDatetime(date: string, time: string) {
+    let dateObj = date.split("/");
+    let dtStr = dateObj[1] + "/" + dateObj[0] + "/" + dateObj[2] + " " + time;
+    return new Date(dtStr);
   }
 }

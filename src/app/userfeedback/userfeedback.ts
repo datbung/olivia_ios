@@ -69,7 +69,6 @@ export class UserFeedBackPage implements OnInit{
       if(trip){
         se.loadInfoTrip(trip);
       }
-      console.log("Test");
     }
 
     loadInfoTrip(trip){

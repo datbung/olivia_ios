@@ -136,7 +136,7 @@ export class ValueGlobal {
   promotionPackage:any;
   notSuggestDaily:any;
   notSuggestDailyCB:any;
-  refreshFBAccessToken: any;
+  refreshFBAccessToken: any= new EventEmitter(); 
   arrsuggest: any;
   BookingCodeHis: any;
   listhistory: any;
