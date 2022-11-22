@@ -93,6 +93,8 @@ export class MytripdetailPage implements OnInit {
   totalDichung=0;
   coutDC: number;
   PromotionNote:any;
+  HotelPolicies: any;
+  totalHotel: any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -112,7 +114,7 @@ export class MytripdetailPage implements OnInit {
     private zone: NgZone) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
-        this.getmhoteldetail();
+        // this.getmhoteldetail();
         if(this.trip.isBookingVMBQT){
           this.getSummaryBooking();
         }
@@ -461,6 +463,13 @@ export class MytripdetailPage implements OnInit {
                 se.totalDichung=TotalPriceGo+TotalPriceReturn;
                 se.totalVMB=se.trip.amount_after_tax-se.totalService-se.totalDichung+se.trip.promotionDiscountAmount;
         }
+       
+        // xử lý case khách sạn có khuyến mãi
+        se.totalHotel=0;
+        if (!this.trip.isFlyBooking) {
+          se.totalHotel=se.trip.amount_after_tax+se.trip.promotionDiscountAmount;
+        }
+
         
   }
 
@@ -1083,7 +1092,7 @@ export class MytripdetailPage implements OnInit {
   }
   getmhoteldetail() {
     var se=this;
-    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.hotel_id;
+    let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+this.trip.booking_id;
     var options = {
       method: 'POST',
       url: url,
@@ -1113,6 +1122,7 @@ export class MytripdetailPage implements OnInit {
           se.zone.run(()=>{
             se.cin = jsondata.CheckinTime;
             se.cout = jsondata.CheckoutTime;
+            se.HotelPolicies = jsondata.HotelPolicies
           })
         }
        

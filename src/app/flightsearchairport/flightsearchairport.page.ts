@@ -24,6 +24,8 @@ export class FlightsearchairportPage implements OnInit {
   itemsfull: any = [];
   itemsHasSameCity: any=[];
   isdepart:any;
+  listLastSearch = [];
+  itemsRegular = [];
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -43,20 +45,31 @@ export class FlightsearchairportPage implements OnInit {
 
           this.zone.run(()=>{
             data = data.filter((item) =>{ return item.code != 'FDF'});
-            data.sort((a,b)=>{ return (a.country == "Việt Nam" && b.country != "Việt Nam" )  ? -1 : 1})
+            data.sort((a,b)=>{ return (a.count - b.count)*-1 });
             this.itemsfull = [...data];
             for (let index = 0; index < 25; index++) {
               const element = data[index];
-              this.items.push(element)
+              this.items.push(element);
+              if(index < 5){
+                this.itemsRegular.push(element);
+              }
+             
             }
+            
             
             this.itemsfull.forEach(element => {
               element.show = true;
              
               
             });
+
+            console.log(this.itemsRegular);
         })
         }
+      })
+
+      this.gf.getListLastSearchFlight().then((data)=>{
+        this.listLastSearch = data;
       })
     }
 
@@ -101,6 +114,10 @@ export class FlightsearchairportPage implements OnInit {
                     se.items.forEach(element => {
                       element.show = true;
                     });
+                    for (let index = 0; index < 5; index++) {
+                      const element = se.items[index];
+                      this.itemsRegular.push(element);
+                    }
                 })
               
             }
@@ -125,28 +142,8 @@ export class FlightsearchairportPage implements OnInit {
           let filteritems = se.itemsfull.filter((element) => { return se.gf.convertFontVNI(element.name).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.code).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.city).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.airport).toLowerCase().indexOf(val) != -1});
             se.zone.run(()=>{
               if(filteritems && filteritems.length >0){
-                // se.itemsHasSameCity = [];
-                // let samecityitem = filteritems.filter((v,i,a)=>a.findIndex(t=>(t.city !== v.city)) );
-
-                // if(samecityitem && samecityitem.length >1){
-                //   let uniqueinsamecity =  samecityitem.filter((v,i,a)=>a.findIndex(t=>(t.city === v.city)) === i );
-                //   console.log(uniqueinsamecity);
-                //   if(uniqueinsamecity && uniqueinsamecity.length >0){
-                //     uniqueinsamecity.forEach((uitem)=>{
-                //       let arr = samecityitem.filter((arritem) => { return arritem.city == uitem.city});
-                //       se.itemsHasSameCity.push({city: uitem.city, country: uitem.country, Items: arr, sameCity: true});
-                //     })
-                //   }
-                //   console.log(se.itemsHasSameCity);
-                // }
-               
-                //let uniqueitem = filteritems.filter((v,i,a)=>a.findIndex(t=>(t.city === v.city)));
-                //se.items = [...se.itemsHasSameCity,...uniqueitem];
-                //console.log(dupitem);
                 se.items = [...filteritems];
               }
-              //console.log(filteritems)
-              //se.items = filteritems;
             })
         }
       }else{
@@ -163,7 +160,7 @@ export class FlightsearchairportPage implements OnInit {
       }
     }
 
-    itemclick(item){
+    async itemclick(item){
       var se = this;
       if(se._flightService.searchDepartCode){
         se._flightService.itemFlightCache.departCode = item.code;
@@ -180,6 +177,7 @@ export class FlightsearchairportPage implements OnInit {
         se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
         se._flightService.itemFlightCache.isExtenalReturn = item.country != "Việt Nam" ? true : false;
       }
+      se.gf.createListLastSearchFlight(item);
       se._flightService.itemFlightChangeLocation.emit(item);
       if(se.valueGlobal.backValue == "flightchangeinfo"){
         se.modalCtrl.dismiss();

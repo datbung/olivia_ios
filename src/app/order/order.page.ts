@@ -161,6 +161,8 @@ import { tourService } from '../providers/tourService';
   returnAirport:any;
   totalDichung=0;
   coutDC: number;
+  totalHotel: number;
+  HotelPolicies: any;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -879,7 +881,7 @@ import { tourService } from '../providers/tourService';
                       element.departAirport = se.getAirportByCode(element.departCode);
                       element.returnAirport = se.getAirportByCode(element.arrivalCode);
                       se.getRatingStar(element);
-                      // if (element.booking_id=='IVIVU1002887') {
+                      // if (element.booking_id=='IVIVU1003484') {
                       //   se.listMyTrips.push(element);
                       // }
                        se.listMyTrips.push(element);
@@ -1685,11 +1687,16 @@ import { tourService } from '../providers/tourService';
                     }
                   })
                 }else{
+                    // xử lý case khách sạn có khuyến mãi
+                  se.totalHotel=0;
+                 
+                  se.totalHotel=se.listMyTrips[0].amount_after_tax+se.listMyTrips[0].promotionDiscountAmount;
+                  
                   this.getmhoteldetail();
                 }
                 
               }
-              this.getmhoteldetail();
+              // this.getmhoteldetail();
               this.totalVMB=0;
         se.totalService=0;
         //chặng dừng nếu có
@@ -5853,7 +5860,7 @@ import { tourService } from '../providers/tourService';
           }
           getmhoteldetail() {
             var se=this;
-            let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+se.listMyTrips[0].hotel_id;
+            let url = C.urls.baseUrl.urlPost +"/mhoteldetail/"+se.listMyTrips[0].booking_id;
             var options = {
               method: 'POST',
               url: url,
@@ -5883,6 +5890,7 @@ import { tourService } from '../providers/tourService';
                   se.zone.run(()=>{
                     se.cin = jsondata.CheckinTime;
                     se.cout = jsondata.CheckoutTime;
+                    se.HotelPolicies = jsondata.HotelPolicies
                   })
                 }
         

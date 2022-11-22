@@ -1419,13 +1419,20 @@
                                 {{trip.room_name}}
                               </div>
                               <div class="position-absolute text-info">
-                                {{gf.numberToCurrency(trip.amount_after_tax, '.')}} VND
+                                {{gf.numberToCurrency(totalHotel, '.')}} VND
                               </div>
                             </div>
                             <div class="text-name-airport">
                               {{trip.room_count}} phòng, {{trip.roomNight}} đêm
                             </div>
-                
+                            <div class="d-flex" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0">
+                              <div class="text-info">
+                                Khuyến mãi
+                              </div>
+                              <div class="position-absolute text-info">
+                                - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                              </div>
+                            </div>
                             <div  *ngIf="totalService>0" class="d-flex m-top-8">
                               <div class="text-info">
                                 Phụ thu thêm
@@ -1478,7 +1485,19 @@
                                   </label>
                                 </div>
                               </div>
+                              <div style="margin-top: 12px;" *ngFor="let msg of HotelPolicies">
+                                <div>
+                                  <label style="font-weight: bold;font-size: 14px;">
+                                    {{msg.Key}}
+                                  </label>
+                                </div>
+                                <div style="margin-top: 12px;">
+                                  <label [innerHTML]="msg.PolicyDes" text-wrap>
+                                  </label>
+                                </div>
+                              </div>
                           </div>
+                      
                           <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="div-panel-1px"></div>
                           <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="d-flex">
                             <div class="text-info-2">

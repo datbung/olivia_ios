@@ -232,7 +232,25 @@ export class FlightnotifyPage {
                       }
                       else{
                         if (element.memberId=='alluser') {
-                          se.navCtrl.navigateForward(element.bookingCode);
+                           if(element.bookingCode.indexOf('tourdetail') != -1){
+                            let arr = element.bookingCode.replace('/','').split('/');
+                            if(arr && arr.length ==2){
+                              this.tourService.tourDetailId = arr[1];
+                              this.tourService.backPage = 'hometour';
+                              this.navCtrl.navigateForward('/tourdetail');
+                            }
+                          } else {
+                            if (element.bookingCode=='1') {
+                            
+                                this._flightService.itemTabFlightActive.emit(true);
+                                this.valueGlobal.backValue = "homeflight";
+                                //this._flightService.itemFlightMytripRefresh.emit(true);
+                                this._flightService.itemMenuFlightClick.emit(1);
+                            }else{
+                                se.navCtrl.navigateForward(element.bookingCode);
+                            }
+                           
+                          }
                         }
                     }
                 })

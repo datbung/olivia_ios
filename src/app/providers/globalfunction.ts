@@ -604,12 +604,13 @@ export class GlobalFunction{
     * @param devicetoken key token của device
     * @param authentoken key id member user
     */
-   pushTokenAndMemberID(authentoken, devicetoken, appversion){
-    var se = this;
-    console.log(devicetoken);
-    if (authentoken) {
-        var text = "Bearer " + authentoken;
-        var options = {
+    pushTokenAndMemberID(authentoken, devicetoken, appversion){
+      var se = this;
+      console.log(devicetoken);
+      var options ;
+      if (authentoken) {
+          var text = "Bearer " + authentoken;
+         options = {
         method: 'POST',
         url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/PushTokenOfUser',
         timeout: 10000, maxAttempts: 5, retryDelay: 2000,
@@ -622,31 +623,35 @@ export class GlobalFunction{
         body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, ''),source:6 },
         json: true
       };
-      request(options, function (error, response, body) {
-          if (error) {
-              error.page = "login";
-              error.func = "pushTokenAndMemberID";
-              error.param = JSON.stringify(options);
-              C.writeErrorLog(error,response);
-          }else if(body){
-              var obj = JSON.parse(body);
-             
-          }
-      })
-    }
-    request(options, function (error, response, body) {
-      if (error) {
-          error.page = "login";
-          error.func = "pushTokenAndMemberID";
-          error.param = JSON.stringify(options);
-          C.writeErrorLog(error,response);
-      }else if(body){
-          var obj = JSON.parse(body);
-         
+  
+      }else{
+        options = {
+        method: 'POST',
+        url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/PushTokenUser',
+        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+        headers:
+        {
+            'cache-control': 'no-cache',
+            'content-type': 'application/json-patch+json',
+        },
+        body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, ''),source:6 },
+        json: true
+      };
+  
       }
-  })   
-    
-  }
+      request(options, function (error, response, body) {
+        if (error) {
+            error.page = "login";
+            error.func = "pushTokenAndMemberID";
+            error.param = JSON.stringify(options);
+            C.writeErrorLog(error,response);
+        }else if(body){
+            var obj = JSON.parse(body);
+  
+        }
+    })   
+  
+    }
 
   DeleteTokenOfUser(deviceToken, userToken, appversion) {
     var se = this;
@@ -3656,6 +3661,25 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     input = input.replace('master','').replace('mstr','').replace('miss','').replace('mr','').replace('mrs','').replace('ms','');
     input = input.replace('Master','').replace('Mstr','').replace('Miss','').replace('Mr','').replace('Mrs','').replace('Ms','');
     return input.toLowerCase().trim();
+  }
+
+  async createListLastSearchFlight(item){
+    let listLastSearch = await this.storage.get(('listLastSearchFlight'));
+      if(listLastSearch && listLastSearch.length >0){
+        if(listLastSearch.length >2){
+          listLastSearch.pop();
+          listLastSearch.push(item);
+        }else{
+          listLastSearch.push(item);
+        }
+        this.storage.set('listLastSearchFlight', listLastSearch);
+      }else {
+        listLastSearch.push(item);
+      }
+  }
+
+  async getListLastSearchFlight() {
+    return await this.storage.get(('listLastSearchFlight'));
   }
 }
 

@@ -61,7 +61,7 @@
 
 <ion-content #scrollArea class="mytrip-detail-content" [scrollEvents]="true">
   <div class="card-background-page-mytrips">
-    <div  *ngIf="(!trip.isRequestTrip && !trip.isFlyBooking)">
+    <div  *ngIf="(!trip.isRequestTrip && !trip.isFlyBooking)"  class="m-l-8">
       <!-- <div class="div-delivery_payment" *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay">Quý khách vui lòng thanh toán trong vòng {{ trip.paymentBefore}}</div> -->
       <div class="div-delivery_payment div-marginpayment" *ngIf="trip.payment_status == 0 && trip.delivery_payment_date_display">
         Chờ thanh toán tới <span class="text-waitpayment">{{ trip.delivery_payment_time_display}}</span> ngày <span class="text-waitpayment">{{ trip.delivery_payment_date_display}}</span>
@@ -422,7 +422,7 @@
                     {{trip.room_name}}
                   </div>
                   <div class="position-absolute text-info">
-                    {{gf.numberToCurrency(trip.amount_after_tax, '.')}} VND
+                    {{gf.numberToCurrency(totalHotel, '.')}} VND
                   </div>
                 </div>
                 <div class="text-name-airport">
@@ -434,7 +434,7 @@
                     Khuyến mãi
                   </div>
                   <div class="position-absolute text-info">
-                    {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                    - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
                   </div>
                 </div>
                 <div  *ngIf="totalService>0" class="d-flex m-top-8">
@@ -448,14 +448,7 @@
                 <!-- <div *ngIf="totalService>0" class="text-name-airport">
                   Thêm giường phụ
                 </div> -->
-                <div class="d-flex" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0">
-                  <div class="text-info">
-                    Khuyến mãi
-                  </div>
-                  <div class="position-absolute text-info">
-                   - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
-                  </div>
-                </div>
+               
                 <div class="div-split"></div>
                 <div class="d-flex m-top-8">
                   <div class="text-info d-flex">
@@ -497,6 +490,19 @@
                       </label>
                     </div>
                   </div>
+                  
+                    <div style="margin-top: 12px;" *ngFor="let msg of HotelPolicies">
+                      <div>
+                        <label style="font-weight: bold;font-size: 14px;">
+                          {{msg.Key}}
+                        </label>
+                      </div>
+                      <div style="margin-top: 12px;">
+                        <label [innerHTML]="msg.PolicyDes" text-wrap>
+                        </label>
+                      </div>
+                    </div>
+                
               </div>
               <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="div-panel-1px"></div>
               <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="d-flex">
@@ -1188,7 +1194,7 @@
 
             <div class="d-flex">
               <div class="text-pax div-width-150">Tổng cộng<span *ngIf="trip.payment_status == 5 || trip.payment_status == 1" class="text-bold"> - Đã thanh toán</span></div>
-              <div class="text-price text-bold div-width-100 text-right">{{ gf.convertNumberToString(trip.amount_after_tax) }}</div>
+              <div class="text-price text-bold div-width-100 text-right">{{ gf.convertNumberToString(totalHotel) }}</div>
             </div>
             <div class="m-lr-5"  *ngIf="!trip.exclude_vat">(Giá đã bao gồm thuế & phí)</div>
           </div>
@@ -1251,24 +1257,10 @@
       
   </div>
     <!-- Booking Flight -->
-    <div class="div-flighttrip" *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
+    <div class="div-flighttrip m-l-8" *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
       <!-- bkg VMBQT -->
       <div class="div-VMBQT div-flybooking div-detail-booking" *ngIf="trip.isBookingVMBQT else otherbooking">
-        <!-- <div class="div-bkgno d-flex" >
-          <div class="text-bkg">Mã booking: </div>
-          <div class="bkg-no">{{trip.booking_id}}</div>
-          <div class="div-btn-payment" *ngIf="trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
-                  <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
-                  <ng-template #notpayment>
-                    <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
-                      <div><label class="label-text-paymented">Đã thanh toán</label></div>
-                      <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
-                    </div>
-                    <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
-                  </ng-template>
-          </div>
-        </div> 
-        <div [ngClass]="!(trip.payment_status==1||trip.payment_status==5) &&trip.delivery_payment_date_display ? 'div-split-panel m-bottom-0' : 'div-split-panel'" ></div> -->
+      
         <div class="div-waiting-payment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && trip.delivery_payment_date_display">
             <label class="label-waiting-payment">Chờ thanh toán tới <span class="text-time-payment">{{trip.time_payment}}</span> ngày <span class="text-time-payment">{{trip.date_payment}}</span></label>
         </div>
@@ -1791,7 +1783,10 @@
               </div>
             </div>
         </div>
-    <ng-template #otherbooking>
+   
+      
+    </div>
+         <ng-template #otherbooking>
       <div [ngClass]="i == 0 ? 'div-mytrip m-top-24' : 'div-mytrip'">
         <div [ngClass]="i == 0 ? 'first-content padding-left-0 m-top-42' : 'first-content padding-left-0'">
           <ion-item-group>
@@ -2789,9 +2784,6 @@
         </div>
       </div>
     </ng-template>
-      
-    </div>
-        
       <div class="div-marginpayment" *ngIf="!trip.isBookingVMBQT && trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
         <div class="div-split-panel"></div>
         <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
@@ -2853,5 +2845,86 @@
       </div>
       </div>
     </div>
+
+    <div *ngIf="trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
+      <div class="div-split-panel"></div>
+      <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+    </div>
+      <div *ngIf="trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
+        <div class="div-split-panel"></div>
+        <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
+          <div class="div-payment-combo-flight">
+            <div class="div-payment-left">
+              <div><label class="text-name" position="stacked">{{ trip.paxDisplay}}</label></div>
+              <div class="div-text-fee"><label class="text-fee">Giá đã bao gồm thuế & phí</label></div>
+            </div>
+            <div class="div-price">
+              <label  class="total-price">
+                {{trip.priceShow}}đ
+              </label>
+            </div>
+        </div>
+        <div *ngIf="trip.booking_type == 'COMBO_FLIGHT' else notcomboflight">
+            <label class="text-note">Quý khách thanh toán trước hạn thanh toán để đảm bảo tình trạng phòng và vé máy bay</label>
+        </div>
+        <ng-template #notcomboflight>
+            <label class="text-note">Quý khách thanh toán trước hạn thanh toán để đảm bảo tình trạng phòng</label>
+        </ng-template>
+        <div >
+            <label class="text-note">Khi Quý khách nhấn nút “Thanh toán” cũng đồng nghĩa là Quý khách đã đồng ý với các <a class="text-policy" >điều khoản và chính sách</a> thay đổi hoặc hủy đặt phòng.</label>
+        </div>
+        <div class="div-btn-payment div-mytrip">
+            <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+        </div>
+        </div>
+          <!-- Hình thức ck ngân hàng -->
+          <div *ngIf="!(trip.pay_method==3||trip.pay_method==51||trip.pay_method==2)">
+            <div class="d-flex-later">
+              <div class="d-img">
+                <img src={{trip.urlimgbank}}>
+              </div>
+              <div class="div-center">
+                <ion-label class="cls-text">
+                {{trip.bankName}}
+                </ion-label>
+                <!-- <div class="mt6">
+                  <ion-label (click)="openWebpage()" class="cls-textopen">
+                    Mở website/ứng dụng {{trip.textbank}}
+                  </ion-label>
+                </div> -->
+              </div>
+            </div>
+            <div class="div-text-payment">
+              <p class="text-payment-info" text-wrap>
+                Số TK: <b>{{trip.accountNumber}}</b><a class='text-copy' (click)='copyClipboard(trip.accountNumber)'>Sao chép</a>
+              </p>
+              <p class="text-payment-info" >
+                Người nhận: Công ty Cổ Phần IVIVU.COM<a class='text-copy' (click)='copyClipboard("Người nhận: Công ty Cổ Phần IVIVU.COM")'>Sao chép</a>
+              </p>
+              <p class="text-payment-info" text-wrap>
+                Nội dung chuyển tiền: <b class="text-booking text-red">{{trip.booking_id}}</b><a class='text-copy' (click)='copyClipboard(trip.booking_id)'>Sao chép</a>
+              </p>
+              <p class="text-payment-info" text-wrap>
+                Tổng tiền: <b class="text-bold">{{trip.priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
+              </p>                    
+            </div>
+          
+          </div>
+          <!-- payoo tại của hàng -->
+          <div *ngIf="trip.pay_method==3" class="d-flex-later">
+            <p class="text-payment-info" text-wrap>
+              Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">{{trip.priceShow}} VND</b>
+            </p>
+          </div>
+          <div *ngIf="!(trip.pay_method==51||trip.pay_method==2)" class="mt16">
+            <label class="text-other">Hoặc thanh toán bằng phương thức khác</label>
+          </div>
+          <div *ngIf="!(trip.pay_method==3||trip.pay_method==51||trip.pay_method==2)" class="div-btn-payment mt16">
+            <button (click)="paymentselect(trip,0)" ion-button round outline class="button btn-payment">Đổi phương thức thanh toán</button>
+        </div>
+        <div *ngIf="trip.pay_method==3" class="div-btn-payment mt16">
+          <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Đổi phương thức thanh toán</button>
+      </div>
+      </div>
   </div>
 </ion-content>
