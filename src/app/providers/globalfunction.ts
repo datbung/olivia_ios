@@ -645,8 +645,8 @@ export class GlobalFunction{
             error.param = JSON.stringify(options);
             C.writeErrorLog(error,response);
         }else if(body){
-
-            var obj = JSON.parse(body);
+          se.storage.set('checktoken',"1");
+          var obj = JSON.parse(body);
   
         }
     })   

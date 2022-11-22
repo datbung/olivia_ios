@@ -2909,7 +2909,6 @@ export class Tab1Page implements OnInit {
     this.fcmNative.getToken().then(token => {
       this.storage.get('checktoken').then(checktoken => {
         if (!checktoken) {
-          this.storage.set('checktoken',"1");
           //PDANH 19/07/2019: Push memberid & devicetoken
             this.gf.pushTokenAndMemberID("", token, this.appversion);
           }
