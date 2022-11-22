@@ -243,7 +243,7 @@
 
             <div *ngIf="listMyTrips[0].delivery_payment_date_display && (listMyTrips[0].pay_method==0||listMyTrips[0].pay_method==5||listMyTrips[0].pay_method==10) && !(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5|| listMyTrips[0].payment_status == 9|| listMyTrips[0].payment_status == -2 ||listMyTrips[0].payment_status == 3)" class="div-btn-payment m-top-27">
               <div class="div-split-panel"></div>
-              <button (click)="paymentselect(listMyTrips[0],1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+              <button (click)="paymentselect(listMyTrips[0],1)" ion-button round outline class="button btn-payment">Thanh toán ngay</button>
             </div>
             <div *ngIf="listMyTrips[0].delivery_payment_date_display&&!(listMyTrips[0].pay_method==0||listMyTrips[0].pay_method==5||listMyTrips[0].pay_method==10)&& !(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5|| listMyTrips[0].payment_status == 9|| listMyTrips[0].payment_status == -2 ||listMyTrips[0].payment_status == 3)" class="m-top-27">
               <div style="padding: 8px;" *ngIf="listMyTrips[0].pay_method==51||listMyTrips[0].pay_method==2">
@@ -764,7 +764,7 @@
                       <!-- payment info -->
                       <div *ngIf="trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" class="div-btn-payment m-top-27">
                         <div class="div-split-panel"></div>
-                        <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+                        <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán ngay</button>
                       </div>
                       <div *ngIf="trip.delivery_payment_date_display&&!(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10)&& !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" class="m-top-27">
                         <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
@@ -789,7 +789,7 @@
                             <label class="text-note">Khi Quý khách nhấn nút “Thanh toán” cũng đồng nghĩa là Quý khách đã đồng ý với các <a class="text-policy" >điều khoản và chính sách</a> thay đổi hoặc hủy đặt phòng.</label>
                         </div>
                         <div class="div-btn-payment">
-                            <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+                            <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán ngay</button>
                         </div>
                         </div>
                           <!-- Hình thức ck ngân hàng -->
@@ -3081,14 +3081,14 @@
                       </div>
                       <div *ngIf="trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" class="div-btn-payment">
                       <div class="div-split-panel"></div>
-                      <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+                      <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán ngay</button>
                       </div>
                       <div *ngIf="trip.delivery_payment_date_display&&!(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10)&& !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
                       <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
                       
                       
                       <div class="div-btn-payment">
-                          <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
+                          <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán ngay</button>
                       </div>
                       </div>
                           <!-- Hình thức ck ngân hàng -->
