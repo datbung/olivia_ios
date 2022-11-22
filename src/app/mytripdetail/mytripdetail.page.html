@@ -1257,7 +1257,7 @@
       
   </div>
     <!-- Booking Flight -->
-    <div class="div-flighttrip m-l-8" *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
+    <div [ngClass]="!trip.isBookingVMBQT ? 'div-flighttrip m-l-8' : 'div-flighttrip'" *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
       <!-- bkg VMBQT -->
       <div class="div-VMBQT div-flybooking div-detail-booking" *ngIf="trip.isBookingVMBQT else otherbooking">
       
@@ -1298,20 +1298,9 @@
                 </div>
                 <div class="placeline">
                 </div>
-                <div  *ngIf="ishdnp"  class="position-absolute">
-                  <img src="./assets/imgs/ic_expand_down.svg" />
-                </div>
+               
               </div>
-                  <!--   Hướng dẫn nhận phòng -->
-            <div class="m-top-24"  *ngIf="ishdnp">
-              <div>Nhận phòng: <span class="font-weight-600">{{cin}}</span> - Trả phòng: <span class="font-weight-600">{{cout}}</span></div>
-              <div *ngFor="let msg of trip.hotelNotes">
-                <div *ngIf="msg.title=='Hướng dẫn nhận phòng'">
-                  <label [innerHTML]="msg.description">
-                  </label>
-                </div>
-              </div>
-              
+             
               <div class="div-return m-top-28">
                 <div class="div-time-landing ">
                   <div>{{itemtransit.LandingTimeDisplay}}</div>
@@ -1323,24 +1312,14 @@
                 </div>
                 <div class="placepoint-return">
                 </div>
-                <div  *ngIf="isttt" class="position-absolute">
-                  <img src="./assets/imgs/ic_expand_down.svg" />
-                </div>
               </div>
-              <div (click)="openWebpage()" class="mt22"  *ngIf="isttt">
-                <div class="text-link" >
-                  <u>Hướng dẫn thủ tục hàng không</u>
-                </div>
-                <div class="text-link mt22">
-                  <u>Cẩm nang du lịch</u>
-                </div>
-              </div>
-              <!-- <div class="div-overlay" *ngIf="idxtransit != itembkg.Transits.length-1"><span *ngIf="itembkg.timeOverlay">Quá cảnh {{ itembkg.timeOverlay }} tại {{ itemtransit.ToPlaceCode }}</span></div> -->
-              <div class="div-overlay" *ngIf="itemtransit.timeOverlay"><span *ngIf="itemtransit.timeOverlay">Quá cảnh {{ itemtransit.timeOverlay }} tại {{ itemtransit.ToPlaceCode }}</span></div>
+              <div class="div-overlay" *ngIf="idxtransit != itembkg.Transits.length-1"><span *ngIf="itemtransit.timeOverlay">Quá cảnh {{ itemtransit.timeOverlay }} tại {{ itemtransit.ToPlaceName }} ({{ itemtransit.ToPlaceCode }})</span></div>
+            <!-- </div>
+            <div class="div-line-vmbqt" *ngIf="idxbkg != bookingjson.length-1"></div> -->
+
             </div>
             <div class="div-line-vmbqt" *ngIf="idxbkg != bookingjson.length-1"></div>
-        </div>
-          
+          </div>
         <!-- pax info -->
         <div class="div-split-panel"></div>
         <div *ngFor="let pax of trip.itemdepart.passengers; let idx = index">
@@ -1782,11 +1761,11 @@
                 <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Đổi phương thức thanh toán</button>
               </div>
             </div>
-        </div>
+        
    
       
     </div>
-         <ng-template #otherbooking>
+    <ng-template #otherbooking>
       <div [ngClass]="i == 0 ? 'div-mytrip m-top-24' : 'div-mytrip'">
         <div [ngClass]="i == 0 ? 'first-content padding-left-0 m-top-42' : 'first-content padding-left-0'">
           <ion-item-group>
@@ -2846,11 +2825,11 @@
       </div>
     </div>
 
-    <div *ngIf="trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
+    <div *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
       <div class="div-split-panel"></div>
       <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
     </div>
-      <div *ngIf="trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
+      <div *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
         <div class="div-split-panel"></div>
         <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
           <div class="div-payment-combo-flight">

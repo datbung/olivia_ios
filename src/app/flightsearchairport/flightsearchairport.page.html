@@ -22,10 +22,10 @@
     </ion-row>
   </ion-header>
   <ion-content >
-    <!-- <div class="text-normal">Danh sách các sân bay</div> -->
+    <div class="text-normal">Danh sách các sân bay</div>
     
     <div class="search-content-result">
-      <div *ngIf="listLastSearch && listLastSearch.length >0" class="div-list-last-search">
+      <!-- <div *ngIf="listLastSearch && listLastSearch.length >0" class="div-list-last-search">
         <div class="div-label-text">Sân bay tìm kiếm gần đây</div>
         <div *ngFor="let itemLastSearch of listLastSearch; let idx = index" (click)="itemclick(itemLastSearch)">
           <div [ngClass]="idx == listLastSearch.length -1 ? 'div-item-search m-top-24' : (idx==0 ? 'div-item-search div-border-bottom m-top-16' : 'div-item-search div-border-bottom m-top-12')">
@@ -48,7 +48,19 @@
               </div>
               <div class="aiport-text">{{item.airport}}</div>
             </div>
-            <!-- <div class="d-flex m-bottom-8">
+           
+          </div>
+        </div> -->
+      
+
+      <div>
+        
+        <div (click)="itemclick(item)" *ngFor="let item of items">
+          <div *ngIf="item && item.show">
+            <div class="d-flex m-bottom-8" *ngIf="!item.SameCity else itemsamecity">
+              <!-- <div class="div-icon v-align-center">
+                  <img class="img-plane" src="./assets/ic_flight/icon_flight.svg">
+              </div> -->
               <div class="div-text-result" >
                 <div class="text-bold">
                   {{item.city}}, {{item.country}} ({{item.code}})
@@ -58,12 +70,37 @@
                 </div>
 
               </div>
-            </div>
-
-            <div class="div-split-result"></div> -->
           </div>
+          <ng-template #itemsamecity>
+            
+            <div class="m-bottom-8">
+              <div class="d-flex m-bottom-8">
+               
+                <div class="div-text-result p-l-8" >
+                  {{item.city}}, {{item.country}} <span class="text-code">Tất cả các sân bay</span>
+                </div>
+              </div>
+
+              <div *ngFor="let itemsub of item.Items">
+                <div class="d-flex m-bottom-8 p-l-16">
+                  <div class="div-icon">
+                      <img class="img-plane" src="./assets/ic_flight/icon_flight.svg">
+                  </div>
+                  <div class="div-text-result" >
+                      {{itemsub.airport}} <span class="text-code">{{itemsub.code}}</span>
+                  </div>
+                </div>
+              </div>
+          </div>
+          </ng-template>
+
+          <div class="div-split-result"></div>
+          </div>
+          
+          
         </div>
-      
+      </div>
+     
     </div>
     <div style="margin-top: 20px" *ngIf="!items || (items && items.length ==0)">
         <label>Không tìm thấy kết quả tìm kiếm.Vui lòng nhập lại!</label>

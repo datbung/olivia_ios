@@ -1937,15 +1937,15 @@ color: #e52822
           margin-left: 16px;
 
           .img-flight-inout{
-            width: 32px;
-            height: 32px;
+            width: 16px;
+            height: 16px;
             position: absolute;
             left: 0;
             top: 25px;
           }
 
           .img-oneway{
-            width: 12px !important;
+            width: 16px !important;
             margin-left: 8px;
           }
         }
@@ -3103,8 +3103,8 @@ color: #e52822
     margin-left: 4px;
 }
 .cls-icon-img-detail{
-    width: 24px !important;
-    padding: 0 5px;
+    width: 18px !important;
+    padding: 0;
  }
  .p-absolute-16{
     position: absolute;
@@ -3829,9 +3829,8 @@ color: #e52822
      margin-top: 2px;
  }
  .cls-icon-img-detail{
-
-    width: 24px !important;
-    padding: 0 5px;
+    width: 18px !important;
+    padding: 0;
  }
  .div-panel{
     height: 6px;

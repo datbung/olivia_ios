@@ -3391,11 +3391,11 @@ export class FlightaddservicePage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight') ? {
+        body: {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight') ?  { flight: {
             "tickets": this._flightService.itemFlightCache.roundTrip ? [
               {
                 "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
                 "departTime": se._flightService.itemFlightCache.departFlight.departTime,
                 "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
                 "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
@@ -3408,7 +3408,7 @@ export class FlightaddservicePage implements OnInit {
               },
               {
                 "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
-                "airLineCode": se._flightService.itemFlightCache.returnFlight.airLineCode,
+                "airLineCode": se._flightService.itemFlightCache.returnFlight.airlineCode,
                 "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
                 "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
                 "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
@@ -3423,7 +3423,7 @@ export class FlightaddservicePage implements OnInit {
             [
               {
                 "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
                 "departTime": se._flightService.itemFlightCache.departFlight.departTime,
                 "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
                 "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
@@ -3439,7 +3439,7 @@ export class FlightaddservicePage implements OnInit {
             "totalChild": se._flightService.itemFlightCache.child,
             "totalInfant": se._flightService.itemFlightCache.infant
           ,
-        } : '' },
+        } }: '' },
         json: true
       };
 
