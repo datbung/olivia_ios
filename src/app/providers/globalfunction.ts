@@ -637,7 +637,6 @@ export class GlobalFunction{
         body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, ''),source:6 },
         json: true
       };
-  
       }
       request(options, function (error, response, body) {
         if (error) {
@@ -646,6 +645,7 @@ export class GlobalFunction{
             error.param = JSON.stringify(options);
             C.writeErrorLog(error,response);
         }else if(body){
+
             var obj = JSON.parse(body);
   
         }

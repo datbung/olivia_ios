@@ -495,9 +495,7 @@ export class TabsPage implements OnInit {
           //this.setNotification(data,"product");
           let arr = data.dataLink.replace('/','').split('/');
           if(arr && arr.length ==2){
-            this.tourService.tourDetailId = arr[1];
-            this.tourService.backPage = 'hometour';
-            this.navCtrl.navigateForward('/tourdetail');
+           this.loadTopSale(arr[1]);
           }
         
         }else {
@@ -1306,4 +1304,22 @@ export class TabsPage implements OnInit {
   
   //   })
   // }
+  loadTopSale(Id) {
+    let se = this;
+    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetAllBooking24h';
+    let headers = {
+      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    se.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTopSale').then((data) => {
+      let res = JSON.parse(data);
+      console.log(res.Response);
+      this.tourService.listTopSale = res.Response;
+      se.tourService.tourDetailId = Id;
+      se.tourService.backPage = 'hometour';
+      se.navCtrl.navigateForward('/tourdetail');
+      //se.slideData = res.Response;
+      //se.loaddatadone = true;
+    })
+  }
 }
