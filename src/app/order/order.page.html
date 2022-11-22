@@ -949,7 +949,7 @@
                 <ng-template #otherbooking>
                   <div *ngIf="!trip.bookingOffType" >
            
-                    <div [ngClass]="trip.bookingsComboData && (!trip.bookingsComboData[0].issueTicketDate || (trip.bookingsComboData[1] && !trip.bookingsComboData[1].issueTicketDate)) && (trip.payment_status == 1 || trip.payment_status == 5)?'padding-16-16 d-flex':'padding-9-16 d-flex'">
+                    <div [ngClass]="trip.bookingsComboData && (!trip.bookingsComboData[0].issueTicketDate || (trip.bookingsComboData[1] && !trip.bookingsComboData[1].issueTicketDate)) && (trip.payment_status == 1 || trip.payment_status == 5) || !trip.approve_date?'padding-16-16 d-flex':'padding-9-16 d-flex'">
                       <div size="8" class="col-bookingid" *ngIf="!trip.isFlyBooking else flybooking"><label class="label-bkg-id">Mã booking: <span
                             class="bkg-id">{{trip.booking_id}}</span></label>
                       </div>
@@ -959,7 +959,7 @@
       
                       <div  size="4" class="col-bkg-status position-absolute "
                         *ngIf="!trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
-                        <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">
+                        <div  [ngClass]="!trip.approve_date? 'm-t-11':''" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">
                           <div><label class="label-text-paymented">Đã thanh toán</label></div>
                           <div class="m-top-4"><label class="label-text-processing ml-7" *ngIf="!trip.approve_date">(Chờ xử lý)</label></div>
                         </div>
