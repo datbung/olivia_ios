@@ -305,7 +305,7 @@
                 <div class="col-mytrip-text-description ">
                   <div >
                     <div *ngIf="trip.hotel_name && !trip.isFlyBooking && !trip.bookingOffType">
-                      <ion-label class="label-comboname div-name-hotel">{{trip.hotel_name}}
+                      <ion-label class="label-comboname div-name-hotel text-line-clamp">{{trip.hotel_name}}
                       
                       </ion-label>
                     </div> 
@@ -321,7 +321,7 @@
                           <img style="height:12px" src="./assets/ic_hoteldetail/group.svg">
                         </ion-col>
                         <ion-col class="text-address" [ngClass]="trip.payment_status == 1 ? '': ''">
-                            <label>{{trip.address}}</label>
+                            <label class="text-line-clamp">{{trip.address}}</label>
                         </ion-col>
                       </ion-row>
                        <!-- số đt -->

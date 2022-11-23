@@ -331,8 +331,8 @@
             <div *ngIf="(listMyTrips && listMyTrips.length ==1) else divshowlisttrip">
               
                       <!-- bkg VMBQT -->
-                <div class="div-VMBQT div-flybooking" *ngIf="trip.isBookingVMBQT else otherbooking">
-                   <div class="div-bkgno d-flex">
+                <div class="div-VMBQT div-flybooking" *ngIf="trip.isBookingVMBQT else otherbooking" >
+                   <div [ngClass]="!trip.bookingsComboData[0].issueTicketDate?'div-bkgno d-flex align-center':'div-bkgno d-flex'">
                       <div class="text-bkg">Mã booking: </div>
                       <div class="bkg-no">{{trip.booking_id}}</div>
                       <div class="div-btn-payment" *ngIf="trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
@@ -346,7 +346,8 @@
                               </ng-template>
                       </div>
                    </div> 
-                   <div [ngClass]="trip.delivery_payment_date_display && !(trip.payment_status == 1 || trip.payment_status == 5) ? 'div-split-panel m-bottom-0' : 'div-split-panel'" *ngIf="(trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2) || (trip.payment_status == 1 || trip.payment_status == 5) )"></div>
+
+                   <div [ngClass]="trip.delivery_payment_date_display && !(trip.payment_status == 1 || trip.payment_status == 5) ? 'div-split-panel-VMB m-bottom-0' : 'div-split-panel-VMB'" *ngIf="(trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2) || (trip.payment_status == 1 || trip.payment_status == 5) )"></div>
                    <div class="div-waiting-payment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && trip.delivery_payment_date_display">
                       <label class="label-waiting-payment">Chờ thanh toán tới <span class="text-time-payment">{{trip.time_payment}}</span> ngày <span class="text-time-payment">{{trip.date_payment}}</span></label>
                    </div>

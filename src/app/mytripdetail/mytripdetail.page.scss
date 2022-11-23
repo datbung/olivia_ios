@@ -960,6 +960,13 @@
 .padding-bottom-16{
     padding-bottom: 16px;
 }
+.text-line-clamp{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+}
 
 
 
