@@ -50,9 +50,9 @@ export class FlightsearchairportPage implements OnInit {
             for (let index = 0; index < 25; index++) {
               const element = data[index];
               this.items.push(element);
-              if(index < 5){
-                this.itemsRegular.push(element);
-              }
+              // if(index < 5){
+              //   this.itemsRegular.push(element);
+              // }
              
             }
             
@@ -114,10 +114,10 @@ export class FlightsearchairportPage implements OnInit {
                     se.items.forEach(element => {
                       element.show = true;
                     });
-                    for (let index = 0; index < 5; index++) {
-                      const element = se.items[index];
-                      this.itemsRegular.push(element);
-                    }
+                    // for (let index = 0; index < 5; index++) {
+                    //   const element = se.items[index];
+                    //   this.itemsRegular.push(element);
+                    // }
                 })
               
             }

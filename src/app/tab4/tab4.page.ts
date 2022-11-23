@@ -276,24 +276,38 @@ export class Tab4Page implements OnInit{
             se.valueGlobal.countNotifi--;
             se.callUpdateStatus(element);
           }
-          if(element.dataLink){
+          if (element.dataLink) {
             if(element.dataLink.indexOf('tourdetail') != -1){
-              let arr = element.dataLink.replace('/','').split('/');
-              if(arr && arr.length ==2){
-                this.tourService.tourDetailId = arr[1];
-                this.tourService.backPage = 'hometour';
-                this.navCtrl.navigateForward('/tourdetail');
+                let arr = element.dataLink.replace('/','').split('/');
+                if(arr && arr.length ==2){
+                  this.tourService.tourDetailId = arr[1];
+                  this.tourService.backPage = 'hometour';
+                  this.navCtrl.navigateForward('/tourdetail');
+                }
+              } else {
+                se.navCtrl.navigateForward(element.dataLink);
               }
-            } else {
-              se.navCtrl.navigateForward(element.dataLink);
-            }
           }
           else{
-              if (element.memberId=='alluser') {
-                se.navCtrl.navigateForward(element.bookingCode);
-                
+            if (element.memberId=='alluser') {
+               if(element.bookingCode.indexOf('tourdetail') != -1){
+                let arr = element.bookingCode.replace('/','').split('/');
+                if(arr && arr.length ==2){
+                  this.tourService.tourDetailId = arr[1];
+                  this.tourService.backPage = 'hometour';
+                  this.navCtrl.navigateForward('/tourdetail');
+                }
+              } else {
+                if (element.bookingCode=='1') {
+                  this._flightService.itemTabFlightActive.emit(true);
+                  this.valueGlobal.backValue = "homeflight";
+                  this.navCtrl.navigateForward('/tabs/tab1');
+              }else{
+                  se.navCtrl.navigateForward(element.bookingCode);
+              }
               }
             }
+        }
         })
       }
     });

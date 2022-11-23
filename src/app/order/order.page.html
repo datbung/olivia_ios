@@ -1346,7 +1346,7 @@
                           <!-- <ion-row (click)="openBookingTrip(trip)">
                             <ion-col class="col-nopd-top"><label class="room-name">{{trip.room_name}}</label></ion-col>
                             <ion-col size="1" class="icon-arrow-right" *ngIf="!trip.isHistoryItem">
-                              <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">
+                              <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                             </ion-col>
                           </ion-row> -->
                           <div class="d-flex m-top-16" >
@@ -2043,7 +2043,7 @@
                              
                              <div class="insurrance-contact-arrow s-text text-right w-24">
                                <!-- <ion-icon class="icon-arrow-right" item-end name="ios-arrow-round-forward"></ion-icon> -->
-                               <img  class="cls-icon-img "  src="./assets/imgs/ic_arrow_grey.svg">
+                               <img  class="cls-icon-img "  src="./assets/ic_mytripbooking/ico_arrow.svg">
                              </div>
                           </div>
                 
@@ -2460,7 +2460,7 @@
                                     <div class="insurrance-contact-name  p-bottom-8"><label class="text-bh">Bảo hiểm trễ chuyến</label></div>
                                         
                                         <div class="insurrance-contact-arrow-android s-text text-right">
-                                        <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">
+                                        <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                                         </div>
                                     </div>
                                     <div class="div-split-panel" *ngIf="trip.isPickupDropoff"></div>
@@ -3282,7 +3282,7 @@
                               {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
                             </div>
                             <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5" class="p-absolute-16">
-                              <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">
+                              <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                             </div>
                           </div>
                      
@@ -3356,8 +3356,8 @@
                                 </div> -->
                               </div>
                               <div class="div-flight-inout">
-                                  <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout.svg" *ngIf="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) else oneway">
-                                  <ng-template #oneway><img class="img-flight-inout img-oneway" src="../assets/imgs/ic_arrow.svg"></ng-template>
+                                  <img class="img-flight-inout" src="./assets/ic_mytripbooking/ico_2ways.svg" *ngIf="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) else oneway">
+                                  <ng-template #oneway><img class="img-flight-inout img-oneway" src="../assets/ic_mytripbooking/ico_1way.svg"></ng-template>
                               </div> 
                               <div [ngClass]="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) ? 'min-width-100 cls-text-overflow' : 'min-width-100 cls-text-overflow mt-30'">
                                 <div class="div-logo div-width-100" *ngIf=" trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ">
@@ -3474,7 +3474,7 @@
                                 </div>
                               </div>
                               <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
-                                <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">
+                                <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                               </div>
                             </div>
                             
@@ -3487,7 +3487,7 @@
                                 {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                               </div>
                               <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
-                                <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">
+                                <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                               </div>
                             </div>
                 <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="div-line-new-1 margin-0-16"></div>

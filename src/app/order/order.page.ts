@@ -284,14 +284,14 @@ import { tourService } from '../providers/tourService';
             if (se.networkProvider.isOnline()) {
               se.getdata(null, false);
               se.getdata(null, true);
-              se.loadOrder();
+              //se.loadOrder();
             }
             else{
               se.isConnected = false;
               se.storage.get('listmytrips').then(data => {
                 if (data) {
                   se.loadMytrip(data, false);
-                  se.loadOrder();
+                  //se.loadOrder();
                 }
               })
             }
@@ -328,7 +328,7 @@ import { tourService } from '../providers/tourService';
           setTimeout(()=>{
             se.getdata(null, true);
           },1000)
-          se.loadOrder();
+          //se.loadOrder();
           if (se.activityService.insurranceBookingId) {
             se.refreshInsurranceInfo();
           }
@@ -563,7 +563,7 @@ import { tourService } from '../providers/tourService';
                     se.gf.refreshToken(memberid, devicetoken).then((token) => {
                       setTimeout(() => {
                         se.getdatanewtoken(token, ishistory);
-                        se.loadOrder();
+                        //se.loadOrder();
                       }, 100)
                     });
     
@@ -2441,14 +2441,14 @@ import { tourService } from '../providers/tourService';
           se.storage.get('jti').then((uid: any) => {
             if(uid){
                 se.memberid = uid;
-                se.gf.getCurrentPeriod().then(data => {
-                    if(data){
-                      se.listWeek.push({ id: 1, weekname: "Tuần " + moment(data.periodStartDate).format("DD.MM") + " - " + moment(data.periodEndDate).format("DD.MM"), startDate: data.periodStartDate, endDate: data.periodEndDate });
-                      se.listWeek.push({ id: 2, weekname: "Tuần " + moment(data.periodStartDateNextWeek).format("DD.MM") + " - " + moment(data.periodEndDateNextWeek).format("DD.MM"), startDate: data.periodStartDateNextWeek, endDate: data.periodEndDateNextWeek });
+                // se.gf.getCurrentPeriod().then(data => {
+                //     if(data){
+                //       se.listWeek.push({ id: 1, weekname: "Tuần " + moment(data.periodStartDate).format("DD.MM") + " - " + moment(data.periodEndDate).format("DD.MM"), startDate: data.periodStartDate, endDate: data.periodEndDate });
+                //       se.listWeek.push({ id: 2, weekname: "Tuần " + moment(data.periodStartDateNextWeek).format("DD.MM") + " - " + moment(data.periodEndDateNextWeek).format("DD.MM"), startDate: data.periodStartDateNextWeek, endDate: data.periodEndDateNextWeek });
                       
-                      se.loadOrder();
-                    }
-                })
+                //       se.loadOrder();
+                //     }
+                // })
             }else{
                 se.mylistOrders = [];
             }
@@ -3171,7 +3171,7 @@ import { tourService } from '../providers/tourService';
         if (document.querySelector(".tabbar")) {
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
-        this.loadOrder();
+        //this.loadOrder();
         this.loadUserReviews();
       }
 
@@ -3181,7 +3181,7 @@ import { tourService } from '../providers/tourService';
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
 
-        this.loadOrder();
+        //this.loadOrder();
         this.loadUserReviews();
       }
     
@@ -4346,14 +4346,14 @@ import { tourService } from '../providers/tourService';
         se.storage.get('auth_token').then(auth_token => {
           se.loginuser = auth_token;
         });
-        se.loadOrder();
+        //se.loadOrder();
       }
     
       refreshData() {
         var se = this;
         se.presentLoadingData();
         se.getdata(null, false);
-        se.loadOrder();
+        //se.loadOrder();
       }
     
       showPolicy(trip) {
@@ -4523,7 +4523,7 @@ import { tourService } from '../providers/tourService';
           this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
           return;
         }
-        if (trip.payment_status==1 || trip.payment_status==5 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay)) {
+        if (trip.payment_status==1 || trip.payment_status==5 || trip.payment_status==9 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay)) {
           if(trip){
             this.enableheader = false;
             this._mytripservice.tripdetail = trip;

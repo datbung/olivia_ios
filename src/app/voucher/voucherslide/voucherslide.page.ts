@@ -180,12 +180,12 @@ export class VoucherSlidePage implements OnInit{
                 'cache-control': 'no-cache',
                 'content-type': 'application/json'
               },
-              body: { bookingCode: '' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: 0,
-              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? {
+              body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: 0,
+              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? { flight: {
                   "tickets": this._flightService.itemFlightCache.roundTrip ? [
                     {
                       "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                      "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                      "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
                       "departTime": se._flightService.itemFlightCache.departFlight.departTime,
                       "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
                       "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
@@ -198,7 +198,7 @@ export class VoucherSlidePage implements OnInit{
                     },
                     {
                       "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
-                      "airLineCode": se._flightService.itemFlightCache.returnFlight.airLineCode,
+                      "airLineCode": se._flightService.itemFlightCache.returnFlight.airlineCode,
                       "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
                       "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
                       "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
@@ -213,7 +213,7 @@ export class VoucherSlidePage implements OnInit{
                   [
                     {
                       "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                      "airLineCode": se._flightService.itemFlightCache.departFlight.airLineCode,
+                      "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
                       "departTime": se._flightService.itemFlightCache.departFlight.departTime,
                       "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
                       "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
@@ -229,7 +229,7 @@ export class VoucherSlidePage implements OnInit{
                   "totalChild": se._flightService.itemFlightCache.child,
                   "totalInfant": se._flightService.itemFlightCache.infant
                 ,
-              } : '' },
+              } }: '' },
               json: true
             };
       
