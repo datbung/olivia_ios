@@ -35,7 +35,7 @@
 
 </ion-header>
 <ion-content #scrollArea class="order-content" [scrollEvents]="true">
-  <div [ngClass]="(!loginuser|| listMyTrips.length ==0) ? 'div-order-content h100' : 'div-order-content '">
+  <div *ngIf="listMyTrips.length > 0" [ngClass]="(!loginuser|| listMyTrips.length ==0) ? 'div-order-content h100' : 'div-order-content '">
     <div [ngClass]="activeTabTrip == 1 ? 'card-background-page-mytrips' : 'card-background-page-mytrips p-history'">
 
       <ion-row *ngIf="!hasloaddata && activeTabTrip == 1">
@@ -1171,7 +1171,7 @@
                 
                           </div>
                         </div>
-                        <div *ngIf="trip.bookingsComboData" class="div-line-new" style="margin-left: -16px;margin-top: 8px;">
+                        <div *ngIf="trip.bookingsComboData" class="div-line-new" style="margin-left: -16px;margin-right: -16px;margin-top: 8px;">
                 
                         </div>
                         <div *ngIf="trip.bookingsComboData">
@@ -1179,7 +1179,7 @@
                      
                             <div class="div-pax-lug">
                              <div
-                                [ngClass]="idx==0 ? 'pax-name m-top-8' : (pax.arrlug && pax.arrlug.length >0) ? 'pax-name m-top-27' : ( (idx == trip.bookingsComboData[0].passengers.length -1 && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2] && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug.length >0 )? 'pax-name m-top-27' :  'pax-name m-top-8')">
+                                [ngClass]="idx==0 ? 'pax-name m-top-16' : (pax.arrlug && pax.arrlug.length >0) ? 'pax-name m-top-27' : ( (idx == trip.bookingsComboData[0].passengers.length -1 && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2] && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug.length >0 )? 'pax-name m-top-27' :  'pax-name m-top-16')">
                                 <label class="text-info font-weight-500">{{pax.gender}}. <span >{{pax.name}}</span> <span class="text-info"
                                     *ngIf="!pax.isAdult && pax.dob"> {{pax.dob}}</span></label></div>
                               <!-- <div class="pax-type ">{{pax.gender}}</div> -->
@@ -1232,60 +1232,8 @@
                           </div>
                         </div>
                         
-                         <div *ngIf="trip.bookingsComboData">
-                          <div class="p-top-8" *ngFor="let pax of trip.bookingsComboData[0].passengers; let idx = index">
-                     
-                            <div class="div-pax-lug">
-                             <div
-                                [ngClass]="idx==0 ? 'pax-name m-top-8' : (pax.arrlug && pax.arrlug.length >0) ? 'pax-name m-top-27' : ( (idx == trip.bookingsComboData[0].passengers.length -1 && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2] && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug.length >0 )? 'pax-name m-top-27' :  'pax-name m-top-8')">
-                                <label class="text-info font-weight-500">{{pax.gender}}. <span >{{pax.name}}</span> <span class="text-info"
-                                    *ngIf="!pax.isAdult && pax.dob"> {{pax.dob}}</span></label></div>
-                              <!-- <div class="pax-type ">{{pax.gender}}</div> -->
-                           </div>
-                           
-                            <div class="d-flex m-top-13  h-26">
-                              <div class="text-name-airport witdh-80 align-self-end ">
-                                {{ trip.bookingsComboData[0].departCode }} - {{ trip.bookingsComboData[0].arrivalCode }}
-                              </div>
-                              <div class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_handbag.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedDepart}}</div>
-                              </div>
-                              <div *ngIf="pax.hanhLyshow && pax.hanhLyshow!='0'" class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_airdrop.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{pax.hanhLyshow}} kg</div>
-                              </div>
-                              <div *ngIf="!pax.hanhLyshow||pax.hanhLyshow=='0'" class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_airdrop.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">không có</div>
-                              </div>
-                              <div *ngIf="pax.seatNumber" class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_seat.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 align-self-end">{{pax.seatNumber}}</div>
-                              </div>
-                            
-                            </div>
-                            <div class="d-flex m-top-13  h-26" *ngIf=" trip.bookingsComboData[1].airlineCode && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ">
-                              <div class="text-name-airport witdh-80 align-self-end ">
-                                {{ trip.bookingsComboData[1].departCode }} - {{ trip.bookingsComboData[1].arrivalCode }}
-                              </div>
-                              <div class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_handbag.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedReturn}}</div>
-                              </div>
-                              <div *ngIf="pax.hanhLyshow && pax.hanhLyshow!='0'" class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_airdrop.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{pax.hanhLyshow}} kg</div>
-                              </div>
-                              <div *ngIf="!pax.hanhLyshow||pax.hanhLyshow=='0'" class="d-flex m-left-4">
-                                <img  src="./assets/imgs/ic_airdrop.svg"/>
-                                <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">không có</div>
-                              </div>
-                        
-                            </div>
-                        
-                          </div>
-                        </div>
+                       
+                        <div *ngIf="trip.bookingsComboData" class="div-line-new" style="margin-left: -16px;margin-right: -16px;margin-top: 8px;"></div>
                           <div class="item-room-detail" *ngIf="!isFlyBooking && !trip.bookingOffType">
                             <div [ngClass]="!trip.combo_name? 'div-wrapimg img-list' : 'div-wrapimg-1 img-list-1'" class="div-wrapimg img-list" >
                               <div *ngIf="trip.avatar else noavatar">
@@ -1357,7 +1305,7 @@
                               {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
                             </div>
                           </div>
-                          <div class="div-gird m-left-20">
+                          <div class="div-gird m-left-20 m-top-4">
                             <div class="text-info-1">
                               Nhận phòng: <span class="text-info">Từ {{cin}}</span>
                             </div>
@@ -3286,7 +3234,7 @@
                             </div>
                           </div>
                      
-                  </div>
+                      </div>
 
                       <div  *ngIf="trip.bookingOffType" class="div-bkgoff-listitem">
                         <div (click)="showtripdetail(trip)">
@@ -3613,8 +3561,8 @@
             <button ion-button round outline class="button btn-trip-empty" (click)="goback()">Khám phá ngay</button>
           </div>
         </div>
-        <div
-          *ngIf="((hasloaddata && !hasdata) || listMyTrips.length == 0) && slide && loginuser"
+        <!-- <div
+          *ngIf="(((hasloaddata && !hasdata) || listMyTrips.length == 0) && slide && loginuser) else notCombo"
           class="trip-empty">
 
           <div class="text-empty-title">
@@ -3647,12 +3595,20 @@
           <div class="div-button-combo-other" (click)="viewComboList()">
             Xem combo khác
           </div>
-        </div>
+        </div> -->
+
         <!-- <div *ngIf="!hasloaddata || !isConnected">
           <div class="img-trip-empty" style="height: 100%">
             <img class="img-empty" src="./assets/placeholder/mytrip.svg">
           </div>
         </div> -->
+
+
+        <!-- <div *ngIf="!hasloaddata || !isConnected">
+          <div class="img-trip-empty" style="height: 100%">
+            <img class="img-empty" src="./assets/placeholder/mytrip.svg">
+          </div>
+        </div>-->
       </div>
       <!-- Food -->
       <div *ngIf="activeTabTrip == 2" >
@@ -3862,7 +3818,7 @@
                           
                             </ng-template>
                             <div class="div-line-bottom" [ngClass]="detail.menu.listmenu.length <4 ? 'p-top-32' : ''"></div>
-                            <div class="div-total">
+                            <div class="div-total-od">
                               <div class="label-total">Thành tiền</div>
                               <div class="text-price-total">{{detail.totalPriceDisplay}} đ</div>
                             </div>
@@ -3940,5 +3896,25 @@
     </div>
 
   </div>
+
+  <div *ngIf="(((hasloaddata) ) && loginuser)"
+ >
+  <div *ngIf="listMyTrips.length == 0"  class="trip-empty">
+    <div class="img-trip-empty-1">
+      <img class="img-empty" src="./assets/empty/no_trip.svg">
+    </div>
+    <div class="text-notrip m-top-8">
+      Quý khách chưa có chuyến đi nào.
+      Khám phá thêm các ưu đãi hấp dẫn của iVIVU ngay hôm nay
+    </div>
+    <div >
+      
+      <div class="div-button-combo-suggest m-top-24">
+        <button ion-button round outline class="button btn-next" (click)="viewComboList(slide)">Khám phá các ưu đãi tốt nhất</button>
+      </div>
+    </div>
+  </div>
+ 
+</div> 
 
 </ion-content>

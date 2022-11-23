@@ -1675,6 +1675,9 @@ import { tourService } from '../providers/tourService';
                   this.getmhoteldetail();
                 })
               }else{
+                se.totalHotel=0;
+                 
+                se.totalHotel=se.listMyTrips[0].amount_after_tax+se.listMyTrips[0].promotionDiscountAmount;
                 if(se.listMyTrips[0].booking_type == 'COMBO_FLIGHT'){
                   this.departAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[0].departCode);
                   this.returnAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[1].departCode);
@@ -1686,13 +1689,6 @@ import { tourService } from '../providers/tourService';
                       })
                     }
                   })
-                }else{
-                    // xử lý case khách sạn có khuyến mãi
-                  se.totalHotel=0;
-                 
-                  se.totalHotel=se.listMyTrips[0].amount_after_tax+se.listMyTrips[0].promotionDiscountAmount;
-                  
-                  this.getmhoteldetail();
                 }
                 
               }
@@ -1836,6 +1832,7 @@ import { tourService } from '../providers/tourService';
                 } else {
                   elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                 }
+                elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
                 elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
                 elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
                 se.getRatingStar(elementHis);
@@ -3600,6 +3597,7 @@ import { tourService } from '../providers/tourService';
                         } else {
                           elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                         }
+                        elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
                         se.listHistoryTrips.push(elementHis);
                         se.historytripcount++;
     

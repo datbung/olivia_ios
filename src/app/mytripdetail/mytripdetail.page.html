@@ -224,7 +224,7 @@
 
               </div>
             </div>
-        <div *ngIf="trip.bookingsComboData" class="div-line-new" style="margin-left: -16px;margin-top: 8px;">
+        <div *ngIf="trip.bookingsComboData" class="div-line-new" style="margin-left: -16px;margin-right: -16px;margin-top: 8px;">
 
         </div>
         <div *ngIf="trip.bookingsComboData">
@@ -232,7 +232,7 @@
      
             <div class="div-pax-lug">
              <div
-                [ngClass]="idx==0 ? 'pax-name m-top-8' : (pax.arrlug && pax.arrlug.length >0) ? 'pax-name m-top-27' : ( (idx == trip.bookingsComboData[0].passengers.length -1 && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2] && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug.length >0 )? 'pax-name m-top-27' :  'pax-name m-top-8')">
+                [ngClass]="idx==0 ? 'pax-name m-top-8' : (pax.arrlug && pax.arrlug.length >0) ? 'pax-name m-top-27' : ( (idx == trip.bookingsComboData[0].passengers.length -1 && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2] && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug && trip.bookingsComboData[0].passengers[trip.bookingsComboData[0].passengers.length-2].arrlug.length >0 )? 'pax-name m-top-27' :  'pax-name m-top-16')">
                 <label class="text-info font-weight-500">{{pax.gender}}. <span >{{pax.name}}</span> <span class="text-info"
                     *ngIf="!pax.isAdult && pax.dob"> {{pax.dob}}</span></label></div>
               <!-- <div class="pax-type ">{{pax.gender}}</div> -->
@@ -289,7 +289,9 @@
           </div>
         </div>
         
-         
+        <div *ngIf="trip.bookingsComboData" class="div-line-new" style="margin-left: -16px;margin-right: -16px;margin-top: 8px;">
+                
+        </div>
           <div class="item-room-detail" *ngIf="!isFlyBooking && !trip.bookingOffType">
             <div [ngClass]="!trip.combo_name? 'div-wrapimg img-list' : 'div-wrapimg-1 img-list-1'" class="div-wrapimg img-list" >
               <div *ngIf="trip.avatar else noavatar">
