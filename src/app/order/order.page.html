@@ -84,7 +84,7 @@
           
           <div class="div-mytrip item-booking-tour-detail">
             <ion-item-group>
-              <ion-row class="row-bkg-id p-left-11">
+              <ion-row class="row-bkg-id">
                 <ion-col size="8" class="col-bookingid" *ngIf="!listMyTrips[0].isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
                       class="bkg-id">{{listMyTrips[0].booking_id}}</span></label>
                 </ion-col>
@@ -131,11 +131,12 @@
                   *ngIf="(listMyTrips[0].payment_status == 3 || listMyTrips[0].payment_status == -2)"><label class="lbl-waitpayment label-text-waitpayment">Đã hủy</label></ion-col>
               </ion-row>
 
-              <div class="item-room padding-0 " *ngIf="!isFlyBooking && !listMyTrips[0].bookingOffType">
+              <div class="padding-0 m-bottom-16" *ngIf="!isFlyBooking && !listMyTrips[0].bookingOffType">
                   <div class="div-wrapimg">
                       <div *ngIf="listMyTrips[0].avatar else noavatar">
-                        <img *ngIf="listMyTrips[0].avatar.indexOf('http') == -1" class="img-avatar" src="https:{{listMyTrips[0].avatar}}">
-                        <img *ngIf="listMyTrips[0].avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{listMyTrips[0].avatar}}">
+                        <!-- <img *ngIf="listMyTrips[0].avatar.indexOf('http') == -1" class="img-avatar" src="https:{{listMyTrips[0].avatar}}">
+                        <img *ngIf="listMyTrips[0].avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{listMyTrips[0].avatar}}"> -->
+                        <img class="img-avatar" src="{{listMyTrips[0].avatar}}">
                       </div>
                       <ng-template #noavatar>
                         <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
@@ -150,12 +151,12 @@
                       </div>
                       <div class="text-left">
                       <!-- Ngày khởi hành -->
-                      <div *ngIf="listMyTrips[0].checkInDate" class="d-flex">
+                      <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
                         <div class="div-icon"><img class="icon-tour-detail"  src="./assets/ic_tour/ic_date.svg"></div>
                         <div class="div-text">{{listMyTrips[0].tourCheckinDisplay}}</div>
                       </div>
                       <!-- Pax -->
-                      <div *ngIf="listMyTrips[0].checkInDate" class="d-flex">
+                      <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
                         <div class="div-icon"><img style="height:12px" src="./assets/imgs/ic_people.svg"></div>
                         <div class="div-text div-maxwidth">{{listMyTrips[0].totalPaxStr}} <span *ngIf="listMyTrips[0].textChildDisplay">{{listMyTrips[0].textChildDisplay}}</span><span *ngIf="listMyTrips[0].childAgesDisplay"> {{listMyTrips[0].childAgesDisplay}}</span></div>
                       </div>

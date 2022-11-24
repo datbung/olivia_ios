@@ -781,7 +781,8 @@ import { tourService } from '../providers/tourService';
                         }
                         element.avatar = urlavatar + "-" + "104x104" + tail;
                       }
-                      element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : 'https:' +  element.avatar;
+                      element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : ('https:' +  element.avatar);
+                      console.log(element.avatar);
                       if (element.delivery_payment_date) {
                         let arrpaymentdate = element.delivery_payment_date.split("T");
                         let hour ='',day='';

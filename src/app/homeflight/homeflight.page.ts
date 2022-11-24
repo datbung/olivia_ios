@@ -1192,7 +1192,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           se.gf.showToastWarning('Ngày khởi hành không được nhỏ hơn ngày hiện tại.');
           return;
         }
-        if(!se.checkValidFromToDate()){
+        if(se._flightService.itemFlightCache.roundTrip && !se.checkValidFromToDate()){
           se.gf.showToastWarning('Ngày về không được nhỏ hơn ngày đi.');
           return;
         }
