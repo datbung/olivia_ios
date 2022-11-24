@@ -91,7 +91,21 @@
                       <ng-template #flybooking>
                         <ion-col size="8" style="align-self: baseline;"><label  class="label-bkg-id">Mã đơn hàng: <span class="bkg-id">{{listMyTrips[0].booking_id}}</span></label></ion-col>
                     </ng-template> 
+
+                  <ion-col size="4" class="col-bkg-status p-r-0 text-align-right"
+                    *ngIf="listMyTrips[0].payment_status != 9 && (listMyTrips[0].payment_status != 3 && listMyTrips[0].payment_status != -2)">
+                    <div *ngIf="(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5) else waitpayment">
+                      <div><label class="label-text-paymented">Đã thanh toán</label></div>
+                      <div class="m-top-4"><label class="label-text-processing ml-7" *ngIf="!listMyTrips[0].approve_date">(Chờ xử lý)</label></div>
+                    </div>
+                    <ng-template  #waitpayment>
+                      <label *ngIf="listMyTrips[0].payment_status == 0 && listMyTrips[0].deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-waitpayment">Chờ thanh toán</label>
+                      <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-waitpayment">Chờ thanh toán</label></ng-template>
+                    </ng-template>
+                  </ion-col>
+                    
                 </ion-row>
+                <div class="div-split-color m-top-0"></div>
                     <div class="padding-0 m-bottom-16" *ngIf="!isFlyBooking && !listMyTrips[0].bookingOffType">
                       <div class="div-wrapimg">
                           <div *ngIf="listMyTrips[0].avatar else noavatar">

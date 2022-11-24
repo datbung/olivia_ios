@@ -30,7 +30,7 @@
     <div class="div-split"></div>
 
     <div *ngIf="tourService.BookingTourMytrip else bkgnormal">
-      <div class="div-voucher-apply d-flex">
+      <div class="div-voucher-apply d-flex" *ngIf="tourService.BookingTourMytrip.promotionDiscountAmount">
         <div class="width-200 text-normal">
           Ưu đãi
         </div>

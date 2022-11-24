@@ -1147,8 +1147,9 @@
             <div class="item-room padding-0 " *ngIf="!isFlyBooking && !trip.bookingOffType">
                 <div class="div-wrapimg">
                     <div *ngIf="trip.avatar else noavatar">
-                      <img *ngIf="trip.avatar.indexOf('http') == -1" class="img-avatar" src="https:{{trip.avatar}}">
-                      <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}">
+                      <!-- <img *ngIf="trip.avatar.indexOf('http') == -1" class="img-avatar" src="https:{{trip.avatar}}">
+                      <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}"> -->
+                      <img class="img-avatar" src="{{trip.avatar}}">
                     </div>
                     <ng-template #noavatar>
                       <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
@@ -1163,12 +1164,12 @@
                     </div>
                     <div class="text-left">
                     <!-- Ngày khởi hành -->
-                    <div *ngIf="trip.checkInDate" class="d-flex">
+                    <div *ngIf="trip.checkInDate" class="d-flex m-top-4">
                       <div class="div-icon"><img class="icon-tour-detail"  src="./assets/ic_tour/ic_date.svg"></div>
                       <div class="div-text">{{trip.tourCheckinDisplay}}</div>
                     </div>
                     <!-- Pax -->
-                    <div *ngIf="trip.checkInDate" class="d-flex">
+                    <div *ngIf="trip.checkInDate" class="d-flex m-top-4">
                       <div class="div-icon"><img style="height:12px" src="./assets/imgs/ic_people.svg"></div>
                       <div class="div-text div-maxwidth">{{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span><span *ngIf="trip.childAgesDisplay"> {{trip.childAgesDisplay}}</span></div>
                     </div>
