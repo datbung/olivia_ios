@@ -105,7 +105,7 @@
                             src="./assets/ic_airticket/bb.png">
 
                         </div>
-                        <div class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
+                        <div *ngIf="trip.bookingsComboData[0].flightNumner" class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
                         </div>
                       </div>
                   
@@ -176,7 +176,7 @@
                               src="./assets/ic_airticket/bb.png">
       
                           </div>
-                          <div class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
+                          <div *ngIf="trip.bookingsComboData[1].flightNumner" class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
                           </div>
                         </div>
                     
@@ -574,7 +574,7 @@
                         src="./assets/ic_airticket/bb.png">
     
                     </div>
-                    <div class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
+                    <div  *ngIf="trip.bookingsComboData[0].flightNumner" class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
                     </div>
                   </div>
           
@@ -643,7 +643,7 @@
               src="./assets/ic_airticket/bb.png">
     
           </div>
-          <div class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
+          <div  *ngIf="trip.bookingsComboData[1].flightNumner" class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
           </div>
         </div>
      
@@ -1800,7 +1800,7 @@
                                 src="./assets/ic_airticket/bb.png">
         
                             </div>
-                            <div class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
+                            <div  *ngIf="trip.itemdepart.flightNumner" class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
                             </div>
                           </div>
                       
@@ -1871,7 +1871,7 @@
                                   src="./assets/ic_airticket/bb.png">
           
                               </div>
-                              <div class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                              <div *ngIf="trip.itemreturn.flightNumner" class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
                               </div>
                             </div>
                         
@@ -1949,7 +1949,7 @@
                                 src="./assets/ic_airticket/bb.png">
         
                             </div>
-                            <div class="div-ticket">{{item.FlightNumber }} - {{item.TicketClass }}
+                            <div *ngIf="item.FlightNumber" class="div-ticket">{{item.FlightNumber }} - {{item.TicketClass }}
                             </div>
                           </div>
                       
@@ -2026,7 +2026,7 @@
                                   src="./assets/ic_airticket/bb.png">
           
                               </div>
-                              <div class="div-ticket">{{item.FlightNumber }} - {{item.TicketClass }}
+                              <div *ngIf="item.FlightNumber" class="div-ticket">{{item.FlightNumber }} - {{item.TicketClass }}
                               </div>
                             </div>
                         
@@ -2620,7 +2620,7 @@
                       src="./assets/ic_airticket/bb.png">
 
                   </div>
-                  <div class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
+                  <div *ngIf="trip.itemdepart.flightNumner" class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
                   </div>
                 </div>
             
@@ -2689,7 +2689,7 @@
                       src="./assets/ic_airticket/bb.png">
 
                   </div>
-                  <div class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                  <div *ngIf="trip.itemreturn.flightNumner" class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
                   </div>
                 </div>
             
@@ -2765,73 +2765,15 @@
         </div>
       </div>
     </ng-template>
-      <div class="div-marginpayment" *ngIf="!trip.isBookingVMBQT && trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
-        <div class="div-split-panel"></div>
-        <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
-      </div>
-      <div class="div-marginpayment" *ngIf="!trip.isBookingVMBQT && trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
-        <div class="div-split-panel"></div>
-        <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
-        <div class="div-btn-payment div-mytrip">
-            <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
-        </div>
-        </div>
-          <!-- Hình thức ck ngân hàng -->
-          <div *ngIf="!(trip.pay_method==3||trip.pay_method==51||trip.pay_method==2)">
-            <div class="d-flex-later">
-              <div class="d-img">
-                <img src={{trip.urlimgbank}}>
-              </div>
-              <div class="div-center">
-                <ion-label class="cls-text">
-                {{trip.bankName}}
-                </ion-label>
-                <!-- <div class="mt6">
-                  <ion-label (click)="openWebpage()" class="cls-textopen">
-                    Mở website/ứng dụng {{trip.textbank}}
-                  </ion-label>
-                </div> -->
-              </div>
-            </div>
-            <div class="div-text-payment">
-              <p class="text-payment-info" text-wrap>
-                Số TK: <b>{{trip.accountNumber}}</b><a class='text-copy' (click)='copyClipboard(trip.accountNumber)'>Sao chép</a>
-              </p>
-              <p class="text-payment-info" >
-                Người nhận: Công ty Cổ Phần IVIVU.COM<a class='text-copy' (click)='copyClipboard("Người nhận: Công ty Cổ Phần IVIVU.COM")'>Sao chép</a>
-              </p>
-              <p class="text-payment-info" text-wrap>
-                Nội dung chuyển tiền: <b class="text-booking text-red">{{trip.booking_id}}</b><a class='text-copy' (click)='copyClipboard(trip.booking_id)'>Sao chép</a>
-              </p>
-              <p class="text-payment-info" text-wrap>
-                Tổng tiền: <b class="text-bold">{{trip.priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
-              </p>                    
-            </div>
-          
-          </div>
-          <!-- payoo tại của hàng -->
-          <div *ngIf="trip.pay_method==3" class="d-flex-later">
-            <p class="text-payment-info" text-wrap>
-              Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">{{trip.priceShow}} VND</b>
-            </p>
-          </div>
-          <div *ngIf="!(trip.pay_method==51||trip.pay_method==2)" class="mt16">
-            <label class="text-other">Hoặc thanh toán bằng phương thức khác</label>
-          </div>
-          <div *ngIf="!(trip.pay_method==3||trip.pay_method==51||trip.pay_method==2)" class="div-btn-payment mt16 padding-bottom-16">
-            <button (click)="paymentselect(trip,0)" ion-button round outline class="button btn-payment">Đổi phương thức thanh toán</button>
-        </div>
-        <div *ngIf="trip.pay_method==3" class="div-btn-payment mt16 padding-bottom-16">
-          <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Đổi phương thức thanh toán</button>
-      </div>
-      </div>
+    
+
     </div>
 
     <div *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
       <div class="div-split-panel"></div>
       <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
     </div>
-      <div *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
+      <div class="div-marginpayment" *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)" >
         <div class="div-split-panel"></div>
         <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
           <div class="div-payment-combo-flight">
