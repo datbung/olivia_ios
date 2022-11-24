@@ -79,125 +79,52 @@
 
         </div>
       </ion-row>
-     
-    </div>
-
-  </div>
-  <div *ngIf="activeTabTrip == 1 && hasloaddata && listMyTrips.length > 0" style="height:100%">
-    <div *ngIf="(listMyTrips && listMyTrips.length ==1 && listMyTrips[0].booking_type == 'TOUR' ) else bookingnormal">
-      
-      <div class="div-mytrip item-booking-tour-detail">
-        <ion-item-group>
-          <ion-row class="row-bkg-id">
-            <ion-col size="8" class="col-bookingid" *ngIf="!listMyTrips[0].isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
-                  class="bkg-id">{{listMyTrips[0].booking_id}}</span></label>
-            </ion-col>
-                  <ng-template #flybooking>
-                    <ion-col size="8" style="align-self: baseline;"><label  class="label-bkg-id">Mã đơn hàng: <span class="bkg-id">{{listMyTrips[0].booking_id}}</span></label></ion-col>
-                </ng-template> 
-
-            <ion-col size="4" class="col-bkg-status p-r-0 "
-              *ngIf="!listMyTrips[0].isFlyBooking && listMyTrips[0].payment_status != 9 && (listMyTrips[0].payment_status != 3 && listMyTrips[0].payment_status != -2)">
-              <div *ngIf="(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5) else waitpayment">
-                <div><label class="label-text-paymented">Đã thanh toán</label></div>
-                <div class="m-top-4"><label class="label-text-processing" *ngIf="!listMyTrips[0].approve_date">(Chờ xử lý)</label></div>
-              </div>
-              <ng-template #waitpayment>
-                <label *ngIf="listMyTrips[0].payment_status == 0 && listMyTrips[0].deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-paymented">Chờ thanh toán</label>
-                <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-paymented">Chờ thanh toán</label></ng-template>
-              </ng-template>
-            </ion-col>
-            <ion-col size="4" class="col-bkg-status"  *ngIf="listMyTrips[0].isFlyBooking && listMyTrips[0].payment_status != 9 && (listMyTrips[0].payment_status != 3 && listMyTrips[0].payment_status != -2)">
-              <div *ngIf="listMyTrips[0].bookingsComboData && listMyTrips[0].bookingsComboData.length > 1">
-                  <label *ngIf="( (listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5) && listMyTrips[0].bookingsComboData[0].issueTicketDate!='' && listMyTrips[0].bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
-                  <ng-template #notpayment>
-                    <div *ngIf="(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5)">
-                      <div><label class="label-text-paymented">Đã thanh toán</label></div>
-                      <div class="m-top-4"><label class="label-text-processing" *ngIf="!listMyTrips[0].bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
-                    </div>
-                    <label class="label-text-waitpayment" *ngIf="!(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5)">Chưa thanh toán</label>
-                  </ng-template>
-              </div>
-              <div *ngIf="listMyTrips[0].bookingsComboData && listMyTrips[0].bookingsComboData.length == 1">
-                  <label *ngIf="( (listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5) && listMyTrips[0].bookingsComboData[0].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
-                  <ng-template #notpayment>
-                    <div *ngIf="(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5)">
-                      <div><label class="label-text-paymented">Đã thanh toán</label></div>
-                      <div class="m-top-4"><label class="label-text-processing" *ngIf="!listMyTrips[0].bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
-                    </div>
-                    <label class="label-text-waitpayment" *ngIf="!(listMyTrips[0].payment_status == 1 || listMyTrips[0].payment_status == 5)">Chưa thanh toán</label>
-                  </ng-template>
-              </div>
-            </ion-col>
-            <ion-col size="4" class="col-bkg-status"
-              *ngIf="listMyTrips[0].payment_status == 9"><label class="label-text-paymented">Chờ hỏi phòng</label></ion-col>
-            <ion-col size="4" style="text-align: right;font-size: 12px;color:#f79221;padding: 5px 5px 5px 0px;"
-              *ngIf="(listMyTrips[0].payment_status == 3 || listMyTrips[0].payment_status == -2)"><label class="lbl-waitpayment label-text-waitpayment">Đã hủy</label></ion-col>
-          </ion-row>
-
-          <div class="item-room padding-0 " *ngIf="!isFlyBooking && !listMyTrips[0].bookingOffType">
-              <div class="div-wrapimg">
-                  <div *ngIf="listMyTrips[0].avatar else noavatar">
-                    <img *ngIf="listMyTrips[0].avatar.indexOf('http') == -1" class="img-avatar" src="https:{{listMyTrips[0].avatar}}">
-                    <img *ngIf="listMyTrips[0].avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{listMyTrips[0].avatar}}">
-                  </div>
-                  <ng-template #noavatar>
-                    <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
-                  </ng-template>
-                </div>
-                <div class="col-mytrip-text-description">
-                   <!-- Tên tour -->
-                  <div *ngIf="listMyTrips[0].hotel_name">
-                    <ion-label class="label-tourname">{{listMyTrips[0].hotel_name}}
-                      <span class="trip-star" *ngIf="listMyTrips[0].RatingStar"><img *ngIf="listMyTrips[0].RatingStar!=0" src={{listMyTrips[0].RatingStar}}></span>
-                    </ion-label>
-                  </div>
-                  <div class="text-left">
-                  <!-- Ngày khởi hành -->
-                  <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
-                    <div class="div-icon"><img class="icon-tour-detail"  src="./assets/ic_tour/ic_date.svg"></div>
-                    <div class="div-text">{{listMyTrips[0].tourCheckinDisplay}}</div>
-                  </div>
-                  <!-- Pax -->
-                  <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
-                    <div class="div-icon"><img style="height:12px" src="./assets/imgs/ic_people.svg"></div>
-                    <div class="div-text div-maxwidth">{{listMyTrips[0].totalPaxStr}} <span *ngIf="listMyTrips[0].textChildDisplay">{{listMyTrips[0].textChildDisplay}}</span><span *ngIf="listMyTrips[0].childAgesDisplay"> {{listMyTrips[0].childAgesDisplay}}</span></div>
-                  </div>
-
-              <div class="padding-0 m-bottom-16" *ngIf="!isFlyBooking && !listMyTrips[0].bookingOffType">
-                  <div class="div-wrapimg">
-                      <div *ngIf="listMyTrips[0].avatar else noavatar">
-                        <!-- <img *ngIf="listMyTrips[0].avatar.indexOf('http') == -1" class="img-avatar" src="https:{{listMyTrips[0].avatar}}">
-                        <img *ngIf="listMyTrips[0].avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{listMyTrips[0].avatar}}"> -->
-                        <img class="img-avatar" src="{{listMyTrips[0].avatar}}">
-                      </div>
-                      <ng-template #noavatar>
-                        <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
-                      </ng-template>
-                    </div>
-                    <div class="col-mytrip-text-description">
-                       <!-- Tên tour -->
-                      <div *ngIf="listMyTrips[0].hotel_name">
-                        <ion-label class="label-tourname">{{listMyTrips[0].hotel_name}}
-                          <span class="trip-star" *ngIf="listMyTrips[0].RatingStar"><img *ngIf="listMyTrips[0].RatingStar!=0" src={{listMyTrips[0].RatingStar}}></span>
-                        </ion-label>
-                      </div>
-                      <div class="text-left">
-                      <!-- Ngày khởi hành -->
-                      <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
-                        <div class="div-icon"><img class="icon-tour-detail"  src="./assets/ic_tour/ic_date.svg"></div>
-                        <div class="div-text">{{listMyTrips[0].tourCheckinDisplay}}</div>
-                      </div>
-                      <!-- Pax -->
-                      <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
-                        <div class="div-icon"><img style="height:12px" src="./assets/imgs/ic_people.svg"></div>
-                        <div class="div-text div-maxwidth">{{listMyTrips[0].totalPaxStr}} <span *ngIf="listMyTrips[0].textChildDisplay">{{listMyTrips[0].textChildDisplay}}</span><span *ngIf="listMyTrips[0].childAgesDisplay"> {{listMyTrips[0].childAgesDisplay}}</span></div>
-                      </div>
-    
+      <div *ngIf="activeTabTrip == 1 && hasloaddata" style="height:100%">
+        <div *ngIf="(listMyTrips && listMyTrips.length ==1 && listMyTrips[0].booking_type == 'TOUR' ) else bookingnormal">
+          
+          <div class="div-mytrip item-booking-tour-detail">
+            <ion-item-group>
+              <ion-row class="row-bkg-id">
+                <ion-col size="8" class="col-bookingid" *ngIf="!listMyTrips[0].isFlyBooking else flybooking"><label class="label-bkg-id">Mã đơn hàng: <span
+                      class="bkg-id">{{listMyTrips[0].booking_id}}</span></label>
+                </ion-col>
+                      <ng-template #flybooking>
+                        <ion-col size="8" style="align-self: baseline;"><label  class="label-bkg-id">Mã đơn hàng: <span class="bkg-id">{{listMyTrips[0].booking_id}}</span></label></ion-col>
+                    </ng-template> 
+                </ion-row>
+                    <div class="padding-0 m-bottom-16" *ngIf="!isFlyBooking && !listMyTrips[0].bookingOffType">
+                      <div class="div-wrapimg">
+                          <div *ngIf="listMyTrips[0].avatar else noavatar">
+                            <!-- <img *ngIf="listMyTrips[0].avatar.indexOf('http') == -1" class="img-avatar" src="https:{{listMyTrips[0].avatar}}">
+                            <img *ngIf="listMyTrips[0].avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{listMyTrips[0].avatar}}"> -->
+                            <img class="img-avatar" src="{{listMyTrips[0].avatar}}">
+                          </div>
+                          <ng-template #noavatar>
+                            <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
+                          </ng-template>
+                        </div>
+                        <div class="col-mytrip-text-description">
+                           <!-- Tên tour -->
+                          <div *ngIf="listMyTrips[0].hotel_name">
+                            <ion-label class="label-tourname">{{listMyTrips[0].hotel_name}}
+                              <span class="trip-star" *ngIf="listMyTrips[0].RatingStar"><img *ngIf="listMyTrips[0].RatingStar!=0" src={{listMyTrips[0].RatingStar}}></span>
+                            </ion-label>
+                          </div>
+                          <div class="text-left">
+                          <!-- Ngày khởi hành -->
+                          <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
+                            <div class="div-icon"><img class="icon-tour-detail"  src="./assets/ic_tour/ic_date.svg"></div>
+                            <div class="div-text">{{listMyTrips[0].tourCheckinDisplay}}</div>
+                          </div>
+                          <!-- Pax -->
+                          <div *ngIf="listMyTrips[0].checkInDate" class="d-flex m-top-4">
+                            <div class="div-icon"><img style="height:12px" src="./assets/imgs/ic_people.svg"></div>
+                            <div class="div-text div-maxwidth">{{listMyTrips[0].totalPaxStr}} <span *ngIf="listMyTrips[0].textChildDisplay">{{listMyTrips[0].textChildDisplay}}</span><span *ngIf="listMyTrips[0].childAgesDisplay"> {{listMyTrips[0].childAgesDisplay}}</span></div>
+                          </div>
+        
+                            </div>
                         </div>
                     </div>
-                </div>
-          </div>
          
         </ion-item-group>
         <div class="div-tour-pax" *ngIf="listMyTrips[0].tourListPax">
@@ -357,8 +284,9 @@
         </div>
         </div>
        
+         </div>
+        </div>
       </div>
-    </div>
     <ng-template #bookingnormal>
       
       <ion-list *ngFor="let trip of listMyTrips; let i = index" [ngClass]=" i == listMyTrips.length-1 ? 'p-bottom-97 item-list-shadow m-top-24' : (i ==0 ? 'item-list-shadow m-top-24' : 'item-list-shadow')">
@@ -3946,5 +3874,5 @@
   </div>
  
 </div> 
-
+  </div>
 </ion-content>
