@@ -35,50 +35,51 @@
 
 </ion-header>
 <ion-content #scrollArea class="order-content" [scrollEvents]="true">
+  <ion-row *ngIf="!hasloaddata && activeTabTrip == 1">
+    <div style="height: 100%;width:100%;padding: 16px">
+      <ion-row>
+        <ion-skeleton-text animated style="width:104px;margin: 0;height: 16px;"></ion-skeleton-text>
+      </ion-row>
+      <div>
+        <div class="div-sk-detail">
+          <ion-row class="row-item-hoteldetail-sk">
+            <ion-col size="4" style="padding: 0">
+              <ion-skeleton-text animated
+                style="width:104px;height:104px;border-radius:6px;margin:0;margin-top:16px;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="8" class="col-description-hoteldetail-sk" style="line-height: 16px;padding-top: 0">
+              <ion-skeleton-text animated style="width: 50%;margin: 0;height: 16px;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 100%;margin: 0;margin-top:40px;height: 16px;">
+              </ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 50%;margin: 0;margin-top:16px;height: 16px;">
+              </ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="row-item-description-sk">
+            <ion-skeleton-text animated style="width: 104px;margin: 0;margin-top:32px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 83%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 67%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 67%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+          </ion-row>
+          <ion-row class="row-item-button-sk">
+            <ion-skeleton-text animated
+              style="width: 100%;margin: 0;height: 48px;border-radius: 6px;margin-top:48px"></ion-skeleton-text>
+          </ion-row>
+        </div>
+      </div>
+
+    </div>
+  </ion-row>
   <div *ngIf="listMyTrips.length > 0" [ngClass]="(!loginuser|| listMyTrips.length ==0) ? 'div-order-content h100' : 'div-order-content '">
     <div [ngClass]="activeTabTrip == 1 ? 'card-background-page-mytrips' : 'card-background-page-mytrips p-history'">
 
-      <ion-row *ngIf="!hasloaddata && activeTabTrip == 1">
-        <div style="height: 100%;width:100%;padding: 16px">
-          <ion-row>
-            <ion-skeleton-text animated style="width:104px;margin: 0;height: 16px;"></ion-skeleton-text>
-          </ion-row>
-          <div>
-            <div class="div-sk-detail">
-              <ion-row class="row-item-hoteldetail-sk">
-                <ion-col size="4" style="padding: 0">
-                  <ion-skeleton-text animated
-                    style="width:104px;height:104px;border-radius:6px;margin:0;margin-top:16px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="8" class="col-description-hoteldetail-sk" style="line-height: 16px;padding-top: 0">
-                  <ion-skeleton-text animated style="width: 50%;margin: 0;height: 16px;"></ion-skeleton-text>
-                  <ion-skeleton-text animated style="width: 100%;margin: 0;margin-top:40px;height: 16px;">
-                  </ion-skeleton-text>
-                  <ion-skeleton-text animated style="width: 50%;margin: 0;margin-top:16px;height: 16px;">
-                  </ion-skeleton-text>
-                </ion-col>
-              </ion-row>
-              <ion-row class="row-item-description-sk">
-                <ion-skeleton-text animated style="width: 104px;margin: 0;margin-top:32px;height: 16px;">
-                </ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 83%;margin: 0;margin-top:16px;height: 16px;">
-                </ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 67%;margin: 0;margin-top:16px;height: 16px;">
-                </ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 100%;margin: 0;margin-top:16px;height: 16px;">
-                </ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 67%;margin: 0;margin-top:16px;height: 16px;">
-                </ion-skeleton-text>
-              </ion-row>
-              <ion-row class="row-item-button-sk">
-                <ion-skeleton-text animated
-                  style="width: 100%;margin: 0;height: 48px;border-radius: 6px;margin-top:48px"></ion-skeleton-text>
-              </ion-row>
-            </div>
-          </div>
-
-        </div>
-      </ion-row>
+    
       <div *ngIf="activeTabTrip == 1 && hasloaddata" style="height:100%">
         <div *ngIf="(listMyTrips && listMyTrips.length ==1 && listMyTrips[0].booking_type == 'TOUR' ) else bookingnormal">
           
@@ -3577,6 +3578,7 @@
       </div>
     </div>-->
   </div>
+  </div>
   <!-- Food -->
   <div *ngIf="activeTabTrip == 2" >
     <div *ngIf="loginuser else tabfoodnotlogin" >
@@ -3876,7 +3878,7 @@
       </div>
     </div>
   </div>
- 
+  
 </div> 
 <div *ngIf="!loginuser" class="trip-empty">
   <div class="img-trip-empty">
@@ -3889,5 +3891,4 @@
     <button ion-button round outline class="button btn-trip-empty" (click)="goback()">Khám phá ngay</button>
   </div>
 </div>
-
 </ion-content>
