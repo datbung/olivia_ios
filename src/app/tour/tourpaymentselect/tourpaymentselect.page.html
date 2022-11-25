@@ -64,8 +64,8 @@
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div>
       </div>
       <div class="div-width-100 text-right m-bottom-16">
-        <div *ngIf="tourService.totalPriceBeforeDiscount && tourService.totalPrice != tourService.totalPriceBeforeDiscount" class="text-price-strike text-right">{{gf.convertNumberToString(tourService.totalPriceBeforeDiscount)}}<span class="text-price-strike-sub ">đ</span></div>
         <div class="text-total-price" >{{tourService.totalPriceStr}}<span class="text-price-sub">đ</span>
+        <div *ngIf="tourService.totalPriceBeforeDiscount && tourService.totalPrice != tourService.totalPriceBeforeDiscount" class="text-price-strike text-right">{{gf.convertNumberToString(tourService.totalPriceBeforeDiscount)}}<span class="text-price-strike-sub ">đ</span></div>
         </div>
         <div class="text-sub">Giá đã bao gồm thuế & phí.</div>
         

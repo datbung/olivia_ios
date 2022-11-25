@@ -590,7 +590,8 @@
                  </div>
               </div>
               <div class="div-button">
-                <button (click)="confirm()" ion-button round outline class="button button-done">Thông tin khách</button>
+                <button (click)="confirm()" ion-button round outline class="button button-done" *ngIf="activeStep == 1">Thông tin khách</button>
+                <button (click)="confirm()" ion-button round outline class="button button-done" *ngIf="activeStep == 2">Thanh toán</button>
               </div>
         </div>
     </div>

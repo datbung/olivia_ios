@@ -78,10 +78,11 @@
     
     .item-booking-tour-detail {
         padding-bottom: 24px;
+        margin-right: 8px;
         .item-room {
             min-height: 106px;
             margin-bottom: 16px;
-            padding: 16px 0 0 0 !important;
+            padding: 0 !important;
         }
         .div-wrapimg {
             width: 100px !important;
@@ -158,14 +159,14 @@
                   }
                 
             }
-            .div-line-tour {
-                margin: 8px 0;
-                height: 1px;
-                background-color: #dde0e4;
-            }
+           
           
         }
-
+        .div-line-tour {
+            margin: 8px 0;
+            height: 1px;
+            background-color: #dde0e4;
+        }
         .div-maxwidth {
             max-width: 167px;
             overflow: hidden;

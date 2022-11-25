@@ -3204,7 +3204,9 @@
                           
                         </div>
                         <div class="mt4">
-                          {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
+                          {{trip.totalPaxStr}} 
+                          <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
+                          <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
                         </div>
                         <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5" class="p-absolute-16">
                           <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
@@ -3271,21 +3273,14 @@
                               <div class="div-flightfrom">{{ trip.bookingsComboData[0].flightFrom }} <span class="m-left-4"> ({{trip.bookingsComboData[0].departCode}})</span></div>
                               <div class="text-time-fly">{{ trip.bookingsComboData[0].departureTime }} </div>
                               <div class="text-flight-datetime">{{ trip.checkInDisplay }} </div>
-<!--        
-                              <div class="div-logo div-width-100">
-                                <img class="img-logo" *ngIf="trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'vietjetair'" src="./assets/ic_airticket/ic_vietjet_b.png">
-                                <img class="img-logo" *ngIf="trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'jetstar'" src="./assets/ic_airticket/ic_jetstar_b.png">
-                                <img class="img-logo logo_vna" *ngIf="trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'vietnamairlines'"src="./assets/ic_airticket/logo_vna.png">
-                                <img class="img-logo" *ngIf=" trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
-                                <span class="text-fn p-left-8 m-top-6 text-small p-absolute" *ngIf="trip.bookingsComboData[0].flightNumner">{{trip.bookingsComboData[0].flightNumner}} - {{trip.bookingsComboData[0].departureTime}}</span>
-                            </div> -->
+
                           </div>
                           <div class="div-flight-inout">
-                              <img class="img-flight-inout" src="./assets/ic_mytripbooking/ico_2ways.svg" *ngIf="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) else oneway">
+                              <img class="img-flight-inout" src="./assets/ic_mytripbooking/ico_2ways.svg" *ngIf="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) else oneway">
                               <ng-template #oneway><img class="img-flight-inout img-oneway" src="../assets/ic_mytripbooking/ico_1way.svg"></ng-template>
                           </div> 
-                          <div [ngClass]="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) ? 'min-width-100 cls-text-overflow' : 'min-width-100 cls-text-overflow mt-30'">
-                            <div class="div-logo div-width-100" *ngIf=" trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ">
+                          <div [ngClass]="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) ? 'min-width-100 cls-text-overflow' : 'min-width-100 cls-text-overflow mt-30'">
+                            <div class="div-logo div-width-100" *ngIf=" trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1">
                               <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'vietjetair'" src="./assets/ic_airticket/ic_vietjet_b.png">
                               <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'jetstar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                               <img class="img-logo logo_vna" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'vietnamairlines'"src="./assets/ic_airticket/logo_vna.png">
@@ -3295,7 +3290,8 @@
                               <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumner">{{trip.bookingsComboData[1].flightNumner}}</span>
                             </div>
                               <div class="div-flightto">{{ trip.bookingsComboData[0].flightTo }} <span class="m-left-4"> ({{trip.bookingsComboData[0].arrivalCode}})</span></div>
-                              <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 " class="text-time-fly">{{ trip.bookingsComboData[1].departureTime }} </div>
+                              <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && (trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1)" class="text-time-fly">{{ trip.bookingsComboData[1].departureTime }} </div>
+                              <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') != -1" class="text-time-fly">{{trip.bookingsComboData[0].arrivalTime}} </div>
                               <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length ==1" class="text-time-fly-1">{{trip.bookingsComboData[0].arrivalTime}} </div>
                               <div class="text-flight-datetime">{{ trip.checkOutDisplay }} </div>
                               
@@ -3474,7 +3470,10 @@
                                 <img style="height:12px" src="./assets/imgs/ic_people.svg">
                               </ion-col>
                               <ion-col  class="col-address">
-                                {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
+                                {{trip.totalPaxStr}} 
+                                <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
+                                <span *ngIf="trip.childAgesDisplay">{{trip.childAgesDisplay}}</span>
+                                <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                               </ion-col>
                               <ion-col size="1" class="col-img-tour">
                                 <img class='img-arrow-tour' src="./assets/ic_tour/arrow_tour_mytrip.svg">

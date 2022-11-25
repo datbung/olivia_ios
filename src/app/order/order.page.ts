@@ -765,6 +765,15 @@ import { tourService } from '../providers/tourService';
                       let _listpax = element.totalPaxStr.split('|');
                       _listpax = _listpax.map((p)=>{ return  p.trim().split(' ').slice(1).join(' ').replace('n','N').replace('t','T') + ' x' + p.trim().split(' ')[0] });
                       element.tourListPax = _listpax;
+
+                      if(element.child_ages){
+                        let countstring = element.child_ages.match(/tuổi/g || []).length;
+                        let inputstr = element.child_ages;
+                        for (let index = 0; index < countstring; index++) {
+                            inputstr = inputstr.replace('tuổi','');
+                          }
+                          element.childAgesDisplay = inputstr;
+                      }
                     }
                     element.isFlyBooking = false;
                     
@@ -973,42 +982,19 @@ import { tourService } from '../providers/tourService';
                         element.isFlyBooking = true;
 
                         if(element.hotel_name.indexOf("VMB QT") != -1){
-                            element.isBookingVMBQT = true;
-
                             if(element.booking_json_data){
                               console.log(JSON.parse(element.booking_json_data));
                               element.bookingjson = JSON.parse(element.booking_json_data);
                               if(element.bookingjson && element.bookingjson.length >0){
                                 element.totalCost = 0;
+                                
                                 element.bookingjson.forEach(elementbkg => {
+                                  if(elementbkg && elementbkg.Supplier3rd == "Travelport"){
+                                    elementbkg.isBookingVMBQT = true;
+                                  }
                                   if(elementbkg && elementbkg.Transits){
                                     element.totalCost += elementbkg.TotalCost*1;
-                                    // if(elementbkg.Transits.length >1){
-                                    //   let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
-                                    //   let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
-                                    //   let diffminutes = moment(dt).diff(lt, 'minutes');
-                                    //   if(diffminutes){
-                                    //     let hours:any = Math.floor(diffminutes/60);
-                                    //     let minutes:any = diffminutes - (hours*60);
-                                    //     if(hours < 10){
-                                    //       hours = hours != 0?  "0"+hours : "0";
-                                    //     }
-                                    //     if(minutes < 10){
-                                    //       minutes = "0"+minutes;
-                                    //     }
-                                    //     elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
-                                    //   }
-                                     
-                                    // }
-                                    // elementbkg.Transits.forEach(element => {
-                                    //     element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                                    //     element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                                    //     element.departAirport = this.getAirportByCode(element.FromPlaceCode);
-                                    //     element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                                    //     let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
-                                    //     element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                                    //   });
-                                      //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                                    
                                     for (let index = 0; index < elementbkg.Transits.length; index++) {
                                         const element = elementbkg.Transits[index];
                                         element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
@@ -1777,7 +1763,7 @@ import { tourService } from '../providers/tourService';
                   let countstring = se.listMyTrips[0].child_ages.match(/tuổi/g || []).length;
                   let inputstr = se.listMyTrips[0].child_ages;
                   for (let index = 0; index < countstring; index++) {
-                      inputstr = inputstr.replace('tuổi','t');
+                      inputstr = inputstr.replace('tuổi','');
                     }
                     se.listMyTrips[0].childAgesDisplay = inputstr;
                 }
@@ -1851,6 +1837,15 @@ import { tourService } from '../providers/tourService';
                   let _listpax = elementHis.totalPaxStr.split('|');
                   _listpax = _listpax.map((p)=>{ return  p.trim().split(' ').slice(1).join(' ').replace('n','N').replace('t','T') + ' x' + p.trim().split(' ')[0] });
                   elementHis.tourListPax = _listpax;
+
+                  if(elementHis.child_ages){
+                    let countstring = elementHis.child_ages.match(/tuổi/g || []).length;
+                    let inputstr = elementHis.child_ages;
+                    for (let index = 0; index < countstring; index++) {
+                        inputstr = inputstr.replace('tuổi','');
+                      }
+                      elementHis.childAgesDisplay = inputstr;
+                  }
                 }
                 if(elementHis.booking_type == "20" || elementHis.booking_id.indexOf('OFF') != -1 || elementHis.booking_id.indexOf('TO') != -1){
                   
@@ -2017,12 +2012,16 @@ import { tourService } from '../providers/tourService';
                   if(elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1 || elementHis.booking_type == "CB_FLY_HOTEL"){
                     elementHis.isFlyBooking = true;
                     if(elementHis.hotel_name.indexOf("VMB QT") != -1){
-                      elementHis.isBookingVMBQT = true;
+                      
                       if(elementHis.booking_json_data){
                         console.log(JSON.parse(elementHis.booking_json_data));
                         elementHis.bookingjson = JSON.parse(elementHis.booking_json_data);
+                        
                         if(elementHis.bookingjson && elementHis.bookingjson.length >0){
                           elementHis.bookingjson.forEach(elementbkg => {
+                            if(elementbkg && elementbkg.Supplier3rd == "Travelport"){
+                              elementHis.isBookingVMBQT = true;
+                            }
                             if(elementbkg && elementbkg.Transits){
                               elementHis.totalCost += elementbkg.TotalCost*1;
                               // if(elementbkg.Transits.length >1){

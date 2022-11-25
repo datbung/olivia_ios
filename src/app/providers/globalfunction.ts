@@ -2477,7 +2477,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
     return new Promise((resolve, reject) => {
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlightInt + "gate/apiv1/CheckAvailable?resid="+data.reservationId,
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/CheckAvailable?resid="+data.reservationId,
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
