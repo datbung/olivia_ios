@@ -1897,7 +1897,8 @@ let AdddiscountPage = class AdddiscountPage {
                     'cache-control': 'no-cache',
                     'content-type': 'application/json'
                 },
-                body: { code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice : (!se._voucherService.isFlightPage ? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice), comboDetailId: se.bookCombo.ComboId },
+                body: { code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice : (!se._voucherService.isFlightPage ? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice), comboDetailId: se.bookCombo.ComboId,
+                    couponData: '' },
                 json: true
             };
             requestretry__WEBPACK_IMPORTED_MODULE_5__(options, function (error, response, body) {
@@ -18280,6 +18281,7 @@ let GlobalFunction = class GlobalFunction {
                 _providers_constants__WEBPACK_IMPORTED_MODULE_4__["C"].writeErrorLog(error, response);
             }
             else if (body) {
+                se.storage.set('checktoken', "1");
                 var obj = JSON.parse(body);
             }
         });

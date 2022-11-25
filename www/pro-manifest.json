@@ -2276,13 +2276,13 @@
   },
   {
     "href": "default~homefood-homefood-module~mytriphistory-mytriphistory-module~tab1-tab1-module~tab3-tab3-modul~e89954f6.js",
-    "size": 710018,
-    "integrity": "sha256-A6PNWtUuUrjp5Sm3eYdaQMCVtgK87IUu7i8EC6jROAs= sha384-TmVeI3h40IAcwanKogS+zx26j2Z3W4/kyA0dpVBkE0bO0J58SC2oXGDsFFvI6BYR sha512-+SedgmY4LH9YbjLksOMH4NdlvQBNQo3RybB0vGsAoAZ/s3CLrUhp/ij4Fnqg0WbXFSxNfkghpntyzpiUI0vZ3g=="
+    "size": 711624,
+    "integrity": "sha256-7An0c/HT7pkPWl5fcu/GyXD4mpSypghLhcEtlGPQG/g= sha384-TpyCQ0eNvTda9P3ToTuSWM1fZNbzemdSCht8rVLEUXqUFuFaAzQPQljrcypK2vOP sha512-qj59mLdU2KKxs56CadPeaKWhWlfIH+9aqzEuQtReHTSOWy0NpEhfkotoeG6c0VejCZjAcbZnaySQWD5tcfBuWQ=="
   },
   {
     "href": "default~homefood-homefood-module~tab1-tab1-module~tab3-tab3-module.js",
-    "size": 2769292,
-    "integrity": "sha256-/BfCq1+diwySogTuaEr8s7yW+J2CrLOGlS/cKncNZ74= sha384-9cxKcLFJ0TacchU3WykJtO9ndIt1m7R5QdttlIPJOoO4fsY78eRk5csMKNo3SIVN sha512-tNUuu7Nr7yEn95BZ0zhIdeZ6HcKDtnXbrVpb3qSsy9KeiUgM3QWcdHDKRJTvXF+ZLWVdLNovm3u6qWf+RhAuGA=="
+    "size": 2750292,
+    "integrity": "sha256-EMUi7Sdt/FELcZDgZu+nAuPDHB+M6ArxETwY+/1Uwgg= sha384-45FwOUSVBnVW/tAzCqbN3Ga/GnhlO5jRxQBqDYG9GPx7i9I8jh7Y880FTq0ap4Rk sha512-K6zDWmVDIv2ha/ZolDbyybQnaGOsIsVDBOzC/A9HnhHo2pNxI7YngW2PnYQ4BUVsdPqEGDLH+6L99xU7fhF1Bw=="
   },
   {
     "href": "default~homefood-homefood-module~tab1-tab1-module~tab3-tab3-module~userreviews-userreviews-module.js",
@@ -2351,8 +2351,8 @@
   },
   {
     "href": "flightaddservice-flightaddservice-module.js",
-    "size": 353360,
-    "integrity": "sha256-W4oo/QwqpNmn4n8yQg88/Brk8ZqrBpl/nVZzEAi/cM4= sha384-xJfFmiWpJbcbPlSUFitr71xyq8ECsQd93lYsnhClg8sH/Vbo5NIjHVuQKS1dQyNX sha512-vLvlewFgAPokWTdH3BvqEpN2FFJaRvvFH1HzILJKs9li7qlG5GjNW9UngR/wdAtkvwoOK7C+XZ8GscgvX6XTYg=="
+    "size": 353387,
+    "integrity": "sha256-O2Fi9Dnd9TGvsuwghStWit/JrgOEu8ai3u4T2aeSBUk= sha384-gO77iTHCmeVY6zsuvKghLtz0soVxExBaKL/T5foNcrMifpXv5cw+En47RoMzibY3 sha512-mwgMVrBDGSlYnlw5KsNgiOmLmbNBIwFHrrbVqfHuiNAAA2XwF1My4m6he+r2rq7oFG1I+5/URq+D5a8Y297Pvw=="
   },
   {
     "href": "flightcomboadddetails-flightcomboadddetails-module.js",
@@ -2441,13 +2441,13 @@
   },
   {
     "href": "flightinternational-flightadddetailsinternational-flightadddetailsinternational-module.js",
-    "size": 296627,
-    "integrity": "sha256-fv5YYh56V4NGcRNU4ccFvldU76lsKc8ebUgmPgH7C1A= sha384-S7HEOU2AfcRrxHLnUW6SzPrt4xpkdnwhDlzDvBIUPVwI9Z6iAMLRQLInJDExuoGp sha512-hc9XJqSpCUwyV56MHzqe2BV9NRDYjqxDx+arnFfw4MdzC6HkUO8s20XoFvs9csKLJxn+4OTeJecNxqyhD+dgUQ=="
+    "size": 296633,
+    "integrity": "sha256-6N8ZQoZkYY1aefui8wkK3MIrKXd/24HjMkZAoeRRQ/8= sha384-pdfrSYk6z+Nu89+bPjZh9yRT+jOdMTTkrFlAiLxfQ1sJbfQ/f+e7ETpRGCPJij56 sha512-SZpXOB/rPHLQCDeOwV8oBJMYBKvuQwXRB+smWL0NVC6+W5ZXdgTIKtOtd+xsvn/8ufmJq7GjjMStJFc5JUGNTA=="
   },
   {
     "href": "flightinternational-flightinternationalpaymentatoffice-flightinternationalpaymentatoffice-module.js",
-    "size": 23969,
-    "integrity": "sha256-cXOc4MMKugSSC+CVPZRwhDx1Lfz/1OQQA0ScGAzVDrY= sha384-z27V1O0y63REIz+3i9WEqBQj81T1G8/PisG/MEwIp5z9dSgEArgEtVRuHS2lKfHK sha512-DSEYoS3rYWLkzGk8mcQN9UFJsgJVqjHWOUjJbR0gQwQTiP43K8EvBlQ5lI4B8pl8NuPsHa8DF82g/uf6TsDaQA=="
+    "size": 23984,
+    "integrity": "sha256-GYPuJdfdA46FThhZWR5rorJiHV3GoYVeYM07O9D+/Ss= sha384-YUawdsc6pQ7a2Q4fMi8TmeSQEWCrpDb5LZ91El/OwkUPgl2K7Q+2t0lLy46DuMys sha512-iSLcaq+aPXw4PnfggQ2ndnbJKW+IsVUbEhMbahbs4aW+Ygj+JHvEZwKct5DPQ7AnucbBXAlsrecR04SvzvPW5w=="
   },
   {
     "href": "flightinternational-flightinternationalpaymentbank-flightinternationalpaymentbank-module.js",
@@ -2506,8 +2506,8 @@
   },
   {
     "href": "flightpaymentatoffice-flightpaymentatoffice-module.js",
-    "size": 22524,
-    "integrity": "sha256-IWwBCFSh4gZkBUbhIh4qrKKhT+RHx0IIPqrHAbe029A= sha384-eT4VioOvtOLgWNwyVIb3judQhXUnXrdaw1QkVtEYUth4T3MO0XaGbnfu0WcVckHe sha512-erpxPuBeAOZnZVpNDz+PB3R3gbraRJ4zioWSuMPW1Re7FxGl1RE+MwQxcHIfibYtLTEdn9YEhMan7tMojREYiQ=="
+    "size": 22539,
+    "integrity": "sha256-dKJl+0anwBMqZTpODROmptwy1m8nPwVL/prEKodjeJA= sha384-hou4/cU3dipx1BbGW4+JZTjZnzC4y0nlhRTblswr3DcIDqs7jDtAr3HpfsxIMPnq sha512-06xhmw0xA5dd3Wev83kUAH6wEuyVUKWIcVWC9hbJt+12h67IIAJwz1MNxXGlFkiUzDTmsbznjNGQ7rqLpXjGYA=="
   },
   {
     "href": "flightpaymentbank-flightpaymentbank-module.js",
@@ -2901,8 +2901,8 @@
   },
   {
     "href": "main.js",
-    "size": 2872264,
-    "integrity": "sha256-d7iGNZ7W+eo6qK9iIsp/HHqcMZKt3eBMgjupoLd/b4g= sha384-Y3QlRztiPU80FSvKCa0f0XFDAQY/nJvLl7fQV8ViDdsLNY4fQ9bAimKmWwPhLIXr sha512-t+d8oFUXI67rTYoCtnLm0/6Uh7TmhvfjU4DwG0xU32aewBF9I6r+OeMhGYNBTCHlfbr2uyxjXn8ACsUsdO7b4A=="
+    "size": 2872351,
+    "integrity": "sha256-kdfyahGGpEn8ysoYIEJL8EhLy1kvABMqWEYM8j+O0WI= sha384-BaUgoMNpjwMxtUv80PhphehdkH5PWTeoilLKyFGhWdJNC966Ow1AmFTKbNZcmh6K sha512-aaSiFGJpQgtXTQzUk988T8RCqXxzkTRU5deD0SyzBGa//UfWPsUrXUZnveGm8Cw5LqK0WF4srNlt0SaNK6u0lA=="
   },
   {
     "href": "marker-icon.2273e3d8ad9264b7daa5.png",
@@ -2961,8 +2961,8 @@
   },
   {
     "href": "mytripdetail-mytripdetail-module.js",
-    "size": 923911,
-    "integrity": "sha256-cNkeNca6bJieCzmBwEhcSGdIrat4Hb9aZxSOoS9hHlI= sha384-/fDSolAMvYt9w2uJ4wERg3Wh3PvwEUtkzAhF9wMaf0QhfTMETjQRJobezVwjb07Z sha512-W2KD5IvdCfZlYMNpedo2GqNIwqToq/PsOVQfud4v+RJeS/I4sVh+TGqJJs7b+akyHId7Ch7fUzbtE06lI+ZmbA=="
+    "size": 921846,
+    "integrity": "sha256-4k3YnfygLQvJ55nIB0flaIGj9/WGKoWdXO+3zJtLtdU= sha384-o0s/O+ElWx9Obb+50oYtKZSD+gDXFqKxzcifr4rZBJqFPWPSG+HVtgINy6KOftP8 sha512-rs+aVBvQSD/KoDXwF0b8EUF6t/EtxfQwQPN0c+Cn+vFA965iQA5/xKjEFZ3ugX/JoyrurZLWti9YP2AhYYGsQg=="
   },
   {
     "href": "mytrippaymentbank-mytrippaymentbank-module.js",
@@ -3116,8 +3116,8 @@
   },
   {
     "href": "roompaymentlive-roompaymentlive-module.js",
-    "size": 26719,
-    "integrity": "sha256-clw8iCr159btwd/azMw3JK+8gub7Tp04MMoBickt/vk= sha384-kR1DQSYDli1YBLIcRI21bzR6lFGl1v2EPF2Ms7zHXZdAx4cZw7N4Iuxrmjxbza95 sha512-T9FMyXLEhdyO2NTSFPsun5gQl/lTvJVqZ2zeJkXuumX0qbFLSiniOvNnJDvTsBLoXgU9MRximCgwQ3vk9B0u7g=="
+    "size": 26735,
+    "integrity": "sha256-jw/AsIkS2GrCVHpZeQLZ8++bYQLGq006bnXcLN15gMs= sha384-IYmaPTIIDFzJDk0R4Bao1/c91Tf6Is9kgT51LgxK5kHwa17OhSwF8M3AcyQNT9+l sha512-OevX5bFYIhOEQ+DbS8e8xRH3h7LyBmPd5ROSRovB1qLj3UXydcqecxPDf4gsmpvHg7hCrS9DbKKvhY/cv9IerQ=="
   },
   {
     "href": "roompaymentpayoo-roompaymentpayoo-module.js",
@@ -3191,8 +3191,8 @@
   },
   {
     "href": "tab1-tab1-module.js",
-    "size": 1053315,
-    "integrity": "sha256-AeZvFmAVb45c0+wZabuY0umSRwToATFn2N0rmN14Yz4= sha384-wNjNwAf2v3ijpDoCDoohcdZBccU0ni+2oADiB2ySa2JjouvK0CBHhBYneCQi7xp1 sha512-TjkYMPYzf0S3t7/ZpAt1v1LX0ZWqMYjgJFPzVy+0x2C2QV1g0oGen4OFPEyrKD3amND/JtW1DvnowKl9FaJa4A=="
+    "size": 1053761,
+    "integrity": "sha256-XNa6PCYXHU2IiebCfXyJ/woZVU80cNPz389E3pyyOec= sha384-3weCbbpTAriAmXrqC9cvyu5pKgt5Sar0StLozwJmh17bRBzuzxCzyGA5PxxIfSyv sha512-7bq5TtHtqUg07LfuFuC4iDQAESZ4gRsjddiEyIoHAntNx8/+E/9hWXuAKmjQv3x8TjG6iGjP5V+KzWqpGRjCeQ=="
   },
   {
     "href": "tab2-tab2-module.js",
@@ -3286,8 +3286,8 @@
   },
   {
     "href": "tour-tourpaymentselect-tourpaymentselect-module.js",
-    "size": 99172,
-    "integrity": "sha256-zMI94aGVGThBlhThz/wpGRssv49Tb+CIDjlbbGErq60= sha384-DSYLFhGDo8kz0ElloOV1bmLpBDvdr3xwBe2/cDVNKx5YKmRhMbzrOp2wswELJCOW sha512-m3tu4tov0RVtO4Rovoi7GYkHpUpcUqPhYLTJRpE3+qq8/qP8+HndwI614ZSYV20GKp4MkcUbMenCXjoYwHwv+w=="
+    "size": 99236,
+    "integrity": "sha256-D7M/tiBUWxvlmjNNXsST78RPwPxiFgWrEGcd+p1S0cs= sha384-YU0TC92To+ef9aq7lapACkxlLzWEjn/fgbbUTzmPFFR+NOI8arTZIKQ9TvlwSjhB sha512-hqf5lHR0TVifRH52egjQkIXsDNIyNG8MXBHRrkxugeBvJDjAS9v4hIhaS5gkPgHU32LdoOIYZUSz9oheRSOriQ=="
   },
   {
     "href": "tour-tourrequestdone-tourrequestdone-module.js",
@@ -8813,6 +8813,21 @@
     "href": "assets/ic_mytripbooking/clock.svg",
     "size": 400,
     "integrity": "sha256-2YIsL6IrNLgC6wI3BD11o3HQ4aSfTxUflrf+lWvA7ds= sha384-ngI8oFBRvVCLdTg/L/MNL0DvLghwg+454kGQGPq7Yka1UIdXje4cM7aWysb54/pN sha512-EmQZ3lEZn2OAcZE/BjVdka42d9LeBnCvNHmFiHo7JbvbBl9pw8XT8AoT2Vf69a7Ge73AU3jKPxzk08Pk4yclRw=="
+  },
+  {
+    "href": "assets/ic_mytripbooking/ico_1way.svg",
+    "size": 275,
+    "integrity": "sha256-BsnO7vPXiGV6XnkBan3d3nhlo91/zHIttYykJoVttdY= sha384-bEBcfXY/9muWyDj9nzhWq6cobGjOoHxddR14BVjFuFVl57st+oaMvhlVmOaoM9cG sha512-hP5AQKP/KMb7KmPgCMryzlabfwzSjUkJTEorniARgZ10BhKehJmVELdIuYQLun/h/qIJJTsLXBhMDsu13wGo0g=="
+  },
+  {
+    "href": "assets/ic_mytripbooking/ico_2ways.svg",
+    "size": 495,
+    "integrity": "sha256-6SOv+zgPrRxVyM9oLBBACoSL+DGRZ6/axxMVlVRK98c= sha384-NmfO8EV8/MOSA/sPbM1x61WvcyttFq/83Lq6BGKE2b8hMGxUckg6BLj3KBJBLbwd sha512-K0MjU7bfSTxK+G7NnNl8H2nvpHw1M9Rbe+0hh1UaX64a+6rlnEfA426gYKbUzctYWznzOR1/cknsPiE4zLGllQ=="
+  },
+  {
+    "href": "assets/ic_mytripbooking/ico_arrow.svg",
+    "size": 262,
+    "integrity": "sha256-OW6RvLSSCE9h0Gu+HgYix0AminvVbAKEc8CLvdMJgRQ= sha384-jqA2j4oYpVbeT2xkTXVTDgcgfqPfUunO8ukK1G0XuRDJLVDW+hoiJaU7vBbTtNlg sha512-x6hBMVGV6gj7+hQXMYnUPCM5B1lv1seJvDyU6Ry1o6ISpCruTIvkIqMMJOutJfgNP6mtokJ9kIvliUr+y3l9VA=="
   },
   {
     "href": "assets/ic_ordersupport/Group.svg",
