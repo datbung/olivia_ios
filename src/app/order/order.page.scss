@@ -2580,16 +2580,24 @@ color: #e52822
     
 .div-mytrip.item-booking-tour-detail {
     background: #fff;
-    margin: -24px -16px;
+    margin: -24px -8px;
     padding: 16px;
     margin-top: 0;
     padding-bottom: 36px !important;
     
+    .m-top-4 {
+        margin-top: 4px;
+    }
     .p-left-11 {
         padding-left: 11px;
     }
+    
     .col-bkg-status {
         text-align: right;
+        padding-right: 0;
+    }
+    .col-bookingid {
+        padding-left: 0;
     }
     .item-room {
         min-height: 106px;
