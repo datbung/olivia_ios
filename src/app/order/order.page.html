@@ -335,7 +335,7 @@
         <div *ngIf="(listMyTrips && listMyTrips.length ==1) else divshowlisttrip">
           
                   <!-- bkg VMBQT -->
-            <div class="div-VMBQT div-flybooking" *ngIf="trip.isBookingVMBQT else otherbooking" >
+            <div class="div-VMBQT div-flybooking m-top-12" *ngIf="trip.isBookingVMBQT else otherbooking" >
                <div [ngClass]="!trip.bookingsComboData[0].issueTicketDate?'div-bkgno d-flex align-center':'div-bkgno d-flex'">
                   <div class="text-bkg">Mã booking: </div>
                   <div class="bkg-no">{{trip.booking_id}}</div>
@@ -964,7 +964,7 @@
   
                   <div  size="4" class="col-bkg-status position-absolute "
                     *ngIf="!trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
-                    <div  [ngClass]="!trip.approve_date? 'm-t-11':''" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">
+                    <div  [ngClass]="!trip.approve_date? 'm-top-11':''" *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">
                       <div><label class="label-text-paymented">Đã thanh toán</label></div>
                       <div class="m-top-4"><label class="label-text-processing ml-7" *ngIf="!trip.approve_date">(Chờ xử lý)</label></div>
                     </div>
@@ -1768,7 +1768,7 @@
                       </ion-row>
                     </div>
                     <!-- Vùng bkg Flight -->
-                    <div class="div-flybooking" *ngIf="isFlyBooking">
+                    <div class="div-flybooking m-top-12" *ngIf="isFlyBooking">
                       <div *ngIf="trip.bookingsComboData[0]">
                         <div class="div-split"></div>
             
@@ -2023,7 +2023,7 @@
                           <div>
                             <div class="div-delivery_payment-od" *ngIf="trip.payment_status == 0 && trip.delivery_payment_date_display">
                                 Chờ thanh toán tới <span class="text-waitpayment">{{ trip.delivery_payment_time_display}}</span> ngày <span class="text-waitpayment">{{ trip.delivery_payment_date_display}}</span></div>
-                            <div class="div-flybooking">
+                            <div class="div-flybooking m-top-12">
                               <div *ngIf="!ischeckStops">
                                 <!-- Chiều đi -->
                                 <div>
@@ -3554,17 +3554,7 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll> 
 
-    <div *ngIf="!loginuser" class="trip-empty">
-      <div class="img-trip-empty">
-        <img class="img-empty" src="./assets/empty/trip_empty.svg">
-      </div>
-      <div class="text-trip-empty">
-        <label>Quý khách chưa có chuyến đi nào với iVIVU.</label>
-      </div>
-      <div class="button-trip-empty">
-        <button ion-button round outline class="button btn-trip-empty" (click)="goback()">Khám phá ngay</button>
-      </div>
-    </div>
+  
     <!-- <div
       *ngIf="(((hasloaddata && !hasdata) || listMyTrips.length == 0) && slide && loginuser) else notCombo"
       class="trip-empty">
@@ -3915,5 +3905,16 @@
   </div>
  
 </div> 
+<div *ngIf="!loginuser" class="trip-empty">
+  <div class="img-trip-empty">
+    <img class="img-empty" src="./assets/empty/trip_empty.svg">
+  </div>
+  <div class="text-trip-empty">
+    <label>Quý khách chưa có chuyến đi nào với iVIVU.</label>
+  </div>
+  <div class="button-trip-empty">
+    <button ion-button round outline class="button btn-trip-empty" (click)="goback()">Khám phá ngay</button>
+  </div>
+</div>
 
 </ion-content>
