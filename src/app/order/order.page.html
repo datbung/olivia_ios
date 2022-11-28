@@ -1243,7 +1243,7 @@
                                       <img style="height:12px" src="./assets/ic_hoteldetail/group.svg">
                                     </ion-col>
                                     <ion-col class="text-address" [ngClass]="trip.payment_status == 1 ? '': ''">
-                                        <label>{{trip.address}}</label>
+                                        <label class="text-line-clamp">{{trip.address}}</label>
                                     </ion-col>
                                   </ion-row>
                                    <!-- số đt -->
@@ -1614,7 +1614,7 @@
                           </div>
                         </div>
                         <div  class="div-panel-1px"></div>
-                        <div class="d-flex">
+                        <div *ngIf="trip.booking_type != 'COMBO_FLIGHT'" class="d-flex">
                           <div  class="text-info-2">
                             Hướng dẫn nhận phòng
                           </div>
@@ -1635,7 +1635,7 @@
                           </div>
                         </div>
                     </div>
-                        <div class="div-panel-1px"></div>
+                        <div *ngIf="trip.booking_type != 'COMBO_FLIGHT'" class="div-panel-1px"></div>
                         <div (click)="info()" class="d-flex">
                           <div  class="text-info-2">
                             Các thông tin thêm
