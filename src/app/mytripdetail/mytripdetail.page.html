@@ -697,7 +697,7 @@
                   </div>
                 </div>
                 <div  class="div-panel-1px"></div>
-                <div *ngIf="trip.booking_type != 'COMBO_FLIGHT'" (click)="policy()" class="d-flex">
+                <div *ngIf="trip.booking_type != 'COMBO_FLIGHT' && trip.booking_type != 'COMBO_VXR'"  (click)="policy()" class="d-flex">
                   <div  class="text-info-2">
                     Hướng dẫn nhận phòng
                   </div>
@@ -718,7 +718,7 @@
                   </div>
                 </div>
             </div>
-                <div *ngIf="trip.booking_type != 'COMBO_FLIGHT'" class="div-panel-1px"></div>
+                <div *ngIf="trip.booking_type != 'COMBO_FLIGHT' && trip.booking_type != 'COMBO_VXR'" class="div-panel-1px"></div>
                 <div (click)="info()" class="d-flex">
                   <div  class="text-info-2">
                     Các thông tin thêm

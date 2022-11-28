@@ -882,7 +882,7 @@ import { tourService } from '../providers/tourService';
                       element.departAirport = se.getAirportByCode(element.departCode);
                       element.returnAirport = se.getAirportByCode(element.arrivalCode);
                       se.getRatingStar(element);
-                      // if (element.booking_id=='IVIVU1003665') {
+                      // if (element.booking_id=='IVIVU1003484') {
                       //   se.listMyTrips.push(element);
                       // }
                        se.listMyTrips.push(element);
