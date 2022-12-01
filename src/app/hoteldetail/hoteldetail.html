@@ -37,9 +37,9 @@
        
       <ion-slides (ionSlideDidChange)="test()" [options]="slideOpts" #mySlider class="slide-image-hotel">
         
-        <ion-slide *ngFor="let slide of slideData">
+        <ion-slide *ngFor="let slide of slideData; let idximg = index" (click)="showSlideImage(idximg)">
           <!-- <img-loader style="height: auto;width: 100%" [src]="slide.LinkImage" useImg fallbackAsPlaceholder="./assets/imgs/demopic.svg"></img-loader> -->
-          <img [src]="slide.LinkImage" style="height: auto;width: 100%" class="preview" alt="image"/>
+          <img [src]="slide.LinkImage" style="height: 212px;width: 100%;object-fit: cover;" class="preview" alt="image"/>
           <div *ngIf="slide.CaptionImg" class="div-img-caption-grad"></div>
           <div *ngIf="slide.CaptionImg" class="div-img-caption">{{slide.CaptionImg}}</div>
         </ion-slide>

@@ -68,9 +68,12 @@ export class MytripaymentflightpayooPage implements OnInit {
 
       }, 60000 * 9.1);
     }
-    this.total=this._flightService.itemFlightCache.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-    this.textHours = moment(this._flightService.itemFlightCache.periodPaymentDate).format("HH:mm");
-    this.PeriodPaymentDate = this._flightService.itemFlightCache.periodPaymentDate ? this.gf.getDayOfWeek(this._flightService.itemFlightCache.periodPaymentDate).dayname + ", " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("DD") + " thg " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("MM") : "";
+    this.total=this.activityService.objPaymentMytrip.trip.priceShow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    if(this._flightService.itemFlightCache.periodPaymentDate){
+      this.textHours = moment(this._flightService.itemFlightCache.periodPaymentDate).format("HH:mm");
+      this.PeriodPaymentDate = this._flightService.itemFlightCache.periodPaymentDate ? this.gf.getDayOfWeek(this._flightService.itemFlightCache.periodPaymentDate).dayname + ", " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("DD") + " thg " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("MM") : "";
+    }
+   
     this.getSummaryBooking().then((databkg:any) => {
       this._flightService.itemFlightCache.dataSummaryBooking = databkg;
     })   

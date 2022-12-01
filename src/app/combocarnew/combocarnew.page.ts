@@ -456,6 +456,7 @@ export class CombocarnewPage implements OnInit {
             var element = se.checkElement(se.jsonroom);
             if (element) {
               se.nameroom = element.ClassName;
+              se.bookCombo.ComboDetail.comboDetail.roomId=element.MealTypeRates[0].RoomId
               se.PriceAvgPlusTA = element.MealTypeRates[0].PriceAvgPlusTotalTA;
               se.elementMealtype = element.MealTypeRates[0];
               se.roomnumber =se.elementMealtype.TotalRoom;
@@ -473,6 +474,7 @@ export class CombocarnewPage implements OnInit {
               if (element) {
            
                 se.nameroom = element.ClassName;
+                se.bookCombo.ComboDetail.comboDetail.roomId=element.MealTypeRates[0].RoomId
                 se.PriceAvgPlusTA = element.MealTypeRates[0].PriceAvgPlusTotalTA;
                 se.elementMealtype = element.MealTypeRates[0];
                 se.roomnumber =se.elementMealtype.TotalRoom;

@@ -1110,7 +1110,7 @@ export class HotelDetailPage implements OnInit {
                 se.slideData = jsondata.HotelImages;
               }
               else {
-                var item = { LinkImage: jsondata.Avatar }
+                var item = { LinkImage: jsondata.Avatar, ImageUrl: jsondata.Avatar }
                 se.slideData.push(item);
               }
             }
@@ -1120,6 +1120,7 @@ export class HotelDetailPage implements OnInit {
                   se.imgHotel = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") != -1) ? se.slideData[index].LinkImage : 'https:' + se.slideData[index].LinkImage;
                 }
                 se.slideData[index].LinkImage = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + se.slideData[index].LinkImage : se.slideData[index].LinkImage;
+                se.slideData[index].ImageUrl = (se.slideData[index].LinkImage.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + se.slideData[index].LinkImage : se.slideData[index].LinkImage;
               }
               se.ischeck = true;
               
@@ -2812,7 +2813,8 @@ async bookcombo() {
     this.searchhotel.isRefreshDetail = false;
     this.searchhotel.showPopup = false;
     if (this.searchhotel.rootPage == "mainpage" || this.searchhotel.rootPage == "topdeal" ) {
-      this.navCtrl.navigateBack('/app/tabs/tab1');
+      //this.navCtrl.navigateBack('/app/tabs/tab1');
+      this.navCtrl.pop();
     }
     // else if(this.searchhotel.rootPage == "roompaymentselect")
     // {
@@ -4994,5 +4996,17 @@ async bookcombo() {
           }
        
     }
+ }
+
+ async showSlideImage(idx) {
+    this.searchhotel.arrimgreview = this.slideData;
+    this.searchhotel.indexreviewimg = idx;
+    this.searchhotel.cusnamereview = '';
+    this.searchhotel.datereview = '';
+    const modal: HTMLIonModalElement =
+      await this.modalCtrl.create({
+        component: HotelreviewsimagePage,
+      });
+    modal.present();
  }
 }

@@ -891,7 +891,7 @@ import { tourService } from '../providers/tourService';
                       element.departAirport = se.getAirportByCode(element.departCode);
                       element.returnAirport = se.getAirportByCode(element.arrivalCode);
                       se.getRatingStar(element);
-                      // if (element.booking_id=='IVIVU1003484') {
+                      // if (element.booking_id=='VMB1651882') {
                       //   se.listMyTrips.push(element);
                       // }
                        se.listMyTrips.push(element);
@@ -990,7 +990,7 @@ import { tourService } from '../providers/tourService';
                                 
                                 element.bookingjson.forEach(elementbkg => {
                                   if(elementbkg && elementbkg.Supplier3rd == "Travelport"){
-                                    elementbkg.isBookingVMBQT = true;
+                                    element.isBookingVMBQT = true;
                                   }
                                   if(elementbkg && elementbkg.Transits){
                                     element.totalCost += elementbkg.TotalCost*1;
@@ -1654,7 +1654,7 @@ import { tourService } from '../providers/tourService';
               }
               if (se.listMyTrips[0].isFlyBooking) {
                 this.getDetailTicketFromDat(0).then((data) => {
-                  if (se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
+                  if (se.listMyTrips[0] && se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
                     this.getDetailTicketFromDat(1).then((data) => {
 
                     })
@@ -1676,6 +1676,8 @@ import { tourService } from '../providers/tourService';
                       })
                     }
                   })
+                }else{
+                  this.getmhoteldetail();
                 }
                 
               }
@@ -1690,7 +1692,13 @@ import { tourService } from '../providers/tourService';
           this.booking_json_data.forEach(item => {
             if (item.Passengers) {
               item.Passengers.forEach(element => {
-                se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
+                if (element.GiaTienHanhLyTA) {
+                  se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)
+                }
+                if (element.SeatPriceTA) {
+                  se.totalService=se.totalService + Number(element.SeatPriceTA)
+                }
+                // se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
               });
             }
           if (item.PromotionNote) {
@@ -1797,7 +1805,7 @@ import { tourService } from '../providers/tourService';
               
 
             }, 300);
-            se.getListSupportByUser(this.loginuser);
+            //se.getListSupportByUser(this.loginuser);
           }
           //List trip đã đi
           else {
@@ -3322,7 +3330,7 @@ import { tourService } from '../providers/tourService';
                       }
                     })
                     se.loadRequestTrip(result);
-                    se.getListSupportByUser(auth_token);
+                    //se.getListSupportByUser(auth_token);
                   });
                 } else {
                   if (response.statusCode != 200) {
@@ -3478,7 +3486,7 @@ import { tourService } from '../providers/tourService';
           }
     
         }, 300);
-        se.getListSupportByUser(this.loginuser);
+        //se.getListSupportByUser(this.loginuser);
       }
     
       public scrollFunction = (event: any) => {
@@ -5738,6 +5746,7 @@ import { tourService } from '../providers/tourService';
                     se.baggageHandedDepart=result.ticketCondition.baggageHanded;
                     se.luggageSignedDepart=result.ticketCondition.luggageSigned;
                     se.departConditionInfo=result;
+                    if(se.listMyTrips[0] && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length >0){
                       se.listMyTrips[0].bookingsComboData[0].passengers.forEach(element => {
                         element.hanhLyshow="";
                         if (element.hanhLy && result.ticketCondition.luggageSigned) {
@@ -5754,27 +5763,30 @@ import { tourService } from '../providers/tourService';
                           element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
                         }
                       });
+                    }
                     
                   }else{
                     se.baggageHandedReturn=result.ticketCondition.baggageHanded;
                     se.luggageSignedReturn=result.ticketCondition.luggageSigned
                     se.returnConditionInfo=result;
-                    se.listMyTrips[0].bookingsComboData[1].passengers.forEach(element => {
-                      element.hanhLyshow="";
-                      if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                        element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
-                      }else{
-                        if (element.hanhLy){
-                          element.hanhLyshow=element.hanhLy;
+                    if(se.listMyTrips[0] && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length >1){
+                      se.listMyTrips[0].bookingsComboData[1].passengers.forEach(element => {
+                        element.hanhLyshow="";
+                        if (element.hanhLy && result.ticketCondition.luggageSigned) {
+                          element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
                         }else{
-                          element.hanhLyshow=result.ticketCondition.luggageSigned;
+                          if (element.hanhLy){
+                            element.hanhLyshow=element.hanhLy;
+                          }else{
+                            element.hanhLyshow=result.ticketCondition.luggageSigned;
+                          }
+                        
                         }
-                       
-                      }
-                      if (element.hanhLyshow) {
-                        element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
-                      }
-                    });
+                        if (element.hanhLyshow) {
+                          element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                        }
+                      });
+                    }
                   }
                   resolve(result);
                   

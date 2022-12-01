@@ -49,6 +49,7 @@ export class TourDetailPage {
   loaddeparturedone: boolean;
   loadslidedone = false;
   youtubeId: any;
+  listSlides: any =[];
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -73,6 +74,13 @@ export class TourDetailPage {
                       this.itemDetail.TopSale = itemmap[0].TotalPax;
                     }
                     this.itemDetail.ImagesSlide = this.itemDetail.Image.split(', ');
+                    this.itemDetail.ImagesSlide.forEach(element => {
+                      if(element.indexOf('http') == -1){
+                        this.listSlides.push({ImageUrl: 'https:'+element});
+                      }else{
+                        this.listSlides.push({ImageUrl: element});
+                      }
+                    });
                     setTimeout(()=>{
                       this.loadslidedone = true;
                     }, 3000)
@@ -476,4 +484,18 @@ export class TourDetailPage {
         this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
       }
 
+      async showSlideImage(idx) {
+        if(!this.listSlides || this.listSlides.length <2){
+          return;
+        }
+        this.searchHotel.arrimgreview = this.listSlides;
+        this.searchHotel.indexreviewimg = idx;
+        this.searchHotel.cusnamereview = '';
+        this.searchHotel.datereview = '';
+        const modal: HTMLIonModalElement =
+          await this.modalCtrl.create({
+            component: HotelreviewsimagePage,
+          });
+        modal.present();
+     }
     }

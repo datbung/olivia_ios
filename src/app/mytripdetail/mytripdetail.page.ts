@@ -416,7 +416,12 @@ export class MytripdetailPage implements OnInit {
           this.booking_json_data.forEach(item => {
             if (item.Passengers) {
               item.Passengers.forEach(element => {
-                se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
+                if (element.GiaTienHanhLyTA) {
+                  se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)
+                }
+                if (element.SeatPriceTA) {
+                  se.totalService=se.totalService + Number(element.SeatPriceTA)
+                }
               });
             }
             if (item.PromotionNote) {

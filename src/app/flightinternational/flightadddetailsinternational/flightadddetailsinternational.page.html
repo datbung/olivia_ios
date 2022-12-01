@@ -204,7 +204,7 @@
                         <div class="m-top-24 d-flex">
                             <div [ngClass]="(itemAdult.errorDateofbirth || (!itemAdult.dateofbirth && itemAdult.errorInfo)) ? 'p-relative div-width-100 m-r-8 cls-error' : 'p-relative div-width-100 m-r-8' ">
                                 <ion-label [ngClass]="!itemAdult.dateofbirth ? 'sub-label label-dob m-bottom-6' : 'sub-label label-dob m-bottom-6 top-dob-24'" position="floating">Sinh ngày</ion-label>
-                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemAdult.mindob" [max]="itemAdult.maxbod" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemAdult.dateofbirth ? 'cls-datetofbirth' : 'cls-datetofbirth m-top-16'"
+                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemAdult.mindob" [max]="itemAdult.maxbod" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemAdult.dateofbirth ? 'cls-datetofbirth p-top-27' : 'cls-datetofbirth m-top-16'"
                                     [(ngModel)]="itemAdult.dateofbirth" (ionBlur)="checkInput(itemAdult, 3, true)" required></ion-datetime>
                             </div>
 
@@ -254,7 +254,7 @@
 
                             <div [ngClass]="(itemAdult.errorPassportExpireDate || (!itemAdult.passportExpireDate && itemAdult.errorInfo))? 'div-width-100 m-left-8 cls-error' : 'div-width-100 m-left-8'">
                                 <ion-label [ngClass]="!itemAdult.passportExpireDate ? 'sub-label label-dob m-bottom-6' : 'sub-label label-dob m-bottom-6 top-dob-24'" position="floating">Ngày hết hạn</ion-label>
-                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemAdult.mindob" [max]="itemAdult.maxepdate" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemAdult.passportExpireDate ? 'cls-datetofbirth w-200' : 'cls-datetofbirth m-top-16 w-200'"
+                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemAdult.mindob" [max]="itemAdult.maxepdate" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemAdult.passportExpireDate ? 'cls-datetofbirth p-top-27 w-200' : 'cls-datetofbirth m-top-16 w-200'"
                                     [(ngModel)]="itemAdult.passportExpireDate" (ionBlur)="checkInput(itemAdult, 7, true)" required></ion-datetime>
                             </div>
                         </div>
@@ -399,7 +399,7 @@
                         <div class="d-flex m-top-24">
                             <div [ngClass]="(itemChild.errorDateofbirth || (itemChild.errorInfo && !itemChild.dateofbirth) )? 'p-relative div-width-100 m-r-8 cls-error' : 'p-relative div-width-100 m-r-8' ">
                                 <ion-label [ngClass]="!itemChild.dateofbirth ? 'sub-label label-dob m-bottom-6' : 'sub-label label-dob m-bottom-6 top-dob-24'" position="floating">Sinh ngày</ion-label>
-                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemChild.mindob" [max]="itemChild.maxbod" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemChild.dateofbirth ? 'cls-datetofbirth' : 'cls-datetofbirth m-top-16'"
+                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemChild.mindob" [max]="itemChild.maxbod" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemChild.dateofbirth ? 'cls-datetofbirth p-top-27' : 'cls-datetofbirth m-top-16'"
                                     [(ngModel)]="itemChild.dateofbirth" (ionChange)="checkInput(itemChild, 3, false)" required></ion-datetime>
                             </div>
 
@@ -451,7 +451,7 @@
 
                             <div [ngClass]="(itemChild.errorPassportExpireDate || (itemChild.errorInfo && !itemChild.passportExpireDate))? 'div-width-100 m-left-8 cls-error' : 'div-width-100 m-left-8'">
                                 <ion-label [ngClass]="!itemChild.passportExpireDate ? 'sub-label label-dob m-bottom-6' : 'sub-label label-dob m-bottom-6 top-dob-24'" position="floating">Ngày hết hạn</ion-label>
-                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemChild.mindob" [max]="itemChild.maxepdate" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemChild.passportExpireDate ? 'cls-datetofbirth w-200' : 'cls-datetofbirth m-top-16 w-200'"
+                                <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemChild.mindob" [max]="itemChild.maxepdate" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" [ngClass]="!itemChild.passportExpireDate ? 'cls-datetofbirth p-top-27 w-200' : 'cls-datetofbirth m-top-16 w-200'"
                                     [(ngModel)]="itemChild.passportExpireDate" (ionBlur)="checkInput(itemChild, 7, false)" required></ion-datetime>
                             </div>
                         </div>

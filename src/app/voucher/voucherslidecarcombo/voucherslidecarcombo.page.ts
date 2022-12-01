@@ -150,22 +150,27 @@ export class VoucherSlideCarComboPage implements OnInit{
       if(voucher.rewardsItem.price <= 0){
         this.showVoucherDetail(voucher);
       }else{
-        this.checkVoucherActive(voucher).then((check) => {
-          if(!check){
-            this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
-            return;
-          }else{
-              for (let index = 0; index < this._voucherService.vouchers.length; index++) {
-                const element = this._voucherService.vouchers[index];
-                if(element.id != voucher.id){
-                  element.claimed = false;
+        if(voucher.applyFor && voucher.applyFor != 'carcombo'){
+          this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ voucher.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
+          return;
+        } else{
+          this.checkVoucherActive(voucher).then((check) => {
+            if(!check){
+              this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+              return;
+            }else{
+                for (let index = 0; index < this._voucherService.vouchers.length; index++) {
+                  const element = this._voucherService.vouchers[index];
+                  if(element.id != voucher.id){
+                    element.claimed = false;
+                  }
+                  
                 }
-                
+                voucher.claimed = !voucher.claimed;
+                this._voucherService.publicVoucherCarComboClicked(voucher);
               }
-              voucher.claimed = !voucher.claimed;
-              this._voucherService.publicVoucherCarComboClicked(voucher);
-            }
-          })
+            })
+          }
       }
     }
     

@@ -26,7 +26,7 @@
         <div *ngIf="itemDetail else loadsdk">
             <div class="div-image-slide" *ngIf="itemDetail.ImagesSlide && loadslidedone" id="content1">
                 <ion-slides (ionSlideDidChange)="slidechange()" [options]="slideOpts" #mySlider>
-                    <ion-slide *ngFor="let slide of itemDetail.ImagesSlide" style="height: 230px" >
+                    <ion-slide *ngFor="let slide of itemDetail.ImagesSlide; let idximg = index" style="height: 230px" (click)="showSlideImage(idximg)" >
                         <img *ngIf="slide.indexOf('http') == -1" src="https:{{slide}}" style="height: 230px;width: 100%" class="preview" alt="image" />
                         <img *ngIf="slide.indexOf('http') != -1" [src]="slide" style="height: 230px;width: 100%" class="preview" alt="image" />
                       </ion-slide>

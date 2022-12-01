@@ -786,7 +786,7 @@
         }
 
         .div-flight-label{
-            font-size: 12px;
+            font-size: 16px;
             color:#4f4f4f;
             font-weight: 300;
             letter-spacing: -0.34px;
@@ -879,7 +879,7 @@
         padding: 5px 5px 5px 0px;
     }
     .combo-info{
-        font-size: 12px;
+        font-size: 14px;
     }
     .combo-departure-date{
         font-weight: normal;
@@ -2537,7 +2537,7 @@ color: #e52822
 
 
 .p-history{
-    padding-top: calc( env(safe-area-inset-top) + 86px) !important;
+    padding-top: calc( env(safe-area-inset-top) + 26px) !important;
 }
 
 .div-height-120{
@@ -3190,6 +3190,9 @@ color: #e52822
 }
 .mt-19{
     margin-top: 19px;
+}
+.mt-30{
+    margin-top: 30px;
 }
 .padding-16{
     padding:16px
@@ -4453,6 +4456,16 @@ and (orientation: portrait) {
   .m-t-11{
     margin-top: -11px;
   }
+  .div-height-120px{
+    height: 120px;
+}
+.text-code-vxr{
+    font-weight: bold;
+    color: #f79321;
+    background-color: #ecf0f5;
+}
+
+
   
 
 

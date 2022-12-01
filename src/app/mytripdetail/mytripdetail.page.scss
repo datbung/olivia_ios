@@ -33,9 +33,9 @@
     height: 100%; 
     background-color: #f2f2f2;
 }
-.div-btn-payment {
-    padding-bottom: 36px;
-}
+// .div-btn-payment {
+//     padding-bottom: 36px;
+// }
 .mytrip-detail-content .card-background-page-mytrips{
     padding-top: 8px !important;
     margin: 8px;
@@ -160,7 +160,9 @@
                 
             }
            
-          
+          .p-top-4 {
+            padding-top: 4px;
+          }
         }
         .div-line-tour {
             margin: 8px 0;
@@ -822,10 +824,10 @@
     width: 80px;
 }
 .m-top-8{
-    margin-top: 8px
+    margin-top: 8px;
 }
 .m-top-2{
-    margin-top: 2px
+    margin-top: 2px;
 }
 .m-l-8{
     margin-left: 8px;
@@ -846,10 +848,10 @@
     border-radius: 4px;
 }
 .text-red{
-    color: #e52822
+    color: #e52822;
 }
 .text-orange{
-    color: #f79321
+    color: #f79321 !important;
 }
 .div-panel-1px{
     height: 1px;
@@ -878,7 +880,13 @@
 
 .item-room-detail{
     height: 120px;
-    padding: 16px 8px;
+    padding: 16px 0px !important;
+}
+.f-18 {
+    font-size: 18px;
+}
+.f-13 {
+    font-size: 13px !important;
 }
 .margin-8{
     margin: 8px;
@@ -959,6 +967,18 @@
      margin-left: -16px;
     margin-right: -8px;
     margin-bottom: 12.5px;
+
+    .d-img {
+        padding-left: 18px !important;
+    }
+
+    .div-text-payment {
+        margin-left: 8px;
+    }
+
+    .text-other {
+        margin-left: 8px;
+    }
 }
 .padding-bottom-16{
     padding-bottom: 16px;
@@ -969,6 +989,9 @@
     -webkit-line-clamp: 2;
     display: -webkit-box;
     /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+}
+.padding-bottom-20{
+    padding-bottom: 20px;
 }
 
 
