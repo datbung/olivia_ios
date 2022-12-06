@@ -21,6 +21,9 @@
     padding: 13px 0 11px 16px;
     background-color: #f2f2f2;
 }
+.text-sub {
+    color: #868998 !important;
+}
 ion-icon {
     display: none;
 }
@@ -111,10 +114,13 @@ ion-icon {
     .text-code{
         color: #828282;
     }
-
+    .m-top--16 {
+        margin-top: -16px;
+    }
     .div-list-last-search {
     }
         .div-label-text {
+            text-transform: uppercase;
             padding: 12px 16px;
             margin: -16px -16px 0;
             background-color: #f2f2f2;

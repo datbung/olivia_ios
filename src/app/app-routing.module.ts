@@ -130,6 +130,7 @@ const routes: Routes = [
   { path: 'flightselectpax', loadChildren: './flightselectpax/flightselectpax.module#FlightselectpaxPageModule' },
   { path: 'flightsearchresult', loadChildren: './flightsearchresult/flightsearchresult.module#FlightsearchresultPageModule' },
   { path: 'flightsearchairport', loadChildren: './flightsearchairport/flightsearchairport.module#FlightsearchairportPageModule' },
+  { path: 'flightsearcharea', loadChildren: './flightsearcharea/flightsearcharea.module#FlightSearchAreaPageModule' },
   { path: 'flightaddservice', loadChildren: './flightaddservice/flightaddservice.module#FlightaddservicePageModule' },
   { path: 'flightaddluggage', loadChildren: './flightaddluggage/flightaddluggage.module#FlightaddluggagePageModule' },
   { path: 'flightaddseat', loadChildren: './flightaddseat/flightaddseat.module#FlightaddseatPageModule' },

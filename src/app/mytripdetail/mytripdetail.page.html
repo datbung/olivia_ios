@@ -486,12 +486,28 @@
                   {{trip.room_count}} phòng, {{trip.roomNight}} đêm
                 </div>
                 <!-- <div *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0" class="div-split"></div> -->
-                <div class="d-flex" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0">
+                <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && trip.ivivu_point>0">
+                  <div class="text-info">
+                    iVIVU point
+                  </div>
+                  <div class="position-absolute text-info">
+                    {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                  </div>
+                </div>
+                <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && !trip.ivivu_point">
                   <div class="text-info">
                     Khuyến mãi
                   </div>
                   <div class="position-absolute text-info">
-                    - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                    {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                  </div>
+                </div>
+                <div class="d-flex m-top-8" *ngIf="trip.paid_amount&&trip.paid_amount>0">
+                  <div class="text-info m-top-8">
+                    Khuyến mãi
+                  </div>
+                  <div class="position-absolute text-info">
+                    {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
                   </div>
                 </div>
                 <div  *ngIf="totalService>0" class="d-flex m-top-8">
@@ -518,7 +534,7 @@
                     </div>
                   </div>
                   <div class="position-absolute text-info font-weight-600" [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange'">
-                    {{gf.numberToCurrency(trip.amount_after_tax, '.')}} VND
+                    {{gf.numberToCurrency(amount_after_tax, '.')}} VND
                   </div>
                 </div>
                 <div class="text-name-airport">
@@ -1440,7 +1456,7 @@
                   </div>
                   <div class="div-price">
                     <label  class="total-price">
-                      {{trip.priceShow}}đ
+                      {{gf.numberToCurrency(amount_after_tax, '.')}}đ
                     </label>
                   </div>
               </div>
@@ -1481,7 +1497,7 @@
                       Nội dung chuyển tiền: <b class="text-booking text-red">{{trip.booking_id}}</b><a class='text-copy' (click)='copyClipboard(trip.booking_id)'>Sao chép</a>
                     </p>
                     <p class="text-payment-info" text-wrap>
-                      Tổng tiền: <b class="text-bold">{{trip.priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
+                      Tổng tiền: <b class="text-bold">   {{gf.numberToCurrency(amount_after_tax, '.')}} VND</b><a class='text-copy' (click)='copyClipboard(amount_after_tax)'>Sao chép</a>
                     </p>                    
                   </div>
                 
@@ -1489,7 +1505,7 @@
                 <!-- payoo tại của hàng -->
                 <div *ngIf="trip.pay_method==3" class="d-flex-later">
                   <p class="text-payment-info" text-wrap>
-                    Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">{{trip.priceShow}} VND</b>
+                    Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">   {{gf.numberToCurrency(amount_after_tax, '.')}} VND</b>
                   </p>
                 </div>
                 <div *ngIf="!(trip.pay_method==51||trip.pay_method==2)" class="mt16 mbt16">
@@ -2295,12 +2311,28 @@
                 <div *ngIf="totalDichung>0" class="text-name-airport">
                   {{coutDC}} chiều
                 </div>
-                <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0">
+                 <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && trip.ivivu_point>0">
+                  <div class="text-info">
+                    iVIVU point
+                  </div>
+                  <div class="position-absolute text-info">
+                     {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                  </div>
+                </div>
+                <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && !trip.ivivu_point ">
                   <div class="text-info">
                     Khuyến mãi
                   </div>
                   <div class="position-absolute text-info">
-                    - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                     {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                  </div>
+                </div>
+                <div class="d-flex m-top-8" *ngIf="trip.paid_amount&&trip.paid_amount>0">
+                  <div class="text-info">
+                    Khuyến mãi
+                  </div>
+                  <div class="position-absolute text-info">
+                    {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
                   </div>
                 </div>
                 <div class="div-split"></div>
@@ -2319,7 +2351,7 @@
                     </div>
                   </div>
                   <div class="position-absolute text-info font-weight-600" [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange'">
-                    {{trip.totalpricedisplay}} VND
+                    {{gf.numberToCurrency(amount_after_tax, '.')}} VND
                   </div>
                 </div>
                 <div class="text-name-airport">
@@ -2350,7 +2382,7 @@
             </div>
             <div class="div-price">
               <label  class="total-price">
-                {{trip.priceShow}}đ
+                {{gf.numberToCurrency(amount_after_tax, '.')}}đ
               </label>
             </div>
         </div>
@@ -2395,7 +2427,7 @@
                 Nội dung chuyển tiền: <b class="text-booking text-red">{{trip.booking_id}}</b><a class='text-copy' (click)='copyClipboard(trip.booking_id)'>Sao chép</a>
               </p>
               <p class="text-payment-info" text-wrap>
-                Tổng tiền: <b class="text-bold">{{trip.priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
+                Tổng tiền: <b class="text-bold">   {{gf.numberToCurrency(amount_after_tax, '.')}} VND</b><a class='text-copy' (click)='copyClipboard(amount_after_tax)'>Sao chép</a>
               </p>                    
             </div>
           
@@ -2403,7 +2435,7 @@
           <!-- payoo tại của hàng -->
           <div *ngIf="trip.pay_method==3" class="d-flex-later">
             <p class="text-payment-info" text-wrap>
-              Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">{{trip.priceShow}} VND</b>
+              Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">   {{gf.numberToCurrency(amount_after_tax, '.')}} VND</b>
             </p>
           </div>
           <div *ngIf="!(trip.pay_method==51||trip.pay_method==2)" class="mt16">

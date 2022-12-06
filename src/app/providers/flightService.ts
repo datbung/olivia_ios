@@ -70,6 +70,7 @@ export class flightService{
   indexFlightInternational: any;
   indexReturnFlightInternational: any;
   loadFlightInfoType: any;
+  listAllPlaceByArea: any;
 
   publicItemFlightReloadInfo(data: any) {
     this.ItemFlightReloadInfoSubject.next(data);

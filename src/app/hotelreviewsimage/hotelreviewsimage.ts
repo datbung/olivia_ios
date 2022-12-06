@@ -18,6 +18,7 @@ import { SearchHotel } from '../providers/book-service';
 export class HotelreviewsimagePage  {
   arrimgreview=[];cusnamereview;datereview;countslide=1;lengthslide;ischeckslide=false
   @ViewChild('mySlider') slider: IonSlides;
+  captionImg: any;
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public searchhotel: SearchHotel,public zone:NgZone) {
   }
   goback() {
@@ -31,6 +32,7 @@ export class HotelreviewsimagePage  {
       this.slider.slideTo(this.searchhotel.indexreviewimg);
       this.lengthslide=this.arrimgreview.length;
       this.ischeckslide=true;
+      this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
     },900)
     console.log(this.lengthslide=this.arrimgreview.length);
 
@@ -40,6 +42,7 @@ export class HotelreviewsimagePage  {
     if (this.countslide<this.arrimgreview.length) {
       this.countslide= this.countslide+1;
       this.slider.slideTo(this.countslide-1);
+      this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
     }
 
   }
@@ -48,6 +51,7 @@ export class HotelreviewsimagePage  {
     if (this.countslide-1>0) {
       this.countslide= this.countslide-1;
       this.slider.slideTo(this.countslide-1);
+      this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
     }
 
   }
@@ -55,6 +59,7 @@ export class HotelreviewsimagePage  {
   {
     this.slider.getActiveIndex().then(index => {
       this.countslide = index + 1;
+      this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
     });
   }
 }

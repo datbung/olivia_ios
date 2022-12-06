@@ -95,6 +95,7 @@ export class MytripdetailPage implements OnInit {
   PromotionNote:any;
   HotelPolicies: any;
   totalHotel: any;
+  amount_after_tax: any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -424,7 +425,7 @@ export class MytripdetailPage implements OnInit {
                 }
               });
             }
-            if (item.PromotionNote) {
+            if (item.PromotionNote && this.isJson(item.PromotionNote)) {
               this.PromotionNote=JSON.parse(item.PromotionNote);
                TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
                TotalPriceGo=this.PromotionNote.TotalPriceGo;
@@ -473,6 +474,11 @@ export class MytripdetailPage implements OnInit {
         se.totalHotel=0;
         if (!this.trip.isFlyBooking) {
           se.totalHotel=se.trip.amount_after_tax+se.trip.promotionDiscountAmount;
+        }
+        if (se.trip.paid_amount && se.trip.paid_amount>0) {
+          se.amount_after_tax=se.trip.amount_after_tax-se.trip.paid_amount;
+        }else{
+          se.amount_after_tax=se.trip.amount_after_tax
         }
 
         
@@ -638,6 +644,7 @@ export class MytripdetailPage implements OnInit {
   paymentselect(trip,stt) {
     var se = this;
     se.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se._mytripservice.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
+    this.activityService.objPaymentMytrip.trip.priceShow=se.amount_after_tax;
     if (trip.booking_type == 'COMBO_FLIGHT') {
       if (stt==0) {
         se.navCtrl.navigateForward("/mytripaymentflightcombo/0");
@@ -1431,4 +1438,12 @@ export class MytripdetailPage implements OnInit {
     let dtStr = dateObj[1] + "/" + dateObj[0] + "/" + dateObj[2] + " " + time;
     return new Date(dtStr);
   }
+  isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 }

@@ -26,6 +26,8 @@ export class FlightsearchairportPage implements OnInit {
   isdepart:any;
   listLastSearch = [];
   itemsRegular = [];
+  itemsRegularInternational = [];
+  itemsFilter: any = [];
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -44,18 +46,31 @@ export class FlightsearchairportPage implements OnInit {
         }else{
 
           this.zone.run(()=>{
-            data = data.filter((item) =>{ return item.code != 'FDF'});
-            data.sort((a,b)=>{ return (a.count - b.count)*-1 });
+            let datainbound = data.filter((item) =>{ return item.code != 'FDF' && item.country == C.urls.baseUrl.countryName});
+            let dataoutbound = data.filter((item) =>{ return item.code != 'FDF' && item.country != C.urls.baseUrl.countryName});
+            this.items = [...data];
             this.itemsfull = [...data];
-            for (let index = 0; index < 25; index++) {
-              const element = data[index];
-              this.items.push(element);
-              // if(index < 5){
-              //   this.itemsRegular.push(element);
-              // }
+            //this.itemsfull.sort((a,b)=>{ return (a.count - b.count)*-1 });
+            // for (let index = 0; index < 25; index++) {
+            //   const element = datainbound[index];
+            //   this.items.push(element);
+            //   if(index < 5){
+            //     this.itemsRegular.push(element);
+            //   }
              
+            // }
+            datainbound.sort((a,b)=>{ return (a.count - b.count)*-1 });
+            for (let index = 0; index < 5; index++) {
+              const element = datainbound[index];
+              element.show = true;
+              this.itemsRegular.push(element);
             }
-            
+            dataoutbound.sort((a,b)=>{ return (a.count - b.count)*-1 });
+            for (let index = 0; index < 5; index++) {
+              const element = dataoutbound[index];
+              element.show = true;
+              this.itemsRegularInternational.push(element);
+            }
             
             this.itemsfull.forEach(element => {
               element.show = true;
@@ -70,6 +85,7 @@ export class FlightsearchairportPage implements OnInit {
 
       this.gf.getListLastSearchFlight().then((data)=>{
         this.listLastSearch = data;
+        console.log(this.listLastSearch);
       })
     }
 
@@ -111,9 +127,25 @@ export class FlightsearchairportPage implements OnInit {
                 se.zone.run(()=>{
                     se.items = [...result.data];
                     se.itemsfull = [...result.data];
+                    //se.itemsfull.sort((a,b)=>{ return (a.count - b.count)*-1 });
                     se.items.forEach(element => {
                       element.show = true;
                     });
+                    let datainbound = se.items.filter((item) =>{ return item.code != 'FDF' && item.country == C.urls.baseUrl.countryName});
+                    let dataoutbound = se.items.filter((item) =>{ return item.code != 'FDF' && item.country != C.urls.baseUrl.countryName});
+                    datainbound.sort((a,b)=>{ return (a.count - b.count)*-1 });
+                    for (let index = 0; index < 5; index++) {
+                      const element = datainbound[index];
+                      element.show = true;
+                      this.itemsRegular.push(element);
+                    }
+                    dataoutbound.sort((a,b)=>{ return (a.count - b.count)*-1 });
+                    for (let index = 0; index < 5; index++) {
+                      const element = dataoutbound[index];
+                      element.show = true;
+                      this.itemsRegularInternational.push(element);
+                    }
+
                     // for (let index = 0; index < 5; index++) {
                     //   const element = se.items[index];
                     //   this.itemsRegular.push(element);
@@ -141,22 +173,26 @@ export class FlightsearchairportPage implements OnInit {
         if(se.itemsfull && se.itemsfull.length >0){
           let filteritems = se.itemsfull.filter((element) => { return se.gf.convertFontVNI(element.name).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.code).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.city).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.airport).toLowerCase().indexOf(val) != -1});
             se.zone.run(()=>{
+            
+              se.itemsfull.sort((a,b)=>{ return ((a.order - b.order) > 0 ? 3 : -3) + ((a.internal - b.internal) > 0 ? -5 : 5 ) + ((a.count - b.count) >0 ? -1 : 1 ) });
               if(filteritems && filteritems.length >0){
-                se.items = [...filteritems];
+                se.itemsFilter = [...filteritems];
               }
             })
         }
-      }else{
-        se.zone.run(()=>{
-          for (let index = 0; index < 25; index++) {
-            const element = se.itemsfull[index];
-            if(element){
-              element.show = true;
-              se.items.push(element);
-            }
+      }
+      else{
+        se.itemsFilter = [];
+        // se.zone.run(()=>{
+        //   for (let index = 0; index < 25; index++) {
+        //     const element = se.itemsfull[index];
+        //     if(element){
+        //       element.show = true;
+        //       se.itemsFilter.push(element);
+        //     }
             
-          }
-        })
+        //   }
+        // })
       }
     }
 
@@ -167,15 +203,15 @@ export class FlightsearchairportPage implements OnInit {
         se._flightService.itemFlightCache.departCity = item.city;
         se._flightService.itemFlightCache.departAirport = item.airport;
         se._flightService.itemFlightCache.itemDepartLocation = item;
-        se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
-        se._flightService.itemFlightCache.isExtenalDepart = item.country != "Việt Nam" ? true : false;
+        //se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
+        //se._flightService.itemFlightCache.isExtenalDepart = item.country != "Việt Nam" ? true : false;
       }else{
         se._flightService.itemFlightCache.returnCode = item.code;
         se._flightService.itemFlightCache.returnCity = item.city;
         se._flightService.itemFlightCache.returnAirport = item.airport;
         se._flightService.itemFlightCache.itemReturnLocation = item;
-        se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
-        se._flightService.itemFlightCache.isExtenalReturn = item.country != "Việt Nam" ? true : false;
+        //se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
+        //se._flightService.itemFlightCache.isExtenalReturn = item.country != "Việt Nam" ? true : false;
       }
       se.gf.createListLastSearchFlight(item);
       se._flightService.itemFlightChangeLocation.emit(item);

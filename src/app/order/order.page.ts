@@ -163,6 +163,7 @@ import { tourService } from '../providers/tourService';
   coutDC: number;
   totalHotel: number;
   HotelPolicies: any;
+  amount_after_tax: any;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -1701,7 +1702,7 @@ import { tourService } from '../providers/tourService';
                 // se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
               });
             }
-          if (item.PromotionNote) {
+          if (item.PromotionNote && this.isJson(item.PromotionNote)) {
             this.PromotionNote=JSON.parse(item.PromotionNote);
              TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
              TotalPriceGo=this.PromotionNote.TotalPriceGo;
@@ -1745,7 +1746,11 @@ import { tourService } from '../providers/tourService';
                 se.totalVMB=se.listMyTrips[0].amount_after_tax-se.totalService-se.totalDichung+se.listMyTrips[0].promotionDiscountAmount;
              
               }
-            
+              if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount>0) {
+                se.amount_after_tax=se.listMyTrips[0].amount_after_tax-se.listMyTrips[0].paid_amount;
+              }else{
+                se.amount_after_tax=se.listMyTrips[0].amount_after_tax
+              }
             } else {
               se.hasdata = false;
             }
@@ -4453,6 +4458,7 @@ import { tourService } from '../providers/tourService';
           return;
         }
         se.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
+        this.activityService.objPaymentMytrip.trip.priceShow=se.amount_after_tax;
         if (trip.booking_type == 'COMBO_FLIGHT') {
           if (stt==0) {
             se.navCtrl.navigateForward("/mytripaymentflightcombo/0");
@@ -5907,6 +5913,14 @@ import { tourService } from '../providers/tourService';
               }
             })
           }
+          isJson(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        }
         }
         
           

@@ -366,7 +366,9 @@ ion-toggle {
     .min-price{
       color: #a0c245 !important;
     }
-
+    .min-price-international {
+      color: #f58220 !important;
+    }
     .normal-price{
       color: #828282 !important;
     }
@@ -456,6 +458,10 @@ ion-toggle {
 
     .m-l-5{
       margin-left: 5px !important;
+    }
+    .m-l--5 {
+      margin-left: -5px !important;
+      width: 44px;
     }
 
     .f-36 {
@@ -1520,4 +1526,28 @@ height: 18px !important;
       margin-left: 21px !important;
     }
   }
+}
+
+.lunardate.date-lunar-visible small {
+  width: 20px !important;
+  visibility: inherit;
+  right: -4px !important;
+  left: auto !important;
+  bottom: -9px !important;
+  color: #828282 !important;
+}
+
+.div-lunar-calendar {
+  background: #f2f2f2;
+  padding: 8px 16px 0;
+}
+.p-top-3 {
+  padding-top: 3px;
+}
+.m-right-8 {
+  margin-right: 8px;
+}
+
+.p-bottom-14 {
+  padding-bottom: 14px;
 }

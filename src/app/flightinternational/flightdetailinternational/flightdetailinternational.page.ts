@@ -1,11 +1,15 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { NavController, ModalController } from '@ionic/angular';
+import { NavController, ModalController, AlertController } from '@ionic/angular';
 import { C } from './../../providers/constants';
 import { GlobalFunction } from '../../providers/globalfunction';
 import { flightService } from '../../providers/flightService';
 import * as moment from 'moment';
 import { FlightInfoInternationalPage } from '../flightinfointernationnal/flightinfointernational.page';
 import { FlightDepartureDetailInternationalPage } from '../flightdeparturedetailinternational/flightdeparturedetailinternational.page';
+import { voucherService } from '../../providers/voucherService';
+import { AdddiscountPage } from 'src/app/adddiscount/adddiscount.page';
+import { OverlayEventDetail } from '@ionic/core';
+
 @Component({
   selector: 'app-flightdetailinternational',
   templateUrl: './flightdetailinternational.page.html',
@@ -38,9 +42,19 @@ export class FlightDetailInternationalPage implements OnInit {
   departTimeDisplayTotal: string;
   returnTimeDisplayTotal: string;
   roundTrip: boolean = false;
+  promocode: string;
+  promotionCode: string;
+  discountpromo: number;
+  itemVoucher: any;
+  msg: string;
+  ischeckerror: number;
+  totalPrice: any=0;
+  totalPriceBeforeDiscount:number=0;
   
   constructor(public modalCtrl: ModalController, public zone: NgZone, public navCtrl: NavController,
     public gf: GlobalFunction,public _flightService: flightService,
+    public _voucherService: voucherService,
+    private alertCtrl: AlertController
     ) {
      this.itemFlight = this._flightService.itemFlightInternational;
      this.itemDepart = this._flightService.itemFlightCache.itemFlightInternationalDepart;
@@ -172,10 +186,43 @@ export class FlightDetailInternationalPage implements OnInit {
      }
      }
 
+     //this.totalPriceAll();
     
   }
 
+  ionViewWillEnter() {
+    this.itemVoucher = null;
+    this.promocode = "";
+    this.promotionCode = "";
+    this.discountpromo = 0;
+    this._flightService.itemFlightCache.hasvoucher = false;
+    if(this._flightService.itemFlightInternational.promocode){
+      this.promocode = this._flightService.itemFlightInternational.promocode;
+      this.promotionCode = this._flightService.itemFlightInternational.promocode;
+      this.discountpromo = this._flightService.itemFlightInternational.discountpromo;
+    }
+    this.totalPriceAll();
+  }
+
   ngOnInit() {
+
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this.itemVoucher = null;
+        this.promocode = "";
+        this.promotionCode = "";
+        this.discountpromo = 0;
+        this._flightService.itemFlightCache.hasvoucher = false;
+        this.totalPriceAll();
+      }
+    })
+  }
+  totalPriceAll() {
+    this.totalPrice = this.itemFlight.fare.price;
+    if(this.discountpromo){
+      this.totalPriceBeforeDiscount = this.itemFlight.fare.price;
+      this.totalPrice = this.totalPrice - this.discountpromo;
+    }
   }
 
   close(){
@@ -205,4 +252,5 @@ export class FlightDetailInternationalPage implements OnInit {
       });
       modal.present();
   }
+
 }

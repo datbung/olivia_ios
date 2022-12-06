@@ -79,7 +79,9 @@ export class FlightnotifyPage {
      */
     loadUserNotification() {
         var se = this;
-
+        se.storage.get('auth_token').then(auth_token => {
+            if (auth_token) {
+                var text = "Bearer " + auth_token;
                 var options = {
                     method: 'GET',
                     url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex=' + se.pageIndex + '&pageSize=' + se.pageSize,
@@ -89,6 +91,7 @@ export class FlightnotifyPage {
                     headers: {
                         'cache-control': 'no-cache',
                         'content-type': 'application/json',
+                        authorization: text
                     }
                 };
                 request(options, function (error, response, body) {
@@ -171,6 +174,18 @@ export class FlightnotifyPage {
                         }
                     }
                 });
+            }else{
+                se.zone.run(()=>{
+                  se.loadend = true;
+                  se.loaddatadone = true;
+                  if(se.pageIndex == 1){
+                    se.items = [];
+                    se.valueGlobal.countNotifi=0;
+                  }
+                })
+              }
+        })
+               
   
     }
     /**

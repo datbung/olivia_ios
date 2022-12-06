@@ -137,15 +137,18 @@ export class Tab4Page implements OnInit{
         this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
         return;
       }
-
-              var options = {
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+            var text = "Bearer " + auth_token;
+            var options = {
               method: 'GET',
               url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex='+se.pageIndex +'&pageSize=' + se.pageSize,
               timeout: 10000, maxAttempts: 5, retryDelay: 2000,
               headers:
               {
                   'cache-control': 'no-cache',
-                  'content-type': 'application/json'
+                  'content-type': 'application/json',
+                  authorization: text
               }
               };
               request(options, function (error, response, body) {
@@ -176,6 +179,18 @@ export class Tab4Page implements OnInit{
                   }
               }
               });
+        }else{
+          se.zone.run(()=>{
+            se.loadend = true;
+            se.loaddatadone = true;
+            if(se.pageIndex == 1){
+              se.items = [];
+              se.valueGlobal.countNotifi=0;
+            }
+          })
+        }
+      })
+             
           
          
       

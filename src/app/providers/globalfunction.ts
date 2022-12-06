@@ -542,6 +542,15 @@ export class GlobalFunction{
         if(type == 'cathay'){
           res = arrays.some(r => r.insurance_code == item.insurance_code);
         }
+        if(type == 'area'){
+          res = arrays.some(r => r.areaName == item.areaName);
+        }
+        if(type == 'areavn'){
+          res = arrays.some(r => r.countryCode == 'VN');
+        }
+        if(type == 'listlastsearch'){
+          res = arrays.some(r => r.code == item.code);
+        }
       }
       else{
         res = arrays.some(r => r.id == item.id);
@@ -1666,11 +1675,17 @@ alert.present();
     if(obj.indexOf('á') != -1 || obj.indexOf('Á') != -1){
       obj = obj.replace(/\á/g,'a').replace(/\Á/g,'A');
     }
-    if(obj.indexOf('à') != -1 || obj.indexOf('À') != -1){
-      obj = obj.replace(/\à/g,'a').replace(/\À/g,'A');
+    if(obj.indexOf('ắ') != -1 || obj.indexOf('Ắ') != -1){
+      obj = obj.replace(/\ắ/g,'a').replace(/\Ắ/g,'A');
     }
     if(obj.indexOf('ấ') != -1 || obj.indexOf('Ấ') != -1){
       obj = obj.replace(/\ấ/g,'a').replace(/\Ấ/g,'A');
+    }
+    if(obj.indexOf('à') != -1 || obj.indexOf('À') != -1){
+      obj = obj.replace(/\à/g,'a').replace(/\À/g,'A');
+    }
+    if(obj.indexOf('ằ') != -1 || obj.indexOf('Ằ') != -1){
+      obj = obj.replace(/\ằ/g,'a').replace(/\Ằ/g,'A');
     }
     if(obj.indexOf('ầ') != -1 || obj.indexOf('Ầ') != -1){
       obj = obj.replace(/\ầ/g,'a').replace(/\Ầ/g,'A');
@@ -1687,9 +1702,7 @@ alert.present();
     if(obj.indexOf('ạ') != -1 || obj.indexOf('Ạ') != -1){
       obj = obj.replace(/\ạ/g,'a').replace(/\Ạ/g,'A');
     }
-    if(obj.indexOf('à') != -1 || obj.indexOf('À') != -1){
-        obj = obj.replace(/\à/g,'a').replace(/\À/g,'A');
-      }
+   
       if(obj.indexOf('ả') != -1 || obj.indexOf('Ả') != -1){
         obj = obj.replace(/\ả/g,'a').replace(/\Ả/g,'A');
       }
@@ -3667,22 +3680,160 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     let listLastSearch = await this.storage.get(('listLastSearchFlight'));
       if(listLastSearch && listLastSearch.length >0){
         if(listLastSearch.length >2){
-          listLastSearch.pop();
-          listLastSearch.push(item);
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearch')){
+            listLastSearch.splice(0,1);
+            listLastSearch.push(item);
+          }
+          
         }else{
-          listLastSearch.push(item);
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearch')){
+            listLastSearch.push(item);
+          }
         }
         this.storage.set('listLastSearchFlight', listLastSearch);
       }else {
+        listLastSearch = [];
         listLastSearch.push(item);
+        this.storage.set('listLastSearchFlight', listLastSearch);
       }
   }
 
   async getListLastSearchFlight() {
     return await this.storage.get(('listLastSearchFlight'));
   }
+
+  getAllPlaceByArea(): Promise<any>{
+    let url = C.urls.baseUrl.urlFlightInt + 'api/FlightSearch/GetAllPlaceByArea';
+    return new Promise((resolve, reject) => {
+      this.RequestApi("GET", url, {}, {}, "homeflight", "GetAllPlaceByArea").then((data) =>{
+        if(data && data.success && data.data && data.data.length>0 ){
+          let listAllPlaceByArea = [];
+          for (let index = 0; index < data.data.length; index++) {
+            const element = data.data[index];
+            let _places = [];
+              element.countries.forEach(elementCountry => {
+                  let item:any = {};
+                  if(_places.length ==0){
+                    _places = [...elementCountry.places.map(item => {
+                      return <Place> {
+                        airport: item.airportName,
+                        airportName: item.airportName,
+                        city: item.placeName,
+                        code: item.placeCode,
+                        count: 0,
+                        country: elementCountry.countryName,
+                        countryCode: elementCountry.countryCode,
+                        id: item.placeId,
+                        internal: elementCountry.countryCode == 'VN' ? 1 : 0,
+                        name: item.placeName,
+                        order: 0,
+                        shortAirportName: '',
+                        type: 'place',
+                        urlCode: '',
+                      }
+                    })];
+                  }else if(_places.length >0){
+                    if(!this.checkExistsItemInArray(_places, item, 'areavn')){
+                      _places = [..._places, ...elementCountry.places.map(item => {
+                        return <Place> {
+                          airport: item.airportName,
+                          airportName: item.airportName,
+                          city: item.placeName,
+                          code: item.placeCode,
+                          count: 0,
+                          country: elementCountry.countryName,
+                          countryCode: elementCountry.countryCode,
+                          id: item.placeId,
+                          internal: elementCountry.countryCode == 'VN' ? 1 : 0,
+                          name: item.placeName,
+                          order: 0,
+                          shortAirportName: '',
+                          type: 'place',
+                          urlCode: '',
+                        }
+                      })]
+                    }else {
+                      _places = [...elementCountry.places.map(item => {
+                        return <Place> {
+                          airport: item.airportName,
+                          airportName: item.airportName,
+                          city: item.placeName,
+                          code: item.placeCode,
+                          count: 0,
+                          country: elementCountry.countryName,
+                          countryCode: elementCountry.countryCode,
+                          id: item.placeId,
+                          internal: elementCountry.countryCode == 'VN' ? 1 : 0,
+                          name: item.placeName,
+                          order: 0,
+                          shortAirportName: '',
+                          type: 'place',
+                          urlCode: '',
+                        }
+                      })]
+                    }
+                    
+                  }
+                  
+                  item.areaId = element.areaId;
+                  item.areaName = elementCountry.countryCode == 'VN' ? 'Việt Nam' : element.areaName;
+                  item.countryCode = elementCountry.countryCode;
+                  item.countryId = elementCountry.countryId;
+                  item.countryName = elementCountry.countryName;
+                  item.order = elementCountry.countryCode == 'VN' ? 1 : element.areaId;
+                  item.places = _places;
+                  if(listAllPlaceByArea.length ==0 || item.countryCode == 'VN'){
+                    listAllPlaceByArea.push(item);
+                  }
+                  else if(!this.checkExistsItemInArray(listAllPlaceByArea, item, 'area') ){
+                    listAllPlaceByArea.push(item);
+                  }
+                  else if(this.checkExistsItemInArray(listAllPlaceByArea, item, 'area') ){
+                    listAllPlaceByArea.pop();
+                    listAllPlaceByArea.push(item);
+                  }
+                
+              });
+          }
+          //listAllPlaceByArea.map(item => )
+          
+          console.log(listAllPlaceByArea);
+          resolve(listAllPlaceByArea);
+        }else{
+          resolve([]);
+        }
+      })
+    })
+    
+  }
 }
 
+export class PlaceByArea {
+  areaName: string;
+  countryCode: string;
+  countryId: number;
+  countryName: string;
+  order: number;
+  places : Place;
+  
+}
+
+export class Place {
+  airport: string;
+  airportName: string;
+  city: string;
+  code: string;
+  count: number;
+  country: string;
+  countryCode: string;
+  id: number;
+  internal: number;
+  name: string;
+  order: number;
+  shortAirportName: string;
+  type: string;
+  urlCode: string;
+}
 
 export class ActivityService {
   currentArticle = new EventEmitter();

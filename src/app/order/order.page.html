@@ -230,7 +230,7 @@
               </div>
               <div class="div-price">
                 <label  class="total-price">
-                  {{listMyTrips[0].priceShow}}đ
+                  {{gf.numberToCurrency(amount_after_tax, '.')}}đ
                 </label>
               </div>
           </div>
@@ -276,7 +276,7 @@
                   Nội dung chuyển tiền: <b class="text-booking text-red">{{listMyTrips[0].booking_id}}</b><a class='text-copy' (click)='copyClipboard(listMyTrips[0].booking_id)'>Sao chép</a>
                 </p>
                 <p class="text-payment-info" text-wrap>
-                  Tổng tiền: <b class="text-bold">{{listMyTrips[0].priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(listMyTrips[0].priceShow)'>Sao chép</a>
+                  Tổng tiền: <b class="text-bold"> {{gf.numberToCurrency(amount_after_tax, '.')}} VND</b><a class='text-copy' (click)='copyClipboard(amount_after_tax)'>Sao chép</a>
                 </p>                    
               </div>
             
@@ -284,7 +284,7 @@
             <!-- payoo tại của hàng -->
             <div *ngIf="listMyTrips[0].pay_method==3" class="d-flex-later">
               <p class="text-payment-info" text-wrap>
-                Mã thanh toán Payoo: {{listMyTrips[0].PaymentCode}}, số tiền: <b class="text-bold">{{listMyTrips[0].priceShow}} VND</b>
+                Mã thanh toán Payoo: {{listMyTrips[0].PaymentCode}}, số tiền: <b class="text-bold">{{gf.numberToCurrency(amount_after_tax, '.')}} VND</b>
               </p>
             </div>
             <div *ngIf="!(listMyTrips[0].pay_method==51||listMyTrips[0].pay_method==2)" class="mt16 mbt16">
@@ -1231,12 +1231,28 @@
                           <div class="text-name-airport">
                             {{trip.room_count}} phòng, {{trip.roomNight}} đêm
                           </div>
-                          <div class="d-flex" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0">
+                          <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && trip.ivivu_point>0">
+                            <div class="text-info">
+                              iVIVU point
+                            </div>
+                            <div class="position-absolute text-info">
+                              {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                            </div>
+                          </div>
+                          <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && !trip.ivivu_point">
                             <div class="text-info">
                               Khuyến mãi
                             </div>
                             <div class="position-absolute text-info">
-                              - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                              {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                            </div>
+                          </div>
+                          <div class="d-flex m-top-8" *ngIf="trip.paid_amount&&trip.paid_amount>0">
+                            <div class="text-info m-top-8">
+                              Khuyến mãi
+                            </div>
+                            <div class="position-absolute text-info">
+                              {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
                             </div>
                           </div>
                           <div  *ngIf="totalService>0" class="d-flex m-top-8">
@@ -2307,13 +2323,29 @@
                                   <div *ngIf="totalDichung>0" class="text-name-airport">
                                   {{coutDC}} chiều
                                   </div>
-                                  <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0">
-                                  <div class="text-info">
+                                  <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && trip.ivivu_point>0">
+                                    <div class="text-info">
+                                      iVIVU point
+                                    </div>
+                                    <div class="position-absolute text-info">
+                                       {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                                    </div>
+                                  </div>
+                                  <div class="d-flex m-top-8" *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && !trip.ivivu_point ">
+                                    <div class="text-info">
                                       Khuyến mãi
+                                    </div>
+                                    <div class="position-absolute text-info">
+                                       {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
+                                    </div>
                                   </div>
-                                  <div class="position-absolute text-info">
-                                      - {{gf.numberToCurrency(trip.promotionDiscountAmount, '.')}} VND
-                                  </div>
+                                  <div class="d-flex m-top-8" *ngIf="trip.paid_amount&&trip.paid_amount>0">
+                                    <div class="text-info">
+                                      Khuyến mãi
+                                    </div>
+                                    <div class="position-absolute text-info">
+                                      {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
+                                    </div>
                                   </div>
                                   <div class="div-split"></div>
                                   <div class="d-flex m-top-8">
@@ -2411,7 +2443,7 @@
 
                   
                   <!-- case hotel -->
-                  <div class="m-top-14 m-l-16" *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
+                  <div class="m-top-14 m-l-16" *ngIf="!trip.isRequestTrip && !trip.isFlyBooking">
                     <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="d-flex">
                       <div  class="text-info-2">
                         Hướng dẫn nhận phòng

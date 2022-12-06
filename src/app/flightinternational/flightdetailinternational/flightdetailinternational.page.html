@@ -179,17 +179,38 @@
               <div class="width-100 text-normal text-right" *ngIf="itemDepart.priceTax">{{gf.convertNumberToString(itemDepart.priceTax)}}</div>
             </div> 
           </div>
-          <div class="d-flex  m-top-8">
-            <div class="width-100 text-total">Tổng cộng</div>
-            <div class="width-100 text-normal text-right f-bold">{{gf.convertNumberToString(itemFlight.fare.price)}}</div>
+
+          <div *ngIf="promocode">
+            <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
+              <div class="width-200">
+                <span class="text-normal">Ưu đãi (</span>
+                <span class="text-code" *ngIf="promocode">{{promocode}}</span>
+                <span class="text-normal">)</span> 
+              </div>
+              <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}</div>
+            </div>
+            <div class="m-top-4" *ngIf="msg"> 
+              <div *ngIf="ischeckerror==1&& msg" class="text-red">{{msg}}</div>
+              <div *ngIf="ischeckerror==0&& msg" class="text-grey">{{msg}}</div>
+            </div>
+  
+            <div class="d-flex  m-top-8">
+              <div class="width-100 text-total">Tổng cộng</div>
+              <div class="width-100 text-normal text-right f-bold">{{gf.convertNumberToString(totalPrice)}}</div>
+              
+            </div>
+            <div class="text-normal text-right text-strike" *ngIf="promocode && discountpromo">{{ gf.convertNumberToString(totalPriceBeforeDiscount)}}</div>
           </div>
           
-          <!-- <div class="div-line"></div>
-          <div class="d-flex">
-            <div class="width-100 text-normal f-bold">Tổng giá vé</div>
-            <div class="width-100 text-total-price text-right">{{gf.convertNumberToString(_flightService.itemFlightInternational.fare.price)}}đ</div>
-          </div> -->
 
+          <div *ngIf="!promocode">
+            <div class="div-line"></div>
+            <div class="d-flex">
+              <div class="width-100 text-normal f-bold">Tổng giá vé</div>
+              <div class="width-100 text-total-price text-right">{{gf.convertNumberToString(_flightService.itemFlightInternational.fare.price)}}đ</div>
+            </div>
+          </div>
+         
         </div>
 
         <ng-template #loadsdk>

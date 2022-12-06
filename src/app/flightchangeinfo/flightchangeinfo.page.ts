@@ -59,6 +59,7 @@ export class FlightchangeinfoPage implements OnInit {
   timereturnpriorityconfig: any;
   allowclickcalendar: any = true;
   isInternationalFlight: any;
+  showLunarCalendar: any;
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -594,6 +595,7 @@ export class FlightchangeinfoPage implements OnInit {
         if(!this.allowclickcalendar){
           return;
         }
+        this._flightService.itemFlightCache.isInternationalFlight = (this._flightService.itemFlightCache.isExtenalDepart || this._flightService.itemFlightCache.isExtenalReturn);
         this.allowclickcalendar = false;
         let fromdate = new Date(this.gf.getCinIsoDate(moment(this.cin).format('YYYY-MM-DD')));
         let todate = new Date(this.gf.getCinIsoDate(moment(this.cout).format('YYYY-MM-DD')));
@@ -621,13 +623,30 @@ export class FlightchangeinfoPage implements OnInit {
         let tetConfig = ['29 Tết','30 Tết','Mùng 1','Mùng 2','Mùng 3','Mùng 4','Mùng 5','Mùng 6','Mùng 7','Mùng 8','Mùng 9','Mùng 10',];
         let _daysConfig: DayConfig[] = [];
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+          let y = moment(new Date(this.valueGlobal.listlunar[j].date).getFullYear()) as any;
+          let m = moment(new Date(this.valueGlobal.listlunar[j].date).getMonth())as any;
+          let d= moment(new Date(this.valueGlobal.listlunar[j].date).getDate())as any;
+
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name,
-            //subTitle: tetConfig.indexOf(this.valueGlobal.listlunar[j].name) != -1 ? this.valueGlobal.listlunar[j].name + ':  '+ this.valueGlobal.listlunar[j].description : moment(this.valueGlobal.listlunar[j].date).format('D') + ' thg '+ moment(this.valueGlobal.listlunar[j].date).format('M') + ':  '+ this.valueGlobal.listlunar[j].description,
-            cssClass: 'lunarcalendar'
+            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name+':' + moment().year(y).month(m).date(d).lunar().format('D'),
+            cssClass: 'lunarcalendar lunardate'
         })
         }
+
+        for (let k = 0; k < 365; k++) {
+          let nd = new Date(moment(new Date()).add(k, 'days').format('MM-DD-YYYY'));
+          let y = moment(nd.getFullYear()) as any;
+          let m = moment(nd.getMonth())as any;
+          let d= moment(nd.getDate())as any;
+          
+          _daysConfig.push({
+            date: nd as any,
+            subTitle: moment().year(y).month(m).date(d).lunar().format('D'),
+            cssClass: 'lunardate'
+          })
+        }
+
         var options:CalendarModalOptions;
         if(this.flighttype == "twoway"){
           options  = {
@@ -685,11 +704,23 @@ export class FlightchangeinfoPage implements OnInit {
               }else{
                 $('.flight-calendar-custom ion-calendar-modal ion-calendar-week ion-toolbar').before(`<div class='d-flex p-16 div-show-calendar-cincout calendar-visible'> <div > <div class='text-date-normal'>Bay đi</div> <div class='d-flex'> <div class='f-36'>${cindaydisplay}</div> <div class='text-date-normal v-align-center'> <div class='p-top-3'>${cindayofweek}</div> <div>${cinmonthdisplay}</div> </div> </div> </div> <div class='d-flex div-img-arrow'> <ion-icon class='ico-arrow' name="remove"></ion-icon> </div> <div class='text-date-normal div-cout-oneway'>Bay về</div> </div>`);
               }
+                 //add check lịch âm
+                 if(this.showLunarCalendar){
+                  $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lunar-calendar'> <div class='div-width-100 d-flex'> <div class='m-right-8 '><ion-checkbox (ionChange)="checkLunarCalendar($event)" [(ngModel)]="showLunarCalendar" color="secondary" checked style="width: 20px; height: 20px" class='chk-showlunar'></ion-checkbox></div> <div class='text-calendar p-top-3'>Thêm lịch âm</div> </div> </div>`);
+                }else{
+                  $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lunar-calendar'> <div class='div-width-100 d-flex'> <div class='m-right-8 '><ion-checkbox (ionChange)="checkLunarCalendar($event)" [(ngModel)]="showLunarCalendar" color="secondary" style="width: 20px; height: 20px" class='chk-showlunar'></ion-checkbox></div> <div class='text-calendar p-top-3'>Thêm lịch âm</div> </div> </div>`);
+                }
+                
               //add div show giá thấp nhất
+              // if(this.showlowestprice){
+              //   $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' (ionChange)="showLowestPrice($event)" [(ngModel)]="showlowestprice" checked></ion-toggle></div> </div>`);
+              // }else{
+              //   $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice"></ion-toggle></div> </div>`);
+              // }
               if(this.showlowestprice){
-                $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' (ionChange)="showLowestPrice($event)" [(ngModel)]="showlowestprice" checked></ion-toggle></div> </div>`);
+                $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lunar-calendar p-bottom-14'> <div class='div-width-100 d-flex'> <div class='m-right-8 '><ion-checkbox (ionChange)="showLowestPrice($event)" [(ngModel)]="showlowestprice" color="secondary" checked style="width: 20px; height: 20px" class='button-show-lowest-price'></ion-checkbox></div> <div class='text-calendar p-top-3'>Xem giá ước tính thấp nhất</div> </div> </div>`);
               }else{
-                $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lowest-price'><div class='div-width-100 text-lowest-price'>Xem giá ước tính thấp nhất</div> <div class='div-width-100 toggle-right'><ion-toggle style='--handle-height: 24px' class='button-show-lowest-price' mode='ios' [(ngModel)]="showlowestprice"></ion-toggle></div> </div>`);
+                $('.flight-calendar-custom ion-calendar-modal').append(`<div class='d-flex div-lunar-calendar p-bottom-14'> <div class='div-width-100 d-flex'> <div class='m-right-8 '><ion-checkbox (ionChange)="showLowestPrice($event)" [(ngModel)]="showlowestprice" color="secondary" style="width: 20px; height: 20px" class='button-show-lowest-price'></ion-checkbox></div> <div class='text-calendar p-top-3'>Xem giá ước tính thấp nhất</div> </div> </div>`);
               }
               
               //add event cho button show price
@@ -699,6 +730,13 @@ export class FlightchangeinfoPage implements OnInit {
               container.addEventListener("touchend", (e)=>{
                   this.showLowestPrice(e);
               }, false);
+
+              var container = document.querySelector(".chk-showlunar");
+
+              container.addEventListener("touchend", (e)=>{
+                  this.checkLunarCalendar(e);
+              }, false);
+
               //custom title month
               if($('.flight-calendar-custom .month-box .month-title').length >0) {
                 for (let index = 0; index < $('.flight-calendar-custom .month-box .month-title').length; index++) {
@@ -726,7 +764,8 @@ export class FlightchangeinfoPage implements OnInit {
               if(divmonth && divmonth.length >0){
                 for (let index = 0; index < divmonth.length; index++) {
                   const em = divmonth[index];
-                    let divsmall = $('#'+em.id+' small');
+                    //let divsmall = $('#'+em.id+' small');
+                    let divsmall = $('#'+em.id).find('.lunarcalendar > small');
                     $('#'+em.id).addClass('cls-animation-calendar');
                     if(divsmall && divsmall.length >0){
                       $('#'+em.id).append("<div class='div-month-text-small'></div>");
@@ -734,10 +773,15 @@ export class FlightchangeinfoPage implements OnInit {
                         const es = divsmall[i];
                         let arres = es.innerHTML.split(':');
                         $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
+                        // if(arres && arres.length >1){
+                        //   es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                        // }
+                        // $('.sm-'+em.id+'-'+i).append(es);
                         if(arres && arres.length >1){
-                          es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
+                          es.innerHTML = arres[2];
                         }
-                        $('.sm-'+em.id+'-'+i).append(es);
+                        let newdiv = "<small><span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span></small>";
+                        $('.sm-'+em.id+'-'+i).append(newdiv);
                       }
                     }
                 }
@@ -1057,24 +1101,11 @@ export class FlightchangeinfoPage implements OnInit {
       
     }
 
-    showLowestPrice(event){
-      setTimeout(()=>{
-        this.showlowestprice = event.target.checked;
-        this._flightService.itemFlightCache.showCalendarLowestPrice = this.showlowestprice;
-        if(this.departCode && this.returnCode){
-          if(this.showlowestprice){
-            $('.price-calendar-text').removeClass('price-calendar-disabled').addClass('price-calendar-visible');
-          }else{
-            $('.price-calendar-text').removeClass('price-calendar-visible').addClass('price-calendar-disabled');
-          }
-        }else{
-          this.gf.showToastWarning('Vui lòng chọn điểm khởi hành và điểm đến trước khi xem lịch giá rẻ.');
-        }
-      },100)
-    }
+    
 
     loadCalendarPrice(){
-      if(this.departCode && this.returnCode){
+      if(!this._flightService.itemFlightCache.isInternationalFlight){
+        if(this.departCode && this.returnCode){
         let url = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDealCalendar?fromplace="+this.departCode+"&toplace="+this.returnCode+"&getincache=false";
         this.gf.RequestApi("GET", url, {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
@@ -1082,9 +1113,9 @@ export class FlightchangeinfoPage implements OnInit {
           }, {}, "homeflight", "showCalendarPrice").then((data) =>{
             if(data){
               let key = "listHotDealCalendar_"+this.departCode+"_"+this.returnCode+"_"+this.adult+ ( this.child ? "_" + this.child : "")+ ( this.infant ? "_" + this.infant : "");
-              this.storage.set(key, data);
+             
               if(data && data.departs && data.departs.length >0){
-
+                this.storage.set(key, data);
                 if(this.flighttype == "twoway"){//2 chiều
                     this.renderCalenderPrice(1, data.departs, data.arrivals);
                 }else{//1 chiều
@@ -1093,7 +1124,95 @@ export class FlightchangeinfoPage implements OnInit {
               }
             }
           })
+        }
+      }else{
+        let url = C.urls.baseUrl.urlFlightInt + 'api/FlightSearch/GetCalendarPrice';
+        let body = {
+          DepartDate: new Date(this.cin),
+          FromPlaceCode: this.departCode,
+          ReturnDate: new Date(this.cout),
+          ToPlaceCode: this.returnCode
+        };
+        this.gf.RequestApi("POST", url, {}, body, "homeflight", "showCalendarPrice").then((data) =>{
+            if(data && data.success && data.data && data.data.calendarPriceItemDto && data.data.calendarPriceItemDto.length>0 ){
+              this.renderInternationalCalenderPrice(data.data.calendarPriceItemDto);
+            }
+          })
       }
+    }
+
+    renderInternationalCalenderPrice(listPrices){
+      var se = this;
+      try {
+        if($('.month-box').length >0){
+          let diffday =moment(this.cout).diff(this.cin, "days");
+          for (let index = 0; index < $('.month-box').length; index++) {
+            const elementMonth = $('.month-box')[index];
+            let objtextmonth = elementMonth.children[0].textContent.replace('Tháng ','');
+            let monthstartdate:any = objtextmonth.trim().split(" ")[0];
+            let yearstartdate:any = objtextmonth.trim().split(" ")[1];
+            let textmonth = moment(this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, 1))).format('YYYY-MM');
+            
+            if(objtextmonth && objtextmonth.length >0){
+              let listdepartinmonth = listPrices.filter((item) => { return moment(item.departDate).format('YYYY-MM') == textmonth});
+            
+              let listdayinmonth = elementMonth.children[1].children[0].children[0].children;
+              if(listdayinmonth && listdayinmonth.length >0){
+                  for (let j = 0; j < listdayinmonth.length; j++) {
+                    const elementday = listdayinmonth[j];
+                    if(elementday && elementday.textContent){
+                      //let fday:any = elementday.textContent;
+                      let fday:any = elementday.children[0].children[0].textContent;
+                      let fromdate = moment(this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday))).format('YYYY-MM-DD');
+                      let todate = moment(fromdate).add(diffday ,'days').format('YYYY-MM-DD');
+                      if(fromdate && moment(fromdate).diff( moment(this.gf.getCinIsoDate(new Date())).format('YYYY-MM-DD'), 'days') >=0){
+                         
+                            let mindepartvalue = Math.min(...listdepartinmonth.map(o => o.price));
+                            let minvalue = mindepartvalue;
+
+                            let pricefromdate =0;
+                            let itemfromdate = listdepartinmonth.filter((d)=>{ return moment(d.departDate).format('YYYY-MM-DD') == fromdate });
+                            if(itemfromdate && itemfromdate.length >0){
+                              pricefromdate = itemfromdate[0].price;
+                            }
+
+                            let totalprice = pricefromdate/1000000 >= 1 ? (pricefromdate/1000000).toFixed(1): Math.round(pricefromdate / 1000000);
+                            if(pricefromdate/1000000 >= 1){
+                              totalprice = totalprice +" Trđ";
+                            }else{
+                              totalprice = totalprice +" Nđ";
+                            }
+                              
+                            if(pricefromdate){
+
+                              //giá min
+                              if(minvalue == pricefromdate){
+                                $(elementday.children[0]).append(`<span class='price-calendar-text m-l--5 price-calendar-disabled min-price-international'>${totalprice}</span>`);
+                              }else{
+                                $(elementday.children[0]).append(`<span class='price-calendar-text m-l--5 price-calendar-disabled normal-price'>${totalprice}</span>`);
+                              }
+                              
+                            }
+                          
+                      }
+                    }
+                    
+                  }
+              }
+              
+            }
+          }
+          if(this.showlowestprice){
+            $('.price-calendar-text').removeClass('price-calendar-disabled').addClass('price-calendar-visible');
+          }else{
+            $('.price-calendar-text').removeClass('price-calendar-visible').addClass('price-calendar-disabled');
+          }
+        }
+      } catch (error) {
+        console.log('Lỗi jquery khi show lịch giá rẻ: '+ error);
+      }
+      
+      
     }
 
     renderCalenderPrice(type, departs, arrivals){
@@ -1234,6 +1353,43 @@ export class FlightchangeinfoPage implements OnInit {
 
       this.reloadInfoOneway(!ev.currentTarget.checked);
       this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
+    }
+
+    showLowestPrice(event){
+      setTimeout(()=>{
+        this.showlowestprice = event.target.checked;
+        this._flightService.itemFlightCache.showCalendarLowestPrice = this.showlowestprice;
+        if(this.departCode && this.returnCode){
+          if(this.showlowestprice){
+            this.showLunarCalendar = !event.target.checked;
+            this._flightService.itemFlightCache.showLunarCalendar = this.showLunarCalendar;
+            $('.lunardate').removeClass('date-lunar-visible');
+            $('.chk-showlunar')[0].checked = false;
+            $('.price-calendar-text').removeClass('price-calendar-disabled').addClass('price-calendar-visible');
+
+          }else{
+            $('.price-calendar-text').removeClass('price-calendar-visible').addClass('price-calendar-disabled');
+          }
+        }else{
+          this.gf.showToastWarning('Vui lòng chọn điểm khởi hành và điểm đến trước khi xem lịch giá rẻ.');
+        }
+      }, 100)
+    }
+
+    checkLunarCalendar(event){
+      setTimeout(()=>{
+        this.showLunarCalendar = event.target.checked;
+        this._flightService.itemFlightCache.showLunarCalendar = this.showLunarCalendar;
+          if(this.showLunarCalendar){
+            this.showlowestprice = !event.target.checked;
+            this._flightService.itemFlightCache.showCalendarLowestPrice = this.showlowestprice;
+            $('.price-calendar-text').removeClass('price-calendar-visible').addClass('price-calendar-disabled');
+            $('.button-show-lowest-price')[0].checked = false;
+            $('.lunardate').addClass('date-lunar-visible');
+          }else{
+            $('.lunardate').removeClass('date-lunar-visible');
+          }
+      }, 100)
     }
 
 }

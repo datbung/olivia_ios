@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { FlightAdddetailsInternationalPage } from './flightadddetailsinternational.page';
+import { VoucherSlidePageModule } from '../../voucher/voucherslide/voucherslide.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { FlightAdddetailsInternationalPage } from './flightadddetailsinternation
     CommonModule,
     FormsModule,
     IonicModule,
+    VoucherSlidePageModule,
     RouterModule.forChild( [{
       path: '',
       component: FlightAdddetailsInternationalPage

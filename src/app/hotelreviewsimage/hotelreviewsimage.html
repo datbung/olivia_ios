@@ -29,8 +29,6 @@
       <ion-slide *ngFor="let slide of arrimgreview; let idx = index">
           
         <img style="height: 350px;width: 100%;object-fit: cover" [src]="slide.ImageUrl" />
-        <div *ngIf="slide.CaptionImg" class="div-img-caption-grad"></div>
-        <div *ngIf="slide.CaptionImg" class="div-img-caption">{{slide.CaptionImg}}</div>
       </ion-slide>
     </ion-slides>
   </div>
@@ -38,7 +36,7 @@
     <ion-skeleton-text animated style="width: 100%;height: 350px;margin: 0 auto" ></ion-skeleton-text>
   </div>
       
-  
+  <div *ngIf="captionImg" class="div-captionImg">{{captionImg}}</div>
   <div *ngIf="ischeckslide" class="slide div-align-center" style="text-align: center">
     <img  (click)="backslide()"  src="./assets/imgs/back.svg">
       <ion-label style="color: whitesmoke;padding: 40px;font-size: 22px">

@@ -181,7 +181,7 @@ export class VoucherSlidePage implements OnInit{
                 'content-type': 'application/json'
               },
               body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: 0,
-              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? { flight: {
+              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' && !se._flightService.itemFlightCache.isInternationalFlight ? { flight: {
                   "tickets": this._flightService.itemFlightCache.roundTrip ? [
                     {
                       "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
