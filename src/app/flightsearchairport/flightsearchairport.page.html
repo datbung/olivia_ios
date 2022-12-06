@@ -29,7 +29,7 @@
         <div *ngIf="listLastSearch && listLastSearch.length >0" class="div-list-last-search">
           <div class="div-label-text">Sân bay tìm kiếm gần đây</div>
           <div *ngFor="let itemLastSearch of listLastSearch; let idx = index" (click)="itemclick(itemLastSearch)">
-            <div [ngClass]="idx == listLastSearch.length -1 ? 'div-item-search' : (idx==0 ? 'div-item-search div-border-bottom m-top-16' : 'div-item-search div-border-bottom m-top-12')">
+            <div [ngClass]="idx == listLastSearch.length -1 ? (listLastSearch.length ==1 ? 'div-item-search m-top-16' : 'div-item-search') : (idx==0 ? 'div-item-search div-border-bottom m-top-16' : 'div-item-search div-border-bottom m-top-12')">
               <div class="title-text">
                 {{itemLastSearch.city}} ({{itemLastSearch.code}})
               </div>

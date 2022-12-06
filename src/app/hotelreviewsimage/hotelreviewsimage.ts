@@ -59,7 +59,7 @@ export class HotelreviewsimagePage  {
   {
     this.slider.getActiveIndex().then(index => {
       this.countslide = index + 1;
-      this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
+      this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
     });
   }
 }

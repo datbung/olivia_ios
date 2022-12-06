@@ -41,7 +41,7 @@ export class FlightsearchairportPage implements OnInit {
     public _flightService: flightService) { 
        this.isdepart = this._flightService.searchDepartCode;
       this.storage.get("listAirport").then((data)=>{
-        if(!data){
+        if(!data || (data && data.length == 0)){
           this.loadLocation();
         }else{
 
