@@ -646,13 +646,18 @@ export class HotelListPage implements OnInit{
           
 
         } else {
-          if (!isloadmore) {
+          //if (!isloadmore) {
             se.ishide = true;
             se.nodata = se.json1.length == 0;
             se.json1.forEach(element => {
-              element.HasCheckPrice = true;
+              if(!element.HasCheckPrice){
+                element.HasCheckPrice = true;
+                element.MinPriceOTAStr = 0;
+                element.MinPriceTAStr = 0;
+              }
+              
             })
-          }
+          //}
           se.loadpricedone = true;
         }
         setTimeout(() => {

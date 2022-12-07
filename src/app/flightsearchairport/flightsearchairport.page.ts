@@ -78,14 +78,14 @@ export class FlightsearchairportPage implements OnInit {
               
             });
 
-            console.log(this.itemsRegular);
+            //console.log(this.itemsRegular);
         })
         }
       })
 
       this.gf.getListLastSearchFlight().then((data)=>{
         this.listLastSearch = data;
-        console.log(this.listLastSearch);
+        //console.log(this.listLastSearch);
       })
     }
 
@@ -137,13 +137,13 @@ export class FlightsearchairportPage implements OnInit {
                     for (let index = 0; index < 5; index++) {
                       const element = datainbound[index];
                       element.show = true;
-                      this.itemsRegular.push(element);
+                      se.itemsRegular.push(element);
                     }
                     dataoutbound.sort((a,b)=>{ return (a.count - b.count)*-1 });
                     for (let index = 0; index < 5; index++) {
                       const element = dataoutbound[index];
                       element.show = true;
-                      this.itemsRegularInternational.push(element);
+                      se.itemsRegularInternational.push(element);
                     }
 
                     // for (let index = 0; index < 5; index++) {

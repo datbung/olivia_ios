@@ -94,7 +94,6 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               })
             )
             this._flightService.listAllPlaceByArea = data;
-            console.log(this._flightService.listAllPlaceByArea);
           });
           this.storage.get('jti').then(jti => {
             if (jti) {

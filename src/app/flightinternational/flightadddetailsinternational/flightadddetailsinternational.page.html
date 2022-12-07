@@ -163,7 +163,7 @@
             </div>
 
 
-            <div class="div-split-panel"></div>
+            <!-- <div class="div-split-panel"></div>
 
             <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
                 <div class="width-200">
@@ -176,10 +176,7 @@
             <div class="m-top-4" *ngIf="msg"> 
                 <div *ngIf="ischeckerror==1&& msg" class="text-red">{{msg}}</div>
                 <div *ngIf="ischeckerror==0&& msg" class="text-grey">{{msg}}</div>
-            </div>
-
-            
-
+            </div> 
 
             <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!promocode">
               <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
@@ -188,10 +185,10 @@
               </div>
               <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
             </div>
-           
           
             <app-voucherslide></app-voucherslide>
-  
+            -->
+
         </div>
         <ng-template #stepUserInfo>
             
@@ -620,7 +617,7 @@
                   </sup>
                  </div>
 
-                 <div class="text-normal text-strike" *ngIf="promocode && discountpromo">{{ gf.convertNumberToString(totalPriceBeforeDiscount)}}</div>
+                 <!-- <div class="text-normal text-strike" *ngIf="promocode && discountpromo">{{ gf.convertNumberToString(totalPriceBeforeDiscount)}}</div> -->
               </div>
               <div class="div-button">
                 <button (click)="confirm()" ion-button round outline class="button button-done" *ngIf="activeStep == 1">Thông tin khách</button>
