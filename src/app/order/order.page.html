@@ -336,7 +336,7 @@
                           <div class="div-datetime">{{itemtransit.cindisplay}}</div>
                           <div class="div-flightnumber"><img class="icon-copy" [src]="itemtransit.Logo" > {{itemtransit.FlightNumber }} - {{itemtransit.TicketClass }}</div>
                       </div>
-                      <div class="ticket-code">
+                      <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="ticket-code">
                         <div class="div-text-code">Mã đặt chỗ</div>
                         <div class="d-flex div-code">
                             <div class="text-code">{{ itembkg.TicketCode }}</div>
