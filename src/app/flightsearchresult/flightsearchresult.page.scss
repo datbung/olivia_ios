@@ -35,6 +35,9 @@
     color: #26bed6;
     text-align: right;
 }
+.text-red {
+    color: #e52822 !important;
+}
 .flightsearchresult-header{
     .col-header{
         text-align: center;
@@ -289,7 +292,7 @@
         .div-flight-time{
             font-size: 10px !important;
             letter-spacing: -0.69px !important;
-            color: #828282 !important;
+            color: #828282;
             width: 70px;
             text-align: center;
             padding-left: 0 !important;

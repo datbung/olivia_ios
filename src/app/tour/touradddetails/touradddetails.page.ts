@@ -1263,8 +1263,8 @@ export class TourAddDetailsPage implements OnInit {
                   'cache-control': 'no-cache',
                   'content-type': 'application/json'
                 },
-                body: { code: se.promocode, totalAmount: se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, '') ,comboDetailId: "", 
-                couponData: vc ? {
+                body: { bookingCode: 'TOUR', code: se.promocode, totalAmount: se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, '') ,comboDetailId: "", 
+                couponData: {
                   "tour": {
                     "tourId": se.tourService.itemDetail.tourDetailId,
                     "totalAdult": se.searchhotel.adult,
@@ -1273,7 +1273,7 @@ export class TourAddDetailsPage implements OnInit {
                     "checkIn": se.searchhotel.CheckInDate,
                     "checkOut": se.searchhotel.CheckOutDate
                   }
-                } : ''
+                }
                 },
                 json: true
               };

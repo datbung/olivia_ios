@@ -169,11 +169,11 @@ export class FlightsearchairportPage implements OnInit {
     getItems(ev: any) {
       var se = this;
       if(ev.detail.value){
-        const val = se.gf.convertFontVNI(ev.detail.value).toLowerCase();
+        const val = se.gf.convertUnicodeCharactor(ev.detail.value).toLowerCase();
         if(se.itemsfull && se.itemsfull.length >0){
-          let filteritems = se.itemsfull.filter((element) => { return se.gf.convertFontVNI(element.name).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.code).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.city).toLowerCase().indexOf(val) != -1 || se.gf.convertFontVNI(element.airport).toLowerCase().indexOf(val) != -1});
+          let filteritems = se.itemsfull.filter((element) => { return se.gf.convertUnicodeCharactor(element.name).toLowerCase().indexOf(val) != -1 || se.gf.convertUnicodeCharactor(element.airport).toLowerCase().indexOf(val) != -1});
             se.zone.run(()=>{
-            
+              
               se.itemsfull.sort((a,b)=>{ return ((a.order - b.order) > 0 ? 3 : -3) + ((a.internal - b.internal) > 0 ? -5 : 5 ) + ((a.count - b.count) >0 ? -1 : 1 ) });
               if(filteritems && filteritems.length >0){
                 se.itemsFilter = [...filteritems];

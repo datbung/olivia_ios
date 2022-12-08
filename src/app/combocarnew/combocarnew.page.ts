@@ -1737,7 +1737,19 @@ export class CombocarnewPage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: { code: se.promocode, totalAmount: se.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') ,comboDetailId: this.bookCombo.ComboId},
+        body: { bookingCode: 'CARCOMBO',code: se.promocode, totalAmount: se.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') ,comboDetailId: this.bookCombo.ComboId,
+        couponData: {
+          "hotel": {
+            "hotelId": this.booking.HotelId,
+            "roomName": (this.Roomif.arrroom[0] as any).MealTypeRates[this.booking.indexmealtype].RoomName,
+            "totalRoom": this.Roomif.roomnumber,
+            "totalAdult": this.booking.Adults,
+            "totalChild": this.booking.Child,
+            "jsonObject": "",
+            "checkIn": this.searchhotel.CheckInDate,
+            "checkOut": this.searchhotel.CheckOutDate
+          }
+        }},
         json: true
       };
 

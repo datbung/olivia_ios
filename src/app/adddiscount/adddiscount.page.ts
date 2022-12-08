@@ -1,5 +1,5 @@
 import { ModalController } from '@ionic/angular';
-import { ValueGlobal, Bookcombo } from './../providers/book-service';
+import { ValueGlobal, Bookcombo, Booking, RoomInfo, SearchHotel } from './../providers/book-service';
 import { Component, OnInit, NgZone } from '@angular/core';
 import { C } from '../providers/constants';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -18,7 +18,11 @@ export class AdddiscountPage implements OnInit {
   ;discountpromo;msg;ischecktext=3;ischeckerror=0;ischeckbtnpromo = false;promocode;
   constructor(public _flightService: flightService,public zone: NgZone,public valueGlobal:ValueGlobal, public modalCtrl: ModalController,private bookCombo:Bookcombo,
     public _voucherService: voucherService,
-    public _tourService: tourService) { 
+    public _tourService: tourService,
+    public booking: Booking,
+    public Roomif: RoomInfo,
+    public searchHotel: SearchHotel,
+    public tourService: tourService) { 
   
   }
 
@@ -35,6 +39,87 @@ export class AdddiscountPage implements OnInit {
   promofunc() {
     var se = this;
     if (se.promocode) {
+      let coupondata:any;
+      let _bookingCode = '';
+      if(se._voucherService.openFrom == 'flightaddservice' ){
+        coupondata = { flight: {
+          "tickets": this._flightService.itemFlightCache.roundTrip ? [
+            {
+              "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
+              "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
+              "departTime": se._flightService.itemFlightCache.departFlight.departTime,
+              "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
+              "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
+              "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
+              "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
+              "stops": se._flightService.itemFlightCache.departFlight.stops,
+              "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
+              "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+              "jsonObject": ""
+            },
+            {
+              "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
+              "airLineCode": se._flightService.itemFlightCache.returnFlight.airlineCode,
+              "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
+              "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
+              "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
+              "fromPlaceCode": se._flightService.itemFlightCache.returnFlight.fromPlaceCode,
+              "toPlaceCode": se._flightService.itemFlightCache.returnFlight.toPlaceCode,
+              "stops": se._flightService.itemFlightCache.returnFlight.stops,
+              "ticketClass": se._flightService.itemFlightCache.returnFlight.ticketClass,
+              "fareBasis": se._flightService.itemFlightCache.returnFlight.fareBasis,
+              "jsonObject": ""
+            }
+          ] : 
+          [
+            {
+              "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
+              "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
+              "departTime": se._flightService.itemFlightCache.departFlight.departTime,
+              "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
+              "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
+              "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
+              "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
+              "stops": se._flightService.itemFlightCache.departFlight.stops,
+              "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
+              "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+              "jsonObject": ""
+            }
+          ],
+          "totalAdult": se._flightService.itemFlightCache.adult,
+          "totalChild": se._flightService.itemFlightCache.child,
+          "totalInfant": se._flightService.itemFlightCache.infant
+        ,
+      } };
+      _bookingCode = 'VMB';
+      }  else if(se._voucherService.openFrom == 'touradddetails'){
+        coupondata = {
+          "tour": {
+            "tourId": se.tourService.itemDetail.tourDetailId,
+            "totalAdult": se.searchHotel.adult,
+            "totalChild": se.searchHotel.child,
+            "jsonObject": "",
+            "checkIn": se.searchHotel.CheckInDate,
+            "checkOut": se.searchHotel.CheckOutDate
+          }
+        };
+        _bookingCode = 'TOUR';
+      } else{
+        coupondata = {
+          "hotel": {
+            "hotelId": this.booking.HotelId,
+            "roomName": this.booking.RoomName,
+            "totalRoom": this.Roomif.roomnumber,
+            "totalAdult": this.booking.Adults,
+            "totalChild": this.booking.Child,
+            "jsonObject": "",
+            "checkIn": this.searchHotel.CheckInDate,
+            "checkOut": this.searchHotel.CheckOutDate
+          }
+        };
+        _bookingCode = 'HOTEL';
+      }
+
       var options = {
         method: 'POST',
         url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
@@ -44,8 +129,8 @@ export class AdddiscountPage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: { bookingCode: se._voucherService.openFrom == 'flightaddservice' ? 'VMB' : 'HOTEL' ,code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice), comboDetailId: se.bookCombo.ComboId,
-        couponData: '' },
+        body: { bookingCode: _bookingCode ,code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice), comboDetailId: se.bookCombo.ComboId,
+        couponData: coupondata},
         json: true
       };
   

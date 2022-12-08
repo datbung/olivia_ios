@@ -3391,7 +3391,7 @@ export class FlightaddservicePage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight') ?  { flight: {
+        body: {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight' || se._voucherService.openFrom == 'flightaddservice') ?  { flight: {
             "tickets": this._flightService.itemFlightCache.roundTrip ? [
               {
                 "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,

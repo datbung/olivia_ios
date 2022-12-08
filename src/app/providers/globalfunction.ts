@@ -3780,7 +3780,7 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
                   item.countryCode = elementCountry.countryCode;
                   item.countryId = elementCountry.countryId;
                   item.countryName = elementCountry.countryName;
-                  item.order = elementCountry.countryCode == 'VN' ? 1 : element.areaId;
+                  item.order = elementCountry.countryCode == 'VN' ? 1 : ( element.areaName == 'Châu Âu' ? 5 : ( element.areaName == 'Châu Úc' ? 6 :  ( element.areaName == 'Châu Đại Dương' ? 7 : ( element.areaName == 'Châu Phi' ? 8 :element.areaId ))));
                   item.places = _places;
                   if(listAllPlaceByArea.length ==0 || item.countryCode == 'VN'){
                     listAllPlaceByArea.push(item);

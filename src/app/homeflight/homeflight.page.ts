@@ -813,13 +813,15 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         }
 
         for (let k = 0; k < 365; k++) {
-          let nd = new Date(moment(new Date()).add(k, 'days').format('MM-DD-YYYY'));
-          let y = moment(nd.getFullYear()) as any;
-          let m = moment(nd.getMonth())as any;
-          let d= moment(nd.getDate())as any;
+          let newdate = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate());
+          let addday = moment(newdate).add(k, 'days').format('YYYY-MM-DD');
+          let arrdate = addday.split('-');
+          let y = arrdate[0] as any;
+          let m = arrdate[1]as any;
+          let d= arrdate[2]as any;
           
           _daysConfig.push({
-            date: nd as any,
+            date: addday as any,
             subTitle: moment().year(y).month(m).date(d).lunar().format('D'),
             cssClass: 'lunardate'
           })
@@ -924,7 +926,11 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               $('.flight-calendar-custom .header-img-close').click((e => this.closecalendar()));
               //
               $(".days-btn").click(e => this.clickedElement(e));
-
+              if(this.showLunarCalendar){
+                $('.lunardate').addClass('date-lunar-visible');
+              }else {
+                $('.lunardate').removeClass('date-lunar-visible');
+              }
               if(this.showlowestprice){
                 $('.price-calendar-text').removeClass('price-calendar-disabled').addClass('price-calendar-visible');
               }else{

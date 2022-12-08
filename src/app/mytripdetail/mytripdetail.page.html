@@ -548,16 +548,6 @@
               </div>
             </div>
     
-       
-            <!-- <div class="d-flex" (click)="nextSupport(trip)">
-              <div class="text-info-2 font-weight-500 padding-bottom-20">
-                Liên hệ hỗ trợ
-              </div>
-              <div  class="position-absolute">
-                <img src="./assets/imgs/ic_expand.svg" />
-              </div>
-            </div> -->
-    
             <div *ngIf="trip.bookingOffType">
               <ion-row >
                 <ion-col class="col-nopd-top"><label class="room-name">{{trip.room_name}}</label></ion-col>
@@ -575,113 +565,6 @@
               </div>
               <div class="div-split-color"></div>
             </div>
-
-            <!-- Vùng cho combo -->
-            <!-- <div *ngIf="trip.booking_type == 'COMBO_FLIGHT'" class="div-combovmb">
-              <div class="div-split-color"></div>
-              <div *ngIf="trip.bookingsComboData[0]">
-                
-                <div *ngIf="trip.bookingsComboData[0].checkInDisplay" class="text-cincout">{{trip.bookingsComboData[0].checkInDisplay}}</div>
-                <div class="div-first"  >
-                      <div class="d-flex">
-                        <div class="div-time">{{trip.bookingsComboData[0].departureTime}}</div>
-                        <div class="div-flight-time"><img _ngcontent-c13="" class="img-arrow" src="./assets/imgs/ic_arrow_right.svg"></div>
-                        <div class="div-time">{{trip.bookingsComboData[0].arrivalTime}}</div>
-                      </div>
-    
-                      <div class="d-flex">
-                        <div class="div-departcode">
-                            {{trip.bookingsComboData[0].departCode}}
-                        </div>
-                        <div class="div-flight-time m-0-16">
-                          {{trip.bookingsComboData[0].flightTimeDisplay}}
-                        </div>
-                    
-                        <div class="div-departcode">
-                          {{trip.bookingsComboData[0].arrivalCode}}
-                        </div>
-                    
-                      </div>
-                </div>
-                <div class="div-second d-flex p-top-8">
-                
-                  <div class="div-logo" >
-                    <img class="img-logo" [src]="trip.bookingsComboData[0].logo" *ngIf="trip.bookingsComboData[0].logo else loadlocalimglogodepart">
-                    <ng-template #loadlocalimglogodepart>
-                        <img class="img-logo vj-logo" *ngIf="trip.bookingsComboData[0].airlineName.indexOf('VIETJET') != -1 "
-                          src="./assets/ic_airticket/ic_vietjet_b.png">
-                        <img class="img-logo logo_vna"
-                          *ngIf="(trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1 ) && !trip.operatedBy "
-                          src="./assets/ic_airticket/logo_vna.png">
-                        <img class="img-logo logo_vna"
-                          *ngIf="(trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1 ) && trip.operatedBy"
-                          src="./assets/ic_airticket/logo_vna.png">
-                        <img class="img-logo" *ngIf="trip.bookingsComboData[0].airlineName.indexOf('JETSTAR') != -1"
-                          src="./assets/ic_airticket/ic_jetstar_b.png">
-                        <img class="img-logo" *ngIf="trip.bookingsComboData[0].airlineName.indexOf('BAMBOO') != -1 "
-                          src="./assets/ic_airticket/ic_bamboo_b.png">
-                    </ng-template>
-                  </div>
-      
-                  <div class="flight-type p-l-8 d-flex">
-                    <div>{{trip.bookingsComboData[0].airlineName}} · {{trip.bookingsComboData[0].ticketClass}}</div>
-                  </div>
-    
-                </div>
-              </div>
-    
-              <div *ngIf="trip.bookingsComboData[1]">
-                <div class="div-split"></div>
-                <div *ngIf="trip.bookingsComboData[1].checkOutDisplay" class="text-cincout">{{trip.bookingsComboData[1].checkOutDisplay}}</div>
-                <div class="div-first"  >
-                      <div class="d-flex">
-                        <div class="div-time">{{trip.bookingsComboData[1].departureTime}}</div>
-                        <div class="div-flight-time"><img _ngcontent-c13="" class="img-arrow" src="./assets/imgs/ic_arrow_right.svg"></div>
-                        <div class="div-time">{{trip.bookingsComboData[1].arrivalTime}}</div>
-                      </div>
-    
-                      <div class="d-flex">
-                        <div class="div-departcode">
-                            {{trip.bookingsComboData[1].departCode}}
-                        </div>
-                        <div class="div-flight-time m-0-16">
-                          {{trip.bookingsComboData[1].flightTimeDisplay}}
-                        </div>
-                    
-                        <div class="div-departcode" >
-                          {{trip.bookingsComboData[1].arrivalCode}}
-                        </div>
-                    
-                      </div>
-                </div>
-                <div class="div-second d-flex p-top-8 ">
-                
-                  <div class="div-logo" >
-                    <img class="img-logo" [src]="trip.bookingsComboData[1].logo" *ngIf="trip.bookingsComboData[1].logo else loadlocalimglogoreturn">
-                    <ng-template #loadlocalimglogoreturn>
-                      <img class="img-logo  vj-logo" *ngIf="trip.bookingsComboData[1].airlineName.indexOf('VIETJET') != -1 "
-                        src="./assets/ic_airticket/ic_vietjet_b.png">
-                      <img class="img-logo logo_vna"
-                        *ngIf="(trip.bookingsComboData[1].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[1].airlineName.indexOf('VIETNAM AIRLINES') != -1 ) && !trip.operatedBy "
-                        src="./assets/ic_airticket/logo_vna.png">
-                      <img class="img-logo logo_vna"
-                        *ngIf="(trip.bookingsComboData[1].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[1].airlineName.indexOf('VIETNAM AIRLINES') != -1 ) && trip.operatedBy"
-                        src="./assets/ic_airticket/logo_vna.png">
-                      <img class="img-logo" *ngIf="trip.bookingsComboData[1].airlineName.indexOf('JETSTAR') != -1"
-                        src="./assets/ic_airticket/ic_jetstar_b.png">
-                      <img class="img-logo" *ngIf="trip.bookingsComboData[1].airlineName.indexOf('BAMBOO') != -1 "
-                        src="./assets/ic_airticket/ic_bamboo_b.png">
-                  </ng-template>
-                  </div>
-      
-                  <div class="flight-type p-l-8 d-flex">
-                    <div>{{trip.bookingsComboData[1].airlineName}} · {{trip.bookingsComboData[1].ticketClass}}</div>
-                  </div>
-    
-                </div>
-              </div>
-            </div> -->
-    
           
             <!-- Vùng bkg Flight -->
             <div class="div-flybooking" *ngIf="isFlyBooking">
@@ -1363,62 +1246,6 @@
                     </div>
                       
                   </div>
-                  <!-- <div *ngIf="dataSummaryBooking && ((dataSummaryBooking.departFlightData && departTicketInfo) || (dataSummaryBooking.departFlightData && dataSummaryBooking.returnCondition))" class="div-wrap-refund div-collapse">
-
-                    <div class="m-top-16" *ngIf="dataSummaryBooking.departFlightData && departTicketInfo && departTicketInfo.ticketCondition">
-                        <div class="text-sub-title" >
-                          Chiều đi {{dataSummaryBooking.departFlightData.fromPlaceCode}}-{{dataSummaryBooking.departFlightData.toPlaceCode}}
-                        </div>
-
-                      
-                      <div class="d-flex" *ngIf="departTicketInfo && departTicketInfo.ticketCondition && departTicketInfo.ticketCondition.changeDepartTime">
-                        <div class="div-icon">
-                          <img *ngIf=" departTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('không') ==-1 && departTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('miễn phí') ==-1" class="icon-info" src="./assets/ic_flight_international/monetization.svg">
-                          <img *ngIf=" departTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('miễn phí') !=-1"class="icon-info" src="./assets/ic_flight_international/check.svg">
-                          <img *ngIf=" departTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('không') !=-1"class="icon-info" src="./assets/ic_flight_international/disturb.svg">
-                        </div>
-                        <div class="text-normal">Thay đổi vé: {{departTicketInfo.ticketCondition.changeDepartTime}}</div>
-                      </div>
-                    
-                      
-                          <div class="d-flex" *ngIf="departTicketInfo && departTicketInfo.ticketCondition && departTicketInfo.ticketCondition.ticketRefund">
-                            <div class="div-icon">
-                              <img *ngIf=" departTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('không') ==-1 && departTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('miễn phí') ==-1" class="icon-info" src="./assets/ic_flight_international/monetization.svg">
-                              <img *ngIf=" departTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('miễn phí') !=-1"class="icon-info" src="./assets/ic_flight_international/check.svg">
-                              <img *ngIf=" departTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('không') !=-1"class="icon-info" src="./assets/ic_flight_international/disturb.svg">
-                            </div>
-                            <div class="text-normal">Hủy vé: {{departTicketInfo.ticketCondition.ticketRefund}}</div>
-                          </div>
-                    </div>
-
-                    <div class="m-top-16" *ngIf="dataSummaryBooking.returnCondition && returnTicketInfo && returnTicketInfo.ticketCondition">
-                        <div class="text-sub-title" >
-                          Chiều về {{dataSummaryBooking.returnFlightData.fromPlaceCode}}-{{dataSummaryBooking.returnFlightData.toPlaceCode}}
-                        </div>
-
-                      
-                      <div class="d-flex" *ngIf="returnTicketInfo.ticketCondition && returnTicketInfo.ticketCondition.changeDepartTime">
-                        <div class="div-icon">
-                          <img *ngIf=" returnTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('không') ==-1 && returnTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('miễn phí') ==-1" class="icon-info" src="./assets/ic_flight_international/monetization.svg">
-                          <img *ngIf=" returnTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('miễn phí') !=-1"class="icon-info" src="./assets/ic_flight_international/check.svg">
-                          <img *ngIf=" returnTicketInfo.ticketCondition.changeDepartTime.toLowerCase().indexOf('không') !=-1"class="icon-info" src="./assets/ic_flight_international/disturb.svg">
-                        </div>
-                        <div class="text-normal">Thay đổi vé: {{returnTicketInfo.ticketCondition.changeDepartTime}}</div>
-                      </div>
-                    
-                      
-                          <div class="d-flex" *ngIf="returnTicketInfo.ticketCondition && returnTicketInfo.ticketCondition.ticketRefund">
-                            <div class="div-icon">
-                              <img *ngIf=" returnTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('không') ==-1 && returnTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('miễn phí') ==-1" class="icon-info" src="./assets/ic_flight_international/monetization.svg">
-                              <img *ngIf=" returnTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('miễn phí') !=-1"class="icon-info" src="./assets/ic_flight_international/check.svg">
-                              <img *ngIf=" returnTicketInfo.ticketCondition.ticketRefund.toLowerCase().indexOf('không') !=-1"class="icon-info" src="./assets/ic_flight_international/disturb.svg">
-                            </div>
-                            <div class="text-normal">Hủy vé: {{returnTicketInfo.ticketCondition.ticketRefund}}</div>
-                          </div>
-                      </div>
-                      
-                      
-                  </div> -->
                 <div class="div-line-total"></div>
 
                   <div class="d-flex h-36" (click)="openLinkCondition()">
@@ -1433,7 +1260,7 @@
                 </div>
                 <div class="div-line-total"></div>
 
-                <!-- <div class="d-flex h-36" (click)="nextSupport(trip)">
+                <div class="d-flex h-36" (click)="nextSupport(trip)">
                   <div class="div-width-250 v-align-center">
                       <div class="text-title">Liên hệ hỗ trợ</div>
                   </div>
@@ -1442,7 +1269,7 @@
                         <img class="img-expand" src="./assets/ic_flight_international/expand.svg">
                       </div>
                   </div>
-                </div> -->
+                </div>
               </div>
           </div>
             <!-- end other info -->
@@ -2731,7 +2558,7 @@
         </div>
       </div>
       <!-- case VMB -->
-      <div class="mt16  m-l-8" *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
+      <div class="mt16  m-l-8" *ngIf="!trip.isRequestTrip && trip.isFlyBooking && !trip.isBookingVMBQT">
         <div (click)="dkv()" class="d-flex">
           <div class="text-info-2 font-weight-500">
             Điều kiện vé
@@ -2904,8 +2731,8 @@
                     </div>
                   </div> -->
       </div>
-                   <div class="div-panel-1px"></div>
-                        <div (click)="nextSupport(trip)" class="d-flex m-l-8  padding-bottom-20">
+                   <div class="div-panel-1px" *ngIf="!trip.isBookingVMBQT"></div>
+                        <div (click)="nextSupport(trip)" class="d-flex m-l-8  padding-bottom-20"  *ngIf="!trip.isBookingVMBQT">
                           <div class="text-info-2 font-weight-500">
                             Liên hệ hỗ trợ
                           </div>
