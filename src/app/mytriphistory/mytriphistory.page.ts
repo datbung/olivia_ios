@@ -549,7 +549,11 @@ export class MytripHistoryPage implements OnInit {
           } else {
             elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
           }
-          elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+          if(elementHis.avatar)
+          {
+            elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+          }
+        
           elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM')
           elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM')
           se.getRatingStar(elementHis);
@@ -694,7 +698,10 @@ export class MytripHistoryPage implements OnInit {
               let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
               elementHis.avatar = urlavatar + "-" + "104x104" + tail;
             }
-            elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+            if (elementHis.avatar) {
+              elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+            }
+          
             if(elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1){
               elementHis.isFlyBooking = true;
               elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));

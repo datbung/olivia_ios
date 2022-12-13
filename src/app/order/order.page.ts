@@ -791,8 +791,10 @@ import { tourService } from '../providers/tourService';
                         }
                         element.avatar = urlavatar + "-" + "104x104" + tail;
                       }
-                      element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : ('https:' +  element.avatar);
-                      console.log(element.avatar);
+                      if (element.avatar ) {
+                        element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : ('https:' +  element.avatar);
+                      }
+                      
                       if (element.delivery_payment_date) {
                         let arrpaymentdate = element.delivery_payment_date.split("T");
                         let hour ='',day='';
@@ -1440,7 +1442,10 @@ import { tourService } from '../providers/tourService';
                       }else{
                         element.avatar = element.hotelAvatar;
                       }
-                      element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : 'https:' +  element.avatar;
+                      if (element.avatar) {
+                        element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : 'https:' +  element.avatar;
+                      }
+                      
                       
                       element.isRequest = true;
                       element.booking_id = element.request_id;
@@ -1832,7 +1837,10 @@ import { tourService } from '../providers/tourService';
                 } else {
                   elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                 }
-                elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+                if (elementHis.avatar) {
+                  elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+                }
+               
                 elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
                 elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
                 se.getRatingStar(elementHis);
@@ -3610,7 +3618,10 @@ import { tourService } from '../providers/tourService';
                         } else {
                           elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                         }
-                        elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+                        if (elementHis.avatar) {
+                          elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
+                        }
+                      
                         se.listHistoryTrips.push(elementHis);
                         se.historytripcount++;
     
