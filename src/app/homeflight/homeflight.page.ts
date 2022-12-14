@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, NgZone, Input } from '@angular/core';
-import { NavController, ModalController, ToastController, ActionSheetController, IonSlides, Platform } from '@ionic/angular';
+import { NavController, ModalController, ToastController, ActionSheetController, IonSlides, Platform, IonContent } from '@ionic/angular';
 import { GlobalFunction } from '../providers/globalfunction';
 import * as $ from 'jquery';
 import { C } from './../providers/constants';
@@ -15,6 +15,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
 import { NetworkProvider } from '../network-provider.service';
 import { BizTravelService } from '../providers/bizTravelService';
 import { CustomAnimations } from '../providers/CustomAnimations';
+import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
 
 @Component({
     selector: 'app-homeflight',
@@ -22,6 +23,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
     styleUrls: ['./homeflight.page.scss'],
   })
   export class HomeflightPage {
+    @ViewChild('xxxx') content: IonContent;
+    
+
     cindisplay = '25-05-2020';
     coutdisplay = '27-05-2020';
     cinthu = "Thứ 3";
@@ -72,6 +76,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
   isExtenalDepart: boolean;
   isExtenalReturn: boolean;
   showLunarCalendar: any;
+
+
+  @HostListener('body:scroll') onScroll(e: Event): void {
+    console.log((e.target as Element).scrollTop);
+ }
+
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -86,6 +96,10 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         public networkProvider: NetworkProvider,
         private platform: Platform,
         public bizTravelService: BizTravelService) {
+
+          // this.content = content;
+          // this.app = app;
+
           this.gettopSale();
           this.gf.getAllPlaceByArea().then((data) => {
             //console.log(data);
@@ -175,8 +189,57 @@ import { CustomAnimations } from '../providers/CustomAnimations';
 
                 this.isExtenal = data.isExtenal;
                 this._flightService.itemFlightCache.isInternationalFlight = data.isInternationalFlight;
-                this.isExtenalDepart = data.isExtenalDepart;
-                this.isExtenalReturn = data.isExtenalReturn;
+                if(typeof(data.isExtenalDepart) == 'undefined' && typeof(data.isExtenalReturn) == 'undefined'){
+                  if(this._flightService.listAirport && this._flightService.listAirport.length >0){
+                    let placeFrom = this._flightService.listAirport.filter((itemairport) => {return itemairport.code == data.departCode});
+                    let placeTo = this._flightService.listAirport.filter((itemairport) => {return itemairport.code == data.returnCode});
+                    if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+                      this._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
+                      this._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+                      this._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+                      this.isExtenalDepart = !placeFrom[0].internal;
+                      this.isExtenalReturn = !placeTo[0].internal;
+                    }else {
+                      this._flightService.itemFlightCache.isInternationalFlight = false;
+                      this._flightService.itemFlightCache.isExtenalDepart = false;
+                      this._flightService.itemFlightCache.isExtenalReturn = false;
+                      this.isExtenalDepart = false;
+                      this.isExtenalReturn = false;
+                    }
+                  }else{
+
+                    setTimeout(()=> {
+                      if(this._flightService.listAirport && this._flightService.listAirport.length >0){
+                        let placeFrom = this._flightService.listAirport.filter((itemairport) => {return itemairport.code == data.departCode});
+                        let placeTo = this._flightService.listAirport.filter((itemairport) => {return itemairport.code == data.returnCode});
+                        if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+                          this._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
+                          this._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+                          this._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+                          this.isExtenalDepart = !placeFrom[0].internal;
+                          this.isExtenalReturn = !placeTo[0].internal;
+                        }else {
+                          this._flightService.itemFlightCache.isInternationalFlight = false;
+                          this._flightService.itemFlightCache.isExtenalDepart = false;
+                          this._flightService.itemFlightCache.isExtenalReturn = false;
+                          this.isExtenalDepart = false;
+                          this.isExtenalReturn = false;
+                        }
+                      }else{
+                        this._flightService.itemFlightCache.isInternationalFlight = false;
+                        this._flightService.itemFlightCache.isExtenalDepart = false;
+                        this._flightService.itemFlightCache.isExtenalReturn = false;
+                        this.isExtenalDepart = false;
+                        this.isExtenalReturn = false;
+                      }
+                    }, 300)
+                    
+                  }
+                }else{
+                  this.isExtenalDepart = data.isExtenalDepart;
+                  this.isExtenalReturn = data.isExtenalReturn;
+                }
+                
                 if(data.itemSameCity){
                   this.itemSameCity = data.itemSameCity,
                   this.itemDepartSameCity= data.itemDepartSameCity,
@@ -401,6 +464,7 @@ import { CustomAnimations } from '../providers/CustomAnimations';
             }
             se.isExtenal = data.internal != 1 ? true : false;
             se._flightService.itemFlightCache.isExtenal = data.internal != 1 ? true : false;
+            se._flightService.listPrices = [];
         }
 
         reloadInfoFlight(){
@@ -775,8 +839,10 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         if(!this.allowclickcalendar){
           return;
         }
-        this._flightService.itemFlightCache.isInternationalFlight = (this.isExtenalDepart || this.isExtenalReturn);
-        
+        if(typeof(this.isExtenalDepart) != 'undefined' && typeof(this.isExtenalReturn) != 'undefined'){
+          this._flightService.itemFlightCache.isInternationalFlight = (this.isExtenalDepart || this.isExtenalReturn);
+        }
+        this._flightService.keyLoadMorePrices = "";
         this.allowclickcalendar = false;
         let fromdate = this.gf.getCinIsoDate(moment(this.cin).format('YYYY-MM-DD'));
         let todate = this.gf.getCinIsoDate(moment(this.cout).format('YYYY-MM-DD'));
@@ -802,29 +868,28 @@ import { CustomAnimations } from '../providers/CustomAnimations';
         let tetConfig = ['29 Tết','30 Tết','Mùng 1','Mùng 2','Mùng 3','Mùng 4','Mùng 5','Mùng 6','Mùng 7','Mùng 8','Mùng 9','Mùng 10',];
         let _daysConfig: DayConfig[] = [];
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-          let y = moment(new Date(this.valueGlobal.listlunar[j].date).getFullYear()) as any;
-          let m = moment(new Date(this.valueGlobal.listlunar[j].date).getMonth())as any;
-          let d= moment(new Date(this.valueGlobal.listlunar[j].date).getDate())as any;
+         
+          const lunar: Lunar = new Lunar();
+          let _day = this.valueGlobal.listlunar[j].date;
+          lunar.getBlockLunarDate(_day);
+
           _daysConfig.push({
               date: this.valueGlobal.listlunar[j].date,
-              subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name +':' + moment().year(y).month(m).date(d).lunar().format('D'),
+              subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name +':' + (lunar.getBlockLunarDate(_day).lunarDate == 1 ? `${lunar.getBlockLunarDate(_day).lunarDate.toString()}/${lunar.getBlockLunarDate(_day).lunarMonth.toString()}`: lunar.getBlockLunarDate(_day).lunarDate.toString()),
               cssClass: 'lunarcalendar lunardate'
           })
         }
-
         for (let k = 0; k < 365; k++) {
-          let newdate = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate());
-          let addday = moment(newdate).add(k, 'days').format('YYYY-MM-DD');
-          let arrdate = addday.split('-');
-          let y = arrdate[0] as any;
-          let m = arrdate[1]as any;
-          let d= arrdate[2]as any;
-          
+          let addday = moment(new Date()).add(k, 'days').format('YYYY-MM-DD');
+          const lunar: Lunar = new Lunar();
+          lunar.getBlockLunarDate(addday);
+
           _daysConfig.push({
-            date: addday as any,
-            subTitle: moment().year(y).month(m).date(d).lunar().format('D'),
-            cssClass: 'lunardate'
-          })
+                date: addday as any,
+                subTitle:  lunar.getBlockLunarDate(addday).lunarDate == 1 ? `${lunar.getBlockLunarDate(addday).lunarDate.toString()}/${lunar.getBlockLunarDate(addday).lunarMonth.toString()}`: lunar.getBlockLunarDate(addday).lunarDate.toString(),
+                cssClass: 'lunardate'
+              })
+         
         }
 
         var options:CalendarModalOptions;
@@ -976,8 +1041,63 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               }
             })
             this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
+
+
+            let se = this;
+              $(document).ready(function() {
+                
+                $('.flight-calendar-custom ion-calendar-modal ion-content')[0].id = 'flight-modal-custom-content-scroll';
+               
+                const scrollContent = document.getElementById('flight-modal-custom-content-scroll');
+                let _daterange = moment(se.cout).diff(se.cin, 'days');
+                
+                
+                scrollContent.addEventListener('ionScroll', (e:any) => {
+                  let _m = Math.floor(e.detail.currentY/360);
+                  let _month:any,_year:any;
+                  setTimeout(()=> {
+                    if(_m >0){
+                      _month = moment(se.cin).add(_m, 'month').format('M');
+                      _year = moment(se.cin).add(_m, 'month').format('YYYY');
+                    }else if(_m <0){
+                      _month = moment(se.cin).subtract(_m, 'month').format('M');
+                      _year = moment(se.cin).subtract(_m, 'month').format('YYYY');
+                    }
+                    else if(_m ==0 && moment(se.cin).diff(new Date(), 'month') >0) {
+                      //tháng checkin > ngày hiện tại && cuộn về đầu => load giá rẻ tháng đầu(m=0)
+                      _month = moment(new Date()).format('M');
+                      _year = moment(new Date()).format('YYYY');
+                    }
+
+                    if(_month && _year && se.departCode && se.returnCode){
+                      let _fdate = new Date(_year, _month, 1, 0, 0,0);
+                      let _tdate = new Date(_year, _month, 3, 0, 0,0);
+                      let newkey = `${moment(_fdate).format('YYYY-MM-DD')}_${moment(_tdate).format('YYYY-MM-DD')}_${se.departCode}_${se.returnCode}`;
+                      if(se._flightService.keyLoadMorePrices != newkey){
+                        se.loadMorePricesByMonth(_fdate, _tdate, se.departCode, se.returnCode);
+                      }
+                      
+                    }
+                    
+                  },10);
+
+                  if(e.detail.currentY >= 3816){
+                    let divmonth = $('.month-box');
+                    if(divmonth && divmonth.length >0){
+                      for (let index = 0; index < divmonth.length; index++) {
+                        const em = divmonth[index];
+                        if(!$('#'+em.id).hasClass('cls-animation-calendar')){
+                          $('#'+em.id).addClass('cls-animation-calendar');
+                        }
+                        
+                      }
+                    }
+                  }
+                });
+            })
           },10)
         });
+        // this.myCalendar
         var se = this;
         const event: any = await se.myCalendar.onDidDismiss();
         const date = event.data;
@@ -1590,90 +1710,12 @@ import { CustomAnimations } from '../providers/CustomAnimations';
           let name = '';
           let itemairport = this._flightService.listAirport.filter((itemairport) => { return itemairport.code == code});
           return itemairport && itemairport.length >0 ? itemairport[0].airport : '';
-           // switch (code) {
-          //   case "SGN":
-          //     name = "Sân bay Quốc tế Tân Sơn Nhất";
-          //     break;
-          //   case "PQC":
-          //     name = "Sân bay Quốc tế Phú Quốc";
-          //     break;
-          //   case "DAD":
-          //     name = "Sân bay Quốc tế Đà Nẵng";
-          //     break;
-          //   case "HAN":
-          //     name = "Sân bay Quốc tế Nội Bài";
-          //     break;
-          //   case "VCA":
-          //       name = "Sân bay Quốc tế Cần Thơ";
-          //     break;
-          //   case "CXR":
-          //       name = "Sân bay Quốc tế Cam Ranh";
-          //     break;
-          //   case "VII":
-          //     name = "Sân bay Quốc tế Vinh – Nghệ An";
-          //     break;
-          //   case "HUI":
-          //     name = "Sân bay Quốc tế Phú Bài – Huế";
-          //     break;
-          //   case "VCL":
-          //     name = "Sân bay Chu Lai Quảng Nam";
-          //     break;
-          //   case "VCS":
-          //     name = "Sân bay Côn Đảo";
-          //     break;
-          //   case "BMV":
-          //     name = "Sân bay Buôn Ma Thuột";
-          //     break;
-          //   case "THD":
-          //     name = "Sân bay Thọ Xuân – Thanh Hóa";
-          //     break;
-          // }
           return name;
         }
       
         getRegionByCode(code){
           let itemairport = this._flightService.listAirport.filter((itemairport) => { return itemairport.code == code});
           return itemairport && itemairport.length >0 ? itemairport[0].city : '';
-          // let name = '';
-          // switch (code) {
-          //   case "SGN":
-          //     name = "TP HCM";
-          //     break;
-          //   case "PQC":
-          //     name = "Phú Quốc";
-          //     break;
-          //   case "DAD":
-          //     name = "Đà Nẵng";
-          //     break;
-          //   case "HAN":
-          //     name = "Hà Nội";
-          //     break;
-          //   case "VCA":
-          //       name = "Cần Thơ";
-          //     break;
-          //   case "CXR":
-          //       name = "Cam Ranh";
-          //     break;
-          //   case "VII":
-          //       name = "Vinh – Nghệ An";
-          //     break;
-          //   case "HUI":
-          //     name = "Huế";
-          //     break;
-          //   case "VCL":
-          //     name = "Quảng Nam";
-          //     break;
-          //   case "VCS":
-          //     name = "Bà Rịa-Vũng Tàu";
-          //     break;
-          //   case "BMV":
-          //     name = "Đắk Lắk";
-          //     break;
-          //   case "THD":
-          //     name = "Thanh Hóa";
-          //     break;
-          // }
-          // return name;
         }
 
         closecalendar(){
@@ -1706,7 +1748,9 @@ import { CustomAnimations } from '../providers/CustomAnimations';
                 })
               }
             }else{
+              this._flightService.listPrices = [];
               let url = C.urls.baseUrl.urlFlightInt + 'api/FlightSearch/GetCalendarPrice';
+              
               let body = {
                 DepartDate: new Date(this.cin),
                 FromPlaceCode: this.departCode,
@@ -1715,12 +1759,40 @@ import { CustomAnimations } from '../providers/CustomAnimations';
               };
               this.gf.RequestApi("POST", url, {}, body, "homeflight", "GetCalendarPrice").then((data) =>{
                   if(data && data.success && data.data && data.data.calendarPriceItemDto && data.data.calendarPriceItemDto.length>0 ){
-                    this.renderInternationalCalenderPrice(data.data.calendarPriceItemDto);
+                    this._flightService.listPrices = [...data.data.calendarPriceItemDto];
+                    this.renderInternationalCalenderPrice(this._flightService.listPrices);
+                    //this.
+                  }else {
+                    this._flightService.listPrices = [];
+                    //this.renderInternationalCalenderPrice([]);
                   }
                 })
             }
             
           
+        }
+
+        loadMorePricesByMonth(fromdate, todate, departcode, returncode){
+          this._flightService.keyLoadMorePrices = `${moment(fromdate).format('YYYY-MM-DD')}_${moment(todate).format('YYYY-MM-DD')}_${departcode}_${returncode}`;
+          let url = C.urls.baseUrl.urlFlightInt + 'api/FlightSearch/GetCalendarPrice';
+          let body = {
+            DepartDate: this.gf.getCinIsoDate(fromdate),
+            FromPlaceCode: departcode,
+            ReturnDate: this.gf.getCinIsoDate(todate),
+            ToPlaceCode: returncode
+          };
+          this.gf.RequestApi("POST", url, {}, body, "homeflight", "GetCalendarPrice").then((data) =>{
+              if(data && data.success && data.data && data.data.calendarPriceItemDto && data.data.calendarPriceItemDto.length>0 ){
+                if(this._flightService.listPrices && this._flightService.listPrices.length >0){
+                  this._flightService.listPrices = [...this._flightService.listPrices,...data.data.calendarPriceItemDto];
+                  this.renderInternationalCalenderPrice(this._flightService.listPrices);
+                }else {
+                  this._flightService.listPrices = [...data.data.calendarPriceItemDto];
+                  this.renderInternationalCalenderPrice(this._flightService.listPrices);
+                }
+                
+              }
+            })
         }
 
         renderInternationalCalenderPrice(listPrices){

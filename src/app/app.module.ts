@@ -121,7 +121,8 @@ import { FlightDepartureDetailInternationalPageModule } from './flightinternatio
 import { FlightInternationalSearchfilterPageModule } from './flightinternational/flightinternationalsearchfilter/flightinternationalsearchfilter.module';
 import { FlightDetailInternationalPageModule } from './flightinternational/flightdetailinternational/flightdetailinternational.module';
 import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
-import 'moment-lunar';
+import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

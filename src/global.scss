@@ -359,7 +359,7 @@ ion-toggle {
       letter-spacing: -0.69px;
       color: #ffffff !important;
       position: absolute;
-      bottom: -22px !important;
+      bottom: -24px !important;
       margin-left: 3px;
     }
 
@@ -458,6 +458,10 @@ ion-toggle {
 
     .m-l-5{
       margin-left: 5px !important;
+    }
+    .between .m-l--5 {
+      margin-left: 5px !important;
+      width: 44px;
     }
     .m-l--5 {
       margin-left: -5px !important;
@@ -1535,6 +1539,7 @@ height: 18px !important;
   left: auto !important;
   bottom: -9px !important;
   color: #828282 !important;
+  font-size: 10px !important;
 }
 
 .div-lunar-calendar {
@@ -1550,4 +1555,19 @@ height: 18px !important;
 
 .p-bottom-14 {
   padding-bottom: 14px;
+}
+
+button.days-btn {
+  width: 28px !important;
+  height: 28px !important;
+}
+.between button.days-btn {
+  width: 100% !important;
+  height: 28px !important;
+}
+.startSelection::before,.startSelection::after  {
+  height: 28px !important;
+}
+.endSelection::before,.endSelection::after {
+  height: 28px !important;
 }

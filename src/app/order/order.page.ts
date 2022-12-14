@@ -979,6 +979,10 @@ import { tourService } from '../providers/tourService';
                         if (element.avatar && element.avatar.indexOf("104x104") ==-1  && element.avatar.indexOf('i.travelapi.com') ==-1) {
                         let urlavatar = element.avatar.substring(0, element.avatar.length - 4);
                         let tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
+                        if (tail.indexOf("jpeg") !=-1) {
+                          urlavatar = element.avatar.substring(0, element.avatar.length - 5);
+                          tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
+                        }
                         element.avatar = urlavatar + "-" + "104x104" + tail;
                       }
                       if(element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL") ){
@@ -1892,6 +1896,10 @@ import { tourService } from '../providers/tourService';
                   if (elementHis.avatar && elementHis.avatar.indexOf("104x104") ==-1  && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
                     let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
                     let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
+                    if (tail.indexOf("jpeg") !=-1) {
+                      urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 5);
+                      tail = elementHis.avatar.substring(elementHis.avatar.length - 5, elementHis.avatar.length);
+                   }
                     elementHis.avatar = urlavatar + "-" + "104x104" + tail;
                   }
                   if (elementHis.delivery_payment_date) {

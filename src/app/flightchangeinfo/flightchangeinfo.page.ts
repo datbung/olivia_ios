@@ -16,6 +16,7 @@ import { FlightsearchairportPage } from '../flightsearchairport/flightsearchairp
 import { FlightselectpaxPage } from '../flightselectpax/flightselectpax.page';
 import { FlightselecttimepriorityPage } from '../flightselecttimepriority/flightselecttimepriority.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
+import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
 
 @Component({
   selector: 'app-flightchangeinfo',
@@ -623,26 +624,25 @@ export class FlightchangeinfoPage implements OnInit {
         let tetConfig = ['29 Tết','30 Tết','Mùng 1','Mùng 2','Mùng 3','Mùng 4','Mùng 5','Mùng 6','Mùng 7','Mùng 8','Mùng 9','Mùng 10',];
         let _daysConfig: DayConfig[] = [];
         for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-          let y = moment(new Date(this.valueGlobal.listlunar[j].date).getFullYear()) as any;
-          let m = moment(new Date(this.valueGlobal.listlunar[j].date).getMonth())as any;
-          let d= moment(new Date(this.valueGlobal.listlunar[j].date).getDate())as any;
+          const lunar: Lunar = new Lunar();
+          let _day = this.valueGlobal.listlunar[j].date;
+          lunar.getBlockLunarDate(_day);
 
         _daysConfig.push({
             date: this.valueGlobal.listlunar[j].date,
-            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name+':' + moment().year(y).month(m).date(d).lunar().format('D'),
+            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name+':'+ (lunar.getBlockLunarDate(_day).lunarDate == 1 ? `${lunar.getBlockLunarDate(_day).lunarDate.toString()}/${lunar.getBlockLunarDate(_day).lunarMonth.toString()}`: lunar.getBlockLunarDate(_day).lunarDate.toString()),
             cssClass: 'lunarcalendar lunardate'
         })
         }
 
         for (let k = 0; k < 365; k++) {
-          let nd = new Date(moment(new Date()).add(k, 'days').format('MM-DD-YYYY'));
-          let y = moment(nd.getFullYear()) as any;
-          let m = moment(nd.getMonth())as any;
-          let d= moment(nd.getDate())as any;
-          
+          let addday = moment(new Date()).add(k, 'days').format('YYYY-MM-DD');
+          const lunar: Lunar = new Lunar();
+          lunar.getBlockLunarDate(addday);
+
           _daysConfig.push({
-            date: nd as any,
-            subTitle: moment().year(y).month(m).date(d).lunar().format('D'),
+            date: addday as any,
+            subTitle: lunar.getBlockLunarDate(addday).lunarDate == 1 ? `${lunar.getBlockLunarDate(addday).lunarDate.toString()}/${lunar.getBlockLunarDate(addday).lunarMonth.toString()}`: lunar.getBlockLunarDate(addday).lunarDate.toString(),
             cssClass: 'lunardate'
           })
         }
@@ -799,6 +799,59 @@ export class FlightchangeinfoPage implements OnInit {
             })
             this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
             
+            let se = this;
+              $(document).ready(function() {
+                
+                $('.flight-calendar-custom ion-calendar-modal ion-content')[0].id = 'flight-modal-custom-content-scroll';
+               
+                const scrollContent = document.getElementById('flight-modal-custom-content-scroll');
+                let _daterange = moment(se.cout).diff(se.cin, 'days');
+                
+                
+                scrollContent.addEventListener('ionScroll', (e:any) => {
+                  let _m = Math.floor(e.detail.currentY/360);
+                  let _month:any,_year:any;
+                  setTimeout(()=> {
+                    if(_m >0){
+                      _month = moment(se.cin).add(_m, 'month').format('M');
+                      _year = moment(se.cin).add(_m, 'month').format('YYYY');
+                    }else if(_m <0){
+                      _month = moment(se.cin).subtract(_m, 'month').format('M');
+                      _year = moment(se.cin).subtract(_m, 'month').format('YYYY');
+                    }
+                    else if(_m ==0 && moment(se.cin).diff(new Date(), 'month') >0) {
+                      //tháng checkin > ngày hiện tại && cuộn về đầu => load giá rẻ tháng đầu(m=0)
+                      _month = moment(new Date()).format('M');
+                      _year = moment(new Date()).format('YYYY');
+                    }
+
+                    if(_month && _year && se.departCode && se.returnCode){
+                      let _fdate = new Date(_year, _month, 1, 0, 0,0);
+                      let _tdate = new Date(_year, _month, 3, 0, 0,0);
+                      let newkey = `${moment(_fdate).format('YYYY-MM-DD')}_${moment(_tdate).format('YYYY-MM-DD')}_${se.departCode}_${se.returnCode}`;
+                      if(se._flightService.keyLoadMorePrices != newkey){
+                        se.loadMorePricesByMonth(_fdate, _tdate, se.departCode, se.returnCode);
+                      }
+                      
+                    }
+                    
+                  },10);
+
+                  if(e.detail.currentY >= 3816){
+                    let divmonth = $('.month-box');
+                    if(divmonth && divmonth.length >0){
+                      for (let index = 0; index < divmonth.length; index++) {
+                        const em = divmonth[index];
+                        if(!$('#'+em.id).hasClass('cls-animation-calendar')){
+                          $('#'+em.id).addClass('cls-animation-calendar');
+                        }
+                        
+                      }
+                    }
+                  }
+                });
+            })
+
           },10)
 
           
@@ -827,6 +880,29 @@ export class FlightchangeinfoPage implements OnInit {
         }
        
         }
+    }
+
+    loadMorePricesByMonth(fromdate, todate, departcode, returncode){
+      this._flightService.keyLoadMorePrices = `${moment(fromdate).format('YYYY-MM-DD')}_${moment(todate).format('YYYY-MM-DD')}_${departcode}_${returncode}`;
+      let url = C.urls.baseUrl.urlFlightInt + 'api/FlightSearch/GetCalendarPrice';
+      let body = {
+        DepartDate: this.gf.getCinIsoDate(fromdate),
+        FromPlaceCode: departcode,
+        ReturnDate: this.gf.getCinIsoDate(todate),
+        ToPlaceCode: returncode
+      };
+      this.gf.RequestApi("POST", url, {}, body, "homeflight", "GetCalendarPrice").then((data) =>{
+          if(data && data.success && data.data && data.data.calendarPriceItemDto && data.data.calendarPriceItemDto.length>0 ){
+            if(this._flightService.listPrices && this._flightService.listPrices.length >0){
+              this._flightService.listPrices = [...this._flightService.listPrices,...data.data.calendarPriceItemDto];
+              this.renderInternationalCalenderPrice(this._flightService.listPrices);
+            }else {
+              this._flightService.listPrices = [...data.data.calendarPriceItemDto];
+              this.renderInternationalCalenderPrice(this._flightService.listPrices);
+            }
+            
+          }
+        })
     }
 
     handleExpandDiv(id){
@@ -1135,7 +1211,11 @@ export class FlightchangeinfoPage implements OnInit {
         };
         this.gf.RequestApi("POST", url, {}, body, "homeflight", "showCalendarPrice").then((data) =>{
             if(data && data.success && data.data && data.data.calendarPriceItemDto && data.data.calendarPriceItemDto.length>0 ){
+              this._flightService.listPrices = [...data.data.calendarPriceItemDto];
               this.renderInternationalCalenderPrice(data.data.calendarPriceItemDto);
+            }else{
+              this._flightService.listPrices = [];
+              //this.renderInternationalCalenderPrice([]);
             }
           })
       }

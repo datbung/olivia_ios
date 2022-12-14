@@ -531,7 +531,7 @@ export class RoomdetailreviewPage implements OnInit {
         couponData: {
           "hotel": {
             "hotelId": this.booking.HotelId,
-            "roomName": (this.Roomif.arrroom[0] as any).MealTypeRates[this.booking.indexmealtype].RoomName,
+            "roomName": this.booking.RoomName,
             "totalRoom": this.Roomif.roomnumber,
             "totalAdult": this.booking.Adults,
             "totalChild": this.booking.Child,

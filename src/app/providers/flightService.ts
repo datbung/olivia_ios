@@ -71,6 +71,8 @@ export class flightService{
   indexReturnFlightInternational: any;
   loadFlightInfoType: any;
   listAllPlaceByArea: any;
+  listPrices: any=[];
+  keyLoadMorePrices: string;
 
   publicItemFlightReloadInfo(data: any) {
     this.ItemFlightReloadInfoSubject.next(data);
