@@ -5737,14 +5737,21 @@ import { tourService } from '../providers/tourService';
               if (stt==0) {
                 var airlineCode=this.getairlineCode(stt);
                 var ticketClass=se.listMyTrips[0].bookingsComboData[0].ticketClass;
+                var departDate=se.listMyTrips[0].bookingsComboData[0].departTime;
+                var bookingDate=se.listMyTrips[0].bookingsComboData[0].bookingDate;
+                var flightNumber=se.listMyTrips[0].bookingsComboData[0].flightNumner;
               }else{
                 var airlineCode=this.getairlineCode(stt);
                 var ticketClass=se.listMyTrips[0].bookingsComboData[1].ticketClass;
+                var departDate=se.listMyTrips[0].bookingsComboData[1].departTime;
+                var bookingDate=se.listMyTrips[0].bookingsComboData[1].bookingDate;
+                var flightNumber=se.listMyTrips[0].bookingsComboData[1].flightNumner;
+                
               }
           
               var options = {
                 method: 'GET',
-                url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass,
+                url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass+"&flightNumber="+flightNumber+"&departDate="+departDate+"&bookingDate="+moment(this.listMyTrips[0].bookingDate).format('YYYY-MM-DD'),
                 timeout: 180000, maxAttempts: 5, retryDelay: 20000,
                 headers: {
                  

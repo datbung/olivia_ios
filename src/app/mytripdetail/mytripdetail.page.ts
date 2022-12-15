@@ -1295,14 +1295,18 @@ export class MytripdetailPage implements OnInit {
       if (stt==0) {
         var airlineCode=this.getairlineCode(stt);
         var ticketClass=this.trip.bookingsComboData[0].ticketClass;
+        var departDate=this.trip.bookingsComboData[0].departureTime;
+        var flightNumber=this.trip.bookingsComboData[0].flightNumner;
       }else{
         var airlineCode=this.getairlineCode(stt);
         var ticketClass=this.trip.bookingsComboData[1].ticketClass;
+        var departDate=this.trip.bookingsComboData[1].departureTime;
+        var flightNumber=this.trip.bookingsComboData[1].flightNumner;
       }
   
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass,
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass+"&flightNumber="+flightNumber+"&departDate="+departDate+"&bookingDate="+moment(this.trip.bookingDate).format('YYYY-MM-DD'),
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
          
