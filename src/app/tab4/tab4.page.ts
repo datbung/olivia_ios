@@ -160,13 +160,25 @@ export class Tab4Page implements OnInit{
               }else{
                   if(body && body != "[]"){
                       var data = JSON.parse(body);
-                      if (se.objnotication && se.objnotication.length > 0) {
-                        for (let i = 0; i < se.objnotication.length; i++) {
-                            const element = se.objnotication[i];
-                            data.push(element);
+                      se.storage.get('objnotication').then(datanoti => {
+                        if (datanoti) {
+                            se.objnotication = datanoti;
                         }
-                    }
-                      se.loadDataNotify(data);
+                        if (se.objnotication && se.objnotication.length > 0) {
+                            for (let i = 0; i < se.objnotication.length; i++) {
+                                const element = se.objnotication[i];
+                                data.push(element);
+                            }
+                        }
+                        se.loadDataNotify(data);
+                      })
+                    //   if (se.objnotication && se.objnotication.length > 0) {
+                    //     for (let i = 0; i < se.objnotication.length; i++) {
+                    //         const element = se.objnotication[i];
+                    //         data.push(element);
+                    //     }
+                    // }
+                     
                   }else{
                     se.zone.run(()=>{
                       se.loadend = true;
