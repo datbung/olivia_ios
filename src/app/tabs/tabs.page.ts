@@ -484,7 +484,7 @@ export class TabsPage implements OnInit {
     }else{
       //show notifi
       if(data.updateNewVersion){
-        //this.setNotification(data,"product");
+        // this.setNotification(data,"product");
         this.gotoAppStore();
       }
       else if(data.activeTab){
@@ -492,14 +492,14 @@ export class TabsPage implements OnInit {
       }
       else if(data.dataLink){
         if(data.dataLink.indexOf('tourdetail') != -1){
-          //this.setNotification(data,"product");
+          // this.setNotification(data,"product");
           let arr = data.dataLink.replace('/','').split('/');
           if(arr && arr.length ==2){
            this.loadTopSale(arr[1]);
           }
         
         }else {
-          //this.setNotification(data,"product");
+          // this.setNotification(data,"product");
           this.navCtrl.navigateForward(data.dataLink);
         }
         
@@ -583,7 +583,7 @@ export class TabsPage implements OnInit {
     var msg = data.message;
     if(data.dataLink){
       if(data.dataLink.indexOf('tourdetail') != -1){
-        //this.setNotification(data,"product");
+        // this.setNotification(data,"product");
         let arr = data.dataLink.replace('/','').split('/');
         if(arr && arr.length ==2){
           this.tourService.tourDetailId = arr[1];
@@ -591,7 +591,7 @@ export class TabsPage implements OnInit {
           this.navCtrl.navigateForward('/tourdetail');
         }
       } else {
-        //se.setNotification(data,"product");
+        // se.setNotification(data,"product");
         se.navCtrl.navigateForward(data.dataLink);
       }
       
