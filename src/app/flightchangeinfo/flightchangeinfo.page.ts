@@ -800,6 +800,7 @@ export class FlightchangeinfoPage implements OnInit {
             this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
             
             let se = this;
+            if(se._flightService.itemFlightCache.isInternationalFlight){
               $(document).ready(function() {
                 
                 $('.flight-calendar-custom ion-calendar-modal ion-content')[0].id = 'flight-modal-custom-content-scroll';
@@ -827,7 +828,7 @@ export class FlightchangeinfoPage implements OnInit {
 
                     if(_month && _year && se.departCode && se.returnCode){
                       let _fdate = new Date(_year, _month, 1, 0, 0,0);
-                      let _tdate = new Date(_year, _month, 3, 0, 0,0);
+                      let _tdate = new Date(_year, _month, + _daterange, 0, 0,0);
                       let newkey = `${moment(_fdate).format('YYYY-MM-DD')}_${moment(_tdate).format('YYYY-MM-DD')}_${se.departCode}_${se.returnCode}`;
                       if(se._flightService.keyLoadMorePrices != newkey){
                         se.loadMorePricesByMonth(_fdate, _tdate, se.departCode, se.returnCode);
@@ -851,6 +852,7 @@ export class FlightchangeinfoPage implements OnInit {
                   }
                 });
             })
+          }
 
           },10)
 
@@ -888,7 +890,7 @@ export class FlightchangeinfoPage implements OnInit {
       let body = {
         DepartDate: this.gf.getCinIsoDate(fromdate),
         FromPlaceCode: departcode,
-        ReturnDate: this.gf.getCinIsoDate(todate),
+        ReturnDate: this._flightService.itemFlightCache.roundTrip ? this.gf.getCinIsoDate(todate) : "",
         ToPlaceCode: returncode
       };
       this.gf.RequestApi("POST", url, {}, body, "homeflight", "GetCalendarPrice").then((data) =>{
@@ -1206,7 +1208,7 @@ export class FlightchangeinfoPage implements OnInit {
         let body = {
           DepartDate: new Date(this.cin),
           FromPlaceCode: this.departCode,
-          ReturnDate: new Date(this.cout),
+          ReturnDate: this._flightService.itemFlightCache.roundTrip ? new Date(this.cout) : "",
           ToPlaceCode: this.returnCode
         };
         this.gf.RequestApi("POST", url, {}, body, "homeflight", "showCalendarPrice").then((data) =>{

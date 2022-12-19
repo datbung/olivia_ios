@@ -5738,13 +5738,11 @@ import { tourService } from '../providers/tourService';
                 var airlineCode=this.getairlineCode(stt);
                 var ticketClass=se.listMyTrips[0].bookingsComboData[0].ticketClass;
                 var departDate=se.listMyTrips[0].bookingsComboData[0].departTime;
-                var bookingDate=se.listMyTrips[0].bookingsComboData[0].bookingDate;
                 var flightNumber=se.listMyTrips[0].bookingsComboData[0].flightNumner;
               }else{
                 var airlineCode=this.getairlineCode(stt);
                 var ticketClass=se.listMyTrips[0].bookingsComboData[1].ticketClass;
                 var departDate=se.listMyTrips[0].bookingsComboData[1].departTime;
-                var bookingDate=se.listMyTrips[0].bookingsComboData[1].bookingDate;
                 var flightNumber=se.listMyTrips[0].bookingsComboData[1].flightNumner;
                 
               }

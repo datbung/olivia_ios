@@ -2647,6 +2647,7 @@ alert.present();
                                 Type: "Baggage", 
                                 Value: departluggage[0].weight,
                                 price: departluggage[0].amount,
+                                netPrice: departluggage[0].amount,
                                 flightNumber: data.departFlight.flightNumber
                               }
                             }
@@ -2670,6 +2671,7 @@ alert.present();
                                 Key: departluggage[0].purchaseKey,
                                 Value: departluggage[0].weight,
                                 price: departluggage[0].amount,
+                                netPrice: departluggage[0].amount,
                                 flightNumber: data.departFlight.flightNumber
                               }
                           }
@@ -2703,6 +2705,7 @@ alert.present();
                             Type: "Baggage", 
                             Value: dl1.weight,
                             price: dl1.amount,
+                            netPrice: dl1.amount,
                             flightNumber: data.departFlight.flightNumber
                           }
                         }
@@ -2727,6 +2730,7 @@ alert.present();
                             Key: dl1.purchaseKey,
                             Value: dl1.weight,
                             price: dl1.amount,
+                            netPrice: dl1.amount,
                             flightNumber: data.departFlight.flightNumber
                           }
                         }
@@ -2748,6 +2752,7 @@ alert.present();
                           Type: "Baggage", 
                           Value: returnluggage[0].weight,
                           price: returnluggage[0].amount,
+                          netPrice: returnluggage[0].amount,
                           flightNumber: data.returnFlight.flightNumber
                         }
                       }
@@ -2772,6 +2777,7 @@ alert.present();
                           Key: returnluggage[0].purchaseKey,
                           Value: returnluggage[0].weight,
                           price: returnluggage[0].amount,
+                          netPrice: returnluggage[0].amount,
                           flightNumber: data.returnFlight.flightNumber
                         }
                       }
@@ -2802,6 +2808,7 @@ alert.present();
                             Type: "Baggage", 
                             Value: rl1.weight,
                             price: rl1.amount,
+                            netPrice: rl1.amount,
                             flightNumber: data.returnFlight.flightNumber
                           }
                         }
@@ -2826,6 +2833,7 @@ alert.present();
                             Key: rl1.purchaseKey,
                             Value: rl1.weight,
                             price: rl1.amount,
+                            netPrice: rl1.amount,
                             flightNumber: data.returnFlight.flightNumber
                           }
                         }

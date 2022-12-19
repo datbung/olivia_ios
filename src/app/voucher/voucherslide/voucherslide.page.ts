@@ -181,47 +181,47 @@ export class VoucherSlidePage implements OnInit{
                 'content-type': 'application/json'
               },
               body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: 0,
-              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' && !se._flightService.itemFlightCache.isInternationalFlight ? { flight: {
+              couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? { flight: {
                   "tickets": this._flightService.itemFlightCache.roundTrip ? [
                     {
-                      "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                      "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
-                      "departTime": se._flightService.itemFlightCache.departFlight.departTime,
-                      "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
-                      "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
-                      "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
-                      "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
-                      "stops": se._flightService.itemFlightCache.departFlight.stops,
-                      "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
-                      "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                      "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airlineCode,
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
                       "jsonObject": ""
                     },
                     {
-                      "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
-                      "airLineCode": se._flightService.itemFlightCache.returnFlight.airlineCode,
-                      "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
-                      "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
-                      "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
-                      "fromPlaceCode": se._flightService.itemFlightCache.returnFlight.fromPlaceCode,
-                      "toPlaceCode": se._flightService.itemFlightCache.returnFlight.toPlaceCode,
-                      "stops": se._flightService.itemFlightCache.returnFlight.stops,
-                      "ticketClass": se._flightService.itemFlightCache.returnFlight.ticketClass,
-                      "fareBasis": se._flightService.itemFlightCache.returnFlight.fareBasis,
+                      "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalReturn.flightNumber,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.airlineCode,
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalReturn.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalReturn.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalReturn.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalReturn.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalReturn.fareBasis,
                       "jsonObject": ""
                     }
                   ] : 
                   [
                     {
-                      "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                      "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
-                      "departTime": se._flightService.itemFlightCache.departFlight.departTime,
-                      "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
-                      "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
-                      "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
-                      "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
-                      "stops": se._flightService.itemFlightCache.departFlight.stops,
-                      "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
-                      "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                      "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airlineCode,
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
                       "jsonObject": ""
                     }
                   ],

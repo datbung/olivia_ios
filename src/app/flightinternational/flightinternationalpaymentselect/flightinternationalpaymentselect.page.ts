@@ -78,10 +78,15 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       this.adult = this._flightService.itemFlightCache.dataSummaryBooking.adult;
       this.child = this._flightService.itemFlightCache.dataSummaryBooking.child;
       this.infant = this._flightService.itemFlightCache.dataSummaryBooking.infant;
-      this.totalpricedisplay= this.gf.convertNumberToString(this._flightService.itemFlightCache.dataSummaryBooking.totalPrice);
+      
       this.totalPrice = this.gf.convertStringToNumber(this._flightService.itemFlightCache.dataSummaryBooking.totalPrice);
-      this._flightService.itemFlightCache.totalPriceDisplay = this.totalpricedisplay;
+      // if(this._flightService.itemFlightInternational.promotionCode){
+      //   this.totalPrice = this.totalPrice - this._flightService.itemFlightInternational.discountpromo;
+      // }
+      this.totalpricedisplay= this.gf.convertNumberToString(this.totalPrice);
       this._flightService.itemFlightCache.totalPrice = this.totalPrice;
+      this._flightService.itemFlightCache.totalPriceDisplay = this.totalpricedisplay;
+
       this._flightService.itemFlightCache.phone = this.activityService.objPaymentMytrip.cus_phone;
       let objday:any = this.gf.getDayOfWeek(this.startDate);
         let objdayreturn:any = this.gf.getDayOfWeek(this.endDate);
@@ -113,8 +118,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       this.adult = this._flightService.itemFlightCache.adult;
       this.child = this._flightService.itemFlightCache.child;
       this.infant = this._flightService.itemFlightCache.infant;
-      this.totalpricedisplay= this.gf.convertNumberToString(this._flightService.itemFlightInternational.fare.price);
+      
       this.totalPrice = this.gf.convertStringToNumber(this._flightService.itemFlightInternational.fare.price);
+      if(this._flightService.itemFlightInternational.promotionCode){
+        this.totalPrice = this.totalPrice - this._flightService.itemFlightInternational.discountpromo;
+      }
+      this.totalpricedisplay= this.gf.convertNumberToString(this.totalPrice);
       this._flightService.itemFlightCache.totalPriceDisplay = this.totalpricedisplay;
       this._flightService.itemFlightCache.totalPrice = this.totalPrice;
       this.departtitle = this._flightService.itemFlightCache.departPaymentTitleDisplay + moment(this._flightService.itemFlightCache.itemFlightInternationalDepart.departTime).format("HH:mm") + " - " + moment(this._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime).format("HH:mm")+ " · " +this._flightService.itemFlightCache.itemFlightInternationalDepart.airlineCode;
@@ -320,7 +329,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
             tintColor: '#23BFD8'
           })
           .subscribe((result: any) => {
-            se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+            se._flightService.itemFlightInternational.hasvoucher = se._flightService.itemFlightInternational.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
               if(result.event === 'opened') console.log('Opened');
               else if(result.event === 'loaded') console.log('Loaded');
               else if(result.event === 'closed') 

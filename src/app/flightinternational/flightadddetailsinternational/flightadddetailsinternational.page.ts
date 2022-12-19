@@ -256,6 +256,17 @@ export class FlightAdddetailsInternationalPage implements OnInit {
         }
     }
 
+    ionViewWillEnter(){
+      // this.itemVoucher = null;
+      // this.promocode = "";
+      // this.promotionCode = "";
+      // this.discountpromo = 0;
+      // this._flightService.itemFlightInternational.discountpromo = 0;
+      // this._flightService.itemFlightInternational.promotionCode = "";
+      // this._flightService.itemFlightInternational.hasVoucher = false;
+      // this.totalPriceAll();
+    }
+
         ngOnInit(){
             var se =this;
             se._flightService.itemFlightLogin.pipe().subscribe((data)=>{
@@ -275,7 +286,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   return;
                 }
                 let databkg = this._flightService.itemFlightCache.dataSummaryBooking;
-                let itemflightcache = this._flightService.itemFlightCache;
+                let itemflightcache = this._flightService.itemFlightInternational;
                 if(databkg && itemflightcache.promotionCode && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.hasvoucher && itemflightcache.hasvoucher != this.promotionCode){
                   this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
                   this.showAlertPromoCode();
@@ -288,11 +299,15 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     this.promocode = itemVoucher.code;
                     this.promotionCode = itemVoucher.code;
                     this.discountpromo = itemVoucher.rewardsItem.price;
+                    this._flightService.itemFlightInternational.discountpromo = itemVoucher.rewardsItem.price;
+                    this._flightService.itemFlightInternational.promotionCode = itemVoucher.code;
                   }else{
                     this.itemVoucher = null;
                     this.promocode = "";
                     this.promotionCode = "";
                     this.discountpromo = 0;
+                    this._flightService.itemFlightInternational.discountpromo = 0;
+                    this._flightService.itemFlightInternational.promotionCode = "";
                   }
                   this.totalPriceAll();
                 })
@@ -307,7 +322,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 this.promocode = "";
                 this.promotionCode = "";
                 this.discountpromo = 0;
-                this._flightService.itemFlightCache.hasvoucher = false;
+                this._flightService.itemFlightInternational.hasvoucher = false;
+                this._flightService.itemFlightInternational.discountpromo = 0;
+                this._flightService.itemFlightInternational.promotionCode = "";
                 this.totalPriceAll();
               }
             })
@@ -2663,54 +2680,6 @@ alert.present();
               //let data = se._flightService.itemFlightCache;
                let departluggage=[],returnluggage=[],
                 departAirlineCode = "", returnAirlineCode = "";
-                
-                //Hành lý đi trả về từ api tìm vé
-                // if(data.departFlight && data.departFlight.airLineLuggage && data.departFlight.airLineLuggage.length >0){
-                //   const dl = data.departFlight.airLineLuggage.filter((item) => { return item.quantity >0});
-                //   if(dl && dl.length >0){
-                //     dl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       departluggage.push(element)
-                //     });
-                //     //departluggage = [...dl];
-                //   }
-                  
-                // }
-                // //Hành lý đi trả về từ api load hành lý
-                // if(data.departLuggage && data.departLuggage.length >0){
-                //   const dl = data.departLuggage.filter((item) => { return item.quantity >0});
-                //   if(dl && dl.length >0){
-                //     dl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       departluggage.push(element)
-                //     });
-                //     //departluggage = [...dl];
-                //   }
-                // }
-                // //Hành lý về trả về từ api tìm vé
-                // if(data.returnFlight && data.returnFlight.airLineLuggage && data.returnFlight.airLineLuggage.length >0){
-                //   const rl = data.returnFlight.airLineLuggage.filter((item) => { return item.quantity >0});
-                //   if(rl && rl.length >0){
-                //     //returnluggage = [...rl]
-                //     rl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       returnluggage.push(element)
-                //     });
-                //   }
-                  
-                // }
-                // //Hành lý về trả về từ api load hành lý
-                // if(data.returnLuggage && data.returnLuggage.length >0){
-                //   const rl = data.returnLuggage.filter((item) => { return item.quantity >0});
-                //   if(rl && rl.length >0){
-                //     //returnluggage = [...rl]
-                //     rl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       returnluggage.push(element)
-                //     });
-                //   }
-                // }
-
 
               for (let index = 0; index < se.adults.length; index++) {
                 const element = se.adults[index];
@@ -2995,22 +2964,7 @@ alert.present();
                       }
                       
                     }
-                   //Đi chung
-                  //  let objTransfer;
-                  //  if (this._flightService.itemFlightCache.DICHUNGParam && this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo) {
-                     
-                  //    objTransfer={Type:"Transfer",price: this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo,netPrice:this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo,title:"1"}
-                  //    if(index == 0){
-                  //       objAncilary.push(objTransfer);
-                  //    }
-                     
-                  //  }
-                  //  if (this._flightService.itemFlightCache.DICHUNGParam && this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn) {
-                  //    objTransfer={Type:"Transfer",price: this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn,netPrice:this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn,title:"1"}
-                  //    if(index == 0){
-                  //       objAncilaryReturn.push(objTransfer);
-                  //    }
-                  //  }
+                 
                    element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
                    element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
                   console.log(element.ancillaryJson);
@@ -3377,19 +3331,7 @@ alert.present();
               data.ho = firstnamecontact;
               data.ten = lastnamecontact;
               var bookingJsonData;
-               //thêm param đi chung vào list đầu tiên
-              // if (this._flightService.itemFlightCache.DICHUNGParam) {
-              //   this._flightService.itemFlightCache.DICHUNGParam.User={email:C.urls.baseUrl.emailDC,phone:se.sodienthoai,fullName:data.ho+" "+data.ten};
-              //   listpassenger[0].DICHUNGParam = this._flightService.itemFlightCache.DICHUNGParam;
-              //   var AirTicketObj=[];
-              //   let AirTicketItem= {PromotionNote:"",AirlineName:""};
-              //   let JsonItem = JSON.stringify(listpassenger[0].DICHUNGParam);
-              //   AirTicketItem.PromotionNote = JsonItem;
-              //   AirTicketItem.AirlineName = "APIDICHUNG";
-              //   AirTicketObj.push(AirTicketItem);
-              //   let Json = JSON.stringify(AirTicketObj);
-              //   bookingJsonData = Json;
-              // }
+             
               return new Promise((resolve, reject) => {
                 let objPass
                    objPass = {
@@ -3403,7 +3345,7 @@ alert.present();
                       "email": se.email,
                       "address": "",
                       "phoneNumber": se.sodienthoai,
-                      "hasvoucher": se._flightService.itemFlightCache.promotionCode ? true : false,
+                      "hasvoucher": se._flightService.itemFlightInternational.promotionCode ? true : false,
                     },
                     "passengers": listpassenger,
                     "userToken": "",
@@ -3420,14 +3362,14 @@ alert.present();
                     "memberId": se.jti ? se.jti : "",
                     //"hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                     //"bookingJsonData":bookingJsonData,//đi chung
-                    //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
+                    "voucher": { voucherCode: se._flightService.itemFlightInternational.promotionCode ? se._flightService.itemFlightInternational.promotionCode:"" },
                     //"InsuranceType":se._flightService.itemFlightCache.InsuranceType
                   }
-                  if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
+                  if(se._flightService.itemFlightInternational.pnr && se._flightService.itemFlightInternational.pnr.resNo && se._flightService.itemFlightInternational.hasvoucher && se._flightService.itemFlightInternational.promotionCode)
                   {
                     objPass.voucher={};
                     objPass.voucher.keepCurrentVoucher=true;
-                    objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
+                    objPass.voucher.voucherCode = se._flightService.itemFlightInternational.promotionCode ? se._flightService.itemFlightInternational.promotionCode:"";
                   }
                   
                   var options = {
@@ -4115,6 +4057,7 @@ alert.present();
       this.totalPrice = this._flightService.itemFlightInternational.fare.price;
       if(this.discountpromo){
         this.totalPriceBeforeDiscount = this._flightService.itemFlightInternational.fare.price;
+        this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
         this.totalPrice = this.totalPrice - this.discountpromo;
         this.totalPriceDisplay = this.gf.convertNumberToString(this.totalPrice);
       }
@@ -4122,7 +4065,7 @@ alert.present();
 
     async showAlertPromoCode() {
       var se = this;
-      let msg = `Mã voucher ${se._flightService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se._flightService.itemFlightCache.pnr.resNo} Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+      let msg = `Mã voucher ${se._flightService.itemFlightInternational.hasvoucher} đang dùng cho đơn hàng ${se._flightService.itemFlightCache.pnr.resNo} Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
       let alert = await se.alertCtrl.create({
         message: msg,
         cssClass: "cls-alert-choiceseat",
@@ -4140,8 +4083,8 @@ alert.present();
             text: 'Hủy',
             role: 'Cancel',
             handler: () => {
-              se.promocode = se._flightService.itemFlightCache.hasvoucher;
-              se.promotionCode = se._flightService.itemFlightCache.hasvoucher;
+              se.promocode = se._flightService.itemFlightInternational.hasvoucher;
+              se.promotionCode = se._flightService.itemFlightInternational.promotionCode;
               alert.dismiss();
             }
           }
@@ -4207,44 +4150,44 @@ alert.present();
           let body = {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight') ?  { flight: {
               "tickets": this._flightService.itemFlightCache.roundTrip ? [
                 {
-                  "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                  "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
-                  "departTime": se._flightService.itemFlightCache.departFlight.departTime,
-                  "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
-                  "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
-                  "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
-                  "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
-                  "stops": se._flightService.itemFlightCache.departFlight.stops,
-                  "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
-                  "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
-                  "jsonObject": ""
+                  "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airlineCode,
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
+                      "jsonObject": ""
                 },
                 {
-                  "flightNumber": se._flightService.itemFlightCache.returnFlight.flightNumber ,
-                  "airLineCode": se._flightService.itemFlightCache.returnFlight.airlineCode,
-                  "departTime": se._flightService.itemFlightCache.returnFlight.departTime,
-                  "landingTime": se._flightService.itemFlightCache.returnFlight.landingTime,
-                  "flightDuration": se._flightService.itemFlightCache.returnFlight.flightDuration,
-                  "fromPlaceCode": se._flightService.itemFlightCache.returnFlight.fromPlaceCode,
-                  "toPlaceCode": se._flightService.itemFlightCache.returnFlight.toPlaceCode,
-                  "stops": se._flightService.itemFlightCache.returnFlight.stops,
-                  "ticketClass": se._flightService.itemFlightCache.returnFlight.ticketClass,
-                  "fareBasis": se._flightService.itemFlightCache.returnFlight.fareBasis,
-                  "jsonObject": ""
+                  "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalReturn.flightNumber,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.airlineCode,
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalReturn.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalReturn.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalReturn.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalReturn.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalReturn.fareBasis,
+                      "jsonObject": ""
                 }
               ] : 
               [
                 {
-                  "flightNumber": se._flightService.itemFlightCache.departFlight.flightNumber ,
-                  "airLineCode": se._flightService.itemFlightCache.departFlight.airlineCode,
-                  "departTime": se._flightService.itemFlightCache.departFlight.departTime,
-                  "landingTime": se._flightService.itemFlightCache.departFlight.landingTime,
-                  "flightDuration": se._flightService.itemFlightCache.departFlight.flightDuration,
-                  "fromPlaceCode": se._flightService.itemFlightCache.departFlight.fromPlaceCode,
-                  "toPlaceCode": se._flightService.itemFlightCache.departFlight.toPlaceCode,
-                  "stops": se._flightService.itemFlightCache.departFlight.stops,
-                  "ticketClass": se._flightService.itemFlightCache.departFlight.ticketClass,
-                  "fareBasis": se._flightService.itemFlightCache.departFlight.fareBasis,
+                  "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
+                  "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airlineCode,
+                  "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
+                  "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
+                  "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
+                  "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode,
+                  "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
+                  "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
+                  "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                  "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
                   "jsonObject": ""
                 }
               ],
@@ -4267,7 +4210,8 @@ alert.present();
               se.msg = json.msg;
               se.ischeckerror = 0;
               se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
-             
+              se._flightService.itemFlightInternational.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+              se._flightService.itemFlightInternational.promotionCode = se.promocode;
               se.promotionCode=se.promocode;
               se.totalPriceAll();
             }

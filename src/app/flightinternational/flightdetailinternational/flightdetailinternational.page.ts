@@ -196,9 +196,9 @@ export class FlightDetailInternationalPage implements OnInit {
     this.promotionCode = "";
     this.discountpromo = 0;
     this._flightService.itemFlightCache.hasvoucher = false;
-    if(this._flightService.itemFlightInternational.promocode){
-      this.promocode = this._flightService.itemFlightInternational.promocode;
-      this.promotionCode = this._flightService.itemFlightInternational.promocode;
+    if(this._flightService.itemFlightInternational.promotionCode){
+      this.promocode = this._flightService.itemFlightInternational.promotionCode;
+      this.promotionCode = this._flightService.itemFlightInternational.promotionCode;
       this.discountpromo = this._flightService.itemFlightInternational.discountpromo;
     }
     this.totalPriceAll();

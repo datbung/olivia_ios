@@ -155,7 +155,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
             tintColor: '#23BFD8'
           })
           .subscribe((result: any) => {
-            se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+            se._flightService.itemFlightInternational.hasvoucher = se._flightService.itemFlightInternational.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
               if(result.event === 'opened') {
                 console.log(url.link);
               }
