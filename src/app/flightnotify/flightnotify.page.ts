@@ -13,7 +13,7 @@ import {Badge} from '@ionic-native/badge/ngx';
 import {Storage} from '@ionic/storage';
 import * as request from 'requestretry';
 import * as moment from 'moment';
-import {ValueGlobal} from '../providers/book-service';
+import {ValueGlobal,SearchHotel} from '../providers/book-service';
 import {flightService} from '../providers/flightService';
 import { tourService } from '../providers/tourService';
 
@@ -44,7 +44,7 @@ export class FlightnotifyPage {
     objnotication : any;
     textnotifyType = "";countNoti
     constructor(private navCtrl : NavController, private gf : GlobalFunction, public _flightService : flightService, public platform : Platform, private badge : Badge, private storage : Storage, private zone : NgZone, public toastCtrl : ToastController, public valueGlobal : ValueGlobal, private modalCtrl : ModalController, private alertCtrl : AlertController, public activityService : ActivityService,
-        public tourService: tourService) { // get phone
+        public tourService: tourService,public searchhotel: SearchHotel) { // get phone
         this.storage.get('phone').then(data => {
             if (data) {
                 this.phone = data;
@@ -233,6 +233,12 @@ export class FlightnotifyPage {
                         // update status xuống db
                         se.callUpdateStatus(element);
                     }
+                    if (se.searchhotel.gbitem) {
+                        se.searchhotel.gbitem.hotelId="";
+                      }
+                      if (se.searchhotel.rootPage) {
+                        se.searchhotel.rootPage="";
+                      }
                     if (element.dataLink) {
                         if(element.dataLink.indexOf('tourdetail') != -1){
                             let arr = element.dataLink.replace('/','').split('/');
