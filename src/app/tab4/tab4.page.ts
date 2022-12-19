@@ -5,7 +5,7 @@ import { ActivityService, GlobalFunction } from './../providers/globalfunction';
 import { Storage } from '@ionic/storage';
 import * as request from 'requestretry';
 import * as moment from 'moment';
-import { ValueGlobal } from '../providers/book-service';
+import { ValueGlobal,SearchHotel } from '../providers/book-service';
 import { Router } from '@angular/router';
 import { NetworkProvider } from '../network-provider.service';
 import { flightService } from '../providers/flightService';
@@ -53,7 +53,7 @@ export class Tab4Page implements OnInit{
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     public activityService: ActivityService, public _flightService: flightService,
-    public tourService: tourService) {
+    public tourService: tourService,public searchhotel: SearchHotel) {
     //google analytic
     gf.googleAnalytion('inbox','load','');
     //get phone
@@ -302,6 +302,12 @@ export class Tab4Page implements OnInit{
             //update status xuống db
             se.valueGlobal.countNotifi--;
             se.callUpdateStatus(element);
+          }
+          if (se.searchhotel.gbitem) {
+            se.searchhotel.gbitem.hotelId="";
+          }
+          if (se.searchhotel.rootPage) {
+            se.searchhotel.rootPage="";
           }
           if (element.dataLink) {
             if(element.dataLink.indexOf('tourdetail') != -1){
