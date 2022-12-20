@@ -684,7 +684,7 @@ export class Tab4Page implements OnInit{
   {
     var se= this;
     if(trip.amount_after_tax){
-      trip.priceShow = trip.amount_after_tax.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+      trip.priceShow = trip.amount_after_tax
     }
     se.activityService.objPaymentMytrip = { returnPage : 'mytrip', tripindex: tripidx, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
     if (trip.booking_type == 'COMBO_FLIGHT') {
