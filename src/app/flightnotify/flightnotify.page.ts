@@ -415,7 +415,7 @@ export class FlightnotifyPage {
     paymentselect(trip, tripidx) {
         var se = this;
         if (trip.amount_after_tax) {
-            trip.priceShow = trip.amount_after_tax.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            trip.priceShow = trip.amount_after_tax;
         }
         se.activityService.objPaymentMytrip = {
             returnPage: 'mytrip',
