@@ -1758,7 +1758,7 @@ import { tourService } from '../providers/tourService';
               if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount>0) {
                 se.amount_after_tax=se.listMyTrips[0].amount_after_tax-se.listMyTrips[0].paid_amount;
               }else{
-                se.amount_after_tax=se.listMyTrips[0].amount_after_tax
+                se.amount_after_tax=se.listMyTrips[0].amount_after_tax;
               }
             } else {
               se.hasdata = false;
@@ -1814,6 +1814,10 @@ import { tourService } from '../providers/tourService';
                      }
                    });
                  }
+
+                if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount>0) {
+                  se.listMyTrips[0].priceShow = (se.listMyTrips[0].amount_after_tax-se.listMyTrips[0].paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                }
               }
 
               

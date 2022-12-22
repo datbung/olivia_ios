@@ -129,7 +129,7 @@ export class AdddiscountPage implements OnInit {
           'cache-control': 'no-cache',
           'content-type': 'application/json'
         },
-        body: { bookingCode: _bookingCode ,code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : se._flightService.itemFlightCache.totalPrice), comboDetailId: se.bookCombo.ComboId,
+        body: { bookingCode: _bookingCode ,code: se.promocode, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : (se._flightService.itemFlightCache.totalPrice || se._flightService.itemFlightInternational.fare.price)), comboDetailId: se.bookCombo.ComboId,
         couponData: coupondata},
         json: true
       };

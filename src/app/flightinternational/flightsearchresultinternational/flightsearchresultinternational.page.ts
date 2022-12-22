@@ -21,6 +21,7 @@ import { FlightselecttimepriorityPage } from '../../flightselecttimepriority/fli
 import { FlightInfoInternationalPage } from '../flightinfointernationnal/flightinfointernational.page';
 import { FlightDepartureDetailInternationalPage } from '../flightdeparturedetailinternational/flightdeparturedetailinternational.page';
 import { FlightInternationalSearchfilterPage } from '../flightinternationalsearchfilter/flightinternationalsearchfilter.page';
+import { voucherService } from 'src/app/providers/voucherService';
 
 @Component({
   selector: 'app-flightsearchresultinternational',
@@ -132,7 +133,8 @@ export class FlightSearchResultInternationalPage implements OnInit {
     public _flightService: flightService,
     private alertCtrl: AlertController,
     private pickerCtrl : PickerController,
-    private fb: Facebook) { 
+    private fb: Facebook,
+    public _voucherService: voucherService) { 
       this.step =2;
       clearInterval(this.intervalFlightTicket);
       if(_flightService.objSearch){
@@ -2503,6 +2505,10 @@ export class FlightSearchResultInternationalPage implements OnInit {
                this._flightService.itemFlightCache.dataBookingInternational = data.data;
                this._flightService.itemFlightInternational = item;
                this._flightService.itemFlightCache.reservationId = data.data.id;
+               this._voucherService.publicClearVoucherAfterPaymentDone(1);
+               this._flightService.itemFlightInternational.promotionCode = "";
+               this._flightService.itemFlightInternational.discountpromo = 0;
+               this._flightService.itemFlightInternational.hasvoucher = null;
                this.navCtrl.navigateForward('/flightadddetailsinternational');
               }else{
                 this.gf.showAlertMessageOnly('Phiên truy cập đã hết hiệu lực. Vui lòng tải lại trang và thử lại.').then(()=>{

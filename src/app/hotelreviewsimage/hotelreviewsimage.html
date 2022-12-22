@@ -1,5 +1,5 @@
 <ion-content>
-    <div style="margin-top: env(safe-area-inset-top)">
+    <div class="border-bottom" style="margin-top: env(safe-area-inset-top)">
         <ion-row>
           <ion-col style="text-align: center;height: 48px;">
             <div style="align-self: center">
@@ -19,6 +19,7 @@
                 {{datereview}}
               </ion-label>
             </div>
+            <div *ngIf="!cusnamereview && !datereview" class="div-hotel-name">{{hotelName}}</div>
           </ion-col>
         </ion-row>
       </div>

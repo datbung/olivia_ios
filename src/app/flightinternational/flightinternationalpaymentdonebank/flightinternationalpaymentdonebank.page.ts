@@ -561,6 +561,12 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     if (this.checkreview == 0) {
       this.showConfirm();
     }
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    if(this._flightService.itemFlightInternational){
+      this._flightService.itemFlightInternational.promotionCode = "";
+      this._flightService.itemFlightInternational.discountpromo = 0;
+      this._flightService.itemFlightInternational.hasvoucher = null;
+    }
     this.navCtrl.navigateBack('/tabs/tab1');
     
   }

@@ -19,6 +19,7 @@ export class HotelreviewsimagePage  {
   arrimgreview=[];cusnamereview;datereview;countslide=1;lengthslide;ischeckslide=false
   @ViewChild('mySlider') slider: IonSlides;
   captionImg: any;
+  hotelName: any;
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public searchhotel: SearchHotel,public zone:NgZone) {
   }
   goback() {
@@ -27,12 +28,14 @@ export class HotelreviewsimagePage  {
   ionViewDidEnter() {
     this.cusnamereview=this.searchhotel.cusnamereview;
     this.datereview=this.searchhotel.datereview;
+    this.hotelName = this.searchhotel.hotelName;
     setTimeout(() => {
       this.arrimgreview = this.searchhotel.arrimgreview;
       this.slider.slideTo(this.searchhotel.indexreviewimg);
       this.lengthslide=this.arrimgreview.length;
       this.ischeckslide=true;
       this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
+      
     },900)
     console.log(this.lengthslide=this.arrimgreview.length);
 

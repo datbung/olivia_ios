@@ -44,6 +44,7 @@ import { MytripService } from '../providers/mytrip-service.service';
 import { flightService } from '../providers/flightService';
 import { resolve } from 'dns';
 import { RequestRoomPage } from '../requestroom/requestroom';
+import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 
 @Component({
   selector: 'app-hoteldetail',
@@ -218,6 +219,8 @@ export class HotelDetailPage implements OnInit {
   textMSG: any;
   isShowPrice: boolean = true;
   isShowPriceHotel: boolean;
+  youtubeId: any;
+  trustedVideoUrl: any;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -229,7 +232,8 @@ export class HotelDetailPage implements OnInit {
     public splashScreen: SplashScreen,
     private fb: Facebook,
     public _mytripservice: MytripService,
-    public _flightService: flightService
+    public _flightService: flightService,
+    private youtube: YoutubeVideoPlayer
     ) {
       this.valueGlobal.notRefreshDetail = false;
       // imgLoaderConfigService.enableSpinner(true);
@@ -1084,6 +1088,7 @@ export class HotelDetailPage implements OnInit {
           se.hotelDetail.push(jsondata);
           se.hotelDetail = se.hotelDetail[0];
           se.hotelname = jsondata.Name;
+          se.searchhotel.hotelName = se.hotelname;
           se.hotelurl = "https://www.ivivu.com" + jsondata.Url;
           let link = "https://maps.google.com/maps?q=" + se.hotelname + "&hl=es;z=16&amp&output=embed";
           se.linkGoogleMap = se.sanitizer.bypassSecurityTrustResourceUrl(link);
@@ -1103,6 +1108,10 @@ export class HotelDetailPage implements OnInit {
           se.booking.RegionId = se.regionId;
           se.booking.Address = jsondata.Address;
 
+          if(jsondata.Youtube){
+            se.youtubeId = jsondata.Youtube;
+            se.trustedVideoUrl = se.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+se.youtubeId);
+          }
           se.id1 = { id: se.HotelID };
           se.zone.run(()=> {
             if(!isloaddata){

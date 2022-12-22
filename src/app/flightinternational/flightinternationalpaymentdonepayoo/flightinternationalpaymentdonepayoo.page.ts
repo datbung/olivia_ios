@@ -300,6 +300,12 @@ if(itemflight.childs && itemflight.childs.length >0){
     this._flightService.itemFlightCache = {};
     this._flightService.itemTabFlightActive.emit(true);
     this.valueGlobal.backValue = "homeflight";
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    if(this._flightService.itemFlightInternational){
+      this._flightService.itemFlightInternational.promotionCode = "";
+      this._flightService.itemFlightInternational.discountpromo = 0;
+      this._flightService.itemFlightInternational.hasvoucher = null;
+    }
     if (this.checkreview==0) {
       this.showConfirm();
     }

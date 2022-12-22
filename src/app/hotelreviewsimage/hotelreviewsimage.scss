@@ -54,7 +54,16 @@
       text-align: center;
       height: 36px;
     }
-    
+    .div-hotel-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+      margin-top: 9px;
+    }
+    .border-bottom {
+      border-bottom: solid 0.5px #f2f2f2;
+    }
     .center
     {
       @media (min-width:320px) and (max-width: 360px) {

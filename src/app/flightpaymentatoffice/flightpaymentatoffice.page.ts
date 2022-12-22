@@ -123,6 +123,10 @@ export class FlightpaymentatofficePage implements OnInit{
                     }
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);
+                    if(data.PeriodPaymentDate && data.PeriodPaymentDate.indexOf('/') != -1){
+                      let _pd = data.PeriodPaymentDate.replace('/Date(','').replace(')/','')*1;
+                      se._flightService.itemFlightCache.periodPaymentDate = new Date(_pd);
+                     }
                         resolve(data.success);
                 })
     })

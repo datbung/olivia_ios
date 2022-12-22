@@ -58,7 +58,7 @@
     </div>
     
     <div class="div-split"></div>
-    <div class="div-voucher-apply" *ngIf="_flightService.itemFlightInternational.promotionCode">
+    <div class="div-voucher-apply" *ngIf="_flightService.itemFlightInternational && _flightService.itemFlightInternational.promotionCode">
       <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_flightService.itemFlightInternational.promotionCode}}</span><span class="text-normal">)</span> </div>
       <div class="width-100 text-normal text-right">{{gf.convertNumberToString(_flightService.itemFlightInternational.discountpromo)}}đ</div>
     </div>
@@ -74,7 +74,7 @@
             <img src="./assets/ic_green/ic_info.svg">
           </sup>
         </div> -->
-        <div class="text-normal text-right text-strike" *ngIf="_flightService.itemFlightInternational.totalPriceBeforeApplyVoucher && _flightService.itemFlightInternational.discountpromo">{{gf.convertNumberToString(_flightService.itemFlightInternational.totalPriceBeforeApplyVoucher)}}đ
+        <div class="text-normal text-right text-strike" *ngIf="_flightService.itemFlightInternational && _flightService.itemFlightInternational.totalPriceBeforeApplyVoucher && _flightService.itemFlightInternational.discountpromo">{{gf.convertNumberToString(_flightService.itemFlightInternational.totalPriceBeforeApplyVoucher)}}đ
         </div>
         <div class="text-total-price" (click)="showPriceDetail()">{{totalpricedisplay}}đ
           <sup>

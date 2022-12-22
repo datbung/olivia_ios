@@ -21,12 +21,12 @@
     <img class="img-empty" src="./assets/empty/imgdone.svg">
 </div>
 <div style="margin-top: 5px">
-  <div class="m-bottom-8">
-    <ion-label class="text text-tealish">
-      Xác nhận thanh toán thành công
-    </ion-label>
-  </div>
   <div *ngIf='stt==1 else paylater'>
+    <div class="m-bottom-8">
+      <ion-label class="text text-tealish">
+        Xác nhận thanh toán thành công
+      </ion-label>
+    </div>
     <div class="text p-top-12">
       Mã booking <span class='text-bold text-tealish'>{{bookingCode}}</span>
     </div>

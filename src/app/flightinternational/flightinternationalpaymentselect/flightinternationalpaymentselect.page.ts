@@ -80,9 +80,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       this.infant = this._flightService.itemFlightCache.dataSummaryBooking.infant;
       
       this.totalPrice = this.gf.convertStringToNumber(this._flightService.itemFlightCache.dataSummaryBooking.totalPrice);
-      // if(this._flightService.itemFlightInternational.promotionCode){
-      //   this.totalPrice = this.totalPrice - this._flightService.itemFlightInternational.discountpromo;
-      // }
+      if(this.activityService.objPaymentMytrip.promotionDiscountAmount && this.activityService.objPaymentMytrip.amount_after_tax){
+        this.totalPrice = this.activityService.objPaymentMytrip.amount_after_tax;
+        if(this.activityService.objPaymentMytrip.paid_amount && this.activityService.objPaymentMytrip.paid_amount >0){
+          this.totalPrice = this.activityService.objPaymentMytrip.amount_after_tax - this.activityService.objPaymentMytrip.paid_amount;
+        }
+      }
       this.totalpricedisplay= this.gf.convertNumberToString(this.totalPrice);
       this._flightService.itemFlightCache.totalPrice = this.totalPrice;
       this._flightService.itemFlightCache.totalPriceDisplay = this.totalpricedisplay;
@@ -121,6 +124,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       
       this.totalPrice = this.gf.convertStringToNumber(this._flightService.itemFlightInternational.fare.price);
       if(this._flightService.itemFlightInternational.promotionCode){
+        this._flightService.itemFlightInternational.hasvoucher = this._flightService.itemFlightInternational.promotionCode;
         this.totalPrice = this.totalPrice - this._flightService.itemFlightInternational.discountpromo;
       }
       this.totalpricedisplay= this.gf.convertNumberToString(this.totalPrice);
@@ -226,7 +230,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     if(se.activityService.objPaymentMytrip && se._flightService.itemFlightCache.dataSummaryBooking){
       this.navCtrl.pop();
     }else{
-      this.navCtrl.navigateBack('flightadddetailsinternational');
+      this.navCtrl.navigateBack('/flightadddetailsinternational');
     }
     
       
@@ -650,7 +654,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
-    this.presentLoading();
+    //this.presentLoading();
     if (this.bookingCode) {
       this.NoCreateBooking();
     }
@@ -679,7 +683,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
   NoCreateBooking()
   {
     var se=this;
-    //se.presentLoading();
+    se.presentLoading();
           se.gf.updatePaymentMethod(se._flightService.itemFlightCache, 3, "","").then(datatype => {
             if (datatype && datatype.isHoldSuccess) {
              

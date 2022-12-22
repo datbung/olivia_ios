@@ -49,11 +49,16 @@ export class VoucherSlidePage implements OnInit{
             const element = this.vouchers[index];
             if(element.id == itemRollback.id){
               element.claimed = false;
+              if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.hasvoucher){
+                this._flightService.itemFlightInternational.hasvoucher = '';
+              }
             }
             
           }
         }
       })
+
+
     }
 
     ngAfterContentInit(){
@@ -311,7 +316,19 @@ export class VoucherSlidePage implements OnInit{
           this._voucherService.vouchers = [...data];
           this.zone.run(()=>{
             this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
+
+            if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.hasvoucher){
+              for (let index = 0; index < this._voucherService.vouchers.length; index++) {
+                const element = this._voucherService.vouchers[index];
+                if(element.code == this._flightService.itemFlightInternational.hasvoucher){
+                  element.claimed = true;
+                  this._voucherService.selectVoucher = element;
+                }
+                
+              }
+            }
           })
+          
         }else if(data.error == 401){
           this.storage.get('jti').then((memberid) => {
             this.storage.get('deviceToken').then((devicetoken) => {

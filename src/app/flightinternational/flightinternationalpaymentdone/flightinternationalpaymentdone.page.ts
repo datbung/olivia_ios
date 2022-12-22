@@ -407,6 +407,13 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     this._flightService.itemMenuFlightClick.emit(2);
     this._flightService.bookingCodePayment = this.bookingCode;
     this._flightService.bookingSuccess = true;
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    if(this._flightService.itemFlightInternational){
+      this._flightService.itemFlightInternational.promotionCode = "";
+      this._flightService.itemFlightInternational.discountpromo = 0;
+      this._flightService.itemFlightInternational.hasvoucher = null;
+    }
+   
     if (this.checkreview == 0) {
       this.showConfirm();
     }

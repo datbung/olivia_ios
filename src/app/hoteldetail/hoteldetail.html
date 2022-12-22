@@ -45,6 +45,7 @@
         </ion-slide>
       </ion-slides>
       
+
         <div class="badgescss">
           <span>{{coutslide}}/{{lengthslide}}</span>
         </div>
@@ -69,6 +70,11 @@
             
         </div>
     </div>
+
+
+    <!-- <div class="div-split"  *ngIf="youtubeId"></div> -->
+   
+
     <div class="hoteldetail-point">
       <div>
         <h2 class="text-name" text-wrap>{{name}}
@@ -165,6 +171,13 @@
   </iframe>
   
   </div>
+
+  <div class="div-split  m-top-8"></div>
+  <div class="div-video-name" *ngIf="youtubeId">Video về {{name}}</div>
+  <div class="div-video m-bottom-16" *ngIf="youtubeId">
+    <iframe width="100%" height="203" [src]="trustedVideoUrl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
   <div *ngIf="showpopup==true&&ischeck==true">
     <div style="margin-left: 15px;margin-top: 10px; margin-bottom:10px">
       

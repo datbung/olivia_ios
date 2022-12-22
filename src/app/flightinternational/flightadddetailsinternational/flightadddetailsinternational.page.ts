@@ -265,6 +265,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
       // this._flightService.itemFlightInternational.promotionCode = "";
       // this._flightService.itemFlightInternational.hasVoucher = false;
       // this.totalPriceAll();
+      if(this.itemVoucher){
+
+      }
     }
 
         ngOnInit(){
@@ -322,9 +325,12 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 this.promocode = "";
                 this.promotionCode = "";
                 this.discountpromo = 0;
-                this._flightService.itemFlightInternational.hasvoucher = false;
-                this._flightService.itemFlightInternational.discountpromo = 0;
-                this._flightService.itemFlightInternational.promotionCode = "";
+                if(this._flightService.itemFlightInternational){
+                  this._flightService.itemFlightInternational.hasvoucher = false;
+                  this._flightService.itemFlightInternational.discountpromo = 0;
+                  this._flightService.itemFlightInternational.promotionCode = "";
+                }
+                
                 this.totalPriceAll();
               }
             })
@@ -800,8 +806,24 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 this._flightService.itemFlightCache.sodienthoaistep2 = this.sodienthoai;
                 this._flightService.itemFlightCache.emailstep2 = this.email;
                 this.activeStep = 1;
+                if(this.itemVoucher){
+
+                }
             }
             
+        }
+
+        gobackToSearchPage(){
+          this._flightService.itemFlightCache.hasvoucher = false;
+          this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+          this._voucherService.selectVoucher = null;
+          this.itemVoucher = null;
+          this.promocode = "";
+          this.promotionCode = "";
+          this.discountpromo = 0;
+          this._flightService.itemFlightInternational.discountpromo = 0;
+          this._flightService.itemFlightInternational.promotionCode = "";
+          this.navCtrl.navigateBack('/flightsearchresultinternational');
         }
 
         resetLuggage(){
@@ -1121,6 +1143,12 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             var se = this;
             se.checkchangeemail=false;
             se.hasinput = false;
+            let itemflightcache= se._flightService.itemFlightInternational;
+            if(se.promotionCode && se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && itemflightcache.hasvoucher && itemflightcache.hasvoucher != se.promotionCode){
+              //this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+              this.showAlertPromoCode();
+              return;
+            }
             if(se.activeStep == 2){
                 if(se.adults && se.adults.length >0){
                     for (let index = 0; index < se.adults.length; index++) {
@@ -4054,13 +4082,16 @@ alert.present();
     }
 
     totalPriceAll() {
-      this.totalPrice = this._flightService.itemFlightInternational.fare.price;
-      if(this.discountpromo){
-        this.totalPriceBeforeDiscount = this._flightService.itemFlightInternational.fare.price;
-        this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
-        this.totalPrice = this.totalPrice - this.discountpromo;
+      this.zone.run(()=> {
+        this.totalPrice = this._flightService.itemFlightInternational.fare.price;
+        if(this.discountpromo){
+          this.totalPriceBeforeDiscount = this._flightService.itemFlightInternational.fare.price;
+          this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
+          this.totalPrice = this.totalPrice - this.discountpromo;
+        }
         this.totalPriceDisplay = this.gf.convertNumberToString(this.totalPrice);
-      }
+      })
+      
     }
 
     async showAlertPromoCode() {
@@ -4076,7 +4107,7 @@ alert.present();
             role: 'OK',
             handler: () => {
               alert.dismiss();
-              //this.close();
+              se.gobackToSearchPage();
             }
           },
           {
@@ -4094,10 +4125,16 @@ alert.present();
     }
 
     async showdiscount(){
+      if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
       this.promocode="";
       this.promotionCode = "";
       this.discountpromo =0;
       this.itemVoucher = null;
+      this._flightService.itemFlightInternational.promotionCode = "";
+      this._flightService.itemFlightInternational.discountpromo = 0;
       //this.ischeckbtnpromo=false;
       //this.ischeckpromo=false;
       this._voucherService.isFlightPage = true;
@@ -4108,10 +4145,7 @@ alert.present();
         component: AdddiscountPage,
       });
       modal.present();
-      if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
-        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-        this._voucherService.selectVoucher = null;
-      }
+      
       this.totalPriceAll();
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
         if (data.data) {
@@ -4121,7 +4155,7 @@ alert.present();
             this._voucherService.rollbackSelectedVoucher.emit(vc);
             return;
           }else {
-            this._voucherService.isFlightPage = false;
+            
             this.zone.run(() => {
               if (data.data.promocode) {
                 //$('.div-point').addClass('div-disabled');
@@ -4147,7 +4181,7 @@ alert.present();
           //   'cache-control': 'no-cache',
           //   'content-type': 'application/json'
           // },
-          let body = {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightCache.totalPrice, comboDetailId: 0, couponData: (vc.applyFor && vc.applyFor == 'flight') ?  { flight: {
+          let body = {bookingCode: 'VMB' ,code: se.promocode, totalAmount: se._flightService.itemFlightInternational.fare.price, comboDetailId: 0, couponData:  { flight: {
               "tickets": this._flightService.itemFlightCache.roundTrip ? [
                 {
                   "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
@@ -4195,7 +4229,7 @@ alert.present();
               "totalChild": se._flightService.itemFlightCache.child,
               "totalInfant": se._flightService.itemFlightCache.infant
             ,
-          } }: '' };
+          } }};
         //  json: true
         //};
         let url = C.urls.baseUrl.urlMobile + '/api/data/validpromocode';
