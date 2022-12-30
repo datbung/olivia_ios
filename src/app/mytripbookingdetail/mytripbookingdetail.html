@@ -136,15 +136,6 @@
                         Bể bơi
                         </ion-col>
                 </ion-row>
-                <!-- Facilitys -->
-                <!-- <ion-row *ngFor="let fac of objectRoom.Rooms[0].RoomInfomations.Facilitys">
-                        <ion-col size="1" class="no-padding room-class-icon">
-                            <ion-icon  class="icon-detail-check" name="checkmark"></ion-icon>
-                        </ion-col>
-                        <ion-col class="p-top-8">
-                        {{fac.Name}}
-                        </ion-col>
-                </ion-row> -->
             </div>
             <hr style="margin: 8px 0px 4px 5px;">
              <!-- Vùng hiển thị facility, mealtype, penalty -->
@@ -153,11 +144,8 @@
                     <ion-row >
                         <img class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_food_green.svg">
                         <ion-label *ngIf="mealPlan" class="text-hotel-description cls-green">{{mealPlan}}</ion-label>
-                        <!-- <ion-label *ngIf="inclusion" class="text-hotel-description cls-green" [innerHTML]="inclusion"></ion-label> -->
                         <ion-label *ngIf="inclusion" class="text-hotel-description cls-green" >{{inclusion}}</ion-label>
-                        <!-- <ion-label *ngIf="mealtype.Name != null && mealtype.Notes.length==0" class="text-hotel-description cls-green">{{mealtype.Name}}</ion-label> -->
-                        <!-- <ion-label *ngIf="mealtype.Name != null && mealtype.Notes.length!=0 && mealtype.Notes[0].length == mealtype.Name.length" class="text-hotel-description cls-green">{{mealtype.Notes.join(', ')}}</ion-label>
-                        <ion-label *ngIf="mealtype.Name != null && mealtype.Notes.length!=0 && mealtype.Notes[0].length != mealtype.Name.length" class="text-hotel-description cls-green">{{mealtype.Name}}, {{mealtype.Notes.join(', ')}}</ion-label> -->
+                        
                     </ion-row>
                     <ion-row *ngFor="let fac of hotelroom.Rooms[0].RoomInfomations.Facilitys" >
                       <ion-row  *ngIf="mealtype.PromotionInclusions.length == 0" class="p-top-4">
@@ -167,36 +155,13 @@
                         <ion-label class="text-hotel-description cls-green">{{ fac.Name }}</ion-label>
                       </ion-row>
                     </ion-row>
-                    <!-- Promotion include -->
-                    <!-- <ion-row *ngFor="let promo of mealtype.PromotionInclusions">
-                      <ion-row  *ngIf="hotelroom.Rooms[0].RoomInfomations.Facilitys.length != 0 && hotelroom.Rooms[0].RoomInfomations.Facilitys != 0"  class="p-top-4">
-                        <img *ngIf="promo.indexOf('Đưa đón') == -1 && promo.indexOf('Wifi') == -1" class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_check_green.svg">
-                                <img *ngIf="promo.indexOf('Wifi') != -1" class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_wifi.svg">
-                                <img *ngIf="promo.indexOf('Đưa đón') != -1" class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_bus_green.svg">
-                        <ion-label class="text-hotel-description cls-green">{{promo}}</ion-label>
-                      </ion-row>
-                    </ion-row> -->
+                 
                     <ion-row>
                       <img class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_fee_green.svg">
-                      <ion-label class="text-hotel-description cls-green">Đã bao gồm thuế phí</ion-label>
+                      <ion-label class="text-hotel-description cls-green" *ngIf="mealtype.Supplier != 'AGD'">Đã bao gồm thuế phí</ion-label>
+                  <ion-label class="text-hotel-description cls-green" *ngIf="mealtype.Supplier == 'AGD'">Hóa đơn VAT sẽ được khách sạn cung cấp tại thời điểm trả phòng</ion-label>
                     </ion-row>
-                    <!-- <ion-row class="penal-detail" *ngIf='mealtype.Penaltys[0] && !mealtype.Penaltys[0].IsPenaltyFree && hotelroom.Rooms[0].Penaltys[0]'>
-                        <img *ngIf="mealtype.Penaltys[0].PenaltyDescription.length <=70" class="icon-detail-check-green-fix" src="./assets/ic_hoteldetail/uc_nonrefund_green.svg">
-                        <img *ngIf="mealtype.Penaltys[0].PenaltyDescription.length > 70" class="icon-detail-check-green-fix" src="./assets/ic_hoteldetail/ic_info.svg">
-                          <span *ngIf="mealtype.Penaltys[0].PenaltyDescription.length <=70" class="penalty-text" [innerHTML]="mealtype.Penaltys[0].PenaltyDescription"></span>
-                          <button *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription.length > 70" class="penalty-text link-penalty" (click)="penaltySelected(hotelRoomClasses.length*i+1)">Chính sách hủy phòng</button>
-                          <div class="penalty-active arrow" [class.active]="penaltyItemSelected==hotelRoomClasses.length*i+1" *ngIf="penaltyItemSelected==hotelRoomClasses.length*i+1">
-                              <span *ngFor="let pen of mealtype.Penaltys; let k = index" [innerHTML]="pen.PenaltyDescription" [ngClass]="mealtype.Penaltys.length > 1 && k==mealtype.Penaltys.length-1 ? 'none-p-top' : ''"></span>
-           
-                          </div>
-                    </ion-row>
-                    <ion-row class="penal-detail" *ngIf='mealtype.Penaltys[0] && mealtype.Penaltys[0].IsPenaltyFree && hotelroom.Rooms[0].Penaltys[0]'>
-                        <img class="icon-detail-check-green-fix" src="./assets/ic_hoteldetail/ic_info.svg">
-                          <button class="penalty-text link-penalty" (click)="penaltySelected(hotelRoomClasses.length*i+1)">Hủy miễn phí trước ngày {{mealtype.Penaltys[0].PenaltyShortDateStr}}</button>
-                          <div class="penalty-active arrow" [class.active]="penaltyItemSelected==hotelRoomClasses.length*i+1" *ngIf="penaltyItemSelected==hotelRoomClasses.length*i+1">
-                              <span *ngFor="let pen of mealtype.Penaltys; let k = index" [innerHTML]="pen.PenaltyDescription" [ngClass]="mealtype.Penaltys.length > 1 && k==mealtype.Penaltys.length-1 ? 'none-p-top' : ''"></span>
-                          </div>
-                    </ion-row> -->
+                   
                   </div>
                 </div>
         <hr style="margin: 0px 0px 8px 5px;">

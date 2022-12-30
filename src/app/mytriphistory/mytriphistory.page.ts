@@ -35,7 +35,7 @@ export class MytripHistoryPage implements OnInit {
   _infiniteScroll: any;
   totalHistoryTrip: any;
   pageIndex: number = 1;
-  pageSize: number = 25;
+  pageSize: number = 5;
 
   constructor(public _mytripservice: MytripService,
     public networkProvider: NetworkProvider,
@@ -168,7 +168,7 @@ export class MytripHistoryPage implements OnInit {
         var text = "Bearer " + auth_token;
         var options = {
           method: 'GET',
-          url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=100',
+          url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=5',
           //url: 'http://localhost:34290/api/dashboard/getmytrip?getall=true',
           headers:
           {

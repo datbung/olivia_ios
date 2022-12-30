@@ -400,10 +400,15 @@ a.progressive {
 .div-relative{
     position: relative;
 }
-  ::ng-deep {
+.text-room-description-custom {
+    line-height: 1.6;
+        font-size: 14px;
     p {
         margin: 0 0 10px;
     }
+}
+  ::ng-deep {
+   
     
     img-loader > img {
         width: 100% !important;

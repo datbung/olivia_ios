@@ -11,22 +11,37 @@
    
         .item-useful{
             border-radius: 4px;
-            background-color: #ffffff;
-            padding: 8px;
             margin-top: 12px;
-            margin-bottom: 68px;
+            //margin-bottom: 68px;
 
             .text-content{
                 font-size: 16px;
-                font-weight: 300;
-                line-height: 2;
-                color: #333333;
+                font-weight: 500;
+                line-height: 1.4;
+                color: #3f3b3b;
+                width: 96%;
+            }
+
+            .div-background-useful {
+                background: #fff;
+                padding: 8px;
+                margin-bottom: 8px;
+                border-radius: 4px;
+            }
+            .icon-arr {
+                display: flex;
+                align-items: center;
+                width: 4%;
+                text-align: right;
+            }
+            .bg-white {
+                background-color: #fff;
             }
         }
     
         .div-useful-show{
             border-radius: 4px;
-            background-color: rgba(242,242,242, 0.5);
+            background-color: #fff;
             padding: 8px;
             margin-top: 11px;
 

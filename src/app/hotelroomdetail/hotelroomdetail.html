@@ -22,7 +22,7 @@
             <ion-slide (click)="imgDetail()" *ngFor="let slide of slideData" >
             
             <!-- <img [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" [defaultImage]="defaultImage" [lazyLoad]="slide.Url" /> -->
-               <img-loader [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" backgroundSize="cover" class="preview" [spinner]="true" useImg ></img-loader>
+               <img [src]="slide.Url" style="min-height: 195px;height: auto; width: 100%" alt="image" >
               <div *ngIf="slide.Caption" class="div-img-caption-grad"></div>
               <div *ngIf="slide.Caption" class="div-img-caption">{{slide.Caption}}</div>
             </ion-slide>
@@ -202,7 +202,7 @@
             <div class="text-title-name">
                 Mô tả phòng
             </div>
-            <div [innerHTML]="RoomDescription">
+            <div class="text-room-description-custom" [innerHTML]="RoomDescription">
             </div> 
         </div>
     </div>

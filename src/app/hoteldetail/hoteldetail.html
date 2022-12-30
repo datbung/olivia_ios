@@ -1,5 +1,5 @@
 <ion-header class="cls-header float-arrow-disabled" >
-  <ion-toolbar class="cls-toolbar">
+  <div class="cls-margin-top-header">
       <ion-row>
         <ion-col size="1">
             <div style="position: absolute" (click)="goback()">
@@ -16,17 +16,17 @@
           </div>
         </ion-col>
         <ion-col size="2">
-            <div *ngIf="!itemlike" class="img-heart" style="top: 3%;left: 30%;" (click)="likeItem()">
+            <div *ngIf="!itemlike" class="img-heart" style="top: 3%;left: 50%;" (click)="likeItem()">
                 <img style="padding-top:12px;width: 18px;" src="./assets/imgs/heart-empty-black.svg">
               </div>
-              <div *ngIf="itemlike" class="img-heart" style="top: 3%;left: 30%;" (click)="unlikeItem()">
+              <div *ngIf="itemlike" class="img-heart" style="top: 3%;left: 50%;" (click)="unlikeItem()">
                 <ion-icon style="padding-top:10px" name="heart" color="danger"></ion-icon>
               </div>
               <div  class="img-sharehd" (click)="share()"><img style="padding-top:10px;width: 18px"
                 src="./assets/imgs/ic_share_black.svg"></div>
           </ion-col>
       </ion-row>
-  </ion-toolbar>
+    </div>
 </ion-header>
 <ion-content #scrollArea (ionScroll)="scrollFunction($event)" [scrollEvents]="true" *ngIf="showpopup==true&&ischeck==true">
 
@@ -44,7 +44,9 @@
           <div *ngIf="slide.CaptionImg" class="div-img-caption">{{slide.CaptionImg}}</div>
         </ion-slide>
       </ion-slides>
-      
+        <div class="div-youtube" *ngIf="youtubeId" (click)="showFullScreen()">
+          <img class="img-youtube" src="./assets/ic_home/videocam.svg">
+        </div>
 
         <div class="badgescss">
           <span>{{coutslide}}/{{lengthslide}}</span>
@@ -159,7 +161,14 @@
     <!-- <hr style="margin-top: -16px"> -->
     <div *ngIf="topsale24Total <= 2" style="margin-top: 0px" class="row-border-cin"></div>
   </div>
-  
+
+  <div class="div-address" *ngIf="Address">
+    <img src="./assets/ic_facility/Group.svg">
+    <label class="label-address">
+      {{Address}}
+    </label>
+  </div>
+
   <div *ngIf="showpopup==true && linkGoogleMap" #map id="map"  class="div-map">
     <iframe width="100%"
       height="100"
@@ -171,21 +180,23 @@
   </iframe>
   
   </div>
+  
 
-  <div class="div-split  m-top-8"></div>
-  <div class="div-video-name" *ngIf="youtubeId">Video về {{name}}</div>
-  <div class="div-video m-bottom-16" *ngIf="youtubeId">
-    <iframe width="100%" height="203" [src]="trustedVideoUrl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  </div>
+  <!-- <div class="div-split  m-top-8"></div>
+  <div class="d-flex" (click)="showFullScreen()" *ngIf="youtubeId">
+    <div class="div-video m-bottom-16" *ngIf="youtubeId">
+      <iframe width="90%" height="100" [src]="trustedVideoUrl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div>
+      <div class="div-button-ivv">Chỉ có tại iVIVU.com</div>
+      <div class="div-video-name" *ngIf="youtubeId">Video về {{name}}</div>
+    </div>
+    
+  </div> -->
+  
 
   <div *ngIf="showpopup==true&&ischeck==true">
-    <div style="margin-left: 15px;margin-top: 10px; margin-bottom:10px">
-      
-      <img src="./assets/ic_facility/Group.svg">
-      <label style="color: #4f4f4f;font-size: 14px;">
-        {{Address}}
-      </label>
-    </div>
+    
     <div class="div-cinout">
       <div class="row-cin-cout">
         <ion-grid class="cls-gridcinout">
@@ -683,7 +694,8 @@
                       </ion-row>
                           <ion-row *ngIf="!ExcludeVAT" style="width:100%;align-items: center;padding-top: 4px">
                             <img class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_fee_green.svg">
-                            <ion-label class="text-hotel-description cls-green">Đã bao gồm thuế phí</ion-label>
+                            <ion-label class="text-hotel-description cls-green" *ngIf="mealtype.Supplier != 'AGD'">Đã bao gồm thuế phí</ion-label>
+                            <ion-label class="text-hotel-description cls-green" *ngIf="mealtype.Supplier == 'AGD'">Hóa đơn VAT sẽ được khách sạn cung cấp tại thời điểm trả phòng</ion-label>
                           </ion-row>
                           <ion-row *ngIf="ExcludeVAT" style="width:100%;align-items: center;padding-top: 4px">
                             <img class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_fee_green.svg">
@@ -700,7 +712,7 @@
                             <span
                               *ngIf="mealtype.Penaltys && mealtype.Penaltys[0].PenaltyDescription && mealtype.Penaltys[0].PenaltyDescription.length <=70"
                               class="penalty-text"
-                              [innerHTML]="mealtype.Penaltys && mealtype.Penaltys[0].PenaltyDescription.replace('p>','ion-label>')"></span>
+                              [innerHTML]="mealtype.Penaltys && mealtype.Penaltys[0].PenaltyDescription.replace('p>','ion-label>').replace('- ','')"></span>
                             <div style="margin-top: -4px;" (click)="penaltySelected(hotelRoomClasses.length*itemindex+j+1)">
                               <button
                                 *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription && mealtype.Penaltys[0].PenaltyDescription.length > 70"

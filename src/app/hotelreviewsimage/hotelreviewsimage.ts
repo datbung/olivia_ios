@@ -20,6 +20,7 @@ export class HotelreviewsimagePage  {
   @ViewChild('mySlider') slider: IonSlides;
   captionImg: any;
   hotelName: any;
+  tourName: any;
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public searchhotel: SearchHotel,public zone:NgZone) {
   }
   goback() {
@@ -29,6 +30,7 @@ export class HotelreviewsimagePage  {
     this.cusnamereview=this.searchhotel.cusnamereview;
     this.datereview=this.searchhotel.datereview;
     this.hotelName = this.searchhotel.hotelName;
+    this.tourName = this.searchhotel.tourDetailName;
     setTimeout(() => {
       this.arrimgreview = this.searchhotel.arrimgreview;
       this.slider.slideTo(this.searchhotel.indexreviewimg);

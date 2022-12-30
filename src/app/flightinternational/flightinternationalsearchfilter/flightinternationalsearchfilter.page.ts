@@ -60,6 +60,24 @@ export class FlightInternationalSearchfilterPage implements OnInit {
       console.log(this._flightService.listAllFlightInternational);
       if(this._flightService.listAirlinesFilter) {
         this.listAirlines = this._flightService.listAirlinesFilter;
+
+        this.listAirlines.forEach(elementAirline => {
+          let listFlightByAirline =[];
+          if(!this._flightService.itemFlightCache.roundTrip){
+            listFlightByAirline = this._flightService.listAllFlightInternational.filter((item) => {return elementAirline.name == item.departFlights[0].airline});
+          }else{
+            listFlightByAirline = this._flightService.listAllFlightInternational.filter((item) => {return elementAirline.name == item.departFlights[0].airline || elementAirline.name == item.returnFlights[0].airline});
+          }
+         
+          elementAirline.minPrice = Math.min(...listFlightByAirline.map(o => o.fare.price));
+          
+        });
+
+        setTimeout(()=>{
+          this.zone.run(() => this.listAirlines.sort(function (a, b) {
+            return a.minPrice - b.minPrice;
+          }))
+        })
       }
       if(this._flightService.listStops){
         this.listStops = this._flightService.listStops;
@@ -189,7 +207,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
 
 
     clearFilter(){
-      
+        $("#chkAll")[0].checked = false
         this._flightService.objectFilterInternational = {};
         this._flightService.objectFilterInternational.stopSelected = -1;
         this._flightService.objectFilterInternational.airlineSelected = [];

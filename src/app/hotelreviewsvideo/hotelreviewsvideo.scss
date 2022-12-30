@@ -30,7 +30,7 @@
     }
     ion-header{
         opacity: 0.91;
-        --ion-background-color:#000;
+        background-color: #000 !important;
     }
     ion-slide{
         justify-content: normal;
@@ -154,4 +154,13 @@
         margin-top: 180px;
 
       }
+    }
+
+    ::ng-deep {
+      .ytp-show-cards-title {
+        display: none;
+      }
+    }
+    .ytp-title {
+      display: none;
     }

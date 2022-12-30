@@ -23,6 +23,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from './providers/flightService';
 import {tourService} from './providers/tourService';
 
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 //import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
@@ -65,7 +66,8 @@ export class AppComponent {
     private loadCtrl: LoadingController,private deeplinks: Deeplinks,
     private safariViewController: SafariViewController,
     public _flightService: flightService,
-    public tourService: tourService
+    public tourService: tourService,
+    private fb: Facebook
   ) {
     this.initializeApp();
     // this.storage.remove('listblogtripdefault');
@@ -200,10 +202,10 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       try {
-        //this.askTrackingPermission();
-        //this.readTrackingPermission();
-        const idfaPlugin = (cordova.plugins as any).idfa;
+        this.fb.setAdvertiserTrackingEnabled(true);
 
+        const idfaPlugin = (cordova.plugins as any).idfa;
+        
         idfaPlugin.getInfo()
             .then(info => {
                 if (!info.trackingLimited) {

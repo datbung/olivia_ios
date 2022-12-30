@@ -19,7 +19,8 @@
                 {{datereview}}
               </ion-label>
             </div>
-            <div *ngIf="!cusnamereview && !datereview" class="div-hotel-name">{{hotelName}}</div>
+            <div *ngIf="!cusnamereview && !datereview && !tourName" class="div-hotel-name">{{hotelName}}</div>
+            <div *ngIf="!cusnamereview && !datereview && tourName" class="div-tour-name">{{tourName}}</div>
           </ion-col>
         </ion-row>
       </div>

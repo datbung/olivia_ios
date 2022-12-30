@@ -122,6 +122,7 @@ import { FlightInternationalSearchfilterPageModule } from './flightinternational
 import { FlightDetailInternationalPageModule } from './flightinternational/flightdetailinternational/flightdetailinternational.module';
 import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
 import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
+import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvideo.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -139,6 +140,7 @@ import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
     OccupancyPageModule,
     CuspointsPageModule,
     HotelreviewsimagePageModule,
+    HotelreviewsvideoPageModule,
     UserTravelHobbyPageModule,
     UserFeedBackPageModule,
     //ExperienceDetailPageModule,

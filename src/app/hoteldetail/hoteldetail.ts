@@ -45,6 +45,7 @@ import { flightService } from '../providers/flightService';
 import { resolve } from 'dns';
 import { RequestRoomPage } from '../requestroom/requestroom';
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
+import { HotelreviewsvideoPage } from '../hotelreviewsvideo/hotelreviewsvideo';
 
 @Component({
   selector: 'app-hoteldetail',
@@ -1111,6 +1112,7 @@ export class HotelDetailPage implements OnInit {
           if(jsondata.Youtube){
             se.youtubeId = jsondata.Youtube;
             se.trustedVideoUrl = se.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+se.youtubeId);
+            se.searchhotel.trustedVideoUrl = se.trustedVideoUrl;
           }
           se.id1 = { id: se.HotelID };
           se.zone.run(()=> {
@@ -2818,12 +2820,20 @@ async bookcombo() {
 
   }
   goback() {
+    this.zone.run(()=>{
+      this.ischeck = false;
+    })
+    
     this.isexit = true;
     this.searchhotel.isRefreshDetail = false;
     this.searchhotel.showPopup = false;
     if (this.searchhotel.rootPage == "mainpage" || this.searchhotel.rootPage == "topdeal" ) {
-      //this.navCtrl.navigateBack('/app/tabs/tab1');
-      this.navCtrl.pop();
+      //this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
+      setTimeout(()=>{
+        this.navCtrl.pop();
+      },10)
+      
+      //this.navCtrl.back();
     }
     // else if(this.searchhotel.rootPage == "roompaymentselect")
     // {
@@ -5012,10 +5022,20 @@ async bookcombo() {
     this.searchhotel.indexreviewimg = idx;
     this.searchhotel.cusnamereview = '';
     this.searchhotel.datereview = '';
+    this.searchhotel.tourDetailName = '';
     const modal: HTMLIonModalElement =
       await this.modalCtrl.create({
         component: HotelreviewsimagePage,
       });
     modal.present();
+ }
+
+ async showFullScreen(){
+  this.searchhotel.tourDetailName = '';
+  const modal: HTMLIonModalElement =
+  await this.modalCtrl.create({
+    component: HotelreviewsvideoPage,
+  });
+modal.present();
  }
 }

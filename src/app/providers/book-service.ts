@@ -287,6 +287,8 @@ export class SearchHotel {
   coutthu: string;
   isRecent:any;
   objRecent:any;
+  tourDetailName: any;
+  trustedVideoUrl: any;
 }
 export class child {
     text: string;

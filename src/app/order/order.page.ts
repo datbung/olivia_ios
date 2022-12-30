@@ -541,9 +541,9 @@ import { tourService } from '../providers/tourService';
             var text = "Bearer " + (token ? token : auth_token);
             var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
+              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize=5',
               //url: "http://localhost:34290/"+ '/api/dashboard/getMyTripPaging?memberId=91f60b04-328e-4e04-a603-cd49139e2c0c&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
-              //memberId=b2d138c8-378f-404f-ac1e-647df522defa
+              //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=b2d138c8-378f-404f-ac1e-647df522defa&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               headers:
               {
                 'accept': 'application/json',
@@ -656,7 +656,7 @@ import { tourService } from '../providers/tourService';
           var text = "Bearer " + token;
           var options = {
             method: 'GET',
-            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize=5',
             headers:
             {
               'accept': 'application/json',
@@ -3585,7 +3585,7 @@ import { tourService } from '../providers/tourService';
             var text = "Bearer " + auth_token;
             var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=100',
+              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=true&pageIndex=1&pageSize=5',
               //url: 'http://localhost:34290/api/dashboard/getmytrip?getall=true',
               headers:
               {

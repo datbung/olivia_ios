@@ -98,6 +98,13 @@
         font-size: 24px;
         font-weight: 600;
         text-align: right;
+        
+    }
+    .text-total-price {
+        color: var(--ion-color-waitpayment);
+    }
+    .text-red {
+        color: #e52822;
     }
     .text-surcharge {
         font-size: 18px;

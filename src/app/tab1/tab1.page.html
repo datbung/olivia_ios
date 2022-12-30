@@ -766,33 +766,6 @@
 
       </div>
        
-        
-        <!-- <div [ngClass]="idx == 0 ? 'float-infoicon top-16' : 'float-infoicon top-16 left-28'"(click)="share(slide.Url)">
-          <div class="div-wrap-icon">
-            <img class="img-share"
-            src="./assets/imgs/ic_share.svg"
-          />
-          </div>
-          
-        </div>
-        <div [ngClass]="idx == 0 ? 'float-infoiconheart top-16' : 'float-infoiconheart top-16 left-72'" >
-          <div class="div-wrap-icon-heart">
-          <img
-            *ngIf="!slide.Like"
-            class="img-heart"
-            (click)="likeItemblog(slide.Id)"
-            src="./assets/imgs/heart-empty.svg"
-          />
-          <img
-            *ngIf="slide.Like"
-            class="img-heart"
-            (click)="unlikeItemblog(slide.Id)"
-            src="./assets/imgs/heart-red.svg"
-          />
-        </div>
-        </div> -->
-        
-        <!-- <div class="grad-blog" (click)="clickitemblog(slide)"></div> -->
       </div>
       <div *ngIf="showloadmoreblog" class="div-loadmore">
         <ion-spinner
@@ -1010,6 +983,22 @@
           </ion-row>
         </ion-col>
       </ion-row>
+    </div>
+  </div>
+  <div class="div-award">
+    <div class="item-award">
+      <div class="div-logo-award"><img class="img-award" src="./assets/ic_home/wta-winner-shield.png" /></div>
+      <div class="div-text-award m-top-8">Đại lý du lịch Trực tuyến hàng đầu Việt Nam</div>
+    </div>
+
+    <div class="item-award">
+      <div class="div-logo-award"><img class="img-award" src="./assets/ic_home/HRA.png" /></div>
+      <div class="div-text-award m-top-8">Best Companies to Work for in Asian</div>
+    </div>
+
+    <div class="item-award">
+      <div class="div-logo-award"><img class="img-award" src="./assets/ic_home/APEA.png" /></div>
+      <div class="div-text-award m-top-8">APEA Inspirational Brand Award</div>
     </div>
   </div>
 </div>

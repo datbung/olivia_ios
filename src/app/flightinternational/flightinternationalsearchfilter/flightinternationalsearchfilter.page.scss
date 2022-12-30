@@ -40,9 +40,13 @@ ion-radio {
     }
     .v-align-center {
         display: flex;
-        //flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+    .v-align-center-custom {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     ion-range{
@@ -94,6 +98,10 @@ ion-radio {
 
     .cls-disabled-text {
         opacity: 0.5;
+    }
+    .div-min-price {
+        font-size: 14px;
+        color: #828282;
     }
 }
 

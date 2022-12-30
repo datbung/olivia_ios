@@ -12,6 +12,7 @@ import { HotelreviewsimagePage } from 'src/app/hotelreviewsimage/hotelreviewsima
 
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 import { DomSanitizer } from '@angular/platform-browser';
+import { HotelreviewsvideoPage } from 'src/app/hotelreviewsvideo/hotelreviewsvideo';
 
 @Component({
   selector: 'app-tourdetail',
@@ -482,6 +483,14 @@ export class TourDetailPage {
 
       ionViewWillEnter(){
         this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
+        this.hidetopbar();
+      }
+
+      hidetopbar(){
+        var se = this;
+        let el = document.getElementsByClassName('div-statusbar-float');
+          el[0].classList.remove('float-statusbar-enabled');
+          el[0].classList.add('float-statusbar-disabled');
       }
 
       async showSlideImage(idx) {
@@ -492,10 +501,20 @@ export class TourDetailPage {
         this.searchHotel.indexreviewimg = idx;
         this.searchHotel.cusnamereview = '';
         this.searchHotel.datereview = '';
+        this.searchHotel.tourDetailName = this.itemDetail.Name;
         const modal: HTMLIonModalElement =
           await this.modalCtrl.create({
             component: HotelreviewsimagePage,
           });
         modal.present();
+     }
+     async showFullScreen(){
+      this.searchHotel.tourDetailName = this.itemDetail.Name;
+      this.searchHotel.trustedVideoUrl = this.itemDetail.trustedVideoUrl;
+      const modal: HTMLIonModalElement =
+      await this.modalCtrl.create({
+        component: HotelreviewsvideoPage,
+      });
+    modal.present();
      }
     }

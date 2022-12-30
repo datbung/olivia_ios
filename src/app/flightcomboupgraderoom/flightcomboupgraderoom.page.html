@@ -87,7 +87,8 @@
                       </ion-row>
                       <ion-row style="width:100%;align-items: center;padding-top: 4px">
                           <img class="icon-detail-green-fix" src="./assets/ic_hoteldetail/ic_fee_green.svg">
-                          <ion-label class="text-hotel-description cls-green">Đã bao gồm thuế phí</ion-label>
+                          <ion-label class="text-hotel-description cls-green" *ngIf="mealtype.Supplier != 'AGD'">Đã bao gồm thuế phí</ion-label>
+                          <ion-label class="text-hotel-description cls-green" *ngIf="mealtype.Supplier == 'AGD'">Hóa đơn VAT sẽ được khách sạn cung cấp tại thời điểm trả phòng</ion-label>
                       </ion-row>
                       <ion-row *ngIf='mealtype.Penaltys[0] && !mealtype.Penaltys[0].IsPenaltyFree && hotelroom.Rooms[0].Penaltys[0]' class="penal-detail">
                           <img *ngIf="mealtype.Penaltys[0].PenaltyDescription.length <=70" class="icon-detail-check-green-fix" src="./assets/ic_hoteldetail/uc_nonrefund_green.svg">

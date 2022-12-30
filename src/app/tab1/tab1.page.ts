@@ -222,7 +222,14 @@ export class Tab1Page implements OnInit {
       })
     })
         //lấy âm lịch
-        this.getCalendarholidays();
+        this.storage.get('listCalendarHolidays').then((data)=>{
+          if(data && data.length >0){
+            this.loadCalendarHolidays(data);
+          }else{
+            this.getCalendarholidays();
+          }
+        });
+        
         this.gettopSale();
     //Lấy app version
     this.appVersion.getVersionNumber().then(version => {
@@ -322,6 +329,8 @@ export class Tab1Page implements OnInit {
         storage.remove("listblogtripdefault");
         storage.remove("listtopdealdefault");
         storage.remove("regionnamesuggest");
+        storage.remove("listCalendarHolidays");
+        storage.remove("listtopmoods");
       }, 24 * 60 * 60 * 1000);
     }
     //preload mytrip
@@ -374,7 +383,7 @@ export class Tab1Page implements OnInit {
           event.url == "/tabs/tab1" ||
           event.url === "/app/tabs/tab1")
       ) {
-        this.onEnter();
+         this.onEnter();
         if (this.gf.getParams("resetBlogTrips")) {
           this.blogtrips = [];
           this.pageBlogTrip = 1;
@@ -465,30 +474,24 @@ export class Tab1Page implements OnInit {
         }
       },100)
     })
-    // se.foodService.itemTabFood.pipe().subscribe((data)=>{
-    //   if(data){
-    //     se.setActiveTab(3);
-    //   }
-    // })
+    
     se.storage.get('auth_token').then((data)=>{
       if(!data){
-        // se.storage.remove("listblogtripdefault");
-        // se.storage.remove("listtopdealdefault");
-        // se.storage.remove("regionnamesuggest");
+       
         se.blogtrips = [];
         se.valueGlobal.countNotifi = 0;
       }
-      else
-      {
-        if (this.valueGlobal.blogid) {
-          this.likeItemblog(this.valueGlobal.blogid);
+      // else
+      // {
+      //   if (this.valueGlobal.blogid) {
+      //     this.likeItemblog(this.valueGlobal.blogid);
           
-        }
-        else
-        {
-          this.getbloglike(1);
-        }
-      }
+      //   }
+      //   else
+      //   {
+      //     this.getbloglike(1);
+      //   }
+      // }
     })
     if (se.blogtrips.length == 0) {
       se.storage.get("listblogtripdefault").then((data: any) => {
@@ -514,7 +517,7 @@ export class Tab1Page implements OnInit {
       se.getNewsBlog(1);
     }
     //Lấy từ service trước
-    if(se.slideData || se.slideData.length == 0 ){
+    if(!se.slideData || se.slideData.length == 0 ){
       se.storage.get("listtopdealdefault").then((data: any) => {
         if (data && data.length > 0) {
           se.slideData = data;
@@ -523,7 +526,7 @@ export class Tab1Page implements OnInit {
         }
       })
     }
-    if(se.slideData1 || se.slideData1.length == 0 ){
+    if(!se.slideData1 || se.slideData1.length == 0 ){
       se.slideData1 = se.activityService.listTopDeal;
       se.loaddata();
       se.getHotelDealPaging();
@@ -911,7 +914,13 @@ export class Tab1Page implements OnInit {
     }
     
     
-    this.getCalendarholidays();
+    this.storage.get('listCalendarHolidays').then((data)=>{
+      if(data && data.length >0){
+        this.loadCalendarHolidays(data);
+      }else{
+        this.getCalendarholidays();
+      }
+    });
   }
 
   getCinCoutDayName(){
@@ -1116,11 +1125,11 @@ export class Tab1Page implements OnInit {
     se.storage.get('listtopmoods').then((data)=>{
       if(data){
         se.loadMoods(data);
-        setTimeout(() => {
-          se.zone.run(()=>{
-            se.getmood();
-          })
-        }, 30000);
+        // setTimeout(() => {
+        //   se.zone.run(()=>{
+        //     se.getmood();
+        //   })
+        // }, 30000);
       }else{
         se.getmood();
       }
@@ -1333,11 +1342,11 @@ export class Tab1Page implements OnInit {
     se.storage.get('listtopregions').then(data => {
       if(data){
         se.loadRegions(data);
-        setTimeout(() => {
-          se.zone.run(()=>{
-            se.getRegions();
-          })
-        }, 30000);
+        // setTimeout(() => {
+        //   se.zone.run(()=>{
+        //     se.getRegions();
+        //   })
+        // }, 30000);
       }else{
         se.getRegions();
       }
@@ -1347,9 +1356,9 @@ export class Tab1Page implements OnInit {
     se.storage.get('listtopregioninternational').then(data => {
       if(data){
         se.loadRegionsInternational(data);
-        setTimeout(() => {
-          se.getRegionsInternational();
-        }, 30000);
+        // setTimeout(() => {
+        //   se.getRegionsInternational();
+        // }, 30000);
       }else{
         se.getRegionsInternational();
       }
@@ -1461,57 +1470,6 @@ export class Tab1Page implements OnInit {
     });
   }
 
-  // getmood() {
-  //   var se = this;
-  //   var options = {
-  //     method: "POST",
-  //     url:
-  //       C.urls.baseUrl.urlMobile +
-  //       "/mobile/OliviaApis/Moods" +
-  //       (se.memberid ? "?memberid=" + se.memberid : ""),
-  //     timeout: 10000,
-  //     maxAttempts: 5,
-  //     retryDelay: 2000,
-  //     headers: {
-  //       "postman-token": "f0589249-bf19-001c-f359-9b33dcf6db86",
-  //       "cache-control": "no-cache",
-  //       apisecret: "2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU",
-  //       apikey: "0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U"
-  //     }
-  //   };
-  //   request(options, function(error, response, body) {
-  //     if (response.statusCode != 200) {
-  //       var objError = {
-  //         page: "main",
-  //         func: "getmood",
-  //         message: response.statusMessage,
-  //         content: response.body,
-  //         param: JSON.stringify(options),
-  //         type: "warning"
-  //       };
-  //       C.writeErrorLog(objError,response);
-  //     }
-  //     if (error) {
-  //       error.page = "main";
-  //       error.func = "getmood";
-  //       error.param = JSON.stringify(options);
-  //       C.writeErrorLog(error,response);
-  //     }
-  //     se.zone.run(() => {
-  //       se.slideMood = JSON.parse(body);
-  //       for (let i = 0; i < se.slideMood.length; i++) {
-  //         var res = se.slideMood[i].avatar.substring(0, 4);
-  //         if (res != "http") {
-  //           se.slideMood[i].avatar = "https:" + se.slideMood[i].avatar;
-  //         }
-  //         // se.slideMood[i].bannerUrl = se.slideMood[i].bannerUrl.replace(".jpg", "-215x282.jpg");
-  //         // se.slideMood[i].bannerUrl = se.slideMood[i].bannerUrl.replace(".png", "-215x282.png");
-  //       }
-  //       se.slmood = se.slideMood.length;
-  //       //se.getNewsBlog();
-  //     });
-  //   });
-  // }
   getmood() {
     var se = this;
     var options = {
@@ -2061,53 +2019,6 @@ export class Tab1Page implements OnInit {
   closecalendar(){
     this.modalCtrl.dismiss();
   }
-  // getNewsBlog() {
-  //   var se = this;
-
-  //   var options = {
-  //     method: 'GET',
-  //     url: C.urls.baseUrl.urlBlog +'/GetNewsBlog?pageIndex='+se.pageBlog+'&pageSize='+se.pageSizeBlog+ (se.memberid ? '&memberid='+se.memberid : ''),
-  //     timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-  //     headers:
-  //     {
-  //     }
-  //   };
-  //   request(options, function (error, response, body) {
-  //     if(response.statusCode != 200){
-  //       var objError ={
-  //           page: "main",
-  //           func: "getNewsBlog",
-  //           message : response.statusMessage,
-  //           content : response.body,
-  //           param: JSON.stringify(options),
-  //           type: "warning"
-  //         };
-  //       C.writeErrorLog(objError,response);
-  //     }
-  //     if (error) {
-  //       error.page = "main";
-  //       error.func = "getNewsBlog";
-  //       error.param = JSON.stringify(options),
-  //       C.writeErrorLog(error,response);
-  //     }
-  //     se.zone.run(() => {
-  //       var listBlog = JSON.parse(body);
-  //       se.showloadmoreblog = listBlog.length ==0 ? false : true;
-  //       for (let i = 0; i < listBlog.length; i++) {
-  //         listBlog[i].Date = moment(listBlog[i].Date).format('DD/MM/YYYY');
-  //       }
-  //       //PDANH 10/06/2019: Thêm kiểm tra trùng item
-  //       if(!se.checkExistsItemInArray(se.blog,listBlog[0],4 ) ){
-  //         se.blog.push(...listBlog);
-  //       }else{
-  //         se.showloadmoreblog = false;
-  //       }
-
-  //     })
-
-  //   });
-
-  // }
   getNewsBlog(value) {
     var se = this;
     se.canLoadBlog = false;
@@ -2963,7 +2874,7 @@ export class Tab1Page implements OnInit {
       
     }
     
-    $(".homefood-header").removeClass("cls-visible").addClass("cls-disabled");
+    //$(".homefood-header").removeClass("cls-visible").addClass("cls-disabled");
     this.searchhotel.backPage = "";
 
   }
@@ -3279,9 +3190,9 @@ export class Tab1Page implements OnInit {
                 }
               }
 
-              if (se.arrbloglike && se.arrbloglike.length > 0) {
-                se.bindItemLiketrips(se.arrbloglike);
-              }
+              // if (se.arrbloglike && se.arrbloglike.length > 0) {
+              //   se.bindItemLiketrips(se.arrbloglike);
+              // }
 
               se.storage.set("listblogtripdefault", se.blogtrips);
               se.storage.set("regionnamesuggest", data.regionName);
@@ -3680,7 +3591,8 @@ export class Tab1Page implements OnInit {
           }
 
           if(eluseful && eluseful.length >0){
-            if(event.detail.scrollTop >= 2156){
+            let h = 1100 + $('.div-topdeal-flight')[0].offsetHeight;
+            if(event.detail.scrollTop >= h){
               if(eluseful.length >0 && !eluseful[0].classList.contains("cls-topdeal-float")){
                 eluseful[0].classList.add('cls-topdeal-float');
               }
@@ -3706,7 +3618,7 @@ export class Tab1Page implements OnInit {
     this.onEnter();
     this.blogtrips = [];
     this.pageBlogTrip = 1;
-    this.getbloglike(0);
+    //this.getbloglike(0);
     this.gf.setParams(false, "resetBlogTrips");
     setTimeout(()=>{
       event.target.complete();
@@ -3880,6 +3792,13 @@ export class Tab1Page implements OnInit {
     });
    
   }
+  loadCalendarHolidays(data){
+    var se = this;
+    se.valueGlobal.listlunar = data;
+    se.cofdate = 0;
+    se.cotdate = 0;
+    se.bindlunar();
+  }
   getCalendarholidays() {
     var se = this;
     var options = {
@@ -3894,6 +3813,7 @@ export class Tab1Page implements OnInit {
       se.cofdate = 0;
       se.cotdate = 0;
       se.bindlunar();
+      se.storage.set('listCalendarHolidays',json);
     })
   }
   checklunar(s) {
