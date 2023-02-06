@@ -64,9 +64,12 @@
       <div [ngClass]="activeTab ==3 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Tour</div>
     </div>
 
-    <!-- <div class="div-food" (click)="setActiveTab(3)">Ăn uống</div> -->
-    
-    <!-- <div class="active-mark"></div> -->
+    <!-- <div (click)="setActiveTab(4)" [ngClass]="activeTab ==4 ? 'div-ticket' : 'div-ticket home-deactive-tab'">
+      <div class="div-icon-home text-center">
+          <img src="./assets/ic_ticket/theme_park.svg" />
+      </div>
+      <div [ngClass]="activeTab ==4 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Vé vui chơi</div>
+    </div> -->
   </div>
   <ion-slides (ionSlideDidChange)="slidechange()" #myHomeSlider class="home-slider" >
     <ion-slide class="slide-hotel">
@@ -1010,9 +1013,9 @@
 <div [ngClass]="activeTab ==3 ? 'div-wraper-combo cls-visible' :  'div-wraper-combo cls-disabled'" style="height: auto;">
   <app-hometour></app-hometour>
 </div>
-<!-- 
-<div [ngClass]="activeTab ==3 ? 'div-wraper-food cls-visible' :  'div-wraper-food cls-disabled'">
-  <app-hometour></app-hometour>
+
+<!-- <div [ngClass]="activeTab ==4 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
+  <app-hometicket></app-hometicket>
 </div> -->
 
 

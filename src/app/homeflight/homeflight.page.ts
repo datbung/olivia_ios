@@ -16,6 +16,7 @@ import { NetworkProvider } from '../network-provider.service';
 import { BizTravelService } from '../providers/bizTravelService';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Component({
     selector: 'app-homeflight',
@@ -76,11 +77,7 @@ import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
   isExtenalDepart: boolean;
   isExtenalReturn: boolean;
   showLunarCalendar: any;
-
-
-  @HostListener('body:scroll') onScroll(e: Event): void {
-    console.log((e.target as Element).scrollTop);
- }
+  listinternationalflighttopdeal=[];
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -95,7 +92,8 @@ import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
         public appVersion: AppVersion,
         public networkProvider: NetworkProvider,
         private platform: Platform,
-        public bizTravelService: BizTravelService) {
+        public bizTravelService: BizTravelService,
+        private http: HttpClient) {
 
           // this.content = content;
           // this.app = app;
@@ -277,6 +275,13 @@ import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
             }
 
             this.loadUserInfo();
+            this.buildLinkQrCode();
+        }
+
+        buildLinkQrCode() {
+          //let url = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=vietcombank&amount=200000&description=IVIVU1122`;
+          
+          
         }
 
         ngOnInit(){
@@ -1586,8 +1591,10 @@ import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
           
           element.priceDisplay = se.gf.convertNumberToString(element.price);
         });
-       
-          se.listflighttopdeal = data;
+          se.listflighttopdeal = data.filter((item) => {return item.source == 'inbound'});
+          se.listinternationalflighttopdeal = data.filter((item) => {return item.source == 'outbound' && (!item.roundTrip || (item.roundTrip && item.return.price))});
+          
+          //console.log(se.listinternationalflighttopdeal);
          // console.log(data);
         //  se.loadflighttrips().then((data)=>{
         //   if(data && data.tripFuture.length >0){
@@ -1645,7 +1652,7 @@ import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
           se._flightService.itemFlightCache.departCode = item.depart.fromPlace;
           se._flightService.itemFlightCache.departAirport = "";
           se._flightService.itemFlightCache.returnCity = item.toPlaceNameDisplay;
-          se._flightService.itemFlightCache.returnCode = item.return.fromPlace;
+          se._flightService.itemFlightCache.returnCode = item.return.fromPlace ? item.return.fromPlace : item.depart.toPlace;
           se._flightService.itemFlightCache.returnAirport = "";
           se._flightService.itemFlightCache.step = 1;
           se._flightService.itemFlightCache.departTimeDisplay = objday.dayname + ", " + moment(item.depart.departTime).format("DD") + " thg " + moment(item.depart.departTime).format("MM");

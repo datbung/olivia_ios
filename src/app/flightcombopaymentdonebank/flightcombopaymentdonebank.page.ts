@@ -85,7 +85,45 @@ export class FlightcombopaymentdonebankPage implements OnInit {
         var DateNow = moment(ti).format('YYYYMMDD');
         var ho = ti.getHours();
         var addhours = moment(ti).add(1, 'hours').format('HH:mm');
-        se.text = addhours + ' cùng ngày';
+        
+        if(se.bookCombo.isHBEDBooking){
+          if(PaymentPeriod){
+            let _paymentPeriodcovert = moment(PaymentPeriod).format('YYYYMMDDHHmm');
+            let _dateNow = moment(ti).add(30, 'minutes').format('YYYYMMDDHHmm');
+            if (parseInt(_paymentPeriodcovert) >= parseInt(_dateNow)) {
+              addhours = moment(ti).add(30, 'minutes').format('HH:mm');
+              se.text = addhours + ' cùng ngày';
+            }else{
+              let textthu= se.getDay(thu);
+              let day=moment(PaymentPeriod).format('DD')+ ' '+ 'thg' + ' ' +  moment(PaymentPeriod).format('MM') +', ' +moment(PaymentPeriod).format('YYYY') 
+              se.text = moment(PaymentPeriod).format('HH:mm') + ' ' + textthu + ', ' + day;
+            }
+          }else{
+            addhours = moment(ti).add(30, 'minutes').format('HH:mm');
+            se.text = addhours + ' cùng ngày';
+          }
+          
+        }else if(se.bookCombo.isAGODABooking){
+          if(PaymentPeriod){
+            let _paymentPeriodcovert = moment(PaymentPeriod).format('YYYYMMDDHHmm');
+            let _dateNow = moment(ti).add(1, 'hours').format('YYYYMMDDHHmm');
+            if (parseInt(_paymentPeriodcovert) >= parseInt(_dateNow)) {
+              addhours = moment(ti).add(1, 'hours').format('HH:mm');
+              se.text = addhours + ' cùng ngày';
+            }else{
+              let textthu= se.getDay(thu);
+              let day=moment(PaymentPeriod).format('DD')+ ' '+ 'thg' + ' ' +  moment(PaymentPeriod).format('MM') +', ' +moment(PaymentPeriod).format('YYYY') 
+              se.text = moment(PaymentPeriod).format('HH:mm') + ' ' + textthu + ', ' + day;
+            }
+          }
+          else{
+            addhours = moment(ti).add(1, 'hours').format('HH:mm');
+            se.text = addhours + ' cùng ngày';
+          }
+          
+        }
+        else {
+          se.text = addhours + ' cùng ngày';
           if (PaymentPeriod) {
             var PaymentPeriodcovert = moment(PaymentPeriod).format('YYYYMMDDHHmm');
             var thu = moment(PaymentPeriod).format('dddd');
@@ -150,6 +188,8 @@ export class FlightcombopaymentdonebankPage implements OnInit {
               se.text = '11 am hôm sau';
             }
           }
+        }
+        
       });
     }
   }
@@ -185,6 +225,9 @@ export class FlightcombopaymentdonebankPage implements OnInit {
       this.showConfirm();
     }
     this.gf.setParams(null, 'flightcombo');
+    this.bookCombo.isAGODABooking = false;
+    this.bookCombo.isHBEDBooking = false;
+    this.bookCombo.roomPenalty = false;
     this.navCtrl.navigateBack('/tabs/tab1');
   }
   public async showConfirm() {

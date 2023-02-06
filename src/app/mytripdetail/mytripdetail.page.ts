@@ -96,6 +96,11 @@ export class MytripdetailPage implements OnInit {
   HotelPolicies: any;
   totalHotel: any;
   amount_after_tax: any;
+  arrqr = [
+    {id: 1, code: '761402903955', pax: '1 người lớn'},
+    {id: 2, code: '761402905492', pax: '1 người lớn'},
+    {id: 3, code: '761402910686', pax: '1 trẻ em'},
+  ]
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,

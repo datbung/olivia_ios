@@ -1,0 +1,329 @@
+.div-tourdeparturecalendar-header {
+
+    .img-back {
+        height: 48px;
+        padding: 8px;
+        margin-left: -3px;
+    }
+    .text-title{
+        font-size: 18px;
+        font-weight: bold;
+        padding: 0;
+        text-align: center;
+    }
+}
+
+.div-tourdeparturecalendar-content {
+    .div-item-departure-date {
+        padding: 18px 16px 14px 10px;
+        border-radius: 4px;
+        border: solid 0.5px #ccc;
+        background-color: #fff;
+        align-items: center;
+        margin-bottom: 8px;
+
+    }
+    .f-18 {
+        letter-spacing: -0.46px;
+        color: #3f3b3b;
+        font-size: 18px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .m-top-32 {
+        margin-top: 32px;
+    }
+    .d-flex {
+        display: flex;
+    }
+    .width-60 {
+        width: 60%;
+    }
+    
+    .width-40 {
+        width: 40%;
+    }
+    .width-30 {
+        width: 30%;
+    }
+    .width-42 {
+        width: 42%;
+    }
+    
+    .v-align-center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .text-normal {
+        font-size: 16px;
+        letter-spacing: -0.46px;
+        color: #3f3b3b;
+    }
+    .align-right {
+        text-align: right;
+    }
+    .text-price {
+        font-size: 14px;
+        text-align: right;
+        color: var(--ion-color-waitpayment)
+    }
+    .text-sub {
+        font-size: 12px;
+        color: #828282;
+        letter-spacing: -0.46px;
+    }
+    .div-item-pax {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        
+        .f-32 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: -4px;
+        }
+
+        .f-24 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+    }
+    .div-item-left, .div-item-right {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+    }
+   
+    .m-r-4 {
+        margin-right: 4px;
+    }
+    .m-top-26 {
+        margin-top: 26px;
+    }
+    .text-total {
+        font-size: 24px;
+        font-weight: 600;
+        text-align: right;
+        
+    }
+    .text-total-price {
+        color: var(--ion-color-primary);
+    }
+    .text-red {
+        color: #e52822;
+    }
+    .text-surcharge {
+        font-size: 18px;
+        font-weight: 600;
+        text-align: right;
+    }
+    .text-tealish {
+        color: var(--ion-color-primary);
+    }
+    .text-right {
+        text-align: right;
+    }
+    .div-last {
+        padding: 12px 48px 10px 8px;
+        border-radius: 4px;
+        background-color: rgba(242,242,242, 0.5);
+    }
+    
+    .no-border-bottom{
+        border-bottom:none;
+    }
+
+    .p-top-20 {
+        padding-top: 20px;
+    }
+    .text-child-age{
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: -0.4px;
+    }
+    .div-age{
+        position: relative;
+
+        .p-right-8{
+            padding-right: 8px;
+        }
+        .div-text-age{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+        .text-child{
+            font-size: 16px;
+            font-weight: 300;
+            color: #000;
+        }
+        .selected-age{
+            font-size: 18px;
+            color: #26bed6;
+            letter-spacing: -0.51px;
+            font-weight: 600;
+        }
+    }
+
+    .div-split-panel {
+        height: 7px;
+        margin: 8px -16px;
+        background-color: #f2f2f2;
+    }
+    .div-point {
+        font-size: 14px;
+        color: #003c71;
+        margin-top: 8px;
+    }
+}
+.days-allotment {
+    p{
+        color: #9fc43a !important;
+        font-weight: 600 !important;
+    }
+}
+
+.text-service-name {
+    font-size: 18px;
+    text-align: left;
+    color: #003c71;
+  }
+  .text-service-des {
+    font-size: 14px;
+    text-align: left;
+    color: #828282;
+  }
+  .text-service-detail {
+    font-size: 14px;
+    text-align: left;
+    color: #26bed6;
+
+    display: flex;
+  }
+  .m-top-18 {
+    margin-top: 18px;
+  }
+  .img-arrow {
+    height: 17px;
+  }
+@media(min-width:300px) and (max-width:360px){
+  .text-label {
+    font-size: 14px !important;
+  }
+  .f-18 {
+    font-size: 15px !important;
+  }
+}
+@media(min-width:360px) and (max-width:375px){
+    .f-18 {
+      font-size: 16px !important;
+    }
+  }
+::ng-deep{
+    .action-sheets-select-age .action-sheet-container.sc-ion-action-sheet-ios{
+        padding: 0;
+    }
+    .action-sheets-select-age .action-sheet-group.sc-ion-action-sheet-ios:last-child{
+        margin: 0;
+        border-radius: 0;
+        overflow: auto;
+    }
+    .action-sheets-select-age .action-sheet-title.sc-ion-action-sheet-ios{
+        font-size: 14px;
+        font-weight: 300;
+        text-align: center;
+        color: #222222;
+    }
+    .action-sheets-select-age .action-sheet-button-inner.sc-ion-action-sheet-ios{
+        justify-content: center;
+    }
+    .action-sheets-select-age .action-sheet-button.sc-ion-action-sheet-ios{
+        font-size: 17px;
+        color: #bdbdbd;
+        height: 48px;
+    }
+    .action-sheets-select-age .no-border-bottom.action-sheet-button.sc-ion-action-sheet-ios{
+        border-bottom: none;
+        background-position: no;
+    }
+    .action-sheets-select-age {
+        .picker-wrapper.sc-ion-picker-ios{
+            height: 332px;
+            margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
+            position: absolute;
+        }
+        .picker-toolbar-button.sc-ion-picker-ios{
+            text-align: center;
+        }
+        .picker-button.ion-activatable.picker-header.sc-ion-picker-ios{
+            font-weight: 300;
+            color: #222222;
+            font-size: 14px;
+        }
+
+        .button-done{
+            color: #ffffff !important;
+            font-size: 17px !important;
+            background: #ec971f;
+            border-radius: 4px;
+            height: 48px !important;
+            width: 92%;
+            margin: 8px 16px;
+          }
+    }
+  }
+
+.div-tourdeparturecalendar-footer {
+    margin: 8px 16px;
+    display: flex;
+  
+    .btn-advise {
+      margin: 0;
+      font-size: 17px !important;
+      background-color: #fff;
+      border: solid 1px #f79321;
+      color: #f79321;
+      width: 100%;
+    }
+    .btn-book {
+        margin: 0;
+        font-size: 17px !important;
+        background-color: #f79321;
+        color: #fff;
+        width: 100%;
+      }
+  }
+  .width-40 {
+    width: 40%;
+}
+.width-45 {
+    width: 45%;
+}
+.width-35 {
+    width: 35%;
+}
+  .width-50 {
+    width: 50%;
+    } 
+    .width-60 {
+        width: 60%;
+    }
+    .width-100 {
+        width: 100%;
+    }
+    .m-r-8 {
+        margin-right: 8px !important;
+    }
+
+    .cls-no-departure {
+        opacity: 0.5;
+    }
+    .bg-white {
+        background: #fff;
+      }

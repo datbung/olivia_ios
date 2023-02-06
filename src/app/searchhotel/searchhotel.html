@@ -51,22 +51,42 @@
     </form> -->
   <div>
     <div *ngIf="ischecklist">
+      <div class="text-title m-top--16" *ngIf="showInLandTitle">Nội địa</div>
       <div (click)="itemclick(item)" *ngFor="let item of items">
-        <ion-row class="cls-row-width">
-          <ion-col text-left style="padding:16px 0px">
+        <div class="cls-row-width" *ngIf="item.inLand">
+          <div class="text-left p-16-0 div-left" >
             <ion-label *ngIf="item.hotelName" class="label-item-search">
               <img src="./assets/ic_facility/ic_hotel.svg"> {{ item.hotelName }}
             </ion-label>
             <ion-label *ngIf="item.regionName" class="label-item-search">
-              <img src="./assets/ic_facility/Group.svg"> {{ item.regionName }}
+              <img class="img-region" src="./assets/ic_facility/Group.svg"> {{ item.regionName }}
             </ion-label>
-          </ion-col>
-          <ion-col *ngIf="item.regionName" text-right style="padding:16px 0px">
-            <ion-label style="color: #26bed6">
-              {{item.totalHotels}} khách sạn
+          </div>
+          <div *ngIf="item.regionName" class="text-right p-16-0 div-right" >
+            <ion-label class="cls-primary">
+              {{item.totalHotels}} ks
             </ion-label>
-          </ion-col>
-        </ion-row>
+          </div>
+        </div>
+      </div>
+
+      <div [ngClass]="!showInLandTitle ? 'text-title m-top--16' : 'text-title m-top-8' " *ngIf="showOutBoundTitle">Quốc tế</div>
+      <div (click)="itemclick(item)" *ngFor="let item of items">
+        <div class="cls-row-width" *ngIf="!item.inLand">
+          <div class="text-left p-16-0 div-left" >
+            <ion-label *ngIf="item.hotelName" class="label-item-search">
+              <img src="./assets/ic_facility/ic_hotel.svg"> {{ item.hotelName }}
+            </ion-label>
+            <ion-label *ngIf="item.regionName" class="label-item-search">
+              <img class="img-region" src="./assets/ic_facility/Group.svg"> {{ item.regionName }}
+            </ion-label>
+          </div>
+          <div *ngIf="item.regionName" class="text-right p-16-0 div-right">
+            <ion-label class="cls-primary">
+              {{item.totalHotels}} ks
+            </ion-label>
+          </div>
+        </div>
       </div>
     </div>
 

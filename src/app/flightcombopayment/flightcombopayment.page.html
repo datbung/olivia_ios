@@ -100,6 +100,14 @@
       <ion-label class="label-input" >Lưu và bảo mật thẻ để đặt dịch vụ nhanh hơn lần sau</ion-label>
     </div>
     <hr style="margin-left: 15px">
+
+    <ion-item  (click)="flightbuynowpaylater()" class="cls-minheight" *ngIf="!ischeckpaymentCard">
+      <label class="text-list">
+        Mua trước trả sau <img class="img-homecredit" src="https://www.homecredit.vn/img/logo-hc2016-main-red.png">
+      </label>
+      <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+    </ion-item>
+
     <ion-item *ngIf="!ischeckpaymentCard" (click)="roompaymentmomo()">
       <label>
         Thanh toán bằng Momo  <img class="img-payoo" src="https://res.ivivu.com/payment/img/momo/logo.png">

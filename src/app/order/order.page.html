@@ -16,7 +16,7 @@
         </ion-segment-button>
        
         <ion-segment-button (click)="SelectHistoryTrip()" mode="md" class="cls-seg-button" value="historytrip">
-          Lịch sử chuyến đi {{ _mytripservice.totalHistoryTripText }}
+          Lịch sử chuyến đi
         </ion-segment-button>
       </ion-segment>
      
@@ -35,7 +35,7 @@
 
 </ion-header>
 <ion-content #scrollArea class="order-content" [scrollEvents]="true">
-  <div *ngIf="listMyTrips.length > 0 else emptydata" [ngClass]="(!loginuser|| listMyTrips.length ==0) ? 'div-order-content h100' : 'div-order-content '">
+  <div *ngIf="activeTabTrip ==1 && listMyTrips.length > 0 else emptydata" [ngClass]="(!loginuser|| listMyTrips.length ==0) ? 'div-order-content h100' : 'div-order-content '">
     <div [ngClass]="activeTabTrip == 1 ? 'card-background-page-mytrips' : 'card-background-page-mytrips p-history'">
 
       <ion-row *ngIf="!hasloaddata && activeTabTrip == 1">
@@ -313,7 +313,7 @@
                   <div class="text-bkg">Mã booking: </div>
                   <div class="bkg-no">{{trip.booking_id}}</div>
                   <div class="div-btn-payment" *ngIf="trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
-                          <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
+                          <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && (trip.bookingsComboData[1] && trip.bookingsComboData[1].issueTicketDate!='') ) else notpayment" class="label-text-issueticket">Đã xuất vé</label>
                           <ng-template #notpayment>
                             <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
                               <div><label class="label-text-paymented">Đã thanh toán</label></div>
@@ -817,7 +817,7 @@
                     <ng-template #waitpayment>
                       <!-- <label *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-paymented">Chờ thanh toán | <span>{{trip.deliveryPaymentDisplay}}</span></label> -->
                       <label *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-waitpayment">Chờ thanh toán</label>
-                      <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-waitpayment">Chờ thanh toán</label></ng-template>
+                      <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-waitpayment1">Hết hạn thanh toán</label></ng-template>
                     </ng-template>
                   </div>
                   <div [ngClass]="trip.bookingsComboData  && (!trip.bookingsComboData[0].issueTicketDate || (trip.bookingsComboData[1] && !trip.bookingsComboData[1].issueTicketDate)) && (trip.payment_status == 1 || trip.payment_status == 5)?'col-bkg-status position-absolute mt-10':'col-bkg-status position-absolute'"
@@ -825,13 +825,14 @@
                     <!-- <label *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else notpayment" class="label-text-paymented">Đã xuất vé</label>
                     <ng-template #notpayment><label class="label-text-waitpayment">Chưa thanh toán</label></ng-template> -->
                     <div  *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
-                        <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-paymented-xv">Đã xuất vé</label>
+                        <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && (trip.bookingsComboData[1] && trip.bookingsComboData[1].issueTicketDate!='') ) else notpayment" class="label-text-paymented-xv">Đã xuất vé</label>
                         <ng-template #notpayment>
                           <div   *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
                             <div><label class="label-text-paymented">Đã thanh toán</label></div>
-                            <div class="m-top-4"><label class="label-text-processing ml-7" *ngIf="!trip.bookingsComboData[0].issueTicketDate||!trip.bookingsComboData[1].issueTicketDate">(Chờ xử lý)</label></div>
+                            <div class="m-top-4"><label class="label-text-processing ml-7" *ngIf="!trip.bookingsComboData[0].issueTicketDate|| (trip.bookingsComboData[1] && !trip.bookingsComboData[1].issueTicketDate)">(Chờ xử lý)</label></div>
                           </div>
-                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && trip.deliveryPaymentDisplay">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment1" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && !trip.deliveryPaymentDisplay">Hết hạn thanh toán</label>
                         </ng-template>
                     </div>
                     <div  *ngIf="trip.bookingsComboData && trip.bookingsComboData.length == 1">
@@ -841,7 +842,8 @@
                             <div><label class="label-text-paymented">Đã thanh toán</label></div>
                             <div class="m-top-4"><label class="label-text-processing ml-7" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
                           </div>
-                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)  && trip.deliveryPaymentDisplay">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment1" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)  && !trip.deliveryPaymentDisplay">Hết hạn thanh toán</label>
                         </ng-template>
                     </div>
                   </div>
@@ -2514,7 +2516,7 @@
                         <img src="./assets/imgs/ic_expand_down.svg" />
                       </div>
                     </div>
-          
+                    <div  *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)" class="div-panel-1px"></div>
                     <div class="m-top-24"  *ngIf="isptp">
                       <div>
                         <label [innerHTML]="trip.off_hotel_paypolicy">
@@ -2906,8 +2908,8 @@
                       
                         </div>
                         
-                    <div  class="div-panel-1px"></div>
-                    <div (click)="nextSupport(trip)" class="d-flex m-l-16">
+                    <div  class="div-panel-1px" *ngIf="trip.booking_type != 'TOUR'"></div>
+                    <div (click)="nextSupport(trip)" class="d-flex m-l-16" *ngIf="trip.booking_type != 'TOUR'">
                       <div class="text-info-2 font-weight-500">
                         Liên hệ hỗ trợ
                       </div>
@@ -2941,20 +2943,24 @@
                     <ng-template  #waitpayment>
                       <!-- <label *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-paymented">Chờ thanh toán | <span>{{trip.deliveryPaymentDisplay}}</span></label> -->
                       <label *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay else notshowwaitpayment" class="lbl-waitpayment label-text-waitpayment">Chờ thanh toán</label>
-                      <ng-template #notshowwaitpayment><label class="lbl-waitpayment label-text-waitpayment">Chờ thanh toán</label></ng-template>
+                      <ng-template #notshowwaitpayment>
+                        <label class="lbl-waitpayment label-text-waitpayment" *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay">Chờ thanh toán</label>
+                        <label class="lbl-waitpayment label-text-waitpayment1" *ngIf="trip.payment_status == 0 && !trip.deliveryPaymentDisplay">Hết hạn thanh toán</label>
+                      </ng-template>
                     </ng-template>
                   </ion-col>
                   <ion-col size="4" class="col-bkg-status"  *ngIf="trip.isFlyBooking && trip.payment_status != 9 && (trip.payment_status != 3 && trip.payment_status != -2)">
                     <!-- <label *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else notpayment" class="label-text-paymented">Đã xuất vé</label>
                     <ng-template #notpayment><label class="label-text-waitpayment">Chưa thanh toán</label></ng-template> -->
                     <div   *ngIf="trip.bookingsComboData && trip.bookingsComboData.length > 1">
-                        <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && trip.bookingsComboData[1].issueTicketDate!='' ) else notpayment" class="label-text-paymented-xv">Đã xuất vé</label>
+                        <label *ngIf="( (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate!='' && (trip.bookingsComboData[1] && trip.bookingsComboData[1].issueTicketDate!='') ) else notpayment" class="label-text-paymented-xv">Đã xuất vé</label>
                         <ng-template #notpayment>
                           <div *ngIf="(trip.payment_status == 1 || trip.payment_status == 5)">
                             <div><label class="label-text-paymented">Đã thanh toán</label></div>
-                            <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate || !trip.bookingsComboData[1].issueTicketDate">(Chờ xử lý)</label></div>
+                            <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate || (trip.bookingsComboData[1] && !trip.bookingsComboData[1].issueTicketDate)">(Chờ xử lý)</label></div>
                           </div>
-                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && trip.deliveryPaymentDisplay">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment1" *ngIf="trip.payment_status ==0 && !trip.deliveryPaymentDisplay">Hết hạn thanh toán</label>
                         </ng-template>
                     </div>
                     <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length == 1">
@@ -2964,7 +2970,8 @@
                             <div><label class="label-text-paymented">Đã thanh toán</label></div>
                             <div class="m-top-4"><label class="label-text-processing" *ngIf="!trip.bookingsComboData[0].issueTicketDate">(Chờ xử lý)</label></div>
                           </div>
-                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5)">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment" *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && trip.deliveryPaymentDisplay">Chưa thanh toán</label>
+                            <label class="label-text-waitpayment1" *ngIf="trip.payment_status == 0 && !trip.deliveryPaymentDisplay">Hết hạn thanh toán</label>
                         </ng-template>
                     </div>
                   </ion-col>
@@ -2977,11 +2984,13 @@
 
                 </div>
                 <!-- bkg khác tour -->
-                <div *ngIf="(!trip.booking_type || trip.booking_type != 'TOUR') else bookingtour ">
+                <div *ngIf="(!trip.booking_type || (trip.booking_type != 'TOUR' && trip.booking_type != 'TICKET') ) else bookingtour ">
                 
                   <div [ngClass]="!trip.bookingOffType ? 'padding-8-16' : 'item-bkgoff padding-0' " *ngIf="!trip.isFlyBooking else bookingflight">
 
                     <div *ngIf="!trip.bookingOffType">
+
+
                         <div [ngClass]="!trip.combo_name? 'div-wrapimg img-list' : 'div-wrapimg-1 img-list-1'" class="div-wrapimg img-list" >
                           <div *ngIf="trip.avatar else noavatar">
                             <img  [ngClass]="!trip.combo_name? 'img-avatar ava-list' : 'img-avatar-1 ava-list-1'"  src="{{trip.avatar}}">
@@ -3043,67 +3052,68 @@
                             </ion-col>
                           </ion-row>
                         </div>
-                      </div>
-                      <div [ngClass]="trip.booking_type=='COMBO_VXR' || trip.booking_type=='COMBO_FLIGHT'? 'div-line-new-1 mt-30' : 'div-line-new-1 mt-19'"></div>
-                      <div *ngIf="trip.totalPaxStr" class="d-flex div-people">
-                        <div>
-                          <img src="./assets/imgs/ic_people.svg">
-                          
                         </div>
-                        <div class="mt4">
-                          {{trip.totalPaxStr}} 
-                          <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
-                          <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
-                        </div>
-                        <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5" class="p-absolute-16">
-                          <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
-                        </div>
-                      </div>
-                 
-                  </div>
 
-                  <div  *ngIf="trip.bookingOffType" class="div-bkgoff-listitem">
-                    <div (click)="showtripdetail(trip)">
-                      <div class="bkgoff-title">{{trip.hotel_name}}</div>
-                      <div class="bkgoff-cincout d-flex p-top-3">
-                        <div class="bkgoff-info">
-                          <img style="height:12px" src="./assets/imgs/ic_date.svg">
+                        <div [ngClass]="trip.booking_type=='COMBO_VXR' || trip.booking_type=='COMBO_FLIGHT'? 'div-line-new-1 mt-30' : 'div-line-new-1 mt-19'"></div>
+                        <div *ngIf="trip.totalPaxStr" class="d-flex div-people">
+                          <div>
+                            <img src="./assets/imgs/ic_people.svg">
+                            
+                          </div>
+                          <div class="mt4">
+                            {{trip.totalPaxStr}} 
+                            <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
+                            <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
+                          </div>
+                          <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5" class="p-absolute-16">
+                            <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
+                          </div>
                         </div>
-                        <div class="bkgoff-info p-l-4">
-                          {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                 
+                    </div>
+
+                    <div  *ngIf="trip.bookingOffType" class="div-bkgoff-listitem">
+                      <div (click)="showtripdetail(trip)">
+                        <div class="bkgoff-title">{{trip.hotel_name}}</div>
+                        <div class="bkgoff-cincout d-flex p-top-3">
+                          <div class="bkgoff-info">
+                            <img style="height:12px" src="./assets/imgs/ic_date.svg">
+                          </div>
+                          <div class="bkgoff-info p-l-4">
+                            {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                          </div>
+                        </div>
+                        <div class="bkgoff-roomname  p-top-3">{{trip.room_name}}</div>
+                        <div class="bkgoff-otherinfo">
+                          <div *ngIf="trip.bookingOffType == 1">
+                              <div class="bkgoff-info">
+                              {{trip.room_count}} phòng | {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
+                              </div>
+                          </div>
+                          <div *ngIf="trip.bookingOffType != 1 && trip.off_sup_code" class="bkgoff-info">
+                              Mã booking: {{trip.off_sup_code}}
+                          </div>
                         </div>
                       </div>
-                      <div class="bkgoff-roomname  p-top-3">{{trip.room_name}}</div>
-                      <div class="bkgoff-otherinfo">
-                        <div *ngIf="trip.bookingOffType == 1">
-                            <div class="bkgoff-info">
-                            {{trip.room_count}} phòng | {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
-                            </div>
+                          
+                    </div>
+                    <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="div-line-new-1"></div>
+                    <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="d-flex div-big-waitpayment m-top-8">
+                      <div>
+                      
+                        <div class="div-right-waitpayment">
+                          {{gf.numberToCurrency(trip.amount_after_tax-trip.paid_amount, '.')}}<span style="font-size: 16px">đ</span>
                         </div>
-                        <div *ngIf="trip.bookingOffType != 1 && trip.off_sup_code" class="bkgoff-info">
-                            Mã booking: {{trip.off_sup_code}}
+                        <div class="div-left-waitpayment">
+                          Thanh toán trước <span style="font-weight: bold">{{trip.deliveryPaymentDisplay}}</span>
                         </div>
+                      </div>
+                      <div  class="p-absolute-16 m-top-3">
+                          <button ion-button round outline class="btn-waitpayment">Thanh toán</button>
                       </div>
                     </div>
-                        
                   </div>
-                  <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="div-line-new-1"></div>
-                  <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="d-flex div-big-waitpayment m-top-8">
-                    <div>
-                     
-                      <div class="div-right-waitpayment">
-                        {{gf.numberToCurrency(trip.amount_after_tax-trip.paid_amount, '.')}}<span style="font-size: 16px">đ</span>
-                      </div>
-                      <div class="div-left-waitpayment">
-                        Thanh toán trước <span style="font-weight: bold">{{trip.deliveryPaymentDisplay}}</span>
-                      </div>
-                    </div>
-                    <div  class="p-absolute-16 m-top-3">
-                        <button ion-button round outline class="btn-waitpayment">Thanh toán</button>
-                    </div>
-                  </div>
-                  </div>
-                  <ng-template #bookingflight>
+                  <ng-template #bookingflight>                      
                     <div class="div-item-flight d-flex padding-8-16">
                       <div class="text-flight-title div-width-600 d-flex">
                           <div *ngIf="trip.bookingsComboData && trip.bookingsComboData[0]" class="min-width-100 cls-text-overflow">
@@ -3228,7 +3238,7 @@
                             
                           </div>
                           <div class="mt4">
-                            {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
+                            {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                           </div>
                           <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
                             <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
@@ -3275,11 +3285,26 @@
                                 <!-- check in, checkout -->
                                   <ion-row class="row-height-listtrip p-top-4" >
                                     <ion-col size="1" class="col-address">
-                                      <img style="height:12px" src="./assets/imgs/ic_date.svg">
+                                      <img class="h-15" src="./assets/imgs/ic_date.svg">
                                       
                                     </ion-col>
-                                    <ion-col  class="col-address">
+                                    <ion-col  class="col-address" *ngIf="trip.booking_type == 'TOUR'">
                                       {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                                    </ion-col>
+
+                                    <ion-col  class="col-address" *ngIf="trip.booking_type == 'TICKET'">
+                                      {{trip.checkInDisplay}}
+                                    </ion-col>
+                                  </ion-row>
+
+                                  <ion-row class="row-height-listtrip p-top-4" *ngIf="trip.booking_type == 'TICKET'">
+                                    <ion-col size="1" class="col-address">
+                                      <img class="h-15" src="./assets/ic_ticket/ticket.svg">
+                                      
+                                    </ion-col>
+                                  
+                                    <ion-col  class="col-ticket-name">
+                                      {{trip.room_name}}
                                     </ion-col>
                                   </ion-row>
                               </div>

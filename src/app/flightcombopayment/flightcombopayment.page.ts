@@ -81,7 +81,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
       }
     }
     this.ischeckpaymentCard = this.Roomif.ischeckpaymentCard;
-    this.ischeckpaymentLater = this.Roomif.ischeckpaymentLater;
+    this.ischeckpaymentLater = this.Roomif.ischeckpaymentLater  || this.bookCombo.roomPenalty;
     this.storage.get('jti').then(jti => {
       if (jti) {
         this.jti = jti;
@@ -231,20 +231,16 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
                     let url;
                     if (paymentType == 'visa') {
                       url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&TokenId=' + se.tokenid + '&rememberToken='+se.isremember+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
-                    } else {
+                    }else if (paymentType == 'bnpl') {
+                      url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&TokenId=' + se.tokenid + '&rememberToken='+se.isremember+'&BankId='+paymentType+'&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankDeepLink';
+                    }
+                     else {
                       url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode + '&buyerPhone=' + se.listfly.HotelBooking.CPhone + '&memberId=' + se.jti + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
                     }
 
                     se.gf.CreateUrl(url).then(dataBuildLink => {
                       dataBuildLink = JSON.parse(dataBuildLink);
                       if (dataBuildLink.success) {
-                        // if(se._voucherService.selectVoucher){
-                        //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
-                        //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
-                        //   setTimeout(()=> {
-                        //   se._voucherService.selectVoucher = null;
-                        // },300)
-                        //}
                         if (paymentType == 'visa') {
                           se.openWebpage(dataBuildLink.returnUrl);
                           se.setinterval();
@@ -851,6 +847,10 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
       }
     }
   );
+  }
+
+  flightbuynowpaylater(){
+    this.postapibook('bnpl');
   }
 }
 

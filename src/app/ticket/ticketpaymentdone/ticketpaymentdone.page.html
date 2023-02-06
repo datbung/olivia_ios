@@ -1,0 +1,90 @@
+
+<ion-header>
+  <ion-toolbar style="min-height: 0px;text-align: center">
+      <ion-row>
+        <ion-col style="text-align: center">
+          <div class="div-goback" (click)="next()">
+            <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
+          </div>
+          <div style="align-self: center" >
+              <div style="padding-top: 6px;font-size: 20px;font-weight: bold;"><label class="text-title">Hoàn thành</label></div>
+          </div>
+          <div class="div-quick-back" (click)="showQuickBack()">
+            ...
+          </div>
+        </ion-col>
+      </ion-row>
+      </ion-toolbar>
+</ion-header>
+<ion-content padding>
+<div  style="text-align: center">
+  <img class="img-step" src="./assets/ic_tour/tour_step3.png">
+  </div>
+  <div class="img-trip-empty">
+    <img class="img-empty" src="./assets/empty/imgdone.svg">
+</div>
+<div style="margin-top: 5px">
+ 
+  <div *ngIf='ticketService.paymentType == 1 else paylater'>
+    <div>
+      <ion-label class="text" *ngIf="ticketService.itemTicketService">
+        Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="ticketService.itemTicketService.Name">{{ticketService.itemTicketService.Name}}</span>
+      </ion-label>
+
+      <!-- <ion-label class="text" *ngIf="ticketService.BookingTourMytrip">
+        Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="ticketService.BookingTourMytrip && ticketService.BookingTourMytrip.hotel_name">{{ticketService.BookingTourMytrip.hotel_name}}</span>
+      </ion-label> -->
+    </div>
+    <div class="p-top-12">  
+      <div>
+        <ion-label class="text">
+          Quý khách vui lòng kiểm tra thông tin Tour đã đặt trong <span class="text-bold">Chuyến đi của tôi</span>
+        </ion-label>
+      </div>
+      <div>
+        <ion-label class="text text-sub">
+          Mã đặt tour <span class="text-bold text-tealish">{{bookingCode}}</span>
+        </ion-label>
+      </div>
+      
+    </div>
+    
+
+  </div>
+
+  <ng-template #paylater>
+    <div class="text">Thanh toán thành công. Cám ơn quý khách đã sử dụng dịch vụ <span class="text-tealish">iVIVU.com</span></div>
+    <!-- <div class="text p-top-12">Thông tin thanh toán đã được gửi đến email của Quý khách</div> -->
+    
+    <!-- <div class="text p-top-12">
+      <ion-label class="text" text-wrap>
+        Mời quý khách thanh toán số tiền:
+        <span class="text-bold text-orange">{{total}}đ </span> trong vòng <span class="text-bold">24 tiếng</span>
+        để hoàn tất việc đặt tour
+      </ion-label>
+    </div> -->
+    <div class="p-top-12">
+      <ion-label class="text ">
+        <span class="text-bold">Vé {{ticketService.itemTicketService.Name}}</span> đã được <span class="text-tealish">iVIVU</span> gửi đến email của Quý khách và được lưu trong mục <span class="text-bold">Chuyến đi của tôi.</span> trên app
+      </ion-label>
+    </div>
+  </ng-template>
+  
+  <!-- <div class="p-top-12">
+    <ion-label class="text" text-wrap>
+        Nếu cần sự hỗ trợ Quý khách vui lòng liên hệ tổng đài <span class="text-bold text-orange">(028) 3933 8002</span> để được trợ giúp.
+    </ion-label>
+  </div>
+  <div class="p-top-12">
+    <ion-label class="text text-sub">
+      Mã đặt vé <span class="text-bold text-tealish">{{bookingCode}}</span> (Vé chỉ có hiệu lực theo ngày cố định Quý khách đã đặt)
+    </ion-label>
+  </div> -->
+</div>
+</ion-content>
+<ion-footer>
+  <div class="div-button-payment-done">
+    <button ion-button round outline class="button button2">Chi tiết vé</button>
+    <button (click)="next()" ion-button round outline class="button button1 m-top-0">Đặt thêm vé khác</button>
+  </div>
+</ion-footer>

@@ -1,0 +1,511 @@
+import { Bookcombo, ValueGlobal } from '../../providers/book-service';
+import { Booking, RoomInfo, SearchHotel } from '../../providers/book-service';
+import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
+import { NavController, LoadingController, ToastController, Platform,AlertController } from '@ionic/angular';
+import { C } from '../../providers/constants';
+import * as request from 'requestretry';
+import { Storage } from '@ionic/storage';
+import { GlobalFunction } from '../../providers/globalfunction';
+import jwt_decode from 'jwt-decode';
+import * as moment from 'moment';
+import { ActivatedRoute } from '@angular/router';
+import { ActivityService } from '../../providers/globalfunction';
+import { ticketService } from 'src/app/providers/ticketService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+
+/**
+ * Generated class for the ticketpaymentatmPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+@Component({
+  selector: 'app-ticketpaymentatm',
+  templateUrl: 'ticketpaymentatm.page.html',
+  styleUrls: ['ticketpaymentatm.page.scss'],
+})
+export class TicketPaymentAtmPage implements OnInit {
+  ischeck; timestamp; public ischeckbox;
+  Avatar; Name; Address; cin; cout; dur; room; nameroom; jsonroom; ischecktext = true
+  roomnumber; adults; children; breakfast; PriceAvgPlusTAStr; priceshow
+  imgroom; roomtype; indexme; indexroom; cin1; cout1; checkpayment; book; id; pricetemp; hotelid
+  public loader: any
+  auth_token: any = '';arrbankrmb=[];totalPrice=0;bookingCode;isckb = false; TokenId;bankid="";jti;intervalID: NodeJS.Timeout;
+  _inAppBrowser: any;stt;isremember=true;isdisable=false;isshowRemember=false;
+  sttbooking=0;
+  phone: any;
+  constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,
+    public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
+    public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
+    private activatedRoute: ActivatedRoute,public activityService: ActivityService,public alertCtrl: AlertController,
+    public valueGlobal: ValueGlobal,
+    public ticketService: ticketService,
+    private safariViewController: SafariViewController,
+    private backgroundmode: BackgroundMode) {
+    //google analytic
+    gf.googleAnalytion('tourpaymentatm', 'load', '');
+  }
+  ngOnInit() {
+    //this.bookingCode = this.ticketService.BookingTourMytrip ? this.ticketService.BookingTourMytrip.booking_id :this.ticketService.dataBookResponse.Code;
+    //this.totalPrice=this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+    this.storage.get('infocus').then(infocus => {
+      if (infocus) {
+        this.phone = infocus.phone;
+      }
+    })
+    this.platform.ready().then(()=>{
+      this.backgroundmode.on('activate').subscribe(()=>{
+          this.backgroundmode.enable();
+         
+          setTimeout(() => {
+              clearInterval(this.intervalID);
+          }, 1000 * 60 * 10);
+      })
+      
+    })
+  }
+  ionViewWillEnter() {
+    this.storage.get('auth_token').then(auth_token => {
+      this.auth_token = auth_token;
+    })
+    this.storage.get('jti').then(jti => {
+      if (jti) {
+        this.jti = jti;
+        this.isshowRemember=true;
+        this.isremember=false;
+        this.GeTokensOfMember();
+      }
+    })
+  }
+  next() {
+    this.TokenId="";
+    this.bankid="";
+    this.arrbankrmb.forEach(element => {
+      if (element.checked) {
+        this.TokenId=element.id;
+        this.bankid=element.vpc_Card;
+      }
+    });
+    this.gf.showLoading();
+    this.CreateUrlOnePay(this.TokenId ? this.bankid : this.id);
+
+  }
+  ionViewWillLeave(){
+    this.backgroundmode.on('activate').subscribe(()=>{
+      this.backgroundmode.disable();
+    })
+  }
+ 
+  async presentToast() {
+    let toast = await this.toastCtrl.create({
+      message: "Xin chọn 1 ngân hàng",
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+  openWebpage(url: string) {
+    var se=this;
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') {
+            se.gf.hideLoading();
+            let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
+              se.gf.Checkpayment(url).then((datapayment)=>{
+                let checkpay=JSON.parse(datapayment);
+                if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
+                
+                  if(se.safariViewController){
+                    se.safariViewController.hide();
+                  }
+                  clearInterval(se.intervalID);
+                  //se.ticketService.paymentType = 1;
+                  se.navCtrl.navigateForward('tourpaymentdone');
+                }
+                else
+                {
+                  clearInterval(se.intervalID);
+                  se.gf.showAlertTourPaymentFail(checkpay.internalNote);
+                }
+              })
+            }
+            //clearInterval(se.intervalID);
+            setTimeout(() => {
+              clearInterval(this.intervalID);
+            }, 60000 * 15);
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+        se.gf.hideLoading();
+      }
+    }
+  );
+  }
+  
+
+  clickitem(id) {
+    this.zone.run(() => {
+      this.id = id;
+      this.TokenId="";
+      this.isdisable=false;
+      this.arrbankrmb.forEach(element => {
+        element.checked =false;
+      });
+    })
+  }
+  ionViewDidLoad() {
+
+  }
+  edit() {
+    this.zone.run(() => {
+      if (this.ischeck) {
+        this.ischecktext = true;
+      } else {
+        this.ischecktext = false;
+      }
+    })
+  }
+  async presentLoading() {
+    this.loader = await this.loadingCtrl.create({
+    });
+    this.loader.present();
+  }
+  goback() {
+    if((this.Roomif.point && this.Roomif.bookingCode) || (this.Roomif.promocode && this.Roomif.bookingCode))
+    {
+      this.navCtrl.navigateBack('/roomdetailreview');
+    }else{
+      this.navCtrl.back();
+    }
+  }
+  async presentToastr(msg) {
+    let toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+  checkacc(item,ev)
+  {
+    var se = this;
+    if(ev.target.checked){
+      se.arrbankrmb.forEach(element => {
+        element.checked = false;
+      });
+      item.checked = true;
+      this.isdisable=true;
+      this.isremember=true;
+      this.id="";
+    }
+    else{
+      item.checked = false;
+      ev.target.checked = false;
+      ev.target.classList.remove("radio-checked");
+    }
+  
+  }
+  CreateUrlOnePay(bankid) {
+    var se=this;
+    let itemcache = this.ticketService;
+    // if(se.ticketService.BookingTourMytrip) {
+    //   se.bookingCode = se.ticketService.BookingTourMytrip.booking_id;
+    //   se.createBookingUrl(se.ticketService.BookingTourMytrip.amount_after_tax, bankid);
+    // } else {
+    //   se.createBookingTour().then((bookingCode) => {
+    //     if(bookingCode){
+    //       se.bookingCode = bookingCode;
+    //       se.createBookingUrl(itemcache.totalPrice, bankid);
+    //     }
+    //   })
+    // }
+    
+  }
+
+  createBookingUrl(totalPrice, bankid) {
+    let se = this;
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+          se.gf.CreatePayoo(url).then(datapayoo => {
+            if(datapayoo.success){
+              se.zone.run(()=>{
+                setTimeout(()=> {
+                  se.callSetInterval();
+                },5000)
+              })
+              se.gf.hideLoading();
+              se.openWebpage(datapayoo.returnUrl);
+            }
+            else{
+              se.showAlertPaymentError();
+              se.gf.hideLoading();
+            }
+          })
+  }
+
+  async showAlertPaymentError(){
+    var se = this;
+    let msg ='Thanh toán không thành công. Xin vui lòng thử lại sau!';
+    let alert = await se.alertCtrl.create({
+      message: msg,
+      header: 'Rất tiếc, đã có lỗi xảy ra',
+      cssClass: "cls-alert-refreshPrice",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
+
+  createBookingTour():Promise<any> {
+    var se = this;
+    return new Promise((resolve, reject) => {
+    //   if (se.ticketService.TourBooking.CustomerEmail) {
+    //     var Invoice=0;
+    //     if (se.ticketService.order) {
+    //       Invoice=1;
+    //     }
+    //       let urlApi = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CreateBookingVerApi';
+    //       let headers = {
+    //         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+    //         apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    //       };
+    //       se.gf.RequestApi('POST', urlApi, headers, se.ticketService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
+    //         if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
+    //           se.ticketService.tourBookingCode = data.Response.BookingCode;
+    //           se.ticketService.totalPrice = data.Response.Total;
+    //           resolve(data.Response.BookingCode)
+    //         }else{
+    //           resolve(false);
+    //         }
+    //         se.gf.hideLoading();
+    //       });
+    // }else{
+    //   se.gf.hideLoading();
+    //   se.gf.showToastWarning('Email không hợp lệ. Vui lòng kiểm tra lại.');
+    //   resolve(false);
+    // }
+    resolve(true);
+    })
+       
+  }
+
+  async showAlertMessageOnly(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Mã đăng nhập đã hết hạn, vui lòng đăng nhập lại!',
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.valueGlobal.logingoback = '/roomdetailreview';
+          this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+
+   
+  callSetInterval()
+  {
+    if (this.loader) {
+      this.loader.dismiss();
+    }
+    //clearInterval(this.intervalID);
+    this.intervalID = setInterval(() => {
+      let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+this.bookingCode;
+      this.zone.run(() => {
+        this.gf.CheckPaymentTour(url).then((res) => {
+          let checkpay = JSON.parse(res);
+          if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
+            this.gf.hideLoading();
+            if(this.safariViewController){
+              this.safariViewController.hide();
+            }
+            clearInterval(this.intervalID);
+            //this.ticketService.paymentType = 1;
+            this.navCtrl.navigateForward('tourpaymentdone');
+          }
+          else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
+          {
+            this.gf.hideLoading();
+            if(this.safariViewController){
+              this.safariViewController.hide();
+            }
+            clearInterval(this.intervalID);
+            this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+          }    
+        
+        })
+      })
+      
+    }, 5000 * 1);
+
+    setTimeout(() => {
+      clearInterval(this.intervalID);
+    }, 60000 * 10.5);
+  }
+
+  GeTokensOfMember() {
+    var se = this;
+    se.gf.GeTokensOfMember(se.jti).then(dataTokens => {
+      if (dataTokens) {
+        dataTokens = JSON.parse(dataTokens);
+        if (dataTokens.tokens.length > 0) {
+          for (let i = 0; i < dataTokens.tokens.length; i++) {
+            if (dataTokens.tokens[i].vpc_Card != 'VC' && dataTokens.tokens[i].vpc_Card != 'MC' && dataTokens.tokens[i].vpc_Card != 'JC' && dataTokens.tokens[i].vpc_Card != 'AE') {
+              // this.TokenId = dataTokens.tokens[i].id;
+              var vpc_CardNum = dataTokens.tokens[i].vpc_CardNum.split('xxx');
+              vpc_CardNum = vpc_CardNum[1];
+              var name_Bank=this.getnameBank(dataTokens.tokens[i].vpc_Card);
+              var item = { id: dataTokens.tokens[i].id, imgbank: 'https://res.ivivu.com/payment/img/onepay/' + dataTokens.tokens[i].vpc_Card + '.png', vpc_CardNum: vpc_CardNum, name_Bank:name_Bank,checked:false,vpc_Card:dataTokens.tokens[i].vpc_Card};
+              this.arrbankrmb.push(item);
+            }
+          }
+          if ( this.arrbankrmb.length>0) {
+            this.arrbankrmb[0].checked=true;
+            this.isdisable=true;
+            this.TokenId= this.arrbankrmb[0].id;
+          }
+        
+          // item = { id: '999', imgbank: 'https://res.ivivu.com/payment/img/onepay/' + dataTokens.tokens[0].vpc_Card + '.png', vpc_CardNum: vpc_CardNum, name_Bank:name_Bank,checked:false};
+          // this.arrbankrmb.push(item);
+        }
+      
+      }
+    })
+  }
+  getnameBank(text) {
+    var cardStr="";
+    switch (text) {
+      case "970436":
+        cardStr = "VietcomBank";
+        break;
+      case "970412":
+        cardStr = "VRBank";
+        break;
+      case "970407":
+        cardStr = "TechcomBank";
+        break;
+      case "970423":
+        cardStr = "TienPhongBank";
+        break;
+      case "970415":
+        cardStr = "ViettinBank";
+        break;
+      case "970441":
+        cardStr = "VIB";
+        break;
+      case "970406":
+        cardStr = "DongABank";
+        break;
+      case "970437":
+        cardStr = "HDBank";
+        break;
+      case "970422":
+        cardStr = "MB";
+        break;
+      case "970427":
+        cardStr = "VietABank";
+        break;
+      case "970426":
+        cardStr = "MaritimeBank";
+        break;
+      case "970431":
+        cardStr = "EximBank";
+        break;
+      case "970443":
+        cardStr = "SHB";
+        break;
+      case "970432":
+        cardStr = "VPBank";
+        break;
+      case "970425":
+        cardStr = "AnBinhBank";
+        break;
+      case "970403":
+        cardStr = "SacomBank";
+        break;
+      case "970428":
+        cardStr = "NamABank";
+        break;
+      case "970414":
+        cardStr = "OceanBank";
+        break;
+      case "970418":
+        cardStr = "BIDV";
+        break;
+      case "970440":
+        cardStr = "SeaBank";
+        break;
+      case "970409":
+        cardStr = "BacABank";
+        break;
+      case "970419":
+        cardStr = "NaviBank";
+        break;
+      case "970405":
+        cardStr = "AgriBank";
+        break;
+      case "970429":
+        cardStr = "SaigonBank";
+        break;
+      case "970454":
+        cardStr = "VietCapital";
+        break;
+      default:
+        break;
+    }
+    return cardStr;
+  }
+  rememberCard(){
+    this.isremember=!this.isremember
+  }
+  async showInfo(msg) {
+    let alert = await this.alertCtrl.create({
+      header: "Thông báo",
+      message: msg,
+      buttons: [{
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          alert.dismiss();
+          this.Roomif.promocode="";
+          this.navCtrl.navigateForward('/roomdetailreview');
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+}
+

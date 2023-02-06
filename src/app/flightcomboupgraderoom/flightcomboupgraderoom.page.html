@@ -95,7 +95,7 @@
                           <img *ngIf="mealtype.Penaltys[0].PenaltyDescription.length > 70" class="icon-detail-check-green-fix" src="./assets/ic_hoteldetail/ic_info.svg">
                           <span *ngIf="mealtype.Penaltys[0].PenaltyDescription.length <=70" [innerHTML]="mealtype.Penaltys[0].PenaltyDescription.replace('p>','ion-label>')" class="penalty-text"></span>
                           <div (click)="penaltySelected(j+1)" style="margin-top: -4px;">
-                              <button *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription.length > 70" class="penalty-text link-penalty">Chính sách hủy phòng</button>
+                              <button *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription.length > 70" class="penalty-text link-penalty">Huỷ phòng có tính phí</button>
                           </div>
 
                           <div *ngIf="penaltyItemSelected==j+1" [class.active]="penaltyItemSelected==j+1" class="penalty-active arrow">
@@ -133,7 +133,7 @@
                           </div>
                       </ion-row>
 
-                      <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString()">
+                      <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG">
                           <button *ngIf="(currentRoomSelect.guidId != mealtype.guidId) else roomSelect" (click)="upgradeRoom(hotelroom, mealtype,j)" class="button btn-book-outline" ion-button outline round style="margin: 11px 0px 0px 0px;">Nâng cấp</button>
                           <ng-template #roomSelect><button class="button btn-book-selected" ion-button outline round style="margin: 11px 0px 0px 0px;">Đang chọn</button></ng-template>
                       </ion-row>

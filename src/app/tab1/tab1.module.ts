@@ -9,6 +9,7 @@ import { Tab1Page } from './tab1.page';
 //import { HomefoodPageModule } from '../homefood/homefood.module';
 import { HomeflightPageModule } from '../homeflight/homeflight.module';
 import { HomeTourPageModule } from '../tour/hometour/hometour.module';
+import { HomeTicketPageModule } from '../ticket/tickethome/hometicket/hometicket.module';
 const routes: Routes = [
   {
     path: '',
@@ -25,6 +26,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     HomeflightPageModule,
     HomeTourPageModule,
+    HomeTicketPageModule,
   ],
   declarations: [Tab1Page],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

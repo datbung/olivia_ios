@@ -125,78 +125,118 @@ export class CombodonePage implements OnInit {
       var PaymentPeriodcovert=moment(restime).format('YYYYMMDDHHmm');
       var thu = moment(restime).format('dddd');
       // var test=moment(ti).diff(timetemp,'minutes');
-      if (ho > 0 && ho < 6) {
-        DateNow = DateNow + '1100';
-        if (parseInt(PaymentPeriodcovert) >= parseInt(DateNow)) {
-          se.text = '11 am cùng ngày';
+      let PaymentPeriod = this.Roomif.expiredtime;
+      if(se.bookCombo.isHBEDBooking){
+        if(PaymentPeriod){
+          let _paymentPeriodcovert = moment(PaymentPeriod).format('YYYYMMDDHHmm');
+          let _dateNow = moment(ti).add(30, 'minutes').format('YYYYMMDDHHmm');
+          if (parseInt(_paymentPeriodcovert) >= parseInt(_dateNow)) {
+            let addhours = moment(ti).add(30, 'minutes').format('HH:mm');
+            se.text = addhours + ' cùng ngày';
+          }else{
+            let textthu= se.getDay(thu);
+            let day=moment(PaymentPeriod).format('DD')+ ' '+ 'thg' + ' ' +  moment(PaymentPeriod).format('MM') +', ' +moment(PaymentPeriod).format('YYYY') 
+            se.text = moment(PaymentPeriod).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+        }else{
+          let addhours = moment(ti).add(30, 'minutes').format('HH:mm');
+          se.text = addhours + ' cùng ngày';
         }
-        else {
-          var textthu= se.getDay(thu);
-          if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
-            var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
-             se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
-         else{
-           var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
-           se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
- 
-       
+        
+      }else if(se.bookCombo.isAGODABooking){
+        if(PaymentPeriod){
+          let _paymentPeriodcovert = moment(PaymentPeriod).format('YYYYMMDDHHmm');
+          let _dateNow = moment(ti).add(1, 'hours').format('YYYYMMDDHHmm');
+          if (parseInt(_paymentPeriodcovert) >= parseInt(_dateNow)) {
+            let addhours = moment(ti).add(1, 'hours').format('HH:mm');
+            se.text = addhours + ' cùng ngày';
+          }else{
+            let textthu= se.getDay(thu);
+            let day=moment(PaymentPeriod).format('DD')+ ' '+ 'thg' + ' ' +  moment(PaymentPeriod).format('MM') +', ' +moment(PaymentPeriod).format('YYYY') 
+            se.text = moment(PaymentPeriod).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
         }
-      }
-      else if (ho >= 6 && ho < 12) {
-        DateNow = DateNow + '1700';
-        if (parseInt(PaymentPeriodcovert) >= parseInt(DateNow)) {
-          se.text = '17h cùng ngày';
-         
+        else{
+          let addhours = moment(ti).add(1, 'hours').format('HH:mm');
+          se.text = addhours + ' cùng ngày';
         }
-        else {
-          var textthu= se.getDay(thu);
-          if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
-            var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
-             se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
-         else{
-           var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
-           se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
-        }
-      }
-      else if (ho >= 12 && ho < 20) {
-        DateNow = DateNow + '2030';
-        if (parseInt(PaymentPeriodcovert) >= parseInt(DateNow)) {
-          se.text = '20h30 cùng ngày'
-        }
-        else {
-          var textthu= se.getDay(thu);
-          if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
-            var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
-             se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
-         else{
-           var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
-           se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
-        }
+        
       }
       else {
-        var res = ti.setTime(ti.getTime() + (24 * 60 * 60 * 1000));
-        var date = new Date(res);
-        var checkDate = moment(date).format('YYYYMMDD') + '1100';
-        if (parseInt(PaymentPeriodcovert) >= parseInt(checkDate)) {
-          se.text = '11 am hôm sau';
-        } else {
-          var textthu= se.getDay(thu);
-          if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
-            var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
-             se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
-         else{
-           var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
-           se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
-         }
+          if (ho > 0 && ho < 6) {
+          DateNow = DateNow + '1100';
+          if (parseInt(PaymentPeriodcovert) >= parseInt(DateNow)) {
+            se.text = '11 am cùng ngày';
+          }
+          else {
+            var textthu= se.getDay(thu);
+            if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
+              var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
+              se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          else{
+            var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
+            se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+  
+        
+          }
+        }
+        else if (ho >= 6 && ho < 12) {
+          DateNow = DateNow + '1700';
+          if (parseInt(PaymentPeriodcovert) >= parseInt(DateNow)) {
+            se.text = '17h cùng ngày';
+          
+          }
+          else {
+            var textthu= se.getDay(thu);
+            if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
+              var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
+              se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          else{
+            var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
+            se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          }
+        }
+        else if (ho >= 12 && ho < 20) {
+          DateNow = DateNow + '2030';
+          if (parseInt(PaymentPeriodcovert) >= parseInt(DateNow)) {
+            se.text = '20h30 cùng ngày'
+          }
+          else {
+            var textthu= se.getDay(thu);
+            if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
+              var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
+              se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          else{
+            var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
+            se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          }
+        }
+        else {
+          var res = ti.setTime(ti.getTime() + (24 * 60 * 60 * 1000));
+          var date = new Date(res);
+          var checkDate = moment(date).format('YYYYMMDD') + '1100';
+          if (parseInt(PaymentPeriodcovert) >= parseInt(checkDate)) {
+            se.text = '11 am hôm sau';
+          } else {
+            var textthu= se.getDay(thu);
+            if(Math.abs(moment(ti).diff(timetemp,'minutes')) < 30) {
+              var day=moment(_timetemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(_timetemp).format('MM') +', ' +moment(_timetemp).format('YYYY') 
+              se.text = moment(_timetemp).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          else{
+            var day=moment(restime).format('DD')+ ' '+ 'thg' + ' ' +  moment(restime).format('MM') +', ' +moment(restime).format('YYYY') 
+            se.text = moment(restime).format('HH:mm') + ' ' + textthu + ', ' + day;
+          }
+          }
         }
       }
+      
       
     }
     else{
@@ -248,6 +288,9 @@ export class CombodonePage implements OnInit {
       this.showConfirm();
     }
     this.gf.setParams(2, 'seemoreblog');
+    this.bookCombo.isAGODABooking = false;
+    this.bookCombo.isHBEDBooking = false;
+    this.bookCombo.roomPenalty = false;
     this.navCtrl.navigateForward('/bloglist');
   }
   public async showConfirm() {

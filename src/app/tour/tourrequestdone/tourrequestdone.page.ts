@@ -42,7 +42,7 @@ export class TourRequestDonePage implements OnInit {
   }
 
   next() {
-    this.tourService.itemPaymentDone.emit(true);
+    this.tourService.itemPaymentDone.emit(3);
     this.valueGlobal.backValue = "hometour";
     this.navCtrl.navigateBack('/app/tabs/tab1');
   }

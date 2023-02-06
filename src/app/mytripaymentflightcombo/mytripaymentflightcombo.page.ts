@@ -309,13 +309,16 @@ export class MytripaymentflightcomboPage implements OnInit {
         if (paymentType=='visa') {
           url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.cus_phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
         }
+        else if (paymentType=='bnpl') {
+          url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=bnpl&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.cus_phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&BankId=bnpl'+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+        }
         else{
           url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' + se.cus_phone + '&memberId=' + se.jti+ '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
         }
         this.gf.CreateUrl(url).then(dataBuildLink => {
           dataBuildLink = JSON.parse(dataBuildLink);
           if (dataBuildLink.success) {
-            if (paymentType=='visa') {
+            if (paymentType=='visa' || paymentType=='bnpl') {
               se.openWebpage(dataBuildLink.returnUrl);
             }
             else if(paymentType=='payoo_qr'){
@@ -478,5 +481,9 @@ export class MytripaymentflightcomboPage implements OnInit {
       }
     }
   );
+  }
+
+  flightbuynowpaylater(){
+    this.buildLink('bnpl');
   }
 }

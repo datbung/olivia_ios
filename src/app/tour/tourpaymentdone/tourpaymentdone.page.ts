@@ -85,7 +85,7 @@ export class TourPaymentDonePage implements OnInit {
 
   next() {
     this.gf.hideLoading();
-    this.tourService.itemPaymentDone.emit(true);
+    this.tourService.itemPaymentDone.emit(3);
     this.valueGlobal.backValue = "hometour";
     this.tourService.BookingTourMytrip = null;
     // this._flightService.itemMenuFlightClick.emit(2);

@@ -457,7 +457,11 @@ export class TourPaymentSelectPage implements OnInit {
     let se = this, url='';
     if(paymentType == 'momo'){
       url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight&version=2';
-    }else{
+    }
+    else if(paymentType == 'bnpl'){
+      url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&BankId=bnpl'+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight&version=2';
+    }
+    else{
       url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
     }
           se.gf.CreatePayoo(url).then(datapayoo => {
@@ -708,5 +712,9 @@ export class TourPaymentSelectPage implements OnInit {
         cssClass: "modal-flight-quick-back",
       });
     modal.present();
+    }
+
+    flightbuynowpaylater(){
+      this.createBookingUrl('bnpl', this.tourService.totalPrice);
     }
 }

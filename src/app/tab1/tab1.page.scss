@@ -1153,6 +1153,9 @@ label {
   .col-calendar{
     padding-right: 0;
   }
+  .div-hotel, .div-flight, .div-combo, .div-food, .div-ticket {
+    font-size: 12px !important;
+  }
 }
   
 body{
@@ -1896,9 +1899,6 @@ body{
   position: absolute;
   //top: 156px;
   top: calc(env(safe-area-inset-top) + 94px) ;
-  //width: 100%;
-  // color: #fff;
-  // font-size: 17px;
 
   background: #fff;
   height: 86px;
@@ -1915,8 +1915,12 @@ body{
   line-height: normal;
   letter-spacing: -0.42px;
   color: #222222;
+
+  //overflow: scroll;
+  //flex-wrap: wrap;
+  //flex-direction: column;
   
-  .div-hotel, .div-flight, .div-combo, .div-food{
+  .div-hotel, .div-flight, .div-combo, .div-food, .div-ticket{
     width: 25%;
     text-align: center;
     font-size: 14px;
@@ -2400,4 +2404,6 @@ body{
     padding-top: 3px;
   }
 }
+
+
 

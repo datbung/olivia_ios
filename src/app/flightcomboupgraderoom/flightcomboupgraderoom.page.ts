@@ -48,7 +48,7 @@ export class FlightcomboupgraderoomPage implements OnInit {
               var co = 0;
               for (let index = 0; index < hotelroom.MealTypeRates.length; index++) {
                 const mealtype = hotelroom.MealTypeRates[index];
-                if ((se.loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString()) {
+                if ((se.loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG) {
                   mealtype.PriceDiffUnit= Math.ceil(mealtype.PriceDiffUnit/1000)*1000
                   mealtype.PriceShow =  mealtype.PriceDiffUnit.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g, '.');
                 }

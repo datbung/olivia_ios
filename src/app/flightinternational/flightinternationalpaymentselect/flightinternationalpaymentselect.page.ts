@@ -1136,6 +1136,27 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       }
       
     }
+
+    flightbuynowpaylater(){
+      var se=this;
+      se.presentLoading();
+              let itemcache = se._flightService.itemFlightCache;
+                  let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=bnpl&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookingCode + '&buyerPhone=' +itemcache.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&BankId=bnpl'+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2&isFlightInt=true';
+                  se.gf.CreatePayoo(url).then((data) => {
+                   
+                    if(data.success){
+                  
+                      se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+                        se._flightService.itemFlightCache.ischeckpayment = 1;
+                        se.openWebpage(data.returnUrl);
+                        se.setinterval(null);
+                    }else{
+                      se.gf.showAlertOutOfTicketInternational(se._flightService.itemFlightCache, 2);
+                      se.hideLoading();
+                    }
+                    
+                  })
+    }
   }
   
   

@@ -532,7 +532,7 @@ export class GlobalFunction{
         if (type == 'order') {
           res = arrays.some(r => r.booking_id == item.booking_id);
         }
-        if(type == 'experiencesearch' || 'blog'){
+        if(type == 'experiencesearch' || type =='blog'){
           res = arrays.some(r => r.id == item.id);
         }
         if(type=='filtername'){
@@ -1407,6 +1407,9 @@ alert.present();
          break;
        case "momo":
          paymentMethod = "10"
+         break;
+        case "bnpl":
+         paymentMethod = "12"
          break;
      }
      return paymentMethod;
@@ -3700,6 +3703,32 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
 
   async getListLastSearchFlight() {
     return await this.storage.get(('listLastSearchFlight'));
+  }
+
+  async createListLastSearchTicketRegion(item){
+    let listLastSearch = await this.storage.get(('listLastSearchTicketRegion'));
+      if(listLastSearch && listLastSearch.length >0){
+        if(listLastSearch.length >2){
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearch')){
+            listLastSearch.splice(0,1);
+            listLastSearch.push(item);
+          }
+          
+        }else{
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearch')){
+            listLastSearch.push(item);
+          }
+        }
+        this.storage.set('listLastSearchTicketRegion', listLastSearch);
+      }else {
+        listLastSearch = [];
+        listLastSearch.push(item);
+        this.storage.set('listLastSearchTicketRegion', listLastSearch);
+      }
+  }
+
+  async getListLastSearchTicketRegion() {
+    return await this.storage.get(('listLastSearchTicketRegion'));
   }
 
   getAllPlaceByArea(): Promise<any>{

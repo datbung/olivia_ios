@@ -86,7 +86,7 @@
                   <img *ngIf="mealtype.Penaltys[0].PenaltyDescription.length > 70" class="icon-detail-check-green-fix" src="./assets/ic_hoteldetail/ic_info.svg">
                   <span *ngIf="mealtype.Penaltys[0].PenaltyDescription.length <=70" [innerHTML]="mealtype.Penaltys[0].PenaltyDescription.replace('p>','ion-label>')" class="penalty-text"></span>
                   <div (click)="penaltySelected(j+1)" style="margin-top: -4px;">
-                      <button *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription.length > 70" class="penalty-text link-penalty">Chính sách hủy phòng</button>
+                      <button *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription.length > 70" class="penalty-text link-penalty">Huỷ phòng có tính phí</button>
                   </div>
 
                   <div *ngIf="penaltyItemSelected==j+1" [class.active]="penaltyItemSelected==j+1" class="penalty-active arrow">

@@ -131,6 +131,7 @@ export class CombocarnewPage implements OnInit {
   arrBOD: any;
   statusRoom: any;
   itemVoucherCarCombo: any;
+  elementRooom: any;
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -420,6 +421,8 @@ export class CombocarnewPage implements OnInit {
       data.GetVinHms = 1;
       data.GetSMD= 1;
       data.IsB2B=true;
+      data.IsAgoda= true;
+      data.GetOTAPackage = 1;
       var form = data;
       var options = {
         method: 'POST',
@@ -455,6 +458,7 @@ export class CombocarnewPage implements OnInit {
          
             var element = se.checkElement(se.jsonroom);
             if (element) {
+              se.elementRooom= element;
               se.nameroom = element.ClassName;
               se.bookCombo.ComboDetail.comboDetail.roomId=element.MealTypeRates[0].RoomId
               se.PriceAvgPlusTA = element.MealTypeRates[0].PriceAvgPlusTotalTA;
@@ -468,11 +472,13 @@ export class CombocarnewPage implements OnInit {
               se.calculateDiffPriceUnit();
               se.getTransferData(true);
               se.getBOD(element.MealTypeRates[0].RoomId);
+              se.bookCombo.isHBEDBooking = element.Supplier == 'HBED' && element.HotelRoomHBedReservationRequest;
+              se.bookCombo.isAGODABooking = element.Supplier == 'AGD' && element.HotelCheckDetailTokenAgoda;
             } else {
               se.jsonroom = result.Hotels[0].RoomClassesRecomments;
               var element = se.checkElement(se.jsonroom);
               if (element) {
-           
+                se.elementRooom= element;
                 se.nameroom = element.ClassName;
                 se.bookCombo.ComboDetail.comboDetail.roomId=element.MealTypeRates[0].RoomId
                 se.PriceAvgPlusTA = element.MealTypeRates[0].PriceAvgPlusTotalTA;
@@ -486,6 +492,8 @@ export class CombocarnewPage implements OnInit {
                 se.calculateDiffPriceUnit();
                 se.getTransferData(true);
                 se.getBOD(element.MealTypeRates[0].RoomId);
+                se.bookCombo.isHBEDBooking = element.Supplier == 'HBED' && element.HotelRoomHBedReservationRequest;
+                se.bookCombo.isAGODABooking = element.Supplier == 'AGD' && element.HotelCheckDetailTokenAgoda;
               }else{
                 se.departDateTimeStr = "không có vé";
                 se.msgwrn = "Hiện tại không có phòng thoả điều kiện của quy khách, xin vui lòng gửi yêu cầu bên dưới để được nhân viên tư vấn chi tiết!"
@@ -1031,6 +1039,9 @@ export class CombocarnewPage implements OnInit {
             HotelCheckDetailTokenVinHms: self.elementMealtype.HotelCheckDetailTokenVinHms ? self.elementMealtype.HotelCheckDetailTokenVinHms : "",
             HotelCheckPriceTokenSMD: self.elementMealtype.HotelCheckPriceTokenSMD ? self.elementMealtype.HotelCheckPriceTokenSMD : "",
             HotelCheckDetailTokenInternal: self.elementMealtype.Supplier == 'SERI' && self.elementMealtype.HotelCheckDetailTokenInternal ? self.elementMealtype.HotelCheckDetailTokenInternal : "",
+            HotelRoomHBedReservationRequest: this.elementMealtype.Supplier == 'HBED' && this.elementMealtype.HotelRoomHBedReservationRequest ? JSON.stringify(this.elementMealtype.HotelRoomHBedReservationRequest) : "",
+            ReqHBED: this.elementRooom && this.elementRooom.ReqHBED? JSON.stringify(this.elementRooom.ReqHBED) : '',
+            HotelCheckDetailTokenAgoda: this.elementMealtype.Supplier == 'AGD' && this.elementMealtype.HotelCheckDetailTokenAgoda ? this.elementMealtype.HotelCheckDetailTokenAgoda : '',
           },
         }
         self.bookCombo.totalAdult = self.totalAdult;
@@ -2473,12 +2484,16 @@ export class CombocarnewPage implements OnInit {
             se.elementMealtype = itemmealtype;
             se.bookCombo.MealTypeName=se.breakfast ;
             se.statusRoom=itemmealtype.Status;
+            se.elementRooom= itemmealtype;
+            
             //se.breakfast = itemmealtype.Name;
             se.Roomif.arrroom = [];
             se.Roomif.arrroom.push(itemroom);
             if(itemroom && itemmealtype){
               se.callSummaryPriceAfterUpgradeRoom(itemroom, itemmealtype)
             }
+            se.bookCombo.isHBEDBooking = itemmealtype.Supplier == 'HBED' && itemmealtype.HotelRoomHBedReservationRequest;
+            se.bookCombo.isAGODABooking = itemmealtype.Supplier == 'AGD' && itemmealtype.HotelCheckDetailTokenAgoda;
           })
         }
   }

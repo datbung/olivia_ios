@@ -762,25 +762,12 @@ export class FlightPaymentSelectPage implements OnInit {
   NoCreateBooking()
   {
     var se=this;
-    //se.presentLoading();
           se.gf.updatePaymentMethod(se._flightService.itemFlightCache, 3, "","").then(datatype => {
             if (datatype && datatype.isHoldSuccess) {
-              //se.gf.holdTicket(this._flightService.itemFlightCache);
-              //se._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
               let itemcache = se._flightService.itemFlightCache;
                   let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookingCode + '&buyerPhone=' +itemcache.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
                   se.gf.CreatePayoo(url).then((data) => {
-                    //let data = JSON.parse(datapayoo);
                     if(data.success){
-                    //   if(se._voucherService.selectVoucher){
-                    //     se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
-                    //     se._voucherService.publicClearVoucherAfterPaymentDone(1);
-                    //     setTimeout(()=> {
-                    //   se._voucherService.selectVoucher = null;
-                    // },300)
-                    //   }
-                      
-
                       se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                         se._flightService.itemFlightCache.ischeckpayment = 1;
                         se.openWebpage(data.returnUrl);
@@ -1275,6 +1262,59 @@ export class FlightPaymentSelectPage implements OnInit {
         }
       }
     );
+    }
+
+    flightbuynowpaylater(){
+      this.gf.showLoading();
+      this.checkAllowRepay().then((check)=>{
+        if(check){
+          this.CreateUrlOnePay();
+        }else{
+          this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
+              if(check){
+                this.CreateUrlOnePay();
+              }else{
+                this.gf.hideLoading();
+                this.gf.showAlertOutOfTicket(this._flightService.itemFlightCache, 1);
+                clearInterval(this.intervalID);
+               
+              }
+          })
+        }
+        
+      })
+    }
+    //Buildlink mua trước trả sau
+    CreateUrlOnePay() {
+      var se = this;
+      let itemcache = this._flightService.itemFlightCache;
+      se.gf.updatePaymentMethod(se._flightService.itemFlightCache, 12, "bnpl","").then((data)=>{
+        if(data && data.isHoldSuccess){
+          var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=bnpl&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ? itemcache.pnr.bookingCode :  itemcache.pnr.resNo) + '&buyerPhone=' + itemcache.phone + '&memberId=' + se.jti + '&BankId=bnpl' + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+          se.gf.CreatePayoo(url).then(datapayoo => {
+            se.hideLoading();
+            se.gf.hideLoading();
+          if(datapayoo.success){
+            //se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
+            se.openWebpage(datapayoo.returnUrl);
+            se.zone.run(()=>{
+              se.setinterval(null);
+            })
+          }else{
+            se.hideLoading();
+            se.gf.hideLoading();
+            se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+          }
+        
+        })
+  
+        }else{
+          se.hideLoading();
+          se.gf.hideLoading();
+          se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+        }
+      })
+      
     }
   }
   

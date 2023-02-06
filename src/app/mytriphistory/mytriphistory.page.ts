@@ -36,6 +36,7 @@ export class MytripHistoryPage implements OnInit {
   totalHistoryTrip: any;
   pageIndex: number = 1;
   pageSize: number = 5;
+  loadingmore: boolean;
 
   constructor(public _mytripservice: MytripService,
     public networkProvider: NetworkProvider,
@@ -210,6 +211,7 @@ export class MytripHistoryPage implements OnInit {
                 se.listHistoryTrips = [];
                 se.hasloaddata = true;
                 se.hideloader();
+                se.loadingmore = false;
               }
             }
 
@@ -221,10 +223,12 @@ export class MytripHistoryPage implements OnInit {
         se.listHistoryTrips = [];
         se.historytripcount = 0;
         se.hideloader();
+        se.loadingmore = false;
       }
     });
     setTimeout(() => {
       se.hideloader();
+      se.loadingmore = false;
     }, 500)
   }
 
@@ -384,6 +388,16 @@ export class MytripHistoryPage implements OnInit {
     })
   }
 
+  loadmore(){
+    this.zone.run(() => {
+      this.loadingmore = true;
+      if(this.listHistoryTrips.length < this.totalHistoryTrip){
+        this.pageIndex = this.pageIndex + 1;
+        this.getdata(null, true);
+      }
+    })
+  }
+
   getdata(token, ishistory) {
     var se = this;
     if(!se.isConnected){
@@ -410,6 +424,7 @@ export class MytripHistoryPage implements OnInit {
             error.func = "getdata";
             error.param = JSON.stringify(options);
             C.writeErrorLog(error, response);
+            se.loadingmore = false;
           }
           else if (response.statusCode == 401) {
             se.storage.get('jti').then((memberid) => {
@@ -429,6 +444,7 @@ export class MytripHistoryPage implements OnInit {
                 let lstTrips = JSON.parse(body);
                 se.loadMytrip(lstTrips, true);
                 se.hideloader();
+                se.loadingmore = false;
               });
             } else {
               if (response.statusCode != 200) {
@@ -436,7 +452,7 @@ export class MytripHistoryPage implements OnInit {
                 se.hasloaddata = true;
                 se.historytripcount = 0;
                 se.hideloader();
-
+                se.loadingmore = false;
               }
               else if (response.statusCode == 401) {
                 se.storage.get('jti').then((memberid) => {
@@ -460,6 +476,7 @@ export class MytripHistoryPage implements OnInit {
         se.listHistoryTrips = [];
         se.hideloader();
         se.historytripcount = 0;
+        se.loadingmore = false;
       }
     });
     setTimeout(() => {
@@ -489,6 +506,7 @@ export class MytripHistoryPage implements OnInit {
           error.func = "getdata";
           error.param = JSON.stringify(options);
           C.writeErrorLog(error, response);
+          se.loadingmore = false;
         }
 
         else {
@@ -498,6 +516,7 @@ export class MytripHistoryPage implements OnInit {
               let lstTrips = JSON.parse(body);
               se.loadMytrip(lstTrips, true);
               se.hideloader();
+              se.loadingmore = false;
             });
           } else {
             if (response.statusCode != 200) {
@@ -505,7 +524,7 @@ export class MytripHistoryPage implements OnInit {
               se.hasloaddata = true;
               se.historytripcount = 0;
               se.hideloader();
-
+              se.loadingmore = false;
             }
 
           }
@@ -518,6 +537,7 @@ export class MytripHistoryPage implements OnInit {
       se.listHistoryTrips = [];
       se.historytripcount = 0;
       se.hideloader();
+      se.loadingmore = false;
     }
     setTimeout(() => {
       if (se.myloader) {
@@ -912,6 +932,7 @@ export class MytripHistoryPage implements OnInit {
     }
     
     se.hideloader();
+    se.loadingmore = false;
   }
 
 }

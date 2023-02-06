@@ -150,6 +150,7 @@ export class SearchHotel {
     review: number;
     adult: number;
     child: number;
+    elder: number=0;
     roomnumber: number;
     input: string;
     flag: number;
@@ -424,6 +425,9 @@ export class Bookcombo {
   isshuttlebus: any;
   promoCode: string;
   totalPriceBeforeApplyVoucher: number;
+  isHBEDBooking: any;
+  isAGODABooking: any;
+  roomPenalty: any;
 }
 export class childAge {
     numage: string;

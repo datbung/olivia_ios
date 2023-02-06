@@ -604,6 +604,10 @@ export class FlightComboReviewsPage implements OnInit{
             if(itemroom && itemmealtype){
               se.callSummaryPriceAfterUpgradeRoom(itemroom, itemmealtype)
             }
+            se.bookCombo.isHBEDBooking = itemmealtype.Supplier == 'HBED' && itemmealtype.HotelRoomHBedReservationRequest;
+            se.bookCombo.isAGODABooking = itemmealtype.Supplier == 'AGD' && itemmealtype.HotelCheckDetailTokenAgoda;
+            se.checkAllowPaylaterBookXML(itemmealtype);
+            //se.bookCombo.roomPenalty = itemmealtype.Penaltys && itemmealtype.Penaltys.length >0 && itemmealtype.Penaltys[0] && !itemmealtype.Penaltys[0].IsPenaltyFree && itemmealtype.Penaltys[0].PenaltyDescription;
           })
         }
   }
@@ -713,6 +717,23 @@ export class FlightComboReviewsPage implements OnInit{
     }
   };
   /**
+   * Hàm check điều kiện cho phép trả sau với trường hợp book combo có chọn phòng XML(HBED+AGODA)
+   * @param mealtyle 
+   */
+  checkAllowPaylaterBookXML(mealtyle){
+    let se = this;
+      if(mealtyle && mealtyle.Penaltys && mealtyle.Penaltys.length >0){
+        let nd = moment(new Date()).format('YYYYMMDDHHmm');
+        let pd = moment(mealtyle.Penaltys[0].PenaltyDateParse).format('YYYYMMDDHHmm');
+        //Trường hợp ngày hiện tại >= hạn penalty => không cho trả sau
+        if (parseInt(nd) >= parseInt(pd)) {
+            se.bookCombo.roomPenalty = true;
+        }else {//ngày hiện tại < hạn penalty => lấy theo biến IsPenaltyFree
+          se.bookCombo.roomPenalty = !mealtyle.Penaltys[0].IsPenaltyFree;
+        }
+      }
+  }
+  /**
    * Load giá phòng của combo 
    * @param data - data giá phòng (Nếu không có dữ liệu = ko có phòng trống)
    */
@@ -726,6 +747,8 @@ export class FlightComboReviewsPage implements OnInit{
         data.GetSMD= 1;
         data.IsB2B=true;
         data.IsSeri= true;
+        data.IsAgoda= true;
+        data.GetOTAPackage = 1;
         var form = data;
         var options = {
           method: 'POST',
@@ -762,7 +785,9 @@ export class FlightComboReviewsPage implements OnInit{
              
               let cbp = se.bookcombodetail;
               var element = se.checkElement(se.jsonroom);
+              
               if (element) {
+                se.elementRooom= element;
                  //check lấy theo meal
                  var index=0;
                  for (let i = 0; i < element.MealTypeRates.length; i++) {
@@ -782,6 +807,10 @@ export class FlightComboReviewsPage implements OnInit{
                 se.callSummaryPrice(element,index);
                 //se.getBOD(element.MealTypeRates[0].RoomId);
                 se.arrBOD =  se.valueGlobal.notSuggestDaily;
+                se.bookCombo.isHBEDBooking = element.Supplier == 'HBED' && element.HotelRoomHBedReservationRequest;
+                se.bookCombo.isAGODABooking = element.Supplier == 'AGD' && element.HotelCheckDetailTokenAgoda;
+                se.checkAllowPaylaterBookXML(element);
+                //se.bookCombo.roomPenalty = element.Penaltys && element.Penaltys.length >0 && element.Penaltys[0] && !element.Penaltys[0].IsPenaltyFree && element.Penaltys[0].PenaltyDescription;
               } else {
                 se.jsonroom = result.Hotels[0].RoomClassesRecomments;
                   //Hàm tính tiền chênh khi nâng cấp phòng
@@ -789,7 +818,7 @@ export class FlightComboReviewsPage implements OnInit{
                 let cbp = se.bookcombodetail;
                 var element = se.checkElement(se.jsonroom);
                 se.elementRooom=element;
-                
+                console.log(se.elementRooom);
                 //check lấy theo meal
                 if (element) {
                   var index = 0;
@@ -808,6 +837,10 @@ export class FlightComboReviewsPage implements OnInit{
                     se.calculateDiffPriceUnit();
                     se.callSummaryPrice(element, index);
                     se.getBOD(element.MealTypeRates[0].RoomId);
+                    se.bookCombo.isHBEDBooking = element.Supplier == 'HBED' && element.HotelRoomHBedReservationRequest;
+                    se.bookCombo.isAGODABooking = element.Supplier == 'AGD' && element.HotelCheckDetailTokenAgoda;
+                    se.checkAllowPaylaterBookXML(element);
+                    //se.bookCombo.roomPenalty = element.Penaltys && element.Penaltys.length >0 && element.Penaltys[0] && !element.Penaltys[0].IsPenaltyFree && element.Penaltys[0].PenaltyDescription;
                   } else {
                     se.loadpricedone = true;
                   }
@@ -1765,7 +1798,10 @@ export class FlightComboReviewsPage implements OnInit{
                 SupplierName: this.elementMealtype.Supplier,
                 HotelCheckDetailTokenVinHms: this.elementMealtype.HotelCheckDetailTokenVinHms ? this.elementMealtype.HotelCheckDetailTokenVinHms : "",
                 HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : "",
-                HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : ""
+                HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : "",
+                HotelRoomHBedReservationRequest: this.elementMealtype.Supplier == 'HBED' && this.elementMealtype.HotelRoomHBedReservationRequest ? JSON.stringify(this.elementMealtype.HotelRoomHBedReservationRequest) : "",
+                ReqHBED: this.elementRooom && this.elementRooom.ReqHBED? JSON.stringify(this.elementRooom.ReqHBED) : '',
+                HotelCheckDetailTokenAgoda: this.elementMealtype.Supplier == 'AGD' && this.elementMealtype.HotelCheckDetailTokenAgoda ? this.elementMealtype.HotelCheckDetailTokenAgoda : '',
               },
               airLineLuggageDepart: [],
               airLineLuggageReturn: [],
@@ -1882,7 +1918,10 @@ export class FlightComboReviewsPage implements OnInit{
               SupplierName: this.elementMealtype.Supplier,
               HotelCheckDetailTokenVinHms: this.elementMealtype.HotelCheckDetailTokenVinHms ? this.elementMealtype.HotelCheckDetailTokenVinHms : "",
               HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : "",
-              HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : ""
+              HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : "",
+              HotelRoomHBedReservationRequest: this.elementMealtype.Supplier == 'HBED' && this.elementMealtype.HotelRoomHBedReservationRequest ? JSON.stringify(this.elementMealtype.HotelRoomHBedReservationRequest) : "",
+              ReqHBED: this.elementRooom && this.elementRooom.ReqHBED? JSON.stringify(this.elementRooom.ReqHBED) : '',
+              HotelCheckDetailTokenAgoda: this.elementMealtype.Supplier == 'AGD' && this.elementMealtype.HotelCheckDetailTokenAgoda ? this.elementMealtype.HotelCheckDetailTokenAgoda : '',
             }
             objectFlight.HotelBooking = objhotel;
             this.gf.setParams(objectFlight, 'flightcombo');
@@ -1998,7 +2037,10 @@ export class FlightComboReviewsPage implements OnInit{
                 SupplierName: this.elementMealtype.Supplier,
                 HotelCheckDetailTokenVinHms: this.elementMealtype.HotelCheckDetailTokenVinHms ? this.elementMealtype.HotelCheckDetailTokenVinHms : "",
                 HotelCheckPriceTokenSMD: this.elementMealtype.HotelCheckPriceTokenSMD ? this.elementMealtype.HotelCheckPriceTokenSMD : "",
-                HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : ""
+                HotelCheckDetailTokenInternal: this.elementMealtype.Supplier == 'SERI' && this.elementMealtype.HotelCheckDetailTokenInternal ? this.elementMealtype.HotelCheckDetailTokenInternal : "",
+                HotelRoomHBedReservationRequest: this.elementMealtype.Supplier == 'HBED' && this.elementMealtype.HotelRoomHBedReservationRequest ? JSON.stringify(this.elementMealtype.HotelRoomHBedReservationRequest) : "",
+                ReqHBED: this.elementRooom && this.elementRooom.ReqHBED ? JSON.stringify(this.elementRooom.ReqHBED) : '',
+                HotelCheckDetailTokenAgoda: this.elementMealtype.Supplier == 'AGD' && this.elementMealtype.HotelCheckDetailTokenAgoda ? this.elementMealtype.HotelCheckDetailTokenAgoda : '',
               },
               airLineLuggageDepart: [],
               airLineLuggageReturn: [],

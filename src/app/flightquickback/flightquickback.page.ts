@@ -68,7 +68,7 @@ export class FlightquickbackPage implements OnInit {
               
             }
             else if(pageIndex ==3){
-              se.tourService.itemPaymentDone.emit(true);
+              se.tourService.itemPaymentDone.emit(3);
               se.valueGlobal.backValue = "hometour";
               setTimeout(()=>{
                 se.navCtrl.navigateBack('/tabs/tab1');

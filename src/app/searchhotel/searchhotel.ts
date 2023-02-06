@@ -24,6 +24,8 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
   styleUrls: ['searchhotel.scss'],
 })
 export class SearchHotelPage implements OnInit{
+  showInLandTitle: boolean = true;
+  showOutBoundTitle: boolean = true;
   ngOnInit() {
   }
   @ViewChild('ipSearchHotel') myInput ;
@@ -224,30 +226,19 @@ export class SearchHotelPage implements OnInit{
                 })
                 
               }else{
-                // se.items.forEach(e => {
-                //   e.show = false;
-                // })
-
-                // lstitems.forEach(element => {
-                //   let check = se.items.filter((i)=>{ return i.id == element.id });
-                //   if(check && check.length == 0)
-                //   {
-                //     element.show = true;
-                //     se.items.push(element);
-                //   }else{
-                //     check[0].show = true;
-                //   }
-                // })
                 se.items=[];
                    lstitems.forEach(element => {
                     se.items.push(element);
                 })
               }
-            
+            se.showInLandTitle = se.items.some(item => item.inLand);
+            se.showOutBoundTitle = se.items.some(item => !item.inLand);
           }else{
             se.items=[];
             se.ischecktext=true;
             se.ischecklist = true;
+            se.showInLandTitle = false;
+            se.showOutBoundTitle = false;
           }
         });
       })

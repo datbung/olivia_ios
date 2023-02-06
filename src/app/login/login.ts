@@ -53,6 +53,7 @@ export class LoginPage implements OnInit{
     })
     //Lấy app version
     this.appVersion.getVersionNumber().then(version => {
+      console.log(version);
       this.appversion=version;
     })
     gf.googleAnalytion('login', 'load', '');
@@ -592,7 +593,7 @@ export class LoginPage implements OnInit{
             'content-type': 'application/json-patch+json',
             authorization: text
         },
-        body: { tokenId: devicetoken, appVersion: appversion.replace(/\./g, '') },
+        body: { tokenId: devicetoken, appVersion: appversion ? appversion.replace(/\./g, '') : '352',source:6 },
         json: true
       };
       request(options, function (error, response, body) {

@@ -1,0 +1,86 @@
+<div class="div-itemtourslide div-itemticketslide">
+    <div *ngIf="slideData.length >0">
+      <div *ngFor="let itemSlide of slideData; let idx = index;" [ngClass]=" (idx%2) == 0 ? 'cls-itemtour-color' : 'cls-odd'">
+        <div class="title-padding p-left-16 p-right-48 p-top-16 position-relative" *ngIf="itemSlide.topicName" >
+          <ion-label class="text-title2">
+            {{ itemSlide.topicName }}
+          </ion-label>
+          <div class="sub-title" *ngIf="itemSlide.abbreviation">
+            <ion-label class="text-subtitle">
+             {{itemSlide.abbreviation}}
+            </ion-label>
+          </div>
+          <div class="text-seemore" *ngIf="itemSlide.topicName" (click)="showTicketList(itemSlide)">
+            <img src="../../../../../assets/ic_tour/viewall.svg" />
+          </div>
+        </div>
+        <!-- <div class="sub-title p-left-16" *ngIf="itemSlide.note">
+          <ion-label class="text-subtitle">
+            {{ itemSlide.note }}
+          </ion-label>
+        </div> -->
+        <div
+          class="slide2-scroll"
+          (scroll)="onScroll($event)" *ngIf="itemSlide && itemSlide.experienceHomeModels && itemSlide.experienceHomeModels.length >0">
+          <div
+              (click)="showDetail(slide)"
+              [ngClass]="idx == 0 ? 'cls-deal position-relative' : 'cls-deal m-l-16 position-relative' "
+              *ngFor="let slide of itemSlide.experienceHomeModels; let idx = index">
+              <div class="div-wrap-deal"> 
+                <div class="div-wrap-image">
+                  <img class="slide2 img" [src]="slide.avatarLink" />
+                  <div class="float-promo" *ngIf="slide.promotionTitle && slide.promotionTitle.length >0">
+                    <p class="float-promo-description">
+                      {{ slide.promotionTitle }}
+                    </p>
+                  </div>
+                </div>
+                <div [ngClass]="itemSlide.hasTopSale ? 'float-info min-height-186' : 'float-info'">
+                  <div class="div-hotel-name">
+                    <h2 class="hotel-name">
+                      {{ slide.experienceName }}
+                    </h2>
+                  </div>
+                 
+  
+                  <div class="d-flex m-top-8" *ngIf="slide.avgPoint else noavgPoint">
+                    <div class="div-badge">
+                        <div class="text-point">{{slide.avgPoint}}</div>
+                        <div class="text-point-des" *ngIf="slide.avgPoint>9 && slide.avgPoint <=10">Xuất sắc</div>
+                        <div class="text-point-des" *ngIf="slide.avgPoint>8 && slide.avgPoint <=9">Rất tốt</div>
+                        <div class="text-point-des" *ngIf="slide.avgPoint>7 && slide.avgPoint <=8">Khá tốt</div>
+                        <div class="text-point-des" *ngIf="slide.avgPoint>6 && slide.avgPoint <=7">Tạm được</div>
+                        <div class="text-point-des" *ngIf="slide.avgPoint>5 && slide.avgPoint <=6">Không tốt</div>
+                        <div  *ngIf="slide.numOfReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div>
+                    </div>
+                  </div>
+                  <ng-template #noAvgPoint>
+                    <div class="text-point-des m-h-20 m-top-8">Chưa có đánh giá</div>
+                  </ng-template>
+  
+                  <div class="d-flex m-top-8 div-button-sale" *ngIf="slide.TopSale">
+                    <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24 giờ qua</ion-label>
+                  </div>
+
+                  <div *ngIf="slide.notes && slide.notes.length >0" class="m-top-16">
+                    <!-- <div *ngFor="let itemNote of slide.notes; let idx = index;">
+                        <div class="div-item-note">{{itemNote.notes}}</div>
+                    </div> -->
+                    <div class="div-item-note" *ngIf="slide.notes && slide.notes.length >0" [innerHTML]="slide.notes"></div>
+                  </div>
+
+                  <div class="cls-price" >{{ gf.convertNumberToString(slide.priceCurrent) }}đ</div>
+                </div>
+              </div>
+              
+            </div>
+            <div *ngIf="showloadmore" class="div-loadmore">
+              <ion-spinner
+                name="bubbles"
+                class="spinner-bubbles hydrated"
+              ></ion-spinner>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

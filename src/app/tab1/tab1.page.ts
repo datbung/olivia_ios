@@ -434,7 +434,7 @@ export class Tab1Page implements OnInit {
 
     se.tourService.itemPaymentDone.pipe().subscribe((data) => {
       if(data){
-        se.setActiveTab(3);
+        se.setActiveTab(data);
       }
     })
 
@@ -3944,6 +3944,22 @@ export class Tab1Page implements OnInit {
           document.getElementsByClassName("homeflight-footer")[1]['style'].display ='none';
         }
       }
+    }
+    else if (currentIndex === 4) {//Ticket
+      this._mytripservice.rootPage = "hometicket";
+      this.valueGlobal.logingoback = "";
+
+      // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
+      // if (document.querySelector(".tabbar")) {
+      // document.querySelector(".tabbar")['style'].display = 'flex';
+      // if(document.querySelector(".tabbar")[1]){
+      //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
+      //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
+      // }
+      // }
+      // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+      // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+      // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
     }
     else{
       this._mytripservice.rootPage = "homehotel";

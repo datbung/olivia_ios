@@ -371,10 +371,16 @@
         </div>
       </ion-list>
 
-      <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="listHistoryTrips.length < totalHistoryTrip">
+      <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="listHistoryTrips.length < totalHistoryTrip">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="">
         </ion-infinite-scroll-content>
-      </ion-infinite-scroll> 
+      </ion-infinite-scroll>  -->
+      <div class="btn-seemore" (click)="loadmore()" *ngIf="listHistoryTrips.length < totalHistoryTrip && !loadingmore">
+        Xem thêm
+      </div>
+      <div class="btn-seemore" *ngIf="loadingmore">
+        <ion-spinner></ion-spinner>
+      </div>
     </div>
     <!-- history nodata -->
     <div *ngIf="hasloaddata && historytripcount == 0" class="trip-empty">

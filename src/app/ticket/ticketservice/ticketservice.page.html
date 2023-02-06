@@ -1,0 +1,165 @@
+<ion-header class="div-tourdeparturecalendar-header">
+    <ion-toolbar>
+      <ion-buttons slot="secondary" style="position: absolute;" (click)="goback()">
+        <img class="img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
+      </ion-buttons>
+  
+      <ion-title class="text-title">
+          Chọn ngày & gói dịch vụ
+        </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="div-tourdeparturecalendar-content">
+    <div class="p-all-16">
+        <!-- <div class="text-center"><img src="./assets/step/tour_step_1.svg"></div> -->
+        <div *ngIf="itemTicketService.Name" class="text-service-name">{{itemTicketService.Name}}</div>
+        <div *ngIf="itemTicketService.Description" class="text-service-des m-top-8">{{itemTicketService.Description}}</div>
+        <div class="text-service-detail m-top-8" (click)="showTicketServiceDetail(itemTicketService)">Chi tiết gói <span><img class="img-arrow" src="./assets/ic_ticket/arrow-down.svg" /></span></div>
+
+        <div [ngClass]="itemTicketService ? 'm-top-18' : 'm-top-18 cls-no-departure' ">
+            <div class="div-item-departure-date d-flex">
+                <div class="width-60 text-label">
+                    Chọn ngày thăm quan:
+                </div>
+                <div class="width-50 d-flex" (click)="openPickupCalendar()">
+                    <div class="v-align-center m-r-8"><img src="./assets/ic_tour/ic_calendar.svg"></div>
+                    <div class="align-right v-align-center f-18" *ngIf="itemTicketService && loaddeparturedone else loadingsk">{{itemTicketService.AllotmentDateDisplay}}</div>
+                    <ng-template #loadingsk>
+                      <div class="text-normal align-right v-align-center" >
+                        <ion-skeleton-text animated style="width: 100%;height: 24px;border-radius: 4px;"></ion-skeleton-text>
+                      </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="div-item-departure-date d-flex">
+              <div class="width-45">
+                  Người lớn
+              </div>
+              <div class="text-price width-35" *ngIf="loaddeparturedone else loadingsk">
+               <span *ngIf="itemTicketService && itemTicketService.PriceAdultAvg">x {{gf.convertNumberToString(itemTicketService.PriceAdultAvg)}}</span>
+              </div>
+              <ng-template #loadingsk>
+                <div class="text-price width-35">
+                  <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
+                </div>
+             </ng-template>
+
+              <div class="width-40 d-flex div-item-pax">
+                  <div class="div-item-left f-32" (click)="removePax(1)">-</div>
+                  <div class="div-item-center">{{searchhotel.adult}}</div>
+                  <div class="div-item-right f-24" (click)="addPax(1)">+</div>
+              </div>
+            </div>
+
+            <div class="div-item-departure-date d-flex">
+              <div class="width-45">
+                <div>Trẻ em</div>
+                <div class="text-sub">Cao 100-139cm</div>
+                  
+              </div>
+              <div class="text-price width-35" *ngIf="loaddeparturedone else loadingsk">
+                <span *ngIf="itemTicketService && itemTicketService.PriceChildAvg ">x {{gf.convertNumberToString(itemTicketService.PriceChildAvg)}}</span>
+              </div>
+              <ng-template #loadingsk>
+                <div class="text-price width-35">
+                  <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
+                </div>
+             </ng-template>
+              <div class="width-40 d-flex div-item-pax">
+                  <div class="div-item-left f-32" (click)="removePax(2)">-</div>
+                  <div class="div-item-center">{{searchhotel.child}}</div>
+                  <div class="div-item-right f-24" (click)="addPax(2)">+</div>
+              </div>
+            </div>
+            <div class="p-top-20">
+              <label class="text-child-age" *ngIf="searchhotel.arrchild && searchhotel.arrchild.length >0">
+                  Tuổi trẻ em
+                </label>
+                <div *ngFor="let msg of searchhotel.arrchild; let idx = index" class="p-top-20">
+                  <div (click)="selectAge(msg.text)"  class="div-age no-border-bottom">
+                    <ion-label class="text-child">{{msg.text}}</ion-label>
+                    <div class="div-text-age">
+                      <ion-label class="selected-age p-right-8" *ngIf="msg.numage">{{msg.numage}}</ion-label>
+                      <ion-label class="selected-age p-right-8" *ngIf="msg.numage ==0">{{infant}}</ion-label>
+                      <img class="img-down" src="./assets/imgs/ic_down.svg"></div>
+                  </div>
+            
+                </div>
+            
+            </div>
+
+            <div class="div-item-departure-date d-flex">
+              <div class="width-45">
+                  <div>Người lớn tuổi</div>
+                  <div class="text-sub">Trên 60+</div>
+              </div>
+              <div class="text-price width-35" *ngIf="loaddeparturedone else loadingsk">
+                <span *ngIf="itemTicketService && itemTicketService.PriceElderAvg ">x {{gf.convertNumberToString(itemTicketService.PriceElderAvg)}}</span>
+              </div>
+              <ng-template #loadingsk>
+                <div class="text-price width-35">
+                  <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
+                </div>
+             </ng-template>
+              <div class="width-40 d-flex div-item-pax">
+                  <div class="div-item-left f-32" (click)="removePax(3)">-</div>
+                  <div class="div-item-center">{{searchhotel.elder}}</div>
+                  <div class="div-item-right f-24" (click)="addPax(3)">+</div>
+              </div>
+            </div>
+
+            <div *ngIf="hasDeparture">
+              <div class="d-flex div-total m-top-26" *ngIf="itemTicketService.Note">
+                <div class="width-40 text-normal">{{itemTicketService.Note}}</div>
+                <div class="width-60 text-tealish text-right"><span class="text-surcharge" *ngIf="itemTicketService.RateSurchargeAdult">+{{gf.convertNumberToString(itemTicketService.RateSurchargeAdult)}}</span><span>đ</span></div>
+              </div>
+
+              <div [ngClass]="itemTicketService.Note ? 'd-flex div-total': 'd-flex div-total m-top-26'">
+                <div class="width-40 text-normal m-top-8">Tổng cộng</div>
+                <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPriceStr">{{totalPriceStr}}</span><span>đ</span></div>
+              </div>
+
+              <div class="div-point" *ngIf="point || pointbkg">
+                <span *ngIf="point">Bạn có {{ gf.convertNumberToString(point) }} điểm. </span>
+                <span *ngIf="pointbkg">Tích lũy thêm {{ pointbkg }} điểm iVIVU</span>
+              </div>
+
+              <div class="d-flex m-top-12 div-last" *ngIf="hasAllotment">
+                <div class="v-align-center m-r-4"><img src="./assets/ic_tour/flash.svg"></div>
+                <div class="v-align-center text-normal text-red">Xác nhận ngay & xuất vé điện tử tức thời</div>
+              </div>
+              <div class="d-flex m-top-12 div-last" *ngIf="!hasAllotment">
+                <div class="v-align-center m-r-4"><img src="./assets/ic_tour/info.svg"></div>
+                <div class="v-align-center text-normal text-tealish">Liên hệ để xác nhận chỗ</div>
+              </div>
+            </div>
+            <div *ngIf="!hasDeparture">
+              <div class="div-split-panel" ></div>
+              <div class="d-flex m-top-12 div-last" *ngIf="!hasAllotment">
+                <div class="v-align-center m-r-4"><img src="./assets/ic_tour/non.svg"></div>
+                <div class="v-align-center text-normal text-tealish">Chưa có lịch khởi hành</div>
+              </div>
+            </div>
+           
+            
+           
+           
+        </div>
+    </div>
+  </ion-content>
+  <ion-footer class="bg-white">
+    <div class="div-tourdeparturecalendar-footer d-flex">
+      <div [ngClass]="hasDeparture ? 'width-100' : 'width-100 cls-no-departure' " *ngIf="hasAllotment" (click)="book()">
+          <button ion-button round outline class="button btn-book">
+              Đặt ngay
+          </button>
+      </div>
+      <div [ngClass]="hasDeparture ? 'width-100' : 'width-100 cls-no-departure' " *ngIf="!hasAllotment " (click)="requestBook()">
+        <button ion-button round outline [ngClass]="itemTicketService ? 'button btn-book' : 'button btn-book cls-no-departure'">
+            Yêu cầu đặt
+        </button>
+    </div>
+  </div>
+  </ion-footer>

@@ -303,10 +303,11 @@ hr
 }
 .img-momo{
   width: 32px;
-    position: absolute;
-    top: 6px;
-    margin-left: 100px;
+  vertical-align: middle;
+  top: 3px;
+  margin-left: 8px;
 }
+
 .cls-minheight
 {
   --min-height: 48px;
@@ -683,4 +684,15 @@ color: #2f80ed
 
 .p-r-24 {
   padding-right: 24px;
+}
+.m-bottom-16 {
+ margin-bottom: 16px;
+}
+.img-homecredit {
+  width: 56px;
+  background: #e51937;
+  padding: 6px;
+  vertical-align: middle;
+  top: 3px;
+  margin-left: 8px;
 }

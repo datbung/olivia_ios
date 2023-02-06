@@ -16,7 +16,7 @@ import { SearchHotel } from '../providers/book-service';
   styleUrls: ['hotelreviewsimage.scss'],
 })
 export class HotelreviewsimagePage  {
-  arrimgreview=[];cusnamereview;datereview;countslide=1;lengthslide;ischeckslide=false
+  arrimgreview=[];cusnamereview;datereview;countslide=0;lengthslide;ischeckslide=false
   @ViewChild('mySlider') slider: IonSlides;
   captionImg: any;
   hotelName: any;
@@ -33,10 +33,14 @@ export class HotelreviewsimagePage  {
     this.tourName = this.searchhotel.tourDetailName;
     setTimeout(() => {
       this.arrimgreview = this.searchhotel.arrimgreview;
-      this.slider.slideTo(this.searchhotel.indexreviewimg);
+      if(this.searchhotel.indexreviewimg){
+        this.slider.slideTo(this.searchhotel.indexreviewimg);
+        this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
+      }
+      
       this.lengthslide=this.arrimgreview.length;
       this.ischeckslide=true;
-      this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
+      
       
     },900)
     console.log(this.lengthslide=this.arrimgreview.length);
@@ -45,25 +49,30 @@ export class HotelreviewsimagePage  {
   nextslide()
   {
     if (this.countslide<this.arrimgreview.length) {
-      this.countslide= this.countslide+1;
-      this.slider.slideTo(this.countslide-1);
-      this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
+      this.countslide++;
+      this.slider.slideTo(this.countslide);
     }
 
   }
   backslide()
   {
-    if (this.countslide-1>0) {
-      this.countslide= this.countslide-1;
-      this.slider.slideTo(this.countslide-1);
-      this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
+    if (this.countslide-1>=0) {
+      this.countslide--;
+      this.slider.slideTo(this.countslide);
     }
 
   }
   ionSlideDidChange()
   {
+    // this.slider.getActiveIndex().then(index => {
+    //   this.countslide = index;
+    //   this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
+    // });
+  }
+
+  ionSlideTransitionStart() {
     this.slider.getActiveIndex().then(index => {
-      this.countslide = index + 1;
+      this.countslide = index;
       this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
     });
   }

@@ -848,4 +848,22 @@ export class MytripaymentflightselectPage implements OnInit {
     }
   );
   }
+
+  flightbuynowpaylater(){
+    var se = this;
+    var totalPrice=se.totalpricedisplay.toString().replace(/\./g, '').replace(/\,/g, '');
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=bnpl&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.cus_phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&BankId=bnpl'+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+    se.gf.CreatePayoo(url).then(datapayoo => {
+    if(datapayoo.success){
+      se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
+      se._flightService.itemFlightCache.ischeckpayment = 1;
+      se.openWebpage(datapayoo.returnUrl);
+      se.setinterval(null);
+      }else{
+        se.gf.showAlertOutOfTicketFromMytrip(se._flightService.itemFlightCache, 2);
+        se.hideLoading();
+      }
+                    
+    })
+  }
 }

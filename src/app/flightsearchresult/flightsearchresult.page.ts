@@ -3058,18 +3058,23 @@ export class FlightsearchresultPage implements OnInit {
              let totalItemReturnAfterFilter = (se.listReturnFilter ? se.listReturnFilter.length : 0);
 
              if(se.step == 2){
+              se.zone.run(()=>{
                 se.enableFlightFilter = (totalItemDepartAfterFilter != totalItemDepartBeforeFilter) ? 1 : 0;
                 
                 if(se.departFlight && se.departFlight.flightType.indexOf("outBound") != -1){
                   let filterOutBound = se.listReturn.filter((filterairlineitem) => {
                     return filterairlineitem.airlineCode == se.departFlight.airlineCode;
                   })
+                 
                   if(filterOutBound && filterOutBound.length != totalItemReturnAfterFilter){
+                    se.listReturnFilter = filterOutBound;
                     se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
                   }
                 }else {
                   se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;
                 }
+              })
+                
                 
              }else{
                 se.enableFlightFilterReturn = (totalItemReturnAfterFilter != totalItemReturnBeforeFilter) ? 1 : 0;

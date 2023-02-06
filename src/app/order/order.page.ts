@@ -324,6 +324,7 @@ import { tourService } from '../providers/tourService';
           se.hasloaddata = false;
           se.loaddatadone = false;
           se.hasdata= false;
+          se.pageIndex=1;
           se.getdata(null, false);
 
           setTimeout(()=>{
@@ -396,32 +397,35 @@ import { tourService } from '../providers/tourService';
             this.gf.setNetworkStatus(true);
             this.isConnected = true;
             //Có cache thì ưu tiên load cache
-            this.storage.get('listmytrips').then(data => {
-              if (data) {
-                this.loadMytrip(data, false);
-                this.activityService.tab3Loaded = true;
-                //Sau 1s load lại dữ liệu mới nhất
-                setTimeout(() => {
-                  this.getdata(null, false);
-                }, 1 * 1000);
-              } else {
-                setTimeout(() => {
-                  this.getdata(null, false);
-                  this.activityService.tab3Loaded = true;
-                }, 300)
-              }
-            })
-
-            this.storage.get('listmytripshistory').then(data => {
-              if (data) {
-                this.loadMytrip(data, true);
-              }else{
-                setTimeout(()=>{
-                  this.getdata(null, true);
-                },1000)
+            // this.storage.get('listmytrips').then(data => {
+            //   if (data) {
+            //     this.loadMytrip(data, false);
+            //     this.activityService.tab3Loaded = true;
+            //     //Sau 1s load lại dữ liệu mới nhất
+            //     setTimeout(() => {
+            //       this.getdata(null, false);
+            //     }, 1 * 1000);
+            //   } else {
+            //     setTimeout(() => {
+            //       this.getdata(null, false);
+            //       this.activityService.tab3Loaded = true;
+            //     }, 300)
+            //   }
+            // })
+            this.getdata(null, false);
+            setTimeout(()=>{
+              this.getdata(null, true);
+            },1000)
+            // this.storage.get('listmytripshistory').then(data => {
+            //   if (data) {
+            //     this.loadMytrip(data, true);
+            //   }else{
+            //     setTimeout(()=>{
+            //       this.getdata(null, true);
+            //     },1000)
                 
-              }
-            })
+            //   }
+            // })
     
             //load dữ liệu topdeal suggest
             this.storage.get('listtopdealdefault').then((data: any) => {
@@ -541,9 +545,9 @@ import { tourService } from '../providers/tourService';
             var text = "Bearer " + (token ? token : auth_token);
             var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize=5',
+              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory? 10:25),
               //url: "http://localhost:34290/"+ '/api/dashboard/getMyTripPaging?memberId=91f60b04-328e-4e04-a603-cd49139e2c0c&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
-              //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=b2d138c8-378f-404f-ac1e-647df522defa&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
+              //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=8e8ec6ca-d154-46cc-a407-a439268e2460&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               headers:
               {
                 'accept': 'application/json',
@@ -656,7 +660,7 @@ import { tourService } from '../providers/tourService';
           var text = "Bearer " + token;
           var options = {
             method: 'GET',
-            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize=5',
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory?5:25),
             headers:
             {
               'accept': 'application/json',
@@ -740,9 +744,7 @@ import { tourService } from '../providers/tourService';
       loadMytrip(listtrips, ishistory) {
         var se = this;
         se.loadLocation().then((data)=> {
-          if(listtrips.trips && listtrips.trips.length ==0){
-            se.pageIndex =1;
-          }
+          
           se.valueGlobal.countclaim = 0;
           se.totalTrip = listtrips.total;
       
@@ -750,6 +752,9 @@ import { tourService } from '../providers/tourService';
           //List trip sắp đi
           
           if(!ishistory){
+            if(listtrips.trips && listtrips.trips.length ==0){
+            se.pageIndex =1;
+          }
             if (lstTrips && lstTrips.trips && lstTrips.trips.length > 0) {
               se.hasdata = true;
               lstTrips.trips.forEach(element => {
@@ -1763,12 +1768,7 @@ import { tourService } from '../providers/tourService';
             } else {
               se.hasdata = false;
             }
-            se.zone.run(()=>{
-           
-
-              se.hasloaddata = true;
-              se.hasdata = true;
-            })
+            
             setTimeout(() => {
               if (se.myloader) {
                 se.myloader.dismiss();
@@ -1821,7 +1821,10 @@ import { tourService } from '../providers/tourService';
               }
 
               
-
+              se.zone.run(()=>{
+                se.hasloaddata = true;
+                se.hasdata = true;
+              })
             }, 300);
             //se.getListSupportByUser(this.loginuser);
           }
@@ -2363,44 +2366,55 @@ import { tourService } from '../providers/tourService';
               if(elementHis.totalPaxStr){
                 elementHis.totalPaxStr = elementHis.totalPaxStr.replace('|', ',');
               }
-   //check cathay
-   if (elementHis.bookingsComboData) {
-    let Temp = [];
-    Temp.push(elementHis.bookingsComboData);
-    if (Temp) {
+              //check cathay
+              if (elementHis.bookingsComboData) {
+                let Temp = [];
+                Temp.push(elementHis.bookingsComboData);
+                if (Temp) {
 
-      let Temp_Cathay = [];
-      Temp.forEach(function (item) {
+                  let Temp_Cathay = [];
+                  Temp.forEach(function (item) {
 
-        Temp_Cathay.push(
-          item.filter(function (word) {
-            return word.airlineName.toLowerCase().includes("cathay");
-          })
-        );
-      });
-      if (
-        Temp_Cathay[0] &&
-        Temp_Cathay[0][0] && Temp_Cathay[0][0].passengers &&
-        Temp_Cathay[0][0].passengers.length > 0
-      )
-        elementHis.IsCathay = true;
-      else {
-        elementHis.IsCathay = false;
-      }
-      if (elementHis.IsCathay && elementHis.itemdepart && elementHis.itemdepart.passengers.length>0) {
-        elementHis.itemdepart.passengers.forEach(el => {
-          for (let i = 0; i < Temp_Cathay[0][0].passengers.length; i++) {
-            if (el.name.toLowerCase().trim() == Temp_Cathay[0][0].passengers[i].name.toLowerCase().trim()) {
-              el.IsCathay = true;
-              break;
-            }
-          }
+                    Temp_Cathay.push(
+                      item.filter(function (word) {
+                        return word.airlineName.toLowerCase().includes("cathay");
+                      })
+                    );
+                  });
+                  if (
+                    Temp_Cathay[0] &&
+                    Temp_Cathay[0][0] && Temp_Cathay[0][0].passengers &&
+                    Temp_Cathay[0][0].passengers.length > 0
+                  )
+                    elementHis.IsCathay = true;
+                  else {
+                    elementHis.IsCathay = false;
+                  }
+                  if (elementHis.IsCathay && elementHis.itemdepart && elementHis.itemdepart.passengers.length>0) {
+                    elementHis.itemdepart.passengers.forEach(el => {
+                      for (let i = 0; i < Temp_Cathay[0][0].passengers.length; i++) {
+                        if (el.name.toLowerCase().trim() == Temp_Cathay[0][0].passengers[i].name.toLowerCase().trim()) {
+                          el.IsCathay = true;
+                          break;
+                        }
+                      }
 
-        })
-      }
-    }
-  }
+                    })
+                  }
+                }
+              }
               se.listHistoryTrips.push(elementHis);
+
+              // //test bkg ticket
+              // if(elementHis.booking_type == 'TOUR' && elementHis.booking_id=='DL0826140'){
+              //   let clone = elementHis;
+              //   clone.booking_type = 'TICKET';
+              //   clone.hotel_name = "Vé VinWonders Phú Quốc";
+              //   clone.room_name = 'Vé vào cổng VinWonders Phú Quốc';
+              //   clone.bookingOffType = false;
+              //   clone.checkInDisplay = se.gf.getDayOfWeek(clone.start_date).daynameshort+", " + moment(clone.start_date).format('DD-MM-YYYY');
+              //   se.listMyTrips.push(clone);
+              // }
               se.historytripcount++;
               //}
 
@@ -3188,12 +3202,14 @@ import { tourService } from '../providers/tourService';
         if (document.querySelector(".tabbar")) {
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
+        this.getdata(null, false);
       }
       SelectHistoryTrip(){
         this.activeTabTrip = 3;
         if (document.querySelector(".tabbar")) {
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
+        this.getdata(null, true);
       }
     
       SelectFoodTab() {
@@ -4385,6 +4401,7 @@ import { tourService } from '../providers/tourService';
     
       refreshData() {
         var se = this;
+        se.pageIndex=1;
         se.presentLoadingData();
         se.getdata(null, false);
         //se.loadOrder();

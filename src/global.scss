@@ -205,12 +205,14 @@ ion-toggle {
   border-top: solid 0.5px #fff !important;
 }
 
+
 .tour-calendar-custom .month-box .month-title{
   font-size: 16px;
   color: #3f3b3b;
   font-weight: 600;
   margin-top: 24px;
 }
+
 
 @media (min-width: 350px) and (max-width: 414px) {
   .flight-calendar-custom ion-header ion-toolbar:first-child {
@@ -1116,7 +1118,9 @@ ion-toolbar{
 .m-bottom-4{
   margin-bottom: 4px;
 }
-
+.m-top-36 {
+  margin-top: 36px;
+}
 .m-top-32{
   margin-top: 32px;
 }
@@ -1442,6 +1446,7 @@ height: 18px !important;
 .tour-calendar-custom .days-btn.on-selected {
   background: #9fc43a !important;
 }
+
 .days-allotment.on-selected {
   p{
     color: #fff !important;
@@ -1601,4 +1606,68 @@ button.days-btn {
 }
 .p-bottom-126 {
   padding-bottom: 126px;
+}
+
+//ticket
+.ticket-calendar-custom  .month-box .month-title{
+  font-size: 16px;
+  color: #3f3b3b;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
+.ticket-calendar-custom .week-toolbar .week-title{
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-top: solid 0.5px #fff !important;
+}
+.ticket-calendar-custom .days-btn.on-selected {
+  background: #9fc43a !important;
+}
+.ticket-calendar-custom .week-toolbar .week-title{
+  border-top: solid 0.5px #fff !important;
+}
+
+.ticket-calendar-custom {
+
+  .div-month-text-small{
+    transition: visibility 1s, opacity 1s linear;
+    margin-left: 26px;
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+
+    .div-border-small {
+      padding: 6px 12px;
+      padding-top: 4px;
+      border: solid 0.5px #cccccc;
+      border-radius: 4px;
+      margin-right: 12px;
+    }
+    
+    // small{
+    //   visibility: visible;
+    //   bottom: 0 !important;
+    //   margin: 0 !important;
+    //   white-space: nowrap;
+    // }
+    .text-red {
+      color: #e52822;
+    }
+    .text-black {
+      color: #3f3b3b;
+    }
+
+    @media (min-width: 350px) and (max-width: 375px) {
+      margin-left: 18px !important;
+    }
+
+    @media (min-width: 376px) and (max-width: 390px) {
+      margin-left: 19px !important;
+    }
+
+    @media (min-width: 391px) and (max-width: 414px) {
+      margin-left: 21px !important;
+    }
+  }
 }

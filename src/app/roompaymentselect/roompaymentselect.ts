@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { BizTravelService } from '../providers/bizTravelService';
 import { voucherService } from '../providers/voucherService';
+import * as moment from 'moment';
 
 
 /**
@@ -411,6 +412,9 @@ export class RoompaymentselectPage implements OnInit{
                 //url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + databook.code + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankappNew';
                 url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
               }
+              else if(paymentType=='bnpl'){
+                url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&BankId='+paymentType+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+              }
               else{
                 url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + databook.code + '&memberId=' + se.jti+ '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
               }
@@ -418,15 +422,7 @@ export class RoompaymentselectPage implements OnInit{
               this.gf.CreateUrl(url).then(dataBuildLink => {
                 dataBuildLink = JSON.parse(dataBuildLink);
                 if (dataBuildLink.success) {
-                  // if(se._voucherService.selectVoucher){
-                  //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
-                  //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
-                  //   setTimeout(()=> {
-                  //     se._voucherService.selectVoucher = null;
-                  //   },300)
-                    
-                  // }
-                  if (paymentType=='visa') {
+                  if (paymentType=='visa' || paymentType=='bnpl') {
                     se.openWebpage(dataBuildLink.returnUrl);
                   }
                   else if(paymentType=='payoo_store'){
@@ -873,4 +869,9 @@ export class RoompaymentselectPage implements OnInit{
     }
   );
   }
+
+  flightbuynowpaylater() {
+    this.CreateBooking('bnpl');
+  }
+
 }

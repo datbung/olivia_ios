@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { BizTravelService } from '../providers/bizTravelService';
 import { voucherService } from '../providers/voucherService';
+import * as moment from 'moment';
 /**
  * Generated class for the RoompaymentselectEanPage page.
  *
@@ -653,19 +654,15 @@ export class RoompaymentselectEanPage implements OnInit{
                 if (paymentType=='visa') {
                   url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
                 }
+                else if(paymentType=='bnpl'){
+                  url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&BankId='+paymentType+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
+                }
                 else{
                   url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType='+paymentType+'&source=app&amount=' + totalPrice + '&orderCode=' + databook.code + '&buyerPhone=' + this.Roomif.phone + '&memberId=' + se.jti+ '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fmyapp';
                 }
                 this.gf.CreateUrl(url).then(dataBuildLink => {
                   dataBuildLink = JSON.parse(dataBuildLink);
                   if (dataBuildLink.success) {
-                    // if(se._voucherService.selectVoucher){
-                    //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
-                    //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
-                    //   setTimeout(()=> {
-                    //   se._voucherService.selectVoucher = null;
-                    // },300)
-                    // }
                     if (paymentType == 'visa') {
                       se.openWebpage(dataBuildLink.returnUrl);
                     }
@@ -1086,5 +1083,11 @@ export class RoompaymentselectEanPage implements OnInit{
     }
   );
   }
+
+  flightbuynowpaylater() {
+    this.presentLoading();
+    this.continueBooking('bnpl');
+  }
+
 }
 

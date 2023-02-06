@@ -95,3 +95,48 @@
     letter-spacing: -0.4px;
     font-weight: 600;
 }
+
+.div-qrcode {
+    text-align: center;
+
+    .img-qrcode {
+        width: 238px;
+        height: 292px;
+        object-fit: cover;
+    }
+}
+.div-btn-download {
+    text-align: center;
+    margin: auto 54px;
+
+    padding: 10px 16px 10px 12px;
+    border-radius: 4px;
+    background-color: #ecf0f5;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+
+    .btn-download {
+        margin-right: 10px;
+    }
+}
+
+.div-payment-info {
+    padding: 16px 8px;
+    border-radius: 6px;
+    background-color: #f9fbfc;
+
+    .text-payment-info {
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1.5;
+        text-align: left;
+        color: #003c71;
+    }
+
+    .text-sub-payment-info {
+        font-size: 16px;
+        text-align: left;
+        color: #868998;
+    }
+}

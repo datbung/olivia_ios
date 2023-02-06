@@ -26,7 +26,7 @@
       </div>
           
   <div class="center">
-    <ion-slides (ionSlideDidChange)="ionSlideDidChange()" #mySlider >
+    <ion-slides (ionSlideTransitionStart)="ionSlideTransitionStart()" (ionSlideDidChange)="ionSlideDidChange()" #mySlider >
      
       <ion-slide *ngFor="let slide of arrimgreview; let idx = index">
           
@@ -42,7 +42,7 @@
   <div *ngIf="ischeckslide" class="slide div-align-center" style="text-align: center">
     <img  (click)="backslide()"  src="./assets/imgs/back.svg">
       <ion-label style="color: whitesmoke;padding: 40px;font-size: 22px">
-        {{countslide}}/{{lengthslide}}
+        {{countslide+1}}/{{lengthslide}}
       </ion-label> 
     <img  (click)="nextslide()" src="./assets/imgs/next.svg">
   </div>
