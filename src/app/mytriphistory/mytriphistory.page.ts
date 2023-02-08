@@ -585,6 +585,12 @@ export class MytripHistoryPage implements OnInit {
           if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
             elementHis.booking_type = "COMBO_VXR";
           }
+          if(elementHis.booking_id.indexOf('DL') != -1 ){
+            elementHis.tourCheckinDisplay = moment(elementHis.checkInDate).format('DD-MM-YYYY');
+            let _listpax = elementHis.totalPaxStr.split('|');
+            _listpax = _listpax.map((p) => { return p.trim().split(' ').slice(1).join(' ').replace('n', 'N').replace('t', 'T') + ' x' + p.trim().split(' ')[0] });
+            elementHis.tourListPax = _listpax;
+          }
           if(elementHis.booking_type == "20" || elementHis.booking_id.indexOf('OFF') != -1 || elementHis.booking_id.indexOf('TO') != -1){
             elementHis.isFlyBooking = false;
               if(elementHis.hotel_name && (elementHis.room_id || elementHis.hotel_name.toUpperCase().indexOf('VOUCHER') != -1) ){
