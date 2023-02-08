@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { CalendarComponentOptions } from 'ion2-calendar';
-import { SearchHotel, ValueGlobal, Bookcombo } from './../providers/book-service';
+import { SearchHotel, ValueGlobal, Bookcombo, RoomInfo, Booking } from './../providers/book-service';
 import * as moment from 'moment';
 import { ActivityService, GlobalFunction } from './../providers/globalfunction';
 import { OnInit } from '@angular/core';
@@ -30,6 +30,8 @@ export class PaymentqrcodePage implements OnInit {
     accountNumber: string;
     bankName: string;
   checkreview: number;
+  private _email: any;
+  defaultEmail: any;
 
     constructor(public platform:Platform,  public zone: NgZone,public navCtrl: NavController,public modalCtrl: ModalController,
         public searchhotel: SearchHotel,public valueGlobal:ValueGlobal,public gf: GlobalFunction,private launchReview: LaunchReview,
@@ -42,7 +44,9 @@ export class PaymentqrcodePage implements OnInit {
         private storage: Storage,
         private alertCtrl: AlertController,
         public tourService: tourService,
-        public bookCombo: Bookcombo
+        public bookCombo: Bookcombo,
+        public Roomif: RoomInfo,
+        public booking: Booking,
          ){
             this.bankName = activityService.bankName;
             this.bankTransfer = activityService.bankTransfer;
@@ -58,6 +62,16 @@ export class PaymentqrcodePage implements OnInit {
                 this.checkreview=checkreview;
               }
             })
+            this.storage.get('email').then(email => {
+              this.defaultEmail = email;
+
+              this._email = (this.activityService.qrcodepaymentfrom == 1 ? this._flightService.itemFlightCache.email : 
+                (( (this.activityService.qrcodepaymentfrom == 2 || this.activityService.qrcodepaymentfrom == 4 || this.activityService.qrcodepaymentfrom == 5)? this.Roomif.addressorder : 
+                  (this.activityService.qrcodepaymentfrom == 3 ? this.booking.CEmail : (
+                    (this.activityService.qrcodepaymentfrom == 4 ? this.booking.CEmail : this.defaultEmail
+                  )))))) ;
+            })
+           
         }
     ngOnInit() {
 
