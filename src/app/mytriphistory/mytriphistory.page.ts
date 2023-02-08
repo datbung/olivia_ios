@@ -35,7 +35,7 @@ export class MytripHistoryPage implements OnInit {
   _infiniteScroll: any;
   totalHistoryTrip: any;
   pageIndex: number = 1;
-  pageSize: number = 5;
+  pageSize: number = 10;
   loadingmore: boolean;
 
   constructor(public _mytripservice: MytripService,
