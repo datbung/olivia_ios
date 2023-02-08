@@ -37,11 +37,11 @@ import { tourService } from '../providers/tourService';
   })
   export class OrderPage {
     
+    @ViewChild('scrollArea') scrollArea: IonContent;
     @ViewChild(IonContent) content: IonContent;
     @ViewChild('mySlider') slider: IonSlides;
     @Input() rootpage: any;
-    @ViewChild('scrollArea') scrollArea: IonContent;
-    
+  
     public listMyTrips = [];
     public listHistoryTrips = [];
     public listRequestTrips = [];
@@ -89,7 +89,7 @@ import { tourService } from '../providers/tourService';
     arrchildinsurrance: any = [];
     arrchild: any = [];
     private subscription: Subscription;
-    listClaimed: any=[];
+    listClaimed: any = [];
     listClaimedFlightOriginal: any = [];
     firstload: any = true;
     departCodeDisplay: string;
@@ -106,7 +106,7 @@ import { tourService } from '../providers/tourService';
     textAirpotArrivalDepart: string;
     textAirpotArrivalReturn: string;
     listWeek: any = [];
-    mylistOrders: any=[];
+    mylistOrders: any = [];
     listOrderDinnerActive: any;
     listOrderActive: any;
     loaddatadone: boolean;
@@ -114,56 +114,43 @@ import { tourService } from '../providers/tourService';
     foodtextorder: any;
     showOnlyOne: any;
     detail: any;
-  pageIndex: any=1;
-  pageSize: any=25;
-  totalTrip: any=0;
-  _infiniteScroll: any;
-  options: NativeTransitionOptions = {
-    direction: 'left',
-    duration: 500,
-    slowdownfactor: 3,
-    slidePixels: 20,
-    iosdelay: 100,
-    androiddelay: 150,
-    fixedPixelsTop: 0,
-    fixedPixelsBottom: 60
-   }
-   enableheader = false;
-   itemsks = [1,2,3,4,5,6];
-  cincombodeparture: string;
-  cincomboarrival: string;
-  noLoginObj: any;
-  childList: any;
-  expandDivTourNotes: boolean;
-  expandDivTourInfo: boolean;
-  expandDivIncludePrice: boolean;
-  bookingjson: any;
-  totalCost=0;
-  flightRoundTripStr: string;
-  totalPaxStr: any;
-  loadsummarydone: any;
-
-  baggageHandedDepart;baggageHandedReturn;totalVMB=0;
-  totalService: number;
-  luggageSignedDepart: any;
-  departConditionInfo: any;
-  returnConditionInfo: any;
-  luggageSignedReturn: any;
-  isdkv=false;
-  ishdnp=false;
-  isptp=false;
-  isttt=false;
-  booking_json_data: any;
-  PromotionNote:any;
-  ischeckStops=false;
-
-  departAirport:any;
-  returnAirport:any;
-  totalDichung=0;
-  coutDC: number;
-  totalHotel: number;
-  HotelPolicies: any;
-  amount_after_tax: any;
+    pageIndex: any = 1;
+    pageSize: any = 10;
+    totalTrip: any = 0;
+    _infiniteScroll: any;
+    enableheader = false;
+    itemsks = [1, 2, 3, 4, 5, 6];
+    cincombodeparture: string;
+    cincomboarrival: string;
+    noLoginObj: any;
+    childList: any; cusaddress;
+    expandDivTourNotes: boolean;
+    expandDivTourInfo: boolean;
+    expandDivIncludePrice: boolean;
+    _inAppBrowser: any;
+    loadsummarydone: any;
+  
+    baggageHandedDepart; baggageHandedReturn; totalVMB = 0;
+    totalService: number;
+    luggageSignedDepart: any;
+    departConditionInfo: any;
+    returnConditionInfo: any;
+    luggageSignedReturn: any;
+    isdkv = false;
+    ishdnp = false;
+    isptp = false;
+    isttt = false;
+    booking_json_data: any;
+    PromotionNote: any;
+    ischeckStops = false;
+  
+    departAirport: any;
+    returnAirport: any;
+    totalDichung = 0;
+    coutDC: number;
+    totalHotel: number;
+    HotelPolicies: any;
+    amount_after_tax: any;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -739,741 +726,915 @@ import { tourService } from '../providers/tourService';
     
       loadMytrip(listtrips, ishistory) {
         var se = this;
-        se.loadLocation().then((data)=> {
-          if(listtrips.trips && listtrips.trips.length ==0){
-            se.pageIndex =1;
+        se.loadLocation().then((data) => {
+          if (listtrips.trips && listtrips.trips.length == 0) {
+            se.pageIndex = 1;
           }
           se.valueGlobal.countclaim = 0;
           se.totalTrip = listtrips.total;
-      
+    
           let lstTrips = listtrips;
           //List trip sắp đi
-          
-          if(!ishistory){
+    
+          if (!ishistory) {
             if (lstTrips && lstTrips.trips && lstTrips.trips.length > 0) {
               se.hasdata = true;
               lstTrips.trips.forEach(element => {
-  
-                if(!se.gf.checkExistsItemInArray(se.listMyTrips, element, 'order')){
+    
+                if (!se.gf.checkExistsItemInArray(se.listMyTrips, element, 'order')) {
                   if (element.booking_id && (element.booking_id.indexOf("FLY") == -1 && element.booking_id.indexOf("VMB") == -1) && element.booking_type != "CB_FLY_HOTEL") {
                     if (element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1) {
                       element.booking_type = "COMBO_VXR";
                     }
                     //tour
-                    else if(element.booking_id && (element.booking_id.indexOf("DL") != -1 || element.booking_id.indexOf("TO") != -1 )){
+                    else if (element.booking_id && (element.booking_id.indexOf("DL") != -1 || element.booking_id.indexOf("TO") != -1)) {
                       element.booking_type = "TOUR";
                       element.tourCheckinDisplay = moment(element.checkInDate).format('DD-MM-YYYY');
                       let _listpax = element.totalPaxStr.split('|');
-                      _listpax = _listpax.map((p)=>{ return  p.trim().split(' ').slice(1).join(' ').replace('n','N').replace('t','T') + ' x' + p.trim().split(' ')[0] });
+                      _listpax = _listpax.map((p) => { return p.trim().split(' ').slice(1).join(' ').replace('n', 'N').replace('t', 'T') + ' x' + p.trim().split(' ')[0] });
                       element.tourListPax = _listpax;
-
-                      if(element.child_ages){
-                        let countstring = element.child_ages.match(/tuổi/g || []).length;
-                        let inputstr = element.child_ages;
-                        for (let index = 0; index < countstring; index++) {
-                            inputstr = inputstr.replace('tuổi','');
-                          }
-                          element.childAgesDisplay = inputstr;
-                      }
                     }
                     element.isFlyBooking = false;
-                    
+    
                     //if (element.payment_status != 3 && element.payment_status != -2) {
-                      if (element.avatar && element.avatar.indexOf("104x104") ==-1  && element.avatar.indexOf('i.travelapi.com') ==-1) {
-                        let urlavatar = "";
-                        let tail = "";
-                        if(element.avatar.indexOf('jpeg') != -1){
-                          urlavatar = element.avatar.substring(0, element.avatar.length - 5);
-                          tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
-                        }else{
-                          urlavatar = element.avatar.substring(0, element.avatar.length - 4);
-                          tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
-                        }
-                        element.avatar = urlavatar + "-" + "104x104" + tail;
+                    if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1) {
+                      let urlavatar = "";
+                      let tail = "";
+                      if (element.avatar.indexOf('jpeg') != -1) {
+                        urlavatar = element.avatar.substring(0, element.avatar.length - 5);
+                        tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
+                      } else {
+                        urlavatar = element.avatar.substring(0, element.avatar.length - 4);
+                        tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
                       }
-                      if (element.avatar ) {
-                        element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : ('https:' +  element.avatar);
-                      }
-                      
-                      if (element.delivery_payment_date) {
-                        let arrpaymentdate = element.delivery_payment_date.split("T");
-                        let hour ='',day='';
-                        let arrday;
-                        if(arrpaymentdate && arrpaymentdate.length >1){
-                          //hour = arrpaymentdate[1].substring(0,5);
-                          let arrhour = arrpaymentdate[1].substring(0,5).split(":");
-                          if(arrhour && arrhour.length>0){
-                            hour = arrhour[0].toString() + "h" + arrhour[1].toString();
-                          }
-                            arrday = arrpaymentdate[0].split('-');
-                          if(arrday && arrday.length>0){
-                            day = arrday[2].toString()+"/"+arrday[1].toString();
-                          }
+                      element.avatar = urlavatar + "-" + "104x104" + tail;
+                    }
+                    if (element.avatar) {
+                      element.avatar = (element.avatar.toLocaleString().trim().indexOf("http") != -1) ? element.avatar : ('https:' + element.avatar);
+                    }
+                    if (element.delivery_payment_date) {
+                      let arrpaymentdate = element.delivery_payment_date.split("T");
+                      let hour = '', day = '';
+                      let arrday;
+                      if (arrpaymentdate && arrpaymentdate.length > 1) {
+                        //hour = arrpaymentdate[1].substring(0,5);
+                        let arrhour = arrpaymentdate[1].substring(0, 5).split(":");
+                        if (arrhour && arrhour.length > 0) {
+                          hour = arrhour[0].toString() + "h" + arrhour[1].toString();
                         }
-                        element.deliveryPaymentDisplay = "" +hour + ", " + day;
-                        
-                        let arrhours = arrpaymentdate[1].split(":");
-                        let today = new Date();
-                        let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
-                        let diffminutes = moment(d).diff(today, 'minutes');
-                        //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
-                        if(diffminutes <0){
+                        arrday = arrpaymentdate[0].split('-');
+                        if (arrday && arrday.length > 0) {
+                          day = arrday[2].toString() + "/" + arrday[1].toString();
+                        }
+                      }
+                      element.deliveryPaymentDisplay = "" + hour + ", " + day;
+    
+                      let arrhours = arrpaymentdate[1].split(":");
+                      let today = new Date();
+                      let d = new Date(Number(arrday[0]), Number(arrday[1]) - 1, Number(arrday[2]), Number(arrhours[0]), Number(arrhours[1]), 0);
+                      let diffminutes = moment(d).diff(today, 'minutes');
+                      //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
+                      if (diffminutes < 0) {
+                        element.deliveryPaymentDisplay = "";
+                      }
+                      else {
+                        //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+    
+                        element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                        element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
+                        if (!(element.pay_method == 3 || element.pay_method == 51 || element.pay_method == 2)) {
+                          var obj = se.gf.getbank(element.pay_method);
+                          element.urlimgbank = obj.urlimgbank;
+                          element.textbank = obj.textbank;
+                          element.accountNumber = obj.accountNumber;
+                          element.bankName = obj.bankName;
+                          element.url = obj.url;
+                        } else if (element.pay_method == 3) {
+                          if (element.payment_info && element.payment_info.length > 0) {
+                            element.payment_info = JSON.parse(element.payment_info);
+                          }
+                          element.PaymentCode = element.payment_info.PaymentCode;
+                        }
+    
+                      }
+                      if (diffminutes < 60) {
+                        element.paymentBefore = diffminutes + "'";
+                        if (diffminutes < 15) {
                           element.deliveryPaymentDisplay = "";
                         }
-                        else{
-                          //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-
-                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
-                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");                          
-                          if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
-                            var obj=se.gf.getbank(element.pay_method);
-                            element.urlimgbank =obj.urlimgbank;
-                            element.textbank =obj.textbank;
-                            element.accountNumber =obj.accountNumber;
-                            element.bankName =obj.bankName;
-                            element.url =obj.url;
-                          } else if (element.pay_method==3) {
-                            if(element.payment_info && element.payment_info.length >0){
-                              element.payment_info=JSON.parse(element.payment_info);
+                      } else if (diffminutes >= 60) {
+                        let hours = Math.floor(diffminutes / 60);
+                        let minutes = diffminutes - (hours * 60);
+                        element.paymentBefore = hours + "h" + minutes + "'";
+                      }
+    
+                      if (element.extra_guest_info) {
+                        let arrpax = element.extra_guest_info.split('|');
+                        if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                          element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
+                        } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                          element.paxDisplay = arrpax[0].toString() + " người lớn";
+                        }
+                      }
+                      if (element.amount_after_tax) {
+                        element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      }
+                    }
+    
+                    if (element.booking_type == "20" || element.booking_id.indexOf('OFF') != -1 || element.booking_id.indexOf('TO') != -1) {
+                      if (element.hotel_name && (element.room_id || element.hotel_name.toUpperCase().indexOf('VOUCHER') != -1)) {
+                        element.bookingOffType = 1;//KS
+                      }
+                      else if (element.hotel_name && (element.hotel_name.toUpperCase().indexOf('VIETJET') != -1
+                        || element.hotel_name.toUpperCase().indexOf('VIETNAM') != -1)
+                        || element.hotel_name.toUpperCase().indexOf('JETSTAR') != -1
+                        || element.hotel_name.toUpperCase().indexOf('BAMBOO') != -1
+                        || element.hotel_name.toUpperCase().indexOf('VMB') != -1
+                        || element.hotel_name.toUpperCase().indexOf('VÉ MÁY BAY') != -1) {
+                        element.bookingOffType = 2;//VMB
+                      }
+                      else if (element.hotel_name && (element.hotel_name.toUpperCase().indexOf('TRANSFER') != -1 || element.hotel_name.toUpperCase().indexOf('XE') != -1)) {
+                        element.bookingOffType = 3;//DC
+                      } else if (element.booking_id.indexOf('TO') != -1) {
+                        element.bookingOffType = 4;//TOUR
+                      }
+                      element.delivery_payment_date_display = "";
+                    }
+    
+                    element.isRequestTrip = false;
+                    //date display
+                    element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM-YYYY');
+                    element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+    
+                    element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM');
+                    element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+                    element.departAirport = se.getAirportByCode(element.departCode);
+                    element.returnAirport = se.getAirportByCode(element.arrivalCode);
+                    se.getRatingStar(element);
+                    // if (element.booking_id=='IVIVU1003793') {
+                    //   se.listMyTrips.push(element);
+                    // }
+                    se.listMyTrips.push(element);
+                    se.mytripcount++;
+                    if (element.insuranceInfo && element.insuranceInfo.adultList.length > 0) {
+                      if (se.checkItemHasNotClaim(element.insuranceInfo.adultList) || se.checkItemHasNotClaim(element.insuranceInfo.childList)) {
+                        se.zone.run(() => {
+                          se.valueGlobal.countclaim++;
+                        })
+                      }
+                    }
+    
+                    //tính giờ bay
+                    if (element.bookingsComboData && element.bookingsComboData.length > 0) {
+                      let diffhours = element.bookingsComboData[0].arrivalTime ? element.bookingsComboData[0].arrivalTime.replace(':', '') * 1 - element.bookingsComboData[0].departureTime.replace(':', '') * 1 : 0;
+                      if (diffhours) {
+                        let str = diffhours.toString();
+                        let m = str.substring(str.length - 2, str.length);
+                        let h = str.substring(0, str.length - 2);
+                        h = h.length < 2 ? "0" + h + "h" : h + "h";
+                        m = m != "00" ? m + "m" : "";
+                        element.bookingsComboData[0].flightTimeDisplay = h + m;
+                      }
+                      let ddate = element.checkInDate;
+                      element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format("DD-MM-YYYY");
+                      element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format("DD-MM-YYYY");
+                      //Thay mới ngày bay
+                      if (element.bookingsComboData) {
+                        if (element.bookingsComboData && element.bookingsComboData.length > 1) {
+    
+                          for (let i = 0; i < 2; i++) {
+                            const elementNew = element.bookingsComboData[i];
+                            if (i == 0) {
+                              if (elementNew.departureDate && !elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDate.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDate.split('-');
+                                }
+                                if (elementNew.departureDate.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDate.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              }
+                              if (elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDateNew.split('-');
+                                }
+                                if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDateNew.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              }
+                            } else {
+                              if (elementNew.departureDate && !elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDate.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDate.split('-');
+                                }
+                                if (elementNew.departureDate.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDate.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              }
+                              if (elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDateNew.split('-');
+                                }
+                                if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDateNew.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              }
                             }
-                            element.PaymentCode=element.payment_info.PaymentCode;
+      
                           }
-                        
                         }
-                        if (diffminutes<60) {
-                          element.paymentBefore = diffminutes+"'";
-                          if(diffminutes<15){
-                            element.deliveryPaymentDisplay = "";
-                          }
-                        }else if (diffminutes>=60){
-                          let hours = Math.floor(diffminutes/60);
-                          let minutes = diffminutes - (hours * 60);
-                            element.paymentBefore = hours +"h"+minutes+"'";
-                        }
+                      }
                       
-                        if (element.extra_guest_info) {
-                          let arrpax = element.extra_guest_info.split('|');
-                          if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
-                            element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                          } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
-                            element.paxDisplay = arrpax[0].toString() + " người lớn";
-                          }
-                        }
-                        if (element.amount_after_tax) {
-                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        }
-                      }
-
-                      if(element.booking_type == "20" || element.booking_id.indexOf('OFF') != -1 || element.booking_id.indexOf('TO') != -1){
-                        if(element.hotel_name && (element.room_id || element.hotel_name.toUpperCase().indexOf('VOUCHER') != -1) ){
-                          element.bookingOffType = 1;//KS
-                        }
-                        else if(element.hotel_name && (element.hotel_name.toUpperCase().indexOf('VIETJET') != -1 
-                         || element.hotel_name.toUpperCase().indexOf('VIETNAM') != -1) 
-                         || element.hotel_name.toUpperCase().indexOf('JETSTAR') != -1 
-                         || element.hotel_name.toUpperCase().indexOf('BAMBOO') != -1
-                         || element.hotel_name.toUpperCase().indexOf('VMB') != -1
-                         || element.hotel_name.toUpperCase().indexOf('VÉ MÁY BAY') != -1){
-                           element.bookingOffType = 2;//VMB
-                         }
-                         else if(element.hotel_name && (element.hotel_name.toUpperCase().indexOf('TRANSFER') != -1 || element.hotel_name.toUpperCase().indexOf('XE') != -1)){
-                          element.bookingOffType = 3;//DC
-                         }else if(element.booking_id.indexOf('TO') != -1){
-                          element.bookingOffType = 4;//TOUR
-                         }
-                         element.delivery_payment_date_display ="";
-                      }
-
-                      element.isRequestTrip = false;
-                      //date display
-                      element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM-YYYY');
-                      element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
-
-                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM');
-                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
-                      element.departAirport = se.getAirportByCode(element.departCode);
-                      element.returnAirport = se.getAirportByCode(element.arrivalCode);
-                      se.getRatingStar(element);
-                      // if (element.booking_id=='VMB1651882') {
-                      //   se.listMyTrips.push(element);
-                      // }
-                       se.listMyTrips.push(element);
-                      se.mytripcount++;
-                      if (element.insuranceInfo && element.insuranceInfo.adultList.length > 0) {
-                        if (se.checkItemHasNotClaim(element.insuranceInfo.adultList) || se.checkItemHasNotClaim(element.insuranceInfo.childList)) {
-                          se.zone.run(() => {
-                            se.valueGlobal.countclaim++;
-                          })
-                        }
-                      }
-          
-                      //tính giờ bay
-                      if(element.bookingsComboData && element.bookingsComboData.length >0){
-                        let diffhours = element.bookingsComboData[0].arrivalTime ? element.bookingsComboData[0].arrivalTime.replace(':','')*1 - element.bookingsComboData[0].departureTime.replace(':','')*1 : 0;
-                        if(diffhours){
+                      if (element.bookingsComboData[1]) {
+                        let diffhours = element.bookingsComboData[1].arrivalTime ? element.bookingsComboData[1].arrivalTime.replace(':', '') * 1 - element.bookingsComboData[1].departureTime.replace(':', '') * 1 : 0;
+                        if (diffhours) {
                           let str = diffhours.toString();
                           let m = str.substring(str.length - 2, str.length);
                           let h = str.substring(0, str.length - 2);
-                          h = h.length <2 ? "0"+h +"h" : h +"h";
+                          h = h.length < 2 ? "0" + h + "h" : h + "h";
                           m = m != "00" ? m + "m" : "";
-                          element.bookingsComboData[0].flightTimeDisplay = h + m;
+                          element.bookingsComboData[1].flightTimeDisplay = h + m;
                         }
-                        let ddate = element.checkInDate;
-                        // element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM');
-                        element.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD-MM-YYYY');
-
-                        if(element.bookingsComboData[1]){
-                          let diffhours = element.bookingsComboData[1].arrivalTime ? element.bookingsComboData[1].arrivalTime.replace(':','')*1 - element.bookingsComboData[1].departureTime.replace(':','')*1 : 0;
-                          if(diffhours){
-                            let str = diffhours.toString();
-                            let m = str.substring(str.length - 2, str.length);
-                            let h = str.substring(0, str.length - 2);
-                            h = h.length <2 ? "0"+h +"h" : h +"h";
-                            m = m != "00" ? m + "m" : "";
-                            element.bookingsComboData[1].flightTimeDisplay = h + m;
-                          }
-          
-                          let rdate = element.checkOutDate;
-                          element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD-MM-YYYY');
-                        }
-                        element.arrPickupDropoff = [];
-                        element.bookingsComboData.forEach(el => {
-                          if(el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP"){
-                            element.isPickupDropoff = true;
-                            el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
-                            element.arrPickupDropoff.push(el);
-                              if(el.departureDate){
-                                let newdate = el.departureDate.split('/');
-                                if(newdate && newdate.length >1){
-                                  let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                                  el.departureDateDisplay =  moment(d).format("DD-MM");
-                                }
-                                
-                              }
-                              
-                          }
-
-                            if (el.airlineName.toLowerCase().indexOf('cathay') != -1) {
-                                element.hasCathay = true;
-                            }
-                        });
-
-                        if(element.arrPickupDropoff && element.arrPickupDropoff.length >0){
-                          se.zone.run(() => element.arrPickupDropoff.sort(function (a, b) {
-                            return a.sortPD - b.sortPD;
-                          }))
-                        }
+    
+                        // let rdate = element.checkOutDate;
+                        // element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname + ", " + moment(rdate).format('DD-MM-YYYY');
                       }
-                      
+                      element.arrPickupDropoff = [];
+                      element.bookingsComboData.forEach(el => {
+                        if (el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP") {
+                          element.isPickupDropoff = true;
+                          el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
+                          element.arrPickupDropoff.push(el);
+                          if (el.departureDate) {
+                            let newdate = el.departureDate.split('/');
+                            if (newdate && newdate.length > 1) {
+                              let d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              el.departureDateDisplay = moment(d).format("DD-MM");
+                            }
+    
+                          }
+    
+                        }
+    
+                        if (el.airlineName.toLowerCase().indexOf('cathay') != -1) {
+                          element.hasCathay = true;
+                        }
+                      });
+    
+                      if (element.arrPickupDropoff && element.arrPickupDropoff.length > 0) {
+                        se.zone.run(() => element.arrPickupDropoff.sort(function (a, b) {
+                          return a.sortPD - b.sortPD;
+                        }))
+                      }
+                    }
+    
                     //}
                   }
-                  
+    
                   //list vmb
-                  else{
-                    if(element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1){
+                  else {
+                    if (element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1) {
                       element.booking_type = "COMBO_VXR";
                     }
-                    
+    
                     //if (element.payment_status != 3 && element.payment_status != -2) {
-                      //if (element.payment_status != 3) {
-                        if (element.avatar && element.avatar.indexOf("104x104") ==-1  && element.avatar.indexOf('i.travelapi.com') ==-1) {
-                        let urlavatar = element.avatar.substring(0, element.avatar.length - 4);
-                        let tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
-                        element.avatar = urlavatar + "-" + "104x104" + tail;
+                    //if (element.payment_status != 3) {
+                    if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1) {
+                      let urlavatar = element.avatar.substring(0, element.avatar.length - 4);
+                      let tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
+                      element.avatar = urlavatar + "-" + "104x104" + tail;
+                    }
+                    if (element.avatar) {
+                      element.avatar = (element.avatar.toLocaleString().trim().indexOf("http") != -1) ? element.avatar : ('https:' + element.avatar);
+                    }
+                    if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
+                      element.isFlyBooking = true;
+    
+                      if (element.hotel_name.indexOf("VMB QT") != -1) {
+    
+                        if (element.booking_json_data) {
+                          console.log(JSON.parse(element.booking_json_data));
+                          element.bookingjson = JSON.parse(element.booking_json_data);
+                          if (element.bookingjson && element.bookingjson.length > 0) {
+                            element.totalCost = 0;
+                            element.bookingjson.forEach(elementbkg => {
+                              if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
+                                element.isBookingVMBQT = true;
+                              }
+    
+                              if (elementbkg && elementbkg.Transits) {
+                                element.totalCost += elementbkg.TotalCost * 1;
+    
+                                for (let index = 0; index < elementbkg.Transits.length; index++) {
+                                  const element = elementbkg.Transits[index];
+                                  element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                                  element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
+                                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
+    
+                                  element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                                  element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                                  let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).dayname + ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+    
+                                  let elementNext = elementbkg.Transits[index + 1];
+                                  if (elementNext) {
+    
+                                    let dt = elementNext.DepartTime.replace('/Date(', '').replace(')/', '') * 1;
+                                    let lt = element.LandingTime.replace('/Date(', '').replace(')/', '') * 1;
+                                    let diffminutes = moment(dt).diff(lt, 'minutes');
+                                    if (diffminutes) {
+                                      let hours: any = Math.floor(diffminutes / 60);
+                                      let minutes: any = diffminutes - (hours * 60);
+                                      if (hours < 10) {
+                                        hours = hours != 0 ? "0" + hours : "0";
+                                      }
+                                      if (minutes < 10) {
+                                        minutes = "0" + minutes;
+                                      }
+                                      element.timeOverlay = hours + ' tiếng ' + minutes + ' phút';
+                                    }
+                                  }
+                                }
+    
+                              }
+                            });
+    
+                          }
+                          element.flightRoundTripStr = 'Vé máy bay ' + (element.bookingjson.length > 1 ? 'khứ hồi' : 'một chiều');
+                          if (element.totalPaxStr) {
+                            element.totalPaxStrVMBQT = element.totalPaxStr.replace(' |', ',');
+                          }
+                        }
                       }
-                      if(element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL") ){
-                        element.isFlyBooking = true;
-
-                        if(element.hotel_name.indexOf("VMB QT") != -1){
-                            if(element.booking_json_data){
-                              console.log(JSON.parse(element.booking_json_data));
-                              element.bookingjson = JSON.parse(element.booking_json_data);
-                              if(element.bookingjson && element.bookingjson.length >0){
-                                element.totalCost = 0;
-                                
-                                element.bookingjson.forEach(elementbkg => {
-                                  if(elementbkg && elementbkg.Supplier3rd == "Travelport"){
-                                    element.isBookingVMBQT = true;
-                                  }
-                                  if(elementbkg && elementbkg.Transits){
-                                    element.totalCost += elementbkg.TotalCost*1;
-                                    
-                                    for (let index = 0; index < elementbkg.Transits.length; index++) {
-                                        const element = elementbkg.Transits[index];
-                                        element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                                        element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                                        element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-                                        element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-
-                                        element.departAirport = this.getAirportByCode(element.FromPlaceCode);
-                                        element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                                        let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
-                                        element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                                        
-                                        let elementNext = elementbkg.Transits[index+1];
-                                        if(elementNext){
+    
+                      element.totalpricedisplay = se.gf.convertNumberToString(Math.round(element.amount_after_tax));
+                      if (element.payment_status == 0 && element.delivery_payment_date) {
+                        let diffminutes = moment(new Date()).diff(moment(element.delivery_payment_date), 'minutes');
+                        if (diffminutes <= 0) {
+                          let hours: any = Math.floor(diffminutes * (-1) / 60);
+                          let minutes: any = diffminutes * (-1) - (hours * 60);
+                          if (hours < 10) {
+                            hours = hours != 0 ? "0" + hours : "0";
+                          }
+                          if (minutes < 10) {
+                            minutes = "0" + minutes;
+                          }
+                          element.time_payment = moment(element.delivery_payment_date).format("HH:mm");
+                          element.date_payment = moment(element.delivery_payment_date).format("DD-MM-YYYY");
+                          element.delivery_payment_date_display = "Hạn thanh toán trước " + moment(element.delivery_payment_date).format("HH:mm") + " " + se.gf.getDayOfWeek(element.delivery_payment_date).dayname + ", " + moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
+                          //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
+                          if (!(element.pay_method == 3 || element.pay_method == 51 || element.pay_method == 2)) {
+                            var obj = se.gf.getbank(element.pay_method);
+                            element.urlimgbank = obj.urlimgbank;
+                            element.textbank = obj.textbank;
+                            element.accountNumber = obj.accountNumber;
+                            element.bankName = obj.bankName;
+                            element.url = obj.url;
+                          } else if (element.pay_method == 3 && element.payment_info) {
+                            element.payment_info = JSON.parse(element.payment_info);
+                            element.PaymentCode = element.payment_info.PaymentCode
+                          }
+                        }
+    
+                      }
+                      element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format("DD-MM-YYYY");
+                      element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format("DD-MM-YYYY");
+    
+                      //Thay mới ngày bay
+                      if (element.bookingsComboData){
+                        if (element.bookingsComboData && element.bookingsComboData.length > 1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(element.bookingsComboData[1].trip_Code) == -1 && element.bookingsComboData[1].airlineName && element.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
+    
+                          for (let i = 0; i < 2; i++) {
+                            const elementNew = element.bookingsComboData[i];
+                            if (i == 0) {
+                              if (elementNew.departureDate && !elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDate.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDate.split('-');
+                                }
+                                if (elementNew.departureDate.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDate.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              }
+                              if (elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDateNew.split('-');
+                                }
+                                if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDateNew.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              }
+                            } else {
+                              if (elementNew.departureDate && !elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDate.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDate.split('-');
+                                }
+                                if (elementNew.departureDate.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDate.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              }
+                              if (elementNew.departureDateNew) {
+                                let newdate;
+                                if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                  newdate = elementNew.departureDateNew.split('-');
+                                }
+                                if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                  newdate = elementNew.departureDateNew.split('/');
+                                }
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              }
+                            }
+      
+                          }
+      
+      
+                        } else {
+      
+                          if (element.bookingsComboData[0].departureDate && !element.bookingsComboData[0].departureDateNew) {
+                            let newdate;
+                            if (element.bookingsComboData[0].departureDate.indexOf('-') != -1) {
+                              newdate = element.bookingsComboData[0].departureDate.split('-');
+                            }
+                            if (element.bookingsComboData[0].departureDate.indexOf('/') != -1) {
+                              newdate = element.bookingsComboData[0].departureDate.split('/');
+                            }
+                            let d;
+                            if (newdate && newdate.length > 1) {
+                              d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                            }
+                            element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                            element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                          }
+                          if (element.bookingsComboData[0].departureDateNew) {
+                            let newdate;
+                            if (element.bookingsComboData[0].departureDateNew.indexOf('-') != -1) {
+                              newdate = element.bookingsComboData[0].departureDateNew.split('-');
+                            }
+                            if (element.bookingsComboData[0].departureDateNew.indexOf('/') != -1) {
+                              newdate = element.bookingsComboData[0].departureDateNew.split('/');
+                            }
+                            let d;
+                            if (newdate && newdate.length > 1) {
+                              d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                            }
+                            element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + element.bookingsComboData[0].departureDateNew;
+                            element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + element.bookingsComboData[0].departureDateNew;
+                          }
+                        }
+                      }
                       
-                                          let dt = elementNext.DepartTime.replace('/Date(','').replace(')/','')*1;
-                                          let lt = element.LandingTime.replace('/Date(','').replace(')/','')*1;
-                                          let diffminutes = moment(dt).diff(lt, 'minutes');
-                                          if(diffminutes){
-                                            let hours:any = Math.floor(diffminutes/60);
-                                            let minutes:any = diffminutes - (hours*60);
-                                            if(hours < 10){
-                                              hours = hours != 0?  "0"+hours : "0";
-                                            }
-                                            if(minutes < 10){
-                                              minutes = "0"+minutes;
-                                            }
-                                            element.timeOverlay = hours+' tiếng '+minutes+' phút';
-                                          }
-                                        }
-                                      }
-                                    
-                                  }
-                                });
-                                
-                              }
-                              element.flightRoundTripStr = 'Vé máy bay ' + (element.bookingjson.length >1 ? 'khứ hồi' : 'một chiều');
-                              if(element.totalPaxStr){
-                                element.totalPaxStrVMBQT = element.totalPaxStr.replace(' |',',');
-                              }
+    
+    
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+    
+                      let departFlight = element.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(element.checkInDate).format('DD-MM-YYYY') && f.airlineCode });
+                      if (departFlight && departFlight.length > 0) {
+                        element.itemdepart = departFlight[0];
+    
+                      } else {
+                        element.itemdepart = element.bookingsComboData[0];
+    
+                      }
+                      element.flightFrom = element.itemdepart.flightFrom;
+                      element.flightTo = element.itemdepart.flightTo;
+                      element.departAirport = se.getAirportByCode(element.itemdepart.departCode);
+                      element.returnAirport = se.getAirportByCode(element.itemdepart.arrivalCode);
+    
+                      se.textDeparture = se.getDayOfWeek(element.itemdepart.departureDate) + ', ' + element.itemdepart.departureDate;
+                      se.textRegionDepart = se.getRegionByCode(element.itemdepart.departCode);
+                      se.textRegionReturn = se.getRegionByCode(element.itemdepart.arrivalCode);
+                      se.textAirpotDepart = se.getAirpot(element.itemdepart.departCode);
+                      se.textAirpotReturn = se.getAirpot(element.itemdepart.arrivalCode);
+    
+                      let idxlug = 0;
+                      element.textChildDisplay = "";
+                      //đi chung
+                      element.arrPickupDropoff = [];
+                      element.bookingsComboData.forEach(el => {
+    
+                        if (el.airlineName.indexOf('Vietnam Airlines') != -1) {
+                          //chặng dừng
+                          if (el.flightNumner.indexOf(',') != -1) {
+                            let fnstring = el.flightNumner.split(',')[0].trim();
+                            let fn = fnstring.substring(2, el.flightNumner.length) * 1;
+                            if (fn >= 6000) {
+                              el.operatedBy = "Khai thác bởi Pacific Airlines";
                             }
-                        }
-                        
-                        element.totalpricedisplay = se.gf.convertNumberToString(Math.round(element.amount_after_tax));
-                        if(element.payment_status == 0 && element.delivery_payment_date){
-                          let diffminutes = moment(new Date()).diff(moment(element.delivery_payment_date), 'minutes');
-                          if(diffminutes <= 0){
-                            let hours:any = Math.floor(diffminutes*(-1)/60);
-                            let minutes:any = diffminutes*(-1) - (hours*60);
-                            if(hours < 10){
-                              hours = hours != 0?  "0"+hours : "0";
-                            }
-                            if(minutes < 10){
-                              minutes = "0"+minutes;
-                            }
-                            element.time_payment = moment(element.delivery_payment_date).format("HH:mm");
-                            element.date_payment = moment(element.delivery_payment_date).format("DD-MM-YYYY");
-                            element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-                            element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
-                            element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
-                            //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
-                            if (!(element.pay_method==3||element.pay_method==51||element.pay_method==2)) {
-                              var obj=se.gf.getbank(element.pay_method);
-                              element.urlimgbank =obj.urlimgbank;
-                              element.textbank =obj.textbank;
-                              element.accountNumber =obj.accountNumber;
-                              element.bankName =obj.bankName;
-                              element.url =obj.url;
-                            } else if (element.pay_method==3 && element.payment_info) {
-                              element.payment_info=JSON.parse(element.payment_info);
-                              element.PaymentCode=element.payment_info.PaymentCode
+                          } else {//bay thẳng
+                            let fn = el.flightNumner.substring(2, el.flightNumner.length) * 1;
+                            if (fn >= 6000) {
+                              el.operatedBy = "Khai thác bởi Pacific Airlines";
                             }
                           }
-                            
+    
                         }
-                        element.checkInDisplay = se.gf.getDayOfWeek(element.checkInDate).dayname +", "+ moment(element.checkInDate).format("DD-MM-YYYY");
-                        element.checkOutDisplay = se.gf.getDayOfWeek(element.checkOutDate).dayname +", "+ moment(element.checkOutDate).format("DD-MM-YYYY");
-
-                        element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort+", " + moment(element.checkInDate).format('DD-MM');
-                        element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort+", " + moment(element.checkOutDate).format('DD-MM-YYYY');
-
-                        let departFlight = element.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(element.checkInDate).format('DD-MM-YYYY')&& f.airlineCode });
-                        if(departFlight && departFlight.length >0){
-                          element.itemdepart = departFlight[0];
-                         
-                        }else{
-                          element.itemdepart = element.bookingsComboData[0];
-                          
-                        }
-                        element.flightFrom = element.itemdepart.flightFrom;
-                        element.flightTo = element.itemdepart.flightTo;
-                        element.departAirport = se.getAirportByCode(element.itemdepart.departCode);
-                        element.returnAirport = se.getAirportByCode(element.itemdepart.arrivalCode);
-                        
-                        se.textDeparture = se.getDayOfWeek(element.itemdepart.departureDate) + ', ' + element.itemdepart.departureDate;
-                        se.textRegionDepart = se.getRegionByCode(element.itemdepart.departCode);
-                        se.textRegionReturn = se.getRegionByCode(element.itemdepart.arrivalCode);
-                        se.textAirpotDepart = se.getAirpot(element.itemdepart.departCode);
-                        se.textAirpotReturn = se.getAirpot(element.itemdepart.arrivalCode);
-                        
-                        let idxlug =0;
-                        element.textChildDisplay = "";
-                        //đi chung
-                        element.arrPickupDropoff = [];
-                        element.bookingsComboData.forEach(el => {
-                         
-                          if(el.airlineName.indexOf('Vietnam Airlines') != -1 ){
-                            //chặng dừng
-                            if(el.flightNumner.indexOf(',') != -1){
-                              let fnstring = el.flightNumner.split(',')[0].trim();
-                              let fn = fnstring.substring(2, el.flightNumner.length)*1;
-                              if(fn >= 6000){
-                                el.operatedBy = "Khai thác bởi Pacific Airlines";
-                              }
-                            }else{//bay thẳng
-                              let fn = el.flightNumner.substring(2, el.flightNumner.length)*1;
-                              if(fn >= 6000){
-                                el.operatedBy = "Khai thác bởi Pacific Airlines";
-                              }
-                            }
-                            
+                        if (el.passengers && el.passengers.length > 0) {
+                          for (let index = 0; index < el.passengers.length; index++) {
+                            el.passengers[index].arrlug = [];
                           }
-                            if(el.passengers && el.passengers.length >0){
-                              for (let index = 0; index < el.passengers.length; index++) {
-                                el.passengers[index].arrlug = [];
-                              }
-                              for (let index = 0; index < el.passengers.length; index++) {
-                                const elementlug = el.passengers[index];
-                                let departElementLug= null;
-                                if(idxlug ==1){
-                                  departElementLug = element.bookingsComboData[idxlug-1].passengers;
-                                }
-                                
-                                if(elementlug.hanhLy && elementlug.hanhLy.indexOf(':') == -1 && ((elementlug.hanhLy.replace('kg',''))*1 >0 || elementlug.seatNumber)){
-                                  if(idxlug ==1){
-                                    if(departElementLug){
-                                      let itemfilter = departElementLug.filter((l) => { return l.arrlug && l.name == elementlug.name});
-                                      if(itemfilter && itemfilter.length >0){
-                                        itemfilter[0].arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg','')*1 >0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber})
-                                      }
-                                      else{
-                                        if(elementlug.seatNumber){
-                                          itemfilter[0].arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: "", lugprice: 0, seatnumber: elementlug.seatNumber})
-                                        }
-                                      }
-                                    }else{
-                                      elementlug.arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg','')*1 >0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber})
-                                    }
-                                  }else{
-                                      if(elementlug.arrlug.length >0){
-                                        let itemfilter = elementlug.arrlug.filter((l) => { return l.paxname == elementlug.name});
-                                        if(itemfilter && itemfilter.length >0){
-                                          itemfilter[0].arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg','')*1 >0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber})
-                                        }
-                                        else{
-                                          if(elementlug.seatNumber){
-                                            itemfilter[0].arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: "", lugprice: 0, seatnumber: elementlug.seatNumber})
-                                          }
-                                        }
-                                    }else{
-                                      elementlug.arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg','')*1 >0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber})
+                          for (let index = 0; index < el.passengers.length; index++) {
+                            const elementlug = el.passengers[index];
+                            let departElementLug = null;
+                            if (idxlug == 1) {
+                              departElementLug = element.bookingsComboData[idxlug - 1].passengers;
+                            }
+    
+                            if (elementlug.hanhLy && elementlug.hanhLy.indexOf(':') == -1 && ((elementlug.hanhLy.replace('kg', '')) * 1 > 0 || elementlug.seatNumber)) {
+                              if (idxlug == 1) {
+                                if (departElementLug) {
+                                  let itemfilter = departElementLug.filter((l) => { return l.arrlug && l.name == elementlug.name });
+                                  if (itemfilter && itemfilter.length > 0) {
+                                    itemfilter[0].arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg', '') * 1 > 0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber })
+                                  }
+                                  else {
+                                    if (elementlug.seatNumber) {
+                                      itemfilter[0].arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: "", lugprice: 0, seatnumber: elementlug.seatNumber })
                                     }
                                   }
-                                  
+                                } else {
+                                  elementlug.arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg', '') * 1 > 0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber })
                                 }
-                              
-                              }
-                             
-                            }
-                            
-                            if(el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP"){
-                              element.isPickupDropoff = true;
-                              el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
-                              element.arrPickupDropoff.push(el);
-                              if(el.departureDate){
-                                let newdate = el.departureDate.split('/');
-                                if(newdate && newdate.length >1){
-                                  let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                                  el.departureDateDisplay = moment(d).format("DD-MM");
-                                }
-                                
-                              }
-                              
-                            }
-                            
-                            idxlug++;
-                        })
-
-                        if(element.arrPickupDropoff && element.arrPickupDropoff.length >0){
-                          se.zone.run(() => element.arrPickupDropoff.sort(function (a, b) {
-                            return a.sortPD - b.sortPD;
-                          }))
-                        }
-          
-                        if(element.bookingsComboData.length >1){
-                          let returnFlight = element.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(element.checkOutDate).format('DD-MM-YYYY') && f.airlineCode });
-                          if(returnFlight && returnFlight.length >0){
-                            element.itemreturn = returnFlight[0];
-                            
-                          }else{
-                            element.itemreturn = element.bookingsComboData[1];
-                          
-                          }
-                            element.textReturn = se.getDayOfWeek(element.itemreturn.departureDate) + ', ' + element.itemreturn.departureDate;
-                            se.textArrivalRegionDepart = se.getRegionByCode(element.itemreturn.departCode);
-                            se.textArrivalRegionReturn = se.getRegionByCode(element.itemreturn.arrivalCode);
-                            se.textAirpotArrivalDepart = se.getAirpot(element.itemreturn.departCode);
-                            se.textAirpotArrivalReturn = se.getAirpot(element.itemreturn.arrivalCode);
-                          
-                        }
-                
-                        if(element.bookingsComboData && element.bookingsComboData[0].passengers && element.bookingsComboData[0].passengers.length >0){
-                          element.adult =0;
-                          element.child =0;
-                          element.infant =0;
-          
-                          element.bookingsComboData[0].passengers.forEach( (elementlug, index) => {
-                            let yearold = 18;
-                            if(elementlug.dob){
-                              let arr = [];
-                              if(elementlug.dob && elementlug.dob.indexOf('/') != -1){
-                                arr = elementlug.dob.split('/');
-                              }
-                              else if(elementlug.dob && elementlug.dob.indexOf('-') != -1){
-                                arr = elementlug.dob.split('-');
-                              }
-
-                              if(arr.length >0){
-                                let newdob = new Date(Number(arr[2]), Number(arr[1]-1), Number(arr[0]));
-                                yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
-                              }
-          
-                              elementlug.isAdult = yearold > 12 ? true : false;
-                              if(elementlug.isAdult){
-                                element.adult += 1;
-                              }else{
-                                if(!element.textChildDisplay){
-                                  element.textChildDisplay = "(";
-                                }
-                                  if(yearold< 2){
-                                      element.infant += 1;
-                                      elementlug.isInfant = true;
-                                      element.textChildDisplay +=element.textChildDisplay  && element.textChildDisplay.length > 1 ? ", "+(yearold >0 ? yearold : 1) : (yearold >0 ? yearold : 1);
-                                  }else{
-                                      element.child += 1;
-                                      element.textChildDisplay +=element.textChildDisplay && element.textChildDisplay.length > 1 ? ", "+(yearold >0 ? yearold : 1) : (yearold >0 ? yearold : 1);
-                                  }
-                              }
-          
-                              if(index == element.bookingsComboData[0].passengers.length -1 && element.textChildDisplay){
-                                element.textChildDisplay += ")";
-                              }
-                            }
-                            
-                            
-                
-                            if(elementlug.hanhLy && elementlug.hanhLy.length >0 && elementlug.hanhLy.indexOf(':') != -1){
-                              elementlug.hanhLy = elementlug.hanhLy.replace(/\n/ig, ':');
-                              let arrlug = elementlug.hanhLy.split(':');
-                              elementlug.arrlug = [];
-                              if(arrlug && arrlug.length >0){
-                                let idx =0;
-                                arrlug.forEach(lug => {
-                                  if(idx >0){
-                                    let arrlugname = lug;
-                                    if(arrlugname.length > 4){
-                                      arrlugname = arrlugname.substring(0,4);
-                                    }
-                                    let lugweight = arrlugname.substring(0,2);
-                                    if(idx == 1 && lugweight >0){
-                                      elementlug.arrlug.push({lugname: element.bookingsComboData[0].departCode + " - " + element.bookingsComboData[0].arrivalCode , lugweight: arrlugname});
-                                    }
-                                    else if(idx == 3 && lugweight >0){
-                                      elementlug.arrlug.push({lugname: element.bookingsComboData[0].arrivalCode + " - " + element.bookingsComboData[0].departCode, lugweight: arrlugname});
-                                    }
-                                  }
-                                  idx++;
-                                });
-                              }
-                            }
-          
-                          });
-                        }
-
-                        //chiều về
-                        if (element.bookingsComboData && element.bookingsComboData[1] && element.bookingsComboData[1].passengers && element.bookingsComboData[1].passengers.length > 0) {
-      
-                          element.bookingsComboData[1].passengers.forEach((elementlug, index) => {
-                            let yearold = 18;
-                            if (elementlug.dob) {
-                              let arr = [];
-                              if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
-                                arr = elementlug.dob.split('/');
-                              }
-                              else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
-                                arr = elementlug.dob.split('-');
-                              }
-      
-                              if (arr.length > 0) {
-                                let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-                                yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
-                              }
-      
-                              elementlug.isAdult = yearold > 12 ? true : false;
-                              if (elementlug.isAdult) {
-                              // element.adult += 1;
                               } else {
-                                if (yearold < 2) {
-                                  elementlug.isInfant = true;
-                                } 
+                                if (elementlug.arrlug.length > 0) {
+                                  let itemfilter = elementlug.arrlug.filter((l) => { return l.paxname == elementlug.name });
+                                  if (itemfilter && itemfilter.length > 0) {
+                                    itemfilter[0].arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg', '') * 1 > 0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber })
+                                  }
+                                  else {
+                                    if (elementlug.seatNumber) {
+                                      itemfilter[0].arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: "", lugprice: 0, seatnumber: elementlug.seatNumber })
+                                    }
+                                  }
+                                } else {
+                                  elementlug.arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementlug.hanhLy, lugprice: (elementlug.hanhLy.replace('kg', '') * 1 > 0 ? elementlug.giaTienHanhLy : 0), seatnumber: elementlug.seatNumber })
+                                }
                               }
-      
+    
                             }
-      
-                          });
-      
-                        }
-                      }
-                      if(element.delivery_payment_date){
-                        let arrpaymentdate = element.delivery_payment_date.split("T");
-                        let hour ='',day='';
-                        let arrday;
-                        if(arrpaymentdate && arrpaymentdate.length >1){
-                          let arrhour = arrpaymentdate[1].substring(0,5).split(":");
-                          if(arrhour && arrhour.length>0){
-                            hour = arrhour[0].toString() + "h" + arrhour[1].toString();
+    
                           }
-                            arrday = arrpaymentdate[0].split('-');
-                          if(arrday && arrday.length>0){
-                            day = arrday[2].toString()+"/"+arrday[1].toString();
+    
+                        }
+    
+                        if (el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP") {
+                          element.isPickupDropoff = true;
+                          el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
+                          element.arrPickupDropoff.push(el);
+                          if (el.departureDate) {
+                            let newdate = el.departureDate.split('/');
+                            if (newdate && newdate.length > 1) {
+                              let d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              el.departureDateDisplay = moment(d).format("DD-MM");
+                            }
+    
                           }
+    
                         }
-                        element.deliveryPaymentDisplay = "" +hour + ", " + day;
-                        // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-
-                        element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
-                        element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");                        let arrhours = arrpaymentdate[1].split(":");
-                        let today = new Date();
-                        let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
-                        let diffminutes = moment(d).diff(today, 'minutes');
-                        //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
-                        if(diffminutes <0){
-                          element.deliveryPaymentDisplay = "";
-                          element.delivery_payment_date_display = "";
-                        }
-                        let hours = Math.round(diffminutes/60);
-                        let minutes = diffminutes - (hours * 60);
-                        element.paymentBefore = hours +"h"+minutes+"'";
-                        if(element.extra_guest_info){
-                          let arrpax = element.extra_guest_info.split('|');
-                          if(arrpax && arrpax.length >1 && arrpax[1] >0){
-                            element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString()+" trẻ em";
-                          }else if(arrpax && arrpax.length >1 && arrpax[1] == 0){
-                            element.paxDisplay = arrpax[0].toString() + " người lớn";
-                          }
-                        }
-                        if(element.amount_after_tax){
-                          element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                        }
-                      }
-                      element.isRequestTrip = false;
-                      if(element.totalPaxStr){
-                        element.totalPaxStr = element.totalPaxStr.replace('|', ',');
-                      }
-                      
-                       //check cathay
-                if (element.bookingsComboData) {
-                  let Temp = [];
-                  Temp.push(element.bookingsComboData);
-                  if (Temp) {
-
-                    let Temp_Cathay = [];
-                    Temp.forEach(function (item) {
-
-                      Temp_Cathay.push(
-                        item.filter(function (word) {
-                          return word.airlineName.toLowerCase().includes("cathay");
-                        })
-                      );
-                    });
-                    if (
-                      Temp_Cathay[0] &&
-                      Temp_Cathay[0][0] && Temp_Cathay[0][0].passengers &&
-                      Temp_Cathay[0][0].passengers.length > 0
-                    )
-                    {
-                      element.IsCathay = true;
-                      element.hasCathay = true;
-                    }
-                    else {
-                      element.IsCathay = false;
-                    }
-                    if (element.IsCathay && element.itemdepart && element.itemdepart.passengers.length>0) {
-                      element.itemdepart.passengers.forEach(el => {
-                        for (let i = 0; i < Temp_Cathay[0][0].passengers.length; i++) {
-                          if (el.name.toLowerCase().trim() == Temp_Cathay[0][0].passengers[i].name.toLowerCase().trim()) {
-                            el.IsCathay = true;
-                            break;
-                          }
-                        }
-
+    
+                        idxlug++;
                       })
-                    }
-                  }
-
-
-                }
-                        
-          
-                      if(element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL") ){
-                        // if (element.booking_id=='IVIVU1002887') {
-                        //   se.listMyTrips.push(element);
-                        // }
-                        se.listMyTrips.push(element);
-                        se.mytripcount++;
-                          //se.nextflightcounttext ="(" + se.mytripcount +")";
+    
+                      if (element.arrPickupDropoff && element.arrPickupDropoff.length > 0) {
+                        se.zone.run(() => element.arrPickupDropoff.sort(function (a, b) {
+                          return a.sortPD - b.sortPD;
+                        }))
                       }
-                    
+    
+                      if (element.bookingsComboData.length > 1) {
+                        let returnFlight = element.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(element.checkOutDate).format('DD-MM-YYYY') && f.airlineCode });
+                        if (returnFlight && returnFlight.length > 0) {
+                          element.itemreturn = returnFlight[0];
+    
+                        } else {
+                          element.itemreturn = element.bookingsComboData[1];
+    
+                        }
+                        element.textReturn = se.getDayOfWeek(element.itemreturn.departureDate) + ', ' + element.itemreturn.departureDate;
+                        se.textArrivalRegionDepart = se.getRegionByCode(element.itemreturn.departCode);
+                        se.textArrivalRegionReturn = se.getRegionByCode(element.itemreturn.arrivalCode);
+                        se.textAirpotArrivalDepart = se.getAirpot(element.itemreturn.departCode);
+                        se.textAirpotArrivalReturn = se.getAirpot(element.itemreturn.arrivalCode);
+    
+                      }
+    
+                      if (element.bookingsComboData && element.bookingsComboData[0].passengers && element.bookingsComboData[0].passengers.length > 0) {
+                        element.adult = 0;
+                        element.child = 0;
+                        element.infant = 0;
+    
+                        element.bookingsComboData[0].passengers.forEach((elementlug, index) => {
+                          let yearold = 18;
+                          if (elementlug.dob) {
+                            let arr = [];
+                            if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
+                              arr = elementlug.dob.split('/');
+                            }
+                            else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
+                              arr = elementlug.dob.split('-');
+                            }
+    
+                            if (arr.length > 0) {
+                              let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+                              yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
+                            }
+    
+                            elementlug.isAdult = yearold > 12 ? true : false;
+                            if (elementlug.isAdult) {
+                              element.adult += 1;
+                            } else {
+                              if (!element.textChildDisplay) {
+                                element.textChildDisplay = "(";
+                              }
+                              if (yearold < 2) {
+                                element.infant += 1;
+                                elementlug.isInfant = true;
+                                element.textChildDisplay += element.textChildDisplay && element.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                              } else {
+                                element.child += 1;
+                                element.textChildDisplay += element.textChildDisplay && element.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                              }
+                            }
+    
+                            if (index == element.bookingsComboData[0].passengers.length - 1 && element.textChildDisplay) {
+                              element.textChildDisplay += ")";
+                            }
+                          }
+    
+    
+    
+                          if (elementlug.hanhLy && elementlug.hanhLy.length > 0 && elementlug.hanhLy.indexOf(':') != -1) {
+                            elementlug.hanhLy = elementlug.hanhLy.replace(/\n/ig, ':');
+                            let arrlug = elementlug.hanhLy.split(':');
+                            elementlug.arrlug = [];
+                            if (arrlug && arrlug.length > 0) {
+                              let idx = 0;
+                              arrlug.forEach(lug => {
+                                if (idx > 0) {
+                                  let arrlugname = lug;
+                                  if (arrlugname.length > 4) {
+                                    arrlugname = arrlugname.substring(0, 4);
+                                  }
+                                  let lugweight = arrlugname.substring(0, 2);
+                                  if (idx == 1 && lugweight > 0) {
+                                    elementlug.arrlug.push({ lugname: element.bookingsComboData[0].departCode + " - " + element.bookingsComboData[0].arrivalCode, lugweight: arrlugname });
+                                  }
+                                  else if (idx == 3 && lugweight > 0) {
+                                    elementlug.arrlug.push({ lugname: element.bookingsComboData[0].arrivalCode + " - " + element.bookingsComboData[0].departCode, lugweight: arrlugname });
+                                  }
+                                }
+                                idx++;
+                              });
+                            }
+                          }
+    
+                        });
+                      }
+    
+                      //chiều về
+                      if (element.bookingsComboData && element.bookingsComboData[1] && element.bookingsComboData[1].passengers && element.bookingsComboData[1].passengers.length > 0) {
+    
+                        element.bookingsComboData[1].passengers.forEach((elementlug, index) => {
+                          let yearold = 18;
+                          if (elementlug.dob) {
+                            let arr = [];
+                            if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
+                              arr = elementlug.dob.split('/');
+                            }
+                            else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
+                              arr = elementlug.dob.split('-');
+                            }
+    
+                            if (arr.length > 0) {
+                              let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+                              yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
+                            }
+    
+                            elementlug.isAdult = yearold > 12 ? true : false;
+                            if (elementlug.isAdult) {
+                              // element.adult += 1;
+                            } else {
+                              if (yearold < 2) {
+                                elementlug.isInfant = true;
+                              }
+                            }
+    
+                          }
+    
+                        });
+    
+                      }
+                    }
+                    if (element.delivery_payment_date) {
+                      let arrpaymentdate = element.delivery_payment_date.split("T");
+                      let hour = '', day = '';
+                      let arrday;
+                      if (arrpaymentdate && arrpaymentdate.length > 1) {
+                        let arrhour = arrpaymentdate[1].substring(0, 5).split(":");
+                        if (arrhour && arrhour.length > 0) {
+                          hour = arrhour[0].toString() + "h" + arrhour[1].toString();
+                        }
+                        arrday = arrpaymentdate[0].split('-');
+                        if (arrday && arrday.length > 0) {
+                          day = arrday[2].toString() + "/" + arrday[1].toString();
+                        }
+                      }
+                      element.deliveryPaymentDisplay = "" + hour + ", " + day;
+                      // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+    
+                      element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                      element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY"); let arrhours = arrpaymentdate[1].split(":");
+                      let today = new Date();
+                      let d = new Date(Number(arrday[0]), Number(arrday[1]) - 1, Number(arrday[2]), Number(arrhours[0]), Number(arrhours[1]), 0);
+                      let diffminutes = moment(d).diff(today, 'minutes');
+                      //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
+                      if (diffminutes < 0) {
+                        element.deliveryPaymentDisplay = "";
+                        element.delivery_payment_date_display = "";
+                      }
+                      let hours = Math.round(diffminutes / 60);
+                      let minutes = diffminutes - (hours * 60);
+                      element.paymentBefore = hours + "h" + minutes + "'";
+                      if (element.extra_guest_info) {
+                        let arrpax = element.extra_guest_info.split('|');
+                        if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                          element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
+                        } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                          element.paxDisplay = arrpax[0].toString() + " người lớn";
+                        }
+                      }
+                      if (element.amount_after_tax) {
+                        element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      }
+                    }
+                    element.isRequestTrip = false;
+                    if (element.totalPaxStr) {
+                      element.totalPaxStr = element.totalPaxStr.replace('|', ',');
+                    }
+    
+                    //check cathay
+                    if (element.bookingsComboData) {
+                      let Temp = [];
+                      Temp.push(element.bookingsComboData);
+                      if (Temp) {
+    
+                        let Temp_Cathay = [];
+                        Temp.forEach(function (item) {
+    
+                          Temp_Cathay.push(
+                            item.filter(function (word) {
+                              return word.airlineName.toLowerCase().includes("cathay");
+                            })
+                          );
+                        });
+                        if (
+                          Temp_Cathay[0] &&
+                          Temp_Cathay[0][0] && Temp_Cathay[0][0].passengers &&
+                          Temp_Cathay[0][0].passengers.length > 0
+                        ) {
+                          element.IsCathay = true;
+                          element.hasCathay = true;
+                        }
+                        else {
+                          element.IsCathay = false;
+                        }
+                        if (element.IsCathay && element.itemdepart && element.itemdepart.passengers.length > 0) {
+                          element.itemdepart.passengers.forEach(el => {
+                            for (let i = 0; i < Temp_Cathay[0][0].passengers.length; i++) {
+                              if (el.name.toLowerCase().trim() == Temp_Cathay[0][0].passengers[i].name.toLowerCase().trim()) {
+                                el.IsCathay = true;
+                                break;
+                              }
+                            }
+    
+                          })
+                        }
+                      }
+    
+    
+                    }
+    
+    
+                    if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
+                      // if (element.booking_id=='IVIVU1003793') {
+                      //   se.listMyTrips.push(element);
+                      // }
+                      se.listMyTrips.push(element);
+                      se.mytripcount++;
+                      //se.nextflightcounttext ="(" + se.mytripcount +")";
+                    }
+    
                     //}
                   }
                 }
-                
+    
               });
-              
+    
             }
-  
-            if(lstTrips && lstTrips.requestPrices && lstTrips.requestPrices.length >0){
-                lstTrips.requestPrices.forEach(element => {
-                  if(!se.gf.checkExistsItemInArray(se.listMyTrips, element, 'order')){
-                    if(element.request_id.indexOf("HTBKG") == -1){
-                      let urlavatar = "", tail ="";
-                      if(element.hotelAvatar.indexOf('i.travelapi.com') ==-1){
-                        if(element.hotelAvatar.indexOf('jpeg') != -1){
-                          urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
-                          tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
-                        }else{
-                          urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 4);
-                          tail = element.hotelAvatar.substring(element.hotelAvatar.length - 4, element.hotelAvatar.length);
-                        }
-
-                        element.avatar = urlavatar + "-" + "104x104" + tail;
-                      }else{
-                        element.avatar = element.hotelAvatar;
+    
+            if (lstTrips && lstTrips.requestPrices && lstTrips.requestPrices.length > 0) {
+              lstTrips.requestPrices.forEach(element => {
+                if (!se.gf.checkExistsItemInArray(se.listMyTrips, element, 'order')) {
+                  if (element.request_id.indexOf("HTBKG") == -1) {
+                    let urlavatar = "", tail = "";
+                    if (element.hotelAvatar.indexOf('i.travelapi.com') == -1) {
+                      if (element.hotelAvatar.indexOf('jpeg') != -1) {
+                        urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
+                        tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
+                      } else {
+                        urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 4);
+                        tail = element.hotelAvatar.substring(element.hotelAvatar.length - 4, element.hotelAvatar.length);
                       }
-                      if (element.avatar) {
-                        element.avatar = ( element.avatar.toLocaleString().trim().indexOf("http") != -1) ?  element.avatar : 'https:' +  element.avatar;
-                      }
-                      
-                      
-                      element.isRequest = true;
-                      element.booking_id = element.request_id;
-                      element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
-                      element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
-  
-                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM');
-                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY');
-  
-                      element.address = element.hotelAddress;
-                      element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
-                      se.getRatingStar(element);
-                      // if (element.booking_id=='IVIVU1002887') {
-                      //   se.listMyTrips.push(element);
-                      // }
-                       se.listMyTrips.push(element);
-                      se.mytripcount++;
+    
+                      element.avatar = urlavatar + "-" + "104x104" + tail;
+                    } else {
+                      element.avatar = element.hotelAvatar;
                     }
-                    
+                    if (element.avatar) {
+                      element.avatar = (element.avatar.toLocaleString().trim().indexOf("http") != -1) ? element.avatar : 'https:' + element.avatar;
+                    }
+                    element.isRequest = true;
+                    element.booking_id = element.request_id;
+                    element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD') + " thg " + moment(element.start_date).format('MM');
+                    element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD') + " thg " + moment(element.end_date).format('MM');
+    
+                    element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM');
+                    element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD-MM-YYYY');
+    
+                    element.address = element.hotelAddress;
+                    element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
+                    se.getRatingStar(element);
+                    // if (element.booking_id=='IVIVU1002887') {
+                    //   se.listMyTrips.push(element);
+                    // }
+                    se.listMyTrips.push(element);
+                    se.mytripcount++;
                   }
-                });
+    
+                }
+              });
             }
-  
+    
             se._mytripservice.listMyTrips = se.listMyTrips;
             let idx1 = 0;
             if (se.gf.getParams('mytripbookingdetail') && se.gf.getParams('mytripbookingdetail').currentTrip) {
-                idx1 = se.gf.getParams('mytripbookingdetail').currentTrip;
-                se.currentTrip = idx;
+              idx1 = se.gf.getParams('mytripbookingdetail').currentTrip;
+              se.currentTrip = idx;
             }
     
             se.sortMytrip();
@@ -1490,29 +1651,29 @@ import { tourService } from '../providers/tourService';
                 if (idxMap && idxMap.length > 0) {
                   var idx = idxMap.findIndex((el) => { return el == true });
                   se.currentTrip = idx;
-                  se.gf.setParams('','notifiBookingCode');
-                  if (idx!=-1) {
+                  se.gf.setParams('', 'notifiBookingCode');
+                  if (idx != -1) {
                     se.showtripdetail(se.listMyTrips[idx]);
-                  }else{
-            
-                        //Map số bkg trong listtrip để focus vào bkg được notifi
-                        var idxMaphis = se.listHistoryTrips.map((item, index) => {
-                          return item.booking_id == se.valueGlobal.BookingCodeHis;
-                        });
-                        if (idxMaphis && idxMaphis.length > 0) {
-                          var idxhis = idxMaphis.findIndex((el) => { return el == true });
-                          se.currentTrip = idxhis;
-                          se.gf.setParams('','notifiBookingCode');
-                          if (idxhis!=-1) {
-                            se.showtripdetail(se.listHistoryTrips[idxhis]);
-                          }else{
-                            se.getdata(null,true);
-                          }
-                        }
-                      
+                  } else {
+    
+                    //Map số bkg trong listtrip để focus vào bkg được notifi
+                    var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                      return item.booking_id == se.valueGlobal.BookingCodeHis;
+                    });
+                    if (idxMaphis && idxMaphis.length > 0) {
+                      var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                      se.currentTrip = idxhis;
+                      se.gf.setParams('', 'notifiBookingCode');
+                      if (idxhis != -1) {
+                        se.showtripdetail(se.listHistoryTrips[idxhis]);
+                      } else {
+                        se.getdata(null, true);
+                      }
                     }
-                  
-                
+    
+                  }
+    
+    
                 }
               }
     
@@ -1526,245 +1687,240 @@ import { tourService } from '../providers/tourService';
                   se.currentTrip = idx;
                 }
               }
-
-              if(se.listMyTrips.length ==1 && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length >0){
-
+    
+              if (se.listMyTrips.length == 1 && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length > 0) {
+    
                 se.listMyTrips[0].bookingsComboData.forEach(element => {
-                if (element.airlineName.toLowerCase().indexOf('cathay') != -1) {
-                  //Add bảo hiểm
-                  se.getCathayClaimInfo(se.listMyTrips[0].booking_id).then((data)=> {
-                    
-                  var claimed;
-                    
-                  let objData = JSON.parse(data);
-                  if(objData.insurObj){
-                    let dataCathay = objData.insurObj;
-                    se.listMyTrips[0].hasCathay = true;
-                   dataCathay.adultList.forEach(objAdult => {
-                     if(!objAdult.claimedFlights ){
-                      let itemAdult = { claimed: objAdult.claimedFlights, insurance_code: objAdult.insurance_code, customer_name: objAdult.customer_name, customer_id: objAdult.customer_cmnd, customer_address: '', customer_dob: objAdult.customer_dob};
-                      if(!se.gf.checkExistsItemInArray(se.arrinsurrance, itemAdult, 'cathay')){
-                        se.arrinsurrance.push(itemAdult);
-                      }
-                      
-                     }else{
-                      objAdult.flightObj.forEach((f) => {
-                        var objmap = objAdult.claimedFlights.filter((cf) => f.flightNumner && cf == f.flightNumner.replace(' ',''));
-                        if(objmap && objmap.length >0){
-                          se.listClaimed.push({ flight_number: objmap[0], insurance_code: objAdult.insurance_code, bookingid: objAdult.booking_id });
-                        }
-                      });
-                      var claimedDone;
-                      if (objData.flightObj[1].airlineCode && objData.flightObj[1].airlineName.toLowerCase().indexOf('cathay') == -1 ) {
-                        claimedDone = objAdult.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 1;
-                      }
-                      else {
-                        claimedDone = objAdult.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 0;
-                      }
-                      let itemAdult = { claimed: claimedDone, insurance_code: objAdult.insurance_code, customer_name: objAdult.customer_name, customer_id: objAdult.customer_cmnd, customer_address: '', customer_dob: objAdult.customer_dob };
-                      if(!se.gf.checkExistsItemInArray(se.arrinsurrance, itemAdult, 'cathay')){
-                        se.arrinsurrance.push(itemAdult);
-                      }
-                     }
-                    });
-                      dataCathay.childList.forEach(objChild => {
-                        if(!objChild.claimedFlights){
-                          let itemChild = { claimed: objChild.claimedFlights, insurance_code: objChild.insurance_code, customer_name: objChild.customer_name, customer_id: objChild.customer_cmnd, customer_address: '', customer_dob: objChild.customer_dob, 
-                          name: objChild.customer_name,id: objChild.insurance_code, birth: objChild.customer_dob};
-                         // se.arrchildinsurrance.push(itemChild);
-                          
-                          if(!se.gf.checkExistsItemInArray(se.arrchildinsurrance, itemChild, 'cathay')){
-                            se.arrchildinsurrance.push(itemChild);
-                            se.arrchild.push(itemChild);
-                          }
-                        }else{
-                          objChild.flightObj.forEach((f) => {
-                            var objmap = objChild.claimedFlights.filter((cf) => f.flightNumner && cf == f.flightNumner.replace(' ',''));
-                            if(objmap && objmap.length >0){
-                              se.listClaimed.push({ flight_number: objmap[0], insurance_code: objChild.insurance_code, bookingid: objChild.booking_id });
+                  if (element.airlineName.toLowerCase().indexOf('cathay') != -1) {
+                    //Add bảo hiểm
+                    se.getCathayClaimInfo(se.listMyTrips[0].booking_id).then((data) => {
+    
+                      var claimed;
+    
+                      let objData = JSON.parse(data);
+                      if (objData.insurObj) {
+                        let dataCathay = objData.insurObj;
+                        se.listMyTrips[0].hasCathay = true;
+                        dataCathay.adultList.forEach(objAdult => {
+                          if (!objAdult.claimedFlights) {
+                            let itemAdult = { claimed: objAdult.claimedFlights, insurance_code: objAdult.insurance_code, customer_name: objAdult.customer_name, customer_id: objAdult.customer_cmnd, customer_address: '', customer_dob: objAdult.customer_dob };
+                            if (!se.gf.checkExistsItemInArray(se.arrinsurrance, itemAdult, 'cathay')) {
+                              se.arrinsurrance.push(itemAdult);
                             }
-                          });
-  
-                          var claimedDone
-                          if (objData.flightObj[1].airlineCode && objData.flightObj[1].airlineName.toLowerCase().indexOf('cathay') == -1 ) {
-                            claimedDone = objChild.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 1;
+    
                           } else {
-                            claimedDone = objChild.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 0;
+                            objAdult.flightObj.forEach((f) => {
+                              var objmap = objAdult.claimedFlights.filter((cf) => f.flightNumner && cf == f.flightNumner.replace(' ', ''));
+                              if (objmap && objmap.length > 0) {
+                                se.listClaimed.push({ flight_number: objmap[0], insurance_code: objAdult.insurance_code, bookingid: objAdult.booking_id });
+                              }
+                            });
+                            var claimedDone;
+                            if (objData.flightObj[1].airlineCode && objData.flightObj[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
+                              claimedDone = objAdult.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 1;
+                            }
+                            else {
+                              claimedDone = objAdult.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 0;
+                            }
+                            let itemAdult = { claimed: claimedDone, insurance_code: objAdult.insurance_code, customer_name: objAdult.customer_name, customer_id: objAdult.customer_cmnd, customer_address: '', customer_dob: objAdult.customer_dob };
+                            if (!se.gf.checkExistsItemInArray(se.arrinsurrance, itemAdult, 'cathay')) {
+                              se.arrinsurrance.push(itemAdult);
+                            }
                           }
-                          let itemChild = {
-                            claimed: claimedDone, insurance_code: objChild.insurance_code, customer_name: objChild.customer_name, customer_id: objChild.customer_cmnd, customer_address: '', customer_dob: objChild.customer_dob,
-                            name: objChild.customer_name, id: objChild.insurance_code, birth: objChild.customer_dob
-                          };
-                          if(!se.gf.checkExistsItemInArray(se.arrchildinsurrance, itemChild, 'cathay')){
-                            se.arrchildinsurrance.push(itemChild);
-                            se.arrchild.push(itemChild);
+                        });
+                        dataCathay.childList.forEach(objChild => {
+                          if (!objChild.claimedFlights) {
+                            let itemChild = {
+                              claimed: objChild.claimedFlights, insurance_code: objChild.insurance_code, customer_name: objChild.customer_name, customer_id: objChild.customer_cmnd, customer_address: '', customer_dob: objChild.customer_dob,
+                              name: objChild.customer_name, id: objChild.insurance_code, birth: objChild.customer_dob
+                            };
+                            // se.arrchildinsurrance.push(itemChild);
+    
+                            if (!se.gf.checkExistsItemInArray(se.arrchildinsurrance, itemChild, 'cathay')) {
+                              se.arrchildinsurrance.push(itemChild);
+                              se.arrchild.push(itemChild);
+                            }
+                          } else {
+                            objChild.flightObj.forEach((f) => {
+                              var objmap = objChild.claimedFlights.filter((cf) => f.flightNumner && cf == f.flightNumner.replace(' ', ''));
+                              if (objmap && objmap.length > 0) {
+                                se.listClaimed.push({ flight_number: objmap[0], insurance_code: objChild.insurance_code, bookingid: objChild.booking_id });
+                              }
+                            });
+    
+                            var claimedDone
+                            if (objData.flightObj[1].airlineCode && objData.flightObj[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
+                              claimedDone = objChild.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 1;
+                            } else {
+                              claimedDone = objChild.claimedFlights.filter((cf, i, arr) => { return arr.indexOf(arr.find(t => t === cf)) === i }).length > 0;
+                            }
+                            let itemChild = {
+                              claimed: claimedDone, insurance_code: objChild.insurance_code, customer_name: objChild.customer_name, customer_id: objChild.customer_cmnd, customer_address: '', customer_dob: objChild.customer_dob,
+                              name: objChild.customer_name, id: objChild.insurance_code, birth: objChild.customer_dob
+                            };
+                            if (!se.gf.checkExistsItemInArray(se.arrchildinsurrance, itemChild, 'cathay')) {
+                              se.arrchildinsurrance.push(itemChild);
+                              se.arrchild.push(itemChild);
+                            }
                           }
-                        }
-                      });
-                  }
-                   //check cathay VMB
-                   if (se.listMyTrips[0] && se.listMyTrips[0].itemdepart && se.arrinsurrance.length > 0) {
-                    se.listMyTrips[0].itemdepart.passengers.forEach((item) => {
-                      for (let i = 0; i < se.arrinsurrance.length; i++) {
-                        if (item.name.toLowerCase().trim() == se.arrinsurrance[i].customer_name.toLowerCase().trim()) {
-                          item.claimed = se.arrinsurrance[i].claimed;
-                          break;
-                        }
+                        });
                       }
-                    });
-                  }
-                  if (se.listMyTrips[0] && se.listMyTrips[0].itemdepart && se.arrchildinsurrance.length > 0) {
-                    se.listMyTrips[0].itemdepart.passengers.forEach((item) => {
-                      for (let i = 0; i < se.arrchildinsurrance.length; i++) {
-                        if (item.name.toLowerCase().trim() == se.arrchildinsurrance[i].customer_name.toLowerCase().trim()) {
-                          item.claimed = se.arrchildinsurrance[i].claimed;
-                          break;
-                        }
+                      //check cathay VMB
+                      if (se.listMyTrips[0] && se.listMyTrips[0].itemdepart && se.arrinsurrance.length > 0) {
+                        se.listMyTrips[0].itemdepart.passengers.forEach((item) => {
+                          for (let i = 0; i < se.arrinsurrance.length; i++) {
+                            if (item.name.toLowerCase().trim() == se.arrinsurrance[i].customer_name.toLowerCase().trim()) {
+                              item.claimed = se.arrinsurrance[i].claimed;
+                              break;
+                            }
+                          }
+                        });
                       }
-                    });
+                      if (se.listMyTrips[0] && se.listMyTrips[0].itemdepart && se.arrchildinsurrance.length > 0) {
+                        se.listMyTrips[0].itemdepart.passengers.forEach((item) => {
+                          for (let i = 0; i < se.arrchildinsurrance.length; i++) {
+                            if (item.name.toLowerCase().trim() == se.arrchildinsurrance[i].customer_name.toLowerCase().trim()) {
+                              item.claimed = se.arrchildinsurrance[i].claimed;
+                              break;
+                            }
+                          }
+                        });
+                      }
+    
+                    })
+    
+                    let arrcd = se.listMyTrips[0].bookingsComboData[0].departureDate.split('-');
+                    let nd = new Date(arrcd[2], arrcd[1] - 1, arrcd[0]);
+                    se.cincombodeparture = moment(nd).format('YYYY-MM-DD');
+    
+                    if (se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length > 1) {
+                      se.departCodeDisplay = se.listMyTrips[0].bookingsComboData[0].departCode + ' → ' + se.listMyTrips[0].bookingsComboData[0].arrivalCode;
+                      if (se.listMyTrips[0].bookingsComboData.length > 1) {
+                        se.arrivalCodeDisplay = se.listMyTrips[0].bookingsComboData[1].departCode + ' → ' + se.listMyTrips[0].bookingsComboData[1].arrivalCode;
+                      }
+    
+                      if (!se.cincombodepartureflightnumberdisplay) {
+                        se.cincombodepartureflightnumberdisplay = se.listMyTrips[0].bookingsComboData[0].flightNumner;
+                      }
+    
+                      if (!se.cincomboarrivalflightnumberdisplay) {
+                        se.cincomboarrivalflightnumberdisplay = se.listMyTrips[0].bookingsComboData[1].flightNumner;
+                      }
+    
+                      if (se.listMyTrips[0].bookingsComboData[1] && se.listMyTrips[0].bookingsComboData[1].departCode) {
+                        let arrca = se.listMyTrips[0].bookingsComboData[1].departureDate.split('-');
+                        let nd = new Date(arrca[2], arrca[1] - 1, arrca[0]);
+                        se.cincomboarrival = moment(nd).format('YYYY-MM-DD');
+                      }
+                    }
                   }
-            
                 })
-
-                let arrcd = se.listMyTrips[0].bookingsComboData[0].departureDate.split('-');
-                let nd = new Date(arrcd[2], arrcd[1] - 1, arrcd[0]);
-                se.cincombodeparture = moment(nd).format('YYYY-MM-DD');
-  
-                if (se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length > 1) {
-                  se.departCodeDisplay = se.listMyTrips[0].bookingsComboData[0].departCode + ' → ' + se.listMyTrips[0].bookingsComboData[0].arrivalCode;
-                  if (se.listMyTrips[0].bookingsComboData.length > 1) {
-                    se.arrivalCodeDisplay = se.listMyTrips[0].bookingsComboData[1].departCode + ' → ' + se.listMyTrips[0].bookingsComboData[1].arrivalCode;
-                  }
-  
-                  if(!se.cincombodepartureflightnumberdisplay){
-                    se.cincombodepartureflightnumberdisplay = se.listMyTrips[0].bookingsComboData[0].flightNumner;
-                  }
-  
-                  if(!se.cincomboarrivalflightnumberdisplay){
-                    se.cincomboarrivalflightnumberdisplay = se.listMyTrips[0].bookingsComboData[1].flightNumner;
-                  }
-
-                  if(se.listMyTrips[0].bookingsComboData[1] && se.listMyTrips[0].bookingsComboData[1].departCode){
-                    let arrca = se.listMyTrips[0].bookingsComboData[1].departureDate.split('-');
-                    let nd = new Date(arrca[2], arrca[1] - 1, arrca[0]);
-                    se.cincomboarrival= moment(nd).format('YYYY-MM-DD');
-                  }
-                }
-                  }
-                })
-
-                if(!se.listMyTrips[0].hasCathay){
+    
+                if (!se.listMyTrips[0].hasCathay) {
                   se.arrinsurrance = [];
                 }
-               
+    
               }
               if (se.listMyTrips[0].isFlyBooking) {
                 this.getDetailTicketFromDat(0).then((data) => {
-                  if (se.listMyTrips[0] && se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
+                  if (se.listMyTrips[0].textReturn && se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
                     this.getDetailTicketFromDat(1).then((data) => {
-
+    
                     })
                   }
                   this.getmhoteldetail();
                 })
-              }else{
-                se.totalHotel=0;
-                 
-                se.totalHotel=se.listMyTrips[0].amount_after_tax+se.listMyTrips[0].promotionDiscountAmount;
-                if(se.listMyTrips[0].booking_type == 'COMBO_FLIGHT'){
-                  this.departAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[0].departCode);
-                  this.returnAirport=this.getAirportByCode(se.listMyTrips[0].bookingsComboData[1].departCode);
+              } else {
+                se.totalHotel = 0;
+    
+                se.totalHotel = se.listMyTrips[0].amount_after_tax + se.listMyTrips[0].promotionDiscountAmount;
+                if (se.listMyTrips[0].booking_type == 'COMBO_FLIGHT') {
+                  this.departAirport = this.getAirportByCode(se.listMyTrips[0].bookingsComboData[0].departCode);
+                  this.returnAirport = this.getAirportByCode(se.listMyTrips[0].bookingsComboData[1].departCode);
                   this.getDetailTicketFromDat(0).then((data) => {
                     if (se.listMyTrips[0].bookingsComboData[1].airlineCode && se.listMyTrips[0].bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(se.listMyTrips[0].bookingsComboData[1].trip_Code) == -1) {
                       this.getDetailTicketFromDat(1).then((data) => {
-
+    
                         this.getmhoteldetail();
                       })
                     }
                   })
-                }else{
-                  this.getmhoteldetail();
                 }
-                
-              }
-              // this.getmhoteldetail();
-              this.totalVMB=0;
-        se.totalService=0;
-        //chặng dừng nếu có
-        if (se.listMyTrips[0].booking_json_data) {
-          this.booking_json_data= JSON.parse(se.listMyTrips[0].booking_json_data);
-          let TotalPriceReturn=0;
-          let TotalPriceGo=0;
-          this.booking_json_data.forEach(item => {
-            if (item.Passengers) {
-              item.Passengers.forEach(element => {
-                if (element.GiaTienHanhLyTA) {
-                  se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)
-                }
-                if (element.SeatPriceTA) {
-                  se.totalService=se.totalService + Number(element.SeatPriceTA)
-                }
-                // se.totalService=se.totalService + Number(element.GiaTienHanhLyTA)+Number(element.SeatPriceTA);
-              });
-            }
-          if (item.PromotionNote && this.isJson(item.PromotionNote)) {
-            this.PromotionNote=JSON.parse(item.PromotionNote);
-             TotalPriceReturn=this.PromotionNote.TotalPriceReturn;
-             TotalPriceGo=this.PromotionNote.TotalPriceGo;
-          }
     
-           if(item.Transits && item.Transits.length>1) {
-            this.ischeckStops=true;
-           }
-          })
-          if(this.ischeckStops){
-            this.booking_json_data.forEach(item => {
-              if(item.Transits) {
-                for (let i = 0; i < item.Transits.length; i++) {
-                  item.Transits[i].departAirport = this.getAirportByCode(item.Transits[i].FromPlaceCode);
-                  item.Transits[i].returnAirport = this.getAirportByCode(item.Transits[i].ToPlaceCode);
-                  item.Transits[i].DepartureTime =moment(item.Transits[i].DepartTime).format('HH:mm')
-                  item.Transits[i].ArrivalTime =moment(item.Transits[i].LandingTime).format('HH:mm')
-                  if(i>0){
-                    var DepartureDate :any=this.parseDatetime(item.DepartureDate,item.Transits[i].DepartureTime)
-                    var LandingTime:any=this.parseDatetime(item.DepartureDate,item.Transits[i-1].ArrivalTime)
-                    let hours = (DepartureDate - LandingTime) / 36e5;
-                    // item.Transits[i].hours =hours;
-                    let layminutes:any = hours - (Math.floor(hours));
-                    item.Transits[i].timeOverStop =  Math.floor(hours) + " tiếng " + (layminutes > 0 ? (+Math.round(layminutes*60) + " phút") : '') ;
-                          }
-                        }
-              
+              }
+              this.getmhoteldetail();
+              this.totalVMB = 0;
+              se.totalService = 0;
+              //chặng dừng nếu có
+              if (se.listMyTrips[0].booking_json_data) {
+                this.booking_json_data = JSON.parse(se.listMyTrips[0].booking_json_data);
+                let TotalPriceReturn = 0;
+                let TotalPriceGo = 0;
+                this.booking_json_data.forEach(item => {
+                  if (item.Passengers) {
+                    item.Passengers.forEach(element => {
+                      if (element.GiaTienHanhLyTA) {
+                        se.totalService = se.totalService + Number(element.GiaTienHanhLyTA);
                       }
+                      if (element.SeatPriceTA) {
+                        se.totalService = se.totalService + Number(element.SeatPriceTA);
+                      }
+                      //se.totalService = se.totalService + Number(element.GiaTienHanhLyTA) + Number(element.SeatPriceTA);
+                    });
+                  }
+                  if (item.PromotionNote && this.isJson(item.PromotionNote)) {
+                    this.PromotionNote = JSON.parse(item.PromotionNote);
+                    TotalPriceReturn = this.PromotionNote.TotalPriceReturn;
+                    TotalPriceGo = this.PromotionNote.TotalPriceGo;
+                  }
+    
+                  if (item.Transits && item.Transits.length > 1) {
+                    this.ischeckStops = true;
+                  }
+                })
+                if (this.ischeckStops) {
+                  this.booking_json_data.forEach(item => {
+                    if (item.Transits) {
+                      for (let i = 0; i < item.Transits.length; i++) {
+                        item.Transits[i].departAirport = this.getAirportByCode(item.Transits[i].FromPlaceCode);
+                        item.Transits[i].returnAirport = this.getAirportByCode(item.Transits[i].ToPlaceCode);
+                        item.Transits[i].DepartureTime = moment(item.Transits[i].DepartTime).format('HH:mm')
+                        item.Transits[i].ArrivalTime = moment(item.Transits[i].LandingTime).format('HH:mm')
+                        if (i > 0) {
+                          var DepartureDate: any = this.parseDatetime(item.DepartureDate, item.Transits[i].DepartureTime)
+                          var LandingTime: any = this.parseDatetime(item.DepartureDate, item.Transits[i - 1].ArrivalTime)
+                          let hours = (DepartureDate - LandingTime) / 36e5;
+                          // item.Transits[i].hours =hours;
+                          let layminutes: any = hours - (Math.floor(hours));
+                          item.Transits[i].timeOverStop = Math.floor(hours) + " tiếng " + (layminutes > 0 ? (+Math.round(layminutes * 60) + " phút") : '');
+                        }
+                      }
+    
+                    }
                   })
                 }
-                let coutDCdepart=0;
-                let coutDCreturn=0;
-                if (TotalPriceGo>0) {
-                  coutDCdepart=2;
+                let coutDCdepart = 0;
+                let coutDCreturn = 0;
+                if (TotalPriceGo > 0) {
+                  coutDCdepart = 2;
                 }
-                if (TotalPriceReturn>0) {
-                  coutDCreturn=2;
+                if (TotalPriceReturn > 0) {
+                  coutDCreturn = 2;
                 }
-                se.coutDC=coutDCdepart+coutDCreturn;
-                se.totalDichung=TotalPriceGo+TotalPriceReturn;
-                se.totalVMB=se.listMyTrips[0].amount_after_tax-se.totalService-se.totalDichung+se.listMyTrips[0].promotionDiscountAmount;
-             
+                se.coutDC = coutDCdepart + coutDCreturn;
+                se.totalDichung = TotalPriceGo + TotalPriceReturn;
+                se.totalVMB = se.listMyTrips[0].amount_after_tax - se.totalService - se.totalDichung + se.listMyTrips[0].promotionDiscountAmount;
+    
               }
-              if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount>0) {
-                se.amount_after_tax=se.listMyTrips[0].amount_after_tax-se.listMyTrips[0].paid_amount;
-              }else{
-                se.amount_after_tax=se.listMyTrips[0].amount_after_tax
+              if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
+                se.amount_after_tax = se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount;
+              } else {
+                se.amount_after_tax = se.listMyTrips[0].amount_after_tax
               }
             } else {
               se.hasdata = false;
             }
-            se.zone.run(()=>{
-           
-
-              se.hasloaddata = true;
-              se.hasdata = true;
-            })
+    
             setTimeout(() => {
               if (se.myloader) {
                 se.myloader.dismiss();
@@ -1776,643 +1932,902 @@ import { tourService } from '../providers/tourService';
               }
               console.log(se.listMyTrips.length);
               //check case 1bkg tour
-              if(se.listMyTrips && se.listMyTrips.length ==1 && se.listMyTrips[0].booking_type == 'TOUR'){
-                if(se.listMyTrips[0].child_ages){
+              if (se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].booking_type == 'TOUR') {
+                if (se.listMyTrips[0].child_ages) {
                   let countstring = se.listMyTrips[0].child_ages.match(/tuổi/g || []).length;
                   let inputstr = se.listMyTrips[0].child_ages;
                   for (let index = 0; index < countstring; index++) {
-                      inputstr = inputstr.replace('tuổi','');
-                    }
-                    se.listMyTrips[0].childAgesDisplay = inputstr;
+                    inputstr = inputstr.replace('tuổi', 't');
+                  }
+                  se.listMyTrips[0].childAgesDisplay = inputstr;
                 }
                 se.getBookingTourDetail(se.listMyTrips[0]);
               }
-
-              else if(se.listMyTrips && se.listMyTrips.length ==1 && se.listMyTrips[0].isBookingVMBQT){
+    
+              else if (se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].isBookingVMBQT) {
                 se.getSummaryBooking(se.listMyTrips[0]);
-                if(se.listMyTrips[0].off_hotel_paypolicy && se.listMyTrips[0].off_hotel_paypolicy.indexOf('\r\n')){
+                if (se.listMyTrips[0].off_hotel_paypolicy && se.listMyTrips[0].off_hotel_paypolicy.indexOf('\r\n')) {
                   let arrpolicy = se.listMyTrips[0].off_hotel_paypolicy.split('\r\n');
-                  se.listMyTrips[0].listpolicy =[];
+                  se.listMyTrips[0].listpolicy = [];
                   arrpolicy.forEach(element => {
-                     if(element && element.toLowerCase().indexOf('đổi chiều đi') != -1){
+                    if (element && element.toLowerCase().indexOf('đổi chiều đi') != -1) {
                       se.listMyTrips[0].hasdepartpolicy = true;
-                      se.listMyTrips[0].listpolicy.push({type: 1, name: element.replace('-',''), isdepart: true});
-                     }else if(element && element.toLowerCase().indexOf('đổi chiều về') != -1){
+                      se.listMyTrips[0].listpolicy.push({ type: 1, name: element.replace('-', ''), isdepart: true });
+                    } else if (element && element.toLowerCase().indexOf('đổi chiều về') != -1) {
                       se.listMyTrips[0].hasreturnpolicy = true;
-                      se.listMyTrips[0].listpolicy.push({type: 1, name: element.replace('-',''), isdepart: false});
-                     }
-                     else if(element && element.toLowerCase().indexOf('hủy chiều đi') != -1){
+                      se.listMyTrips[0].listpolicy.push({ type: 1, name: element.replace('-', ''), isdepart: false });
+                    }
+                    else if (element && element.toLowerCase().indexOf('hủy chiều đi') != -1) {
                       se.listMyTrips[0].hasdepartpolicy = true;
-                      se.listMyTrips[0].listpolicy.push({type: 2, name: element.replace('-',''), isdepart: true});
-                     }else if(element && element.toLowerCase().indexOf('hủy chiều về') != -1){
+                      se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: true });
+                    } else if (element && element.toLowerCase().indexOf('hủy chiều về') != -1) {
                       se.listMyTrips[0].hasreturnpolicy = true;
-                      se.listMyTrips[0].listpolicy.push({type: 2, name: element.replace('-',''), isdepart: false});
-                     }
-                   });
-                 }
+                      se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: false });
+                    }
+                  });
+                }
+                if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
+                  se.listMyTrips[0].priceShow = (se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                }
               }
-
-              
-
+    
+              se.zone.run(() => {
+                se.hasloaddata = true;
+                se.hasdata = true;
+              })
+    
             }, 300);
-            //se.getListSupportByUser(this.loginuser);
+            se.getListSupportByUser(this.loginuser);
           }
           //List trip đã đi
           else {
             if (lstTrips && lstTrips.trips && lstTrips.trips.length > 0) {
-                
-        if (this.gf.getParams('selectedTab3') && this.gf.getParams('notifiBookingCode')) {
-               this.activeTabTrip = 3;
-              this.tabtrip = 'historytrip';
-        }
-
-            lstTrips.trips.forEach(elementHis => {
-              if(!se.gf.checkExistsItemInArray(se.listHistoryTrips, elementHis, 'order')){
-                if (elementHis.avatar  && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
-                  let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
-                  let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
-                  elementHis.avatar157 = urlavatar + "-" + "110x157" + tail;
-                  elementHis.avatar104 = urlavatar + "-" + "110x104" + tail;
-                  elementHis.avatar110 = urlavatar + "-" + "110x118" + tail;
-                } else {
-                  elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
-                }
-                if (elementHis.avatar) {
-                  elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
-                }
-               
-                elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
-                elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
-                se.getRatingStar(elementHis);
-        
-                //map thông tin giống với trip future
-              if (elementHis.booking_id.indexOf("FLY") == -1 && elementHis.booking_id.indexOf("VMB") == -1) {
-                elementHis.isFlyBooking = false;
-                if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
-                  elementHis.booking_type = "COMBO_VXR";
-                }
-                //tour
-                else if(elementHis.booking_id && (elementHis.booking_id.indexOf("DL") != -1 || elementHis.booking_id.indexOf("TO") != -1 )){
-                  elementHis.booking_type = "TOUR";
-                  elementHis.tourCheckinDisplay = moment(elementHis.checkInDate).format('DD-MM-YYYY');
-                  let _listpax = elementHis.totalPaxStr.split('|');
-                  _listpax = _listpax.map((p)=>{ return  p.trim().split(' ').slice(1).join(' ').replace('n','N').replace('t','T') + ' x' + p.trim().split(' ')[0] });
-                  elementHis.tourListPax = _listpax;
-
-                  if(elementHis.child_ages){
-                    let countstring = elementHis.child_ages.match(/tuổi/g || []).length;
-                    let inputstr = elementHis.child_ages;
-                    for (let index = 0; index < countstring; index++) {
-                        inputstr = inputstr.replace('tuổi','');
-                      }
-                      elementHis.childAgesDisplay = inputstr;
-                  }
-                }
-                if(elementHis.booking_type == "20" || elementHis.booking_id.indexOf('OFF') != -1 || elementHis.booking_id.indexOf('TO') != -1){
-                  
-                    if(elementHis.hotel_name && (elementHis.room_id || elementHis.hotel_name.toUpperCase().indexOf('VOUCHER') != -1) ){
-                      elementHis.bookingOffType = 1;//KS
-                    }
-                    else if(elementHis.hotel_name && (elementHis.hotel_name.toUpperCase().indexOf('VIETJET') != -1 
-                     || elementHis.hotel_name.toUpperCase().indexOf('VIETNAM') != -1) 
-                     || elementHis.hotel_name.toUpperCase().indexOf('JETSTAR') != -1 
-                     || elementHis.hotel_name.toUpperCase().indexOf('BAMBOO') != -1
-                     || elementHis.hotel_name.toUpperCase().indexOf('VMB') != -1
-                     || elementHis.hotel_name.toUpperCase().indexOf('VÉ MÁY BAY') != -1){
-                       elementHis.bookingOffType = 2;//VMB
-                     }
-                     else if(elementHis.hotel_name && (elementHis.hotel_name.toUpperCase().indexOf('TRANSFER') != -1 || elementHis.hotel_name.toUpperCase().indexOf('XE') != -1)){
-                      elementHis.bookingOffType = 3;//DC
-                     }
-                     else if(elementHis.booking_id.indexOf('TO') != -1){
-                      elementHis.bookingOffType = 4;//TOUR
-                     }
-                }
-                //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
-                  if (elementHis.avatar && elementHis.avatar.indexOf("104x104") ==-1  && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
+    
+              if (this.gf.getParams('selectedTab3') && this.gf.getParams('notifiBookingCode')) {
+                this.activeTabTrip = 3;
+                this.tabtrip = 'historytrip';
+              }
+    
+              lstTrips.trips.forEach(elementHis => {
+                if (!se.gf.checkExistsItemInArray(se.listHistoryTrips, elementHis, 'order')) {
+                  if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
                     let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
                     let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
-                    elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+                    elementHis.avatar157 = urlavatar + "-" + "110x157" + tail;
+                    elementHis.avatar104 = urlavatar + "-" + "110x104" + tail;
+                    elementHis.avatar110 = urlavatar + "-" + "110x118" + tail;
+                  } else {
+                    elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                   }
-                  if (elementHis.delivery_payment_date) {
-                    let arrpaymentdate = elementHis.delivery_payment_date.split("T");
-                    let hour ='',day='';
-                    let arrday;
-                    if(arrpaymentdate && arrpaymentdate.length >1){
-                      //hour = arrpaymentdate[1].substring(0,5);
-                      let arrhour = arrpaymentdate[1].substring(0,5).split(":");
-                      if(arrhour && arrhour.length>0){
-                        hour = arrhour[0].toString() + "h" + arrhour[1].toString();
-                      }
-                        arrday = arrpaymentdate[0].split('-');
-                      if(arrday && arrday.length>0){
-                        day = arrday[2].toString()+"/"+arrday[1].toString();
-                      }
-                    }
-                      elementHis.deliveryPaymentDisplay = "" +hour + ", " + day;
-                        let arrhours = arrpaymentdate[1].split(":");
-                        let today = new Date();
-                        let d = new Date(Number(arrday[0]), Number(arrday[1])-1, Number(arrday[2]),Number(arrhours[0]),Number(arrhours[1]),0);
-                        let diffminutes = moment(d).diff(today, 'minutes');
-                        //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
-                        if(diffminutes <0){
-                          elementHis.deliveryPaymentDisplay = "";
-                        }
-                  
-                        
-                    if (elementHis.extra_guest_info) {
-                      let arrpax = elementHis.extra_guest_info.split('|');
-                      if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
-                        elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                      } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
-                        elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
-                      }
-                    }
-                    if (elementHis.amount_after_tax) {
-                      elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-                    }
-                  }
-                  elementHis.isRequestTrip = false;
-                  //date display
-                  elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM');
-                  elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM');
-
-                  elementHis.checkInDisplayShort = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM');
-                  elementHis.checkOutDisplayShort = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
-
+                  elementHis.avatar = (elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ? elementHis.avatar : 'https:' + elementHis.avatar;
+                  elementHis.checkInDisplayCity = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort + ", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
+                  elementHis.checkOutDisplayCity = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort + ", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
+              
                   se.getRatingStar(elementHis);
-                  if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
-                    if (se.checkItemHasNotClaim(elementHis.insuranceInfo.adultList) || se.checkItemHasNotClaim(elementHis.insuranceInfo.childList)) {
-                      se.zone.run(() => {
-                        se.valueGlobal.countclaim++;
-                      })
+    
+                  //map thông tin giống với trip future
+                  if (elementHis.booking_id.indexOf("FLY") == -1 && elementHis.booking_id.indexOf("VMB") == -1) {
+                    elementHis.isFlyBooking = false;
+                    if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
+                      elementHis.booking_type = "COMBO_VXR";
                     }
-                  }
-        
-                  //tính giờ bay
-                  if(elementHis.bookingsComboData && elementHis.bookingsComboData.length >0){
-                    let diffhours = elementHis.bookingsComboData[0].arrivalTime ? elementHis.bookingsComboData[0].arrivalTime.replace(':','')*1 - elementHis.bookingsComboData[0].departureTime.replace(':','')*1 : 0;
-                    if(diffhours){
-                      let str = diffhours.toString();
-                      let m = str.substring(str.length - 2, str.length);
-                      let h = str.substring(0, str.length - 2);
-                      h = h.length <2 ? "0"+h +"h" : h +"h";
-                      m = m != "00" ? m + "m" : "";
-                      elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
+                    //tour
+                    else if (elementHis.booking_id && (elementHis.booking_id.indexOf("DL") != -1 || elementHis.booking_id.indexOf("TO") != -1)) {
+                      elementHis.booking_type = "TOUR";
+                      elementHis.tourCheckinDisplay = moment(elementHis.checkInDate).format('DD-MM-YYYY');
+                      let _listpax = elementHis.totalPaxStr.split('|');
+                      _listpax = _listpax.map((p) => { return p.trim().split(' ').slice(1).join(' ').replace('n', 'N').replace('t', 'T') + ' x' + p.trim().split(' ')[0] });
+                      elementHis.tourListPax = _listpax;
                     }
-                    let ddate = elementHis.checkInDate;
-                    elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD-MM-YYYY');
-                    if(elementHis.bookingsComboData[1]){
-                      let diffhours = elementHis.bookingsComboData[1].arrivalTime ? elementHis.bookingsComboData[1].arrivalTime.replace(':','')*1 - elementHis.bookingsComboData[1].departureTime.replace(':','')*1 : 0;
-                      if(diffhours){
+                    if (elementHis.booking_type == "20" || elementHis.booking_id.indexOf('OFF') != -1 || elementHis.booking_id.indexOf('TO') != -1) {
+    
+                      if (elementHis.hotel_name && (elementHis.room_id || elementHis.hotel_name.toUpperCase().indexOf('VOUCHER') != -1)) {
+                        elementHis.bookingOffType = 1;//KS
+                      }
+                      else if (elementHis.hotel_name && (elementHis.hotel_name.toUpperCase().indexOf('VIETJET') != -1
+                        || elementHis.hotel_name.toUpperCase().indexOf('VIETNAM') != -1)
+                        || elementHis.hotel_name.toUpperCase().indexOf('JETSTAR') != -1
+                        || elementHis.hotel_name.toUpperCase().indexOf('BAMBOO') != -1
+                        || elementHis.hotel_name.toUpperCase().indexOf('VMB') != -1
+                        || elementHis.hotel_name.toUpperCase().indexOf('VÉ MÁY BAY') != -1) {
+                        elementHis.bookingOffType = 2;//VMB
+                      }
+                      else if (elementHis.hotel_name && (elementHis.hotel_name.toUpperCase().indexOf('TRANSFER') != -1 || elementHis.hotel_name.toUpperCase().indexOf('XE') != -1)) {
+                        elementHis.bookingOffType = 3;//DC
+                      }
+                      else if (elementHis.booking_id.indexOf('TO') != -1) {
+                        elementHis.bookingOffType = 4;//TOUR
+                      }
+                    }
+                    //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
+                    if (elementHis.avatar && elementHis.avatar.indexOf("104x104") == -1 && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
+                      let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
+                      let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
+                      elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+                    }
+                    if (elementHis.delivery_payment_date) {
+                      let arrpaymentdate = elementHis.delivery_payment_date.split("T");
+                      let hour = '', day = '';
+                      let arrday;
+                      if (arrpaymentdate && arrpaymentdate.length > 1) {
+                        //hour = arrpaymentdate[1].substring(0,5);
+                        let arrhour = arrpaymentdate[1].substring(0, 5).split(":");
+                        if (arrhour && arrhour.length > 0) {
+                          hour = arrhour[0].toString() + "h" + arrhour[1].toString();
+                        }
+                        arrday = arrpaymentdate[0].split('-');
+                        if (arrday && arrday.length > 0) {
+                          day = arrday[2].toString() + "/" + arrday[1].toString();
+                        }
+                      }
+                      elementHis.deliveryPaymentDisplay = "" + hour + ", " + day;
+                      let arrhours = arrpaymentdate[1].split(":");
+                      let today = new Date();
+                      let d = new Date(Number(arrday[0]), Number(arrday[1]) - 1, Number(arrday[2]), Number(arrhours[0]), Number(arrhours[1]), 0);
+                      let diffminutes = moment(d).diff(today, 'minutes');
+                      //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
+                      if (diffminutes < 0) {
+                        elementHis.deliveryPaymentDisplay = "";
+                      }
+    
+    
+                      if (elementHis.extra_guest_info) {
+                        let arrpax = elementHis.extra_guest_info.split('|');
+                        if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                          elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
+                        } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                          elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
+                        }
+                      }
+                      if (elementHis.amount_after_tax) {
+                        elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+                      }
+                    }
+                    elementHis.isRequestTrip = false;
+                    //date display
+                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname + ", " + moment(elementHis.checkInDate).format("DD-MM-YYYY");
+                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname + ", " + moment(elementHis.checkOutDate).format("DD-MM-YYYY");
+                    //Thay mới ngày bay
+                    if (elementHis.bookingsComboData) {
+                      if (elementHis.bookingsComboData.length > 1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(elementHis.bookingsComboData[1].trip_Code) == -1 && elementHis.bookingsComboData[1].airlineName && elementHis.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
+                        for (let i = 0; i < 2; i++) {
+                          const elementNew = elementHis.bookingsComboData[i];
+                          if (i == 0) {
+                            if (elementNew.departureDate && !elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDate.indexOf('-') != -1) {
+                                newdate = elementNew.departureDate.split('-');
+                              }
+                              if (elementNew.departureDate.indexOf('/') != -1) {
+                                newdate = elementNew.departureDate.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                            }
+                            if (elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                newdate = elementNew.departureDateNew.split('-');
+                              }
+                              if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                newdate = elementNew.departureDateNew.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                            }
+                          } else {
+                            if (elementNew.departureDate && !elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDate.indexOf('-') != -1) {
+                                newdate = elementNew.departureDate.split('-');
+                              }
+                              if (elementNew.departureDate.indexOf('/') != -1) {
+                                newdate = elementNew.departureDate.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                            }
+                            if (elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                newdate = elementNew.departureDateNew.split('-');
+                              }
+                              if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                newdate = elementNew.departureDateNew.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                            }
+                          }
+      
+                        }
+      
+      
+                      } else {
+      
+                        if (elementHis.bookingsComboData[0].departureDate && !elementHis.bookingsComboData[0].departureDateNew) {
+                          let newdate;
+                          if (elementHis.bookingsComboData[0].departureDate.indexOf('-') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDate.split('-');
+                          }
+                          if (elementHis.bookingsComboData[0].departureDate.indexOf('/') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDate.split('/');
+                          }
+                          let d;
+                          if (newdate && newdate.length > 1) {
+                            d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                          }
+                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                        }
+                        if (elementHis.bookingsComboData[0].departureDateNew) {
+                          let newdate;
+                          if (elementHis.bookingsComboData[0].departureDateNew.indexOf('-') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDateNew.split('-');
+                          }
+                          if (elementHis.bookingsComboData[0].departureDateNew.indexOf('/') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDateNew.split('/');
+                          }
+                          let d;
+                          if (newdate && newdate.length > 1) {
+                            d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                          }
+                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementHis.bookingsComboData[0].departureDateNew;
+                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementHis.bookingsComboData[0].departureDateNew;
+                        }
+                      }
+                    }
+                   
+    
+                    elementHis.checkInDisplayShort = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort + ", " + moment(elementHis.checkInDate).format('DD-MM');
+                    elementHis.checkOutDisplayShort = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort + ", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
+    
+                    se.getRatingStar(elementHis);
+                    if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
+                      if (se.checkItemHasNotClaim(elementHis.insuranceInfo.adultList) || se.checkItemHasNotClaim(elementHis.insuranceInfo.childList)) {
+                        se.zone.run(() => {
+                          se.valueGlobal.countclaim++;
+                        })
+                      }
+                    }
+    
+                    //tính giờ bay
+                    if (elementHis.bookingsComboData && elementHis.bookingsComboData.length > 0) {
+                      let diffhours = elementHis.bookingsComboData[0].arrivalTime ? elementHis.bookingsComboData[0].arrivalTime.replace(':', '') * 1 - elementHis.bookingsComboData[0].departureTime.replace(':', '') * 1 : 0;
+                      if (diffhours) {
                         let str = diffhours.toString();
                         let m = str.substring(str.length - 2, str.length);
                         let h = str.substring(0, str.length - 2);
-                        h = h.length <2 ? "0"+h +"h" : h +"h";
+                        h = h.length < 2 ? "0" + h + "h" : h + "h";
                         m = m != "00" ? m + "m" : "";
-                        elementHis.bookingsComboData[1].flightTimeDisplay = h + m;
+                        elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
                       }
-        
-                      let rdate = elementHis.checkOutDate;
-                      elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD') +" thg "+moment(rdate).format('MM')
-                    }
-                    elementHis.arrPickupDropoff = [];
-                    elementHis.bookingsComboData.forEach(el => {
-                      if(el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP"){
-                        elementHis.isPickupDropoff = true;
-                        el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
-                        elementHis.arrPickupDropoff.push(el);
-                        if(el.departureDate){
-                          let newdate = el.departureDate.split('/');
-                          if(newdate && newdate.length >1){
-                            let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
-                            el.departureDateDisplay = moment(d).format("DD-MM");
-                          }
-                          
-                        }
-                        
-                      }
-                      if (el.airlineName.toLowerCase().indexOf('cathay') != -1) {
-                        elementHis.hasCathay = true;
-                    }
-                    });
-
-                    if(elementHis.arrPickupDropoff && elementHis.arrPickupDropoff.length >0){
-                      se.zone.run(() => elementHis.arrPickupDropoff.sort(function (a, b) {
-                        return a.sortPD - b.sortPD;
-                      }))
-                    }
-                    
-                  }
-
-                  // elementHis.bookingsComboData.forEach(el => {
-                  //   if(el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP"){
-                  //     elementHis.isPickupDropoff = true;
-                  //   }
-                  // });
-                  
-                //}
-              }
-           
-              //list vmb
-              else{
-                if(elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1){
-                  elementHis.booking_type = "COMBO_VXR";
-                }
-                if(elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1){
-                  elementHis.booking_type = "COMBO_VXR";
-                }
-                
-                //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
-                  //if (elementHis.payment_status != 3) {
-                  if (elementHis.avatar  && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
-                    let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
-                    let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
-                    elementHis.avatar = urlavatar + "-" + "104x104" + tail;
-                  }
-                  if(elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1 || elementHis.booking_type == "CB_FLY_HOTEL"){
-                    elementHis.isFlyBooking = true;
-                    if(elementHis.hotel_name.indexOf("VMB QT") != -1){
-                      
-                      if(elementHis.booking_json_data){
-                        console.log(JSON.parse(elementHis.booking_json_data));
-                        elementHis.bookingjson = JSON.parse(elementHis.booking_json_data);
-                        
-                        if(elementHis.bookingjson && elementHis.bookingjson.length >0){
-                          elementHis.bookingjson.forEach(elementbkg => {
-                            if(elementbkg && elementbkg.Supplier3rd == "Travelport"){
-                              elementHis.isBookingVMBQT = true;
+                      // let ddate = elementHis.checkInDate;
+                      // elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname + ", " + moment(ddate).format('DD-MM-YYYY');
+    
+                      //Thay mới ngày bay
+                      if (elementHis.bookingsComboData) {
+                        if (elementHis.bookingsComboData && elementHis.bookingsComboData.length > 1) {
+    
+                          for (let i = 0; i < 2; i++) {
+                            const elementNew = elementHis.bookingsComboData[i];
+                            if (i == 0) {
+                              if (elementNew.departureDate && !elementNew.departureDateNew) {
+                                let newdate = elementNew.departureDate.split('-');
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              }
+                              if (elementNew.departureDateNew) {
+                                let newdate = elementNew.departureDateNew.split('-');
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              }
+                            } else {
+                              if (elementNew.departureDate && !elementNew.departureDateNew) {
+                                let newdate = elementNew.departureDate.split('-');
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              }
+                              if (elementNew.departureDateNew) {
+                                let newdate = elementNew.departureDateNew.split('-');
+                                let d;
+                                if (newdate && newdate.length > 1) {
+                                  d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                                }
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              }
                             }
-                            if(elementbkg && elementbkg.Transits){
-                              elementHis.totalCost += elementbkg.TotalCost*1;
-                              // if(elementbkg.Transits.length >1){
-                              // let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
-                              //         let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
-                              //         let diffminutes = moment(dt).diff(lt, 'minutes');
-                              //         if(diffminutes){
-                              //           let hours:any = Math.floor(diffminutes/60);
-                              //           let minutes:any = diffminutes - (hours*60);
-                              //           if(hours < 10){
-                              //             hours = hours != 0?  "0"+hours : "0";
-                              //           }
-                              //           if(minutes < 10){
-                              //             minutes = "0"+minutes;
-                              //           }
-                              //           elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
-                              //         }
-                              //       }
-                              // elementbkg.Transits.forEach(element => {
-                              //     element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                              //     element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                              //     element.departAirport = this.getAirportByCode(element.FromPlaceCode);
-                              //     element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                              //     let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
-                              //     element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                              //   });
+      
+                          }
+                        }
+                      }
+                     
+                      if (elementHis.bookingsComboData && elementHis.bookingsComboData[1]) {
+                        let diffhours = elementHis.bookingsComboData[1].arrivalTime ? elementHis.bookingsComboData[1].arrivalTime.replace(':', '') * 1 - elementHis.bookingsComboData[1].departureTime.replace(':', '') * 1 : 0;
+                        if (diffhours) {
+                          let str = diffhours.toString();
+                          let m = str.substring(str.length - 2, str.length);
+                          let h = str.substring(0, str.length - 2);
+                          h = h.length < 2 ? "0" + h + "h" : h + "h";
+                          m = m != "00" ? m + "m" : "";
+                          elementHis.bookingsComboData[1].flightTimeDisplay = h + m;
+                        }
+    
+                        // let rdate = elementHis.checkOutDate;
+                        // elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname + ", " + moment(rdate).format('DD') + " thg " + moment(rdate).format('MM')
+                      }
+                      elementHis.arrPickupDropoff = [];
+                      elementHis.bookingsComboData.forEach(el => {
+                        if (el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP") {
+                          elementHis.isPickupDropoff = true;
+                          el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
+                          elementHis.arrPickupDropoff.push(el);
+                          if (el.departureDate) {
+                            let newdate = el.departureDate.split('/');
+                            if (newdate && newdate.length > 1) {
+                              let d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              el.departureDateDisplay = moment(d).format("DD-MM");
+                            }
+    
+                          }
+    
+                        }
+                        if (el.airlineName.toLowerCase().indexOf('cathay') != -1) {
+                          elementHis.hasCathay = true;
+                        }
+                      });
+    
+                      if (elementHis.arrPickupDropoff && elementHis.arrPickupDropoff.length > 0) {
+                        se.zone.run(() => elementHis.arrPickupDropoff.sort(function (a, b) {
+                          return a.sortPD - b.sortPD;
+                        }))
+                      }
+    
+                    }
+    
+                    // elementHis.bookingsComboData.forEach(el => {
+                    //   if(el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP"){
+                    //     elementHis.isPickupDropoff = true;
+                    //   }
+                    // });
+    
+                    //}
+                  }
+    
+                  //list vmb
+                  else {
+                    if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
+                      elementHis.booking_type = "COMBO_VXR";
+                    }
+                    if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
+                      elementHis.booking_type = "COMBO_VXR";
+                    }
+    
+                    //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
+                    //if (elementHis.payment_status != 3) {
+                    if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
+                      let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
+                      let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
+                      elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+                    }
+                    if (elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1 || elementHis.booking_type == "CB_FLY_HOTEL") {
+                      elementHis.isFlyBooking = true;
+                      if (elementHis.hotel_name.indexOf("VMB QT") != -1) {
+                        //elementHis.isBookingVMBQT = true;
+                        if (elementHis.booking_json_data) {
+                          console.log(JSON.parse(elementHis.booking_json_data));
+                          elementHis.bookingjson = JSON.parse(elementHis.booking_json_data);
+                          if (elementHis.bookingjson && elementHis.bookingjson.length > 0) {
+                            elementHis.bookingjson.forEach(elementbkg => {
+                              if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
+                                elementHis.isBookingVMBQT = true;
+                              }
+    
+                              if (elementbkg && elementbkg.Transits) {
+                                elementHis.totalCost += elementbkg.TotalCost * 1;
+                                // if(elementbkg.Transits.length >1){
+                                // let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
+                                //         let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
+                                //         let diffminutes = moment(dt).diff(lt, 'minutes');
+                                //         if(diffminutes){
+                                //           let hours:any = Math.floor(diffminutes/60);
+                                //           let minutes:any = diffminutes - (hours*60);
+                                //           if(hours < 10){
+                                //             hours = hours != 0?  "0"+hours : "0";
+                                //           }
+                                //           if(minutes < 10){
+                                //             minutes = "0"+minutes;
+                                //           }
+                                //           elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                //         }
+                                //       }
+                                // elementbkg.Transits.forEach(element => {
+                                //     element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                //     element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                                //     element.departAirport = this.getAirportByCode(element.FromPlaceCode);
+                                //     element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                                //     let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                                //     element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                //   });
                                 //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
                                 for (let index = 0; index < elementbkg.Transits.length; index++) {
                                   const element = elementbkg.Transits[index];
-                                  element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                                  element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-
-                                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-                                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-
-
+                                  element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                                  element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+    
+                                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
+                                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
+    
+    
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                                  let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
-                                  element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                                  
-                                  let elementNext = elementbkg.Transits[index+1];
-                                  if(elementNext){
-                
-                                    let dt = elementNext.DepartTime.replace('/Date(','').replace(')/','')*1;
-                                    let lt = element.LandingTime.replace('/Date(','').replace(')/','')*1;
+                                  let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).dayname + ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+    
+                                  let elementNext = elementbkg.Transits[index + 1];
+                                  if (elementNext) {
+    
+                                    let dt = elementNext.DepartTime.replace('/Date(', '').replace(')/', '') * 1;
+                                    let lt = element.LandingTime.replace('/Date(', '').replace(')/', '') * 1;
                                     let diffminutes = moment(dt).diff(lt, 'minutes');
-                                    if(diffminutes){
-                                      let hours:any = Math.floor(diffminutes/60);
-                                      let minutes:any = diffminutes - (hours*60);
-                                      if(hours < 10){
-                                        hours = hours != 0?  "0"+hours : "0";
+                                    if (diffminutes) {
+                                      let hours: any = Math.floor(diffminutes / 60);
+                                      let minutes: any = diffminutes - (hours * 60);
+                                      if (hours < 10) {
+                                        hours = hours != 0 ? "0" + hours : "0";
                                       }
-                                      if(minutes < 10){
-                                        minutes = "0"+minutes;
+                                      if (minutes < 10) {
+                                        minutes = "0" + minutes;
                                       }
-                                      element.timeOverlay = hours+' tiếng '+minutes+' phút';
+                                      element.timeOverlay = hours + ' tiếng ' + minutes + ' phút';
                                     }
                                   }
                                 }
-                              
+    
+                              }
+                            });
+    
+                          }
+                          elementHis.flightRoundTripStr = 'Vé máy bay ' + (elementHis.bookingjson.length > 1 ? 'khứ hồi' : 'một chiều');
+                          if (elementHis.totalPaxStr) {
+                            elementHis.totalPaxStrVMBQT = elementHis.totalPaxStr.replace(' |', ',');
+                          }
+                        }
+                      }
+                      elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
+    
+                      elementHis.checkInDisplayCity = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort + ", " + moment(elementHis.checkInDate).format("DD-MM-YYYY");
+                      elementHis.checkOutDisplayCity = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort + ", " + moment(elementHis.checkOutDate).format("DD-MM-YYYY");
+                      let departFlight = elementHis.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(elementHis.checkInDate).format('DD-MM-YYYY') && f.airlineCode });
+                      if (departFlight && departFlight.length > 0) {
+                        elementHis.itemdepart = departFlight[0];
+    
+                      } else {
+                        elementHis.itemdepart = elementHis.bookingsComboData[0];
+    
+                      }
+                      elementHis.flightFrom = elementHis.itemdepart.flightFrom;
+                      elementHis.flightTo = elementHis.itemdepart.flightTo;
+                      elementHis.departAirport = se.getAirportByCode(elementHis.itemdepart.departCode);
+                      elementHis.returnAirport = se.getAirportByCode(elementHis.itemdepart.arrivalCode);
+    
+                      se.textDeparture = se.getDayOfWeek(elementHis.itemdepart.departureDate) + ', ' + elementHis.itemdepart.departureDate;
+                      se.textRegionDepart = se.getRegionByCode(elementHis.itemdepart.departCode);
+                      se.textRegionReturn = se.getRegionByCode(elementHis.itemdepart.arrivalCode);
+                      se.textAirpotDepart = se.getAirpot(elementHis.itemdepart.departCode);
+                      se.textAirpotReturn = se.getAirpot(elementHis.itemdepart.arrivalCode);
+    
+                      let idxlug = 0;
+                      elementHis.textChildDisplay = "";
+                      elementHis.arrPickupDropoff = [];
+                      elementHis.bookingsComboData.forEach(el => {
+    
+                        if (el.airlineName.indexOf('Vietnam Airlines') != -1) {
+                          //chặng dừng
+                          if (el.flightNumner.indexOf(',') != -1) {
+                            let fnstring = el.flightNumner.split(',')[0].trim();
+                            let fn = fnstring.substring(2, el.flightNumner.length) * 1;
+                            if (fn >= 6000) {
+                              el.operatedBy = "Khai thác bởi Pacific Airlines";
                             }
-                          });
-                          
-                        }
-                        elementHis.flightRoundTripStr = 'Vé máy bay ' + (elementHis.bookingjson.length >1 ? 'khứ hồi' : 'một chiều');
-                        if(elementHis.totalPaxStr){
-                          elementHis.totalPaxStrVMBQT = elementHis.totalPaxStr.replace(' |',',');
-                        }
-                      }
-                  }
-                    elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
-                   
-                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD-MM-YYYY");
-                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname +", "+ moment(elementHis.checkOutDate).format("DD-MM-YYYY");
-                    let departFlight = elementHis.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(elementHis.checkInDate).format('DD-MM-YYYY')&& f.airlineCode });
-                    if(departFlight && departFlight.length >0){
-                      elementHis.itemdepart = departFlight[0];
-                     
-                    }else{
-                      elementHis.itemdepart = elementHis.bookingsComboData[0];
-                      
-                    }
-                    elementHis.flightFrom = elementHis.itemdepart.flightFrom;
-                    elementHis.flightTo = elementHis.itemdepart.flightTo;
-                    elementHis.departAirport = se.getAirportByCode(elementHis.itemdepart.departCode);
-                    elementHis.returnAirport = se.getAirportByCode(elementHis.itemdepart.arrivalCode);
-                    
-                    se.textDeparture = se.getDayOfWeek(elementHis.itemdepart.departureDate) + ', ' + elementHis.itemdepart.departureDate;
-                    se.textRegionDepart = se.getRegionByCode(elementHis.itemdepart.departCode);
-                    se.textRegionReturn = se.getRegionByCode(elementHis.itemdepart.arrivalCode);
-                    se.textAirpotDepart = se.getAirpot(elementHis.itemdepart.departCode);
-                    se.textAirpotReturn = se.getAirpot(elementHis.itemdepart.arrivalCode);
-                    
-                    let idxlug =0;
-                    elementHis.textChildDisplay = "";
-                    elementHis.arrPickupDropoff = [];
-                    elementHis.bookingsComboData.forEach(el => {
-                     
-                      if(el.airlineName.indexOf('Vietnam Airlines') != -1 ){
-                        //chặng dừng
-                        if(el.flightNumner.indexOf(',') != -1){
-                          let fnstring = el.flightNumner.split(',')[0].trim();
-                          let fn = fnstring.substring(2, el.flightNumner.length)*1;
-                          if(fn >= 6000){
-                            el.operatedBy = "Khai thác bởi Pacific Airlines";
+                          } else {//bay thẳng
+                            let fn = el.flightNumner.substring(2, el.flightNumner.length) * 1;
+                            if (fn >= 6000) {
+                              el.operatedBy = "Khai thác bởi Pacific Airlines";
+                            }
                           }
-                        }else{//bay thẳng
-                          let fn = el.flightNumner.substring(2, el.flightNumner.length)*1;
-                          if(fn >= 6000){
-                            el.operatedBy = "Khai thác bởi Pacific Airlines";
-                          }
+    
                         }
-                        
-                      }
-                      
-                        if(el.passengers && el.passengers.length >0){
+    
+                        if (el.passengers && el.passengers.length > 0) {
                           for (let index = 0; index < el.passengers.length; index++) {
                             el.passengers[index].arrlug = [];
                           }
                           for (let index = 0; index < el.passengers.length; index++) {
                             const elementHislug = el.passengers[index];
-                            let departElementHisLug= null;
-                            if(idxlug ==1){
-                              departElementHisLug = elementHis.bookingsComboData[idxlug-1].passengers;
+                            let departElementHisLug = null;
+                            if (idxlug == 1) {
+                              departElementHisLug = elementHis.bookingsComboData[idxlug - 1].passengers;
                             }
-                            
-                            if(elementHislug.hanhLy && elementHislug.hanhLy.indexOf(':') == -1 && (elementHislug.hanhLy.replace('kg',''))*1 >0){
-                              if(idxlug ==1){
-                                if(departElementHisLug){
-                                  let itemfilter = departElementHisLug.filter((l) => { return l.arrlug && l.name == elementHislug.name});
-                                  if(itemfilter && itemfilter.length >0){
-                                    itemfilter[0].arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy})
+    
+                            if (elementHislug.hanhLy && elementHislug.hanhLy.indexOf(':') == -1 && (elementHislug.hanhLy.replace('kg', '')) * 1 > 0) {
+                              if (idxlug == 1) {
+                                if (departElementHisLug) {
+                                  let itemfilter = departElementHisLug.filter((l) => { return l.arrlug && l.name == elementHislug.name });
+                                  if (itemfilter && itemfilter.length > 0) {
+                                    itemfilter[0].arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy })
                                   }
-                                }else{
-                                  elementHislug.arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy})
+                                } else {
+                                  elementHislug.arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy })
                                 }
-                              }else{
-                                  if(elementHislug.arrlug.length >0){
-                                    let itemfilter = elementHislug.arrlug.filter((l) => { return l.paxname == elementHislug.name});
-                                    if(itemfilter && itemfilter.length >0){
-                                      itemfilter[0].arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy})
-                                    }
-                                }else{
-                                  elementHislug.arrlug.push({lugname: el.departCode + " - " + el.arrivalCode , lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy})
+                              } else {
+                                if (elementHislug.arrlug.length > 0) {
+                                  let itemfilter = elementHislug.arrlug.filter((l) => { return l.paxname == elementHislug.name });
+                                  if (itemfilter && itemfilter.length > 0) {
+                                    itemfilter[0].arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy })
+                                  }
+                                } else {
+                                  elementHislug.arrlug.push({ lugname: el.departCode + " - " + el.arrivalCode, lugweight: elementHislug.hanhLy, lugprice: elementHislug.giaTienHanhLy })
                                 }
                               }
-                              
+    
                             }
-                          
+    
                           }
-                         
+    
                         }
-                        
-                        if(el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP"){
+    
+                        if (el.trip_Code == "GO" || el.trip_Code == "RETURN" || el.trip_Code == "GOROUNDTRIP" || el.trip_Code == "RETURNROUNDTRIP") {
                           elementHis.isPickupDropoff = true;
                           el.sortPD = el.trip_Code == "GO" ? 1 : (el.trip_Code == "GOROUNDTRIP" ? 2 : (el.trip_Code == "RETURN" ? 3 : 4));
                           elementHis.arrPickupDropoff.push(el);
-                          if(el.departureDate){
+                          if (el.departureDate) {
                             let newdate = el.departureDate.split('/');
-                            if(newdate && newdate.length >1){
-                              let d = new Date(Number(newdate[2]), Number(newdate[1])-1, Number(newdate[0]));
+                            if (newdate && newdate.length > 1) {
+                              let d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               el.departureDateDisplay = moment(d).format("DD-MM");
                             }
-                            
+    
                           }
-                         
+    
                         }
                         if (el.airlineName.toLowerCase().indexOf('cathay') != -1) {
                           elementHis.hasCathay = true;
                         }
-                        
+    
                         idxlug++;
-                    })
-
-                    if(elementHis.arrPickupDropoff && elementHis.arrPickupDropoff.length >0){
-                      se.zone.run(() => elementHis.arrPickupDropoff.sort(function (a, b) {
-                        return a.sortPD - b.sortPD;
-                      }))
-                    }
-
-                    if(elementHis.bookingsComboData.length >1){
-                      let returnFlight = elementHis.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(elementHis.checkOutDate).format('DD-MM-YYYY')&& f.airlineCode });
-                      if(returnFlight && returnFlight.length >0){
-                        elementHis.itemreturn = returnFlight[0];
-                        
-                      }else{
-                        elementHis.itemreturn = elementHis.bookingsComboData[1];
-                      
+                      })
+    
+                      if (elementHis.arrPickupDropoff && elementHis.arrPickupDropoff.length > 0) {
+                        se.zone.run(() => elementHis.arrPickupDropoff.sort(function (a, b) {
+                          return a.sortPD - b.sortPD;
+                        }))
                       }
+    
+                      if (elementHis.bookingsComboData.length > 1) {
+                        let returnFlight = elementHis.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(elementHis.checkOutDate).format('DD-MM-YYYY') && f.airlineCode });
+                        if (returnFlight && returnFlight.length > 0) {
+                          elementHis.itemreturn = returnFlight[0];
+    
+                        } else {
+                          elementHis.itemreturn = elementHis.bookingsComboData[1];
+    
+                        }
                         elementHis.textReturn = se.getDayOfWeek(elementHis.itemreturn.departureDate) + ', ' + elementHis.itemreturn.departureDate;
                         se.textArrivalRegionDepart = se.getRegionByCode(elementHis.itemreturn.departCode);
                         se.textArrivalRegionReturn = se.getRegionByCode(elementHis.itemreturn.arrivalCode);
                         se.textAirpotArrivalDepart = se.getAirpot(elementHis.itemreturn.departCode);
                         se.textAirpotArrivalReturn = se.getAirpot(elementHis.itemreturn.arrivalCode);
-                      
-                    }
-            
-                    if(elementHis.bookingsComboData && elementHis.bookingsComboData[0].passengers && elementHis.bookingsComboData[0].passengers.length >0){
-                      elementHis.adult =0;
-                      elementHis.child =0;
-                      elementHis.infant =0;
-        
-                      elementHis.bookingsComboData[0].passengers.forEach( (elementHislug, index) => {
-                        let yearold = 18;
-                        let arr =[];
-                        if(elementHislug.dob){
-                          if(elementHislug.dob && elementHislug.dob.indexOf('/') != -1){
-                            arr = elementHislug.dob.split('/');
-                          }
-                          else if(elementHislug.dob && elementHislug.dob.indexOf('-') != -1){
-                            arr = elementHislug.dob.split('-');
-                          }
-
-                          if(arr.length >0){
-                            let newdob = new Date(Number(arr[2]), Number(arr[1]-1), Number(arr[0]));
-                            yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
-                          }
-        
-                          elementHislug.isAdult = yearold > 12 ? true : false;
-                          if(elementHislug.isAdult){
-                            elementHis.adult += 1;
-                          }else{
-                            if(!elementHis.textChildDisplay){
-                              elementHis.textChildDisplay = "(";
+    
+                      }
+    
+                      if (elementHis.bookingsComboData && elementHis.bookingsComboData[0].passengers && elementHis.bookingsComboData[0].passengers.length > 0) {
+                        elementHis.adult = 0;
+                        elementHis.child = 0;
+                        elementHis.infant = 0;
+    
+                        elementHis.bookingsComboData[0].passengers.forEach((elementHislug, index) => {
+                          let yearold = 18;
+                          let arr = [];
+                          if (elementHislug.dob) {
+                            if (elementHislug.dob && elementHislug.dob.indexOf('/') != -1) {
+                              arr = elementHislug.dob.split('/');
                             }
-                              if(yearold< 2){
-                                  elementHis.infant += 1;
-                                  elementHislug.isInfant = true;
-                                  elementHis.textChildDisplay +=elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", "+(yearold >0 ? yearold : 1) : (yearold >0 ? yearold : 1);
-                              }else{
-                                  elementHis.child += 1;
-                                  elementHis.textChildDisplay +=elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", "+(yearold >0 ? yearold : 1) : (yearold >0 ? yearold : 1);
-                              }
-                          }
-                         
-                            if(index == elementHis.bookingsComboData[0].passengers.length -1 && elementHis.textChildDisplay){
-                                elementHis.textChildDisplay += ")";
+                            else if (elementHislug.dob && elementHislug.dob.indexOf('-') != -1) {
+                              arr = elementHislug.dob.split('-');
                             }
     
-                        }
-                        
-                        if(elementHislug.hanhLy && elementHislug.hanhLy.length >0 && elementHislug.hanhLy.indexOf(':') != -1){
-                          elementHislug.hanhLy = elementHislug.hanhLy.replace(/\n/ig, ':');
-                          let arrlug = elementHislug.hanhLy.split(':');
-                          elementHislug.arrlug = [];
-                          if(arrlug && arrlug.length >0){
-                            let idx =0;
-                            arrlug.forEach(lug => {
-                              if(idx >0){
-                                let arrlugname = lug;
-                                if(arrlugname.length > 4){
-                                  arrlugname = arrlugname.substring(0,4);
-                                }
-                                let lugweight = arrlugname.substring(0,2);
-                                if(idx == 1 && lugweight >0){
-                                  elementHislug.arrlug.push({lugname: elementHis.bookingsComboData[0].departCode + " - " + elementHis.bookingsComboData[0].arrivalCode , lugweight: arrlugname});
-                                }
-                                else if(idx == 3 && lugweight >0){
-                                  elementHislug.arrlug.push({lugname: elementHis.bookingsComboData[0].arrivalCode + " - " + elementHis.bookingsComboData[0].departCode, lugweight: arrlugname});
-                                }
+                            if (arr.length > 0) {
+                              let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+                              yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
+                            }
+    
+                            elementHislug.isAdult = yearold > 12 ? true : false;
+                            if (elementHislug.isAdult) {
+                              elementHis.adult += 1;
+                            } else {
+                              if (!elementHis.textChildDisplay) {
+                                elementHis.textChildDisplay = "(";
                               }
-                              idx++;
-                            });
+                              if (yearold < 2) {
+                                elementHis.infant += 1;
+                                elementHislug.isInfant = true;
+                                elementHis.textChildDisplay += elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                              } else {
+                                elementHis.child += 1;
+                                elementHis.textChildDisplay += elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                              }
+                            }
+    
+                            if (index == elementHis.bookingsComboData[0].passengers.length - 1 && elementHis.textChildDisplay) {
+                              elementHis.textChildDisplay += ")";
+                            }
+    
                           }
-                        }
-        
-                      });
+    
+                          if (elementHislug.hanhLy && elementHislug.hanhLy.length > 0 && elementHislug.hanhLy.indexOf(':') != -1) {
+                            elementHislug.hanhLy = elementHislug.hanhLy.replace(/\n/ig, ':');
+                            let arrlug = elementHislug.hanhLy.split(':');
+                            elementHislug.arrlug = [];
+                            if (arrlug && arrlug.length > 0) {
+                              let idx = 0;
+                              arrlug.forEach(lug => {
+                                if (idx > 0) {
+                                  let arrlugname = lug;
+                                  if (arrlugname.length > 4) {
+                                    arrlugname = arrlugname.substring(0, 4);
+                                  }
+                                  let lugweight = arrlugname.substring(0, 2);
+                                  if (idx == 1 && lugweight > 0) {
+                                    elementHislug.arrlug.push({ lugname: elementHis.bookingsComboData[0].departCode + " - " + elementHis.bookingsComboData[0].arrivalCode, lugweight: arrlugname });
+                                  }
+                                  else if (idx == 3 && lugweight > 0) {
+                                    elementHislug.arrlug.push({ lugname: elementHis.bookingsComboData[0].arrivalCode + " - " + elementHis.bookingsComboData[0].departCode, lugweight: arrlugname });
+                                  }
+                                }
+                                idx++;
+                              });
+                            }
+                          }
+    
+                        });
+                      }
+    
+                      //chiều về
+                      if (elementHis.bookingsComboData && elementHis.bookingsComboData[1] && elementHis.bookingsComboData[1].passengers && elementHis.bookingsComboData[1].passengers.length > 0) {
+    
+                        elementHis.bookingsComboData[1].passengers.forEach((elementHislug, index) => {
+                          let yearold = 18;
+                          let arr = [];
+                          if (elementHislug.dob) {
+                            if (elementHislug.dob && elementHislug.dob.indexOf('/') != -1) {
+                              arr = elementHislug.dob.split('/');
+                            }
+                            else if (elementHislug.dob && elementHislug.dob.indexOf('-') != -1) {
+                              arr = elementHislug.dob.split('-');
+                            }
+    
+                            if (arr.length > 0) {
+                              let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+                              yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
+                            }
+    
+                            elementHislug.isAdult = yearold > 12 ? true : false;
+                            if (elementHislug.isAdult) {
+                              //elementHis.adult += 1;
+                            } else {
+                              if (yearold < 2) {
+                                elementHislug.isInfant = true;
+                              }
+                            }
+    
+                          }
+    
+                        });
+                      }
                     }
-
-                    //chiều về
-                    if (elementHis.bookingsComboData && elementHis.bookingsComboData[1] && elementHis.bookingsComboData[1].passengers && elementHis.bookingsComboData[1].passengers.length > 0) {
-
-                      elementHis.bookingsComboData[1].passengers.forEach((elementHislug, index) => {
-                        let yearold = 18;
-                        let arr = [];
-                        if (elementHislug.dob) {
-                          if (elementHislug.dob && elementHislug.dob.indexOf('/') != -1) {
-                            arr = elementHislug.dob.split('/');
-                          }
-                          else if (elementHislug.dob && elementHislug.dob.indexOf('-') != -1) {
-                            arr = elementHislug.dob.split('-');
-                          }
-
-                          if (arr.length > 0) {
-                            let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-                            yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
-                          }
-
-                          elementHislug.isAdult = yearold > 12 ? true : false;
-                          if (elementHislug.isAdult) {
-                            //elementHis.adult += 1;
+                     //Thay mới ngày bay
+                     if (elementHis.bookingsComboData) {
+                      if (elementHis.bookingsComboData.length > 1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(elementHis.bookingsComboData[1].trip_Code) == -1 && elementHis.bookingsComboData[1].airlineName && elementHis.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
+                        for (let i = 0; i < 2; i++) {
+                          const elementNew = elementHis.bookingsComboData[i];
+                          if (i == 0) {
+                            if (elementNew.departureDate && !elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDate.indexOf('-') != -1) {
+                                newdate = elementNew.departureDate.split('-');
+                              }
+                              if (elementNew.departureDate.indexOf('/') != -1) {
+                                newdate = elementNew.departureDate.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                            }
+                            if (elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                newdate = elementNew.departureDateNew.split('-');
+                              }
+                              if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                newdate = elementNew.departureDateNew.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + elementNew.departureDateNew;
+                            }
                           } else {
-                            if (yearold < 2) {
-                              elementHislug.isInfant = true;
-                            } 
+                            if (elementNew.departureDate && !elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDate.indexOf('-') != -1) {
+                                newdate = elementNew.departureDate.split('-');
+                              }
+                              if (elementNew.departureDate.indexOf('/') != -1) {
+                                newdate = elementNew.departureDate.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format("DD-MM-YYYY");
+                            }
+                            if (elementNew.departureDateNew) {
+                              let newdate;
+                              if (elementNew.departureDateNew.indexOf('-') != -1) {
+                                newdate = elementNew.departureDateNew.split('-');
+                              }
+                              if (elementNew.departureDateNew.indexOf('/') != -1) {
+                                newdate = elementNew.departureDateNew.split('/');
+                              }
+                              let d;
+                              if (newdate && newdate.length > 1) {
+                                d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                              }
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + elementNew.departureDateNew;
+                            }
                           }
-
+      
                         }
-
-                      });
+      
+      
+                      } else {
+      
+                        if (elementHis.bookingsComboData[0].departureDate && !elementHis.bookingsComboData[0].departureDateNew) {
+                          let newdate;
+                          if (elementHis.bookingsComboData[0].departureDate.indexOf('-') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDate.split('-');
+                          }
+                          if (elementHis.bookingsComboData[0].departureDate.indexOf('/') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDate.split('/');
+                          }
+                          let d;
+                          if (newdate && newdate.length > 1) {
+                            d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                          }
+                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format("DD-MM-YYYY");
+                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format("DD-MM-YYYY");
+                        }
+                        if (elementHis.bookingsComboData[0].departureDateNew) {
+                          let newdate;
+                          if (elementHis.bookingsComboData[0].departureDateNew.indexOf('-') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDateNew.split('-');
+                          }
+                          if (elementHis.bookingsComboData[0].departureDateNew.indexOf('/') != -1) {
+                            newdate = elementHis.bookingsComboData[0].departureDateNew.split('/');
+                          }
+                          let d;
+                          if (newdate && newdate.length > 1) {
+                            d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
+                          }
+                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + elementHis.bookingsComboData[0].departureDateNew;
+                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + elementHis.bookingsComboData[0].departureDateNew;
+                        }
+                      }
                     }
                   }
-              }
-              elementHis.isRequestTrip = false;
-              if(elementHis.totalPaxStr){
-                elementHis.totalPaxStr = elementHis.totalPaxStr.replace('|', ',');
-              }
-   //check cathay
-   if (elementHis.bookingsComboData) {
-    let Temp = [];
-    Temp.push(elementHis.bookingsComboData);
-    if (Temp) {
-
-      let Temp_Cathay = [];
-      Temp.forEach(function (item) {
-
-        Temp_Cathay.push(
-          item.filter(function (word) {
-            return word.airlineName.toLowerCase().includes("cathay");
-          })
-        );
-      });
-      if (
-        Temp_Cathay[0] &&
-        Temp_Cathay[0][0] && Temp_Cathay[0][0].passengers &&
-        Temp_Cathay[0][0].passengers.length > 0
-      )
-        elementHis.IsCathay = true;
-      else {
-        elementHis.IsCathay = false;
-      }
-      if (elementHis.IsCathay && elementHis.itemdepart && elementHis.itemdepart.passengers.length>0) {
-        elementHis.itemdepart.passengers.forEach(el => {
-          for (let i = 0; i < Temp_Cathay[0][0].passengers.length; i++) {
-            if (el.name.toLowerCase().trim() == Temp_Cathay[0][0].passengers[i].name.toLowerCase().trim()) {
-              el.IsCathay = true;
-              break;
-            }
-          }
-
-        })
-      }
-    }
-  }
-              se.listHistoryTrips.push(elementHis);
-              se.historytripcount++;
-              //}
-
-            }
-      
-            if(se.listHistoryTrips.length >0){
-              se._mytripservice.totalHistoryTripText = "(" + se.listHistoryTrips.length + ")";
-            }
-             
-      
-              if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
-                if (se.checkItemHasNotClaim(elementHis.insuranceInfo.adultList) || se.checkItemHasNotClaim(elementHis.insuranceInfo.childList)) {
-                  se.zone.run(() => {
-                    se.valueGlobal.countclaim++;
-                  })
+                  elementHis.isRequestTrip = false;
+                  if (elementHis.totalPaxStr) {
+                    elementHis.totalPaxStr = elementHis.totalPaxStr.replace('|', ',');
+                  }
+                  //check cathay
+                  if (elementHis.bookingsComboData) {
+                    let Temp = [];
+                    Temp.push(elementHis.bookingsComboData);
+                    if (Temp) {
+    
+                      let Temp_Cathay = [];
+                      Temp.forEach(function (item) {
+    
+                        Temp_Cathay.push(
+                          item.filter(function (word) {
+                            return word.airlineName.toLowerCase().includes("cathay");
+                          })
+                        );
+                      });
+                      if (
+                        Temp_Cathay[0] &&
+                        Temp_Cathay[0][0] && Temp_Cathay[0][0].passengers &&
+                        Temp_Cathay[0][0].passengers.length > 0
+                      )
+                        elementHis.IsCathay = true;
+                      else {
+                        elementHis.IsCathay = false;
+                      }
+                      if (elementHis.IsCathay && elementHis.itemdepart && elementHis.itemdepart.passengers.length > 0) {
+                        elementHis.itemdepart.passengers.forEach(el => {
+                          for (let i = 0; i < Temp_Cathay[0][0].passengers.length; i++) {
+                            if (el.name.toLowerCase().trim() == Temp_Cathay[0][0].passengers[i].name.toLowerCase().trim()) {
+                              el.IsCathay = true;
+                              break;
+                            }
+                          }
+    
+                        })
+                      }
+                    }
+                  }
+                  se.listHistoryTrips.push(elementHis);
+                  se.historytripcount++;
+                  //}
+    
                 }
-              }
-            });
-          }
-            
-      
+    
+                if (se.listHistoryTrips.length > 0) {
+                  se._mytripservice.totalHistoryTripText = "(" + se.listHistoryTrips.length + ")";
+                }
+    
+    
+                if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
+                  if (se.checkItemHasNotClaim(elementHis.insuranceInfo.adultList) || se.checkItemHasNotClaim(elementHis.insuranceInfo.childList)) {
+                    se.zone.run(() => {
+                      se.valueGlobal.countclaim++;
+                    })
+                  }
+                }
+              });
+            }
+    
+    
             se._mytripservice.listHistoryTrips = se.listHistoryTrips;
-      
-            if (se.valueGlobal.BookingCodeHis && se.gf.getParams('selectedTab3') ) {
+    
+            if (se.valueGlobal.BookingCodeHis && se.gf.getParams('selectedTab3')) {
               se.activeTabTrip = 3;
               se.tabtrip = 'historytrip';
               //Map số bkg trong listtriphistory để focus vào bkg được notifi
@@ -2426,49 +2841,49 @@ import { tourService } from '../providers/tourService';
               //     se.feedback(se.listHistoryTrips[idx]);
               //   }
               // }
-                //Map số bkg trong listtrip để focus vào bkg được notifi
-                var idxMaphis = se.listHistoryTrips.map((item, index) => {
-                  return item.booking_id == se.valueGlobal.BookingCodeHis;
-                });
-                if (idxMaphis && idxMaphis.length > 0) {
-                  var idxhis = idxMaphis.findIndex((el) => { return el == true });
-                  se.currentTrip = idxhis;
-                  if (idxhis!=-1) {
-                    se.showtripdetail(se.listHistoryTrips[idxhis]);
-                  }else{
-                    se.getdata(null,true);
-                  }
+              //Map số bkg trong listtrip để focus vào bkg được notifi
+              var idxMaphis = se.listHistoryTrips.map((item, index) => {
+                return item.booking_id == se.valueGlobal.BookingCodeHis;
+              });
+              if (idxMaphis && idxMaphis.length > 0) {
+                var idxhis = idxMaphis.findIndex((el) => { return el == true });
+                se.currentTrip = idxhis;
+                if (idxhis != -1) {
+                  se.showtripdetail(se.listHistoryTrips[idxhis]);
+                } else {
+                  se.getdata(null, true);
                 }
+              }
               //Sau khi map được trip thì set giá trị về null
               se.gf.setParams(null, 'notifiBookingCode');
               se.gf.setParams(null, 'selectedTab3');
             }
-      
+    
             se.historytripcounttext = " (" + se.historytripcount + ")";
           }
-          
-          if(se._infiniteScroll && se._infiniteScroll.target){
+    
+          if (se._infiniteScroll && se._infiniteScroll.target) {
             se._infiniteScroll.target.complete();
           }
         })
-       
-        
+    
+    
         se.hideloader();
-        
-        if(!ishistory){
+    
+        if (!ishistory) {
           se.storage.get('jti').then((uid: any) => {
-            if(uid){
-                se.memberid = uid;
-                // se.gf.getCurrentPeriod().then(data => {
-                //     if(data){
-                //       se.listWeek.push({ id: 1, weekname: "Tuần " + moment(data.periodStartDate).format("DD.MM") + " - " + moment(data.periodEndDate).format("DD.MM"), startDate: data.periodStartDate, endDate: data.periodEndDate });
-                //       se.listWeek.push({ id: 2, weekname: "Tuần " + moment(data.periodStartDateNextWeek).format("DD.MM") + " - " + moment(data.periodEndDateNextWeek).format("DD.MM"), startDate: data.periodStartDateNextWeek, endDate: data.periodEndDateNextWeek });
-                      
-                //       se.loadOrder();
-                //     }
-                // })
-            }else{
-                se.mylistOrders = [];
+            if (uid) {
+              se.memberid = uid;
+              // se.gf.getCurrentPeriod().then(data => {
+              //     if(data){
+              //       se.listWeek.push({ id: 1, weekname: "Tuần " + moment(data.periodStartDate).format("DD.MM") + " - " + moment(data.periodEndDate).format("DD.MM"), startDate: data.periodStartDate, endDate: data.periodEndDate });
+              //       se.listWeek.push({ id: 2, weekname: "Tuần " + moment(data.periodStartDateNextWeek).format("DD.MM") + " - " + moment(data.periodEndDateNextWeek).format("DD.MM"), startDate: data.periodStartDateNextWeek, endDate: data.periodEndDateNextWeek });
+    
+              //       se.loadOrder();
+              //     }
+              // })
+            } else {
+              se.mylistOrders = [];
             }
           })
         }
@@ -5939,7 +6354,9 @@ import { tourService } from '../providers/tourService';
             }
             return true;
         }
+        
         }
+
         
           
   

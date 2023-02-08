@@ -339,6 +339,8 @@ export class MytripHistoryPage implements OnInit {
         trip.isHistoryItem = true;
         this._mytripservice.tripdetail = trip;
         this._mytripservice.backroute = "mytriphistory";
+        trip.checkInDisplayCity=trip.checkInDisplay;
+        trip.checkOutDisplayCity=trip.checkOutDisplay;
         this.navCtrl.navigateForward('mytripdetail');
       }
     }

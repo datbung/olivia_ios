@@ -90,7 +90,7 @@
                               
                             </ion-col>
                             <ion-col  class="col-address">
-                              {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                              {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                             </ion-col>
                           </ion-row>
                           <!-- pax -->
@@ -148,7 +148,7 @@
                             <img style="height:12px" src="./assets/imgs/ic_date.svg">
                           </div>
                           <div class="bkgoff-info p-l-4">
-                            {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                            {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                           </div>
                         </div>
                         <div class="bkgoff-roomname  p-top-3">{{trip.room_name}}</div>
@@ -175,7 +175,8 @@
                             <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                             <img class="img-logo " *ngIf=" trip.isBookingVMBQT && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[0]" [src]="trip.bookingjson[0].Transits[0].Logo">
 
-                            <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumner">{{trip.bookingsComboData[0].flightNumner}}</span>
+                            <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumner && !trip.bookingsComboData[0].flightNumberNew">{{trip.bookingsComboData[0].flightNumner}}</span>
+                            <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumberNew">{{trip.bookingsComboData[0].flightNumberNew}}</span>
                         </div>
                         
                             <div class="div-flightfrom">{{ trip.bookingsComboData[0].flightFrom }} <span class="m-left-4"> ({{trip.bookingsComboData[0].departCode}})</span></div>
@@ -203,7 +204,9 @@
                             <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] &&  trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                             <img class="img-logo " *ngIf=" trip.isBookingVMBQT && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[1]" [src]="trip.bookingjson[0].Transits[1].Logo">
 
-                            <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumner">{{trip.bookingsComboData[1].flightNumner}}</span>
+
+                            <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumner && !trip.bookingsComboData[1].flightNumberNew">{{trip.bookingsComboData[1].flightNumner}}</span>
+                            <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumberNew">{{trip.bookingsComboData[1].flightNumberNew}}</span>
                           </div>
                             <div class="div-flightto">{{ trip.bookingsComboData[0].flightTo }} <span class="m-left-4"> ({{trip.bookingsComboData[0].arrivalCode}})</span></div>
                             <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 " class="text-time-fly">{{ trip.bookingsComboData[1].departureTime }} </div>
@@ -310,7 +313,7 @@
                                       
                                     </ion-col>
                                     <ion-col  class="col-address">
-                                      {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                                      {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                                     </ion-col>
                                   </ion-row>
                               </div>
@@ -340,7 +343,7 @@
                               <img style="height:12px" src="./assets/imgs/ic_date.svg">
                             </div>
                             <div class="bkgoff-info p-l-4">
-                              {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                              {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                             </div>
                           </div>
                           <div class="bkgoff-roomname  p-top-3">{{trip.room_name}}</div>

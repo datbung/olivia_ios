@@ -853,8 +853,9 @@
                                       src="./assets/ic_airticket/bb.png">
               
                                   </div>
-                                  <div class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
-                                  </div>
+                                  <div  *ngIf="trip.bookingsComboData[0].flightNumner && !trip.bookingsComboData[0].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}</div>
+                                  <div *ngIf="trip.bookingsComboData[0].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[0].flightNumberNew }} - {{trip.bookingsComboData[0].ticketClass }}
+                                </div>
                                 </div>
                             
                               </div>
@@ -875,8 +876,11 @@
                             </div>
                             </div>
                             <div class="m-top-14 d-flex">
-                              <div class="text-time-depart">
+                              <div *ngIf="trip.bookingsComboData[0].departureTime && !trip.bookingsComboData[0].departureTimeNew" class="text-time-depart">
                                 {{trip.bookingsComboData[0].departureTime}}
+                              </div>
+                              <div *ngIf="trip.bookingsComboData[0].departureTimeNew" class="text-time-depart">
+                                {{trip.bookingsComboData[0].departureTimeNew}}
                               </div>
                               <div class="placepoint">
                               </div>
@@ -924,8 +928,9 @@
                                         src="./assets/ic_airticket/bb.png">
                 
                                     </div>
-                                    <div class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
-                                    </div>
+                                    <div *ngIf="trip.bookingsComboData[1].flightNumner && !trip.bookingsComboData[1].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}</div>
+                                    <div *ngIf="trip.bookingsComboData[1].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[1].flightNumberNew }} - {{trip.bookingsComboData[1].ticketClass }}
+                                  </div>
                                   </div>
                               
                                 </div>
@@ -946,8 +951,11 @@
                               </div>
                               </div>
                               <div class="m-top-14 d-flex">
-                                <div class="text-time-depart">
+                                <div *ngIf="trip.bookingsComboData[1].departureTime && !trip.bookingsComboData[1].departureTimeNew" class="text-time-depart">
                                   {{trip.bookingsComboData[1].departureTime}}
+                                </div>
+                                <div *ngIf="trip.bookingsComboData[1].departureTimeNew" class="text-time-depart">
+                                  {{trip.bookingsComboData[1].departureTimeNew}}
                                 </div>
                                 <div class="placepoint">
                                 </div>
@@ -1159,7 +1167,7 @@
                             <img src="./assets/imgs/ic_date.svg">
                           </div>
                           <div class="text-info m-left-4 font-weight-500">
-                            {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                            {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                           </div>
                         </div>
                         <div class="div-gird m-left-20 m-top-4">
@@ -1319,7 +1327,8 @@
                           <div class="div-first d-flex"  >
                             <div>
                                 <div class="d-flex">
-                                  <div class="div-time">{{trip.bookingsComboData[0].departureTime}}</div>
+                                  <div *ngIf="trip.bookingsComboData[0].departureTime && !trip.bookingsComboData[0].departureTimeNew" class="div-time">{{trip.bookingsComboData[0].departureTime}}</div>
+                                  <div *ngIf="trip.bookingsComboData[0].departureTimeNew" class="div-time">{{trip.bookingsComboData[0].departureTimeNew}}</div>
                                   <div class="div-flight-time"></div>
                                   <div class="div-time">{{trip.bookingsComboData[0].arrivalTime}}</div>
                                 </div>
@@ -1362,7 +1371,8 @@
                           <div class="div-first d-flex"  >
                             <div>
                                 <div class="d-flex">
-                                  <div class="div-time">{{trip.bookingsComboData[1].departureTime}}</div>
+                                  <div *ngIf="trip.bookingsComboData[1].departureTime && !trip.bookingsComboData[1].departureTimeNew" class="div-time">{{trip.bookingsComboData[1].departureTime}}</div>
+                                  <div *ngIf="trip.bookingsComboData[1].departureTimeNew" class="div-time">{{trip.bookingsComboData[1].departureTimeNew}}</div>
                                   <div class="div-flight-time"></div>
                                   <div class="div-time">{{trip.bookingsComboData[1].arrivalTime}}</div>
                                 </div>
@@ -1554,8 +1564,8 @@
                                                 src="./assets/ic_airticket/bb.png">
                         
                                             </div>
-                                            <div class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
-                                            </div>
+                                              <div *ngIf="trip.itemdepart.flightNumner && !trip.itemdepart.flightNumberNew" class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}</div>
+                                            <div *ngIf="trip.itemdepart.flightNumberNew" class="div-ticket">{{trip.itemdepart.flightNumberNew }} - {{trip.itemdepart.ticketClass }}</div>
                                         </div>
                                     
                                         </div>
@@ -1576,9 +1586,12 @@
                                     </div>
                                     </div>
                                     <div class="m-top-14 d-flex">
-                                        <div class="text-time-depart">
+                                      <div *ngIf="trip.itemdepart.departureTime && !trip.itemdepart.departureTimeNew" class="text-time-depart">
                                         {{trip.itemdepart.departureTime}}
                                         </div>
+                                        <div *ngIf="trip.itemdepart.departureTimeNew" class="text-time-depart">
+                                          {{trip.itemdepart.departureTimeNew}}
+                                          </div>
                                         <div class="placepoint">
                                         </div>
                                         <div class="m-l-6">
@@ -1626,7 +1639,9 @@
                                                 src="./assets/ic_airticket/bb.png">
                         
                                             </div>
-                                            <div class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                                            <div *ngIf="trip.itemreturn.flightNumner && !trip.itemreturn.flightNumberNew " class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                                            </div>
+                                            <div  *ngIf="trip.itemreturn.flightNumberNew" class="div-ticket">{{trip.itemreturn.flightNumberNew }} - {{trip.itemreturn.ticketClass }}
                                             </div>
                                             </div>
                                         
@@ -1648,8 +1663,11 @@
                                         </div>
                                         </div>
                                         <div class="m-top-14 d-flex">
-                                        <div class="text-time-depart">
+                                          <div *ngIf="trip.itemreturn.departureTime && !trip.itemreturn.departureTimeNew" class="text-time-depart">
                                             {{trip.itemreturn.departureTime}}
+                                        </div>
+                                        <div *ngIf="trip.itemreturn.departureTimeNew" class="text-time-depart">
+                                          {{trip.itemreturn.departureTimeNew}}
                                         </div>
                                         <div class="placepoint">
                                         </div>
@@ -2243,7 +2261,7 @@
                                     <img src="./assets/imgs/ic_date.svg">
                                     </div>
                                     <div class="text-info m-left-4 font-weight-500">
-                                    {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                                    {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                                     </div>
                                 </div>
                                 <div class="div-gird m-left-20 m-top-12">
@@ -2556,7 +2574,9 @@
                     src="./assets/ic_airticket/bb.png">
         
                 </div>
-                <div class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
+                <div *ngIf="trip.itemdepart.flightNumner && !trip.itemdepart.flightNumberNew" class="div-ticket">{{trip.itemdepart.flightNumner }} - {{trip.itemdepart.ticketClass }}
+                </div>
+                <div  *ngIf="trip.itemdepart.flightNumberNew" class="div-ticket">{{trip.itemdepart.flightNumberNew }} - {{trip.itemdepart.ticketClass }}
                 </div>
             </div>
         
@@ -2625,7 +2645,9 @@
                     src="./assets/ic_airticket/bb.png">
         
                 </div>
-                <div *ngIf="trip.itemreturn.flightNumner" class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                <div *ngIf="trip.itemreturn.flightNumner && !trip.itemreturn.flightNumberNew" class="div-ticket">{{trip.itemreturn.flightNumner }} - {{trip.itemreturn.ticketClass }}
+                </div>
+                <div  *ngIf="trip.itemreturn.flightNumberNew" class="div-ticket">{{trip.itemreturn.flightNumberNew }} - {{trip.itemreturn.ticketClass }}
                 </div>
             </div>
         
@@ -2724,7 +2746,10 @@
                             src="./assets/ic_airticket/bb.png">
         
                         </div>
-                        <div class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
+                      
+                        <div *ngIf="trip.bookingsComboData[0].flightNumner && !trip.bookingsComboData[0].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[0].flightNumner }} - {{trip.bookingsComboData[0].ticketClass }}
+                        </div>
+                        <div  *ngIf="trip.bookingsComboData[0].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[0].flightNumberNew }} - {{trip.bookingsComboData[0].ticketClass }}
                         </div>
                       </div>
               
@@ -2793,7 +2818,9 @@
                         src="./assets/ic_airticket/bb.png">
               
                     </div>
-                    <div class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
+                    <div *ngIf="trip.bookingsComboData[1].flightNumner && !trip.bookingsComboData[1].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[1].flightNumner }} - {{trip.bookingsComboData[1].ticketClass }}
+                    </div>
+                    <div *ngIf="trip.bookingsComboData[1].flightNumberNew" class="div-ticket">{{trip.bookingsComboData[1].flightNumberNew }} - {{trip.bookingsComboData[1].ticketClass }}
                     </div>
                   </div>
               
@@ -2996,7 +3023,7 @@
                                 
                               </ion-col>
                               <ion-col  class="col-address">
-                                {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                                {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                               </ion-col>
                             </ion-row>
                             <!-- pax -->
@@ -3055,7 +3082,7 @@
                           <img style="height:12px" src="./assets/imgs/ic_date.svg">
                         </div>
                         <div class="bkgoff-info p-l-4">
-                          {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                          {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                         </div>
                       </div>
                       <div class="bkgoff-roomname  p-top-3">{{trip.room_name}}</div>
@@ -3099,12 +3126,14 @@
                               <img class="img-logo" *ngIf="!trip.isBookingVMBQT &&  trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                               <img class="img-logo " *ngIf=" trip.isBookingVMBQT && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[0]" [src]="trip.bookingjson[0].Transits[0].Logo">
 
-                              <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumner">{{trip.bookingsComboData[0].flightNumner}}</span>
+                              <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumner && !trip.bookingsComboData[0].flightNumberNew">{{trip.bookingsComboData[0].flightNumner}}</span>
+                              <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumberNew">{{trip.bookingsComboData[0].flightNumberNew}}</span>
                           </div>
                           
-                              <div class="div-flightfrom">{{ trip.bookingsComboData[0].flightFrom }} <span class="m-left-4"> ({{trip.bookingsComboData[0].departCode}})</span></div>
-                              <div class="text-time-fly">{{ trip.bookingsComboData[0].departureTime }} </div>
-                              <div class="text-flight-datetime">{{ trip.checkInDisplay }} </div>
+                          <div class="div-flightfrom">{{ trip.bookingsComboData[0].flightFrom }} <span class="m-left-4"> ({{trip.bookingsComboData[0].departCode}})</span></div>
+                          <div *ngIf="trip.bookingsComboData[0].departureTime && !trip.bookingsComboData[0].departureTimeNew" class="text-time-fly">{{ trip.bookingsComboData[0].departureTime }} </div>
+                          <div *ngIf="trip.bookingsComboData[0].departureTimeNew" class="text-time-fly">{{ trip.bookingsComboData[0].departureTimeNew }} </div>
+                          <div class="text-flight-datetime">{{ trip.checkInDisplay }} </div>
 
                           </div>
                           <div class="div-flight-inout">
@@ -3119,13 +3148,15 @@
                               <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] &&  trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                               <img class="img-logo " *ngIf=" trip.isBookingVMBQT && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[1]" [src]="trip.bookingjson[0].Transits[1].Logo">
 
-                              <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumner">{{trip.bookingsComboData[1].flightNumner}}</span>
+                              <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumner && !trip.bookingsComboData[1].flightNumberNew">{{trip.bookingsComboData[1].flightNumner}}</span>
+                              <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumberNew ">{{trip.bookingsComboData[1].flightNumberNew}}</span>
                             </div>
-                              <div class="div-flightto">{{ trip.bookingsComboData[0].flightTo }} <span class="m-left-4"> ({{trip.bookingsComboData[0].arrivalCode}})</span></div>
-                              <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && (trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1)" class="text-time-fly">{{ trip.bookingsComboData[1].departureTime }} </div>
-                              <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') != -1" class="text-time-fly">{{trip.bookingsComboData[0].arrivalTime}} </div>
-                              <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length ==1" class="text-time-fly-1">{{trip.bookingsComboData[0].arrivalTime}} </div>
-                              <div class="text-flight-datetime">{{ trip.checkOutDisplay }} </div>
+                            <div class="div-flightto">{{ trip.bookingsComboData[0].flightTo }} <span class="m-left-4"> ({{trip.bookingsComboData[0].arrivalCode}})</span></div>
+                            <div *ngIf="trip.bookingsComboData.length >1 && trip.bookingsComboData[1].departureTime && !trip.bookingsComboData[1].departureTimeNew && trip.bookingsComboData && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && (trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1)" class="text-time-fly">{{ trip.bookingsComboData[1].departureTime }} </div>
+                            <div *ngIf="trip.bookingsComboData.length >1 && trip.bookingsComboData[1].departureTimeNew && trip.bookingsComboData  && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && (trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1)" class="text-time-fly">{{ trip.bookingsComboData[1].departureTimeNew }} </div>
+                            <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') != -1" class="text-time-fly">{{trip.bookingsComboData[0].arrivalTime}} </div>
+                            <div *ngIf="trip.bookingsComboData && trip.bookingsComboData.length ==1" class="text-time-fly-1">{{trip.bookingsComboData[0].arrivalTime}} </div>
+                            <div class="text-flight-datetime">{{ trip.checkOutDisplay }} </div>
                               
                           </div>
                       </div>
@@ -3264,7 +3295,7 @@
                                       
                                     </ion-col>
                                     <ion-col  class="col-address">
-                                      {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                                      {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                                     </ion-col>
                                   </ion-row>
                               </div>
@@ -3297,7 +3328,7 @@
                               <img style="height:12px" src="./assets/imgs/ic_date.svg">
                             </div>
                             <div class="bkgoff-info p-l-4">
-                              {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
+                              {{trip.checkInDisplayCity}} → {{trip.checkOutDisplayCity}}
                             </div>
                           </div>
                           <div class="bkgoff-roomname  p-top-3">{{trip.room_name}}</div>
