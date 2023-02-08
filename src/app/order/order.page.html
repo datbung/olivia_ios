@@ -799,13 +799,13 @@
                       Nội dung chuyển tiền: <b class="text-booking text-red">{{trip.booking_id}}</b><a class='text-copy' (click)='copyClipboard(trip.booking_id)'>Sao chép</a>
                     </p>
                     <p class="text-payment-info" text-wrap>
-                      Tổng tiền: <b class="text-bold">{{trip.priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
+                      Tổng tiền: <b *ngIf="amount_after_tax>0" class="text-bold">{{gf.numberToCurrency(amount_after_tax, '.')}} VND</b> <b *ngIf="amount_after_tax<=0" class="text-bold"> {{gf.numberToCurrency(trip.paid_amount, '.')}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
                     </p>                    
                   </div>
                    <!-- payoo tại của hàng -->
                    <div *ngIf="trip.pay_method==3" class="d-flex-later">
                     <p class="text-payment-info" text-wrap>
-                      Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">{{trip.priceShow}} VND</b>
+                      Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b *ngIf="amount_after_tax>0" class="text-bold">{{gf.numberToCurrency(amount_after_tax, '.')}} VND</b> <b *ngIf="amount_after_tax<=0" class="text-bold"> {{gf.numberToCurrency(trip.paid_amount, '.')}} VND</b>
                     </p>
                     </div>
                     <div *ngIf="!(trip.pay_method==51||trip.pay_method==2)" class="mt16 mbt16">
@@ -2495,8 +2495,9 @@
                           <p class="text-payment-info" text-wrap>
                           Nội dung chuyển tiền: <b class="text-booking text-red">{{trip.booking_id}}</b><a class='text-copy' (click)='copyClipboard(trip.booking_id)'>Sao chép</a>
                           </p>
+                         
                           <p class="text-payment-info" text-wrap>
-                          Tổng tiền: <b class="text-bold">{{trip.priceShow}} VND</b><a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
+                          Tổng tiền: <b *ngIf="amount_after_tax>0" class="text-bold">{{gf.numberToCurrency(amount_after_tax, '.')}} VND</b> <b *ngIf="amount_after_tax<=0" class="text-bold"> {{gf.numberToCurrency(trip.paid_amount, '.')}} VND</b> <a class='text-copy' (click)='copyClipboard(trip.priceShow)'>Sao chép</a>
                           </p>                    
                       </div>
                       
@@ -2504,7 +2505,7 @@
                       <!-- payoo tại của hàng -->
                       <div *ngIf="trip.pay_method==3" class="d-flex-later">
                       <p class="text-payment-info" text-wrap>
-                          Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b class="text-bold">{{trip.priceShow}} VND</b>
+                          Mã thanh toán Payoo: {{trip.PaymentCode}}, số tiền: <b *ngIf="amount_after_tax>0" class="text-bold">{{gf.numberToCurrency(amount_after_tax, '.')}} VND</b> <b *ngIf="amount_after_tax<=0" class="text-bold"> {{gf.numberToCurrency(trip.paid_amount, '.')}} VND</b>
                       </p>
                       </div>
                       <div *ngIf="!(trip.pay_method==51||trip.pay_method==2)" class="mt16 mbt16">
