@@ -4,7 +4,7 @@ import { Booking, RoomInfo, SearchHotel } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
-import { GlobalFunction } from '../providers/globalfunction';
+import { GlobalFunction,ActivityService } from '../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
 import { Bookcombo } from './../providers/book-service';
 import { Facebook } from '@ionic-native/facebook/ngx';
@@ -34,7 +34,8 @@ export class FlightcombobankPage implements OnInit {
     public gf: GlobalFunction,
     private fb: Facebook,
     public searchhotel: SearchHotel,
-    public _voucherService: voucherService) {
+    public _voucherService: voucherService,
+    public activityService: ActivityService) {
     this.hoten = this.Roomif.hoten;
     this.phone = this.Roomif.phone
     this.totalAdult = bookCombo.totalAdult;
@@ -626,7 +627,14 @@ export class FlightcombobankPage implements OnInit {
                     },300)
             }
           if (se.Roomif.payment == 'AL' && datafly.depcode && datafly.retcode) {
-            se.navCtrl.navigateForward('/flightcombopaymentdonebank/AL');
+            //se.navCtrl.navigateForward('/flightcombopaymentdonebank/AL');
+            this.activityService.bankName = this.bankName;
+                      this.activityService.bankTransfer = this.textbank;
+                      this.activityService.bankAccount = this.accountNumber;
+                      this.activityService.totalPriceTransfer = this.bookCombo.totalprice;
+                      this.activityService.bookingCode = this.bookCombo.bookingcode;
+                      this.activityService.qrcodepaymentfrom = 4;
+                      this.navCtrl.navigateForward('/paymentqrcode');
           }
           else {
             se.navCtrl.navigateForward('/flightcombopaymentdone/RQ');

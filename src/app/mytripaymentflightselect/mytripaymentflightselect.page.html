@@ -27,12 +27,12 @@
                 <div class="text-flight-datetime">{{ checkInDisplayFullYear }} </div>
             </div>
             <div class="div-flight-inout">
-                <img class="img-flight-inout" *ngIf="activityService.objPaymentMytrip.trip.bookingsComboData.length >1" src="./assets/ic_flight/ic_flight_inout.svg">
-                <img class="img-flight-inout img-oneway" *ngIf="activityService.objPaymentMytrip.trip.bookingsComboData.length ==1" src="./assets/imgs/ic_arrow.svg">
+                <img class="img-flight-inout" *ngIf="activityService.objPaymentMytrip && activityService.objPaymentMytrip.trip.bookingsComboData && activityService.objPaymentMytrip.trip.bookingsComboData.length >1" src="./assets/ic_flight/ic_flight_inout.svg">
+                <img class="img-flight-inout img-oneway" *ngIf="activityService.objPaymentMytrip && activityService.objPaymentMytrip.trip.bookingsComboData && activityService.objPaymentMytrip.trip.bookingsComboData.length ==1" src="./assets/imgs/ic_arrow.svg">
             </div> 
             <div *ngIf="returnCity&&returnCode">
                 <div>{{ returnCity }}  ({{ returnCode }})</div>
-                <div *ngIf="activityService.objPaymentMytrip.trip.bookingsComboData.length >1" class="text-flight-datetime" >{{ checkOutDisplayFullYear }} </div>
+                <div *ngIf="activityService.objPaymentMytrip && activityService.objPaymentMytrip.trip.bookingsComboData && activityService.objPaymentMytrip.trip.bookingsComboData.length >1" class="text-flight-datetime" >{{ checkOutDisplayFullYear }} </div>
             </div>
         </div>
 

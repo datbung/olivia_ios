@@ -73,7 +73,7 @@ export class FlightInternationalPaymentBankPage implements OnInit {
     this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
     this.accountNumber = "007 1000 895 230";
     this.bankTransfer = "Vietcombank";
-    this.bookingCode = this._flightService.itemFlightCache.pnr.resNo;
+    this.bookingCode = this._flightService.itemFlightCache.pnr ? this._flightService.itemFlightCache.pnr.resNo : (this.activityService.objPaymentMytrip ? this.activityService.objPaymentMytrip.trip.booking_id : '');
 
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -614,8 +614,14 @@ export class FlightInternationalPaymentBankPage implements OnInit {
           se._flightService.itemFlightCache.ischeckpayment = 0;
           //se.checkHoldTicket(se._flightService.itemFlightCache);
           let itemcache = se._flightService.itemFlightCache;
-          se.navCtrl.navigateForward('flightinternationalpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-         
+          //se.navCtrl.navigateForward('flightinternationalpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+          this.activityService.bankName = this.bankName;
+          this.activityService.bankTransfer = this.textbank;
+          this.activityService.bankAccount = this.accountNumber;
+          this.activityService.totalPriceTransfer = this._flightService.itemFlightInternational.fare.price;
+          this.activityService.bookingCode = this.bookingCode;
+          this.activityService.qrcodepaymentfrom = 1;
+          this.navCtrl.navigateForward('/paymentqrcode');
         }else{
           se.gf.hideLoading();
           se.gf.showAlertOutOfTicketInternational(se._flightService.itemFlightCache, 2);
@@ -634,7 +640,7 @@ export class FlightInternationalPaymentBankPage implements OnInit {
       se.Roomif.bankName = se.bankName;
       se.Roomif.bankBranch = se.bankBranch;
       se.Roomif.paymentbank=se.paymentMethod;
-
+      se.bookingCode = (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo);
       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + se._flightService.itemFlightInternational.fare.price.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone+ '&memberId=' + se.jti +'&version=2&isFlightInt=true';
                   se.gf.CreatePayoo(url).then((data) => {
                     // if(se._voucherService.selectVoucher){

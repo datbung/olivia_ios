@@ -81,27 +81,10 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  
-  <div class="div-qrcode m-top-24">
-    <img class="img-qrcode" src="{{qrcodeurl}}" >
-  </div>
-  <div class="div-btn-download m-top-16 d-flex" (click)="downloadqrcode()">
-    <div class="btn-download">
-      <img class="img-download" src="./assets/imgs/download.svg">
-    </div>
-    <div class="text-download">Lưu mã để thanh toán</div>
+  <div class="div-text-note m-top-24" >
+    Bằng việc nhấn nút Thanh toán, Quý khách đã đồng ý với các <span class="text-underline">điều kiện và điều khoản</span> về đặt phòng trên website iVIVU.com
   </div>
 
-  <!-- <div class="div-payment-info m-top-24">
-    <div class="text-payment-info">{{bankName}}</div>
-
-    <div class="text-sub-payment-info">Số tài khoản</div>
-    <div class="d-flex">
-      <div class="text-payment-info m-top-4 ">{{accountNumber}}</div>
-      <div class="btn-copy"></div>
-    </div>
-    
-  </div> -->
 
   <ion-grid *ngIf="rowtwoactive" class="no-padding">
     <!-- <ion-row>
@@ -182,6 +165,6 @@
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
+    <button (click)="paymentqrcode()" ion-button round outline class="button button2">Xác nhận & Chuyển khoản<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
   </div>
 </ion-footer>

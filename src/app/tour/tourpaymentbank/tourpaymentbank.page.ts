@@ -590,7 +590,13 @@ export class TourPaymentBankPage implements OnInit {
                     console.log(dataTrans);
                     if(dataTrans){
                       this.tourService.paymentType = -1;
-                      this.navCtrl.navigateForward('/tourpaymentdone');
+                      this.activityService.bankName = this.bankName;
+                      this.activityService.bankTransfer = this.textbank;
+                      this.activityService.bankAccount = this.accountNumber;
+                      this.activityService.totalPriceTransfer = data.Response.Total;
+                      this.activityService.bookingCode = data.Response.BookingCode;
+                      this.activityService.qrcodepaymentfrom = 3;
+                      this.navCtrl.navigateForward('/paymentqrcode');
                     }
                   });
                 }

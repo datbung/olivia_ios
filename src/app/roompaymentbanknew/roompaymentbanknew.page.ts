@@ -562,6 +562,11 @@ export class RoompaymentbanknewPage implements OnInit {
   }
   next() {
     var se =this;
+    se.activityService.bankName = se.bankName;
+    se.activityService.bankTransfer = se.textbank;
+    se.activityService.bankAccount = se.accountNumber;
+    se.activityService.totalPriceTransfer = se.totalPrice;
+    se.activityService.bookingCode = se.bookingCode;
     if(se.Roomif.roomtype.Supplier == 'SERI'){
       se.gf.checkAllotmentSeri(
         se.booking.HotelId,
@@ -668,6 +673,7 @@ export class RoompaymentbanknewPage implements OnInit {
                 se.Roomif.bankName = se.bankName;
                 se.Roomif.bankBranch = se.bankBranch;
                 se.Roomif.paymentbank=se.paymentMethod;
+                se.activityService.bookingCode = code;
                 //PDANH 22/03/2021 - Case trả sau của VIN gọi thêm hàn build link để đẩy xuống backend luồng VIN
                 //let mealtype = se.jsonroom.RoomClasses[0].MealTypeRates[se.booking.indexmealtype];
                 //if(mealtype && (mealtype.Supplier == "VINPEARL" || mealtype.Supplier == "SMD" || mealtype.Supplier == "EAN") ){
@@ -696,7 +702,8 @@ export class RoompaymentbanknewPage implements OnInit {
                   }
                 
                 //}
-                se.navCtrl.navigateForward('/roompaymentdonenew/'+code+'/'+stt);
+                se.activityService.qrcodepaymentfrom = 2;//ks 
+                se.navCtrl.navigateForward('/paymentqrcode');
               }
               else{
                 se.loader.dismiss();

@@ -3,7 +3,7 @@ import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
 import { tourService } from '../providers/tourService';
 import * as moment from 'moment';
-import { ActionSheetController, IonRouterOutlet, NavController, ToastController ,AlertController,LoadingController, IonContent} from '@ionic/angular';
+import { ActionSheetController, IonRouterOutlet, NavController, ToastController ,AlertController,LoadingController, IonContent, Platform} from '@ionic/angular';
 import { NetworkProvider } from '../network-provider.service';
 import { SearchHotel, ValueGlobal } from '../providers/book-service';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -14,6 +14,10 @@ import { C } from '../providers/constants';
 import * as $ from 'jquery';
 import * as request from 'requestretry';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { normalizeURL } from 'ionic-angular';
+
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -100,7 +104,8 @@ export class MytripdetailPage implements OnInit {
     {id: 1, code: '761402903955', pax: '1 người lớn'},
     {id: 2, code: '761402905492', pax: '1 người lớn'},
     {id: 3, code: '761402910686', pax: '1 trẻ em'},
-  ]
+  ];
+  qrcodeurl='';
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -117,6 +122,9 @@ export class MytripdetailPage implements OnInit {
     private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
     public _tourService: tourService,
     private safariViewController: SafariViewController,
+    private platform: Platform,
+    private socialSharing: SocialSharing,
+    private file: File,
     private zone: NgZone) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
@@ -238,6 +246,9 @@ export class MytripdetailPage implements OnInit {
           }
         }
         this.routerOutlet.swipeGesture = false;
+        if(!(this.trip.pay_method==3||this.trip.pay_method==51||this.trip.pay_method==2)){
+          this.buildLinkQrCode();
+        }
       }
    }
   loadDetailInfo() {
@@ -1455,4 +1466,34 @@ export class MytripdetailPage implements OnInit {
     }
     return true;
 }
+
+buildLinkQrCode() {
+  this.zone.run(()=>{
+   this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${this.trip.textbank}&amount=${this.gf.convertStringToNumber(this.trip.amount_after_tax)}&description=${this.trip.booking_id}`;
+  })
+   
+ }
+
+async downloadqrcode(){
+    let storageDirectory ='';
+    if (this.platform.is('ios')) {
+    storageDirectory = this.file.dataDirectory + `qrcode_${this.trip.booking_id}.png`;
+    }
+    else if (this.platform.is('android')) {
+      storageDirectory = this.file.externalDataDirectory + `qrcode_${this.trip.booking_id}.png`;
+    }
+    else {
+      return false;
+    }
+    storageDirectory = normalizeURL(storageDirectory);
+    this.gf.showLoading();
+    try {
+    this.socialSharing.saveToPhotoAlbum(this.qrcodeurl).then(()=>{
+      this.gf.hideLoading();
+      this.presentToastr('Đã lưu');
+    });
+    } catch (error) {
+    this.gf.hideLoading();
+    }
+  }
 }

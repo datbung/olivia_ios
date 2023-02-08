@@ -1671,3 +1671,54 @@ button.days-btn {
     }
   }
 }
+
+.div-text-note-paymentbank {
+  padding: 8px;
+  background-color: #f2f2f2;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: left;
+  color: #717484;
+
+  .text-underline {
+      text-decoration: underline;
+      color: #2f80ed !important;
+  }
+}
+
+.div-button-payment-qrcode{
+  background-color: #ffffff; 
+  text-align: center;
+
+  display: flex;
+  flex-direction: row;
+
+  .m-top-0{
+      margin-top: 0 !important;
+  }
+
+  .button1 {
+    color: #f79321;
+    border-color: #f79321;
+    width: 100%;
+    border: solid 1px #f79321;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    background-color: #fff;
+    margin: 8px 0;
+    margin-left: 16px;
+  }
+
+  .button2 {
+    background: #f79321;
+    color: #fff;
+    border-color: #f79321;
+    border: solid 1px #f79321;
+    width: 90%;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    margin: 8px !important;
+    padding: 0;
+    margin-right: 16px !important;
+  }
+}

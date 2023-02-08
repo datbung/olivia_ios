@@ -383,7 +383,7 @@ export class GlobalFunction{
       var textbank, bankName, bankBranch, accountNumber,urlimgbank,url;
       switch (method) {
         case 41:
-          textbank = "ACBbank";
+          textbank = "ACB";
           bankName = "Ngân hàng TMCP Á Châu (ACB)";
           bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
           accountNumber = "190862589";
@@ -399,7 +399,7 @@ export class GlobalFunction{
           url = 'https://www.vietcombank.com.vn/IBanking2020';
           break;
         case 45:
-          textbank = "Vietinbank";
+          textbank = "Viettinbank";
           bankName = "Ngân hàng TMCP Công thương Việt Nam VietinBank";
           bankBranch = "Chi Nhánh 03, Tp.HCM";
           accountNumber = "1110 0014 2852";
@@ -415,7 +415,7 @@ export class GlobalFunction{
           url = 'https://ib.techcombank.com.vn/servlet/BrowserServlet';
           break;
         case 43:
-          textbank = "Dongabank";
+          textbank = "Donga";
           bankName = "NH TMCP Đông Á (DongABank)";
           bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
           accountNumber = "0139 9166 0002";
@@ -471,7 +471,7 @@ export class GlobalFunction{
           url = 'https://omni.ocb.com.vn/frontend-web/app/auth.html#/login';
           break;
         default:
-          textbank = "ACBbank";
+          textbank = "ACB";
           bankName = "Ngân hàng TMCP Á Châu (ACB)";
           bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
           accountNumber = "190862589";
@@ -3888,5 +3888,11 @@ export class ActivityService {
   backValue: string;
   objRequestAddLuggage: { bookingCode: any; totalPrice: number; totalPriceDisplay: any; departWeight: any; returnWeight: any; objectDepartLuggage: any; objectReturnLuggage: any; };
   itemRefreshDeletionAccount=new EventEmitter();
+  bankName: string;
+  bankAccount: string;
+  totalPriceTransfer: any;
+  bookingCode: any;
+  bankTransfer: string;
+  qrcodepaymentfrom: number;
   //abortSearch: boolean;
 }

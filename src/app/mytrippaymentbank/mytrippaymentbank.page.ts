@@ -13,6 +13,11 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { MytripService } from '../providers/mytrip-service.service';
 import { flightService } from '../providers/flightService';
+
+import { File } from '@ionic-native/file/ngx';
+import { normalizeURL } from 'ionic-angular';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
 @Component({
   selector: 'app-mytrippaymentbank',
   templateUrl: './mytrippaymentbank.page.html',
@@ -36,6 +41,7 @@ export class MytrippaymentbankPage implements OnInit {
   accountNumber: string;
   bankBranch: string;
   isPaymentFromMytrip: boolean = false;
+  qrcodeurl: string;
   constructor(public platform: Platform, public zone: NgZone, public storage: Storage, 
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController,
     public gf: GlobalFunction, private toastCtrl: ToastController,public bookCombo:Bookcombo,
@@ -45,6 +51,8 @@ export class MytrippaymentbankPage implements OnInit {
     private safariViewController: SafariViewController, public _mytripservice: MytripService,
     public _flightService: flightService,
     public valueGlobal: ValueGlobal,
+    private file: File,
+    private socialSharing: SocialSharing,
     ) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
@@ -69,6 +77,7 @@ export class MytrippaymentbankPage implements OnInit {
     this.accountNumber = "007 1000 895 230";
     this.bookingCode = this.activityService.objPaymentMytrip.trip.booking_id;
     gf.googleAnalytion('roompaymentbank','load','');
+    this.buildLinkQrCode();
   }
   ngOnInit() {
   }
@@ -106,10 +115,11 @@ export class MytrippaymentbankPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "ACBbank";
+      this.textbank = "ACB";
       this.bankName = "Ngân hàng TMCP Á Châu (ACB)";
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "190862589";
+      this.buildLinkQrCode();
     })
 
   }
@@ -150,6 +160,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "Ngân TMCP Ngoại Thương Việt Nam (VCB)";
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "007 1000 895 230";
+      this.buildLinkQrCode();
     })
 
   }
@@ -187,10 +198,11 @@ export class MytrippaymentbankPage implements OnInit {
       this.rowoneactive =true;
       this.rowtwoactive = false;
       this.rowthreeactive = false;
-      this.textbank = "Vietinbank";
+      this.textbank = "Viettinbank";
       this.bankName = "Ngân hàng TMCP Công thương Việt Nam VietinBank";
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "1110 0014 2852";
+      this.buildLinkQrCode();
     })
 
   }
@@ -232,6 +244,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "NH TMCP Kỹ Thương Việt Nam (Techcombank)";
       this.bankBranch = "Chi nhánh Trần Quang Diệu, Tp.HCM";
       this.accountNumber = "19128840912016";
+      this.buildLinkQrCode();
     })
 
   }
@@ -270,10 +283,11 @@ export class MytrippaymentbankPage implements OnInit {
       this.rowoneactive = false;
       this.rowtwoactive = true;
       this.rowthreeactive = false;
-      this.textbank = "Dongabank";
+      this.textbank = "Donga";
       this.bankName = "NH TMCP Đông Á (DongABank)";
       this.bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
       this.accountNumber = "0139 9166 0002";
+      this.buildLinkQrCode();
     })
 
   }
@@ -316,6 +330,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "Ngân hàng Agribank";
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "160 2201 361 086";
+      this.buildLinkQrCode();
     })
 
   }
@@ -358,6 +373,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "NH TM CP Đầu Tư và Phát Triển Việt Nam (BIDV)";
       this.bankBranch = "Chi Nhánh 02, Tp.HCM";
       this.accountNumber = "130 1000 147 4890";
+      this.buildLinkQrCode();
     })
 
   }
@@ -399,6 +415,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "Ngân Hàng TMCP Sài Gòn Thương Tín (Sacombank)";
       this.bankBranch = "Chi nhánh Cao Thắng, Tp.HCM";
       this.accountNumber = "060 0952 73354";
+      this.buildLinkQrCode();
     })
 
   }
@@ -439,6 +456,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "Ngân hàng HDBANK";
       this.bankBranch = "Chi nhánh Sài gòn";
       this.accountNumber = "052704070018649";
+      this.buildLinkQrCode();
     })
 
   }
@@ -480,6 +498,7 @@ export class MytrippaymentbankPage implements OnInit {
       this.bankName = "Ngân Hàng Sài Gòn (SCB)";
       this.bankBranch = "Chi nhánh Phú Đông";
       this.accountNumber = "023 0109 7937 00001";
+      this.buildLinkQrCode();
     })
 
   }
@@ -595,5 +614,35 @@ export class MytrippaymentbankPage implements OnInit {
   }
   uppayment(){
     this.navCtrl.navigateForward('/mytripuppayment');
+  }
+
+  buildLinkQrCode() {
+    this.zone.run(()=>{
+     this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${this.textbank}&amount=${this.gf.convertStringToNumber(this.activityService.objPaymentMytrip.trip.amount_after_tax)}&description=${this.bookingCode}`;
+    })
+     
+   }
+
+async downloadqrcode(){
+    let storageDirectory ='';
+    if (this.platform.is('ios')) {
+      storageDirectory = this.file.dataDirectory + `qrcode_${this.bookingCode}.png`;
+    }
+    else if (this.platform.is('android')) {
+        storageDirectory = this.file.externalDataDirectory + `qrcode_${this.bookingCode}.png`;
+    }
+    else {
+        return false;
+    }
+    storageDirectory = normalizeURL(storageDirectory);
+    this.gf.showLoading();
+    try {
+      this.socialSharing.saveToPhotoAlbum(this.qrcodeurl).then(()=>{
+        this.gf.hideLoading();
+        this.presentToastr('Đã lưu');
+      });
+    } catch (error) {
+      this.gf.hideLoading();
+    }
   }
 }

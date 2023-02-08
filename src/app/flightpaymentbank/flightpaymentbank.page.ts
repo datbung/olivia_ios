@@ -16,9 +16,7 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import * as moment from 'moment';
 import { voucherService } from '../providers/voucherService';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { HTTP } from '@ionic-native/http/ngx';
+
 
 @Component({
   selector: 'app-flightpaymentbank',
@@ -55,9 +53,9 @@ export class FlightpaymentbankPage implements OnInit {
     private http: HttpClient,
     public clipboard: Clipboard,public _flightService: flightService,private modalCtrl: ModalController,
     private fb: Facebook,
-    private fileTransfer: FileTransfer,
-    private file: File,
-    private nativeHTTP: HTTP,
+   
+    //private normalizeURL: normalizeURL,
+    //private nativeHTTP: HTTP,
     ) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
@@ -85,7 +83,6 @@ export class FlightpaymentbankPage implements OnInit {
     this.accountNumber = "007 1000 895 230";
     this.bankTransfer = "Vietcombank";
     this.bookingCode = this._flightService.itemFlightCache.pnr.resNo;
-    this.buildLinkQrCode();
     this.storage.get('jti').then(jti => {
       if (jti) {
         this.jti = jti;
@@ -125,7 +122,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.accountNumber = "007 1000 895 230";
       this.bankTransfer = "Vietcombank";
       this.bookingCode = this._flightService.itemFlightCache.pnr.resNo;
-      this.buildLinkQrCode();
   }
   acb() {
     this.zone.run(() => {
@@ -168,7 +164,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "190862589";
       this.bankTransfer = "ACB";
-      this.buildLinkQrCode();
     })
 
   }
@@ -212,7 +207,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
       this.accountNumber = "007 1000 895 230";
       this.bankTransfer = "Vietcombank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -258,7 +252,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "1110 0014 2852";
       this.bankTransfer = "Viettinbank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -303,7 +296,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Trần Quang Diệu, Tp.HCM";
       this.accountNumber = "19128840912016";
       this.bankTransfer = "Techcombank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -349,7 +341,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Lê Văn Sỹ, Tp.HCM";
       this.accountNumber = "0139 9166 0002";
       this.bankTransfer = "dongabank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -395,7 +386,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi Nhánh 03, Tp.HCM";
       this.accountNumber = "160 2201 361 086";
       this.bankTransfer = "Agribank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -441,7 +431,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi Nhánh 02, Tp.HCM";
       this.accountNumber = "130 1000 147 4890";
       this.bankTransfer = "BIDV";
-      this.buildLinkQrCode();
     })
 
   }
@@ -487,7 +476,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Cao Thắng, Tp.HCM";
       this.accountNumber = "060 0952 73354";
       this.bankTransfer = "Sacombank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -532,7 +520,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Sài gòn";
       this.accountNumber = "052704070018649";
       this.bankTransfer = "HDBank";
-      this.buildLinkQrCode();
     })
 
   }
@@ -578,7 +565,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chi nhánh Phú Đông";
       this.accountNumber = "023 0109 7937 00001";
       this.bankTransfer = "SCB";
-      this.buildLinkQrCode();
     })
 
   }
@@ -624,7 +610,6 @@ export class FlightpaymentbankPage implements OnInit {
       this.bankBranch = "Chợ Lớn, TP.HCM";
       this.accountNumber = "001 7101 6190 02045";
       this.bankTransfer = "OCB";
-      this.buildLinkQrCode();
     })
 
   }
@@ -690,22 +675,13 @@ export class FlightpaymentbankPage implements OnInit {
                   if(se._flightService.itemFlightCache.objHotelCitySelected){
                     se.gf.updatePaymentMethodForCombo(se._flightService.itemFlightCache.pnr.bookingCode, se.paymentMethod);
                     se.gf.hideLoading();
-                    // var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone+ '&memberId=' + se.jti +'&version=2';
-                    //   se.gf.CreatePayoo(url).then(databanktransfer => {
-                    //     se.gf.hideLoading();
-                    //     se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-                        
-                    // })
                   }else{
                     se.gf.hideLoading();
-                    // var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&rememberToken=&buyerPhone=' + itemcache.phone+ '&memberId=' + se.jti +'&version=2';
-                    //   se.gf.CreatePayoo(url).then(() => {
-                    //     se.gf.hideLoading();
-                    //     se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-                    // })
+               
                   }
-                  se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-             
+                  //se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                  se.activityService.qrcodepaymentfrom = 1;
+                  se.navCtrl.navigateForward('/paymentqrcode');
             }else{//hold vé thất bại về trang tìm kiếm
               se.gf.hideLoading();
               se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 1);
@@ -898,49 +874,24 @@ export class FlightpaymentbankPage implements OnInit {
   }
   
 
-  buildLinkQrCode() {
-   this.zone.run(()=>{
-    let itemcache = this._flightService.itemFlightCache;
-    let totalprice = itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '');
-    this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${this.textbank}&amount=${totalprice}&description=${this.bookingCode}`;
-   })
-    
-  }
-
-  async downloadqrcode(){
-    // retrieve the image
-      // const response = await fetch(this.qrcodeurl);
-      // // convert to a Blob
-      // const blob = await response.blob();
-      // // convert to base64 data, which the Filesystem plugin requires
-      // const base64Data = await this.convertBlobToBase64(blob) as string;
-            
-      // let _fileTransfer = new FileTransfer();
-      // let uri = encodeURI(this.qrcodeurl)
-    
-      // _fileTransfer.create().download(uri,uri);
-
-      const filePath = this.file.dataDirectory + `qrcode_${this.bookingCode}`; 
-                         // for iOS use this.file.documentsDirectory
+  paymentqrcode(){
+    this.activityService.bankName = this.bankName;
+    this.activityService.bankTransfer = this.bankTransfer;
+    this.activityService.bankAccount = this.accountNumber;
+    this.activityService.totalPriceTransfer = this._flightService.itemFlightCache.totalPrice;
+    this.activityService.bookingCode = this.bookingCode;
+    this.gf.showLoading();
+    this.callBuildLink().then(data => {
+      if (data ) {
+        //this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
         
-        this.nativeHTTP.downloadFile(this.qrcodeurl, {}, {}, filePath).then(response => {
-           // prints 200
-           console.log('success block...', response);
-        }).catch(err => {
-            // prints 403
-            console.log('error block ... ', err.status);
-            // prints Permission denied
-            console.log('error block ... ', err.error);
-        })
+        this._flightService.itemFlightCache.ischeckpayment = 0;
+        this.checkHoldTicket(this._flightService.itemFlightCache);
+      }else{
+        this.gf.hideLoading();
+        this.gf.showAlertOutOfTicket(this._flightService.itemFlightCache, 2);
+      }
+    })
+    
   }
-
-    // helper function
-    convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-      const reader = new FileReader;
-      reader.onerror = reject;
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-    reader.readAsDataURL(blob);
-    });
 }

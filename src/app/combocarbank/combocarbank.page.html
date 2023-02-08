@@ -78,7 +78,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid class="no-padding">
+  <!-- <ion-grid class="no-padding">
     <ion-row>
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
@@ -86,10 +86,13 @@
         </p>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
+  <div class="div-text-note-paymentbank m-top-24" >
+    Bằng việc nhấn nút Thanh toán, Quý khách đã đồng ý với các <span class="text-underline">điều kiện và điều khoản</span> về đặt phòng trên website iVIVU.com
+  </div>
 </ion-content>
 <ion-footer>
 <div style="background-color: #ffffff; text-align: center">
-  <button [disabled]="isenabledbtn" (click)="postapibook()" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
+  <button [disabled]="isenabledbtn" (click)="postapibook()" ion-button round outline class="button button2">Xác nhận & Chuyển khoản<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
 </div>
 </ion-footer>

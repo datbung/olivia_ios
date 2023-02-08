@@ -18,6 +18,147 @@
   <ion-content >
     <div class="content-flightadddetails">
         <div *ngIf="activeStep == 1 else stepUserInfo">
+            <div class="div-login m-bottom-16" *ngIf="!loginuser" (click)="goToLogin()">
+                Đã có tài khoản? <span class="text-login">Đăng nhập ngay</span>
+            </div>
+
+            <div class="div-user-info">
+                    <div  [ngClass]=" ( (hasinput && !hoten) || hoteninvalid || subnameinvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
+                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Họ tên</ion-label>
+                            <ion-input [(ngModel)]="hoten" type="text"  (ionBlur)="inputLostFocus(null)" (ionInput)="inputFocus(null, $event)" (ionFocus)="inputOnFocus(null, 9)"></ion-input>
+                        </ion-item>
+                    </div>
+                    
+                    <div [ngClass]="((hasinput && !sodienthoai) || sodienthoaiinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
+                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Số điện thoại</ion-label>
+                            <ion-input [(ngModel)]="sodienthoai" type="tel" maxlength=11 required  (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
+                        </ion-item>
+                    </div>
+    
+                    <div [ngClass]="((hasinput && !email) || emailinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
+                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Email</ion-label>
+                            <ion-input [(ngModel)]="email" type="email" (ionBlur)="checkInputUserInfo(3)" (ionFocus)="inputOnFocus(null, 11)"></ion-input>
+                        </ion-item>
+                    </div>
+                    
+                    <div class="div-showerror m-bottom-12">
+                        <div class="d-flex cls-error" *ngIf="hasinput && !hoten">
+                            <div class="div-icon-error">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                                Vui lòng nhập họ tên.
+                            </div>
+                        </div>
+                        <div class="d-flex cls-error m-top-8" *ngIf="hoten && hoteninvalid">
+                            <div class="div-icon-error">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                                Họ tên không hợp lệ. Vui lòng kiểm tra lại!
+                            </div>
+                        </div>
+
+                        <div class="d-flex cls-error m-top-8" *ngIf="hoten && subnameinvalid">
+                            <div class="div-icon-error width-40">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                              Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!
+                            </div>
+                          </div>
+
+                        <div class="d-flex cls-error m-top-8" *ngIf="hasinput && !sodienthoai">
+                            <div class="div-icon-error">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                                Vui lòng nhập số điện thoại.
+                            </div>
+                        </div>
+                        <div class="d-flex cls-error m-top-8" *ngIf="sodienthoai && sodienthoaiinvalid">
+                            <div class="div-icon-error">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                                Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!
+                            </div>
+                        </div>
+
+                        <div class="d-flex cls-error m-top-8" *ngIf="hasinput && !email">
+                            <div class="div-icon-error">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                                Vui lòng nhập email.
+                            </div>
+                        </div>
+
+                        <div class="d-flex cls-error m-top-8" *ngIf="email && emailinvalid">
+                            <div class="div-icon-error">
+                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
+                            </div>
+                            <div class="div-text-error m-left-28">
+                                Định dạng địa chỉ email không hợp lệ. Vui lòng kiểm tra lại!
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="div-vat">
+                <div class="d-flex">
+                    <ion-checkbox (ionChange)="(0)" [(ngModel)]="ischeck" color="secondary" style="width: 20px; height: 20px"></ion-checkbox>
+                    <ion-label class="label-input" style="margin: 3px 10px">Xuất hóa đơn điện tử</ion-label>
+                </div>
+
+                <div *ngIf="ischeck">
+                    <div *ngIf="ischeck">
+                        <div class="m-bottom-12">
+                          <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Tên công ty</ion-label>
+                            <ion-input class="cls-input-custom" [(ngModel)]="companyname" type="text" required></ion-input>
+                          </ion-item>
+                        </div>
+                        <div class="m-bottom-12">
+                          <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Địa chỉ</ion-label>
+                            <ion-input class="cls-input-custom" [(ngModel)]="address" type="text" required></ion-input>
+                          </ion-item>
+                        </div>
+                        <div class="m-bottom-12">
+                          <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Mã số thuế</ion-label>
+                            <ion-input class="cls-input-custom" [(ngModel)]="tax" type="text" required></ion-input>
+                          </ion-item>
+                        </div>
+                        <div style="margin-left: 5px">
+                            <ion-checkbox (ionChange)="showNameMail($event)" style="width: 20px; height: 20px" [checked]="ishideNameMail"  color="secondary"></ion-checkbox>
+                            <ion-label class="label-input" style="margin: 0px 10px;">Dùng họ tên & email của người đặt dịch vụ để xuất hoá đơn</ion-label>
+                          </div>
+                          <div *ngIf="!ishideNameMail">
+                            <ion-col size="12">
+                              <ion-item style="--padding-start: 0px">
+                                <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Họ tên</ion-label>
+                                <ion-input class="cls-input-custom" [(ngModel)]="hotenhddt" type="text" required></ion-input>
+                              </ion-item>
+                            </ion-col>
+                            <ion-col size="12">
+                              <ion-item style="--padding-start: 0px">
+                                <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Email nhận HĐ</ion-label>
+                                <ion-input class="cls-input-custom"  [(ngModel)]="emailhddt" type="text" required></ion-input>
+                              </ion-item>
+                            </ion-col>
+                          </div>
+                    </div>
+                  </div>
+            </div>
+
+           
+        </div>
+        <ng-template #stepUserInfo>
             <div class="div-img-step">
                 <img class="img-step" src="./assets/ic_flight/step_2.svg">
             </div>
@@ -407,145 +548,6 @@
                     </div>
                     <div class="div-split"></div>
                 </div>
-            </div>
-        </div>
-        <ng-template #stepUserInfo>
-            <div class="div-login m-bottom-16" *ngIf="!loginuser" (click)="goToLogin()">
-                Đã có tài khoản? <span class="text-login">Đăng nhập ngay</span>
-            </div>
-
-            <div class="div-user-info">
-                    <div  [ngClass]=" ( (hasinput && !hoten) || hoteninvalid || subnameinvalid)? 'm-bottom-12 cls-error': 'm-bottom-12' ">
-                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Họ tên</ion-label>
-                            <ion-input [(ngModel)]="hoten" type="text"  (ionBlur)="inputLostFocus(null)" (ionInput)="inputFocus(null, $event)" (ionFocus)="inputOnFocus(null, 9)"></ion-input>
-                        </ion-item>
-                    </div>
-                    
-                    <div [ngClass]="((hasinput && !sodienthoai) || sodienthoaiinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
-                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Số điện thoại</ion-label>
-                            <ion-input [(ngModel)]="sodienthoai" maxlength=11 required  (ionBlur)="checkInputUserInfo(2)" (ionFocus)="inputOnFocus(null, 10)"></ion-input>
-                        </ion-item>
-                    </div>
-    
-                    <div [ngClass]="((hasinput && !email) || emailinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
-                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Email</ion-label>
-                            <ion-input [(ngModel)]="email" type="email" (ionBlur)="checkInputUserInfo(3)" (ionFocus)="inputOnFocus(null, 11)"></ion-input>
-                        </ion-item>
-                    </div>
-                    
-                    <div class="div-showerror m-bottom-12">
-                        <div class="d-flex cls-error" *ngIf="hasinput && !hoten">
-                            <div class="div-icon-error">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                                Vui lòng nhập họ tên.
-                            </div>
-                        </div>
-                        <div class="d-flex cls-error m-top-8" *ngIf="hoten && hoteninvalid">
-                            <div class="div-icon-error">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                                Họ tên không hợp lệ. Vui lòng kiểm tra lại!
-                            </div>
-                        </div>
-
-                        <div class="d-flex cls-error m-top-8" *ngIf="hoten && subnameinvalid">
-                            <div class="div-icon-error width-40">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                              Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!
-                            </div>
-                          </div>
-
-                        <div class="d-flex cls-error m-top-8" *ngIf="hasinput && !sodienthoai">
-                            <div class="div-icon-error">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                                Vui lòng nhập số điện thoại.
-                            </div>
-                        </div>
-                        <div class="d-flex cls-error m-top-8" *ngIf="sodienthoai && sodienthoaiinvalid">
-                            <div class="div-icon-error">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                                Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!
-                            </div>
-                        </div>
-
-                        <div class="d-flex cls-error m-top-8" *ngIf="hasinput && !email">
-                            <div class="div-icon-error">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                                Vui lòng nhập email.
-                            </div>
-                        </div>
-
-                        <div class="d-flex cls-error m-top-8" *ngIf="email && emailinvalid">
-                            <div class="div-icon-error">
-                                <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
-                            </div>
-                            <div class="div-text-error m-left-28">
-                                Định dạng địa chỉ email không hợp lệ. Vui lòng kiểm tra lại!
-                            </div>
-                        </div>
-                    </div>
-            </div>
-
-            <div class="div-vat">
-                <div class="d-flex">
-                    <ion-checkbox (ionChange)="(0)" [(ngModel)]="ischeck" color="secondary" style="width: 20px; height: 20px"></ion-checkbox>
-                    <ion-label class="label-input" style="margin: 3px 10px">Xuất hóa đơn điện tử</ion-label>
-                </div>
-
-                <div *ngIf="ischeck">
-                    <div *ngIf="ischeck">
-                        <div class="m-bottom-12">
-                          <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Tên công ty</ion-label>
-                            <ion-input class="cls-input-custom" [(ngModel)]="companyname" type="text" required></ion-input>
-                          </ion-item>
-                        </div>
-                        <div class="m-bottom-12">
-                          <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Địa chỉ</ion-label>
-                            <ion-input class="cls-input-custom" [(ngModel)]="address" type="text" required></ion-input>
-                          </ion-item>
-                        </div>
-                        <div class="m-bottom-12">
-                          <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Mã số thuế</ion-label>
-                            <ion-input class="cls-input-custom" [(ngModel)]="tax" type="text" required></ion-input>
-                          </ion-item>
-                        </div>
-                        <div style="margin-left: 5px">
-                            <ion-checkbox (ionChange)="showNameMail($event)" style="width: 20px; height: 20px" [checked]="ishideNameMail"  color="secondary"></ion-checkbox>
-                            <ion-label class="label-input" style="margin: 0px 10px;">Dùng họ tên & email của người đặt dịch vụ để xuất hoá đơn</ion-label>
-                          </div>
-                          <div *ngIf="!ishideNameMail">
-                            <ion-col size="12">
-                              <ion-item style="--padding-start: 0px">
-                                <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Họ tên</ion-label>
-                                <ion-input class="cls-input-custom" [(ngModel)]="hotenhddt" type="text" required></ion-input>
-                              </ion-item>
-                            </ion-col>
-                            <ion-col size="12">
-                              <ion-item style="--padding-start: 0px">
-                                <ion-label class="sub-label m-bottom-6 f-13" position="stacked">Email nhận HĐ</ion-label>
-                                <ion-input class="cls-input-custom"  [(ngModel)]="emailhddt" type="text" required></ion-input>
-                              </ion-item>
-                            </ion-col>
-                          </div>
-                    </div>
-                  </div>
             </div>
         </ng-template>
         

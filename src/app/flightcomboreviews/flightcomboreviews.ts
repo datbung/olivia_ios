@@ -2868,10 +2868,15 @@ export class FlightComboReviewsPage implements OnInit{
           });
           let adultCombo = room.Rooms[0].IncludeAdults * element.TotalRoom;
           adultCombo = adultCombo > se.totalAdult ? se.totalAdult : adultCombo;
-
-          adultOtherFee = adultOtherFee * (room.Rooms[0].IncludeAdults * se.roomnumber) / adultCombo;
-          element.PriceDiffUnit = adultOtherFee + ((element.PriceAvgDefaultTA * se.roomnumber) * se.TotalNight / adultCombo) - se.roomPriceSale;
-          element.PriceDiffUnit = Math.round(element.PriceDiffUnit);
+          adultOtherFee=0;
+          element.PriceDiffUnit =0;
+          if (adultCombo!=0) {
+            adultOtherFee = adultOtherFee * (room.Rooms[0].IncludeAdults * se.roomnumber) / adultCombo;
+            element.PriceDiffUnit = adultOtherFee + ((element.PriceAvgDefaultTA * se.roomnumber) * se.TotalNight / adultCombo) - se.roomPriceSale;
+            element.PriceDiffUnit = Math.round(element.PriceDiffUnit);
+          }
+       
+        
         });
       });
       

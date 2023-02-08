@@ -29,6 +29,9 @@ import {
 } from 'timers';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { tourService } from '../providers/tourService';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { normalizeURL } from 'ionic-angular';
 
 @Component({
     selector: 'app-order',
@@ -164,6 +167,7 @@ import { tourService } from '../providers/tourService';
   totalHotel: number;
   HotelPolicies: any;
   amount_after_tax: any;
+  qrcodeurl: string;
     constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
         public storage: Storage, public zone: NgZone, public modalCtrl: ModalController, 
         public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -179,7 +183,10 @@ import { tourService } from '../providers/tourService';
         public _foodService: foodService,
         private nativePageTransitions: NativePageTransitions,
         public _tourService: tourService,
-        private safariViewController: SafariViewController,) {
+        private safariViewController: SafariViewController,
+        private socialSharing: SocialSharing,
+        private file: File,
+        ) {
         this.handleSplashScreen();
         
         //this.getdata();
@@ -547,7 +554,7 @@ import { tourService } from '../providers/tourService';
               method: 'GET',
               url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory? 10:25),
               //url: "http://localhost:34290/"+ '/api/dashboard/getMyTripPaging?memberId=91f60b04-328e-4e04-a603-cd49139e2c0c&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
-              //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=8e8ec6ca-d154-46cc-a407-a439268e2460&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
+              //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=b2d138c8-378f-404f-ac1e-647df522defa&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               headers:
               {
                 'accept': 'application/json',
@@ -1075,6 +1082,7 @@ import { tourService } from '../providers/tourService';
                               element.accountNumber =obj.accountNumber;
                               element.bankName =obj.bankName;
                               element.url =obj.url;
+                              
                             } else if (element.pay_method==3 && element.payment_info) {
                               element.payment_info=JSON.parse(element.payment_info);
                               element.PaymentCode=element.payment_info.PaymentCode
@@ -1666,6 +1674,9 @@ import { tourService } from '../providers/tourService';
                   se.arrinsurrance = [];
                 }
                
+                if (!(se.listMyTrips[0].pay_method==3||se.listMyTrips[0].pay_method==51||se.listMyTrips[0].pay_method==2)) {
+                  se.buildLinkQrCode(se.listMyTrips[0]);
+                }
               }
               if (se.listMyTrips[0].isFlyBooking) {
                 this.getDetailTicketFromDat(0).then((data) => {
@@ -5966,6 +5977,36 @@ import { tourService } from '../providers/tourService';
             }
             return true;
         }
+
+        buildLinkQrCode(trip) {
+          this.zone.run(()=>{
+           this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${trip.textbank}&amount=${this.gf.convertStringToNumber(trip.amount_after_tax)}&description=${trip.booking_id}`;
+          })
+           
+         }
+        
+        async downloadqrcode(trip){
+            let storageDirectory ='';
+            if (this.platform.is('ios')) {
+            storageDirectory = this.file.dataDirectory + `qrcode_${trip.booking_id}.png`;
+            }
+            else if (this.platform.is('android')) {
+              storageDirectory = this.file.externalDataDirectory + `qrcode_${trip.booking_id}.png`;
+            }
+            else {
+              return false;
+            }
+            storageDirectory = normalizeURL(storageDirectory);
+            this.gf.showLoading();
+            try {
+            this.socialSharing.saveToPhotoAlbum(this.qrcodeurl).then(()=>{
+              this.gf.hideLoading();
+              this.presentToastr('Đã lưu');
+            });
+            } catch (error) {
+            this.gf.hideLoading();
+            }
+          }
         }
         
           

@@ -200,7 +200,7 @@ export class FlightadddetailsPage implements OnInit {
                                         }else{
                                           se.checkInValidSubNameBeforeNextStep(itempax).then((iteminvalid)=>{
                                             if(!iteminvalid){
-                                              se.gonextstep();
+                                              se.gotopayment();
                                             }else{
                                               se.showAlertInvalidSubName(iteminvalid);
                                               return;
@@ -1027,7 +1027,7 @@ export class FlightadddetailsPage implements OnInit {
             var se = this;
             se.checkchangeemail=false;
             se.hasinput = false;
-            if(se.activeStep == 1){
+            if(se.activeStep == 2){
                 if(se.adults && se.adults.length >0){
                     for (let index = 0; index < se.adults.length; index++) {
                         const elementAdult = se.adults[index];
@@ -1401,7 +1401,7 @@ export class FlightadddetailsPage implements OnInit {
                                 }else{
                                   se.checkInValidSubNameBeforeNextStep(itempax).then((iteminvalid)=>{
                                     if(!iteminvalid){
-                                      se.gonextstep();
+                                      se.gotopayment();
                                     }else{
                                       se.showAlertInvalidSubName(iteminvalid);
                                       return;
@@ -1529,7 +1529,8 @@ export class FlightadddetailsPage implements OnInit {
                 }else{
                   if (!se.checkchangeemail) {
                     //se.confirmBeforeGoToPaymentPage();
-                    se.gotopaymentpage();
+                    //se.gotopaymentpage();
+                    se.gonextstep();
                   }
                 }
                 
@@ -2042,46 +2043,7 @@ export class FlightadddetailsPage implements OnInit {
   se.inputtext = false;
   se.activeStep = 2;
 
-                    se._flightService.itemFlightCache.adults = se.adults;
-                    se._flightService.itemFlightCache.childs = se.childs;
-    
-                    if(!se.loginuser){
-                      let ad = se.adults[0];
-                      se.hoten = ad.name;
-                    }
-                    
-    
-                    se.storage.get('paxdetailInfo').then((data) =>{
-                      if(data){
-                        se.storage.remove('paxdetailInfo').then(()=>{
-                          se.storage.set('paxdetailInfo', { adults: se.adults, childs: se.childs });
-                        })
-                      }else{
-                        se.storage.set('paxdetailInfo', { adults: se.adults, childs: se.childs });
-                      }
-                    })
-    
-                    //Lưu cache danh sách khách
-                    se.storage.get('listpaxcache').then((data)=>{
-                      if(data){
-                        let datapax = [...data];
-                        let arraycheck = [...this.adults,...this.childs];
-                        for (let index = 0; index < arraycheck.length; index++) {
-                          const elementpax = arraycheck[index];
-                          let isexist = data.some(r => r.name == elementpax.name );
-                          if(!isexist){
-                            datapax.push(elementpax);
-                          }
-                        }
-    
-                        se.storage.remove('listpaxcache').then(()=>{
-                          se.storage.set('listpaxcache', datapax);
-                        })
-                      }else{
-                        let arraypax = [...this.adults,...this.childs];
-                        se.storage.set('listpaxcache', arraypax);
-                      }
-                    })
+                   
 }
   async showAlertDuplicateName(){
     var se = this;
@@ -2111,7 +2073,7 @@ export class FlightadddetailsPage implements OnInit {
         cssClass: 'button-payment',
         handler: () => {
           alert.dismiss();
-          se.gonextstep();
+          se.gotopayment();
         }
         
       },
@@ -2155,7 +2117,7 @@ export class FlightadddetailsPage implements OnInit {
           cssClass: 'button-payment',
           handler: () => {
             alert.dismiss();
-            se.gonextstep();
+            se.gotopayment();
           }
           
         },
@@ -2188,7 +2150,7 @@ export class FlightadddetailsPage implements OnInit {
         cssClass: 'button-payment',
         handler: () => {
           alert.dismiss();
-          se.gonextstep();
+          se.gotopayment();
         }
         
       },
@@ -2221,7 +2183,7 @@ async showAlertInvalidSubName(iteminvalid){
       cssClass: 'button-payment',
       handler: () => {
         alert.dismiss();
-        se.gonextstep();
+        se.gotopayment();
       }
       
     },
@@ -2264,7 +2226,7 @@ async showAlertInvalidFirtNameAndLastName(item){
       cssClass: 'button-payment',
       handler: () => {
         alert.dismiss();
-        se.gonextstep();
+        se.gotopayment();
       }
       
     },
@@ -2299,7 +2261,7 @@ async showAlertDuplicateFirtNameAndLastName(item){
       cssClass: 'button-payment',
       handler: () => {
         alert.dismiss();
-        se.gonextstep();
+        se.gotopayment();
       }
       
     },
@@ -2434,9 +2396,58 @@ alert.present();
           })
         }
 
+        gotopayment(){
+          let se = this;
+          se.activeStep = 2;
+          se.inputtext = false;
+          se._flightService.itemFlightCache.adults = se.adults;
+          se._flightService.itemFlightCache.childs = se.childs;
+
+          if(!se.loginuser){
+            let ad = se.adults[0];
+            se.hoten = ad.name;
+          }
+          
+
+          se.storage.get('paxdetailInfo').then((data) =>{
+            if(data){
+              se.storage.remove('paxdetailInfo').then(()=>{
+                se.storage.set('paxdetailInfo', { adults: se.adults, childs: se.childs });
+              })
+            }else{
+              se.storage.set('paxdetailInfo', { adults: se.adults, childs: se.childs });
+            }
+          })
+
+          //Lưu cache danh sách khách
+          se.storage.get('listpaxcache').then((data)=>{
+            if(data){
+              let datapax = [...data];
+              let arraycheck = [...this.adults,...this.childs];
+              for (let index = 0; index < arraycheck.length; index++) {
+                const elementpax = arraycheck[index];
+                let isexist = data.some(r => r.name == elementpax.name );
+                if(!isexist){
+                  datapax.push(elementpax);
+                }
+              }
+
+              se.storage.remove('listpaxcache').then(()=>{
+                se.storage.set('listpaxcache', datapax);
+              })
+            }else{
+              let arraypax = [...this.adults,...this.childs];
+              se.storage.set('listpaxcache', arraypax);
+            }
+          })
+
+          this.gotopaymentpage();
+        }
+
         gotopaymentpage(){
           var se = this;
           se._flightService.itemFlightCache.backtochoiceseat = false;
+          
           se.updatePassengerInfo().then((data)=>{
             if(!data.error){
               
@@ -3589,7 +3600,7 @@ alert.present();
                     }
                   })
                 }
-              }else if(!se.hidepaxhint && se.activeStep ==2)
+              }else if(!se.hidepaxhint && se.activeStep ==1)
               {
                 if(se.listPaxSuggestByMemberId && se.listPaxSuggestByMemberId.length >0){
                   se.inputtext = true;
@@ -3599,7 +3610,7 @@ alert.present();
              
             }else if(se.listPaxSuggestByMemberId && se.listPaxSuggestByMemberId.length >0){
               
-              if(se.activeStep ==1){
+              if(se.activeStep ==2){
                 se.inputtext = true;
                   se.updateHintPaxName(item, se.gf.convertFontVNI(event.target.value), se.listPaxSuggestByMemberId);
                 }else{
@@ -3696,7 +3707,7 @@ alert.present();
             selectPaxHint(paxhint){
               var se = this;
               se.inputtext = false;
-              if(se.currentSelectPax && se.activeStep ==1){
+              if(se.currentSelectPax && se.activeStep ==2){
                 se.currentSelectPax.name = paxhint.name;
                 se.currentSelectPax.gender = paxhint.gender;
                 se.currentSelectPax.genderdisplay = paxhint.genderdisplay; 
@@ -3751,7 +3762,7 @@ alert.present();
             var se = this;
               setTimeout(()=>{
                 se.inputtext = false;
-                if(se.activeStep ==1){
+                if(se.activeStep ==2){
                   se.checkInput(item, 2, isadult);
                 }else{
                   se.checkInputUserInfo(1);

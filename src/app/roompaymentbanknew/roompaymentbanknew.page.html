@@ -76,16 +76,15 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  
-  <ion-grid *ngIf="rowtwoactive" class="no-padding">
+  <div class="div-text-note-paymentbank m-top-24" >
+    Bằng việc nhấn nút Thanh toán, Quý khách đã đồng ý với các <span class="text-underline">điều kiện và điều khoản</span> về đặt phòng trên website iVIVU.com
+  </div>
+  <!-- <ion-grid *ngIf="rowtwoactive" class="no-padding">
     <ion-row>
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
           {{bankName}}
-          <!-- <br>{{bankBranch}}
-          <br>Số TK: <b>{{accountNumber}}</b><a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a>
-          <br>Người thụ hưởng: Công ty Cổ Phần IVIVU.COM <a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a>
-          <br>Nội dung thanh toán: <b>{{bookingCode}}</b><a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a> -->
+         
         </p>
       </ion-col>
     </ion-row>
@@ -96,10 +95,7 @@
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
           {{bankName}}
-          <!-- <br>{{bankBranch}}
-          <br>Số TK: <b>{{accountNumber}}</b><a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a>
-          <br>Người thụ hưởng: Công ty Cổ Phần IVIVU.COM<a class='text-copy' (click)='copyClipboard(2)'>Sao chép</a>
-          <br>Nội dung thanh toán: <b>{{bookingCode}}</b><a class='text-copy' (click)='copyClipboard(3)'>Sao chép</a> -->
+         
         </p>
       </ion-col>
     </ion-row>
@@ -111,14 +107,11 @@
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
           {{bankName}}
-          <!-- <br>{{bankBranch}}
-          <br>Số TK: <b>{{accountNumber}}</b><a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a>
-          <br>Người thụ hưởng: Công ty Cổ Phần IVIVU.COM <a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a>
-          <br>Nội dung thanh toán: <b>{{bookingCode}}</b><a class='text-copy' (click)='copyClipboard(1)'>Sao chép</a> -->
+         
         </p>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
 
   <!-- <div class="div-DK">
     <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkDk()"></ion-checkbox>
@@ -129,6 +122,7 @@
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
-    <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
+    <!-- <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button> -->
+    <button [disabled]="!ischeckedDK" (click)="next()" [ngClass]="ischeckedDK?'button2':'btn-disabled'" ion-button round outline class="button button2">Xác nhận & Chuyển khoản<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
   </div>
 </ion-footer>

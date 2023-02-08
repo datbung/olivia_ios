@@ -89,3 +89,41 @@
     .color-red{
         color: #e52822
     }
+
+
+    .m-l-6 {
+        margin-left: 6px;
+    }
+    .div-qrcode {
+        text-align: center;
+    
+        .img-qrcode {
+            width: 238px;
+            height: 292px;
+            object-fit: cover;
+        }
+    }
+    .img-copy {
+        width: 24px;
+        height: 24px;
+    }
+    .div-btn-download {
+        text-align: center;
+        margin: auto 54px;
+    
+        padding: 10px 16px 10px 12px;
+        border-radius: 4px;
+        background-color: #ecf0f5;
+        justify-content: center;
+        align-items: center;
+        margin-top: 16px;
+    
+        .btn-download {
+            margin-right: 10px;
+        }
+    }
+   
+
+.d-flex {
+    display: flex;
+}

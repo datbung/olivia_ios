@@ -270,6 +270,9 @@ const routes: Routes = [
     //{ path: 'ticketpaymentatoffice', loadChildren: './ticket/ticketpaymentatoffice/ticketpaymentatoffice.module#ticketPaymentAtOfficePageModule' },
     { path: 'ticketpaymentpayoo/:code/:stt', loadChildren: './ticket/ticketpaymentpayoo/ticketpaymentpayoo.module#TicketPaymentPayooPageModule' },
     { path: 'ticketpaymentdone', loadChildren: './ticket/ticketpaymentdone/ticketpaymentdone.module#TicketPaymentDonePageModule' },
+
+    { path: 'paymentqrcode', loadChildren: './paymentqrcode/paymentqrcode.module#PaymentqrcodePageModule' },
+    
 ];
 @NgModule({
   imports:

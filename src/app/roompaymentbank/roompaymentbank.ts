@@ -501,6 +501,11 @@ export class RoompaymentbankPage implements OnInit{
   }
   next() {
     var se = this;
+    this.activityService.bankName = this.bankName;
+    this.activityService.bankTransfer = this.textbank;
+    this.activityService.bankAccount = this.accountNumber;
+    this.activityService.totalPriceTransfer = this.totalPrice;
+    this.activityService.bookingCode = this.bookingCode;
     //Nếu không phải thanh toán từ mytrip thì theo luồng cũ
     if(!this.activityService.objPaymentMytrip){
       this.presentLoading();
@@ -577,7 +582,7 @@ export class RoompaymentbankPage implements OnInit{
                 var stt=body.bookingStatus;
                 se.clearClonePage('page-roompaymentdone');
                 se.loader.dismiss();
-                se.navCtrl.navigateForward('/roompaymentdone/'+code+'/'+stt);
+                se.navCtrl.navigateForward('/paymentqrcode');
               }
               else{
                 se.loader.dismiss();
@@ -668,7 +673,7 @@ export class RoompaymentbankPage implements OnInit{
         url='https://ebanking.scb.com.vn/?module=login';
       }
       se.activityService.objPaymentMytrip.urlPayment = url;
-      se.navCtrl.navigateForward('/roompaymentdoneean/' + code + '/' + se.totalPrice + '/' + 1);
+      se.navCtrl.navigateForward('/paymentqrcode');
     }
     
   }  

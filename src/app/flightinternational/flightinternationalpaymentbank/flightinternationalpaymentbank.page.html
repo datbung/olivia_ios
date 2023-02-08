@@ -82,15 +82,19 @@
     </ion-row>
   </ion-grid>
   
+  <div class="div-text-note-paymentbank m-top-24" *ngIf="!isPaymentFromMytrip">
+    Bằng việc nhấn nút Thanh toán, Quý khách đã đồng ý với các <span class="text-underline">điều kiện và điều khoản</span> về đặt phòng trên website iVIVU.com
+  </div>
+
   <ion-grid *ngIf="rowtwoactive" class="no-padding">
-    <ion-row>
+    <!-- <ion-row>
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
           {{bankName}}
          
         </p>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
     <div *ngIf="isPaymentFromMytrip">
       <ion-row>
         <ion-col col-12 class="no-padding">
@@ -107,14 +111,14 @@
   </ion-grid>
 
   <ion-grid *ngIf="rowoneactive" class="no-padding">
-    <ion-row>
+    <!-- <ion-row>
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
           {{bankName}}
         
         </p>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
     <div *ngIf="isPaymentFromMytrip">
       <ion-row>
         <ion-col col-12 class="no-padding">
@@ -133,14 +137,14 @@
 
 
   <ion-grid *ngIf="rowthreeactive" class="no-padding">
-    <ion-row>
+    <!-- <ion-row>
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap>
           {{bankName}}
         
         </p>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
     <div *ngIf="isPaymentFromMytrip">
       <ion-row>
         <ion-col col-12 class="no-padding">
@@ -158,6 +162,6 @@
 </ion-content>
 <ion-footer>
   <div style="background-color: #ffffff; text-align: center">
-    <button (click)="next()" ion-button round outline class="button button2">Chuyển khoản {{textbank}}<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
+    <button (click)="next()" ion-button round outline class="button button2">Xác nhận & Chuyển khoản<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
   </div>
 </ion-footer>

@@ -42,7 +42,7 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-<ion-grid *ngIf="rowoneactive" class="no-padding">
+<!-- <ion-grid *ngIf="rowoneactive" class="no-padding">
     <ion-row >
       <ion-col col-12 class="no-padding">
         <p class="text-payment-info" text-wrap >
@@ -67,7 +67,7 @@
       </ion-row>
     </div>
     
-</ion-grid>
+</ion-grid> -->
 
 <ion-grid class="grid-row-2">
   <ion-row>
@@ -89,7 +89,7 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-<ion-grid *ngIf="rowtwoactive" class="no-padding">
+<!-- <ion-grid *ngIf="rowtwoactive" class="no-padding">
     <ion-row>
       <ion-col col-12 class="no-padding">
           <p class="text-payment-info" text-wrap >
@@ -113,7 +113,7 @@
           </ion-col>
       </ion-row>
     </div>
-</ion-grid>
+</ion-grid> -->
 
 <ion-grid class="grid-row-2">
     <ion-row>
@@ -127,7 +127,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-<ion-grid *ngIf="rowthreeactive" class="no-padding">
+<!-- <ion-grid *ngIf="rowthreeactive" class="no-padding">
     <ion-row >
       <ion-col col-12 class="no-padding">
           <p class="text-payment-info" text-wrap >
@@ -151,7 +151,7 @@
           </ion-col>
       </ion-row>
     </div>
-</ion-grid>
+</ion-grid> -->
 <!-- <ion-row style="margin-top: 20px">
   <ion-checkbox (ionChange)="check()"  [(ngModel)]="ischeck" color="secondary"  ></ion-checkbox>
   <ion-label style="margin: 0 10px" text-wrap>Tôi đồng ý các
@@ -160,10 +160,13 @@
 <!-- <div class="div-btn">
   <button (click)="select()" ion-button round outline class="button1">Chọn phương thức thanh toán khác</button>
 </div> -->
+<div class="div-text-note-paymentbank m-top-24" >
+  Bằng việc nhấn nút Thanh toán, Quý khách đã đồng ý với các <span class="text-underline">điều kiện và điều khoản</span> về đặt phòng trên website iVIVU.com
+</div>
 </ion-content>
 <ion-footer>
 <div style="background-color: #ffffff; text-align: center" *ngIf="!isPaymentFromMytrip else paymentmytrip">
-  <button [disabled]="isenabledbtn" (click)="next()" ion-button round outline class="button button2">Tiếp tục</button>
+  <button (click)="next()" ion-button round outline class="button button2">Xác nhận & Chuyển khoản<span><img class="img" src="./assets/imgs/ic_next.svg"></span></button>
 </div>
 <ng-template #paymentmytrip>
   <div style="background-color: #ffffff; text-align: center">

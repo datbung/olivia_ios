@@ -1,0 +1,66 @@
+
+<ion-header class="paymentqrcode-header">
+    <ion-toolbar >
+        <ion-row>
+          <ion-col class="align-center">
+            <div class="div-text-header"><label class="text-title">Thông tin chuyển khoản</label></div>
+            <div class="div-quick-back" (click)="showQuickBack()">
+              ...
+            </div>
+          </ion-col>
+        </ion-row>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <div class="paymentqrcode-content p-all-16 ">
+        <div  style="text-align: center">
+            <img  src="./assets/ic_flight/step_4.svg">
+        </div>
+                
+        <div class="div-qrcode m-top-24">
+            <img class="img-qrcode" src="{{qrcodeurl}}" >
+        </div>
+        <div class="div-btn-download m-top-16 d-flex" (click)="downloadqrcode()">
+            <div class="btn-download">
+                <img class="img-download" src="./assets/imgs/download.svg">
+            </div>
+            <div class="text-download">Lưu mã để thanh toán</div>
+        </div>
+
+        <div class="div-payment-info m-top-24">
+            <div class="text-payment-info">{{bankName}}</div>
+
+            <div class="text-sub-payment-info m-top-12">Số tài khoản:</div>
+            <div class="d-flex m-top-2" *ngIf="accountNumber" (click)="copyClipboard(1)">
+                <div class="text-payment-info">{{accountNumber}}</div>
+                <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
+            </div>
+
+            <div class="text-sub-payment-info m-top-12">Người thụ hưởng:</div>
+            <div class="d-flex m-top-2" *ngIf="accountNumber" (click)="copyClipboard(2)">
+                <div class="text-payment-info">Công ty cổ phần IVIVU.COM</div>
+                <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
+            </div>
+
+            <div class="text-sub-payment-info m-top-12">Số tiền:</div>
+            <div class="d-flex m-top-2" *ngIf="totalPrice" (click)="copyClipboard(4)">
+                <div class="text-payment-info">{{gf.convertNumberToString(totalPrice) }} VND</div>
+                <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
+            </div>
+
+            <div class="text-sub-payment-info m-top-12">Nội dung:</div>
+            <div class="d-flex m-top-2" *ngIf="bookingCode" (click)="copyClipboard(3)">
+                <div class="text-payment-info">{{bookingCode}}</div>
+                <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
+            </div>
+            
+        </div>
+    </div>
+  
+  </ion-content>
+  <ion-footer>
+  <div class="div-button-payment-qrcode">
+    <button (click)="gotohomepage()" ion-button round outline class="button button1">Về trang chủ</button>
+    <button (click)="gotomytrip()" ion-button round outline class="button button2 m-top-0">Xem chuyến đi</button>
+  </div>
+  </ion-footer>

@@ -123,6 +123,7 @@ import { FlightDetailInternationalPageModule } from './flightinternational/fligh
 import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
 import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
 import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvideo.module';
+//import { HTTP } from '@ionic-native/http/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -244,6 +245,7 @@ import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvid
     FileOpener,
     tourService,
     YoutubeVideoPlayer,
+    //HTTP,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import { Booking, RoomInfo } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
-import { GlobalFunction } from '../providers/globalfunction';
+import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
 import { Bookcombo } from './../providers/book-service';
 import * as moment from 'moment';
@@ -30,7 +30,8 @@ export class CombocarbankPage implements OnInit {
   constructor(public platform: Platform, public Roomif: RoomInfo, public zone: NgZone, public storage: Storage,
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController, public bookCombo: Bookcombo,
     public gf: GlobalFunction,
-    private fb: Facebook) {
+    private fb: Facebook,
+    public activityService: ActivityService) {
     this.listcars = this.gf.getParams('carscombo');
     this.hoten=this.Roomif.hoten;
     this.phone=this.Roomif.phone
@@ -564,7 +565,14 @@ export class CombocarbankPage implements OnInit {
           }
           if(se.Roomif.payment == 'AL')
           {
-            se.navCtrl.navigateForward('/combodonebank/' + obj.Code);
+            //se.navCtrl.navigateForward('/combodonebank/' + obj.Code);
+            se.activityService.bankName = se.bankName;
+            se.activityService.bankTransfer = se.textbank;
+            se.activityService.bankAccount = se.accountNumber;
+            se.activityService.totalPriceTransfer = se.bookCombo.totalprice;
+            se.activityService.bookingCode = obj.Code;
+            se.activityService.qrcodepaymentfrom = 5;
+            se.navCtrl.navigateForward('/paymentqrcode');
           }
           else
           {
