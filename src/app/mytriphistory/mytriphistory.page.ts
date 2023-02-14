@@ -576,8 +576,8 @@ export class MytripHistoryPage implements OnInit {
             elementHis.avatar = ( elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ?  elementHis.avatar : 'https:' +  elementHis.avatar;
           }
         
-          elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM')
-          elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM')
+          elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY')
+          elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY')
           se.getRatingStar(elementHis);
   
           //map thông tin giống với trip future
@@ -662,8 +662,8 @@ export class MytripHistoryPage implements OnInit {
             }
             elementHis.isRequestTrip = false;
             //date display
-            elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD') +" thg "+moment(elementHis.checkInDate).format('MM')
-            elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD') +" thg "+moment(elementHis.checkOutDate).format('MM')
+            elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", " + moment(elementHis.checkInDate).format('DD-MM-YYYY')
+            elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY')
             se.getRatingStar(elementHis);
             if (elementHis.insuranceInfo && elementHis.insuranceInfo.adultList.length > 0) {
               if (se.checkItemHasNotClaim(elementHis.insuranceInfo.adultList) || se.checkItemHasNotClaim(elementHis.insuranceInfo.childList)) {
@@ -685,7 +685,7 @@ export class MytripHistoryPage implements OnInit {
                 elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
               }
               let ddate = elementHis.checkInDate;
-              elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).daynameshort+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM')
+              elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).daynameshort+", " + moment(ddate).format('DD-MM-YYYY')
               if(elementHis.bookingsComboData[1]){
                 let diffhours = elementHis.bookingsComboData[1].arrivalTime.replace(':','')*1 - elementHis.bookingsComboData[1].departureTime.replace(':','')*1;
                 if(diffhours){
@@ -738,8 +738,8 @@ export class MytripHistoryPage implements OnInit {
               elementHis.isFlyBooking = true;
               elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
              
-              elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", "+ moment(elementHis.checkInDate).format("DD") + " thg " + moment(elementHis.checkInDate).format("MM");
-              elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", "+ moment(elementHis.checkOutDate).format("DD") + " thg " + moment(elementHis.checkOutDate).format("MM");
+              elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", "+ moment(elementHis.checkInDate).format("DD-MM-YYYY")
+              elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", "+ moment(elementHis.checkOutDate).format("DD-MM-YYYY")
               let departFlight = elementHis.bookingsComboData.filter((f) => { return f.departureDate == elementHis.checkInStr });
               if(departFlight && departFlight.length >0){
                 elementHis.itemdepart = departFlight[0];
