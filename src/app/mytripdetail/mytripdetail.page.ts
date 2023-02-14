@@ -1469,7 +1469,7 @@ export class MytripdetailPage implements OnInit {
 
 buildLinkQrCode() {
   this.zone.run(()=>{
-   this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${this.trip.textbank}&amount=${this.gf.convertStringToNumber(this.trip.amount_after_tax)}&description=${this.trip.booking_id}`;
+   this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${this.trip.textbank}&amount=${this.gf.convertStringToNumber((this.amount_after_tax ? this.amount_after_tax : this.trip.amount_after_tax))}&description=${this.trip.booking_id}`;
   })
    
  }

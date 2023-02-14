@@ -1845,9 +1845,7 @@ import { normalizeURL } from 'ionic-angular';
                   se.arrinsurrance = [];
                 }
                
-                if (!(se.listMyTrips[0].pay_method==3||se.listMyTrips[0].pay_method==51||se.listMyTrips[0].pay_method==2)) {
-                  se.buildLinkQrCode(se.listMyTrips[0]);
-                }
+               
               }
               if (se.listMyTrips[0].isFlyBooking) {
                 this.getDetailTicketFromDat(0).then((data) => {
@@ -1997,6 +1995,10 @@ import { normalizeURL } from 'ionic-angular';
                 if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
                   se.listMyTrips[0].priceShow = (se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                 }
+              }
+
+              if (se.listMyTrips && se.listMyTrips.length ==1 && !(se.listMyTrips[0].pay_method==3||se.listMyTrips[0].pay_method==51||se.listMyTrips[0].pay_method==2)) {
+                se.buildLinkQrCode(se.listMyTrips[0]);
               }
     
               se.zone.run(() => {
@@ -6386,7 +6388,7 @@ import { normalizeURL } from 'ionic-angular';
 
         buildLinkQrCode(trip) {
           this.zone.run(()=>{
-           this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${trip.textbank}&amount=${this.gf.convertStringToNumber(trip.amount_after_tax)}&description=${trip.booking_id}`;
+           this.qrcodeurl = `https://cdn1.ivivu.com/newcdn/qr-payment?bankname=${trip.textbank}&amount=${this.gf.convertStringToNumber((this.amount_after_tax ? this.amount_after_tax : trip.amount_after_tax))}&description=${trip.booking_id}`;
           })
            
          }
