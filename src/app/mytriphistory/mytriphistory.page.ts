@@ -698,7 +698,7 @@ export class MytripHistoryPage implements OnInit {
                 }
   
                 let rdate = elementHis.checkOutDate;
-                elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).daynameshort+", " + moment(rdate).format('DD') +" thg "+moment(rdate).format('MM')
+                elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).daynameshort+", " + moment(rdate).format('DD-MM-YYYY')
               }
 
               elementHis.bookingsComboData.forEach(el => {

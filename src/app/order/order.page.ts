@@ -823,8 +823,7 @@ import { normalizeURL } from 'ionic-angular';
                         element.deliveryPaymentDisplay = "";
                       }
                       else {
-                        //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).daynameshort+", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-    
+                      
                         element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
                         element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
                         if (!(element.pay_method == 3 || element.pay_method == 51 || element.pay_method == 2)) {
@@ -1087,7 +1086,7 @@ import { normalizeURL } from 'ionic-angular';
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
                                   let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
-                                  element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD-MM-YYYY')
     
                                   let elementNext = elementbkg.Transits[index + 1];
                                   if (elementNext) {
@@ -1520,8 +1519,6 @@ import { normalizeURL } from 'ionic-angular';
                         }
                       }
                       element.deliveryPaymentDisplay = "" + hour + ", " + day;
-                      // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).daynameshort+", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-    
                       element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
                       element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY"); let arrhours = arrpaymentdate[1].split(":");
                       let today = new Date();
@@ -1635,10 +1632,10 @@ import { normalizeURL } from 'ionic-angular';
                     }
                     element.isRequest = true;
                     element.booking_id = element.request_id;
-                    element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD') + " thg " + moment(element.start_date).format('MM');
-                    element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD') + " thg " + moment(element.end_date).format('MM');
+                    element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM-YYYY');
+                    element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD-MM-YYYY');
     
-                    element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM');
+                    element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM-YYYY');
                     element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD-MM-YYYY');
     
                     element.address = element.hotelAddress;
@@ -2421,7 +2418,7 @@ import { normalizeURL } from 'ionic-angular';
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
                                   let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
-                                  element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD-MM-YYYY');
     
                                   let elementNext = elementbkg.Transits[index + 1];
                                   if (elementNext) {
@@ -3067,8 +3064,8 @@ import { normalizeURL } from 'ionic-angular';
         se.isFlyBooking = (obj.booking_id.indexOf('FLY') != -1 || obj.booking_id.indexOf("VMB") != -1 || obj.booking_type == "CB_FLY_HOTEL") ? true : false;
         se.datecin = new Date(obj.checkInDate);
         se.datecout = new Date(obj.checkOutDate);
-        se.cindisplay = se.gf.getDayOfWeek(se.datecin).dayname+ " " + moment(se.datecin).format('DD') + "Thg " + moment(se.datecin).format('MM');
-        se.coutdisplay = se.gf.getDayOfWeek(se.datecout).dayname+ " " + moment(se.datecout).format('DD') + "Thg " + moment(se.datecout).format('MM');
+        se.cindisplay = se.gf.getDayOfWeek(se.datecin).daynameshort+ " " + moment(se.datecin).format('DD-MM-YYYY')
+        se.coutdisplay = se.gf.getDayOfWeek(se.datecout).daynameshort+ " " + moment(se.datecout).format('DD-MM-YYYY')
         if (obj.bookingsComboData) {
           se.valueGlobal.bookingsComboData = obj.bookingsComboData[0];
           se.cincombodeparturedisplay = moment(new Date(obj.bookingsComboData[0].departureDate)).format('DD-MM-YYYY');
@@ -3155,8 +3152,8 @@ import { normalizeURL } from 'ionic-angular';
         var se = this;
         var datecinRQ = new Date(obj.start_date);
         var datecoutRQ = new Date(obj.end_date);
-        se.cinRQdisplay =se.gf.getDayOfWeek(datecinRQ).dayname+ " " + moment(datecinRQ).format('DD') + "Thg " + moment(datecinRQ).format('MM');
-        se.coutRQdisplay = se.gf.getDayOfWeek(datecoutRQ).dayname+ " " + moment(datecoutRQ).format('DD') + "Thg " + moment(datecoutRQ).format('MM');
+        se.cinRQdisplay =se.gf.getDayOfWeek(datecinRQ).daynameshort+ " " + moment(datecinRQ).format('DD-MM-YYYY')
+        se.coutRQdisplay = se.gf.getDayOfWeek(datecoutRQ).daynameshort+ " " + moment(datecoutRQ).format('DD-MM-YYYY')
     
         se.numberOfRQDay = moment(datecoutRQ).diff(moment(datecinRQ), 'days');
       }
@@ -3713,8 +3710,8 @@ import { normalizeURL } from 'ionic-angular';
                         
                         element.hotelAvatar = urlavatar + "-" + "104x104" + tail;
                         element.booking_id = element.request_id;
-                        element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM')
-                        element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM')
+                        element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM-YYYY')
+                        element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY')
                         se.getRatingStar(element);
                         se.listRequestTrips.push(element);
                       }
@@ -3846,8 +3843,8 @@ import { normalizeURL } from 'ionic-angular';
               element.avatar = element.hotelAvatar;
               element.isRequestTrip = true;
               element.booking_id = element.request_id;
-              element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
-              element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
+              element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM-YYYY')
+              element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY')
               se.getRatingStar(element);
               se.listRequestTrips.push(element);
               se.requestripcount++;
