@@ -898,7 +898,7 @@ export class HotelListPage implements OnInit{
   
         if (se.dataList[index].DealType) {
           if (se.dataList[index].DealPrice) {
-            se.dataList[index].DealPrice = se.dataList[index].DealPrice.toLocaleString();
+            se.dataList[index].DealPrice = se.dataList[index].DealPrice;
           }
   
         }
@@ -940,9 +940,9 @@ export class HotelListPage implements OnInit{
         if (se.dataList[index].DealType) {
   
           if (se.dataList[index].Address) {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice ? se.dataList[index].DealPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : se.dataList[index].DealPrice, DealType: se.dataList[index].DealTypeSubstring, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false,StyleTag: se.dataList[index].StyleTag, IsShowPrice: se.dataList[index].IsShowPrice };
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice ? se.dataList[index].DealPrice : se.dataList[index].DealPrice, DealType: se.dataList[index].DealTypeSubstring, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false,StyleTag: se.dataList[index].StyleTag, IsShowPrice: se.dataList[index].IsShowPrice };
           } else {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice? se.dataList[index].DealPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."): se.dataList[index].DealPrice, DealType: se.dataList[index].DealTypeSubstring, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag, IsShowPrice: se.dataList[index].IsShowPrice};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice? se.dataList[index].DealPrice: se.dataList[index].DealPrice, DealType: se.dataList[index].DealTypeSubstring, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag, IsShowPrice: se.dataList[index].IsShowPrice};
           }
         }
         else {

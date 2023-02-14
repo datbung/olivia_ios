@@ -720,7 +720,7 @@ export class RoompaymentselectEanPage implements OnInit{
                     },100)
                   });
                 }else{
-                  se.showAlertMessageOnly(databook.Msg);
+                  se.showAlertMessage(databook.msg);
                 }
               })
             }else{
@@ -759,7 +759,25 @@ export class RoompaymentselectEanPage implements OnInit{
     });
     alert.present();
   }
-  
+  async showAlertMessage(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: msg,
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/hoteldetail/' + this.booking.HotelId);
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
   //Tạo booking phòng
   CreateBookingRoom(paymentMethod): Promise<any>{
     var Invoice = 0;

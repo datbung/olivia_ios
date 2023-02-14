@@ -823,7 +823,7 @@ import { normalizeURL } from 'ionic-angular';
                         element.deliveryPaymentDisplay = "";
                       }
                       else {
-                        //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                        //element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).daynameshort+", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
     
                         element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
                         element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
@@ -942,8 +942,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                               }
                               if (elementNew.departureDateNew) {
                                 let newdate;
@@ -957,8 +957,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                               }
                             } else {
                               if (elementNew.departureDate && !elementNew.departureDateNew) {
@@ -973,8 +973,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                               }
                               if (elementNew.departureDateNew) {
                                 let newdate;
@@ -988,8 +988,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                               }
                             }
       
@@ -1009,7 +1009,7 @@ import { normalizeURL } from 'ionic-angular';
                         }
     
                         // let rdate = element.checkOutDate;
-                        // element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname + ", " + moment(rdate).format('DD-MM-YYYY');
+                        // element.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).daynameshort+ ", " + moment(rdate).format('DD-MM-YYYY');
                       }
                       element.arrPickupDropoff = [];
                       element.bookingsComboData.forEach(el => {
@@ -1087,7 +1087,7 @@ import { normalizeURL } from 'ionic-angular';
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
                                   let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
-                                  element.cindisplay = this.gf.getDayOfWeek(cin).dayname + ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
     
                                   let elementNext = elementbkg.Transits[index + 1];
                                   if (elementNext) {
@@ -1134,7 +1134,7 @@ import { normalizeURL } from 'ionic-angular';
                           }
                           element.time_payment = moment(element.delivery_payment_date).format("HH:mm");
                           element.date_payment = moment(element.delivery_payment_date).format("DD-MM-YYYY");
-                          element.delivery_payment_date_display = "Hạn thanh toán trước " + moment(element.delivery_payment_date).format("HH:mm") + " " + se.gf.getDayOfWeek(element.delivery_payment_date).dayname + ", " + moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                          element.delivery_payment_date_display = "Hạn thanh toán trước " + moment(element.delivery_payment_date).format("HH:mm") + " " + se.gf.getDayOfWeek(element.delivery_payment_date).daynameshort+ ", " + moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
                           element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
                           element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
                           //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
@@ -1174,8 +1174,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                                element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                               }
                               if (elementNew.departureDateNew) {
                                 let newdate;
@@ -1189,8 +1189,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                                element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                               }
                             } else {
                               if (elementNew.departureDate && !elementNew.departureDateNew) {
@@ -1205,8 +1205,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                                element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                element.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                               }
                               if (elementNew.departureDateNew) {
                                 let newdate;
@@ -1220,8 +1220,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                                element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                element.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                               }
                             }
       
@@ -1242,8 +1242,8 @@ import { normalizeURL } from 'ionic-angular';
                             if (newdate && newdate.length > 1) {
                               d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                             }
-                            element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
-                            element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                            element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
+                            element.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                           }
                           if (element.bookingsComboData[0].departureDateNew) {
                             let newdate;
@@ -1257,8 +1257,8 @@ import { normalizeURL } from 'ionic-angular';
                             if (newdate && newdate.length > 1) {
                               d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                             }
-                            element.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + element.bookingsComboData[0].departureDateNew;
-                            element.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + element.bookingsComboData[0].departureDateNew;
+                            element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + element.bookingsComboData[0].departureDateNew;
+                            element.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + element.bookingsComboData[0].departureDateNew;
                           }
                         }
                       }
@@ -1520,7 +1520,7 @@ import { normalizeURL } from 'ionic-angular';
                         }
                       }
                       element.deliveryPaymentDisplay = "" + hour + ", " + day;
-                      // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).dayname +", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
+                      // element.delivery_payment_date_display = "Hạn thanh toán trước "+moment(element.delivery_payment_date).format("HH:mm") +" "+ se.gf.getDayOfWeek(element.delivery_payment_date).daynameshort+", "+ moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
     
                       element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
                       element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY"); let arrhours = arrpaymentdate[1].split(":");
@@ -2113,8 +2113,8 @@ import { normalizeURL } from 'ionic-angular';
                     }
                     elementHis.isRequestTrip = false;
                     //date display
-                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname + ", " + moment(elementHis.checkInDate).format("DD-MM-YYYY");
-                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname + ", " + moment(elementHis.checkOutDate).format("DD-MM-YYYY");
+                    elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+ ", " + moment(elementHis.checkInDate).format("DD-MM-YYYY");
+                    elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+ ", " + moment(elementHis.checkOutDate).format("DD-MM-YYYY");
                     //Thay mới ngày bay
                     if (elementHis.bookingsComboData) {
                       if (elementHis.bookingsComboData.length > 1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(elementHis.bookingsComboData[1].trip_Code) == -1 && elementHis.bookingsComboData[1].airlineName && elementHis.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
@@ -2133,8 +2133,8 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                             }
                             if (elementNew.departureDateNew) {
                               let newdate;
@@ -2148,8 +2148,8 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                             }
                           } else {
                             if (elementNew.departureDate && !elementNew.departureDateNew) {
@@ -2164,8 +2164,8 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                             }
                             if (elementNew.departureDateNew) {
                               let newdate;
@@ -2179,8 +2179,8 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                             }
                           }
       
@@ -2201,8 +2201,8 @@ import { normalizeURL } from 'ionic-angular';
                           if (newdate && newdate.length > 1) {
                             d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                           }
-                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
-                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
+                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                         }
                         if (elementHis.bookingsComboData[0].departureDateNew) {
                           let newdate;
@@ -2216,8 +2216,8 @@ import { normalizeURL } from 'ionic-angular';
                           if (newdate && newdate.length > 1) {
                             d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                           }
-                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementHis.bookingsComboData[0].departureDateNew;
-                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementHis.bookingsComboData[0].departureDateNew;
+                          elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementHis.bookingsComboData[0].departureDateNew;
+                          elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementHis.bookingsComboData[0].departureDateNew;
                         }
                       }
                     }
@@ -2247,7 +2247,7 @@ import { normalizeURL } from 'ionic-angular';
                         elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
                       }
                       // let ddate = elementHis.checkInDate;
-                      // elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname + ", " + moment(ddate).format('DD-MM-YYYY');
+                      // elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).daynameshort+ ", " + moment(ddate).format('DD-MM-YYYY');
     
                       //Thay mới ngày bay
                       if (elementHis.bookingsComboData) {
@@ -2262,8 +2262,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                               }
                               if (elementNew.departureDateNew) {
                                 let newdate = elementNew.departureDateNew.split('-');
@@ -2271,8 +2271,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                               }
                             } else {
                               if (elementNew.departureDate && !elementNew.departureDateNew) {
@@ -2281,8 +2281,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                               }
                               if (elementNew.departureDateNew) {
                                 let newdate = elementNew.departureDateNew.split('-');
@@ -2290,8 +2290,8 @@ import { normalizeURL } from 'ionic-angular';
                                 if (newdate && newdate.length > 1) {
                                   d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                                 }
-                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
-                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).dayname + ", " + elementNew.departureDateNew;
+                                // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                                elementNew.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + elementNew.departureDateNew;
                               }
                             }
       
@@ -2311,7 +2311,7 @@ import { normalizeURL } from 'ionic-angular';
                         }
     
                         // let rdate = elementHis.checkOutDate;
-                        // elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname + ", " + moment(rdate).format('DD') + " thg " + moment(rdate).format('MM')
+                        // elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).daynameshort+ ", " + moment(rdate).format('DD') + " thg " + moment(rdate).format('MM')
                       }
                       elementHis.arrPickupDropoff = [];
                       elementHis.bookingsComboData.forEach(el => {
@@ -2419,7 +2419,7 @@ import { normalizeURL } from 'ionic-angular';
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
                                   let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
-                                  element.cindisplay = this.gf.getDayOfWeek(cin).dayname + ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
+                                  element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
     
                                   let elementNext = elementbkg.Transits[index + 1];
                                   if (elementNext) {
@@ -2701,8 +2701,8 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
-                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).dayname + ", " + moment(d).format("DD-MM-YYYY");
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort+ ", " + moment(d).format("DD-MM-YYYY");
                             }
                             if (elementNew.departureDateNew) {
                               let newdate;
@@ -2716,7 +2716,7 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
                               elementHis.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + elementNew.departureDateNew;
                             }
                           } else {
@@ -2732,7 +2732,7 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).dayname + ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDate).daynameshort+ ", " + moment(elementNew.departureDate).format("DD-MM-YYYY");
                               elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format("DD-MM-YYYY");
                             }
                             if (elementNew.departureDateNew) {
@@ -2747,7 +2747,7 @@ import { normalizeURL } from 'ionic-angular';
                               if (newdate && newdate.length > 1) {
                                 d = new Date(Number(newdate[2]), Number(newdate[1]) - 1, Number(newdate[0]));
                               }
-                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).dayname + ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
+                              // element.checkInDisplay = se.gf.getDayOfWeek(elementNew.departureDateNew).daynameshort+ ", " + moment(elementNew.departureDateNew).format("DD-MM-YYYY");
                               elementHis.checkOutDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + elementNew.departureDateNew;
                             }
                           }

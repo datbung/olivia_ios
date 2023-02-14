@@ -422,7 +422,7 @@ export class HotelListMoodPage implements OnInit{
   
         if (se.dataList[index].DealType) {
           if (se.dataList[index].DealPrice) {
-            se.dataList[index].DealPrice = se.dataList[index].DealPrice.toLocaleString();
+            se.dataList[index].DealPrice = se.dataList[index].DealPrice;
           }
   
         }
@@ -464,16 +464,16 @@ export class HotelListMoodPage implements OnInit{
         if (se.dataList[index].DealType) {
   
           if (se.dataList[index].subLocation[0]) {
-            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ? se.dataList[index].dealPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") :se.dataList[index].dealPrice , dealType: se.dataList[index].dealType, SubLocation: se.dataList[index].subLocation[0].name, Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice : 0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId };
+            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ? se.dataList[index].dealPrice :se.dataList[index].dealPrice , dealType: se.dataList[index].dealType, SubLocation: se.dataList[index].subLocation[0].name, Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice : 0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId };
           } else {
-            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ? se.dataList[index].dealPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."):se.dataList[index].dealPrice, dealType: se.dataList[index].dealType, SubLocation: '', Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice :0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId };
+            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ? se.dataList[index].dealPrice:se.dataList[index].dealPrice, dealType: se.dataList[index].dealType, SubLocation: '', Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice :0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId };
           }
         }
         else {
           if (se.dataList[index].subLocation[0]) {
-            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ?se.dataList[index].dealPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."):se.dataList[index].dealPrice, dealType: se.dataList[index].dealType, SubLocation: se.dataList[index].subLocation[0].name, Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPriceOTAStr, PromotionDescriptionSubstring: "" , Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice : 0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId};
+            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ?se.dataList[index].dealPrice:se.dataList[index].dealPrice, dealType: se.dataList[index].dealType, SubLocation: se.dataList[index].subLocation[0].name, Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPriceOTAStr, PromotionDescriptionSubstring: "" , Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice : 0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId};
           } else {
-            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ?se.dataList[index].dealPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."):se.dataList[index].dealPrice, dealType: se.dataList[index].dealType, SubLocation: '', Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPriceOTAStr, PromotionDescriptionSubstring: "" , Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice : 0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId };
+            item = { Avatar: se.dataList[index].avatar, Name: se.dataList[index].name, AvgPoint: se.dataList[index].avgPoint, dealPrice: se.dataList[index].dealPrice ?se.dataList[index].dealPrice:se.dataList[index].dealPrice, dealType: se.dataList[index].dealType, SubLocation: '', Rating: se.dataList[index].rating, HotelId: se.dataList[index].id, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPriceOTAStr, PromotionDescriptionSubstring: "" , Liked: itemlike, IsShowPrice: se.dataList[index] ? se.dataList[index].isShowPrice : 0,regionName: this.dataList[index].regionName,regionId: this.dataList[index].regionId };
           }
         }
         if(item.AvgPoint.toString().length ==1){
@@ -554,7 +554,7 @@ export class HotelListMoodPage implements OnInit{
       }
       
       if (this.json[index].dealType) {
-        this.json[index].dealPrice = this.json[index].dealPrice.toLocaleString();
+        this.json[index].dealPrice = this.json[index].dealPrice;
       }
       switch (this.json[index].rating) {
         case 50:

@@ -685,7 +685,7 @@ export class MytripHistoryPage implements OnInit {
                 elementHis.bookingsComboData[0].flightTimeDisplay = h + m;
               }
               let ddate = elementHis.checkInDate;
-              elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).dayname+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM')
+              elementHis.bookingsComboData[0].checkInDisplay = se.gf.getDayOfWeek(ddate).daynameshort+", " + moment(ddate).format('DD') +" thg "+moment(ddate).format('MM')
               if(elementHis.bookingsComboData[1]){
                 let diffhours = elementHis.bookingsComboData[1].arrivalTime.replace(':','')*1 - elementHis.bookingsComboData[1].departureTime.replace(':','')*1;
                 if(diffhours){
@@ -698,7 +698,7 @@ export class MytripHistoryPage implements OnInit {
                 }
   
                 let rdate = elementHis.checkOutDate;
-                elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).dayname+", " + moment(rdate).format('DD') +" thg "+moment(rdate).format('MM')
+                elementHis.bookingsComboData[1].checkOutDisplay = se.gf.getDayOfWeek(rdate).daynameshort+", " + moment(rdate).format('DD') +" thg "+moment(rdate).format('MM')
               }
 
               elementHis.bookingsComboData.forEach(el => {
@@ -738,8 +738,8 @@ export class MytripHistoryPage implements OnInit {
               elementHis.isFlyBooking = true;
               elementHis.totalpricedisplay = se.gf.convertNumberToString(Math.round(elementHis.amount_after_tax));
              
-              elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).dayname +", "+ moment(elementHis.checkInDate).format("DD") + " thg " + moment(elementHis.checkInDate).format("MM");
-              elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).dayname +", "+ moment(elementHis.checkOutDate).format("DD") + " thg " + moment(elementHis.checkOutDate).format("MM");
+              elementHis.checkInDisplay = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort+", "+ moment(elementHis.checkInDate).format("DD") + " thg " + moment(elementHis.checkInDate).format("MM");
+              elementHis.checkOutDisplay = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort+", "+ moment(elementHis.checkOutDate).format("DD") + " thg " + moment(elementHis.checkOutDate).format("MM");
               let departFlight = elementHis.bookingsComboData.filter((f) => { return f.departureDate == elementHis.checkInStr });
               if(departFlight && departFlight.length >0){
                 elementHis.itemdepart = departFlight[0];

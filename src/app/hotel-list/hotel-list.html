@@ -105,7 +105,7 @@
                                 </div>
                                
                                 <div  *ngIf="msg.DealPrice" text-right class="p-top-10  price">
-                                  <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{ msg.DealPrice }} đ</label>
+                                  <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{gf.numberToCurrency(msg.DealPrice, '.')}} đ</label>
                                 </div>
                                 <div  *ngIf="!msg.DealPrice && msg.HasCheckPrice && msg.MinPriceOTAStr" text-right class="p-top-10  price">
                                   <label *ngIf="!msg.DealPrice && msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }} đ</label>
@@ -235,7 +235,7 @@
                                 </div>
                                
                                 <div  *ngIf="msg.DealPrice" text-right class="p-top-10  price">
-                                  <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{ msg.DealPrice }} đ</label>
+                                  <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{gf.numberToCurrency(msg.DealPrice, '.')}} đ</label>
                                 </div>
                                 <div  *ngIf="!msg.DealPrice && msg.HasCheckPrice && msg.MinPriceOTAStr" text-right class="p-top-10  price">
                                   <label *ngIf="!msg.DealPrice && msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }} đ</label>
