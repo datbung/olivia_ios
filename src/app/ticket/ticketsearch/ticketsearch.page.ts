@@ -90,10 +90,34 @@ export class TicketSearchPage implements OnInit{
         },
     ];
     inputText: string='';
+    listHotExperience: any;
   constructor(
     public gf: GlobalFunction,public navCtrl: NavController, private storage: Storage, public ticketService: ticketService,) {
         this.loadHistorySearch();
       this.loadRegion();
+      this.loadBestExperience();
+    }
+    loadBestExperience() {
+        let se = this;
+        let url = `${C.urls.baseUrl.urlTicket}/api/Home/GetBestExperiences`;
+        let headers = {
+            apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+            apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+        };
+        se.gf.RequestApi('GET', url, headers, null, 'ticketsearch', 'GetBestExperiences').then((data) => {
+            let res = JSON.parse(data);
+            //se.listHotRegion = res.data;
+            //console.log(res.data);
+            se.listHotExperience = res.data;
+            if(se.listHotExperience && se.listHotExperience.length >0){
+                se.listHotExperience.forEach((item, idx) => {
+                    if(se.listHotRegion[idx] && se.listHotRegion[idx].AvartarLink){
+                        item.AvartarLink = se.listHotRegion[idx].AvartarLink;
+                    }
+                    
+                })
+            }
+        })
     }
     async loadHistorySearch() {
         let listLastSearch:any = await this.gf.getListLastSearchTicketRegion();

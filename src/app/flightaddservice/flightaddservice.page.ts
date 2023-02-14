@@ -441,6 +441,9 @@ export class FlightaddservicePage implements OnInit {
               this.promocode = itemVoucher.code;
               this.promotionCode = itemVoucher.code;
               this.discountpromo = itemVoucher.rewardsItem.price;
+              // if(!itemVoucher.rewardsItem.price && itemVoucher.discountSpecialCase){
+              //   this.discountpromo = itemVoucher.discountSpecialCase;
+              // }
             }else{
               this.itemVoucher = null;
               this.promocode = "";

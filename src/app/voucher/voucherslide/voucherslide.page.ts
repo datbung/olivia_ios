@@ -138,7 +138,7 @@ export class VoucherSlidePage implements OnInit{
     // }
 
     voucherSelect(voucher){
-      if(voucher.rewardsItem.price <= 0){
+      if(voucher.rewardsItem.price <= 0 && !voucher.limitUse){
         this.showVoucherDetail(voucher);
       }else{
         if(voucher.applyFor && voucher.applyFor != 'flight'){
@@ -185,7 +185,7 @@ export class VoucherSlidePage implements OnInit{
                 'cache-control': 'no-cache',
                 'content-type': 'application/json'
               },
-              body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: 0,
+              body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price ? itemVoucher.rewardsItem.price : se._flightService.itemFlightCache.totalPrice, comboDetailId: 0,
               couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? { flight: {
                   "tickets": this._flightService.itemFlightCache.roundTrip ? [
                     {
@@ -198,7 +198,7 @@ export class VoucherSlidePage implements OnInit{
                       "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
                       "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
                       "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
-                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketType : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketType,
                       "jsonObject": ""
                     },
                     {
@@ -211,7 +211,7 @@ export class VoucherSlidePage implements OnInit{
                       "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.toPlaceCode,
                       "stops": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalReturn.stops,
                       "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
-                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalReturn.fareBasis,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketType : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketType,
                       "jsonObject": ""
                     }
                   ] : 
@@ -226,7 +226,7 @@ export class VoucherSlidePage implements OnInit{
                       "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
                       "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
                       "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
-                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketType : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
                       "jsonObject": ""
                     }
                   ],
@@ -242,6 +242,9 @@ export class VoucherSlidePage implements OnInit{
               if (error) throw new Error(error);
                 var json = body;
                 if (json.error == 0) {
+                  // if(itemVoucher.rewardsItem.price == 0 && itemVoucher.limitUse >0){
+                  //   itemVoucher.discountSpecialCase = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+                  // }
                   resolve(true);
                 }
                 else{
@@ -296,6 +299,7 @@ export class VoucherSlidePage implements OnInit{
     }
 
     loadVoucherClaimed(auth_token){
+      let se = this;
       let url = `${C.urls.baseUrl.urlMobile}/api/dashboard/GetVoucherClaimed`;
       let text = "Bearer " + auth_token;
       let  headers =
@@ -303,18 +307,72 @@ export class VoucherSlidePage implements OnInit{
           'cache-control': 'no-cache',
           'content-type': 'application/json',
           authorization: text
-      }
-      console.log(headers);
-      this.gf.RequestApi('GET', url, headers, {}, 'myvoucher', 'loadVoucher').then((data)=> {
+      };
+      let body = { bookingCode: 'VMB' ,codes: [], totalAmount: 0, comboDetailId: 0,
+              couponData: { flight: {
+                  "tickets": this._flightService.itemFlightCache.roundTrip ? [
+                    {
+                      "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airline.replace(' ',''),
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketType : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      //"jsonObject": ""
+                    },
+                    {
+                      "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalReturn.flightNumber,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.airline.replace(' ',''),
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalReturn.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalReturn.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalReturn.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalReturn.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketType : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
+                      //"jsonObject": ""
+                    }
+                  ] : 
+                  [
+                    {
+                      "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airline.replace(' ',''),
+                      "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
+                      "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
+                      "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
+                      "fromPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fromPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.fromPlaceCode,
+                      "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
+                      "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
+                      "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketType : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
+                      //"jsonObject": ""
+                    }
+                  ],
+                  "totalAdult": se._flightService.itemFlightCache.adult,
+                  "totalChild": se._flightService.itemFlightCache.child,
+                  "totalInfant": se._flightService.itemFlightCache.infant
+                ,
+              } } };
+      //console.log(headers);
+      this.gf.RequestApi('POST', url, headers, body, 'myvoucher', 'loadVoucher').then((data)=> {
         //console.log(data);
         //this.vouchersClaimed = data;
         if(data && data.length >0){
           data.forEach(element => {
             element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
           });
-          this.vouchers = [...data];
-          this._voucherService.vouchers = [...data];
+          
           this.zone.run(()=>{
+          let voucheractive = data.filter((i)=> {return i.isActive});
+          let voucherdeactive = data.filter((i)=> {return !i.isActive});
+          this.vouchers = [...voucheractive, ...voucherdeactive];
+          this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
+
             this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
 
             if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.hasvoucher){

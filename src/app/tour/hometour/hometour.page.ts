@@ -17,6 +17,7 @@ import { tourService } from 'src/app/providers/tourService';
 })
 export class HomeTourPage implements OnInit {
   itemSearch: any;
+  totalSale: any;
   
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -28,6 +29,18 @@ export class HomeTourPage implements OnInit {
     public networkProvider: NetworkProvider,
     public tourService: tourService) {
     this.loadTopSale();
+    this.loadTotalSale();
+  }
+  loadTotalSale() {
+    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetTotalBooking24H';
+    let headers = {
+      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    this.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTotalSale').then((data) => {
+      let res = JSON.parse(data);
+      this.totalSale = res.Response;
+    })
   }
   loadTopSale() {
     let se = this;
@@ -38,7 +51,6 @@ export class HomeTourPage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTopSale').then((data) => {
       let res = JSON.parse(data);
-      console.log(res.Response);
       this.tourService.listTopSale = res.Response;
       //se.slideData = res.Response;
       //se.loaddatadone = true;

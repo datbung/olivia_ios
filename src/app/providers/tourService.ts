@@ -25,6 +25,7 @@ export class tourService{
   discountpromo: number;
   usePointPrice: number;
   itemTicketService: any;
+  totalSale: any;
   
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);

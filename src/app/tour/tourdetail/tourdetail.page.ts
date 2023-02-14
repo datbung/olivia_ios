@@ -126,22 +126,24 @@ export class TourDetailPage {
                         if(data1 && data1.Status == "Success" && data1.Response && data1.Response.TourRate){
                        
                           if(data1.Response.StrListDepartures){
-                            //this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDeparture', headers, {TourId: tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures},'tourDetail','MercuriusTourDeparture').then((data2)=>{
                               this.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDepartureDate', headers, {TourCode: tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures.split(',')},'tourDetail','MercuriusTourDeparture').then((data2)=>{
-                              if(data2 && data2.Status == 'Success'){
+                                if(data2 && data2.Status == 'Success'){
                                 let lstDepartures = JSON.parse(data2.Response);
                                 console.log(lstDepartures);
 
                                 lstDepartures.forEach(element => {
                                   let _item = {
-                                    AllotmentDateStr: `${this.getDayName(element.AllotmentDate)}, ${moment(element.AllotmentDate).format('DD/MM/YYYY')}`,
+                                    AllotmentDateStr: `${moment(element.AllotmentDate).format('DD/MM/YYYY')}`,
                                     PriceAdultAvgStr: this.gf.convertNumberToString(element.PriceAdultAvg),
                                     PriceChildAvgStr: element.PriceChildAvg ? this.gf.convertNumberToString(element.PriceChildAvg) : 0,
                                     IsMinPrice: Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) == element.PriceAdultAvg && Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) != Math.max(...lstDepartures.map(o => o.PriceAdultAvg)),
                                     AllotmentDateDisplay: moment(element.AllotmentDate).format('DD-MM-YYYY'),
                                     PriceAdultAvg: element.PriceAdultAvg,
                                     PriceChildAvg: element.PriceChildAvg || 0,
-                                    DepartureDate: moment(element.AllotmentDate).format('YYYY-MM-DD')
+                                    DepartureDate: moment(element.AllotmentDate).format('YYYY-MM-DD'),
+                                    DayDisplay: gf.getDayOfWeek(element.AllotmentDate).dayname,
+                                    AllotmentDisplay: element.Status == 'RQ' ? 'Liên hệ' : `Còn ${element.AllotmentNo} chỗ`,
+                                    Status: element.Status == 'AL' ? true : false
                                   }
                                   this.listDepartureDate.push(_item);
                                 });
@@ -180,7 +182,9 @@ export class TourDetailPage {
                               } else {
                                 this.loaddeparturedone = true;
                               }
-                            })
+                              })
+
+                              //this.gf.RequestApi('POST', C.urls.baseUrl.urlGet+'/du-lich/Ajax/loadCalendarDeparture', headers, {"Tourid": tourService.tourDetailId,"DepartureTime": data1.Response.StrListDepartures}, 'tourDetail','MercuriusTourDeparture')
                           }
                           
                           
@@ -219,51 +223,6 @@ export class TourDetailPage {
           }
           
         }
-
-    getCalendarDeparture(comboId) {
-        this.storage.get('auth_token').then(auth_token => {
-            if (auth_token) {
-              var text = "Bearer " + auth_token;
-              var options = {
-                method: 'POST',
-                url:  C.urls.baseUrl.urlGet+'/du-lich/Ajax/loadCalendarDeparture',
-                timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-                form: {"Tourid": comboId,"DepartureTime": this.departureDate},
-                json: true,
-                headers:
-                {
-                    'cache-control': 'no-cache',
-                    'content-type': 'application/json',
-                    authorization: text
-                }
-              };
-        
-              request(options, function (error, response, body) {
-                if (response.statusCode != 200) {
-                  var objError = {
-                    page: "tourdetail",
-                    func: "getCalendarDeparture",
-                    message: response.statusMessage,
-                    content: response.body,
-                    param: JSON.stringify(options),
-                    type: "warning"
-                  };
-                  C.writeErrorLog(objError, response);
-                }
-                if (error) {
-                  error.page = "tourdetail";
-                  error.func = "getCalendarDeparture";
-                  error.param = JSON.stringify(options);
-                  C.writeErrorLog(error, response);
-                };
-                let result = JSON.parse(body);
-                console.log(result);
-            });
-            }
-        })
-        
-        
-    }
 
     /***
      * Next trên slide

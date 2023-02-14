@@ -3,7 +3,7 @@ import { Platform, NavController, AlertController,  ToastController, ModalContro
 import { Storage } from '@ionic/storage';
 import * as request from 'requestretry';
 import { C } from './../../providers/constants';
-import { Bookcombo, ValueGlobal } from '../../providers/book-service';
+import { Bookcombo, Booking, RoomInfo, SearchHotel, ValueGlobal } from '../../providers/book-service';
 import { GlobalFunction } from './../../providers/globalfunction';
 import { VoucherDetailPage } from '../voucherdetail/voucherdetail.page';
 import { voucherService } from 'src/app/providers/voucherService';
@@ -28,6 +28,9 @@ export class VoucherSlideHotelPage implements OnInit{
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
         public _voucherService: voucherService,
+        public booking: Booking,
+        public Roomif: RoomInfo,
+        public searchHotel: SearchHotel,
         public bookCombo: Bookcombo){
           storage.get('auth_token').then(auth_token => {
             if (auth_token) {
@@ -237,18 +240,37 @@ export class VoucherSlideHotelPage implements OnInit{
           'cache-control': 'no-cache',
           'content-type': 'application/json',
           authorization: text
-      }
-      console.log(headers);
-      this.gf.RequestApi('GET', url, headers, {}, 'myvoucher', 'loadVoucher').then((data)=> {
+      };
+      let body = {
+        bookingCode: 'hotel' ,codes: [], totalAmount: 0, comboDetailId: 0,
+        couponData: {
+          "hotel": {
+            "hotelId": this.booking.HotelId,
+            "roomName": this.booking.RoomName,
+            "totalRoom": this.Roomif.roomnumber,
+            "totalAdult": this.booking.Adults,
+            "totalChild": this.booking.Child,
+            "jsonObject": "",
+            "checkIn": this.searchHotel.CheckInDate,
+            "checkOut": this.searchHotel.CheckOutDate
+          }
+        },
+      };
+      //console.log(headers);
+      this.gf.RequestApi('POST', url, headers, body, 'myvoucher', 'loadVoucher').then((data)=> {
         //console.log(data);
         //this.vouchersClaimed = data;
         if(data && data.length >0){
           data.forEach(element => {
             element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
           });
-          this.vouchers = [...data];
-          this._voucherService.vouchers = [...data];
+        //  this.vouchers = [...data];
+        //  this._voucherService.vouchers = [...data];
           this.zone.run(()=>{
+            let voucheractive = data.filter((i)=> {return i.isActive});
+            let voucherdeactive = data.filter((i)=> {return !i.isActive});
+            this.vouchers = [...voucheractive, ...voucherdeactive];
+            this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
             this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
           })
         }else if(data.error == 401){

@@ -30,7 +30,7 @@ export class PaymentqrcodePage implements OnInit {
     accountNumber: string;
     bankName: string;
   checkreview: number;
-  private _email: any;
+  _email: any;
   defaultEmail: any;
 
     constructor(public platform:Platform,  public zone: NgZone,public navCtrl: NavController,public modalCtrl: ModalController,
@@ -63,7 +63,7 @@ export class PaymentqrcodePage implements OnInit {
               }
             })
             this.storage.get('email').then(email => {
-              this.defaultEmail = email;
+              this.defaultEmail = email || '';
 
               this._email = (this.activityService.qrcodepaymentfrom == 1 ? this._flightService.itemFlightCache.email : 
                 (( (this.activityService.qrcodepaymentfrom == 2 || this.activityService.qrcodepaymentfrom == 4 || this.activityService.qrcodepaymentfrom == 5)? this.Roomif.addressorder : 
@@ -142,6 +142,7 @@ export class PaymentqrcodePage implements OnInit {
       this._flightService.itemMenuFlightClick.emit(2);
       this._flightService.bookingCodePayment = this.bookingCode;
       this._flightService.bookingSuccess = true;
+      this.navCtrl.navigateBack('/tabs/tab1');
     }else if(this.activityService.qrcodepaymentfrom == 2){//ks
       if(this.searchhotel.rootPage == "topdeallist"){
         this.navCtrl.navigateBack('/topdeallist');

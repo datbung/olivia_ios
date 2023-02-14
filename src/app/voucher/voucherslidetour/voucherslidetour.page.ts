@@ -3,11 +3,12 @@ import { Platform, NavController, AlertController,  ToastController, ModalContro
 import { Storage } from '@ionic/storage';
 import * as request from 'requestretry';
 import { C } from './../../providers/constants';
-import { Bookcombo, ValueGlobal } from '../../providers/book-service';
+import { Bookcombo, SearchHotel, ValueGlobal } from '../../providers/book-service';
 import { GlobalFunction } from './../../providers/globalfunction';
 import { VoucherDetailPage } from '../voucherdetail/voucherdetail.page';
 import { voucherService } from 'src/app/providers/voucherService';
 import * as moment from 'moment';
+import { tourService } from 'src/app/providers/tourService';
 
 @Component({
   selector: 'app-voucherslidetour',
@@ -28,7 +29,9 @@ export class VoucherSlideTourPage implements OnInit{
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
         public _voucherService: voucherService,
-        public bookCombo: Bookcombo){
+        public bookCombo: Bookcombo,
+        public tourService: tourService,
+        public searchHotel: SearchHotel){
           storage.get('auth_token').then(auth_token => {
             if (auth_token) {
               //this.loadVoucher(auth_token);
@@ -218,6 +221,7 @@ export class VoucherSlideTourPage implements OnInit{
     }
 
     loadVoucherClaimed(auth_token){
+      let se = this;
       let url = `${C.urls.baseUrl.urlMobile}/api/dashboard/GetVoucherClaimed`;
       let text = "Bearer " + auth_token;
       let  headers =
@@ -225,18 +229,35 @@ export class VoucherSlideTourPage implements OnInit{
           'cache-control': 'no-cache',
           'content-type': 'application/json',
           authorization: text
+      };
+      let body = {
+        bookingCode: 'tour' ,codes: [], totalAmount: 0, comboDetailId: 0,
+        couponData: {
+          "tour": {
+            "tourId": se.tourService.itemDetail.tourDetailId,
+            "totalAdult": se.searchHotel.adult,
+            "totalChild": se.searchHotel.child,
+            "jsonObject": "",
+            "checkIn": se.searchHotel.CheckInDate,
+            "checkOut": se.searchHotel.CheckOutDate
+          }
+        },
       }
-      console.log(headers);
-      this.gf.RequestApi('GET', url, headers, {}, 'myvoucher', 'loadVoucher').then((data)=> {
+      //console.log(headers);
+      this.gf.RequestApi('POST', url, headers, body, 'myvoucher', 'loadVoucher').then((data)=> {
         //console.log(data);
         //this.vouchersClaimed = data;
         if(data && data.length >0){
           data.forEach(element => {
             element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
           });
-          this.vouchers = [...data];
-          this._voucherService.vouchers = [...data];
+          //this.vouchers = [...data];
+          //this._voucherService.vouchers = [...data];
           this.zone.run(()=>{
+            let voucheractive = data.filter((i)=> {return i.isActive});
+            let voucherdeactive = data.filter((i)=> {return !i.isActive});
+            this.vouchers = [...voucheractive, ...voucherdeactive];
+            this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
             this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
           })
         }else if(data.error == 401){

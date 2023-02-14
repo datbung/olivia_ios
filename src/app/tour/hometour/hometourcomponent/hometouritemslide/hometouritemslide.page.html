@@ -1,6 +1,6 @@
 <div class="div-itemtourslide">
   <div *ngIf="slideData.length >0">
-    <div *ngFor="let itemSlide of slideData; let idx = index;" [ngClass]=" (idx%2) == 0 ? 'cls-itemtour-color' : ''">
+    <div *ngFor="let itemSlide of slideData; let idxslide = index;" [ngClass]=" (idxslide%2) == 0 ? 'cls-itemtour-color' : ''">
       <div class="title-padding p-left-16 p-right-48 p-top-30 position-relative" *ngIf="itemSlide.Name" >
         <ion-label class="text-title2">
           {{ itemSlide.Name }}
@@ -20,8 +20,8 @@
         </ion-label>
       </div>
       <div
-        class="slide2-scroll"
-        (scroll)="onScroll($event)" *ngIf="itemSlide && itemSlide.TourGroupDetail && itemSlide.TourGroupDetail.length >0">
+        class="slide2-scroll tour-slide-scroll-{{idxslide}}"
+        (scroll)="onScroll($event,itemSlide,idxslide)" *ngIf="itemSlide && itemSlide.TourGroupDetail && itemSlide.TourGroupDetail.length >0">
         <div
             (click)="showDetail(slide)"
             [ngClass]="idx == 0 ? 'cls-deal position-relative' : 'cls-deal m-l-16 position-relative' "

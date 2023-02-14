@@ -149,19 +149,25 @@
     
                     <div *ngIf="loaddeparturedone else loadDepartureDate" >
                         <div class="d-flex m-top-20 m-bottom-8">
-                            <div class="width-50 text-normal">Ngày khởi hành</div>
-                            <div class="width-50 text-normal">Giá</div>
+                            <div class="width-35 text-normal">Ngày khởi hành</div>
+                            <div class="width-25 text-normal text-right">Giá</div>
+                            <div class="d-width-40 text-normal text-right m-right-16">Tình trạng</div>
                         </div>
                         <div *ngFor="let itemdeparture of listDepartureDate; let idx = index" [ngClass]="idx < 3 ? 'div-wrap-departure' : 'div-wrap-departure div-collapse' "  (click)="showDepartureCalendar(itemdeparture)">
                             <div  [ngClass]=" idx%2 ==0 ?  'div-item-departure-date cls-event' : 'div-item-departure-date' ">
-                                <div class="width-50">{{itemdeparture.AllotmentDateStr}}</div>
-                                <div class="width-50 d-flex v-align-items">
-                                    <div [ngClass]="itemdeparture.IsMinPrice ? 'width-100 text-price cls-red' : 'width-100 text-price' ">{{itemdeparture.PriceAdultAvgStr}} VND</div>
+                                <div class="width-35">
+                                    <div class="text-allotment-date">{{itemdeparture.AllotmentDateStr}}</div>
+                                    <div class="text-allotment-dayname">{{itemdeparture.DayDisplay}}</div>
+                                </div>
+                                <div class="width-25 d-flex ">
+                                    <div [ngClass]="(itemdeparture.IsMinPrice || itemdeparture.Status) ? 'width-100 text-price cls-red text-right' : 'width-100 text-price text-right' ">{{itemdeparture.PriceAdultAvgStr}} VNĐ</div>
+                                </div>
+                               <div class="d-width-40 d-flex v-align-items">
+                                    <div [ngClass]="(itemdeparture.IsMinPrice || itemdeparture.Status) ? 'width-100 text-price cls-red text-right text-allotment-display' : 'width-100 text-price text-right text-allotment-display' ">{{itemdeparture.AllotmentDisplay}}</div>
                                     <div class="div-flex-end">
                                         <img class="img-next" src="./assets/ic_tour/ic_next.svg" />
                                     </div>
-                                </div>
-                               
+                               </div>
                             </div>
                         </div>
                     </div>

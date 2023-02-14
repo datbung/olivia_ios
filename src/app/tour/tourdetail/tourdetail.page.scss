@@ -6,8 +6,23 @@
       justify-content: flex-end;
       text-align: right;
     }
+    .m-right-16 {
+      margin-right: 16px;
+    }
     .width-50 {
         width: 50%;
+    }
+    .d-width-40 {
+      width: 40%;
+    }
+    .width-30 {
+      width: 30%;
+    }
+    .width-25 {
+      width: 25%;
+    }
+    .width-35 {
+      width: 35%;
     }
     .width-40 {
       display: flex;
@@ -23,7 +38,7 @@
       width: 100%;
     }
     .text-right {
-        text-align: right;
+        text-align: right !important;
     }
     .text-normal {
         font-size: 14px;
@@ -228,6 +243,22 @@
         .cls-red {
           color: #e52822;
           font-weight: 600;
+        }
+        .text-allotment-date {
+          font-size: 16px;
+          line-height: 1.2;
+          text-align: left;
+          color: #3f3b3b;
+        }
+        .text-allotment-dayname {
+          font-size: 14px;
+          line-height: 1.2;
+          color: #828282;
+        }
+
+        .text-allotment-display {
+          margin-right: 8px;
+          margin-bottom: 3px;
         }
       }
       .v-align-items {

@@ -2029,7 +2029,9 @@ import { normalizeURL } from 'ionic-angular';
                   } else {
                     elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
                   }
-                  elementHis.avatar = (elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ? elementHis.avatar : 'https:' + elementHis.avatar;
+                  if (elementHis.avatar) {
+                    elementHis.avatar = (elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ? elementHis.avatar : 'https:' + elementHis.avatar;
+                  }
                   elementHis.checkInDisplayCity = se.gf.getDayOfWeek(elementHis.checkInDate).daynameshort + ", " + moment(elementHis.checkInDate).format('DD-MM-YYYY');
                   elementHis.checkOutDisplayCity = se.gf.getDayOfWeek(elementHis.checkOutDate).daynameshort + ", " + moment(elementHis.checkOutDate).format('DD-MM-YYYY');
               

@@ -1374,51 +1374,56 @@ export class FlightadddetailsPage implements OnInit {
                 if(se.childs && se.childs.length >0){
                   itempax = [...itempax, ...se.childs];
                 }
-
-
-                se.checkDuplicateItem(itempax).then((itemcheck) => {
-                  if(itemcheck && itemcheck.length >0){
-                    se._flightService.itemFlightCache.duplicateItem = itemcheck;
-                    //show cảnh báo trùng
-                    se.showAlertDuplicateName();
-                    return;
-                  }
-                  else{
-                    se.checkValidName(itempax).then((itemcheckname) => {
-                      if(itemcheckname){
-                        se.showAlertInvalidName(itemcheckname);
-                        return;
-                      }else{
-                        se.checkValidFirstNameAndSubName(itempax).then((itemname) => {
-                          if(itemname){
-                            se.showAlertInvalidFirtNameAndLastName(itemname);
-                            return;
-                          }else{
-                            se.checkValidDuplicateFirstNameAndSubName(itempax).then((itemdup) => {
-                                if(itemdup){
-                                    se.showAlertDuplicateFirtNameAndLastName(itemdup);
-                                    return;
-                                }else{
-                                  se.checkInValidSubNameBeforeNextStep(itempax).then((iteminvalid)=>{
-                                    if(!iteminvalid){
-                                      se.gotopayment();
-                                    }else{
-                                      se.showAlertInvalidSubName(iteminvalid);
+                if(se._flightService.itemFlightCache.backtochoiceseat){
+                  se.showAlertChoiceSeat();
+                }else{
+                  se.checkDuplicateItem(itempax).then((itemcheck) => {
+                    if(itemcheck && itemcheck.length >0){
+                      se._flightService.itemFlightCache.duplicateItem = itemcheck;
+                      //show cảnh báo trùng
+                      se.showAlertDuplicateName();
+                      return;
+                    }
+                    else{
+                      se.checkValidName(itempax).then((itemcheckname) => {
+                        if(itemcheckname){
+                          se.showAlertInvalidName(itemcheckname);
+                          return;
+                        }else{
+                          se.checkValidFirstNameAndSubName(itempax).then((itemname) => {
+                            if(itemname){
+                              se.showAlertInvalidFirtNameAndLastName(itemname);
+                              return;
+                            }else{
+                              se.checkValidDuplicateFirstNameAndSubName(itempax).then((itemdup) => {
+                                  if(itemdup){
+                                      se.showAlertDuplicateFirtNameAndLastName(itemdup);
                                       return;
-                                    }
-                                  })
-                                
-                                }
-                            })
-                          }
-                        })
-                      }
-                    })
+                                  }else{
+                                    se.checkInValidSubNameBeforeNextStep(itempax).then((iteminvalid)=>{
+                                      if(!iteminvalid){
+                                        se.gotopayment();
+                                        
+                                      }else{
+                                        se.showAlertInvalidSubName(iteminvalid);
+                                        return;
+                                      }
+                                    })
+                                  
+                                  }
+                              })
+                            }
+                          })
+                        }
+                      })
+                      
+                    }
+                      
                     
-                  }
-                    
-                  
-                })
+                  })
+                }
+
+                
                 
             }else{
               se.emailinvalid = false;
@@ -1528,8 +1533,6 @@ export class FlightadddetailsPage implements OnInit {
                     se.showAlertChoiceSeat();
                 }else{
                   if (!se.checkchangeemail) {
-                    //se.confirmBeforeGoToPaymentPage();
-                    //se.gotopaymentpage();
                     se.gonextstep();
                   }
                 }

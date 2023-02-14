@@ -125,15 +125,19 @@ export class HomeTourItemSlidePage implements OnInit {
    * Sự kiện loadmore khi scroll topdeal
    * @param event biến event
    */
-   onScroll(event: any) {
+   onScroll(event: any,itemSlide, idx) {
     let scrolled = 0;
-    let el: any = document.getElementsByClassName('slide2-scroll');
+    let el: any = document.getElementsByClassName('tour-slide-scroll-'+idx);
     if (el.length > 0) {
       scrolled = Math.round(el[0].scrollWidth - el[0].scrollLeft);
     }
     if (scrolled == el[0].offsetWidth || scrolled + 1 == el[0].offsetWidth) {
       setTimeout(() => {
-        this.doInfinite();
+       // this.doInfinite();
+       if(itemSlide) {
+        this.showTourList(itemSlide);
+       }
+       
       }, 500)
     }
 
