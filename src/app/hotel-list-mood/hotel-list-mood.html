@@ -98,7 +98,7 @@
                                   <label class="cls-lineheight">{{msg.dealType}}</label>
                                 </div>
                               <div  *ngIf="msg.dealPrice" text-right class="p-top-10  price">
-                                <label *ngIf="msg.dealPrice!=0" class="label-dealprice">{{ msg.dealPrice }} đ</label>
+                                <label *ngIf="msg.dealPrice!=0" class="label-dealprice">{{gf.numberToCurrency(msg.dealPrice, '.')}} đ</label>
                               </div>
                               <div  *ngIf="!msg.dealPrice" text-right class="p-top-10 price">
                                 <ion-icon class="ico-gift" name="gift"></ion-icon>

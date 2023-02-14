@@ -428,7 +428,7 @@ export class RoomchoosebankPage implements OnInit{
                     },100)
                   });
                 }else{
-                  se.showAlertMessageOnly(body.Msg);
+                  se.showAlertMessage(body.msg);
                 }
               })
             }else{
@@ -452,6 +452,25 @@ export class RoomchoosebankPage implements OnInit{
         role: 'OK',
         handler: () => {
           this.navCtrl.navigateForward('/login');
+          alert.dismiss();
+        }
+      }
+      ]
+    });
+    alert.present();
+  }
+  async showAlertMessage(msg){
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: msg,
+      cssClass: "cls-alert-message",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateForward('/hoteldetail/' + this.booking.HotelId);
           alert.dismiss();
         }
       }

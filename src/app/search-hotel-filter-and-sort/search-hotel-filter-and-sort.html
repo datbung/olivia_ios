@@ -143,7 +143,9 @@
           Khu vực
         </ion-label>
         <div class="item-local p-top">
-            <div *ngFor="let item of dataLocal; let i = index" id="{{item.Id}}" class="cls-col-border local-item-{{item.Id}}" (click)="localClick($event,'local')" >{{ item.Name }}</div>
+            <div *ngFor="let item of dataLocal; let i = index" id="{{item.Id}}" class="cls-col-border local-item-{{item.Id}}" (click)="localClick($event,'local')" >{{ item.Name }} <span *ngIf="item.TotalHotels>0">({{item.TotalHotels}})</span>
+              <div>{{item.ShortDes}}</div>
+            </div>
         </div>
   </div>
 

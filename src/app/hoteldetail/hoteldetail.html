@@ -251,7 +251,7 @@
             <ion-row >
              
               <ion-col class="col-title-combo">
-                  <ion-label class="text-hotel-label text-white-space">{{titlecombo}} | <span class="title-combo-price">{{combopriceontitle}} VND/<span *ngIf="PriceFor==1">Khách</span><span *ngIf="PriceFor==0">Phòng</span></span></ion-label>
+                  <ion-label class="text-hotel-label text-white-space">{{titlecombo}} | <span class="title-combo-price">{{gf.numberToCurrency(combopriceontitle, '.')}} VND/<span *ngIf="PriceFor==1">Khách</span><span *ngIf="PriceFor==0">Phòng</span></span></ion-label>
               </ion-col>
             </ion-row>
             <div no-lines class="padding-lr-16">
@@ -315,7 +315,7 @@
                   <div>
                     <ion-row style="padding-top: 2px;" *ngFor="let day of combolist.details; let idxcombolistdetail = index">
                       <ion-col size="7" class="combo-departure-date">{{ day.stayFromStr }} <span>→</span> {{ day.stayToStr }}</ion-col>
-                      <ion-col size="5" style="padding-right: 6px;" class="text-right" [ngClass]="combolist.detailMinPrice == day.id ? 'text-combo-min-price': 'text-combo-price'">{{ day.priceDisplay }}<span class="sub-price">đ</span></ion-col>
+                      <ion-col size="5" style="padding-right: 6px;" class="text-right" [ngClass]="combolist.detailMinPrice == day.id ? 'text-combo-min-price': 'text-combo-price'">{{gf.numberToCurrency(day.priceDisplay, '.')}}<span class="sub-price">đ</span></ion-col>
                       <ion-row class="row-line" *ngIf="combolist.details.length >1">
                         <ion-col style="padding:0">
                         <div [ngClass]="combolist.detailMinPrice == day.id ? 'placepoint-19' : 'placepoint-16'">

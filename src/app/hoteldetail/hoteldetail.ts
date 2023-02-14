@@ -1170,8 +1170,8 @@ export class HotelDetailPage implements OnInit {
             se.cocombo = 1;
             se.titlecombo = jsondata.ComboPromtion && jsondata.ComboPromtion.Title ? jsondata.ComboPromtion.Title : (jsondata.Combos ? jsondata.Combos.Title : '');
             se.notecombo = jsondata.ComboPromtion && jsondata.ComboPromtion.Note ? (jsondata.ComboPromtion.Note || '') : (jsondata.Combos ? jsondata.Combos.Note : '');
-            se.combopriceontitle = jsondata.ComboPromtion && jsondata.ComboPromtion.Description ? jsondata.ComboPromtion.Price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : (jsondata.Combos ? jsondata.Combos.Price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : '');
-            se.comboprice = jsondata.ComboPromtion && jsondata.ComboPromtion.Description ? jsondata.ComboPromtion.Price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : (jsondata.Combos ? jsondata.Combos.Price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : '');
+            se.combopriceontitle = jsondata.ComboPromtion && jsondata.ComboPromtion.Description ? jsondata.ComboPromtion.Price : (jsondata.Combos ? jsondata.Combos.Price : '');
+            se.comboprice = jsondata.ComboPromtion && jsondata.ComboPromtion.Description ? jsondata.ComboPromtion.Price : (jsondata.Combos ? jsondata.Combos.Price : '');
             if (jsondata.Combos) {
               se.PriceFor=jsondata.Combos.PriceFor;
               se.SpecialNote = jsondata.Combos.SpecialNote ? jsondata.Combos.SpecialNote.replace(/\r\n/g, "") : "";
@@ -1622,7 +1622,7 @@ export class HotelDetailPage implements OnInit {
         if (obj.comboDetail) {          
         se.bookCombo.transportDepartTime=obj.comboDetail.transportDepartTime;
         se.bookCombo.transportReturnTime=obj.comboDetail.transportReturnTime;
-        se.combopriceontitle = obj.comboDetail.totalPriceSale ? obj.comboDetail.totalPriceSale.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") : obj.comboDetail.price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+        se.combopriceontitle = obj.comboDetail.totalPriceSale ? obj.comboDetail.totalPriceSale: obj.comboDetail.price;
         }else{
           se.allowbookcombofc = false;
           se.allowbookcombofx = false;
@@ -1760,7 +1760,7 @@ export class HotelDetailPage implements OnInit {
             itemList.forEach(item => {
               if(item.details && item.details.length >0){
                 item.details.forEach((itemdetail) => {
-                  itemdetail.priceDisplay = itemdetail.totalPriceSale.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g, ".");
+                  itemdetail.priceDisplay = itemdetail.totalPriceSale;
                 })
               }
               se.comboDetailList.push(item);

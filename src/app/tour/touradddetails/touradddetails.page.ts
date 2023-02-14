@@ -1182,6 +1182,40 @@ export class TourAddDetailsPage implements OnInit {
                     if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
                       se.tourService.tourBookingCode = data.Response.BookingCode;
                       se.tourService.tourTotal = data.Response.Total;
+
+                      // moi truong test k có api sử dụng link live
+                      let urlApiSendMail="https://gate.ivivu.com/tour/api/TourApi/AppSendEmailCustomer";
+                      let objTourSendMail:any = {};
+                      objTourSendMail.startDate=se.tourService.TourBooking.StartDate;
+                      var endDate = moment(se.tourService.TourBooking.StartDate).add(this.tourService.itemDetail.NightNo-1, 'days').format('YYYY-MM-DD');
+                      objTourSendMail.endDate=endDate;
+                      objTourSendMail.customerName=se.tourService.TourBooking.CustomerName;
+                      objTourSendMail.customerPhone=se.tourService.TourBooking.CustomerPhone;
+                      objTourSendMail.customerEmail=se.tourService.TourBooking.CustomerEmail;
+                      objTourSendMail.receiverAddress='';
+                      objTourSendMail.notes=se.tourService.TourBooking.TourNotes;
+                      objTourSendMail.qty=0;
+                      objTourSendMail.QtyAdults=se.tourService.TourBooking.AdultNo;
+                      objTourSendMail.QtyChilds=se.tourService.TourBooking.ChildNo;;
+                      objTourSendMail.ChildAges=se.tourService.TourBooking.ChildAges;
+                      objTourSendMail.tourAvatarLink="/content/img/no-image.svg",
+                      objTourSendMail.tourName=se.tourService.itemDetail.Name;
+                      objTourSendMail.tourCode=se.tourService.itemDetail.Code;
+                      objTourSendMail.tourId=se.tourService.itemDetail.Id;
+                      objTourSendMail.bookingId=se.tourService.tourBookingCode;
+                      objTourSendMail.timeName=se.tourService.itemDetail.TourTime;
+                      objTourSendMail.Transport="";
+                      objTourSendMail.Transports=null;
+                      objTourSendMail.TotalPrice=se.tourService.tourTotal;
+                      objTourSendMail.TotalAmountAfterTax=0.0;
+                      objTourSendMail.RateAdult=se.tourService.itemDepartureCalendar.RateAdultAvg;
+                      objTourSendMail.RateChild=se.tourService.itemDepartureCalendar.RateChildAvg;
+                      objTourSendMail.Surcharge=0.0;
+                      objTourSendMail.AliasTour="";
+                      objTourSendMail.paymentMethod=42;
+                      
+                      se.gf.RequestApi('POST', urlApiSendMail, {}, objTourSendMail, 'touradddetails', 'AppSendEmailCustomer').then((data)=>{
+                      });
                       resolve(data.Response.BookingCode)
                     }else{
                       resolve(false);
