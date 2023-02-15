@@ -4185,7 +4185,7 @@ alert.present();
               "tickets": this._flightService.itemFlightCache.roundTrip ? [
                 {
                   "flightNumber": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightNumber : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightNumber ,
-                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airlineCode,
+                      "airLineCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.airlineCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.airline.replace(' ',''),
                       "departTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.departTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.departTime,
                       "landingTime": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.landingTime : se._flightService.itemFlightCache.itemFlightInternationalDepart.landingTime,
                       "flightDuration": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.flightDuration : se._flightService.itemFlightCache.itemFlightInternationalDepart.flightDuration,
@@ -4193,7 +4193,7 @@ alert.present();
                       "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
                       "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
                       "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
-                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
                       "jsonObject": ""
                 },
                 {
@@ -4206,7 +4206,7 @@ alert.present();
                       "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalReturn.toPlaceCode,
                       "stops": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalReturn.stops,
                       "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
-                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalReturn.fareBasis,
+                      "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ?se._flightService.itemFlightCache.returnFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalReturn.ticketClass,
                       "jsonObject": ""
                 }
               ] : 
@@ -4221,7 +4221,7 @@ alert.present();
                   "toPlaceCode": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.toPlaceCode : se._flightService.itemFlightCache.itemFlightInternationalDepart.toPlaceCode,
                   "stops": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.stops : se._flightService.itemFlightCache.itemFlightInternationalDepart.stops,
                   "ticketClass": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.ticketClass : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
-                  "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.fareBasis,
+                  "fareBasis": !se._flightService.itemFlightCache.isInternationalFlight ? se._flightService.itemFlightCache.departFlight.fareBasis : se._flightService.itemFlightCache.itemFlightInternationalDepart.ticketClass,
                   "jsonObject": ""
                 }
               ],

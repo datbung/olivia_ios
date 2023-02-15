@@ -20,7 +20,7 @@ import { GlobalFunction } from './../providers/globalfunction';
 })
 export class SearchHotelFilterAndSortPage implements OnInit{
   
-  structure: any = { lower: 100000, upper: 15000000 }; review; minprice; maxprice;
+  structure: any = { lower: 100000, upper: 15000000 }; review=0; minprice; maxprice;
   star_1 = true; star_1active = false; star_2 = true; star_2active = false; star_3 = true; star_3active = false;
   star_4 = true; star_4active = false; star_5 = true; star_5active = false;
   chuoi= "";
@@ -63,7 +63,7 @@ export class SearchHotelFilterAndSortPage implements OnInit{
     }
 
     if (searchhotel.review) {
-      this.review = searchhotel.review
+      this.review = searchhotel.review;
     }
     this.ischeckAL=searchhotel.ischeckAL;
     if (searchhotel.star) {
@@ -366,7 +366,7 @@ export class SearchHotelFilterAndSortPage implements OnInit{
       this.searchhotel.star = [];
       this.searchhotel.minprice = null;
       this.searchhotel.maxprice = null;
-      this.searchhotel.review = null;
+      this.searchhotel.review = 0;
       this.searchhotel.location = "";
       this.searchhotel.facsearch = "";
       this.searchhotel.tagIds = "";
