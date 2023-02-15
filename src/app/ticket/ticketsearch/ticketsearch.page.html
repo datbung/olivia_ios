@@ -47,7 +47,10 @@
             <div class="div-title m-top-8 m-bottom-8">Vé bán chạy nhất</div>
             <div  class="div-item-region-hot ">
                 <div *ngFor="let item of listHotExperience" class="d-flex m-bottom-12">
-                   <div class="div-img"><img class="img-hot" [src]="item.AvartarLink"></div>
+                   <div class="div-img">
+                    <img *ngIf="item.expAvatar" class="img-hot" [src]="item.expAvatar">
+                    <img *ngIf="!item.expAvatar" class="img-hot" src='https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-60x45.jpg'>
+                  </div>
                    <div class="div-text">
                         {{item.expName}}
                    </div>

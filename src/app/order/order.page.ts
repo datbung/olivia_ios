@@ -1635,8 +1635,8 @@ import { normalizeURL } from 'ionic-angular';
                     }
                     element.isRequest = true;
                     element.booking_id = element.request_id;
-                    element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD') + " thg " + moment(element.start_date).format('MM');
-                    element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD') + " thg " + moment(element.end_date).format('MM');
+                    element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM-YYYY')
+                    element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD-MM-YYYY')
     
                     element.checkInDisplayShort = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM');
                     element.checkOutDisplayShort = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD-MM-YYYY');
@@ -3715,8 +3715,8 @@ import { normalizeURL } from 'ionic-angular';
                         
                         element.hotelAvatar = urlavatar + "-" + "104x104" + tail;
                         element.booking_id = element.request_id;
-                        element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM')
-                        element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM')
+                        element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM-YYYY')
+                        element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY')
                         se.getRatingStar(element);
                         se.listRequestTrips.push(element);
                       }
@@ -3848,8 +3848,8 @@ import { normalizeURL } from 'ionic-angular';
               element.avatar = element.hotelAvatar;
               element.isRequestTrip = true;
               element.booking_id = element.request_id;
-              element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD') +" thg "+moment(element.start_date).format('MM');
-              element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD') +" thg "+moment(element.end_date).format('MM');
+              element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort+", " + moment(element.start_date).format('DD-MM-YYYY')
+              element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort+", " + moment(element.end_date).format('DD-MM-YYYY')
               se.getRatingStar(element);
               se.listRequestTrips.push(element);
               se.requestripcount++;

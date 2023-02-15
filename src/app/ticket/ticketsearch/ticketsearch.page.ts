@@ -109,14 +109,14 @@ export class TicketSearchPage implements OnInit{
             //se.listHotRegion = res.data;
             //console.log(res.data);
             se.listHotExperience = res.data;
-            if(se.listHotExperience && se.listHotExperience.length >0){
-                se.listHotExperience.forEach((item, idx) => {
-                    if(se.listHotRegion[idx] && se.listHotRegion[idx].AvartarLink){
-                        item.AvartarLink = se.listHotRegion[idx].AvartarLink;
-                    }
+            // if(se.listHotExperience && se.listHotExperience.length >0){
+            //     se.listHotExperience.forEach((item, idx) => {
+            //         if(se.listHotRegion[idx] && se.listHotRegion[idx].AvartarLink){
+            //             item.AvartarLink = se.listHotRegion[idx].AvartarLink;
+            //         }
                     
-                })
-            }
+            //     })
+            // }
         })
     }
     async loadHistorySearch() {
