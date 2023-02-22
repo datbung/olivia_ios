@@ -540,16 +540,19 @@
                             </ion-col>
                             <ion-col class="no-padding p-top-10">
                               <span
-                                *ngIf="hotelroom.Rooms[0].MaxAdults != hotelroom.Rooms[0].IncludeAdults && hotelroom.Rooms[0].MaxChils >0"
+                                *ngIf="hotelroom.Rooms[0].MaxAdults != hotelroom.Rooms[0].IncludeAdults && hotelroom.Rooms[0].MaxChils >0 && hotelroom.Rooms[0].MaxAdults>0"
                                 class="text-room-class-description">{{hotelroom.Rooms[0].MaxAdults}} người lớn |
                                 {{hotelroom.Rooms[0].IncludeAdults}} người lớn & {{hotelroom.Rooms[0].MaxChils}} trẻ
                                 em</span>
                               <span
-                                *ngIf="hotelroom.Rooms[0].MaxAdults == hotelroom.Rooms[0].IncludeAdults && hotelroom.Rooms[0].MaxPax >= hotelroom.Rooms[0].MaxAdults && hotelroom.Rooms[0].MaxChils >0"
+                                *ngIf="hotelroom.Rooms[0].MaxAdults == hotelroom.Rooms[0].IncludeAdults && hotelroom.Rooms[0].MaxPax >= hotelroom.Rooms[0].MaxAdults && hotelroom.Rooms[0].MaxChils >0  && hotelroom.Rooms[0].MaxAdults>0"
                                 class="text-room-class-description">{{hotelroom.Rooms[0].MaxAdults}} người lớn &
                                 {{hotelroom.Rooms[0].MaxPax - hotelroom.Rooms[0].MaxAdults}} trẻ em</span>
                               <span
                                 *ngIf="hotelroom.Rooms[0].MaxAdults == hotelroom.Rooms[0].IncludeAdults && (hotelroom.Rooms[0].MaxPax < hotelroom.Rooms[0].MaxAdults || hotelroom.Rooms[0].MaxChils ==0)"
+                                class="text-room-class-description">Phòng tối đa {{hotelroom.Rooms[0].MaxPax}} khách</span>
+                                <span
+                                *ngIf="hotelroom.Rooms[0].MaxAdults ==0"
                                 class="text-room-class-description">Phòng tối đa {{hotelroom.Rooms[0].MaxPax}} khách</span>
                             </ion-col>
                           </ion-row>
