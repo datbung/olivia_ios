@@ -16,20 +16,20 @@
     </ion-header>
     <ion-content>
             <div *ngIf="loaddatadone else loadskeleton">
-                <div class="innerdeals1 slide2-scroll" style="overflow-x: auto;overflow-y: hidden" padding *ngIf="(slideData1 && slideData1.length >0) else emptydata">
+                <div class="innerdeals1 slide2-scroll div-topdeal-content" *ngIf="(slideData1 && slideData1.length >0) else emptydata">
                     <div class="cls-deal" *ngFor="let slide of slideData1">
                       <img class="slide2 img" [src]="slide.imageUrl" (click)="itemclickht(slide)" >
                       <div class="float-promo">
                         <p *ngIf="slide.priceshow" class="float-promo-description">{{slide.description}} | {{slide.priceshow}} triệu/<span *ngIf="slide.priceFor!=0">khách</span><span *ngIf="slide.priceFor==0">phòng</span></p>
                         <p *ngIf="!slide.priceshow" class="float-promo-description">{{slide.description}}</p>
                       </div>
-
-                      <h2 class="hotel-name" style="margin-top: 4px;margin-bottom: 0;" (click)="itemclickht(slide)" >
-                            {{slide.name}}
+                      <div class='div-wrappadding'>
+                        <h2 class="hotel-name" style="margin-top: 4px;margin-bottom: 0;" (click)="itemclickht(slide)" >
+                          {{slide.name}}
                         </h2>
                         <img *ngIf="slide.rating!=0" src={{slide.rating}} (click)="itemclickht(slide)" >
                         <ion-row class="cls-row-viewtopsale" >
-                            <ion-col class="p-5 d-flex">
+                            <ion-col class="p-5 d-flex min-height-28">
                                 <!-- <button ion-button round class="btn-topsale">Đang bán chạy</button> -->
                                 <!-- <div class="div-topsale">Đang bán chạy</div> -->
                                 <ion-label *ngIf="slide.topsale24Total > 2" class="text-topsale">Đã bán {{ slide.topsale24Total }} phòng trong 24h qua</ion-label>
@@ -45,6 +45,8 @@
                               </div>
                             </ion-col>
                         </ion-row>
+                      </div>
+                      
                     </div>
                   </div>
                   <ng-template #emptydata>

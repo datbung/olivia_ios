@@ -1433,10 +1433,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           se._flightService.itemFlightCache.itemDepartSameCity = se.itemDepartSameCity;
           se._flightService.itemFlightCache.itemReturnSameCity = se.itemReturnSameCity;
         }
-        se._flightService.itemFlightCache.isExtenalDepart = se.isExtenalDepart;
-        se._flightService.itemFlightCache.isExtenalReturn = se.isExtenalReturn;
+        //se._flightService.itemFlightCache.isExtenalDepart = se.isExtenalDepart;
+       // se._flightService.itemFlightCache.isExtenalReturn = se.isExtenalReturn;
 
-        se._flightService.itemFlightCache.isInternationalFlight = (se.isExtenalDepart || se.isExtenalReturn);
+        
+
+        //se._flightService.itemFlightCache.isInternationalFlight = (se.isExtenalDepart || se.isExtenalReturn);
 
         se.storage.get("itemFlightCache").then((data)=>{
           if(data){
@@ -1449,17 +1451,35 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           }
         })
       
-
-
-        if(se._flightService.itemFlightCache.isInternationalFlight){
-          se.navCtrl.navigateForward("/flightsearchresultinternational");
-        } else {
+        if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+          let placeFrom = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == se.departCode});
+          let placeTo = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == se.returnCode});
+          if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+            
+            se._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
+            se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+            se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+            if(se._flightService.itemFlightCache.isInternationalFlight){
+              se.navCtrl.navigateForward("/flightsearchresultinternational");
+            }else{
+                se._flightService.itemFlightCache.isInternationalFlight = false;
+                se._flightService.itemFlightCache.isExtenalDepart = false;
+                se._flightService.itemFlightCache.isExtenalReturn = false;
+                se.navCtrl.navigateForward("/flightsearchresult");
+            }
+            
+          }else {
+            se._flightService.itemFlightCache.isInternationalFlight = false;
+            se._flightService.itemFlightCache.isExtenalDepart = false;
+            se._flightService.itemFlightCache.isExtenalReturn = false;
+            se.navCtrl.navigateForward("/flightsearchresult");
+          }
+        }else{
+          se._flightService.itemFlightCache.isInternationalFlight = false;
           se._flightService.itemFlightCache.isExtenalDepart = false;
           se._flightService.itemFlightCache.isExtenalReturn = false;
-          se._flightService.itemFlightCache.isInternationalFlight = false;
           se.navCtrl.navigateForward("/flightsearchresult");
         }
-        
        
       }
 

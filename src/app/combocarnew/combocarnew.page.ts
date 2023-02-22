@@ -423,6 +423,8 @@ export class CombocarnewPage implements OnInit {
       data.IsB2B=true;
       data.IsAgoda= true;
       data.GetOTAPackage = 1;
+      data.IsOccWithBed = false;
+      data.NoCache = true;
       var form = data;
       var options = {
         method: 'POST',

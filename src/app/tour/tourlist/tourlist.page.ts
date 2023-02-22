@@ -61,11 +61,13 @@ export class TourListPage implements OnInit{
      
       this.loadData();
       this.gf.hideStatusBar();
+      
   }
   ionViewWillEnter(){
     if(this.searchhotel.CheckInDate){
       this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
     }
+    this.hidetopbar();
   }
   
   loadData() {
@@ -236,7 +238,6 @@ export class TourListPage implements OnInit{
     };
     se.gf.RequestApi('GET', url, headers, null, 'tourlist', 'loadTourListByListId').then((data) => {
       let res = JSON.parse(data);
-      console.log(res.Response);
       se.slideData = res.Response;
       // if(se.slideData && se.slideData.length >0){
       //   se.name = se.slideData[0].Destination;
@@ -661,5 +662,10 @@ export class TourListPage implements OnInit{
           }
         }
       }
+    }
+    hidetopbar(){
+      let el = document.getElementsByClassName('div-statusbar-float');
+        el[0].classList.remove('float-statusbar-enabled');
+        el[0].classList.add('float-statusbar-disabled');
     }
 }

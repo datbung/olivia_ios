@@ -48,6 +48,8 @@ export class HotelupgraderoomPage implements OnInit {
     var se = this;
     if (data) {
       var form = data;
+      data.IsOccWithBed = true;
+      data.NoCache = true;
       //se.presentLoading();
       var options = {
         method: 'POST',

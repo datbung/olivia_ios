@@ -341,7 +341,7 @@ export class BlogListPage implements OnInit {
         this.navCtrl.navigateBack('/topdeallist');
         this.searchhotel.rootPage = "";
       }else{
-        this.navCtrl.navigateBack(['/app/tabs/tab1']);
+        this.navCtrl.navigateBack('/');
       }
     }else{
       this.input.value = '';

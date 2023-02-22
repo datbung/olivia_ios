@@ -212,6 +212,7 @@ export class CarComboPage implements OnInit {
     if (data) {
       data.IsPackageRateInternal = true;
       data.IsPackageRate = true;
+      data.IsOccWithBed = false;
       var form = data;
       var options = {
         method: 'POST',

@@ -30,12 +30,16 @@
                 padding: 8px;
                 border-radius: 0 6px 6px 0;
                 background: #fff;
+                width: 246px;
     
                 .div-icon {
                     width: 42px;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
+                    .img-avatar {
+                        max-width: 42px;
+                    }
                 }
     
                 .div-content {
@@ -118,30 +122,38 @@
         }
 
         .cls-deactive {
-            //display: none;
             opacity: 0.6;
-            //background-color: #666;
+            filter: grayscale(1);
+            -webkit-filter: grayscale(1);
         }
+        .text-tealish {
+            color: #26bed6;
+        }
+        
     }
     
 
     ::ng-deep {
         .div-item-voucher {
-        @media (min-width: 360px) and (max-width: 375px) { 
+        @media (min-width: 360px) and (max-width: 390px) { 
             .div-title {
-                max-width: 206px !important;
+                max-width: 192px !important;
             }
             .div-apply {
                 width: 60px !important;
             }
             
         }
-        @media (min-width: 414px) and (max-width: 480px) { 
+       
+        @media (min-width: 412px) and (max-width: 480px) { 
             .div-title {
-                max-width: 236px !important;
+                max-width: 224px !important;
             }
             .div-apply {
                 width: 70px !important;
+            }
+            .div-content-item {
+                width: 278px !important;
             }
         }
         }

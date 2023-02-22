@@ -1961,7 +1961,7 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
   
 }
   convertNumberToString(input){
-    let output =  input.toLocaleString().replace(/\,/g,'').replace(/\./g,'').toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g,'.');
+    let output =  input ? input.toLocaleString().replace(/\,/g,'').replace(/\./g,'').toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g,'.'): '';
     return output;
   }
 

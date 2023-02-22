@@ -1,3 +1,4 @@
+@import "../hometour/hometourcomponent/hometouritemslide/hometouritemslide.page.scss";
 .d-flex {
   display: flex;
 }
@@ -654,4 +655,50 @@
   padding: 0 4px;
   border-radius: 4px;
   left: 16px;
+}
+
+.item-tour-slide {
+  display: flex;
+  flex-direction: row;
+  padding-top: 12px !important;
+  padding-bottom: 24px !important;
+
+  .cls-deal {
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .diw-wrap-image {
+    height: 170px;
+  }
+}
+.div-wrap-tourrelate {
+  background-color: #f2f2f2;
+  margin: 24px -16px -16px;
+
+  .div-title {
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3f3b3b;
+    padding-top: 16px;
+    padding-left: 16px;
+  }
+
+  .cls-price-strike {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: right;
+    color: #828282;
+    text-decoration: line-through;
+    position: absolute;
+    right: 8px;
+    bottom: 36px;
+  }
+  .float-info {
+    min-height: 164px !important;
+  }
 }

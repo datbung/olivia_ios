@@ -10,46 +10,49 @@
       </ion-title>
 
       <ion-buttons slot="secondary" style="position: absolute;right: 0;" (click)="openSortTour()">
-        <img class="img-sort" src="./assets/ic_tour/ic_sort_tour.svg" >
+        <img class="img-sort" src="./assets/imgs/ic_filter_b.svg" >
       </ion-buttons>
   </ion-toolbar>
 </ion-header>
   <ion-content>
     <div *ngIf="loaddatadone else loadskeleton">
-      <div class="innerdeals1 slide2-scroll" style="overflow-x: auto;overflow-y: hidden" padding *ngIf="(slideData && slideData.length >0) else emptydata">
+      <div class="innerdeals1 slide2-scroll div-tourlist-content" padding *ngIf="(slideData && slideData.length >0) else emptydata">
           <div class="cls-deal" *ngFor="let slide of slideData">
             <img class="slide2 img" [src]="slide.AvartarLink" (click)="itemclickht(slide)" >
             <div class="float-promo" *ngIf="slide.PromotionTitle">
               <p class="float-promo-description">{{slide.PromotionTitle}}</p>
             </div>
 
-              <h2 class="hotel-name m-top-8" (click)="itemclickht(slide)" >
-                  {{slide.Name}}
-              </h2>
-              <div class="d-flex m-top-8" *ngIf="slide.AvgPoint">
-                <div class="div-badge" >
-                    <div class="text-point">{{slide.AvgPoint}}</div>
-                    <div class="text-point-des" *ngIf="slide.AvgPoint >=9 && slide.AvgPoint <=10">Xuất sắc</div>
-                    <div class="text-point-des" *ngIf="slide.AvgPoint>8 && slide.AvgPoint <=9">Rất tốt</div>
-                    <div class="text-point-des" *ngIf="slide.AvgPoint>7 && slide.AvgPoint <=8">Khá tốt</div>
-                    <div class="text-point-des" *ngIf="slide.AvgPoint>6 && slide.AvgPoint <=7">Tạm được</div>
-                    <div class="text-point-des" *ngIf="slide.AvgPoint>5 && slide.AvgPoint <=6">Không tốt</div>
-                    <div  *ngIf="slide.TotalReview"> | <span class="text-comment">{{slide.TotalReview}} đánh giá</span></div>
-                    <div  *ngIf="slide.NumOfReview"> | <span class="text-comment">{{slide.NumOfReview}} đánh giá</span></div>
-                </div>
+          <div class="div-wrappadding">
+            <h2 class="hotel-name m-top-8" (click)="itemclickht(slide)" >
+                {{slide.Name}}
+            </h2>
+            <div class="d-flex m-top-8" *ngIf="slide.AvgPoint">
+              <div class="div-badge" >
+                  <div class="text-point">{{slide.AvgPoint}}</div>
+                  <div class="text-point-des" *ngIf="slide.AvgPoint >=9 && slide.AvgPoint <=10">Xuất sắc</div>
+                  <div class="text-point-des" *ngIf="slide.AvgPoint>8 && slide.AvgPoint <=9">Rất tốt</div>
+                  <div class="text-point-des" *ngIf="slide.AvgPoint>7 && slide.AvgPoint <=8">Khá tốt</div>
+                  <div class="text-point-des" *ngIf="slide.AvgPoint>6 && slide.AvgPoint <=7">Tạm được</div>
+                  <div class="text-point-des" *ngIf="slide.AvgPoint>5 && slide.AvgPoint <=6">Không tốt</div>
+                  <div  *ngIf="slide.TotalReview"> | <span class="text-comment">{{slide.TotalReview}} đánh giá</span></div>
+                  <div  *ngIf="slide.NumOfReview"> | <span class="text-comment">{{slide.NumOfReview}} đánh giá</span></div>
+              </div>
               </div>
 
               <div class="cls-row-viewtopsale d-flex" >
                   <div class="width-70 div-flex-end"><span *ngIf="slide.TopSale" class="text-topsale">Đã bán {{ slide.TopSale }} khách trong 24h qua</span></div>
                   <div class=" width-45 " >
-                    <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.PriceAdult < slide.MinPrice">{{ gf.convertNumberToString(slide.MinPrice) }}đ</div>
+                    <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.PriceAdult < slide.MinPrice && slide.MinPrice > slide.AdultSalePrice">{{ gf.convertNumberToString(slide.MinPrice) }}đ</div>
                     <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.PriceAdult > slide.MinPrice && slide.MinPrice == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div>
                     <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.MinPrice < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div>
                     <div  class="text-price " *ngIf="slide.priceShow else noprice">{{ slide.priceShow }}đ</div>
                     <ng-template #noprice><div  class="text-noprice ">Hết chỗ</div> </ng-template>
                   </div>
                   
-             </div>
+              </div>
+            </div>
+              
 
           </div>
         </div>
