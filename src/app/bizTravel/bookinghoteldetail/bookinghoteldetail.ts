@@ -173,7 +173,9 @@ export class BookingHotelDetailPage implements OnInit{
       GetVinHms: 1,
       GetSMD: 1,
       IsFenced: true,
-      IsB2B: true
+      IsB2B: true,
+      IsOccWithBed: true,
+      NoCache: false,
     };
     options = {
       method: 'POST',

@@ -567,16 +567,17 @@ export class SearchHotelFilterAndSortPage implements OnInit{
    * PDANH 28/01/2019
    */
   localClick(objEvent, name){
-    let idx = objEvent.target.className.toLocaleString().split(' ')[1].split('-')[2];
-    var obj = document.getElementsByClassName(objEvent.target.className.toLocaleString().split(' ')[1]);
-    obj[0].classList.remove('local-check');
-    obj[0].classList.remove('local-uncheck');
-    obj[0].classList.remove('style-check');
-    obj[0].classList.remove('style-uncheck');
-    obj[0].classList.remove('facility-check');
-    obj[0].classList.remove('facility-uncheck');
-    obj[0].classList.remove('hoteltype-check');
-    obj[0].classList.remove('hoteltype-uncheck');
+    let idx = objEvent.target.className ? objEvent.target.className.toLocaleString().split(' ')[1].split('-')[2] : (objEvent.currentTarget.className ? objEvent.currentTarget.className.toLocaleString().split(' ')[1].split('-')[2] : '');
+    var obj = document.getElementsByClassName(objEvent.target.className ? objEvent.target.className.toLocaleString().split(' ')[1] : (objEvent.currentTarget.className ? objEvent.currentTarget.className.toLocaleString().split(' ')[1] : ''));
+    if(idx && obj){
+      obj[0].classList.remove('local-check');
+      obj[0].classList.remove('local-uncheck');
+      obj[0].classList.remove('style-check');
+      obj[0].classList.remove('style-uncheck');
+      obj[0].classList.remove('facility-check');
+      obj[0].classList.remove('facility-uncheck');
+      obj[0].classList.remove('hoteltype-check');
+      obj[0].classList.remove('hoteltype-uncheck');
 
           if(name == "local"){
             if(this.gf.checkExistsIndex(this.arrlocalcheck,idx)){
@@ -613,7 +614,7 @@ export class SearchHotelFilterAndSortPage implements OnInit{
             }
             obj[0].classList.add(this.gf.checkExistsIndex(this.arrhoteltypecheck,idx) ? 'hoteltype-check' : 'hoteltype-uncheck');
           }
-    
+        }
   }
 
 

@@ -1394,7 +1394,9 @@ export class HotelDetailPage implements OnInit {
           GetSMD: 1,
           IsB2B: true,
           IsSeri: true,
-          IsAgoda: true
+          IsAgoda: true,
+          IsOccWithBed: true,
+          NoCache: false,
         };
         if (se.searchhotel.arrchild) {
           for (var i = 0; i < se.searchhotel.arrchild.length; i++) {
@@ -1935,7 +1937,9 @@ async getdataroom() {
     GetSMD: 1,
     IsB2B: true,
     IsSeri: true,
-    IsAgoda: true
+    IsAgoda: true,
+    IsOccWithBed: true,
+    NoCache: false,
   };
   if (self.searchhotel.arrchild) {
     self.arrchild1 = [];
@@ -1994,7 +1998,7 @@ excuteLoadHotelRoom(data){
     if (self.loader) {
       self.loader.dismiss();
     }
-    self.loadcomplete = true;
+    
     self.ischeck = true;
     self.jsonroom = [];
     self.jsonroom2 = data;
@@ -2008,218 +2012,228 @@ excuteLoadHotelRoom(data){
         self.hotelMealTypes = [];
         self.hotelMealTypesHidden = [];
         self.hotelRooms = result.Hotels[0];
-
-        if (result.Hotels[0].RoomClasses.length == 0) {
-          self.ischeckwarn = true;
-        }
-        else {
-          self.ischeckwarn = false;
-        }
+        setTimeout(()=>{
+          if (result.Hotels[0].RoomClasses.length == 0) {
+            self.ischeckwarn = true;
+          }
+          else {
+            self.ischeckwarn = false;
+          }
+        },100)
         se.booking.OriginalRoomClass = result.Hotels[0].RoomClasses;
+        se.zone.run(()=> result.Hotels[0].RoomClasses.sort(function (a, b) {
+            return a.TotalPriceHadDiscountOta - b.TotalPriceHadDiscountOta;
+        }));
+        setTimeout(()=>{
         result.Hotels[0].RoomClasses.forEach((element, index) => {
-          var groupMealType = 0;
-          var indexMealTypeHidden = 0;
-          element.hotelMealTypes = [];
-          element.hotelMealTypesHidden = [];
-          
-          if (!element.Rooms[0].Images || element.Rooms[0].Images.indexOf('noimage') != -1) {
-            element.Rooms[0].Images = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg";
-          }
-          else if(element.Rooms[0].Images.indexOf('220x125') != -1){
-            let urlimage = element.Rooms[0].Images.substring(0, element.Rooms[0].Images.lastIndexOf('-') +1 );
-            let idexofdot = element.Rooms[0].Images.lastIndexOf('.');
-            let tail = element.Rooms[0].Images.substring(idexofdot, element.Rooms[0].Images.length);
-            element.Rooms[0].Images = urlimage + "110x110" + tail;
-          }
-          element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
-          for (let i = 0; i < element.MealTypeRates.length; i++) {
-            var PriceAvgPlusTA=element.MealTypeRates[i].PriceAvgPlusTotalTA
-            PriceAvgPlusTA=PriceAvgPlusTA/100000;
-            PriceAvgPlusTA=Math.floor(PriceAvgPlusTA);
-            element.MealTypeRates[i].point=PriceAvgPlusTA;
+            var groupMealType = 0;
+            var indexMealTypeHidden = 0;
+            element.hotelMealTypes = [];
+            element.hotelMealTypesHidden = [];
+            
+            if (!element.Rooms[0].Images || element.Rooms[0].Images.indexOf('noimage') != -1) {
+              element.Rooms[0].Images = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg";
+            }
+            else if(element.Rooms[0].Images.indexOf('220x125') != -1){
+              let urlimage = element.Rooms[0].Images.substring(0, element.Rooms[0].Images.lastIndexOf('-') +1 );
+              let idexofdot = element.Rooms[0].Images.lastIndexOf('.');
+              let tail = element.Rooms[0].Images.substring(idexofdot, element.Rooms[0].Images.length);
+              element.Rooms[0].Images = urlimage + "110x110" + tail;
+            }
+            element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
+            for (let i = 0; i < element.MealTypeRates.length; i++) {
+              var PriceAvgPlusTA=element.MealTypeRates[i].PriceAvgPlusTotalTA
+              PriceAvgPlusTA=PriceAvgPlusTA/100000;
+              PriceAvgPlusTA=Math.floor(PriceAvgPlusTA);
+              element.MealTypeRates[i].point=PriceAvgPlusTA;
 
-            if(element.hotelMealTypes.length == 0){
-              groupMealType = groupMealType +1;
-              element.MealTypeRates[i].displayMealType=true;
-              element.MealTypeRates[i].groupMealType = index;
-              element.hotelMealTypes.push(element.MealTypeRates[i]);
-            }else{
-              var mealTypeName = element.MealTypeRates[i].Name;
-              //Trường hợp có thêm note thì filter theo name + note
-              if(element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length >0){
-                mealTypeName = element.MealTypeRates[i].Name + ", " +element.MealTypeRates[i].Notes.join(', ');
-              }
-              // + ( (element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length !=0)? element.MealTypeRates[i].Notes[0] : '' )
-              //if(element.hotelMealTypes.filter(item =>item.Name == element.MealTypeRates[i].Name ).length ==0 ){
-                if(element.hotelMealTypes.filter(item => item.Code == element.MealTypeRates[i].Code && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length==0) {
+              if(element.hotelMealTypes.length == 0){
                 groupMealType = groupMealType +1;
                 element.MealTypeRates[i].displayMealType=true;
                 element.MealTypeRates[i].groupMealType = index;
                 element.hotelMealTypes.push(element.MealTypeRates[i]);
               }else{
-                element.MealTypeRates[i].groupMealType = index;
-                indexMealTypeHidden = indexMealTypeHidden+1;
-                //Nếu nhiều hơn 2 item thì add vào list ẩn
-                //Hiển thị item đầu tiên của list ẩn (hiển thị 2 item đầu của 1 mealtype của room)
-                element.MealTypeRates[i].displayMealType = false;
-                if(indexMealTypeHidden == element.MealTypeRates.length -1){
-                  element.MealTypeRates[i].displaySecondItem = true;
-                }
-                element.hotelMealTypesHidden.push(element.MealTypeRates[i]);
-              }
-            }
-          }
-          element.countMealType = 0;
-          for (let m =0; m < element.hotelMealTypes.length; m++){
-            let mealTypeCode = element.hotelMealTypes[m].Code;
-            //Trường hợp có thêm note thì filter theo name + note
-          //   if(element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length >0){
-          //       mealTypeName = element.hotelMealTypes[m].Code + ", " +element.hotelMealTypes[m].Notes.join(', ');
-          //   }
-          //   if(element.hotelMealTypes[m].PromotionInclusions && element.hotelMealTypes[m].PromotionInclusions.length >0){
-          //     mealTypeName = element.hotelMealTypes[m].Code + ", " +element.hotelMealTypes[m].PromotionInclusions.join(', ');
-          // }
-            let  count = element.MealTypeRates.filter(item => item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
-            //let count = element.MealTypeRates.filter(item =>item.Name == element.hotelMealTypes[m].Name && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )).length;
-            element.hotelMealTypes[m].countMealType = count -1;
-            //Nếu chỉ có 2 nhóm mealtype thì hiển thị 2 item đầu
-            if(element.hotelMealTypes.length <= 1){
-              var el = element.hotelMealTypesHidden.filter(item => item.displaySecondItem);
-              if(el && el.length >0){
-                el[0].displayMealType = true;
-                element.hotelMealTypes[m].countMealType = count -2;
-              }
-            }
-            //Nhiều hơn 2 nhóm mealtype => hiển thị giá gạch TA của item có giá cao nhất
-            else{
-              let lastElementMealTypeGroup = element.MealTypeRates.filter(item => item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
-              let objMap = lastElementMealTypeGroup[lastElementMealTypeGroup.length - 1];
-              if(objMap){
-                lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTA = true;
-                lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTAStr = objMap.PriceAvgPlusOTAStr;
-              }
-              
-            }
-          }
-          element.countMealType = 0;
-          for (let m =0; m < element.hotelMealTypes.length; m++){
-            element.countMealType += element.hotelMealTypes[m].countMealType;
-          }
-          element.checkwarning = 0;
-          self.hotelRoomClasses.push(element);
-          self.hotelRoomClassesFS.push(element);
-          if(self.hotelRoomClasses && self.hotelRoomClasses.length >0){
-            self.clearBlurEffect();
-          }
-        });
-
-        // thêm RoomClassesRecomments
-        // Tạm rem để check sau
-        result.Hotels[0].RoomClassesRecomments.forEach((element, index) => {
-          var groupMealType = 0;
-          var indexMealTypeHidden = 0;
-          element.isFromListRecomment = true;
-          element.hotelMealTypes = [];
-          element.hotelMealTypesHidden = [];
-          if (index == 0) {
-            if (self.hotelRoomClasses.length > 0) {
-              element.checkwarning = 1;
-            }
-          } else {
-            element.checkwarning = 0;
-          }
-
-          // if (!element.Rooms[0].Images || element.Rooms[0].Images.indexOf('noimage') != -1) {
-          //   element.Rooms[0].Images = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg";
-          // }
-          element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
-          if (!element.Rooms[0].Images || element.Rooms[0].Images.indexOf('noimage') != -1) {
-            element.Rooms[0].Images = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg";
-          } else if (element.Rooms[0].Images.indexOf('220x125') != -1) {
-             let urlimage = element.Rooms[0].Images.substring(0, element.Rooms[0].Images.lastIndexOf('-') +1 );
-             let idexofdot = element.Rooms[0].Images.lastIndexOf('.');
-             let tail = element.Rooms[0].Images.substring(idexofdot, element.Rooms[0].Images.length);
-             element.Rooms[0].Images = urlimage + "110x110" + tail;
-          }
-          for (let i = 0; i < element.MealTypeRates.length; i++) {
-            if ((element.Supplier == 'HBED' || element.Supplier == 'EAN') && element.MealTypeRates[i].Status != 'AL') {
-              element.MealTypeRates[i] = null;
-            }
-            if (element.MealTypeRates[i] != null) {
-              var PriceAvgPlusTA = element.MealTypeRates[i].PriceAvgPlusTotalTA
-              PriceAvgPlusTA = PriceAvgPlusTA / 100000;
-              PriceAvgPlusTA = Math.floor(PriceAvgPlusTA);
-              element.MealTypeRates[i].point = PriceAvgPlusTA;
-
-              if (element.hotelMealTypes.length == 0) {
-                groupMealType = groupMealType + 1;
-                element.MealTypeRates[i].displayMealType = true;
-                element.MealTypeRates[i].groupMealType = index;
-                element.hotelMealTypes.push(element.MealTypeRates[i]);
-              } else {
                 var mealTypeName = element.MealTypeRates[i].Name;
                 //Trường hợp có thêm note thì filter theo name + note
-                if (element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length > 0) {
-                  mealTypeName = element.MealTypeRates[i].Name + ", " + element.MealTypeRates[i].Notes.join(', ');
+                if(element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length >0){
+                  mealTypeName = element.MealTypeRates[i].Name + ", " +element.MealTypeRates[i].Notes.join(', ');
                 }
-                if (element.hotelMealTypes.filter(item => item.Code == element.MealTypeRates[i].Code && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length == 0) {
-                  groupMealType = groupMealType + 1;
-                  element.MealTypeRates[i].displayMealType = true;
+                // + ( (element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length !=0)? element.MealTypeRates[i].Notes[0] : '' )
+                //if(element.hotelMealTypes.filter(item =>item.Name == element.MealTypeRates[i].Name ).length ==0 ){
+                  if(element.hotelMealTypes.filter(item => item.Code == element.MealTypeRates[i].Code && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length==0) {
+                  groupMealType = groupMealType +1;
+                  element.MealTypeRates[i].displayMealType=true;
                   element.MealTypeRates[i].groupMealType = index;
                   element.hotelMealTypes.push(element.MealTypeRates[i]);
-                } else {
+                }else{
                   element.MealTypeRates[i].groupMealType = index;
-                  indexMealTypeHidden = indexMealTypeHidden + 1;
+                  indexMealTypeHidden = indexMealTypeHidden+1;
                   //Nếu nhiều hơn 2 item thì add vào list ẩn
                   //Hiển thị item đầu tiên của list ẩn (hiển thị 2 item đầu của 1 mealtype của room)
                   element.MealTypeRates[i].displayMealType = false;
-                  if (indexMealTypeHidden == element.MealTypeRates.length - 1) {
+                  if(indexMealTypeHidden == element.MealTypeRates.length -1){
                     element.MealTypeRates[i].displaySecondItem = true;
                   }
                   element.hotelMealTypesHidden.push(element.MealTypeRates[i]);
                 }
               }
             }
-
-          }
-          if (element.hotelMealTypes && element.hotelMealTypes.length > 0) {
             element.countMealType = 0;
-            for (let m = 0; m < element.hotelMealTypes.length; m++) {
+            for (let m =0; m < element.hotelMealTypes.length; m++){
               let mealTypeCode = element.hotelMealTypes[m].Code;
               //Trường hợp có thêm note thì filter theo name + note
-              // if (element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length > 0) {
-              //   mealTypeName = element.hotelMealTypes[m].Name + ", " + element.hotelMealTypes[m].Notes.join(', ');
-              // }
-              let count = element.MealTypeRates.filter(item =>  item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
+            //   if(element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length >0){
+            //       mealTypeName = element.hotelMealTypes[m].Code + ", " +element.hotelMealTypes[m].Notes.join(', ');
+            //   }
+            //   if(element.hotelMealTypes[m].PromotionInclusions && element.hotelMealTypes[m].PromotionInclusions.length >0){
+            //     mealTypeName = element.hotelMealTypes[m].Code + ", " +element.hotelMealTypes[m].PromotionInclusions.join(', ');
+            // }
+              let  count = element.MealTypeRates.filter(item => item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
               //let count = element.MealTypeRates.filter(item =>item.Name == element.hotelMealTypes[m].Name && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )).length;
-              element.hotelMealTypes[m].countMealType = count - 1;
+              element.hotelMealTypes[m].countMealType = count -1;
               //Nếu chỉ có 2 nhóm mealtype thì hiển thị 2 item đầu
-              if (element.hotelMealTypes.length <= 1) {
+              if(element.hotelMealTypes.length <= 1){
                 var el = element.hotelMealTypesHidden.filter(item => item.displaySecondItem);
-                if (el && el.length > 0) {
+                if(el && el.length >0){
                   el[0].displayMealType = true;
-                  element.hotelMealTypes[m].countMealType = count - 2;
+                  element.hotelMealTypes[m].countMealType = count -2;
                 }
               }
               //Nhiều hơn 2 nhóm mealtype => hiển thị giá gạch TA của item có giá cao nhất
-              else {
-                let lastElementMealTypeGroup = element.MealTypeRates.filter(item =>  item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
+              else{
+                let lastElementMealTypeGroup = element.MealTypeRates.filter(item => item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) ) ).length;
                 let objMap = lastElementMealTypeGroup[lastElementMealTypeGroup.length - 1];
-                if (objMap) {
+                if(objMap){
                   lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTA = true;
                   lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTAStr = objMap.PriceAvgPlusOTAStr;
                 }
-
+                
               }
             }
             element.countMealType = 0;
-            for (let m = 0; m < element.hotelMealTypes.length; m++) {
+            for (let m =0; m < element.hotelMealTypes.length; m++){
               element.countMealType += element.hotelMealTypes[m].countMealType;
             }
-          }
+            element.checkwarning = 0;
+            self.hotelRoomClasses.push(element);
+            self.hotelRoomClassesFS.push(element);
+            if(self.hotelRoomClasses && self.hotelRoomClasses.length >0){
+              self.clearBlurEffect();
+            }
+          });
+        },50)
+        // thêm RoomClassesRecomments
+        // Tạm rem để check sau
+        setTimeout(()=>{
+          result.Hotels[0].RoomClassesRecomments.forEach((element, index) => {
+            var groupMealType = 0;
+            var indexMealTypeHidden = 0;
+            element.ischeckwarn = 1;
+            element.isFromListRecomment = true;
+            element.hotelMealTypes = [];
+            element.hotelMealTypesHidden = [];
+            if (index == 0) {
+              if (self.hotelRoomClasses.length > 0) {
+                element.checkwarning = 1;
+              }
+            } else {
+              element.checkwarning = 0;
+            }
 
-          self.hotelRoomClasses.push(element);
-        });
+            element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
+            if (!element.Rooms[0].Images || element.Rooms[0].Images.indexOf('noimage') != -1) {
+              element.Rooms[0].Images = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg";
+            } else if (element.Rooms[0].Images.indexOf('220x125') != -1) {
+              let urlimage = element.Rooms[0].Images.substring(0, element.Rooms[0].Images.lastIndexOf('-') +1 );
+              let idexofdot = element.Rooms[0].Images.lastIndexOf('.');
+              let tail = element.Rooms[0].Images.substring(idexofdot, element.Rooms[0].Images.length);
+              element.Rooms[0].Images = urlimage + "110x110" + tail;
+            }
+            for (let i = 0; i < element.MealTypeRates.length; i++) {
+              if ((element.Supplier == 'HBED' || element.Supplier == 'EAN') && element.MealTypeRates[i].Status != 'AL') {
+                element.MealTypeRates[i] = null;
+              }
+              if (element.MealTypeRates[i] != null) {
+                var PriceAvgPlusTA = element.MealTypeRates[i].PriceAvgPlusTotalTA
+                PriceAvgPlusTA = PriceAvgPlusTA / 100000;
+                PriceAvgPlusTA = Math.floor(PriceAvgPlusTA);
+                element.MealTypeRates[i].point = PriceAvgPlusTA;
+
+                if (element.hotelMealTypes.length == 0) {
+                  groupMealType = groupMealType + 1;
+                  element.MealTypeRates[i].displayMealType = true;
+                  element.MealTypeRates[i].groupMealType = index;
+                  element.hotelMealTypes.push(element.MealTypeRates[i]);
+                } else {
+                  var mealTypeName = element.MealTypeRates[i].Name;
+                  //Trường hợp có thêm note thì filter theo name + note
+                  if (element.MealTypeRates[i].Notes && element.MealTypeRates[i].Notes.length > 0) {
+                    mealTypeName = element.MealTypeRates[i].Name + ", " + element.MealTypeRates[i].Notes.join(', ');
+                  }
+                  if (element.hotelMealTypes.filter(item => item.Code == element.MealTypeRates[i].Code && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length == 0) {
+                    groupMealType = groupMealType + 1;
+                    element.MealTypeRates[i].displayMealType = true;
+                    element.MealTypeRates[i].groupMealType = index;
+                    element.hotelMealTypes.push(element.MealTypeRates[i]);
+                  } else {
+                    element.MealTypeRates[i].groupMealType = index;
+                    indexMealTypeHidden = indexMealTypeHidden + 1;
+                    //Nếu nhiều hơn 2 item thì add vào list ẩn
+                    //Hiển thị item đầu tiên của list ẩn (hiển thị 2 item đầu của 1 mealtype của room)
+                    element.MealTypeRates[i].displayMealType = false;
+                    if (indexMealTypeHidden == element.MealTypeRates.length - 1) {
+                      element.MealTypeRates[i].displaySecondItem = true;
+                    }
+                    element.hotelMealTypesHidden.push(element.MealTypeRates[i]);
+                  }
+                }
+              }
+
+            }
+            if (element.hotelMealTypes && element.hotelMealTypes.length > 0) {
+              element.countMealType = 0;
+              for (let m = 0; m < element.hotelMealTypes.length; m++) {
+                let mealTypeCode = element.hotelMealTypes[m].Code;
+                //Trường hợp có thêm note thì filter theo name + note
+                // if (element.hotelMealTypes[m].Notes && element.hotelMealTypes[m].Notes.length > 0) {
+                //   mealTypeName = element.hotelMealTypes[m].Name + ", " + element.hotelMealTypes[m].Notes.join(', ');
+                // }
+                let count = element.MealTypeRates.filter(item =>  item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
+                //let count = element.MealTypeRates.filter(item =>item.Name == element.hotelMealTypes[m].Name && (item.Supplier != 'HBED' || (item.Supplier=='HBED'&& item.Penaltys && item.Penaltys.length >0) )).length;
+                element.hotelMealTypes[m].countMealType = count - 1;
+                //Nếu chỉ có 2 nhóm mealtype thì hiển thị 2 item đầu
+                if (element.hotelMealTypes.length <= 1) {
+                  var el = element.hotelMealTypesHidden.filter(item => item.displaySecondItem);
+                  if (el && el.length > 0) {
+                    el[0].displayMealType = true;
+                    element.hotelMealTypes[m].countMealType = count - 2;
+                  }
+                }
+                //Nhiều hơn 2 nhóm mealtype => hiển thị giá gạch TA của item có giá cao nhất
+                else {
+                  let lastElementMealTypeGroup = element.MealTypeRates.filter(item =>  item.Code == mealTypeCode && (item.Supplier != 'HBED' || (item.Supplier == 'HBED' && item.Penaltys && item.Penaltys.length > 0))).length;
+                  let objMap = lastElementMealTypeGroup[lastElementMealTypeGroup.length - 1];
+                  if (objMap) {
+                    lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTA = true;
+                    lastElementMealTypeGroup[0].displayLastPriceAvgPlusOTAStr = objMap.PriceAvgPlusOTAStr;
+                  }
+
+                }
+              }
+              element.countMealType = 0;
+              for (let m = 0; m < element.hotelMealTypes.length; m++) {
+                element.countMealType += element.hotelMealTypes[m].countMealType;
+              }
+            }
+
+            self.hotelRoomClasses.push(element);
+          });
+        },100);
+
+        setTimeout(()=>{
+          self.loadcomplete = true;
+        },110);
+
       } else {
         self.hotelRoomClasses = [];
         self.hotelRoomClassesFS = [];
@@ -2229,13 +2243,14 @@ excuteLoadHotelRoom(data){
       }
   });
   se.resetShowHidePanel();
-  se.checkCombo();
-    if(se.hotelRoomClasses && se.hotelRoomClasses.length>0){
-      let priceinstallment = Math.round(se.hotelRoomClasses[0].MealTypeRates[0].PriceAvgPlusTotalTA*1 / 12 * 1.05);
-      se.installmentPriceStr = priceinstallment.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g, '.') + "đ/tháng";
-      se.activityService.installmentPriceStr = se.installmentPriceStr;
-    }
-    
+  setTimeout(()=>{
+    se.checkCombo();
+      if(se.hotelRoomClasses && se.hotelRoomClasses.length>0){
+        let priceinstallment = Math.round(se.hotelRoomClasses[0].MealTypeRates[0].PriceAvgPlusTotalTA*1 / 12 * 1.05);
+        se.installmentPriceStr = priceinstallment.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g, '.') + "đ/tháng";
+        se.activityService.installmentPriceStr = se.installmentPriceStr;
+      }
+  },110);
   }
   //
   checkCombo(){
@@ -2532,10 +2547,25 @@ excuteLoadHotelRoom(data){
     this.roomvalue = MealTypeRates.TotalRoom;
     this.arrroom = [];
     for (let i = 0; i < self.hotelRoomClasses.length; i++) {
-      if (id == self.hotelRoomClasses[i].Rooms[0].RoomID && MealTypeRates.TotalRoom == self.hotelRoomClasses[i].TotalRoom) {
+      // if (id == self.hotelRoomClasses[i].Rooms[0].RoomID && MealTypeRates.TotalRoom == self.hotelRoomClasses[i].TotalRoom) {
+      //   this.arrroom.push(self.hotelRoomClasses[i]);
+      //   this.indexroom = i;
+      //   break;
+      // }
+      // //Thêm case api trả về số room phòng < số room khi search => Check max pax & supplier internal
+      // else if(id == self.hotelRoomClasses[i].Rooms[0].RoomID 
+      //   && MealTypeRates.Adults == self.hotelRoomClasses[i].Rooms[0].MaxAdults
+      //   && MealTypeRates.Supplier == 'Internal'){
+      //     this.arrroom.push(self.hotelRoomClasses[i]);
+      //     this.indexroom = i;
+      //     break;
+      // }
+
+      //Api mới trả về số phòng theo mealtype => bỏ rule check số phòng theo api trả về = cấu hình phòng lúc search
+      if (id == self.hotelRoomClasses[i].Rooms[0].RoomID){
         this.arrroom.push(self.hotelRoomClasses[i]);
-        this.indexroom = i;
-        break;
+          this.indexroom = i;
+          break;
       }
     }
     //console.log(this.arrroom);
@@ -2570,7 +2600,7 @@ excuteLoadHotelRoom(data){
           this.Roomif.jsonroom = this.jsonroom2.Hotels[0],
           this.Roomif.imgHotel = this.imgHotel;
           this.Roomif.objMealType = MealTypeRates;
-          this.Roomif.HotelRoomHBedReservationRequest=JSON.stringify(this.arrroom[0].HotelRoomHBedReservationRequest);
+          this.Roomif.HotelRoomHBedReservationRequest=this.arrroom[0].HotelRoomHBedReservationRequest ? JSON.stringify(this.arrroom[0].HotelRoomHBedReservationRequest) : '';
         this.Roomif.arrrbed = [];
         this.Roomif.imgRoom = this.arrroom[0].Rooms[0].ImagesMaxWidth320;
         this.searchhotel.adult = this.adults;

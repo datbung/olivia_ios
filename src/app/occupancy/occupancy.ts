@@ -96,55 +96,61 @@ export class OccupancyPage implements OnInit {
     }
   }
   plusadults() {
-    if(this.adults < 50){
-      this.adults++;
-    }
-    
-    if (this.adults == 1) {
-      this.ischeckadults = false;
-    }
-    else {
-      this.ischeckadults = true;
-    }
+    this.zone.run(()=>{
+      if(this.adults < 50){
+        this.adults++;
+      }
+      
+      if (this.adults == 1) {
+        this.ischeckadults = false;
+      }
+      else {
+        this.ischeckadults = true;
+      }
+    })
   }
   minusadults() {
-    if (this.adults > 1) {
-      this.adults--;
-    }
-    if (this.adults == 1) {
-      this.ischeckadults = false;
-    }
-    else {
-      this.ischeckadults = true;
-    }
-    
+    this.zone.run(()=>{
+      if (this.adults > 1) {
+        this.adults--;
+      }
+      if (this.adults == 1) {
+        this.ischeckadults = false;
+      }
+      else {
+        this.ischeckadults = true;
+      }
+    })
   }
   pluschild() {
-    if(this.child < 12){
-      this.child++;
-      var arr = { text: 'Trẻ em' + ' ' + this.child, numage: "" }
-      this.arrchild.push(arr);
-    }
-    if (this.child == 0) {
-      this.ischeckchild = false;
-    }
-    else {
-      this.ischeckchild = true;
-    }
+    this.zone.run(()=>{
+      if(this.child < 12){
+        this.child++;
+        var arr = { text: 'Trẻ em' + ' ' + this.child, numage: "" }
+        this.arrchild.push(arr);
+      }
+      if (this.child == 0) {
+        this.ischeckchild = false;
+      }
+      else {
+        this.ischeckchild = true;
+      }
+    })
   }
   minuschild() {
-
-    if (this.child > 0) {
-      this.child--;
-      this.arrchild.splice(this.arrchild.length - 1, 1);
-    }
-    if (this.child == 0) {
-      this.ischeckchild = false;
-      this.arrchild.splice(this.arrchild.length - 1, 1);
-    }
-    else {
-      this.ischeckchild = true;
-    }
+    this.zone.run(()=>{
+      if (this.child > 0) {
+        this.child--;
+        this.arrchild.splice(this.arrchild.length - 1, 1);
+      }
+      if (this.child == 0) {
+        this.ischeckchild = false;
+        this.arrchild.splice(this.arrchild.length - 1, 1);
+      }
+      else {
+        this.ischeckchild = true;
+      }
+    })
   }
   selectclick(event, text) {
     for (let i = 0; i < this.arrchild.length; i++) {
@@ -160,29 +166,33 @@ export class OccupancyPage implements OnInit {
   }
 
   plusroom() {
-    if(this.room <9){
-      this.room++;
-      if(this.adults < this.room){
-        this.adults = this.room;
+    this.zone.run(()=>{
+      if(this.room <9){
+        this.room++;
+        if(this.adults < this.room){
+          this.adults = this.room;
+        }
       }
-    }
-
-    if (this.room == 1) {
-      this.ischeckroom = false;
-    } else {
-      this.ischeckroom = true;
-    }
+  
+      if (this.room == 1) {
+        this.ischeckroom = false;
+      } else {
+        this.ischeckroom = true;
+      }
+    })
+    
   }
   minusroom() {
-
-    if (this.room > 1) {
-      this.room--;
-    }
-    if (this.room == 1) {
-      this.ischeckroom = false;
-    } else {
-      this.ischeckroom = true;
-    }
+    this.zone.run(()=>{
+      if (this.room > 1) {
+        this.room--;
+      }
+      if (this.room == 1) {
+        this.ischeckroom = false;
+      } else {
+        this.ischeckroom = true;
+      }
+    })
   }
   data()
   {

@@ -749,6 +749,7 @@ export class FlightComboReviewsPage implements OnInit{
         data.IsSeri= true;
         data.IsAgoda= true;
         data.GetOTAPackage = 1;
+        data.IsOccWithBed = false;
         var form = data;
         var options = {
           method: 'POST',

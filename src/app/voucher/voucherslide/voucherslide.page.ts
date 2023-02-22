@@ -138,6 +138,9 @@ export class VoucherSlidePage implements OnInit{
     // }
 
     voucherSelect(voucher){
+      if(!voucher.isActive){
+        return;
+      }
       if(voucher.rewardsItem.price <= 0 && !voucher.limitUse){
         this.showVoucherDetail(voucher);
       }else{
@@ -373,7 +376,7 @@ export class VoucherSlidePage implements OnInit{
           this.vouchers = [...voucheractive, ...voucherdeactive];
           this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
 
-            this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
+            this._voucherService.hasVoucher = this._voucherService.vouchers && this._voucherService.vouchers.length >0;
 
             if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.hasvoucher){
               for (let index = 0; index < this._voucherService.vouchers.length; index++) {
@@ -410,4 +413,6 @@ export class VoucherSlidePage implements OnInit{
       let nd = new Date();
       return moment(voucher.rewardsItem.to).diff(nd, 'days') >=0;
     }
+
+   
 }

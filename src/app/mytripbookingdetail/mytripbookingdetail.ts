@@ -172,7 +172,9 @@ export class MytripBookingDetailPage implements OnInit{
       GetSMD: 1,
       IsFenced: true,
       IsB2B: true,
-      IsSeri: true
+      IsSeri: true,
+      IsOccWithBed: true,
+      NoCache: false,
     };
     options = {
       method: 'POST',

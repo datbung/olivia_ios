@@ -46,7 +46,6 @@ export class HomeTourItemSlidePage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometouritemslide', 'getTourGroupFutures').then((data) => {
       let res = JSON.parse(data);
-      console.log(res.Response);
       se.slideData = res.Response;
       se.sortTourOrder(se.slideData, 'SortOrder').then(()=>{
         se.slideData.forEach(element => {
@@ -111,7 +110,6 @@ export class HomeTourItemSlidePage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometouritemslide', 'GetPopularLocation').then((data) => {
       let res = JSON.parse(data);
-      console.log(res.Response);
       se.slidePopular = res.Response;
       se.slidePopular.forEach(slide => {
         if(slide.AvatarLink && slide.AvatarLink.indexOf('http') == -1){

@@ -840,14 +840,14 @@
                                   *ngIf="(loginuser || mealtype.IsshowpricesOTA) &&  !mealtype.MSG && (mealtype.Status=='AL')&&hotelroom.RoomType!='villa'">
                                   <button
                                     (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
-                                    ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
+                                    ion-button round outline class="button btn-book-outline">Đặt {{mealtype.TotalRoom}}
                                     phòng</button>
                                 </div>
                                 <div class="div-btnbook"
                                   *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG && mealtype.Status=='AL' &&hotelroom.RoomType=='villa'">
                                   <button
                                     (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
-                                    ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
+                                    ion-button round outline class="button btn-book-outline">Đặt {{mealtype.TotalRoom}}
                                     villa</button>
                                 </div>
                                 <div class="div-btnbook"

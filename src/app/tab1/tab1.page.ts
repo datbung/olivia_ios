@@ -1315,7 +1315,7 @@ export class Tab1Page implements OnInit {
               .toLocaleString()
               .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")
               .replace(",", ".") ) : 0,priceFor:se.slideData[i].priceFor };
-            if(!se.gf.checkExistsItemInArray(se.slideData1, item, 1)){
+            if(!se.gf.checkExistsItemInArray(se.slideData1, item, 'trip')){
               se.slideData1.push(item);
               
             }

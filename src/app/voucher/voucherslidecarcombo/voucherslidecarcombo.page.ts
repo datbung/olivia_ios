@@ -150,6 +150,9 @@ export class VoucherSlideCarComboPage implements OnInit{
     }
 
     voucherSelect(voucher){
+      if(!voucher.isActive){
+        return;
+      }
       if(voucher.rewardsItem.price <= 0){
         this.showVoucherDetail(voucher);
       }else{
@@ -255,7 +258,7 @@ export class VoucherSlideCarComboPage implements OnInit{
           let voucherdeactive = data.filter((i)=> {return !i.isActive});
           this.vouchers = [...voucheractive, ...voucherdeactive];
           this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
-            this._voucherService.hasVoucher = this._voucherService.vouchers.some(v => v.isActive);
+            this._voucherService.hasVoucher = this._voucherService.vouchers && this._voucherService.vouchers.length >0;
           })
         }else if(data.error == 401){
           this.storage.get('jti').then((memberid) => {

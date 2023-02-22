@@ -673,35 +673,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 se.loginuser = auth_token;
               });
 
-              // se.storage.get('orderflight').then(order => {
-              //   if (order) {
-              //     se.companyname = order.companyname;
-              //     se.address = order.address;
-              //     se.tax = order.tax;
-              //     se.addressorder = order.addressorder;
-              //     se.hotenhddt=order.hotenhddt;
-              //     se.emailhddt=order.emailhddt;
-              //     se.ishideNameMail=order.ishideNameMail;
-              //     se._flightService.itemFlightCache.companyname = order.companyname;
-              //     se._flightService.itemFlightCache.address = order.address;
-              //     se._flightService.itemFlightCache.tax = order.tax;
-              //     se.ischeck = true;
-              //   } else {
-              //     se.ischeck = false;
-              //     se._flightService.itemFlightCache.companyname = '';
-              //     se._flightService.itemFlightCache.address = '';
-              //     se._flightService.itemFlightCache.tax = '';
-              //   }
-              // })
               se.GetUserInfo();
-              // se.storage.get('InvoiceFlight').then((Invoice: any) => {
-              //   if (Invoice) {
-              //     se.ischeck = true;
-              //   }
-              //   else{
-              //     se.ischeck = false;
-              //   }
-              // })
             })
             
         }
