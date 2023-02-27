@@ -438,6 +438,22 @@
                 font-size: 15px;
                 bottom: -10px;
             }
+
+            .div-apply-discount {
+                color: #9fc43a;
+                padding: 2px 4px;
+                position: absolute;
+                right: 0;
+                top: 15px;
+                font-size: 12px;
+                text-align: center;
+                background: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%239FC43AFF' stroke-width='1.5' stroke-dasharray='5%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 160px;
+            }
         }
         .div-second{
             margin-top: 12px;
@@ -903,4 +919,7 @@
         .stick-css {
             transition: top 0.5s ease-out;
             margin-top: -16px !important;
+        }
+        .top-0 {
+            top: 0px !important;
         }

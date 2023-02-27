@@ -80,12 +80,16 @@
             </div>
             
           </div>
-          <div *ngIf="showloadmore" class="div-loadmore">
+          <div  class="div-loadmore" (click)="showTourList(itemSlide)">
+            <div class="div-text-loadmore">Xem thêm <img class="img-arrow-left" src="./assets/ic_tour/arrow-left.svg"></div>
+          </div>
+          <div class="div-item-padding"></div>
+          <!-- <div *ngIf="showloadmore" class="div-loadmore">
             <ion-spinner
               name="bubbles"
               class="spinner-bubbles hydrated"
             ></ion-spinner>
-          </div>
+          </div> -->
       </div>
     </div>
   </div>

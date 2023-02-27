@@ -270,7 +270,7 @@
     overflow-x: unset !important;
   }
   .m-l-16 {
-    margin-left: 16px;
+    margin-left: 19px;
   }
 
   .item-md ion-thumbnail img {
@@ -372,5 +372,34 @@
     .h-296 {
       height: 296px;
     }
+  }
+
+  .div-loadmore {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 19px;
+    width: 150px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #ecf0f5;
+
+      .div-text-loadmore {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.4;
+        text-align: center;
+        color: #26bed6;
+        width: 150px;
+        display: flex;
+        justify-content: center;
+
+        .img-arrow-left {
+          margin-left: 6px;
+        }
+      }
+  }
+  .div-item-padding {
+    margin-left: 16px;
   }
 }
