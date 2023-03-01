@@ -52,14 +52,14 @@ export class SearchHotelFilterAndSortPage implements OnInit{
 
     if (searchhotel.minprice && this.searchhotel.maxprice) {
       //PDANH 09/01/2018: Fix lỗi không lấy được minprice,maxprice do lỗi định dạng thập phân ','
-      this.structure.lower = searchhotel.minprice.replace(/\./g, '').replace(/\,/g, '');
-      this.structure.upper = searchhotel.maxprice.replace(/\./g, '').replace(/\,/g, '');
+      this.structure.lower = searchhotel.minprice;
+      this.structure.upper = searchhotel.maxprice;
       this.minprice = searchhotel.minprice;
       this.maxprice = searchhotel.maxprice; 
     }
     else {
-      this.minprice = this.structure.lower.toLocaleString();
-      this.maxprice = this.structure.upper.toLocaleString()
+      this.minprice = this.structure.lower;
+      this.maxprice = this.structure.upper
     }
 
     if (searchhotel.review) {
@@ -166,30 +166,42 @@ export class SearchHotelFilterAndSortPage implements OnInit{
             
               //if(se.searchhotel.arrlocalcheck && se.searchhotel.arrlocalcheck.length >0){
                 se.arrlocalcheck = se.searchhotel.arrlocalcheck;
-                se.dataLocal.forEach(item => {
-                  se.renderCssByType("local",item.Id, se.gf.checkExistsIndex(se.arrlocalcheck,item.Id) );
-                });
+                if (se.dataLocal) {
+                  se.dataLocal.forEach(item => {
+                    se.renderCssByType("local",item.Id, se.gf.checkExistsIndex(se.arrlocalcheck,item.Id) );
+                  });
+                }
+                
               //}
 
               //if(se.searchhotel.arrfacilitycheck && se.searchhotel.arrfacilitycheck.length >0){
                 se.arrfacilitycheck = se.searchhotel.arrfacilitycheck;
-                se.dataFacility.forEach(item => {
-                  se.renderCssByType("facility",item.Id, se.gf.checkExistsIndex(se.arrfacilitycheck,item.Id) );
-                });
+                if (se.dataFacility) {
+                  se.dataFacility.forEach(item => {
+                    se.renderCssByType("facility",item.Id, se.gf.checkExistsIndex(se.arrfacilitycheck,item.Id) );
+                  });
+                }
+               
               //}
 
               //if(se.searchhotel.arrstylecheck && se.searchhotel.arrstylecheck.length >0){
                 se.arrstylecheck = se.searchhotel.arrstylecheck;
-                se.dataStyle.forEach(item => {
-                  se.renderCssByType("style",item.Id, se.gf.checkExistsIndex(se.arrstylecheck,item.Id) );
-                });
+                if (se.dataStyle) {
+                  se.dataStyle.forEach(item => {
+                    se.renderCssByType("style",item.Id, se.gf.checkExistsIndex(se.arrstylecheck,item.Id) );
+                  });
+                }
+             
               //}
 
               //if(se.searchhotel.arrhoteltypecheck && se.searchhotel.arrhoteltypecheck.length >0){
                 se.arrhoteltypecheck = se.searchhotel.arrhoteltypecheck;
-                se.dataHotelType.forEach(item => {
-                  se.renderCssByType("hoteltype",item.Id, se.gf.checkExistsIndex(se.arrhoteltypecheck,item.Id) );
-                });
+                if (se.dataHotelType) {
+                  se.dataHotelType.forEach(item => {
+                    se.renderCssByType("hoteltype",item.Id, se.gf.checkExistsIndex(se.arrhoteltypecheck,item.Id) );
+                  });
+                }
+               
               //}
           })
             
@@ -235,8 +247,8 @@ export class SearchHotelFilterAndSortPage implements OnInit{
     this.modalCtrl.dismiss('close');
   }
   test() {
-    this.minprice = this.structure.lower.toLocaleString()
-    this.maxprice = this.structure.upper.toLocaleString()
+    this.minprice = this.structure.lower
+    this.maxprice = this.structure.upper
 
   }
   star1() {
@@ -401,8 +413,8 @@ export class SearchHotelFilterAndSortPage implements OnInit{
       this.searchhotel.star.push(5);
     }
     //PDANH 09/01/2018: Fix lỗi không lấy được minprice,maxprice do lỗi định dạng thập phân ','
-    var minprice1 = this.minprice.replace(/\./g, '').replace(/\,/g, '');
-    var maxprice1 = this.maxprice.replace(/\./g, '').replace(/\,/g, '');
+    var minprice1 = this.minprice
+    var maxprice1 = this.maxprice
     if (minprice1*1 > 100000 || maxprice1*1 < 15000000) {
       this.searchhotel.minprice = this.minprice;
       this.searchhotel.maxprice = this.maxprice;
@@ -437,9 +449,9 @@ export class SearchHotelFilterAndSortPage implements OnInit{
       }
       if (this.searchhotel.minprice) {
         if (this.chuoi) {
-          this.chuoi = this.chuoi + " | " + "đ " + this.searchhotel.minprice.toLocaleString() + " -" + " " + this.searchhotel.maxprice.toLocaleString();
+          this.chuoi = this.chuoi + " | " + "đ " + this.searchhotel.minprice.toLocaleString() + " -" + " " + this.searchhotel;
         } else {
-          this.chuoi = "đ " + this.searchhotel.minprice.toLocaleString() + " -" + " " + this.searchhotel.maxprice.toLocaleString();
+          this.chuoi = "đ " + this.searchhotel.minprice.toLocaleString() + " -" + " " + this.searchhotel.maxprice;
         }
       }
       if (this.searchhotel.review > 0) {

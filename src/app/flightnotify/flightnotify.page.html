@@ -59,25 +59,29 @@
       </div>
     </div>
     <div *ngIf="!textnotifyType">
-      <div  class="mess-card" *ngFor="let item of items" [ngClass]="items && items.length > 0 && !item.status ? 'mess-card' : 'unmess-card' ">
+      <div  class="mess-card" *ngFor="let item of items" class="mess-card">
         <div class="div-detail" (click)="updateStatusMessage(item)" >
           <div class="div-flex">
             <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
             <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
-            <div *ngIf="item.notifyType == 'product'"  class="noti-text">
+            <div *ngIf="item.notifyType == 'product'" [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text'" >
               Sản phẩm
             </div>
-            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  class="noti-text">
+            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text'">
               Đơn hàng
             </div>
-            <div class="noti-text-time">
-              {{item.date}}
+        
+            <div class="d-flex">
+              <div *ngIf="!item.status" class="cls-dot">
+              
+              </div>
+              <div [ngClass]="!item.status ? 'noti-text-time text-bold' : 'noti-text-time'">{{item.date}}</div>
             </div>
         </div>
         <div class="cls-border">
 
         </div>
-        <div class="noti-text-title">
+        <div [ngClass]="!item.status ? 'noti-text-title text-bold' : 'noti-text-title'">
           {{item.title}}
         </div>
         <div class="noti-text-content">
@@ -90,31 +94,34 @@
     <div *ngIf="textnotifyType">
       <div class="inbox-content-empty" *ngIf="countNoti == 0">
         <div class="img-inbox-empty">
-          <div class="img-empty"><img  src="../../assets/empty/island.svg"></div>
+            <img class="img-empty" src="./assets/empty/island.svg">
         </div>
         <div class="text-trip-empty">
           <label>Quý khách chưa có tin nhắn mới</label>
         </div>
     </div>
-      <div class="mess-card" *ngFor="let item of items" [ngClass]="items && items.length > 0 && !item.status ? 'mess-card' : 'unmess-card' ">
+      <div class="mess-card" *ngFor="let item of items"  class="mess-card">
         <div *ngIf="item.notifyType==textnotifyType" class="div-detail" (click)="updateStatusMessage(item)" >
           <div class="div-flex">
             <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
             <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
-            <div *ngIf="item.notifyType == 'product'"  class="noti-text">
+            <div *ngIf="item.notifyType == 'product'" [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text' ">
               Sản phẩm
             </div>
-            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  class="noti-text">
+            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text' ">
               Đơn hàng
             </div>
-            <div class="noti-text-time">
-              {{item.date}}
+            <div class="d-flex">
+              <div *ngIf="!item.status" class="cls-dot">
+              
+              </div>
+              <div [ngClass]="!item.status ? 'noti-text-time text-bold' : 'noti-text-time' ">{{item.date}}</div>
             </div>
         </div>
         <div class="cls-border">
 
         </div>
-        <div class="noti-text-title">
+        <div [ngClass]="!item.status ? 'noti-text-title text-bold' : 'noti-text-title'">
           {{item.title}}
         </div>
         <div class="noti-text-content">

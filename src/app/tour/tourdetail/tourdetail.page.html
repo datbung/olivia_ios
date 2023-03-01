@@ -5,6 +5,7 @@
             <div class="div-width-100 m-top-12 header-tourname" *ngIf="itemDetail && itemDetail.Name">{{itemDetail.Name}}</div>
             <div class="div-width-48"></div>
         </div>
+        
         <div class="d-flex ">
             <div class="div-item scroll-vertical" #headerScroll>
                 <div class="item-tour-header item-header-actived item-overall" id="header1" (click)="changeItemHeader(1)">Tổng quan</div>
@@ -39,14 +40,17 @@
                     <div class="div-icon-back width-50" (click)="goback()">
                         <img class="icon-back" src="./assets/ic_tour/icon_back.svg" />
                     </div>
-                    <!-- <div class=" width-50 text-right d-flex d-flex-end">
-                        <div class="div-icon-share">
+                    <div class=" width-50 text-right d-flex d-flex-end">
+                        <div (click)="share()" class="div-icon-share">
                             <img class="icon-back" src="./assets/ic_tour/icon_share.svg" />
                         </div>
-                        <div class="div-icon-like">
+                        <div *ngIf="!itemlike" (click)="likeItem()" class="div-icon-like">
                             <img class="icon-back" src="./assets/ic_tour/icon_heart.svg" />
                         </div>
-                    </div> -->
+                        <div *ngIf="itemlike" (click)="unlikeItem()" class="div-icon-like">
+                            <img class="icon-back" src="./assets/ic_tour/heart-red.svg" />
+                        </div>
+                    </div>
                     
                 </div>
                 <div class="div-total-slide" *ngIf="itemDetail.ImagesSlide && itemDetail.ImagesSlide.length >1">{{coutslide}}/{{itemDetail.ImagesSlide.length}}</div>

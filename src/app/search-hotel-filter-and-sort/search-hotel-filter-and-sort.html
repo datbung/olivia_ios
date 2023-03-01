@@ -46,7 +46,7 @@
         </ion-col>
     </ion-row> -->
     
-      <ion-row style="margin-top: 30px">
+      <!-- <ion-row style="margin-top: 30px">
           <ion-col style="padding: 0">
             <label class="text-title1">
                 Giá
@@ -57,12 +57,12 @@
       <ion-row >
         <ion-col style="padding: 0">
           <label class="text-range">
-            {{minprice}}đ
+            {{gf.numberToCurrency(minprice, '.')}}đ
           </label>
         </ion-col>
         <ion-col text-right  style="padding: 0">
           <label class="text-range">
-            {{maxprice}}đ
+            {{gf.numberToCurrency(maxprice, '.')}}đ
           </label>
         </ion-col>
       </ion-row>
@@ -71,7 +71,7 @@
             <ion-range style="padding: 0; height: 24px;--bar-background: #ccc !important;--ion-color-primary: #26bed6;" step=50000 (ionChange)="test()" min="100000" max="15000000" dualKnobs="true" [(ngModel)]="structure">
           </ion-range>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
       <div style="margin-top: 20px">
         <ion-row>
             <ion-col style="padding: 0">

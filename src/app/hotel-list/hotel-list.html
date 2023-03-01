@@ -101,7 +101,7 @@
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
                                 </div>
                                 <div *ngIf="!msg.DealPrice && msg.MinPriceOTAStr" text-left class="p-top-minprice">
-                                  <label >{{msg.RoomNameSubString}}</label>
+                                  <label >{{msg.RoomNameSubString}}</label>  (<span *ngIf="msg.supplier!='Internal' && msg.RoomNameSubString">OTA </span><label>{{msg.supplier}})</label>
                                 </div>
                                
                                 <div  *ngIf="msg.DealPrice" text-right class="p-top-10  price">
@@ -118,13 +118,14 @@
                             <div *ngIf="!msg.DealType"  [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''">
                               <div text-right *ngIf="msg.HasCheckPrice && msg.MinPriceOTAStr && msg.MinPriceTAStr && msg.MinPriceOTAStr!=msg.MinPriceTAStr && msg.MinPriceTAStr!=0 && msg.MinPriceOTAStr<msg.MinPriceTAStr && loginuser" class="label-minpriceTA">{{msg.MinPriceTAStr}} đ</div>
                               <div >
-                                <div col-7 class="text-nameroom" text-left class="p-top-minprice">
-                                  <label >{{msg.RoomNameSubString}}</label>
+                                <div *ngIf="msg.RoomNameSubString" col-7 class="text-nameroom" text-left class="p-top-minprice">
+                                  <label >{{msg.RoomNameSubString}}</label> (<span *ngIf="msg.supplier!='Internal'">OTA </span><label>{{msg.supplier}})</label>
                                 </div>
                                 <div col-5 text-right class="p-top-10 price">
                                   <div>
                                       <label *ngIf="msg.HasCheckPrice && msg.MinPriceOTAStr" class="label-minprice">{{msg.MinPriceOTAStr}} đ</label>
                                       <label *ngIf="msg.HasCheckPrice && !msg.MinPriceOTAStr" class="label-minprice">Hết phòng</label>
+                                      
                                   </div>
                                 </div>
                               </div>
@@ -231,7 +232,7 @@
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
                                 </div>
                                 <div *ngIf="!msg.DealPrice && msg.MinPriceOTAStr" text-left class="p-top-minprice">
-                                  <label >{{msg.RoomNameSubString}}</label>
+                                  <label >{{msg.RoomNameSubString}}</label>  (<span *ngIf="msg.supplier!='Internal' && msg.RoomNameSubString">OTA </span><label>{{msg.supplier}})</label>
                                 </div>
                                
                                 <div  *ngIf="msg.DealPrice" text-right class="p-top-10  price">
@@ -249,7 +250,7 @@
                               <div text-right *ngIf="msg.HasCheckPrice && msg.MinPriceOTAStr && msg.MinPriceTAStr && msg.MinPriceOTAStr!=msg.MinPriceTAStr && msg.MinPriceTAStr!=0 && msg.MinPriceOTAStr<msg.MinPriceTAStr && loginuser" class="label-minpriceTA">{{msg.MinPriceTAStr}} đ</div>
                               <div >
                                 <div col-7 class="text-nameroom" text-left class="p-top-minprice">
-                                  <label >{{msg.RoomNameSubString}}</label>
+                                  <label >{{msg.RoomNameSubString}}</label>  (<span *ngIf="msg.supplier!='Internal' && msg.RoomNameSubString">OTA </span><label>{{msg.supplier}})</label>
                                 </div>
                                 <div col-5 text-right class="p-top-10 price">
                                   <div>

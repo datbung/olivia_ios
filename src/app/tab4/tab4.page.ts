@@ -44,6 +44,7 @@ export class Tab4Page implements OnInit{
   objnotication: any;
   textnotifyType="";
   countNoti: number;
+  listStatus: any;
   constructor(public platform: Platform,public navCtrl: NavController,public gf: GlobalFunction,
     private storage: Storage,
     private zone: NgZone,
@@ -79,8 +80,8 @@ export class Tab4Page implements OnInit{
     if(document.querySelector(".tabbar")){
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
-   
-      se.loadUserNotification();
+      se.loadUserNotificationStatus();
+
     
     //19/07/2019: Load thông tin notification
     //this.loadUserNotification();
@@ -106,6 +107,51 @@ export class Tab4Page implements OnInit{
        
     //   }
     // })
+  }
+  loadUserNotificationStatus() {
+    var se = this;
+    if (!this.networkProvider.isOnline()) {
+      this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
+      return;
+    }
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var options = {
+            method: 'GET',
+            url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationStatus',
+            timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+            headers:
+            {
+                'cache-control': 'no-cache',
+                'content-type': 'application/json',
+                authorization: text
+            }
+            };
+            request(options, function (error, response, body) {
+            if (error) {
+                error.page = "inbox";
+                error.func = "loadUserNotification";
+                error.param =  JSON.stringify(options);
+                C.writeErrorLog(error,response);
+            }else{
+                if(body && body != "[]"){
+                  se.listStatus = JSON.parse(body);
+                }
+                se.loadUserNotification();
+            }
+            });
+      }else{
+        se.zone.run(()=>{
+          se.loadend = true;
+          se.loaddatadone = true;
+          if(se.pageIndex == 1){
+            se.items = [];
+            se.valueGlobal.countNotifi=0;
+          }
+        })
+      }
+    })
   }
 
   async handleSplashScreen(): Promise<void> {
@@ -160,18 +206,9 @@ export class Tab4Page implements OnInit{
               }else{
                   if(body && body != "[]"){
                       var data = JSON.parse(body);
-                      se.storage.get('objnotication').then(datanoti => {
-                        if (datanoti) {
-                            se.objnotication = datanoti;
-                        }
-                        if (se.objnotication && se.objnotication.length > 0) {
-                            for (let i = 0; i < se.objnotication.length; i++) {
-                                const element = se.objnotication[i];
-                                data.push(element);
-                            }
-                        }
-                        se.loadDataNotify(data);
-                      })
+                      
+                    se.loadDataNotify(data);
+              
                     //   if (se.objnotication && se.objnotication.length > 0) {
                     //     for (let i = 0; i < se.objnotication.length; i++) {
                     //         const element = se.objnotication[i];
@@ -227,6 +264,14 @@ export class Tab4Page implements OnInit{
             element.date = moment(element.created).format('DD/MM/YYYY');
           }
           element.deleted = false;
+          if (this.listStatus && this.listStatus.length>0) {
+            if(!se.checkItemInArray(element.id)){
+              element.status=0
+            }else{
+              element.status=1
+            }
+          }
+        
           if(se.items.length >0){
             if(!se.gf.checkExistsItemInArray(se.items,element,'trip')){
               se.items.push(element)
@@ -249,7 +294,18 @@ export class Tab4Page implements OnInit{
       se.loaddatadone = true;
     })
   }
-
+  checkItemInArray(id){
+    
+    var co=false;
+    for (let i = 0; i < this.listStatus.length; i++) {
+      const element = this.listStatus[i];
+      if (element==id) {
+        co= true;
+        break;
+      }
+    }
+    return co;
+  }
   addUpdateLasterVersionNotify(){
     var se = this;
     let itemNew = {
@@ -301,7 +357,12 @@ export class Tab4Page implements OnInit{
             
             //update status xuống db
             se.valueGlobal.countNotifi--;
-            se.callUpdateStatus(element);
+            if (element.memberId=='alluser') {
+              se.callUpdateStatusProduct(element);
+            }else{
+              se.callUpdateStatus(element);
+            }
+            
           }
           if (se.searchhotel.gbitem) {
             se.searchhotel.gbitem.hotelId="";
@@ -418,6 +479,37 @@ export class Tab4Page implements OnInit{
                 "title": item.title,
                 "message": item.message,
                 "status": 1
+              },
+              json: true,
+              };
+              request(options, function (error, response, body) {
+              if (error) {
+                  error.page = "inbox";
+                  error.func = "loadUserNotification";
+                  error.param =  JSON.stringify(options);
+                  C.writeErrorLog(error,response);
+              }
+              });
+          }
+      })
+  }
+  callUpdateStatusProduct(item){
+    var se = this;
+      se.storage.get('auth_token').then(auth_token => {
+          if (auth_token) {
+              var text = "Bearer " + auth_token;
+              var options = {
+              method: 'POST',
+              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/UpdateStatusNotification',
+              timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+              headers:
+              {
+                  'cache-control': 'no-cache',
+                  'content-type': 'application/json',
+                  authorization: text
+              },
+              body: {
+                "Id": item.id
               },
               json: true,
               };

@@ -137,12 +137,11 @@
   font-size: 14px;
   color: #38383d;
   margin-left: 4px;
+
 }
 .noti-text-time{
   font-size: 12px;
-  color: #868998;
-  position: absolute;
-  right: 32px;
+  color: #3f3b3b;
 }
 .div-detail{
   height: 154px;
@@ -153,14 +152,13 @@
   height: 16px;
 }
 .cls-border{
-  height: 2px;
-  background-color: #ecf0f5;
+  height: 1px;
+  background-color: #ccc;
   margin-top: 4px;
   margin-bottom: 8px;
 }
 .noti-text-title{
   font-size: 16px;
-  font-weight: 600;
   line-height: 1.2;
   color: #3f3b3b;
 }
@@ -177,12 +175,32 @@
   height: auto;
   display: -webkit-box;
   /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+
+}
+.img-empty{
+  padding-bottom: 24px;
 }
 .btn-Product{
   position: absolute;
   right: 16px;
 }
+
 .div-33{
   width: 33%;
 }
-
+.cls-dot{
+  width: 10px;
+  height: 10px;
+  background-color: #26bed6;
+  border-radius: 6px;
+  margin-top: 2px;
+  margin-right: 6px;;
+}
+.d-flex{
+  display: flex;
+    position: absolute;
+    right: 32px;
+}
+.text-bold{
+  font-weight: bold;
+}
