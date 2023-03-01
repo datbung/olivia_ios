@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController, LoadingController, Platform } from '@ionic/angular';
-import { Booking, RoomInfo } from '../providers/book-service';
+import { Booking, RoomInfo, SearchHotel } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
@@ -31,7 +31,8 @@ export class CombocarbankPage implements OnInit {
     public navCtrl: NavController, public booking: Booking, public loadingCtrl: LoadingController, public bookCombo: Bookcombo,
     public gf: GlobalFunction,
     private fb: Facebook,
-    public activityService: ActivityService) {
+    public activityService: ActivityService,
+    public searchhotel: SearchHotel) {
     this.listcars = this.gf.getParams('carscombo');
     this.hoten=this.Roomif.hoten;
     this.phone=this.Roomif.phone
@@ -69,7 +70,8 @@ export class CombocarbankPage implements OnInit {
         this.jti = jti;
       }
     })
-    gf.googleAnalytion('roompaymentbank', 'load', '');
+    //gf.googleAnalytion('roompaymentbank', 'load', '');
+    this.gf.logEventFirebase('banktransfer',this.searchhotel, 'combocarbank', 'add_payment_info', 'Combo');
   }
   ngOnInit() {
   }

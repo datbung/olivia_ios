@@ -131,30 +131,33 @@ export class CombopaymentPage implements OnInit {
           }
         });
     //google analytic
-    gf.googleAnalytion('roompaymentselect', 'load', '');
+   // gf.googleAnalytion('roompaymentselect', 'load', '');
 
   }
   ngOnInit() {
     
   }
   roompaymentbank() {
+    this.searchhotel.paymentType = 'banktransfer';
     clearInterval(this.Roomif.setInter);
     this.clearClonePage('page-roompaymentbank');
     this.navCtrl.navigateForward("/combocarbank");
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect', 'roompaymentbankselect', '');
+    //this.gf.googleAnalytion('roompaymentselect', 'roompaymentbankselect', '');
   }
   roompaymentlive() {
+    this.searchhotel.paymentType = 'office';
     clearInterval(this.Roomif.setInter);
     this.clearClonePage('page-roompaymentlive');
     this.navCtrl.navigateForward("/combocarlive");
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect', 'roompaymentliveselect', '');
+    //this.gf.googleAnalytion('roompaymentselect', 'roompaymentliveselect', '');
   }
   roompaymentatm() {
+    this.searchhotel.paymentType = 'atm';
     this.navCtrl.navigateForward("/combochoosebank")
     //google analytic
-    this.gf.googleAnalytion('combopayment', 'combopayment', '');
+    //this.gf.googleAnalytion('combopayment', 'combopayment', '');
   }
   roompaymentvisa() {
     if (this.arrbankrmb.length==0) {
@@ -163,6 +166,8 @@ export class CombopaymentPage implements OnInit {
   }
   postapibook(paymentType) {
     var se = this;
+    se.searchhotel.paymentType = paymentType;
+    se.gf.logEventFirebase(paymentType,se.searchhotel, 'combopayment', 'add_payment_info', 'Combo');
     var options = {
       method: 'POST',
       url: C.urls.baseUrl.urlMobile + '/booking',

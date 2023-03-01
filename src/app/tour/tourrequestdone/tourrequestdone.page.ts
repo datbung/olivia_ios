@@ -37,8 +37,8 @@ export class TourRequestDonePage implements OnInit {
 
   async ionViewWillEnter() {
     let se = this;
-    se.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'tour', start_date: se.tourService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.tourService.itemSearchDestination ? this.tourService.itemSearchDestination.Name || this.tourService.itemSearchDestination.RegionCode : '', destination: se.tourService.itemDetail.Destinations, value: se.tourService.tourTotal, currency: "VND" });
-
+    //se.gf.googleAnalytionCustom('purchase', { item_category: 'tour', start_date: se.tourService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.tourService.itemSearchDestination ? this.tourService.itemSearchDestination.Name || this.tourService.itemSearchDestination.RegionCode : '', destination: se.tourService.itemDetail.Destinations, value: se.tourService.tourTotal, currency: "VND" });
+    se.gf.logEventFirebase(se.tourService.gaPaymentType,se.tourService, 'tourrequestdone', 'purchase', 'Tours');
   }
 
   next() {

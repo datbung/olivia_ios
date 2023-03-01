@@ -1,5 +1,5 @@
 
-import { Booking } from '../providers/book-service';
+import { Booking, SearchHotel } from '../providers/book-service';
 import { Component,  NgZone, OnInit } from '@angular/core';
 import {  NavController, ToastController,LoadingController,Platform ,AlertController, ModalController} from '@ionic/angular';
 import { RoomInfo,Bookcombo } from '../providers/book-service';
@@ -51,7 +51,8 @@ export class RoomadddetailsPage implements OnInit {
     public booking: Booking, public gf: GlobalFunction,
     public keyboard: Keyboard,
     public activityService: ActivityService,public alertCtrl: AlertController,
-    public modalCtrl: ModalController) {
+    public modalCtrl: ModalController,
+    public searchhotel: SearchHotel) {
     this.ischeckpayment = Roomif.ischeckpayment;
     this.storage.get('email').then(email => {
       if(email){
@@ -233,7 +234,8 @@ export class RoomadddetailsPage implements OnInit {
   next() {
     this.checkchangeemail=false;
     this.Roomif.notetotal = "";
-    this.gf.googleAnalytion('roomadddetails', 'add_payment_info', '');
+    //this.gf.googleAnalytion('roomadddetails', 'add_payment_info', '');
+    this.gf.logEventFirebase('',this.searchhotel, 'roomadddetails', 'add_shipping_info', 'Hotels');
     if (this.hoten) {
       this.hoten = this.hoten.trim();
       var checktext=this.hasWhiteSpace(this.hoten);
@@ -876,7 +878,7 @@ export class RoomadddetailsPage implements OnInit {
                 let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + priceBooking + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
                 se.gf.CreateUrl(url);
               }
-
+              se.gf.logEventFirebase('On request',se.searchhotel, 'roomadddetails', 'add_payment_info', 'Hotels');
             se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + se.Roomif.payment);
             se.loader.dismiss();
             //se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)

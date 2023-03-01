@@ -35,7 +35,8 @@ export class RoomchoosebankPage implements OnInit{
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,private safariViewController: SafariViewController,private activatedRoute: ActivatedRoute,public activityService: ActivityService) {
    
     //google analytic
-    gf.googleAnalytion('roomchoosebank', 'load', '');
+    //gf.googleAnalytion('roomchoosebank', 'load', '');
+    this.gf.logEventFirebase('atm',this.searchhotel, 'roompaymentatm', 'add_payment_info', 'Hotels');
   }
   ngOnInit() {
     this.stt = this.activatedRoute.snapshot.paramMap.get('stt');

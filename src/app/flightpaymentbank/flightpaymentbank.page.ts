@@ -643,6 +643,7 @@ export class FlightpaymentbankPage implements OnInit {
                       se._voucherService.selectVoucher = null;
                     },300)
                     }
+                    se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);
                         resolve(data.success);
@@ -681,6 +682,7 @@ export class FlightpaymentbankPage implements OnInit {
                   }
                   //se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
                   se.activityService.qrcodepaymentfrom = 1;
+                  se._flightService.itemFlightCache.paymentType = 'banktransfer';
                   se.navCtrl.navigateForward('/paymentqrcode');
             }else{//hold vé thất bại về trang tìm kiếm
               se.gf.hideLoading();

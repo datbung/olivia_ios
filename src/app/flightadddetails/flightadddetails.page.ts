@@ -143,7 +143,7 @@ export class FlightadddetailsPage implements OnInit {
             let se = this;
             let item = se._flightService.itemFlightCache;
 
-            se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
+            //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
 
             se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'flight','fb_content_id': item.fromPlaceCode +"_"+item.toPlaceCode +"_"+item.flightNumber, 'fb_value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'fb_currency': 'VND' ,
             'origin_airport' : se._flightService.itemFlightCache.departCode  ,
@@ -151,6 +151,9 @@ export class FlightadddetailsPage implements OnInit {
             'departing_departure_date': se._flightService.itemFlightCache.checkInDate ,'returning_departure_date ': se._flightService.itemFlightCache.checkOutDate,'num_adults': se._flightService.itemFlightCache.adult,'num_children': se._flightService.itemFlightCache.child ? se._flightService.itemFlightCache.child : 0,'num_infants': se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0
             , 'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': 'VND'  }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
          
+            let itemcache = se._flightService.itemFlightCache;
+            //se.gf.gaSetScreenName('flightadddetails');
+            se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
     }
 

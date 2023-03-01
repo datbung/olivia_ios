@@ -55,6 +55,7 @@ export class TourDepartureCalendarPage implements OnInit{
       }
        this.calculatePrice(0);
        this.GetUserInfo();
+       
     }
   
   ngOnInit() {

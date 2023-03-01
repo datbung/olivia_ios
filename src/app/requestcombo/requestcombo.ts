@@ -53,7 +53,7 @@ export class RequestComboPage implements OnInit{
       public searchhotel: SearchHotel, public valueGlobal: ValueGlobal,private renderer:Renderer,public navCtrl: NavController,
       public gf: GlobalFunction,
       private fb: Facebook) {
-          
+        this.gf.gaSetScreenName('requestcomboflight');
     }
 
     ngOnInit(){
@@ -111,9 +111,12 @@ export class RequestComboPage implements OnInit{
        se.hasDepatureFromCanTho = true;
      }
      //google analytic
-     var priceshow:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? Number(se.bookCombo.ComboDetail.comboDetail.totalPriceSale.toString().replace(/\./g, '').replace(/\,/g, '')) : se.gf.convertNumberToFloat(se.bookCombo.ComboRoomPrice);
-     se.gf.googleAnalytionCustom('add_to_cart',{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout, value: priceshow ,currency: "VND"});
-
+     se.bookCombo.location = se.location;
+     se.searchhotel.gaComboId = se.bookCombo.HotelCode;
+     var priceshow:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? se.gf.convertNumberToString(se.bookCombo.ComboDetail.comboDetail.totalPriceSale) : se.gf.convertNumberToString(se.bookCombo.ComboRoomPrice);
+     se.searchhotel.totalPrice = priceshow;
+      se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'begin_checkout', 'Combo');
+      
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.bookCombo.HotelCode,'fb_num_items': 1, 'fb_value': se.gf.convertNumberToDouble(priceshow) ,  'fb_currency': 'VND' , 
       'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
       'value': se.gf.convertNumberToDouble(priceshow) ,  'currency': 'VND'  }, se.gf.convertNumberToFloat(priceshow) );
@@ -185,6 +188,29 @@ export class RequestComboPage implements OnInit{
     }
     postapi()
     {
+      let se = this;
+       //Validate số điện thoại
+       if(this.mobile.length >0 && !this.filterPhone(this.mobile)){
+        this.mobilevalidate = false;
+        this.setInputFocus("cusMobile");
+        return;
+      }else if(this.filterPhone(this.mobile)){
+        this.mobilevalidate= true;
+      }
+      //Validate email
+      if(!this.filterEmail(this.usermail)){
+        this.emailvalidate = false;
+        this.setInputFocus("cusEmail");
+        return;
+      }else if(this.filterEmail(this.usermail)){
+        this.emailvalidate = true;
+      }
+
+      let priceshow = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? se.gf.convertNumberToString(se.bookCombo.ComboDetail.comboDetail.totalPriceSale) : se.gf.convertNumberToString((se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice : 0));
+        se.searchhotel.totalPrice = priceshow;
+        se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'add_shipping_info', 'Combo');
+        se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'add_payment_info', 'Combo');
+
         //Gửi yêu cầu
         var options;
         var form = "";
@@ -252,23 +278,7 @@ export class RequestComboPage implements OnInit{
         headers:{'content-type':  'application/x-www-form-urlencoded; charset=UTF-8'},
         form
         };
-        //Validate số điện thoại
-        if(this.mobile.length >0 && !this.filterPhone(this.mobile)){
-          this.mobilevalidate = false;
-          this.setInputFocus("cusMobile");
-          return;
-        }else if(this.filterPhone(this.mobile)){
-          this.mobilevalidate= true;
-        }
-        //Validate email
-        if(!this.filterEmail(this.usermail)){
-          this.emailvalidate = false;
-          this.setInputFocus("cusEmail");
-          return;
-        }else if(this.filterEmail(this.usermail)){
-          this.emailvalidate = true;
-        }
-        var se = this;
+       
         request(options, function (error, response, body) {
           if(response.statusCode != 200){
             var objError ={
@@ -289,9 +299,12 @@ export class RequestComboPage implements OnInit{
           }else{
             var data = JSON.parse(body);
             if(data.success){
-              let priceshow = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? Number(se.bookCombo.ComboDetail.comboDetail.totalPriceSale.toString().replace(/\./g, '').replace(/\,/g, '')) : (se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice.toString().replace(/\./g, '').replace(/\,/g, '') : 0);
-              let pricecurrency:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? Number(se.bookCombo.ComboDetail.comboDetail.totalPriceSale.toString().replace(/\./g, ',')) : (se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice.toString().replace(/\./g, ',') : 0);
-              se.gf.googleAnalytionCustom('purchase',{items: [{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.bookCombo.ComboDetail ? se.bookCombo.ComboDetail.arrivalCode : '' }], value: se.gf.convertNumberToDouble(priceshow) ,currency: "VND"});
+              let priceshow = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? se.gf.convertNumberToString(se.bookCombo.ComboDetail.comboDetail.totalPriceSale) : se.gf.convertNumberToString((se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice : 0));
+              let pricecurrency:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? se.gf.convertNumberToString(se.bookCombo.ComboDetail.comboDetail.totalPriceSale) : se.gf.convertNumberToString((se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice : 0));
+              //se.gf.googleAnalytionCustom('purchase',{items: [{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.bookCombo.ComboDetail ? se.bookCombo.ComboDetail.arrivalCode : '' }], value: se.gf.convertNumberToDouble(priceshow) ,currency: "VND"});
+
+               se.searchhotel.totalPrice = priceshow;
+               se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'purchase', 'Combo');
 
               se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel'  ,'fb_content_id': se.bookCombo.HotelCode,'fb_num_items': 1, 'fb_value': se.gf.convertNumberToDouble(priceshow) ,  'fb_currency': 'VND' , 
               'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),

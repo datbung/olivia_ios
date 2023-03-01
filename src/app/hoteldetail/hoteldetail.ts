@@ -400,6 +400,7 @@ export class HotelDetailPage implements OnInit {
           this.HotelID = this.activeRoute.snapshot.paramMap.get('id');
         }
       }
+      this.searchhotel.gaHotelId = this.HotelID;
       this.checkBODdone = false;
       this.hasComboRoom = false;
       //this.ischeck = false;
@@ -533,6 +534,7 @@ export class HotelDetailPage implements OnInit {
       this.loadHotelImageReviews();
       this.isLoadingData = false;
     
+      
   }
 
   loadTopSale24h(id){
@@ -1141,7 +1143,11 @@ export class HotelDetailPage implements OnInit {
          
           se.lengthslide = se.slideData.length;
           se.name = jsondata.Name;
+          se.searchhotel.gaHotelDetail = {...jsondata};
+          se.searchhotel.gaHotelDetail.RatingValue = se.searchhotel.gaHotelDetail.Rating/10;
+          se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
           se.json = jsondata.Rating;
+          
           se.AvgPoint = jsondata.AvgPoint;
           if(se.AvgPoint && se.AvgPoint.toString().length == 1){
             se.AvgPoint = se.AvgPoint + ".0";
@@ -1363,8 +1369,8 @@ export class HotelDetailPage implements OnInit {
           setTimeout(()=>{
             se.clearBlurEffect();
           },500)
-
-        
+          
+          
   }
 
   checkPriceHotelDetail(): Promise<boolean>{

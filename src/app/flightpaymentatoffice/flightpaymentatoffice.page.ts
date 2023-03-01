@@ -89,6 +89,7 @@ export class FlightpaymentatofficePage implements OnInit{
               if(se._flightService.itemFlightCache.objHotelCitySelected){
               }
               se.gf.hideLoading();
+              se._flightService.itemFlightCache.paymentType = 'office';
               se.navCtrl.navigateForward('flightpaymentdone/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
             }else{//hold vé thất bại về trang tìm kiếm
               se.gf.hideLoading();
@@ -123,6 +124,7 @@ export class FlightpaymentatofficePage implements OnInit{
                     }
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);
+                    se.gf.logEventFirebase('office', se._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
                     if(data.PeriodPaymentDate && data.PeriodPaymentDate.indexOf('/') != -1){
                       let _pd = data.PeriodPaymentDate.replace('/Date(','').replace(')/','')*1;
                       se._flightService.itemFlightCache.periodPaymentDate = new Date(_pd);

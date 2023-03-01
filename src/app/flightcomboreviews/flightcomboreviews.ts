@@ -231,6 +231,8 @@ export class FlightComboReviewsPage implements OnInit{
       this.breakfast = this.bookCombo.MealTypeName;
       this.value.flagreview = 1;
       this.titlecombo = this.bookCombo.ComboTitle;
+      this.searchhotel.gaComboName = this.bookCombo.ComboTitle;
+      
       this.hotelcode = this.bookCombo.HotelCode;
       this.objInsurranceFee = this.bookCombo.objInsurranceFee;
       this.hasInsurrance = this.bookCombo.hasInsurrance;
@@ -257,6 +259,7 @@ export class FlightComboReviewsPage implements OnInit{
             this.bookcombodetail = cb;
         }
       }
+      this.searchhotel.gaComboId = this.bookcombodetail.comboId;
       this.totalPriceSale = cb.totalPriceSale;
       this.departTicketSale = cb.departTicketSale;
       this.returnTicketSale = cb.returnTicketSale;
@@ -1662,6 +1665,7 @@ export class FlightComboReviewsPage implements OnInit{
       this.bookCombo.discountpromo = 0;
       this.promocode = "";
     }
+    this.searchhotel.gaDiscountPromo = this.bookCombo.discountpromo;
     // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
     //   this.bookCombo.discountpromo= this._voucherService.selectVoucher.rewardsItem.price;
     //   this.promocode = this._voucherService.selectVoucher.code;
@@ -1681,8 +1685,9 @@ export class FlightComboReviewsPage implements OnInit{
               MealTypeCode: this.bookCombo.MealTypeCode,
               AdultCombo: this.adultCombo
             }
-
-            this.gf.googleAnalytionCustom('add_to_cart', { item_category: 'flightcombo', item_name: this.bookCombo.ComboTitle, item_id: this.bookCombo.HotelCode, start_date: this.cin, end_date: this.cout, origin: this.bookCombo.ComboDetail.departureCode, destination: this.bookCombo.arrivalCode, value: Number(this.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
+            this.searchhotel.totalPrice = total;
+            this.gf.logEventFirebase('',this.searchhotel, 'flightcomboreview', 'begin_checkout', 'Combo');
+            //this.gf.googleAnalytionCustom('add_to_cart', { item_category: 'flightcombo', item_name: this.bookCombo.ComboTitle, item_id: this.bookCombo.HotelCode, start_date: this.cin, end_date: this.cout, origin: this.bookCombo.ComboDetail.departureCode, destination: this.bookCombo.arrivalCode, value: Number(this.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
 
             this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': this.bookCombo.HotelCode,'fb_num_items': 1, 'fb_value': this.gf.convertNumberToDouble(this.PriceAvgPlusTAStr) ,  'fb_currency': 'VND' ,
             'checkin_date': this.cin ,'checkout_date ': this.cout,'num_adults': this.searchhotel.adult,'num_children': (this.searchhotel.child ? this.searchhotel.child : 0),'value': this.gf.convertNumberToDouble(this.PriceAvgPlusTAStr) ,  'currency': 'VND' }, this.gf.convertNumberToFloat(this.PriceAvgPlusTAStr) );

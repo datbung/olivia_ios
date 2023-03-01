@@ -38,7 +38,8 @@ export class FlightcombochosebankPage implements OnInit {
       }
     })
     //google analytic
-    gf.googleAnalytion('roomchoosebank', 'load', '');
+    //gf.googleAnalytion('roomchoosebank', 'load', '');
+    
   }
   ngOnInit() {
   }
@@ -64,6 +65,7 @@ export class FlightcombochosebankPage implements OnInit {
 
   openWebpage(url: string) {
     var se=this;
+    se.gf.logEventFirebase('atm',se.searchhotel, 'flightcomboatm', 'add_payment_info', 'Combo');
     this.safariViewController.isAvailable()
   .then((available: boolean) => {
       if (available) {

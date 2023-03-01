@@ -1,4 +1,4 @@
-import { RoomInfo } from '../providers/book-service';
+import { RoomInfo, SearchHotel } from '../providers/book-service';
 import { GlobalFunction } from './../providers/globalfunction';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +15,8 @@ export class RoompaymentpayooPage implements OnInit {
   bookingCode;stt;text;qrimg;BillingCode;PeriodPaymentDate
   intervalID: NodeJS.Timeout;priceshow;PriceAvgPlusTAStr;roomtype;sttbooking;payment
   constructor(private navCtrl:NavController, public gf: GlobalFunction,
-    private activatedRoute: ActivatedRoute,private Roomif:RoomInfo) { }
+    private activatedRoute: ActivatedRoute,private Roomif:RoomInfo,
+    public searchhotel: SearchHotel) { }
 
   ngOnInit() {
     this.bookingCode = this.activatedRoute.snapshot.paramMap.get('code');
@@ -43,6 +44,7 @@ export class RoompaymentpayooPage implements OnInit {
       }, 60000 * 15);
     }
     this.PeriodPaymentDate=moment(this.Roomif.PeriodPaymentDate).format('HH:mm DD/MM/YYYY');
+    this.gf.logEventFirebase('payoo',this.searchhotel, 'roompaymentpayoo', 'add_payment_info', 'Hotels');
   }
   goback()
   {

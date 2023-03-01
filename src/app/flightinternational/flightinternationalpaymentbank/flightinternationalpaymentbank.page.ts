@@ -609,7 +609,8 @@ export class FlightInternationalPaymentBankPage implements OnInit {
     se.gf.showLoading();
       se.callBuildLink().then(data => {
         if (data ) {
-          //se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
+          se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_payment_info', 'Flights');
+
           se.gf.hideLoading();
           se._flightService.itemFlightCache.ischeckpayment = 0;
           //se.checkHoldTicket(se._flightService.itemFlightCache);

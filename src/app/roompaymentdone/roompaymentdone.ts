@@ -103,15 +103,15 @@ export class RoompaymentdonePage implements OnInit {
     this.nameroom = this.room[0].ClassName;
     //google analytic
     this.GetUserInfo();
-    //this.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'roompayment', item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1), value: Number(pricestring.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
+    //this.gf.googleAnalytionCustom('purchase', { item_category: 'roompayment', item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1), value: Number(pricestring.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
     
   }
 
   ionViewWillEnter(){
     let se = this;
     let pricestring = se.priceshow ? se.priceshow : se.Roomif.pricepoint;
-    se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate, number_of_rooms: (se.booking.roomNb ? se.booking.roomNb : 1) }], value: se.gf.convertNumberToDouble(pricestring), currency: "VND"});
-    
+    //se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate, number_of_rooms: (se.booking.roomNb ? se.booking.roomNb : 1) }], value: se.gf.convertNumberToDouble(pricestring), currency: "VND"});
+    se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'roompaymentselect-ean', 'purchase', 'Hotels');
     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(pricestring) ,  'fb_currency': 'VND' , 
     'checkin_date': se.booking.CheckInDate ,'checkout_date ': se.booking.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0), 
     'value': se.gf.convertNumberToDouble(pricestring) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(pricestring) );

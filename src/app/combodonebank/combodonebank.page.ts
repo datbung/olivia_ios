@@ -60,11 +60,13 @@ export class CombodonebankPage implements OnInit {
         this._email = e;
       }
     })
-    //this.gf.googleAnalytion('flightcombopayment','ecommerce_purchase',this.bookCombo.titleComboShort+'|'+this.bookCombo.HotelCode+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'|'+this.booking.Adults+'|'+this.booking.Child+'|'+this.priceshow);
-    //this.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'flightcombopayment', item_name: this.bookCombo.ComboTitle, item_id: this.bookCombo.HotelCode, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1), value: Number(this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
-    this.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'flightcombopayment', item_name: this.bookCombo.ComboTitle, item_id: this.bookCombo.HotelCode, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1) }], value: this.gf.convertNumberToDouble(this.priceshow), currency: "VND" });
+    //this.gf.googleAnalytion('flightcombopayment','purchase',this.bookCombo.titleComboShort+'|'+this.bookCombo.HotelCode+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'|'+this.booking.Adults+'|'+this.booking.Child+'|'+this.priceshow);
+    //this.gf.googleAnalytionCustom('purchase', { item_category: 'flightcombopayment', item_name: this.bookCombo.ComboTitle, item_id: this.bookCombo.HotelCode, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1), value: Number(this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
+    //this.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'flightcombopayment', item_name: this.bookCombo.ComboTitle, item_id: this.bookCombo.HotelCode, start_date: moment(this.booking.CheckInDate).format("YYYY-MM-DD"), end_date: moment(this.booking.CheckOutDate).format("YYYY-MM-DD"), number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1) }], value: this.gf.convertNumberToDouble(this.priceshow), currency: "VND" });
   
     let se = this;
+    se.searchhotel.totalPrice = se.priceshow;
+    se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'combodone', 'purchase', 'Combo');
     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel' ,'fb_content_id': se.bookCombo.HotelCode ? se.bookCombo.HotelCode : se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.priceshow) ,  'fb_currency': 'VND' ,
     'checkin_date': se.booking.CheckInDate ,'checkout_date ': se.booking.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0), 'value': se.gf.convertNumberToDouble(se.priceshow) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.priceshow) );
 

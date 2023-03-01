@@ -133,7 +133,7 @@ export class RoompaymentselectPage implements OnInit{
         });
 
     //google analytic
-    gf.googleAnalytion('roompaymentselect','load','');
+    //gf.googleAnalytion('roompaymentselect','load','');
     
   }
   ngOnInit() {
@@ -165,18 +165,22 @@ export class RoompaymentselectPage implements OnInit{
   roompaymentbank() {
     clearInterval(this.Roomif.setInter);
     this.clearClonePage('page-roompaymentbank');
+    this.searchhotel.paymentType = 'banktransfer';
     this.navCtrl.navigateForward("/roompaymentbanknew");
+    
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect','roompaymentbankselect','');
+    //this.gf.googleAnalytion('roompaymentselect','roompaymentbankselect','');
   }
   roompaymentlive() {
     clearInterval(this.Roomif.setInter);
     this.clearClonePage('page-roompaymentlive');
+    this.searchhotel.paymentType = 'office';
     this.navCtrl.navigateForward("/roompaymentlive/0");
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect','roompaymentliveselect','');
+    //this.gf.googleAnalytion('roompaymentselect','roompaymentliveselect','');
   }
   roompaymentatm() {
+    this.searchhotel.paymentType = 'atm';
     this.gf.checkroomInternal(this.booking.HotelId, this.Roomif.RoomId, this.booking.CheckInDate, this.booking.CheckOutDate, this.Roomif.roomnumber).then(data => {
       if (data == 'AL') {
         this.navCtrl.navigateForward("/roomchoosebank/0")
@@ -188,10 +192,11 @@ export class RoompaymentselectPage implements OnInit{
     })
 
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect','roompaymentatmselect','');
+    //this.gf.googleAnalytion('roompaymentselect','roompaymentatmselect','');
   }
   roompaymentvisa() {
     var se = this;
+    se.searchhotel.paymentType = 'visa';
     if (se.booking.CEmail) {
       if (this.arrbankrmb.length==0) {
         this.GeTokensOfMember(1);
@@ -390,11 +395,15 @@ export class RoompaymentselectPage implements OnInit{
 
   CreateBooking(paymentType) {
     var se = this;
+    
     se.presentLoading();
     var paymentMethod=se.gf.funcpaymentMethod(paymentType);
     se.gf.checkroomInternal(this.booking.HotelId, this.Roomif.RoomId, this.booking.CheckInDate, this.booking.CheckOutDate, this.Roomif.roomnumber).then(data => {
       se.ischeckroom=data;
       var totalPrice=se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+      se.searchhotel.totalPrice = totalPrice;
+      se.searchhotel.paymentType = paymentType;
+      se.gf.logEventFirebase(paymentType,this.searchhotel, 'roompaymentselect', 'add_payment_info', 'Hotels');
       // if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed && !se.Roomif.promocode){
       //   totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
       //   se.Roomif.promocode = se._voucherService.selectVoucher.code;
@@ -871,6 +880,7 @@ export class RoompaymentselectPage implements OnInit{
   }
 
   flightbuynowpaylater() {
+    this.searchhotel.paymentType = 'bnpl';
     this.CreateBooking('bnpl');
   }
 

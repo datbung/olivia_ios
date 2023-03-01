@@ -217,10 +217,11 @@ export class FlightSearchResultInternationalPage implements OnInit {
 
 
       //this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);
-      this.gf.googleAnalytionCustom('Searched', {'Origination City' : _flightService.itemFlightCache.departCity ,
-       'Destination City': _flightService.itemFlightCache.returnCity,
-       'Departure Date': _flightService.itemFlightCache.checkInDate ,'Return Date': _flightService.itemFlightCache.checkOutDate,'Number of Passengers': _flightService.itemFlightCache.pax})
+      // this.gf.googleAnalytionCustom('Searched', {'Origination City' : _flightService.itemFlightCache.departCity ,
+      //  'Destination City': _flightService.itemFlightCache.returnCity,
+      //  'Departure Date': _flightService.itemFlightCache.checkInDate ,'Return Date': _flightService.itemFlightCache.checkOutDate,'Number of Passengers': _flightService.itemFlightCache.pax})
       let se = this;
+      se.gf.logEventFirebase(null, se._flightService.itemFlightCache, 'flightsearchresultinternational', 'view_item', 'Flights');
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_SEARCHED, {'fb_content_type': 'flight', 'fb_content_id': se._flightService.itemFlightCache.departCode +"_"+se._flightService.itemFlightCache.returnCode,
       'origin_airport' : se._flightService.itemFlightCache.departCode  ,
       'destination_airport': se._flightService.itemFlightCache.returnCode,
@@ -2509,6 +2510,9 @@ export class FlightSearchResultInternationalPage implements OnInit {
                this._flightService.itemFlightInternational.promotionCode = "";
                this._flightService.itemFlightInternational.discountpromo = 0;
                this._flightService.itemFlightInternational.hasvoucher = null;
+               this._flightService.itemFlightCache.totalPrice = item.fare.price;
+               this.gf.gaSetScreenName('flightsearchresultinternational');
+               this.gf.logEventFirebase('', this._flightService.itemFlightCache, 'flightsearchresultinternational', 'begin_checkout', 'Flights');
                this.navCtrl.navigateForward('/flightadddetailsinternational');
               }else{
                 this.gf.showAlertMessageOnly('Phiên truy cập đã hết hiệu lực. Vui lòng tải lại trang và thử lại.').then(()=>{

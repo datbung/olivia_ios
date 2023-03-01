@@ -147,6 +147,9 @@ export class ComboadddetailsPage implements OnInit {
     this.GetUserInfo();
     //facebook analytic
     let se = this;
+    se.searchhotel.totalPrice = se.listcars.HotelBooking.TotalPrices;
+    se.gf.logEventFirebase('',se.searchhotel, 'comboadddetails', 'add_shipping_info', 'Combo');
+
     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.Bookcombo.HotelCode ? se.Bookcombo.HotelCode : se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.listcars.HotelBooking.TotalPrices) ,  'fb_currency': 'VND' , 
     'checkin_date': se.listcars.HotelBooking.CheckInDate ,'checkout_date ': se.listcars.HotelBooking.CheckOutDate,'num_adults': se.listcars.HotelBooking.Adult,'num_children': (se.listcars.HotelBooking.Child ? se.listcars.HotelBooking.Child : 0), 'value': se.gf.convertNumberToDouble(se.listcars.HotelBooking.TotalPrices) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.listcars.HotelBooking.TotalPrices) );
 

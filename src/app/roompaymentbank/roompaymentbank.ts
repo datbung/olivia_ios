@@ -1,5 +1,5 @@
 
-import { Bookcombo } from './../providers/book-service';
+import { Bookcombo, SearchHotel } from './../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import {  NavController ,LoadingController,Platform, ToastController, AlertController} from '@ionic/angular';
 import { Booking, RoomInfo } from '../providers/book-service';
@@ -46,7 +46,8 @@ export class RoompaymentbankPage implements OnInit{
     public activityService: ActivityService,
     public alertCtrl: AlertController,
     public clipboard: Clipboard,
-    private safariViewController: SafariViewController
+    private safariViewController: SafariViewController,
+    public searchhotel: SearchHotel
     ) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
@@ -79,7 +80,8 @@ export class RoompaymentbankPage implements OnInit{
       this.bookingCode = this.activityService.objPaymentMytrip.trip.booking_id;
       this.isPaymentFromMytrip = true;
     }
-    gf.googleAnalytion('roompaymentbank','load','');
+    //gf.googleAnalytion('roompaymentbank','load','');
+    this.gf.logEventFirebase('banktransfer',this.searchhotel, 'roompaymentbank', 'add_payment_info', 'Hotels');
   }
   ngOnInit() {
   }

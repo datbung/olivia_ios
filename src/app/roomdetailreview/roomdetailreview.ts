@@ -218,11 +218,12 @@ export class RoomdetailreviewPage implements OnInit {
       }
       this.navCtrl.navigateForward('roomadddetails-ean');
     }
-    this.gf.googleAnalytionCustom('add_to_cart',{item_category:'roomdetail' , item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, value: Number(this.booking.cost.replace(/\./g, '').replace(/\,/g, '') ), currency: 'VND'});
+    
+    //this.gf.googleAnalytionCustom('add_to_cart',{item_category:'roomdetail' , item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, value: Number(this.booking.cost.replace(/\./g, '').replace(/\,/g, '') ), currency: 'VND'});
     let se = this;
-    // se.fb.logEvent('Add_To_Cart', {'Origination City' : se.searchhotel.OriginalCity ?se.searchhotel.OriginalCity: se.searchhotel.searchCityName,
-    //       'Destination City': se.bookCombo.arrivalCode ? se.bookCombo.arrivalCode : se.searchhotel.destinationCity,
-    //       'Departure Date': se.searchhotel.CheckInDate ,'Return Date': se.searchhotel.CheckOutDate,'Number of Passengers': se.searchhotel.adult + (se.searchhotel.child ? se.searchhotel.child : 0)} , ((se.bookCombo && se.booking.cost) ? Number(se.booking.cost.toString().replace(/\./g, '').replace(/\,/g, '')) : 0) );
+    se.searchhotel.totalPrice = this.booking.cost;
+    se.gf.logEventFirebase('',this.searchhotel, 'roomdetailreview', 'begin_checkout', 'Hotels');
+   
     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.booking.cost) ,  'fb_currency': 'VND' , 
     'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
     'value': se.gf.convertNumberToDouble(se.booking.cost) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.booking.cost) );

@@ -266,6 +266,7 @@ export class FlightPaymentSelectPage implements OnInit {
       })
   }
 
+  
 
   
   
@@ -275,6 +276,8 @@ export class FlightPaymentSelectPage implements OnInit {
       return;
     }
     this.presentLoading();
+    
+    this._flightService.itemFlightCache.paymentType = 'banktransfer';
     this.checkAllowRepay().then((check) => {
       if(check){
         clearInterval(this.intervalID);
@@ -301,6 +304,7 @@ export class FlightPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'atm';
     this.presentLoading();
     this.checkAllowRepay().then((check) => {
       if(check){
@@ -323,10 +327,13 @@ export class FlightPaymentSelectPage implements OnInit {
         }
       })
   }
+
+
   flightpaymentvisa() {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'visa';
     this.presentLoading();
     this.checkAllowRepay().then((check) => {
       if(check){
@@ -348,6 +355,7 @@ export class FlightPaymentSelectPage implements OnInit {
   }
   openWebpage(url: string) {
     var se = this;
+    se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
     se.safariViewController.isAvailable()
     .then((available: boolean) => {
         if (available) {
@@ -493,6 +501,7 @@ export class FlightPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'momo';
     this.presentLoading();
     this.checkAllowRepay().then((check) => {
       if(check){
@@ -552,6 +561,7 @@ export class FlightPaymentSelectPage implements OnInit {
                         this.zone.run(()=>{
                           this.setinterval(null);
                         })
+                        
                       }else{
                         this.hideLoading();
                         this.gf.showAlertOutOfTicket(this._flightService.itemFlightCache, 2);
@@ -772,6 +782,7 @@ export class FlightPaymentSelectPage implements OnInit {
                         se._flightService.itemFlightCache.ischeckpayment = 1;
                         se.openWebpage(data.returnUrl);
                         se.setinterval(null);
+                        
                     }else{
                       se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
                       se.hideLoading();
@@ -809,6 +820,7 @@ export class FlightPaymentSelectPage implements OnInit {
     if(this.blockPaylate){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'payoo';
     this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
       if(check){
           this.presentLoading();
@@ -833,6 +845,7 @@ export class FlightPaymentSelectPage implements OnInit {
                         if (this.loader) {
                           this.loader.dismiss();
                         }
+                        
                         this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/0');
                       }else{
                         this.hideLoading();
@@ -857,6 +870,7 @@ export class FlightPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'payoo';
     this.presentLoading();
     this.checkAllowRepay().then((check) => {
       if(check){
@@ -879,6 +893,7 @@ export class FlightPaymentSelectPage implements OnInit {
 
                 this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                 this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;
+                
                 this.navCtrl.navigateForward('flightpaymentpayoo/' + this.bookingCode + '/1');
               }else{
                 this.hideLoading();
@@ -1015,7 +1030,9 @@ export class FlightPaymentSelectPage implements OnInit {
       if(this.blockPaylate){
         return;
       }
+      this._flightService.itemFlightCache.paymentType = 'office';
       this.gf.showLoading();
+      
       this.navCtrl.navigateForward('/flightpaymentatoffice');
     }
 
@@ -1265,6 +1282,8 @@ export class FlightPaymentSelectPage implements OnInit {
     }
 
     flightbuynowpaylater(){
+      this._flightService.itemFlightCache.paymentType = 'bnpl';
+      this.gf.logEventFirebase('bnpl', this._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
       this.gf.showLoading();
       this.checkAllowRepay().then((check)=>{
         if(check){

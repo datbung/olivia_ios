@@ -79,7 +79,7 @@ export class TicketPaymentDonePage implements OnInit {
     // }
     
     // let se = this;
-    // se.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'tour', start_date: se.ticketService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.ticketService.itemSearchDestination ? this.ticketService.itemSearchDestination.Name || this.ticketService.itemSearchDestination.RegionCode : '', destination: se.ticketService.itemDetail.Destinations, value: se.ticketService.tourTotal, currency: "VND" });
+    // se.gf.googleAnalytionCustom('purchase', { item_category: 'tour', start_date: se.ticketService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.ticketService.itemSearchDestination ? this.ticketService.itemSearchDestination.Name || this.ticketService.itemSearchDestination.RegionCode : '', destination: se.ticketService.itemDetail.Destinations, value: se.ticketService.tourTotal, currency: "VND" });
     //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
     //   se.ticketService.promocode = "";
     //   se.ticketService.discountpromo = 0;

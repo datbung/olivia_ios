@@ -76,6 +76,8 @@ export class TourDetailPage {
           this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetTourById?id='+this.tourService.tourDetailId, headers, {}, 'tourDetail', 'init').then((data)=>{
             if(data && data.Status == "Success" && data.Response){
               this.itemDetail = data.Response;
+              this.tourService.gaTourDetail = this.itemDetail;
+              
               if(this.itemDetail && this.itemDetail.Image){
                 let itemmap = this.tourService.listTopSale.filter((item) => item.Id == this.tourService.tourDetailId );
                 if(itemmap && itemmap.length >0){
@@ -136,7 +138,7 @@ export class TourDetailPage {
                           this.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDepartureDate', headers, {TourCode: this.tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures.split(',')},'tourDetail','MercuriusTourDeparture').then((data2)=>{
                             if(data2 && data2.Status == 'Success'){
                             let lstDepartures = JSON.parse(data2.Response);
-                            console.log(lstDepartures);
+                            //console.log(lstDepartures);
 
                             lstDepartures.forEach(element => {
                               let _item = {
@@ -189,6 +191,8 @@ export class TourDetailPage {
                           } else {
                             this.loaddeparturedone = true;
                           }
+
+                          this.gf.logEventFirebase('',this.tourService, 'tourdetail', 'view_item', 'Tours');
                           })
                           this.changeItemHeader(1);
                           //this.gf.RequestApi('POST', C.urls.baseUrl.urlGet+'/du-lich/Ajax/loadCalendarDeparture', headers, {"Tourid": tourService.tourDetailId,"DepartureTime": data1.Response.StrListDepartures}, 'tourDetail','MercuriusTourDeparture')

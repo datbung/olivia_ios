@@ -119,7 +119,11 @@ export class RequestRoomPage implements OnInit{
      }
      //google analytic
      var priceshow:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? Number(se.bookCombo.ComboDetail.comboDetail.totalPriceSale.toString().replace(/\./g, '').replace(/\,/g, '')) : se.gf.convertNumberToFloat(se.bookCombo.ComboRoomPrice);
-     se.gf.googleAnalytionCustom('add_to_cart',{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout, value: priceshow ,currency: "VND"});
+     //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout, value: priceshow ,currency: "VND"});
+     se.bookCombo.location = se.location;
+     se.searchhotel.gaComboId = se.bookCombo.HotelCode;
+     se.searchhotel.totalPrice = priceshow;
+     se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'begin_checkout', 'Combo');
 
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.bookCombo.HotelCode,'fb_num_items': 1, 'fb_value': se.gf.convertNumberToDouble(priceshow) ,  'fb_currency': 'VND' , 
       'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
@@ -196,6 +200,11 @@ export class RequestRoomPage implements OnInit{
       var se =this;
         //Gửi yêu cầu
         //se.sendRequestRoom();
+        let priceshow =  se.booking.cost ? Number( se.booking.cost.toString().replace(/\./g, '').replace(/\,/g, '')) : 0;
+        se.searchhotel.totalPrice = priceshow.toString();
+        se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'add_shipping_info', 'Combo');
+        se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'add_payment_info', 'Combo');
+
         let roomData = [];
         for (let index = 0; index < se.booking.OriginalRoomClass.length; index++) {
           const element = se.booking.OriginalRoomClass[index];
@@ -299,8 +308,8 @@ export class RequestRoomPage implements OnInit{
                   se.modalCtrl.dismiss();
                 },200);
                 let priceshow =  se.booking.cost ? Number( se.booking.cost.toString().replace(/\./g, '').replace(/\,/g, '')) : 0;
-                se.gf.googleAnalytionCustom('purchase',{items: [{item_category:'requestroom' , item_name: se.booking.HotelName, item_id: se.booking.HotelId, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.booking.Address ? se.booking.Address : '' }], value: se.gf.convertStringToNumber(priceshow) ,currency: "VND"});
-  
+                //se.gf.googleAnalytionCustom('purchase',{items: [{item_category:'requestroom' , item_name: se.booking.HotelName, item_id: se.booking.HotelId, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.booking.Address ? se.booking.Address : '' }], value: se.gf.convertStringToNumber(priceshow) ,currency: "VND"});
+                se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'purchase', 'Combo');
                 se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_ADDED_TO_CART, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.HotelId,'fb_num_items': 1, 'fb_value': se.gf.convertStringToNumber(priceshow) ,  'fb_currency': 'VND' , 
                 'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0) }, se.gf.convertStringToNumber(priceshow) );
   

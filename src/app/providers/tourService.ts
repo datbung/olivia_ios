@@ -26,6 +26,8 @@ export class tourService{
   usePointPrice: number;
   itemTicketService: any;
   totalSale: any;
+  gaTourDetail: any;
+  gaPaymentType: string;
   
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);

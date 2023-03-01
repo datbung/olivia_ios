@@ -279,7 +279,7 @@ export class FlightInternationalPaymentChooseBankPage implements OnInit {
         //datapayoo = JSON.parse(datapayoo);
         if(datapayoo.success){
           se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
-
+          se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_payment_info', 'Flights');
           se.openWebpage(datapayoo.returnUrl);
           se.zone.run(()=>{
             se.setinterval(null);

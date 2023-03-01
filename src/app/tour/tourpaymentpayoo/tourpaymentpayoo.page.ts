@@ -64,6 +64,10 @@ export class TourPaymentPayooPage implements OnInit {
     }else{
       this.total = this._tourService.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     }
+
+    this._tourService.gaPaymentType = 'payoo';
+    this._tourService.totalPrice = this.total;
+    this.gf.logEventFirebase(this._tourService.gaPaymentType,this._tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
   }
   goback() {
     if (this.stt == 1) {
