@@ -6414,6 +6414,12 @@ import { normalizeURL } from 'ionic-angular';
             this.gf.hideLoading();
             }
           }
+          goToLogin() {
+            this.navCtrl.navigateForward('/login');
+        }
+        goToRegister() {
+            this.navCtrl.navigateForward('/register');
+        }
         }
 
         

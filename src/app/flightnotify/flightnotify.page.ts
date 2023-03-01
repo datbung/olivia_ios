@@ -43,6 +43,7 @@ export class FlightnotifyPage {
     isOrder = false;
     objnotication : any;
     textnotifyType = "";countNoti
+    listStatus: any;
     constructor(private navCtrl : NavController, private gf : GlobalFunction, public _flightService : flightService, public platform : Platform, private badge : Badge, private storage : Storage, private zone : NgZone, public toastCtrl : ToastController, public valueGlobal : ValueGlobal, private modalCtrl : ModalController, private alertCtrl : AlertController, public activityService : ActivityService,
         public tourService: tourService,public searchhotel: SearchHotel) { // get phone
         this.storage.get('phone').then(data => {
@@ -56,7 +57,7 @@ export class FlightnotifyPage {
                 this.email = e;
             }
         })
-       this.loadUserNotification();
+        this.loadUserNotificationStatus();
        
     }
 
@@ -131,6 +132,13 @@ export class FlightnotifyPage {
                                             element.date = moment(element.created).format('DD/MM/YYYY');
                                         }
                                         element.deleted = false;
+                                        if (se.listStatus && se.listStatus.length>0) {
+                                            if(!se.checkItemInArray(element.id)){
+                                                element.status=0
+                                              }else{
+                                                element.status=1
+                                              }
+                                        }
                                         if (se.items.length > 0) {
                                             if (! se.gf.checkExistsItemInArray(se.items, element, 'trip')) {
                                                 se.items.push(element);
@@ -188,6 +196,17 @@ export class FlightnotifyPage {
                
   
     }
+    checkItemInArray(id){
+        var co=false;
+        for (let i = 0; i < this.listStatus.length; i++) {
+          const element = this.listStatus[i];
+          if (element==id) {
+            co= true;
+            break;
+          }
+        }
+        return co;
+      }
     /**
      * Thực hiện sort theo date
      */
@@ -231,7 +250,11 @@ export class FlightnotifyPage {
                     if (!element.status) {
                         element.status = 1;
                         // update status xuống db
-                        se.callUpdateStatus(element);
+                        if (element.memberId=='alluser') {
+                            se.callUpdateStatusProduct(element);
+                          }else{
+                            se.callUpdateStatus(element);
+                          }
                     }
                     if (se.searchhotel.gbitem) {
                         se.searchhotel.gbitem.hotelId="";
@@ -533,6 +556,37 @@ export class FlightnotifyPage {
             }
         })
     }
+    callUpdateStatusProduct(item){
+        var se = this;
+          se.storage.get('auth_token').then(auth_token => {
+              if (auth_token) {
+                  var text = "Bearer " + auth_token;
+                  var options = {
+                  method: 'POST',
+                  url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/UpdateStatusNotification',
+                  timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+                  headers:
+                  {
+                      'cache-control': 'no-cache',
+                      'content-type': 'application/json',
+                      authorization: text
+                  },
+                  body: {
+                    "Id": item.id
+                  },
+                  json: true,
+                  };
+                  request(options, function (error, response, body) {
+                  if (error) {
+                      error.page = "inbox";
+                      error.func = "loadUserNotification";
+                      error.param =  JSON.stringify(options);
+                      C.writeErrorLog(error,response);
+                  }
+                  });
+              }
+          })
+      }
     /**
      * Hàm xóa thông báo
      */
@@ -718,6 +772,47 @@ export class FlightnotifyPage {
             return item.notifyType == this.textnotifyType
         }).length;
     }
+    loadUserNotificationStatus() {
+        var se = this;
+       
+        se.storage.get('auth_token').then(auth_token => {
+          if (auth_token) {
+              var text = "Bearer " + auth_token;
+              var options = {
+                method: 'GET',
+                url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationStatus',
+                timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+                headers:
+                {
+                    'cache-control': 'no-cache',
+                    'content-type': 'application/json',
+                    authorization: text
+                }
+                };
+                request(options, function (error, response, body) {
+                if (error) {
+                    error.page = "inbox";
+                    error.func = "loadUserNotification";
+                    error.param =  JSON.stringify(options);
+                    C.writeErrorLog(error,response);
+                }else{
+                    if(body && body != "[]"){
+                      se.listStatus = JSON.parse(body);
+                    }
+                }    se.loadUserNotification();
+                });
+          }else{
+            se.zone.run(()=>{
+              se.loadend = true;
+              se.loaddatadone = true;
+              if(se.pageIndex == 1){
+                se.items = [];
+                se.valueGlobal.countNotifi=0;
+              }
+            })
+          }
+        })
+      }
     // funcOther() {
     //     this.isAll = false;
     //     this.isProduct = false;

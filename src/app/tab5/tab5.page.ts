@@ -379,12 +379,7 @@ export class Tab5Page implements OnInit {
 
     }
     goToLogin() {
-        // this.storage.get('auth_token').then(auth_token => {
-        // if (!auth_token) {
-        // this.valueGlobal.logingoback='TabPage';
         this.navCtrl.navigateForward('/login');
-        // }
-        // });
     }
     goToLogout() {
         this.storage.get('auth_token').then(id_token => {
@@ -392,6 +387,9 @@ export class Tab5Page implements OnInit {
                 this.showConfirmLogout('Bạn có chắc chắn muốn đăng xuất?', id_token);
             }
         });
+    }
+    goToRegister() {
+        this.navCtrl.navigateForward('/register');
     }
     /***
      * Gọi tổng đài hỗ trợ

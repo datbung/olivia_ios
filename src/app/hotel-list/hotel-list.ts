@@ -59,6 +59,8 @@ export class HotelListPage implements OnInit{
   private subscription: Subscription;
   _infiniteScroll;
   memberid: any;cindisplayhr = "14/04"; coutdisplayhr = "16/04"; guest = 2; datecin; datecout;ischeckAL=false;
+  MaxPrice=0;
+  MinPrice=10000000;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
@@ -72,6 +74,8 @@ export class HotelListPage implements OnInit{
       this.name =authService.region;
     }
     this.ischeckAL=this.searchhotel.ischeckAL;
+    this.searchhotel.location="";
+    this.searchhotel.hasSortHotelList =  this.searchhotel.chuoi  ||this.searchhotel.facsearch || this.searchhotel.tagIds || this.searchhotel.classIds || this.searchhotel.tagIds || this.searchhotel.ischeckAL; 
       this.loadpricedone = false;
         setTimeout(() => {
           this.loaddata(authService, searchhotel, 0);
@@ -149,11 +153,11 @@ export class HotelListPage implements OnInit{
       this.name =this.authService.region;
       
     }
-    var strurl = C.urls.baseUrl.urlGet + '/hotelslist?regionId=' + id + '&page=' + this.page + '&pageSize=200&version=2' + (this.memberid ? '&memberid='+this.memberid : '');
+    var strurl = C.urls.baseUrl.urlGet + '/hotelslist?regionId=' + id + '&page=' + this.page + '&pageSize=60&version=2' + (this.memberid ? '&memberid='+this.memberid : '');
     if (searchhotel.chuoi) {
       if (searchhotel.minprice) {
-        this.minprice = searchhotel.minprice.replace(/\./g, '').replace(/\,/g, '');
-        this.maxprice = searchhotel.maxprice.replace(/\./g, '').replace(/\,/g, '');
+        this.minprice = searchhotel.minprice
+        this.maxprice = searchhotel.maxprice
         strurl += '&minprice=' + this.minprice;
         strurl += '&maxprice=' + this.maxprice;
       }else{
@@ -245,8 +249,8 @@ export class HotelListPage implements OnInit{
            */
           if (searchhotel.minprice) {
             //PDANH 09/01/2018: Fix lỗi không lấy được minprice,maxprice do lỗi định dạng thập phân ','
-            se.minprice = searchhotel.minprice.replace(/\./g, '').replace(/\,/g, '');
-            se.maxprice = searchhotel.maxprice.replace(/\./g, '').replace(/\,/g, '');
+            se.minprice = searchhotel.minprice
+            se.maxprice = searchhotel.maxprice
             se.hasfilter = true;
           }
           if (searchhotel.review > 0 || searchhotel.star.length > 0) {
@@ -477,7 +481,7 @@ export class HotelListPage implements OnInit{
     var se = this;
     if (id) {
       for (let i = 0; i < se.listHotelPrice.length; i++) {
-        if (id == se.listHotelPrice[i].HotelId) {
+        if (id == se.listHotelPrice[i].GroupId) {
           co = 1;
           break;
         }
@@ -506,24 +510,34 @@ export class HotelListPage implements OnInit{
     var options;
     var form = {
       RoomNumber: se.searchhotel.roomnumber ? se.searchhotel.roomnumber : 1,
-      IsLeadingPrice: '',
       ReferenceClient: '',
       Supplier: 'IVIVU',
       CheckInDate: se.searchhotel.CheckInDate,
       CheckOutDate: se.searchhotel.CheckOutDate,
       CountryID: '',
       CityID: '',
-      NationalityID: '',
-      'RoomsRequest[0][RoomIndex]': '0',
+      NationalityID: 82,
+      'RoomsRequest[0][RoomIndex]': '1',
       'RoomsRequest[0][Adults][value]': se.searchhotel.adult,
       'RoomsRequest[0][Child][value]': se.searchhotel.child,
       StatusMethod: '2',
       'CityCode': se.authService.region,
-      CountryCode: 'VN',
       NoCache: 'false',
       SearchType: '2',
       HotelIds: se.listhotels,
-      HotelIdInternal: se.listhotelIdInternal
+      HotelIdInternal: se.listhotelIdInternal,
+      IsB2B: true,
+      IsSeri: true,
+      IsAgoda: true,
+      IsPackageRate: false,
+      IsPackageRateInternal: false,
+      GetVinHms: 1,
+      GetSMD: 1,
+      IsLeadingPrice: 1,
+      IsFenced: false,
+      HotelID:0,
+      vipCode:'',
+      EANHotelID: 0,
     };
     if (this.searchhotel.arrchild) {
       for (var i = 0; i < this.searchhotel.arrchild.length; i++) {
@@ -605,9 +619,9 @@ export class HotelListPage implements OnInit{
                 se.zone.run(()=>{
                   se.json1.forEach(element => {
                     
-                    if(!se.checkExistsPriceItem(element.HotelId)){
-                      element.MinPriceOTAStr = "";
-                    }
+                    // if(!se.checkExistsPriceItem(element.HotelId)){
+                    //   element.MinPriceOTAStr = "";
+                    // }
                     //Check lại có nằm trong khoảng giá lọc không, nếu ko thì remove khỏi list
                     if(se.minprice && (!se.checkItemPrice(se.jsonhtprice, element)) 
                     && !(se.minprice*1 < se.clearSubFix(element.MinPriceTAStr)*1 && se.clearSubFix(element.MinPriceTAStr)*1 < se.maxprice*1) ){
@@ -746,14 +760,18 @@ export class HotelListPage implements OnInit{
             se.json1[index].HasCheckPrice = true;
             for (let i = 0; i < se.listHotelPrice.length; i++) {
               //Chỉ bind lại giá cho hotel, combo bỏ qua
-              if (se.json1[index] && se.json1[index].HotelId == se.listHotelPrice[i].HotelId) {
-                se.json1[index].MinPriceOTAStr = se.listHotelPrice[i].MinPriceOTAStr;
-                se.json1[index].MinPriceTAStr = se.listHotelPrice[i].MinPriceTAStr;
-                se.json1[index].RoomNameSubString = se.listHotelPrice[i].RoomNameSubString.replace('...','');
-                se.json1[index].PromotionDescription = se.listHotelPrice[i].PromotionDescription;
-                se.json1[index].PromotionDescriptionSubstring = se.listHotelPrice[i].PromotionDescriptionSubstring;
-                se.json1[index].hasPrice = true;
-              }
+             
+                if (se.json1[index] && se.json1[index].HotelId == se.listHotelPrice[i].GroupId) {
+                  se.json1[index].MinPriceOTAStr = se.listHotelPrice[i].MinPriceOTAStr;
+                  se.json1[index].MinPriceTAStr = se.listHotelPrice[i].MinPriceTAStr;
+                  se.json1[index].RoomNameSubString = se.listHotelPrice[i].RoomNameSubString.replace('...','');
+                  se.json1[index].supplier = se.listHotelPrice[i].supplier;
+                  se.json1[index].PromotionDescription = se.listHotelPrice[i].PromotionDescription;
+                  se.json1[index].PromotionDescriptionSubstring = se.listHotelPrice[i].PromotionDescriptionSubstring;
+                  se.json1[index].hasPrice = true;
+                }
+              
+             
             }
         }
     
@@ -1039,7 +1057,7 @@ export class HotelListPage implements OnInit{
   doInfinite(infiniteScroll) {
     this.zone.run(() => {
       if (this.ishide == true) {
-        if (this.co == 0 && this.loadpricedone) {
+        if (this.co == 0 ) {
           this.page = this.page + 1;
           this.loaddata(this.authService, this.searchhotel, 1);
           this._infiniteScroll = infiniteScroll;
@@ -1208,6 +1226,7 @@ export class HotelListPage implements OnInit{
    * PDANH  29/01/2018
    */
   showFilterAndSort() {
+    console.log(this.json1);
     this.presentModal();
     if(this.searchhotel.gbitem){
       if(this.searchhotel.gbitem.regionName){
@@ -1220,6 +1239,25 @@ export class HotelListPage implements OnInit{
         this.authService.regioncode = this.searchhotel.gbitem.regionCode;
       }
     }
+   
+    // for (let i = 0; i < this.json1.length; i++) {
+    //   const element = this.json1[i];
+    //   if (element.DealPrice!=0 && element.HasCheckPrice &&  element.DealPrice>=this.MaxPrice) {
+    //     this.MaxPrice=element.DealPrice;
+    //   }
+    //   if (element.DealPrice!=0 && element.HasCheckPrice &&  element.DealPrice<=this.MinPrice) {
+    //     this.MinPrice=element.DealPrice;
+    //   }
+    //   if (!element.DealPrice && element.MinPriceOTAStr && element.HasCheckPrice &&  Number(element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, ''))<=this.MinPrice) {
+    //     this.MinPrice=element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, '');
+    //   }
+    //   if (!element.DealPrice && element.MinPriceOTAStr && element.HasCheckPrice &&   Number(element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, ''))>=this.MaxPrice) {
+    //     this.MaxPrice=element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, '');
+    //   }
+
+    // }
+    // this.searchhotel.structureLower=this.MinPrice;
+    // this.searchhotel.structureUpper=this.MaxPrice;
   }
   /*** Về trang login
    * PDANH  29/01/2018
@@ -1606,4 +1644,5 @@ export class HotelListPage implements OnInit{
       }
     });
   }
+  
 }

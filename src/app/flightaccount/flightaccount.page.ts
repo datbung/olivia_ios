@@ -288,10 +288,10 @@ export class FlightaccountPage {
      });
     if (this.networkProvider.isOnline()) {
       this.isConnected = true;
-      setTimeout(()=>{
+
         this.loadEmployeeSupport();
         this.GetUserInfo();
-      },100)
+ 
       this.loadUserInfo();
       this.bizTravelService.accountBizTravelChange.emit(1);
     }else{
