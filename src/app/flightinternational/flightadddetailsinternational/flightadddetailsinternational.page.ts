@@ -158,8 +158,8 @@ export class FlightAdddetailsInternationalPage implements OnInit {
 
             let se = this;
             let item = se._flightService.itemFlightCache;
-
-            se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
+            se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_shipping_info', 'Flights');
+            //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
 
             se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'flight','fb_content_id': item.fromPlaceCode +"_"+item.toPlaceCode +"_"+item.flightNumber, 'fb_value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'fb_currency': 'VND' ,
             'origin_airport' : se._flightService.itemFlightCache.departCode  ,

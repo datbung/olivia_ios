@@ -73,31 +73,11 @@ export class RoompaymentdoneeanPage implements OnInit {
         this.checkreview=checkreview;
       }
     })
-    //this.gf.googleAnalytion('payment','ecommerce_purchase',this.booking.code+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'|'+this.booking.Adults+'|'+this.booking.Child+'|'+ this.booking.roomNb+ '|'+this.booking.cost);
-    //this.gf.googleAnalytionCustom('ecommerce_purchase',{item_category:'roompayment-ean' , item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate,number_of_rooms: (this.booking.roomNb ?this.booking.roomNb : 1),value: this.booking.code+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'|'+this.booking.Adults+'|'+this.booking.Child+ '|'+this.booking.cost});
+    //this.gf.googleAnalytion('payment','purchase',this.booking.code+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'|'+this.booking.Adults+'|'+this.booking.Child+'|'+ this.booking.roomNb+ '|'+this.booking.cost);
+    //this.gf.googleAnalytionCustom('purchase',{item_category:'roompayment-ean' , item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate,number_of_rooms: (this.booking.roomNb ?this.booking.roomNb : 1),value: this.booking.code+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'|'+this.booking.Adults+'|'+this.booking.Child+ '|'+this.booking.cost});
  
     this.GetUserInfo();
-    // if(this.activityService.objPaymentMytrip && this.activityService.objPaymentMytrip.textPayment){
-    //   this.textPayment = this.activityService.objPaymentMytrip.textPayment;
-    //   this.textLinkPayment = this.activityService.objPaymentMytrip.textLinkPayment;
-    //   this.urlPayment = this.activityService.objPaymentMytrip.urlPayment;
-    //   this.bankName = this.activityService.objPaymentMytrip.bankName;
-    //   this.bankBranch = this.activityService.objPaymentMytrip.bankBranch;
-    //   this.accountNumber = this.activityService.objPaymentMytrip.accountNumber;
-    //   this.bookingCode = this.activityService.objPaymentMytrip.trip.booking_id;
-    // }
-    //google analytic
-    // if(!(this.activityService.objPaymentMytrip && this.activityService.objPaymentMytrip.trip)){
-    //   var pricestring = this.Roomif.priceshowtt ? this.Roomif.priceshowtt : this.Roomif.pricepoint;
-    //   //this.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'roompayment', item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, number_of_rooms: (this.booking.roomNb ? this.booking.roomNb : 1), value: Number(pricestring.toString().replace(/\./g, '').replace(/\,/g, '')), currency: "VND" });
-    //   this.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate }], value: this.gf.convertNumberToDouble(pricestring), currency: "VND" });
-    // }else{
-    //   if(this.activityService.objPaymentMytrip && this.activityService.objPaymentMytrip.trip && this.activityService.objPaymentMytrip.trip.payment_status == 1)
-    //   this.code = this.activityService.objPaymentMytrip.trip.HotelIdERP;
-    //   this.priceshow = this.activityService.objPaymentMytrip.trip.amount_after_tax.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-    //   this.paymentmytrip = true;
-    //   this.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate }], value: this.gf.convertNumberToDouble(pricestring), currency: "VND" });
-    // }
+    
 
     
   }
@@ -116,7 +96,7 @@ export class RoompaymentdoneeanPage implements OnInit {
       se.CheckOutDate=se.booking.CheckOutDate;
       var pricestring = se.Roomif.priceshowtt ? se.Roomif.priceshowtt : se.Roomif.pricepoint;
       se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate }], value: se.gf.convertNumberToDouble(pricestring), currency: "VND" });
-
+      
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(pricestring) ,  'fb_currency': 'VND' ,  
     'checkin_date': se.booking.CheckInDate ,'checkout_date ': se.booking.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
     'value': se.gf.convertNumberToDouble(pricestring) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(pricestring) );
@@ -136,8 +116,11 @@ export class RoompaymentdoneeanPage implements OnInit {
       this.hoten=this.activityService.objPaymentMytrip.trip.cus_name;
       se.CheckInDate=se.activityService.objPaymentMytrip.trip.start_day;
       se.CheckOutDate=se.activityService.objPaymentMytrip.trip.checkOutDate;
-      se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate }], value: se.gf.convertNumberToDouble(se.priceshow), currency: "VND" });
-
+      //se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate }], value: se.gf.convertNumberToDouble(se.priceshow), currency: "VND" });
+      se.searchhotel.totalPrice = se.activityService.objPaymentMytrip.trip.amount_after_tax;
+      se.searchhotel.hotelName = this.activityService.objPaymentMytrip.trip.hotel_name;
+      se.searchhotel.gaHotelId = se.activityService.objPaymentMytrip.trip.HotelIdERP;
+      se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'roompaymentdone-ean', 'purchase', 'Hotels');
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.priceshow) ,  'fb_currency': 'VND' ,  
       'checkin_date': se.booking.CheckInDate ,'checkout_date ': se.booking.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
       'value': se.gf.convertNumberToDouble(se.priceshow) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.priceshow) );

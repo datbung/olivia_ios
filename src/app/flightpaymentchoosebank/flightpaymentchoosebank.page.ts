@@ -159,6 +159,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
                           se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
                             se._flightService.itemFlightCache.dataSummaryBooking = databkg;
                           })
+                          se._flightService.itemFlightCache.paymentType = 'banktransfer';
                           se.navCtrl.navigateForward('flightpaymentdone/'+se.bookingCode+'/'+se.startDate+'/'+se.endDate);
                     }
                     else//case còn lại không thành công
@@ -256,6 +257,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
           }
           se.hideLoading();
           se.gf.hideLoading();
+          se.gf.logEventFirebase('atm', this._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
         //datapayoo = JSON.parse(datapayoo);
         if(datapayoo.success){
           se._flightService.itemFlightCache.periodPaymentDate = datapayoo.periodPaymentDate;
@@ -322,6 +324,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
             se._flightService.itemFlightCache.dataSummaryBooking = databkg;
           })
           se._flightService.itemFlightCache.ischeckpayment= 1;
+          se._flightService.itemFlightCache.paymentType = 'atm';
           se.navCtrl.navigateForward('flightpaymentdone/'+se.bookingCode+'/'+se.startDate+'/'+se.endDate);
         }
         else if(rs.error){
@@ -503,6 +506,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
             this.getSummaryBooking(this._flightService.itemFlightCache).then((databkg:any) => {
               this._flightService.itemFlightCache.dataSummaryBooking = databkg;
           })
+            this.gf.logEventFirebase('atm', this._flightService.itemFlightCache, 'flightpaymentselect', 'purchase', 'Flights');
             this.navCtrl.navigateForward('flightpaymentdone/'+this.bookingCode+'/'+this.startDate+'/'+this.endDate);
           }
           else if(checkpay.ipnCall == "CALLED_FAIL" || checkpay.ipnCall == "CALLED_TIMEOUT")//hủy
@@ -565,6 +569,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
               window.close();
               se.safariViewController.hide();
               clearInterval(se.intervalID);
+              se._flightService.itemFlightCache.paymentType = 'banktransfer';
               se.navCtrl.navigateForward('flightpaymentdone/'+se.bookingCode+'/'+se.startDate+'/'+se.endDate);
             }else{//hold vé thất bại về trang tìm kiếm
               clearInterval(se.intervalID);

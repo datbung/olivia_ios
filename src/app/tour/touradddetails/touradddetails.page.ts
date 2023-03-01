@@ -335,7 +335,7 @@ export class TourAddDetailsPage implements OnInit {
       this.tourService.usePointPrice = 0;
       this.edit(2);
     })
-    
+    this.gf.logEventFirebase('',this.tourService, 'touradddetails', 'add_shipping_info', 'Tours');
   }
   createObjectBooking(isPaymentDirect) : Promise<any>{
     return new Promise((resolve, reject)=> {
@@ -1110,10 +1110,14 @@ export class TourAddDetailsPage implements OnInit {
                 if(code){
                   se.tourService.tourBookingCode = code;
                   se.createBookingTourTransaction(code);
+                  se.tourService.gaPaymentType = 'Yeu Cau Dat Tour';
+                  se.gf.logEventFirebase('Yeu Cau Dat Tour',se.tourService, 'touradddetails', 'add_payment_info', 'Tours');
                   se.navCtrl.navigateForward('/tourrequestdone');
                 }
               })
             }else{
+              se.tourService.gaPaymentType = 'Yeu Cau Tu Van';
+              se.gf.logEventFirebase('Yeu Cau Tu Van',se.tourService, 'touradddetails', 'add_payment_info', 'Tours');
               se.gf.showLoading();
               let urlApi = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/CreateRequestQuote?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child || 0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}&nightNo=${se.tourService.itemDetail.NightNo}&totalRate=${se.tourService.totalPrice}&act=book&paymentMethod=1&receiverAddress&customerName=${this.hoten}&customerphone=${this.phone}&customeremail=${this._email}&notes=${this.note}&qty=1`;
                   let headers = {

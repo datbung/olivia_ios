@@ -245,6 +245,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       return;
     }
     //this.presentLoading();
+    this._flightService.itemFlightCache.paymentType = 'banktransfer';
     this.navCtrl.navigateForward('flightinternationalpaymentbank');
     // this.checkAllowRepay().then((check) => {
     //   if(check){
@@ -272,6 +273,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'atm';
+    
     this.navCtrl.navigateForward('flightinternationalpaymentchoosebank');
     // this.presentLoading();
     // this.checkAllowRepay().then((check) => {
@@ -317,10 +320,13 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     //       })
     //     }
     //   })
+    this._flightService.itemFlightCache.paymentType = 'visa';
+    
     this.GeTokensOfMember(1);
   }
   openWebpage(url: string) {
     var se = this;
+    se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_payment_info', 'Flights');
     se.safariViewController.isAvailable()
     .then((available: boolean) => {
         if (available) {
@@ -466,6 +472,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'momo';
+    
     this.presentLoading();
     this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 4, "","").then(datatype => {
       if (datatype && datatype.isHoldSuccess) {
@@ -734,6 +742,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     if(this.blockPaylate){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'payoo';
+    
     this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 5, "","").then(datatype => {
       if (datatype && datatype.isHoldSuccess) {
         this.presentLoading();
@@ -769,6 +779,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     if(this.blockPayCard){
       return;
     }
+    this._flightService.itemFlightCache.paymentType = 'payoo';
+    
     this.presentLoading();
     this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 6, "","").then(datatype => {
       if (datatype && datatype.isHoldSuccess) {
@@ -872,6 +884,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       if(this.blockPaylate){
         return;
       }
+      this._flightService.itemFlightCache.paymentType = 'office';
+      
       this.gf.showLoading();
       this.navCtrl.navigateForward('/flightinternationalpaymentatoffice');
     }
@@ -1139,6 +1153,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
 
     flightbuynowpaylater(){
       var se=this;
+      se._flightService.itemFlightCache.paymentType = 'bnpl';
+      se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_payment_info', 'Flights');
       se.presentLoading();
               let itemcache = se._flightService.itemFlightCache;
                   let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=bnpl&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookingCode + '&buyerPhone=' +itemcache.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&BankId=bnpl'+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2&isFlightInt=true';

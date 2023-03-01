@@ -1,7 +1,7 @@
 import { error } from 'util';
 import { Component, NgZone, OnInit } from '@angular/core';
 import {  NavController, LoadingController,Platform } from '@ionic/angular';
-import { Booking, RoomInfo } from '../providers/book-service';
+import { Booking, RoomInfo, SearchHotel } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
@@ -20,7 +20,8 @@ export class FlightcombolivePage implements OnInit {
   public loader:any;listcars;hoten;phone;totalAdult;email
   jti: any;
   constructor(public bookCombo: Bookcombo,public platform: Platform,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,
-    public _voucherService: voucherService) {
+    public _voucherService: voucherService,
+    public searchhotel: SearchHotel) {
     this.text = "<b>Văn phòng tại TP. Hồ Chí Minh:</b> Lầu 2, tòa nhà Saigon Prime, 107-109-111 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh<br />Thời gian làm việc:<br /><ul><li>Thứ 2 - Thứ 7: từ 07h30 đến 21h00</li><li>Chủ Nhật: từ 07h30 đến 20h00</li></ul><br /><b>Văn phòng tại Hà Nội:</b> P.308, Tầng 3, Tòa nhà The One, số 2 Chương Dương Độ, Q.Chương Dương, Q.Hoàn Kiếm, Hà Nội<br />Thời gian làm việc:<br /><ul ><li>Thứ 2 - Thứ 6: từ 07h30 đến 17h30</li></ul>";
     this.listcars = this.gf.getParams('carscombo');
     this.hoten=this.Roomif.hoten;
@@ -37,7 +38,8 @@ export class FlightcombolivePage implements OnInit {
       }
     })
     //google analytic
-    gf.googleAnalytion('roompaymentlive','load','');
+    //gf.googleAnalytion('roompaymentlive','load','');
+    
   }
   ngOnInit() {
   }
@@ -72,6 +74,7 @@ export class FlightcombolivePage implements OnInit {
                     if(se.jti){
                       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
                       se.gf.CreatePayoo(url);
+                      se.gf.logEventFirebase('office',se.searchhotel, 'flightcombolive', 'add_payment_info', 'Combo');
                     }
                     if(se._voucherService.selectVoucher){
                       se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);

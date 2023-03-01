@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import {  NavController, LoadingController,Platform, ToastController, AlertController } from '@ionic/angular';
-import { Booking, RoomInfo,Bookcombo } from '../providers/book-service';
+import { Booking, RoomInfo,Bookcombo, SearchHotel } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
@@ -26,7 +26,8 @@ export class RoompaymentlivePage implements OnInit{
 ; room; jsonroom;loader:any;stt;booking_type
   constructor(public activityService: ActivityService,public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,private activatedRoute: ActivatedRoute,
     public alertCtrl: AlertController,
-    public _voucherService: voucherService) {
+    public _voucherService: voucherService,
+    public searchhotel: SearchHotel) {
    
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -34,7 +35,8 @@ export class RoompaymentlivePage implements OnInit{
       }
     })
     //google analytic
-    gf.googleAnalytion('roompaymentlive','load','');
+    //gf.googleAnalytion('roompaymentlive','load','');
+    this.gf.logEventFirebase('office',this.searchhotel, 'roompaymentlive', 'add_payment_info', 'Hotels');
   }
   ngOnInit() {
     this.stt= this.activatedRoute.snapshot.paramMap.get('stt');

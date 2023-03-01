@@ -44,6 +44,8 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
       // this.getSummaryBooking(this._flightService.itemFlightCache).then((databkg:any) => {
       //   this._flightService.itemFlightCache.dataSummaryBooking = databkg;
       // })    
+      this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_payment_info', 'Flights');
+
     }
 
   ngOnInit() {

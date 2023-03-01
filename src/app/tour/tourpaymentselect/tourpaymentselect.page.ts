@@ -173,16 +173,21 @@ export class TourPaymentSelectPage implements OnInit {
   tourpaymentbank()
   {
     clearInterval(this.intervalID);
+    this.tourService.gaPaymentType = 'banktransfer';
+    this.gf.logEventFirebase(this.tourService.gaPaymentType,this.tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
     this.navCtrl.navigateForward('tourpaymentbank');
   }
   tourpaymentatm()
   {
     clearInterval(this.intervalID);
     this.tourService.paymentType = 1;
+    this.tourService.gaPaymentType = 'atm';
+    this.gf.logEventFirebase(this.tourService.gaPaymentType,this.tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
     this.navCtrl.navigateForward('tourpaymentatm');
   }
   tourpaymentvisa() {
-   
+    this.tourService.gaPaymentType = 'visa';
+    this.gf.logEventFirebase(this.tourService.gaPaymentType,this.tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
     this.presentLoading();
     this.tourService.paymentType = 1;
     this.GeTokensOfMember(1);
@@ -316,6 +321,8 @@ export class TourPaymentSelectPage implements OnInit {
   }
   tourpaymentmomo(){
     this.tourService.paymentType = 1;
+    this.tourService.gaPaymentType = 'momo';
+      this.gf.logEventFirebase(this.tourService.gaPaymentType,this.tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
     this.CreateBooking('momo');
   }
 
@@ -574,7 +581,8 @@ export class TourPaymentSelectPage implements OnInit {
   }
 
     tourpaymentatoffice(){
-      
+      this.tourService.gaPaymentType = 'office';
+      this.gf.logEventFirebase(this.tourService.gaPaymentType,this.tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
       //this.gf.showLoadingwithtimeout();
       this.navCtrl.navigateForward('/tourpaymentatoffice');
     }
@@ -715,6 +723,8 @@ export class TourPaymentSelectPage implements OnInit {
     }
 
     flightbuynowpaylater(){
+      this.tourService.gaPaymentType = 'bnpl';
+      this.gf.logEventFirebase(this.tourService.gaPaymentType,this.tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
       this.createBookingUrl('bnpl', this.tourService.totalPrice);
     }
 }

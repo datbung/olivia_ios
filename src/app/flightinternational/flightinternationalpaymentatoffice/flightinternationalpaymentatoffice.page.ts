@@ -55,6 +55,8 @@ export class FlightInternationalPaymentatOfficePage implements OnInit{
     se.gf.showLoading();
     se.callBuildLink().then(data => {
       if (data) {
+        this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'flightsearchresultinternational', 'add_payment_info', 'Flights');
+
         // se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
         // se._flightService.itemFlightCache.ischeckpayment = 0;
          //Có chọn khách sạn thì gọi thêm updatepayment theo luồng check ks

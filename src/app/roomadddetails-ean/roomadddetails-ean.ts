@@ -1,4 +1,4 @@
-import {RoomInfo, Booking, Bookcombo} from '../providers/book-service';
+import {RoomInfo, Booking, Bookcombo, SearchHotel} from '../providers/book-service';
 import {Component, NgZone, OnInit} from '@angular/core';
 import {
     NavController,
@@ -67,7 +67,8 @@ export class RoomadddetailsEanPage implements OnInit {
     hidepaxhint : boolean = false;
     currentSelectPax : any;
 
-    constructor(public platform : Platform, public navCtrl : NavController, public Roomif : RoomInfo, private toastCtrl : ToastController, public booking : Booking, public bookcombo : Bookcombo, public zone : NgZone, public storage : Storage, public loadingCtrl : LoadingController, public gf : GlobalFunction, public alertCtrl : AlertController, private modalCtrl : ModalController, public activityService : ActivityService) {
+    constructor(public platform : Platform, public navCtrl : NavController, public Roomif : RoomInfo, private toastCtrl : ToastController, public booking : Booking, public bookcombo : Bookcombo, public zone : NgZone, public storage : Storage, public loadingCtrl : LoadingController, public gf : GlobalFunction, public alertCtrl : AlertController, private modalCtrl : ModalController, public activityService : ActivityService,
+        public searchhotel: SearchHotel) {
         this.ischeckpayment = Roomif.ischeckpayment;
         this.roomnumber = Roomif.roomnumber;
         this.note = Roomif.notetotal;
@@ -282,7 +283,8 @@ export class RoomadddetailsEanPage implements OnInit {
         })
         this.GetUserInfo();
         // google analytic
-        this.gf.googleAnalytion('roomadddetails-ean', 'add_payment_info', '');
+        //this.gf.googleAnalytion('roomadddetails-ean', 'add_payment_info', '');
+        this.gf.logEventFirebase('',this.searchhotel, 'roomadddetails-ean', 'add_shipping_info', 'Hotels');
 
         this.storage.get('jti').then(jti => {
             if (jti) {
@@ -1836,8 +1838,10 @@ export class RoomadddetailsEanPage implements OnInit {
                 if (body.error == 0) { // console.log(body.code);
                     var code = body.code;
                     var stt = body.bookingStatus;
+                    se.gf.logEventFirebase('On request',se.searchhotel, 'roomadddetails-ean', 'add_payment_info', 'Hotels');
                     se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
                     se.loader.dismiss();
+                    
                     // se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
                 } else {
                     se.loader.dismiss();

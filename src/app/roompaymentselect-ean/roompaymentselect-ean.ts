@@ -149,26 +149,33 @@ export class RoompaymentselectEanPage implements OnInit{
     // })
   }
   roompaymentbank() {
+    this.searchhotel.paymentType = 'banktransfer';
     clearInterval(this.Roomif.setInter);
     this.clearClonePage('page-roompaymentbank');
     this.navCtrl.navigateForward("/roompaymentbanknew");
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect-ean', 'roompaymentbankselect', '');
+    //this.gf.googleAnalytion('roompaymentselect-ean', 'roompaymentbankselect', '');
+    
   }
   roompaymentlive() {
     clearInterval(this.Roomif.setInter);
+    this.searchhotel.paymentType = 'office';
     this.clearClonePage('page-roompaymentlive');
     this.navCtrl.navigateForward("/roompaymentlive/0");
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect-ean', 'roompaymentliveselect', '');
+    //this.gf.googleAnalytion('roompaymentselect-ean', 'roompaymentliveselect', '');
+    
   }
   roompaymentatm() {
+    this.searchhotel.paymentType = 'atm';
     this.navCtrl.navigateForward("/roomchoosebank/0");
+    
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect-ean', 'roompaymentatmselect', '');
+    //this.gf.googleAnalytion('roompaymentselect-ean', 'roompaymentatmselect', '');
   }
   roompaymentvisa() {
     var se = this;
+    se.searchhotel.paymentType = 'visa';
     if (se.booking.CEmail) {
       if (this.arrbankrmb.length==0) {
         this.GeTokensOfMember(1);
@@ -525,6 +532,9 @@ export class RoompaymentselectEanPage implements OnInit{
   continueBooking(paymentType){
     var se= this;
     var paymentMethod=se.gf.funcpaymentMethod(paymentType);
+    se.searchhotel.totalPrice = se.priceshow;
+    se.searchhotel.paymentType = paymentType;
+    se.gf.logEventFirebase(paymentType,se.searchhotel, 'roompaymentselect-ean', 'add_payment_info', 'Hotels');
     this.CreateBookingRoom(paymentMethod).then(databook => {
       if (databook) {
         if (databook.error == 0) {
@@ -1104,6 +1114,7 @@ export class RoompaymentselectEanPage implements OnInit{
 
   flightbuynowpaylater() {
     this.presentLoading();
+    this.searchhotel.paymentType = 'bnpl';
     this.continueBooking('bnpl');
   }
 

@@ -143,6 +143,7 @@ export class ValueGlobal {
   listhistory: any;
 }
 export class SearchHotel {
+  paymentType: string='';
     recent: Array<ItemBook>;
     minprice: string;
     maxprice: string;
@@ -290,6 +291,13 @@ export class SearchHotel {
   objRecent:any;
   tourDetailName: any;
   trustedVideoUrl: any;
+  gaHotelId: any;
+  gaHotelDetail: any;
+  totalPrice: string;
+  gaComboName: string;
+  gaComboId: any;
+  gaDiscountPromo: any;
+  RatingValue: number;
 }
 export class child {
     text: string;

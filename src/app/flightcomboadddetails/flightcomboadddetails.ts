@@ -237,6 +237,8 @@ export class FlightComboAddDetailsPage implements OnInit {
       // })
       this.GetUserInfo();
       let se = this;
+      se.searchhotel.totalPrice = se.PriceAvgPlusTAStr;
+      se.gf.logEventFirebase('',se.searchhotel, 'flightcomboadddetails', 'add_shipping_info', 'Combo');
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.bookcombo.HotelCode ? se.bookcombo.HotelCode : se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.PriceAvgPlusTAStr) ,  'fb_currency': 'VND' ,
       'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0), 'price':  se.PriceAvgPlusTAStr, 'value': se.gf.convertNumberToDouble(se.PriceAvgPlusTAStr) ,  'currency': 'VND'  }, se.gf.convertNumberToFloat(se.PriceAvgPlusTAStr) );
 

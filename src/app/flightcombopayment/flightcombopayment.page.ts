@@ -161,15 +161,20 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     // })
   }
   roompaymentbank() {
+    this.searchhotel.paymentType = 'banktransfer';
     this.navCtrl.navigateForward("/flightcombobank");
     //google analytic
-    this.gf.googleAnalytion('roompaymentselect', 'roompaymentbankselect', '');
+    //this.gf.googleAnalytion('roompaymentselect', 'roompaymentbankselect', '');
   }
   roompaymentatm() {
+    this.searchhotel.paymentType = 'atm';
     this.navCtrl.navigateForward("/flightcombochosebank");
   }
   postapibook(paymentType) {
     var se = this;
+    se.searchhotel.totalPrice = se.priceshow;
+    se.searchhotel.paymentType = paymentType;
+    
     if(se.bookCombo.mealTypeRates.Supplier == 'SERI' && se.bookCombo.mealTypeRates.HotelCheckDetailTokenInternal){
       //Check allotment trÆ°á»›c khi book
       se.gf.checkAllotmentSeri(
@@ -309,10 +314,12 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     })
   }
   roompaymentlive() {
+    this.searchhotel.paymentType = 'office';
     this.navCtrl.navigateForward("/flightcombolive");
   }
   openWebpage(url: string) {
     var se=this;
+    se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'flightcombopayment', 'add_payment_info', 'Combo');
     se.safariViewController.isAvailable()
   .then((available: boolean) => {
       if (available) {
@@ -644,6 +651,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   }
   //thêm các phương thức thanh toán
   roompaymentpayoolive() {
+    this.searchhotel.paymentType = 'payoo';
     this.postapibook('payoo_store');
     // if (!this.ischeckTransaction) {
     //   this.postapibook('payoo_store');
@@ -652,6 +660,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     // }
   }
   roompaymentpayooqr() {
+    this.searchhotel.paymentType = 'payoo';
     this.postapibook('payoo_qr');
     // if (!this.ischeckTransaction) {
     //   this.postapibook('payoo_qr');
@@ -660,6 +669,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     // }
   }
   roompaymentmomo() {
+    this.searchhotel.paymentType = 'momo';
     this.postapibook('momo');
     // if (!this.ischeckTransaction) {
     //   this.postapibook('momo');
@@ -683,6 +693,7 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     this.postapibook('visa');
   }
   roompaymentvisa() {
+    this.searchhotel.paymentType = 'momo';
     if (this.arrbankrmb.length==0) {
       this.GeTokensOfMember(1);
     }

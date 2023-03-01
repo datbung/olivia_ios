@@ -77,7 +77,9 @@ export class TourPaymentDonePage implements OnInit {
     }
     
     let se = this;
-    se.gf.googleAnalytionCustom('ecommerce_purchase', { item_category: 'tour', start_date: se.tourService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.tourService.itemSearchDestination ? this.tourService.itemSearchDestination.Name || this.tourService.itemSearchDestination.RegionCode : '', destination: se.tourService.itemDetail.Destinations, value: se.tourService.tourTotal, currency: "VND" });
+    se.tourService.totalPrice = this.total;
+    se.gf.logEventFirebase(se.tourService.gaPaymentType,se.tourService, 'tourpaymentdone', 'purchase', 'Tours');
+    //se.gf.googleAnalytionCustom('purchase', { item_category: 'tour', start_date: se.tourService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.tourService.itemSearchDestination ? this.tourService.itemSearchDestination.Name || this.tourService.itemSearchDestination.RegionCode : '', destination: se.tourService.itemDetail.Destinations, value: se.tourService.tourTotal, currency: "VND" });
       se._voucherService.publicClearVoucherAfterPaymentDone(1);
       se.tourService.promocode = "";
       se.tourService.discountpromo = 0;

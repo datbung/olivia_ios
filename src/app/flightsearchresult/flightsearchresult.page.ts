@@ -223,17 +223,20 @@ export class FlightsearchresultPage implements OnInit {
 
 
       //this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);
-      this.gf.googleAnalytionCustom('Searched', {'Origination City' : _flightService.itemFlightCache.departCity ,
-       'Destination City': _flightService.itemFlightCache.returnCity,
-       'Departure Date': _flightService.itemFlightCache.checkInDate ,'Return Date': _flightService.itemFlightCache.checkOutDate,'Number of Passengers': _flightService.itemFlightCache.pax})
+      // this.gf.googleAnalytionCustom('Searched', {'Origination City' : _flightService.itemFlightCache.departCity ,
+      //  'Destination City': _flightService.itemFlightCache.returnCity,
+      //  'Departure Date': _flightService.itemFlightCache.checkInDate ,'Return Date': _flightService.itemFlightCache.checkOutDate,'Number of Passengers': _flightService.itemFlightCache.pax})
+      
       let se = this;
+      let flightItem = se._flightService.itemFlightCache;
+      se.gf.logEventFirebase(null, se._flightService.itemFlightCache, 'flightsearchresult', 'view_item', 'Flights');
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_SEARCHED, {'fb_content_type': 'flight', 'fb_content_id': se._flightService.itemFlightCache.departCode +"_"+se._flightService.itemFlightCache.returnCode,
       'origin_airport' : se._flightService.itemFlightCache.departCode  ,
       'destination_airport': se._flightService.itemFlightCache.returnCode,
       'departing_departure_date': se._flightService.itemFlightCache.checkInDate ,'returning_departure_date ': se._flightService.itemFlightCache.checkOutDate,'num_adults': se._flightService.itemFlightCache.adult,'num_children': se._flightService.itemFlightCache.child ? se._flightService.itemFlightCache.child : 0,'num_infants': se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0, 'fb_value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'fb_currency': "VND",
       'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': "VND"   }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
 
-      let flightItem = se._flightService.itemFlightCache;
+      
     }
 
   ngOnInit() {
@@ -538,8 +541,11 @@ export class FlightsearchresultPage implements OnInit {
           se._flightService.itemFlightCache.returnSeatChoiceAmout = 0;
           se.clearServiceInfo();
           let _totalprice =  se._flightService.itemFlightCache.departFlight.totalPrice + (se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.totalPrice : 0);
-          se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flights' ,  start_date: moment(se._flightService.itemFlightCache.checkInDate).format("YYYY-MM-DD"), end_date: moment(se._flightService.itemFlightCache.checkOutDate).format("YYYY-MM-DD"),item_name: se._flightService.itemFlightCache.departCity+'-'+se._flightService.itemFlightCache.returnCity,item_id:se._flightService.itemFlightCache.departCode, value: _totalprice ,currency: "VND"});
-          
+          //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flights' ,  start_date: moment(se._flightService.itemFlightCache.checkInDate).format("YYYY-MM-DD"), end_date: moment(se._flightService.itemFlightCache.checkOutDate).format("YYYY-MM-DD"),item_name: se._flightService.itemFlightCache.departCity+'-'+se._flightService.itemFlightCache.returnCity,item_id:se._flightService.itemFlightCache.departCode, value: _totalprice ,currency: "VND"});
+          let itemcache = se._flightService.itemFlightCache;
+          se._flightService.itemFlightCache.totalPrice = _totalprice;
+          se.gf.gaSetScreenName('flightsearchresult');
+          se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightsearchresult', 'begin_checkout', 'Flights');
 
           se.navCtrl.navigateForward('/flightaddservice');
           se.stoprequest = true;

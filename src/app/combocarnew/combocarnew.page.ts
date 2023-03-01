@@ -184,6 +184,7 @@ export class CombocarnewPage implements OnInit {
     this.nameroom = this.room[0].ClassName;
     this.breakfast = (this.bookCombo.MealTypeCode == 'CUS' ? 'Ăn 3 bữa' : this.bookCombo.MealTypeName);
     this.titlecombo = this.bookCombo.ComboTitle;
+    this.searchhotel.gaComboName = this.bookCombo.ComboTitle;
     this.titlecomboprice = this.bookCombo.ComboRoomPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this.totalInfant = this.infant;
     this.totalChild = this.children - this.infant;
@@ -193,6 +194,7 @@ export class CombocarnewPage implements OnInit {
     this.fromPlace = this.bookCombo.ComboDetail.comboDetail.departurePlace;
     //this.PriceAvgPlusTAStr = this.Roomif.objMealType.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this.comboId = this.bookCombo.ComboDetail.comboDetail.comboId;
+    this.searchhotel.gaComboId = this.bookCombo.ComboDetail.comboDetail.comboId;
     this.roomcboId = this.bookCombo.ComboDetail.comboDetail.roomId;
     this.departTicketSale = this.bookCombo.ComboDetail.comboDetail.departTicketSale;
     this.returnTicketSale = this.bookCombo.ComboDetail.comboDetail.returnTicketSale;
@@ -235,6 +237,7 @@ export class CombocarnewPage implements OnInit {
       this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
     }
     this.loadLunar();
+    this.gf.logEventFirebase('',this.searchhotel, 'combocarnew', 'begin_checkout', 'Combo');
   }
 
   loadLunar(){
@@ -866,6 +869,7 @@ export class CombocarnewPage implements OnInit {
       self.Roomif.promocode = self.promocode;
       self.bookCombo.totalprice = total;
     }
+    self.searchhotel.gaDiscountPromo = self.bookCombo.discountpromo;
     // if(self._voucherService.selectVoucher && self._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
     //   self.bookCombo.discountpromo= self._voucherService.selectVoucher.rewardsItem.price;
     //   self.promocode = self._voucherService.selectVoucher.code;

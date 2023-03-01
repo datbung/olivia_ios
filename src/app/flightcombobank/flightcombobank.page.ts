@@ -80,7 +80,8 @@ export class FlightcombobankPage implements OnInit {
     //   })
     // })
     //google analytic
-    gf.googleAnalytion('roompaymentbank', 'load', '');
+    //gf.googleAnalytion('roompaymentbank', 'load', '');
+    
   }
   ngOnInit() {
   }
@@ -603,6 +604,7 @@ export class FlightcombobankPage implements OnInit {
 
   continueBook() {
     var se = this;
+    
     se.gf.holdflight(se.bookCombo.FlightCode, se.bookCombo.iddepart, se.bookCombo.idreturn).then(datafly => {
       se.gf.createTransactionCombo(se.bookCombo.bookingcode, se.bookCombo.FlightCode, datafly.depcode, datafly.retcode).then(data => {
         if (data) {
@@ -619,6 +621,7 @@ export class FlightcombobankPage implements OnInit {
           if(se.jti){
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
                       se.gf.CreatePayoo(url);
+                      se.gf.logEventFirebase('banktransfer',se.searchhotel, 'flightcombobank', 'add_payment_info', 'Combo');
             }
             if(se._voucherService.selectVoucher){
               se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
