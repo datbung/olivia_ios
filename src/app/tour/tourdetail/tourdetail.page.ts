@@ -13,7 +13,7 @@ import { HotelreviewsimagePage } from 'src/app/hotelreviewsimage/hotelreviewsima
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HotelreviewsvideoPage } from 'src/app/hotelreviewsvideo/hotelreviewsvideo';
-
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 @Component({
   selector: 'app-tourdetail',
   templateUrl: './tourdetail.page.html',
@@ -52,6 +52,9 @@ export class TourDetailPage {
   youtubeId: any;
   listSlides =[];
   tourRelated = [];
+  itemlike=false;
+  TourIDLike: string;
+  dataListLike: any;
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -60,7 +63,7 @@ export class TourDetailPage {
         public tourService: tourService,
         public searchHotel: SearchHotel,
         private youtube: YoutubeVideoPlayer,
-        private domSanitizer: DomSanitizer) {
+        private domSanitizer: DomSanitizer, private socialSharing: SocialSharing, public searchhotel: SearchHotel) {
             if(tourService.tourDetailId){
               this.loaddata();
             }
@@ -512,6 +515,15 @@ export class TourDetailPage {
       ionViewWillEnter(){
         this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
         this.hidetopbar();
+        if (this.searchhotel.rootPage == 'login') {
+          if (this.TourIDLike) {
+            this.likeItem();
+            
+          }
+          else{
+            this.updateLikeStatus();
+          }
+        }
       }
 
       hidetopbar(){
@@ -557,4 +569,191 @@ export class TourDetailPage {
         
       }
     }
+    likeItem() {
+      var se = this;
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/AddFavouriteTour',
+            timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+            headers:
+            {
+              'postman-token': '9fd84263-7323-0848-1711-8022616e1815',
+              'cache-control': 'no-cache',
+              'content-type': 'application/json',
+              authorization: text
+            },
+            body: { tourId: se.tourService.tourDetailId },
+            json: true
+          };
+          request(options, function (error, response, body) {
+            if (response.statusCode != 200) {
+              var objError = {
+                page: "hoteldetail",
+                func: "likeItem",
+                message: response.statusMessage,
+                content: response.body,
+                type: "warning",
+                param: JSON.stringify(options)
+              };
+              C.writeErrorLog(objError,response);
+            }
+            if (error) {
+              error.page = "hoteldetail";
+              error.func = "likeItem";
+              error.param = JSON.stringify(options);
+              C.writeErrorLog(error,response);
+            };
+            se.TourIDLike='';
+            se.zone.run(() => {
+              setTimeout(() => {
+                se.itemlike = true;
+              }, 10)
+            })
+          });
+        }
+        else {
+          se.TourIDLike=se.tourService.tourDetailId;
+          se.navCtrl.navigateForward('/login');
+        }
+      });
+      //google analytic
+      se.gf.googleAnalytion('hoteldetail','likeitem','');
     }
+    /*** Set unlike item
+     * PDANH  29/01/2018
+     */
+    unlikeItem() {
+      var se = this;
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/RemoveFavouriteTourByUser',
+            timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+            headers:
+            {
+              'postman-token': 'a19ecc0a-cb83-4dd9-3fd5-71062937a931',
+              'cache-control': 'no-cache',
+              'content-type': 'application/json',
+              authorization: text
+            },
+            body: { tourId: se.tourService.tourDetailId },
+            json: true
+          };
+  
+          request(options, function (error, response, body) {
+            if (response.statusCode != 200) {
+              var objError = {
+                page: "hoteldetail",
+                func: "likeItem",
+                message: response.statusMessage,
+                content: response.body,
+                type: "warning",
+                param: JSON.stringify(options)
+              };
+              C.writeErrorLog(objError,response);
+            }
+            if (error) {
+              error.page = "hoteldetail";
+              error.func = "unlikeItem";
+              error.param = JSON.stringify(options);
+              C.writeErrorLog(error,response);
+            };
+            se.zone.run(() => {
+              setTimeout(() => {
+                se.itemlike = false;
+              }, 10)
+            })
+          });
+        }
+        else {
+          se.navCtrl.navigateForward('/login');
+        }
+      });
+      //google analytic
+      se.gf.googleAnalytion('hoteldetail','unlikeitem','');
+    }
+    share() {
+      console.log(this.itemDetail.TourDetailUrl)
+      this.socialSharing.share(null, null, null, this.itemDetail.TourDetailUrl).then(() => {
+        // Success!
+      }).catch(() => {
+        // Error!
+      });
+    }
+    updateLikeStatus() {
+      var se = this;
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var options = {
+            method: 'GET',
+            url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/GetFavouriteTourByUser',
+            timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+            headers:
+            {
+              'cache-control': 'no-cache',
+              'content-type': 'application/json',
+              authorization: text
+            }
+          };
+          request(options, function (error, response, body) {
+            if (response.statusCode != 200) {
+              var objError = {
+                page: "hoteldetail",
+                func: "updateLikeStatus",
+                message: response.statusMessage,
+                content: response.body,
+                type: "warning",
+                param: JSON.stringify(options)
+              };
+              C.writeErrorLog(objError,response);
+            }
+            if (error) {
+              error.page = "hoteldetail";
+              error.func = "updateLikeStatus";
+              error.param = JSON.stringify(options);
+              C.writeErrorLog(error,response);
+            } else {
+              if (body) {
+                se.zone.run(() => {
+                  se.dataListLike = JSON.parse(body);
+                  let like = false;
+                  //Kiểm tra có trong list like không
+                  if (se.dataListLike.length > 0) {
+                    like = se.checkItemLiked(se.tourService.tourDetailId) == 1 ? true : false;
+                  }
+                  se.itemlike = like;
+                });
+              } else {
+                //se.showConfirm();
+              }
+            }
+  
+          });
+        }
+        else{
+          se.itemlike = false;
+        }
+      });
+  
+    }
+    checkItemLiked(id) {
+      var co = 0;
+      id=parseInt(id);
+      if (id) {
+        for (let i = 0; i < this.dataListLike.length; i++) {
+          if (this.dataListLike.indexOf(id) != -1) {
+            co = 1;
+            break;
+          }
+        }
+      }
+  
+      return co;
+    }
+  }
