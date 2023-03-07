@@ -264,13 +264,15 @@ export class Tab4Page implements OnInit{
             element.date = moment(element.created).format('DD/MM/YYYY');
           }
           element.deleted = false;
-          if (this.listStatus && this.listStatus.length>0) {
-            if(!se.checkItemInArray(element.id)){
-              element.status=1
-            }else{
-              element.status=0
+          if (element.memberId=='alluser') {
+            element.status=0;
+            if (this.listStatus && this.listStatus.length>0) {
+              if(se.checkItemInArray(element.id)){
+                element.status=1
+              }
             }
           }
+         
         
           if(se.items.length >0){
             if(!se.gf.checkExistsItemInArray(se.items,element,'trip')){
@@ -352,8 +354,8 @@ export class Tab4Page implements OnInit{
     se.items.forEach(element => {
       if(element.id == item.id){
         se.zone.run(()=>{
-          if(element.status == 1){
-            element.status = 0;
+          if(element.status == 0){
+            element.status = 1;
             
             //update status xuống db
             se.valueGlobal.countNotifi--;

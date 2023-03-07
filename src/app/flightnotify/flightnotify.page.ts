@@ -132,13 +132,15 @@ export class FlightnotifyPage {
                                             element.date = moment(element.created).format('DD/MM/YYYY');
                                         }
                                         element.deleted = false;
-                                        if (se.listStatus && se.listStatus.length>0) {
-                                            if(!se.checkItemInArray(element.id)){
-                                                element.status=1
-                                              }else{
-                                                element.status=0
-                                              }
+                                        if (element.memberId=='alluser') {
+                                            element.status=0;
+                                            if (se.listStatus && se.listStatus.length>0) {
+                                                if(se.checkItemInArray(element.id)){
+                                                    element.status=1;
+                                                  }
+                                            }
                                         }
+                                       
                                         if (se.items.length > 0) {
                                             if (! se.gf.checkExistsItemInArray(se.items, element, 'trip')) {
                                                 se.items.push(element);
@@ -247,8 +249,8 @@ export class FlightnotifyPage {
         se.items.forEach(element => {
             if (element.id == item.id) {
                 se.zone.run(() => {
-                    if (element.status == 1) {
-                        element.status = 0;
+                    if (element.status == 0) {
+                        element.status = 1;
                         // update status xuống db
                         if (element.memberId=='alluser') {
                             se.callUpdateStatusProduct(element);
