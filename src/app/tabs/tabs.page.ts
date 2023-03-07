@@ -1053,15 +1053,16 @@ export class TabsPage implements OnInit {
                         se.zone.run(()=>{
                        
                           data.forEach(element =>{
-                            if (se.listStatus && se.listStatus.length>0) {
-                              if(!se.checkItemInArray(element.id)){
-                                element.status=1
-                              }else{
-                                element.status=0
+                            if (element.memberId=='alluser') {
+                              element.status=0;
+                              if (se.listStatus && se.listStatus.length>0) {
+                                  if(se.checkItemInArray(element.id)){
+                                      element.status=1;
+                                    }
                               }
                             }
                           })
-                          let countNoti = data.filter(item=>{ return item.status == 1 }).length;
+                          let countNoti = data.filter(item=>{ return item.status == 0 }).length;
                           if(se.valueGlobal.updatedLastestVersion){
                             countNoti ++;
                           }
