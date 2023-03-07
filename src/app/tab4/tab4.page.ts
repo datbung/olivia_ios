@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { NetworkProvider } from '../network-provider.service';
 import { flightService } from '../providers/flightService';
 import { tourService } from '../providers/tourService';
-
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 /**
  * Generated class for the InboxPage page.
  *
@@ -54,7 +54,7 @@ export class Tab4Page implements OnInit{
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     public activityService: ActivityService, public _flightService: flightService,
-    public tourService: tourService,public searchhotel: SearchHotel) {
+    public tourService: tourService,public searchhotel: SearchHotel,    private fcm: FirebaseMessaging) {
     //google analytic
     gf.googleAnalytion('inbox','load','');
     //get phone
@@ -359,6 +359,7 @@ export class Tab4Page implements OnInit{
             
             //update status xuống db
             se.valueGlobal.countNotifi--;
+            se.fcm.setBadge(se.valueGlobal.countNotifi);
             if (element.memberId=='alluser') {
               se.callUpdateStatusProduct(element);
             }else{
