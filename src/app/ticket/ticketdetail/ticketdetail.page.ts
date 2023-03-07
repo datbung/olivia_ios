@@ -219,7 +219,7 @@ export class TicketDetailPage {
         private domSanitizer: DomSanitizer,
         public ticketService: ticketService,) {
             if(ticketService.itemTicketDetail){
-              let url = C.urls.baseUrl.urlTicket+'/api/Detail/GetExperienceDetail/'+(ticketService.itemTicketDetail.id ||1);
+              let url = C.urls.baseUrl.urlTicket+'/api/Detail/GetExperienceDetail/'+(ticketService.itemTicketDetail.experienceId ||1);
               let headers = {
                 apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
                 apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'

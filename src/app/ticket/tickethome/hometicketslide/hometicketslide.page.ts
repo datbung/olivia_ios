@@ -169,7 +169,7 @@ export class HomeTicketSlidePage implements OnInit {
     public searchhotel: SearchHotel,
     public ticketService: ticketService) {
       this.getAllExperiences();
-      //this.getPopularLocation();
+      this.getPopularLocation();
   }
 
   ngOnInit(){
