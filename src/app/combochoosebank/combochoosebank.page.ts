@@ -40,6 +40,7 @@ export class CombochoosebankPage implements OnInit {
     })
     //google analytic
     //gf.googleAnalytion('roomchoosebank', 'load', '');
+    this.searchhotel.paymentType = 'atm';
     this.gf.logEventFirebase('atm',this.searchhotel, 'combocarbank', 'add_payment_info', 'Combo');
   }
   ngOnInit() {

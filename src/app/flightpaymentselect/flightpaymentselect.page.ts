@@ -1283,7 +1283,7 @@ export class FlightPaymentSelectPage implements OnInit {
 
     flightbuynowpaylater(){
       this._flightService.itemFlightCache.paymentType = 'bnpl';
-      this.gf.logEventFirebase('bnpl', this._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
+      
       this.gf.showLoading();
       this.checkAllowRepay().then((check)=>{
         if(check){

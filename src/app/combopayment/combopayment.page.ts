@@ -160,6 +160,7 @@ export class CombopaymentPage implements OnInit {
     //this.gf.googleAnalytion('combopayment', 'combopayment', '');
   }
   roompaymentvisa() {
+    this.searchhotel.paymentType = 'visa';
     if (this.arrbankrmb.length==0) {
       this.GeTokensOfMember(1);
     }
@@ -782,14 +783,17 @@ export class CombopaymentPage implements OnInit {
   }
   //thêm các phương thức thanh toán
   roompaymentpayoolive() {
+    this.searchhotel.paymentType = 'payoo';
     this.presentLoading();
     this.postapibook('payoo_store');
   }
   roompaymentpayooqr() {
+    this.searchhotel.paymentType = 'payoo';
     this.presentLoading();
     this.postapibook('payoo_qr');
   }
   roompaymentmomo() {
+    this.searchhotel.paymentType = 'momo';
     this.presentLoading();
     this.postapibook('momo');
   }
@@ -929,6 +933,7 @@ export class CombopaymentPage implements OnInit {
   }
 
   flightbuynowpaylater(){
+    this.searchhotel.paymentType = 'bnpl';
     this.postapibook('bnpl');
   }
 }

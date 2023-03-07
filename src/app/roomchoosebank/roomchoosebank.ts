@@ -36,6 +36,7 @@ export class RoomchoosebankPage implements OnInit{
    
     //google analytic
     //gf.googleAnalytion('roomchoosebank', 'load', '');
+    this.searchhotel.paymentType = 'atm';
     this.gf.logEventFirebase('atm',this.searchhotel, 'roompaymentatm', 'add_payment_info', 'Hotels');
   }
   ngOnInit() {

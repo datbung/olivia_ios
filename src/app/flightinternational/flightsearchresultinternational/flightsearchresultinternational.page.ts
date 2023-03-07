@@ -2511,7 +2511,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
                this._flightService.itemFlightInternational.discountpromo = 0;
                this._flightService.itemFlightInternational.hasvoucher = null;
                this._flightService.itemFlightCache.totalPrice = item.fare.price;
-               this.gf.gaSetScreenName('flightsearchresultinternational');
+               //this.gf.gaSetScreenName('flightsearchresultinternational');
                this.gf.logEventFirebase('', this._flightService.itemFlightCache, 'flightsearchresultinternational', 'begin_checkout', 'Flights');
                this.navCtrl.navigateForward('/flightadddetailsinternational');
               }else{

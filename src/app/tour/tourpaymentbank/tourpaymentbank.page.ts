@@ -574,7 +574,7 @@ export class TourPaymentBankPage implements OnInit {
                 apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
                 apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
               };
-              se.tourService.TourBooking.PaymentMethod = se.paymentMethod;
+              se.gf.logEventFirebase(se.tourService.gaPaymentType,se.tourService, 'tourpaymentbank', 'add_payment_info', 'Tours');
               se.gf.RequestApi('POST', urlApi, headers, se.tourService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
                 console.log(data);
                 if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){

@@ -335,6 +335,7 @@ export class HotelDetailPage implements OnInit {
             se.updateLikeStatus();
           }
           se.valueGlobal.notRefreshDetail = false;
+          se.searchhotel.rootPage = '';
           //se.loaddata(false);
         }
         if (se.valueGlobal.backValue == 'popupinfobkg') {
@@ -1145,7 +1146,12 @@ export class HotelDetailPage implements OnInit {
           se.name = jsondata.Name;
           se.searchhotel.gaHotelDetail = {...jsondata};
           se.searchhotel.gaHotelDetail.RatingValue = se.searchhotel.gaHotelDetail.Rating/10;
-          se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
+          let key = 'hoteldetail_' + se.HotelID+"_"+se.cindisplay+"_"+se.coutdisplay;
+          if((se.searchhotel.keySearchHotelDetail && se.searchhotel.keySearchHotelDetail != key) || !se.searchhotel.keySearchHotelDetail){
+            se.searchhotel.keySearchHotelDetail = key;
+            se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
+          }
+          
           se.json = jsondata.Rating;
           
           se.AvgPoint = jsondata.AvgPoint;
@@ -2932,6 +2938,9 @@ async bookcombo() {
       se.hotelname=msg.Name;
       se.searchhotel.isRefreshDetail = true;
       se.searchhotel.hotelID = msg.Id;
+      se.loadpricecombodone = false;
+      se.loadcomplete = false;
+      se.hotelRoomClasses = [];
       se.setCacheHotel();
       se.presentLoading();
       se.loadTopSale24h(msg.Id);

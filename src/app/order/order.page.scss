@@ -529,7 +529,7 @@
         text-align: center;
     }
     .img-empty{
-        padding-top: 20%;
+        padding-top: calc(env(safe-area-inset-top ));
     }
     .text-trip-empty{
         text-align: center;
@@ -1044,9 +1044,33 @@
         .col-text-right{
             font-size: 13px;
         }
-      
+        // .img-empty{
+        //     padding-top: calc(env(safe-area-inset-top ) + 20% ) !important;
+        // }
         
       }
+
+    //   @media (min-width: 350px) and (max-width: 414px) {
+    //     .img-empty{
+    //         padding-top: calc(env(safe-area-inset-top ) + 20% ) !important;
+    //     }
+    //   }
+      
+    //   @media (min-height: 812px) and (max-height: 840px){
+    //     .flight-calendar-custom ion-header ion-toolbar:first-child {
+    //       margin-top: 0 !important;
+    //       padding-top: 8px !important;
+    //       height: 78px !important;
+    //     }
+    //   }
+      
+    //   @media (min-width: 376px) and (max-width: 440px) {
+    //     .flight-calendar-custom ion-header ion-toolbar:first-child {
+    //       margin-top: 0 !important;
+    //       padding-top: 8px !important;
+    //       height: 78px !important;
+    //     }
+    //   }
       :host{
         --ion-color-primary:#26bed6;
         }
@@ -1255,6 +1279,13 @@
     .trip-empty{
         padding: 13px 16px 16px 16px;
         height: 100%;
+        padding-top: 124px ;
+        //min-height: 360px;
+        //max-height: 570px;
+    }
+    .trip-empty-no-login{
+        padding: 13px 16px 16px 16px;
+        height: 100%;
         padding-top: 100px ;
         //min-height: 360px;
         //max-height: 570px;
@@ -1405,12 +1436,12 @@
           }
           //
           @media (min-height:667px) and (max-height: 736px) {
-            .trip-empty {
-                padding: 13px 16px 16px 16px;
-                height: 100%;
-                padding-top: 100px;
-                //max-height: 590px;
-            }
+            // .trip-empty {
+            //     padding: 13px 16px 16px 16px;
+            //     height: 100%;
+            //     padding-top: 100px;
+            //     //max-height: 590px;
+            // }
           }
 
           @media (min-height:737px) and (max-height: 812px) {

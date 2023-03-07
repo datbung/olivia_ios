@@ -1,5 +1,5 @@
 import { foodService } from './../providers/foodService';
-import { Bookcombo } from './../providers/book-service';
+import { Bookcombo, SearchHotel } from './../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import {  NavController ,LoadingController,Platform, ToastController,ModalController} from '@ionic/angular';
 import { Booking, RoomInfo } from '../providers/book-service';
@@ -53,7 +53,7 @@ export class FlightpaymentbankPage implements OnInit {
     private http: HttpClient,
     public clipboard: Clipboard,public _flightService: flightService,private modalCtrl: ModalController,
     private fb: Facebook,
-   
+    public searchhotel: SearchHotel
     //private normalizeURL: normalizeURL,
     //private nativeHTTP: HTTP,
     ) {
@@ -643,6 +643,7 @@ export class FlightpaymentbankPage implements OnInit {
                       se._voucherService.selectVoucher = null;
                     },300)
                     }
+                    se.searchhotel.paymentType = 'banktransfer';
                     se.gf.logEventFirebase(se._flightService.itemFlightCache.paymentType, se._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);

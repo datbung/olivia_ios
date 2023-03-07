@@ -48,6 +48,10 @@ export class FlightcombodoneprepayPage implements OnInit {
     this.code = this.activatedRoute.snapshot.paramMap.get('code');
     this.ischeckshow = this.activatedRoute.snapshot.paramMap.get('ischeck');
     this.total = this.Roomif.priceshowtt;
+
+    let se = this;
+    se.searchhotel.totalPrice = se.total;
+    se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'flightcombodoneprepay', 'purchase', 'Combo');
   }
   GetUserInfo() {
     var se = this;
