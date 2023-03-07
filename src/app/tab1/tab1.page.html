@@ -51,7 +51,6 @@
     <div (click)="setActiveTab(2)" [ngClass]="activeTab ==2 ? 'div-combo' : 'div-combo home-deactive-tab'">
       <div class="div-icon-home text-center">
           <img src="./assets/ic_home/combo_enable.svg" />
-          <!-- <img src="./assets/ic_home/combo_disabled.svg" *ngIf="activeTab !=2"/> -->
       </div>
       <div [ngClass]="activeTab ==2 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Combo</div>
     </div>
@@ -1014,9 +1013,9 @@
   <app-hometour></app-hometour>
 </div>
 
-<!-- <div [ngClass]="activeTab ==4 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
+<div [ngClass]="activeTab ==4 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
   <app-hometicket></app-hometicket>
-</div> -->
+</div>
 
 
   <div

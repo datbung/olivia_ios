@@ -46,11 +46,12 @@
                   <div class="d-flex m-top-8" *ngIf="slide.avgPoint else noavgPoint">
                     <div class="div-badge">
                         <div class="text-point">{{slide.avgPoint}}</div>
-                        <div class="text-point-des" *ngIf="slide.avgPoint>9 && slide.avgPoint <=10">Xuất sắc</div>
+                         <div class="text-point-des" *ngIf="slide.avgPointStr">{{slide.avgPointStr}}</div>
+                        <!-- <div class="text-point-des" *ngIf="slide.avgPoint>9 && slide.avgPoint <=10">Xuất sắc</div>
                         <div class="text-point-des" *ngIf="slide.avgPoint>8 && slide.avgPoint <=9">Rất tốt</div>
                         <div class="text-point-des" *ngIf="slide.avgPoint>7 && slide.avgPoint <=8">Khá tốt</div>
                         <div class="text-point-des" *ngIf="slide.avgPoint>6 && slide.avgPoint <=7">Tạm được</div>
-                        <div class="text-point-des" *ngIf="slide.avgPoint>5 && slide.avgPoint <=6">Không tốt</div>
+                        <div class="text-point-des" *ngIf="slide.avgPoint>5 && slide.avgPoint <=6">Không tốt</div> -->
                         <div  *ngIf="slide.numOfReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div>
                     </div>
                   </div>
