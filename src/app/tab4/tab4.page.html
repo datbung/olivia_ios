@@ -7,7 +7,7 @@
 <ion-header>
     <!-- <ion-toolbar> -->
         <ion-row style="height: 56px;">
-          <ion-title style="text-align: center;font-size: 20px;font-weight: bold">Thông báo ({{valueGlobal.countNotifi}})</ion-title>
+          <ion-title style="text-align: center;font-size: 20px;font-weight: bold">Thông báo <span *ngIf="valueGlobal.countNotifi>0">({{valueGlobal.countNotifi}})</span></ion-title>
         </ion-row>
       <!-- </ion-toolbar> -->
 </ion-header>
@@ -77,24 +77,24 @@
               <div class="div-flex">
                 <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
                 <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
-                <div *ngIf="item.notifyType == 'product'" [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text'" >
+                <div *ngIf="item.notifyType == 'product'" [ngClass]="item.status == 1 ? 'noti-text text-bold' : 'noti-text'" >
                   Sản phẩm
                 </div>
-                <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text'">
+                <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="item.status == 1 ? 'noti-text text-bold' : 'noti-text'">
                   Đơn hàng
                 </div>
             
                 <div class="d-flex">
-                  <div *ngIf="!item.status" class="cls-dot">
+                  <div *ngIf="item.status == 1" class="cls-dot">
                   
                   </div>
-                  <div [ngClass]="!item.status ? 'noti-text-time text-bold' : 'noti-text-time'">{{item.date}}</div>
+                  <div [ngClass]="item.status == 1 ? 'noti-text-time text-bold' : 'noti-text-time'">{{item.date}}</div>
                 </div>
             </div>
             <div class="cls-border">
 
             </div>
-            <div [ngClass]="!item.status ? 'noti-text-title text-bold' : 'noti-text-title'">
+            <div [ngClass]="item.status == 1 ? 'noti-text-title text-bold' : 'noti-text-title'">
               {{item.title}}
             </div>
             <div class="noti-text-content">
@@ -118,23 +118,23 @@
               <div class="div-flex">
                 <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
                 <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
-                <div *ngIf="item.notifyType == 'product'" [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text' ">
+                <div *ngIf="item.notifyType == 'product'" [ngClass]="item.status == 1 ? 'noti-text text-bold' : 'noti-text' ">
                   Sản phẩm
                 </div>
-                <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="!item.status ? 'noti-text text-bold' : 'noti-text' ">
+                <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="item.status == 1 ? 'noti-text text-bold' : 'noti-text' ">
                   Đơn hàng
                 </div>
                 <div class="d-flex">
-                  <div *ngIf="!item.status" class="cls-dot">
+                  <div *ngIf="item.status == 1" class="cls-dot">
                   
                   </div>
-                  <div [ngClass]="!item.status ? 'noti-text-time text-bold' : 'noti-text-time' ">{{item.date}}</div>
+                  <div [ngClass]="item.status == 1 ? 'noti-text-time text-bold' : 'noti-text-time' ">{{item.date}}</div>
                 </div>
             </div>
             <div class="cls-border">
 
             </div>
-            <div [ngClass]="!item.status ? 'noti-text-title text-bold' : 'noti-text-title'">
+            <div [ngClass]="item.status == 1 ? 'noti-text-title text-bold' : 'noti-text-title'">
               {{item.title}}
             </div>
             <div class="noti-text-content">
