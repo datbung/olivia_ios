@@ -34,6 +34,7 @@ export class TabsPage implements OnInit {
   email: any;
   appversion: string;
   username: string;
+  listStatus: any;
 
   constructor(public platform: Platform, private router: Router, private activeRoute: ActivatedRoute, private modalCtrl: ModalController,
     public searchhotel: SearchHotel, private navCtrl: NavController, public gf: GlobalFunction, public booking: Booking,
@@ -447,14 +448,45 @@ export class TabsPage implements OnInit {
                     error.param =  JSON.stringify(options);
                     C.writeErrorLog(error,response);
                 }else{
-                  se.loadUserNotification();
+                  se.loadUserNotificationStatus();
                 }
 
                 });
             }
         })
     }
-
+    loadUserNotificationStatus() {
+      var se = this;
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+            var text = "Bearer " + auth_token;
+            var options = {
+              method: 'GET',
+              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationStatus',
+              timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+              headers:
+              {
+                  'cache-control': 'no-cache',
+                  'content-type': 'application/json',
+                  authorization: text
+              }
+              };
+              request(options, function (error, response, body) {
+              if (error) {
+                  error.page = "inbox";
+                  error.func = "loadUserNotification";
+                  error.param =  JSON.stringify(options);
+                  C.writeErrorLog(error,response);
+              }else{
+                  if(body && body != "[]"){
+                    se.listStatus = JSON.parse(body);
+                  }
+                  se.loadUserNotification();
+              }
+              });
+        }
+      })
+    }
   showNotification(data){
     //chuyển qua tab mytrip
     if(data && data.BookingCode && data.notifyAction != "cancel"){
@@ -704,7 +736,7 @@ export class TabsPage implements OnInit {
     }
     //refresh lại count notifi
     if(obj.id != "tab-button-tab4"){
-      this.loadUserNotification();
+      this.loadUserNotificationStatus();
     }
 
     if(obj.id != "tab-button-tab1"){
@@ -740,7 +772,7 @@ export class TabsPage implements OnInit {
     // var datanoti=[];
     // datanoti.push(obj);
     // this.storage.set("objnotication",datanoti);
-    this.loadUserNotification();
+    this.loadUserNotificationStatus();
     
     var el = document.getElementsByClassName('tab-button');
     $('.tab-button').click(e => this.clickedElement(e));
@@ -989,7 +1021,7 @@ export class TabsPage implements OnInit {
               var text = "Bearer " + auth_token;
               var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex=1&pageSize=50' ,
+              url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUserIVV?pageIndex=1&pageSize=1500' ,
               timeout: 10000, maxAttempts: 5, retryDelay: 2000,
               headers:
               {
@@ -1019,7 +1051,17 @@ export class TabsPage implements OnInit {
                         })
                         
                         se.zone.run(()=>{
-                          let countNoti = data.filter(item=>{ return !item.status }).length;
+                       
+                          data.forEach(element =>{
+                            if (se.listStatus && se.listStatus.length>0) {
+                              if(!se.checkItemInArray(element.id)){
+                                element.status=1
+                              }else{
+                                element.status=0
+                              }
+                            }
+                          })
+                          let countNoti = data.filter(item=>{ return item.status == 1 }).length;
                           if(se.valueGlobal.updatedLastestVersion){
                             countNoti ++;
                           }
@@ -1043,7 +1085,18 @@ export class TabsPage implements OnInit {
           }
       })
   }
-
+  checkItemInArray(id){
+    
+    var co=false;
+    for (let i = 0; i < this.listStatus.length; i++) {
+      const element = this.listStatus[i];
+      if (element==id) {
+        co= true;
+        break;
+      }
+    }
+    return co;
+  }
   gotoAppStore(){
     this.market.open('https://apps.apple.com/us/app/ivivu-com-k%E1%BB%B3-ngh%E1%BB%89-tuy%E1%BB%87t-v%E1%BB%9Di/id1464844301?uo=4');
   }

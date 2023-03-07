@@ -266,9 +266,9 @@ export class Tab4Page implements OnInit{
           element.deleted = false;
           if (this.listStatus && this.listStatus.length>0) {
             if(!se.checkItemInArray(element.id)){
-              element.status=0
-            }else{
               element.status=1
+            }else{
+              element.status=0
             }
           }
         
@@ -287,9 +287,9 @@ export class Tab4Page implements OnInit{
         se.valueGlobal.updatedLastestVersion = false;
       }
 
-      let countNoti = se.items.filter(item=>{ return !item.status }).length;
+      // let countNoti = se.items.filter(item=>{ return item.status == 1 }).length;
       
-      se.valueGlobal.countNotifi = countNoti;
+      // se.valueGlobal.countNotifi = countNoti;
       se.sortNotifi();
       se.loaddatadone = true;
     })
@@ -352,8 +352,8 @@ export class Tab4Page implements OnInit{
     se.items.forEach(element => {
       if(element.id == item.id){
         se.zone.run(()=>{
-          if(!element.status){
-            element.status = 1;
+          if(element.status == 1){
+            element.status = 0;
             
             //update status xuống db
             se.valueGlobal.countNotifi--;
