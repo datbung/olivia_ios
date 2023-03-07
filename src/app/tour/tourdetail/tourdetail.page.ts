@@ -7,7 +7,7 @@ import { tourService } from '../../providers/tourService';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
-import { SearchHotel } from 'src/app/providers/book-service';
+import { SearchHotel,ValueGlobal } from 'src/app/providers/book-service';
 import { HotelreviewsimagePage } from 'src/app/hotelreviewsimage/hotelreviewsimage';
 
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
@@ -63,7 +63,7 @@ export class TourDetailPage {
         public tourService: tourService,
         public searchHotel: SearchHotel,
         private youtube: YoutubeVideoPlayer,
-        private domSanitizer: DomSanitizer, private socialSharing: SocialSharing, public searchhotel: SearchHotel) {
+        private domSanitizer: DomSanitizer, private socialSharing: SocialSharing, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal) {
             if(tourService.tourDetailId){
               this.loaddata();
             }
@@ -519,15 +519,7 @@ export class TourDetailPage {
       ionViewWillEnter(){
         this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
         this.hidetopbar();
-        if (this.searchhotel.rootPage == 'login') {
-          if (this.TourIDLike) {
-            this.likeItem();
-            
-          }
-          else{
-            this.updateLikeStatus();
-          }
-        }
+        this.updateLikeStatus();
       }
 
       hidetopbar(){
@@ -575,8 +567,14 @@ export class TourDetailPage {
     }
     likeItem() {
       var se = this;
+   
       se.storage.get('auth_token').then(auth_token => {
         if (auth_token) {
+          se.zone.run(() => {
+            setTimeout(() => {
+              se.itemlike = true;
+            }, 10)
+          })
           var text = "Bearer " + auth_token;
           var options = {
             method: 'POST',
@@ -611,15 +609,12 @@ export class TourDetailPage {
               C.writeErrorLog(error,response);
             };
             se.TourIDLike='';
-            se.zone.run(() => {
-              setTimeout(() => {
-                se.itemlike = true;
-              }, 10)
-            })
+          
           });
         }
         else {
           se.TourIDLike=se.tourService.tourDetailId;
+          se.valueGlobal.logingoback='/tourdetail'
           se.navCtrl.navigateForward('/login');
         }
       });
@@ -631,12 +626,17 @@ export class TourDetailPage {
      */
     unlikeItem() {
       var se = this;
+      se.zone.run(() => {
+        setTimeout(() => {
+          se.itemlike = false;
+        }, 10)
+      })
       se.storage.get('auth_token').then(auth_token => {
         if (auth_token) {
           var text = "Bearer " + auth_token;
           var options = {
             method: 'POST',
-            url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/RemoveFavouriteTourByUser',
+            url: C.urls.baseUrl.urlMobile + '/mobile/OliviaApis/RemoveFavouriteTour',
             timeout: 10000, maxAttempts: 5, retryDelay: 2000,
             headers:
             {
@@ -667,15 +667,8 @@ export class TourDetailPage {
               error.param = JSON.stringify(options);
               C.writeErrorLog(error,response);
             };
-            se.zone.run(() => {
-              setTimeout(() => {
-                se.itemlike = false;
-              }, 10)
-            })
+           
           });
-        }
-        else {
-          se.navCtrl.navigateForward('/login');
         }
       });
       //google analytic
