@@ -95,7 +95,7 @@ export class RoompaymentdoneeanPage implements OnInit {
       se.CheckInDate=se.booking.CheckInDate;
       se.CheckOutDate=se.booking.CheckOutDate;
       var pricestring = se.Roomif.priceshowtt ? se.Roomif.priceshowtt : se.Roomif.pricepoint;
-      se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate }], value: se.gf.convertNumberToDouble(pricestring), currency: "VND" });
+      //se.gf.googleAnalytionCustom('purchase', { items: [{ item_category: 'hotel_room', item_name: se.booking.HotelName, item_id: se.booking.code, start_date: se.booking.CheckInDate, end_date: se.booking.CheckOutDate }], value: se.gf.convertNumberToDouble(pricestring), currency: "VND" });
       
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(pricestring) ,  'fb_currency': 'VND' ,  
     'checkin_date': se.booking.CheckInDate ,'checkout_date ': se.booking.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
@@ -120,13 +120,18 @@ export class RoompaymentdoneeanPage implements OnInit {
       se.searchhotel.totalPrice = se.activityService.objPaymentMytrip.trip.amount_after_tax;
       se.searchhotel.hotelName = this.activityService.objPaymentMytrip.trip.hotel_name;
       se.searchhotel.gaHotelId = se.activityService.objPaymentMytrip.trip.HotelIdERP;
-      se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'roompaymentdone-ean', 'purchase', 'Hotels');
+      
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_PURCHASED, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.priceshow) ,  'fb_currency': 'VND' ,  
       'checkin_date': se.booking.CheckInDate ,'checkout_date ': se.booking.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
       'value': se.gf.convertNumberToDouble(se.priceshow) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.priceshow) );
 
     }
-
+    try {
+      se.gf.logEventFirebase(se.searchhotel.paymentType,se.searchhotel, 'roompaymentdone-ean', 'purchase', 'Hotels');
+    } catch (error) {
+      
+    }
+    
     
   }
   ngOnInit() {

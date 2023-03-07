@@ -690,10 +690,11 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     this.isremember=true;
   }
   next() {
+    this.searchhotel.paymentType = 'visa';
     this.postapibook('visa');
   }
   roompaymentvisa() {
-    this.searchhotel.paymentType = 'momo';
+    this.searchhotel.paymentType = 'visa';
     if (this.arrbankrmb.length==0) {
       this.GeTokensOfMember(1);
     }

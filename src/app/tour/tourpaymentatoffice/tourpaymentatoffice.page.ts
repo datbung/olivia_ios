@@ -58,6 +58,7 @@ export class TourPaymentAtOfficePage implements OnInit{
           apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
         };
         se._tourService.TourBooking.PaymentMethod = '';
+        se.gf.logEventFirebase(se._tourService.gaPaymentType,se._tourService, 'tourpaymentoffice', 'add_payment_info', 'Tours');
         se.gf.RequestApi('POST', urlApi, headers, se._tourService.TourBooking, 'tourpaymentbank', 'CreateBookingVerApi').then((data)=>{
           if(data && data.Status == "Success" && data.Response && data.Response.BookingCode){
             se._tourService.tourBookingCode = data.Response.BookingCode;

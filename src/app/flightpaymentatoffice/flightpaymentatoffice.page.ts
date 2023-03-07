@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import {  NavController, LoadingController,Platform, ToastController } from '@ionic/angular';
-import { Booking, RoomInfo,Bookcombo } from '../providers/book-service';
+import { Booking, RoomInfo,Bookcombo, SearchHotel } from '../providers/book-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { C } from '../providers/constants';
@@ -31,7 +31,8 @@ export class FlightpaymentatofficePage implements OnInit{
   constructor(public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,
     public _flightService: flightService,
     private fb: Facebook,
-    public _voucherService: voucherService) {
+    public _voucherService: voucherService,
+    public searchhotel: SearchHotel) {
     this.text = "<b>Văn phòng tại TP. Hồ Chí Minh:</b> Lầu 2, tòa nhà Saigon Prime, 107-109-111 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh<br />Thời gian làm việc:<br /><ul><li>Thứ 2 - Thứ 7: từ 07h30 đến 21h00</li><li>Chủ Nhật: từ 07h30 đến 20h00</li></ul><br /><b>Văn phòng tại Hà Nội:</b> P.308, Tầng 3, Tòa nhà The One, số 2 Chương Dương Độ, Q.Chương Dương, Q.Hoàn Kiếm, Hà Nội<br />Thời gian làm việc:<br /><ul ><li>Thứ 2 - Thứ 6: từ 07h30 đến 17h30</li></ul>";
     this.bookingCode =  this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
 
@@ -124,6 +125,7 @@ export class FlightpaymentatofficePage implements OnInit{
                     }
                     //console.log(data);
                     //var data = JSON.parse(datapayoo);
+                    se.searchhotel.paymentType = 'office';
                     se.gf.logEventFirebase('office', se._flightService.itemFlightCache, 'flightpaymentselect', 'add_payment_info', 'Flights');
                     if(data.PeriodPaymentDate && data.PeriodPaymentDate.indexOf('/') != -1){
                       let _pd = data.PeriodPaymentDate.replace('/Date(','').replace(')/','')*1;

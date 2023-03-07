@@ -2,7 +2,7 @@
   <div no-padding>
     <ion-row>
       <ion-col class="header-title">
-        <label>Đơn hàng của tôi</label>
+        <label>Chuyến đi của tôi</label>
           <div class="div-refresh" (click)="doRefresh(0)">
               <img class="img-refresh" src="./assets/imgs/refresh.svg" >
           </div>
@@ -3492,7 +3492,7 @@
     </div> -->
 
     <div *ngIf="!loginuser &&hasloaddata">
-      <div  class="trip-empty">
+      <div  class="trip-empty-no-login">
         <div class="img-trip-empty-1">
           <img class="img-empty" src="./assets/iconaccount/login_img.svg">
         </div>

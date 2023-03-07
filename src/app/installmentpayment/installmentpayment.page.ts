@@ -91,7 +91,7 @@ export class InstallmentpaymentPage implements OnInit {
         se.PriceAvgPlusTAStr = se.booking.cost;
       }
       //se.roomtype.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(/\,/g, '.');
-      if(se.activityService.objBankInStallment){
+      if(se.activityService.objBankInStallment && se.activityService.objBankInStallment.banks){
         se.banks = se.activityService.objBankInStallment.banks.data;
       }
     //},150)
