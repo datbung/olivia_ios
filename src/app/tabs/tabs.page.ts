@@ -1324,8 +1324,10 @@ export class TabsPage implements OnInit {
         }
         else
         {
-          se.gf.setParams('','notifiBookingCode');//Chưa thanh toán thì không show detail trong mytrip
-          se.paymentselect(item, idx);
+          se.gf.setParams(bookingCode,'notifiBookingCode');    //Chưa thanh toán thì không show detail trong mytrip
+          se.navCtrl.navigateForward(['/app/tabs/tab3']);
+      
+          // se.paymentselect(item, idx);
         }
       
       }

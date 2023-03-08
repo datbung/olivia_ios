@@ -56,7 +56,13 @@ export class MytripaymentflightselectPage implements OnInit {
       this.checkOutDisplayFullYear=this.activityService.objPaymentMytrip.trip.checkOutDisplay;
     } 
     this.totalPaxStr=this.activityService.objPaymentMytrip.trip.totalPaxStr;
-    this.totalpricedisplay=this.activityService.objPaymentMytrip.trip.priceShow;
+
+    if (this.activityService.objPaymentMytrip.trip.priceShow) {
+      this.totalpricedisplay = this.activityService.objPaymentMytrip.trip.priceShow.toString().replace(/\./g, '').replace(/\,/g, '');
+      
+    }else{
+      this.totalpricedisplay = this.activityService.objPaymentMytrip.trip.totalpricedisplay.toString().replace(/\./g, '').replace(/\,/g, '');
+    }
     this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
     this.cus_phone=this.activityService.objPaymentMytrip.trip.cus_phone;
     this.storage.get('jti').then(jti => {
@@ -66,7 +72,13 @@ export class MytripaymentflightselectPage implements OnInit {
       }
     })
     this.loadCheckPayment();
-    this.totalPrice = this.activityService.objPaymentMytrip.trip.priceShow.toString().replace(/\./g, '').replace(/\,/g, '');
+    if (this.activityService.objPaymentMytrip.trip.priceShow) {
+      this.totalPrice = this.activityService.objPaymentMytrip.trip.priceShow.toString().replace(/\./g, '').replace(/\,/g, '');
+      
+    }else{
+      this.totalPrice = this.activityService.objPaymentMytrip.trip.totalpricedisplay.toString().replace(/\./g, '').replace(/\,/g, '');
+    }
+   
     this.storage.get('auth_token').then(auth_token => {
       if (auth_token) {
             let text = "Bearer " + auth_token;
@@ -472,7 +484,7 @@ export class MytripaymentflightselectPage implements OnInit {
     }
   }
   goback(){
-    this.navCtrl.back();
+    this.navCtrl.navigateForward('mytripdetail', {animated: true});
   }
 
   buildLinkPaymentVisa(){
