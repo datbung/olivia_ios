@@ -59,14 +59,14 @@
         <ng-template #emptydata>
           <div style="text-align: center;margin-top: 10px">
             <img src="./assets/imgs/empty.svg">
-            <div class="text-empty m-top-8">Vui lòng chọn lại điều kiện tìm kiếm.</div>
+            <div class="text-empty m-top-8">Không có tour theo yêu cầu. Vui lòng chọn điều kiện tìm kiếm khác</div>
             <div class="div-button-empty d-flex">
                 <div class="div-width-100">
-                  <button ion-button round (click)="reFilter()" class="button btn-change-search" clear>Lọc lại</button>
+                  <button ion-button round (click)="goback()" class="button btn-change-search" clear>Tìm kiếm lại</button>
                 </div>
-                <div class="div-width-100 m-left-8" *ngIf="enableFilterTopdeal">
+                <!-- <div class="div-width-100 m-left-8" *ngIf="enableFilterTopdeal">
                   <button ion-button round (click)="clearFilter()" class="button btn-clear-search" clear>Xóa lọc</button>
-                </div>
+                </div> -->
             </div>
           </div>
         </ng-template>

@@ -249,8 +249,6 @@ export class HotelDetailPage implements OnInit {
                 this.searchhotel.keySearchHotelDetail = key;
                 this.loaddata(true);
               }
-            }else{
-              console.log(event instanceof NavigationEnd);
             }
           })
         })
