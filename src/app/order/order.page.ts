@@ -1665,7 +1665,7 @@ import { normalizeURL } from 'ionic-angular';
               //Tạm thời gọi api get notifi để build lại thông tin thay đổi chuyến bay nếu có
               se.loadUserNotificationAndMapFlightChange();
     
-              if (se.gf.getParams('notifiBookingCode') && se.listMyTrips.length > 1) {
+              if (se.gf.getParams('notifiBookingCode') ) {
                 //Map số bkg trong listtrip để focus vào bkg được notifi
                 var idxMap = se.listMyTrips.map((item, index) => {
                   return item.booking_id == se.gf.getParams('notifiBookingCode');
