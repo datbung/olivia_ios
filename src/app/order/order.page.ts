@@ -895,7 +895,7 @@ import { normalizeURL } from 'ionic-angular';
                     element.departAirport = se.getAirportByCode(element.departCode);
                     element.returnAirport = se.getAirportByCode(element.arrivalCode);
                     se.getRatingStar(element);
-                    // if (element.booking_id=='IVIVU1003793') {
+                    // if (element.booking_id=='VMB1719504') {
                     //   se.listMyTrips.push(element);
                     // }
                     se.listMyTrips.push(element);
@@ -1593,7 +1593,7 @@ import { normalizeURL } from 'ionic-angular';
     
     
                     if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
-                      // if (element.booking_id=='IVIVU1003793') {
+                      // if (element.booking_id=='VMB1719504') {
                       //   se.listMyTrips.push(element);
                       // }
                       se.listMyTrips.push(element);
@@ -1641,7 +1641,7 @@ import { normalizeURL } from 'ionic-angular';
                     element.address = element.hotelAddress;
                     element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                     se.getRatingStar(element);
-                    // if (element.booking_id=='IVIVU1002887') {
+                    // if (element.booking_id=='VMB1719504') {
                     //   se.listMyTrips.push(element);
                     // }
                     se.listMyTrips.push(element);
@@ -1673,7 +1673,23 @@ import { normalizeURL } from 'ionic-angular';
                 if (idxMap && idxMap.length > 0) {
                   var idx = idxMap.findIndex((el) => { return el == true });
                   se.currentTrip = idx;
+                  if (this.listMyTrips[idx].delivery_payment_date_display  && (this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10) && !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)) {
+                    this._mytripservice.tripdetail = this.listMyTrips[idx];
+                    this._mytripservice.currentTrip = this.currentTrip;
+                    this.paymentselect(se.listMyTrips[idx],0); 
+                    se.gf.setParams('', 'notifiBookingCode');
+                    return;
+                  }
+                  else if (this.listMyTrips[idx].delivery_payment_date_display&&!(this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10)&& !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)){
+                    se.amount_after_tax='';
+                    this._mytripservice.tripdetail = this.listMyTrips[idx];
+                    this._mytripservice.currentTrip = this.currentTrip;
+                    this.paymentselect(se.listMyTrips[idx],1); 
+                    se.gf.setParams('', 'notifiBookingCode');
+                    return;
+                  }
                   se.gf.setParams('', 'notifiBookingCode');
+            
                   if (idx != -1) {
                     se.showtripdetail(se.listMyTrips[idx]);
                   } else {

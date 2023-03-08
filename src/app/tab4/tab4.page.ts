@@ -675,7 +675,14 @@ export class Tab4Page implements OnInit{
             se.gf.setParams(BookingCode,'notifiBookingCode');
             se.navCtrl.navigateForward(['/app/tabs/tab3']);
           }else{//Chưa thanh toán về trang thanh toán
-            se.paymentselect(itemMap[0], idx);
+            if (itemMap[0].booking_type == 'VMB')  {
+              se.gf.setParams(BookingCode,'notifiBookingCode');
+              se.navCtrl.navigateForward(['/app/tabs/tab3']);
+            }
+            else{
+              se.paymentselect(itemMap[0], idx);
+            }
+          
           }
           
         }else{
@@ -795,7 +802,16 @@ export class Tab4Page implements OnInit{
         se.navCtrl.navigateForward("/mytripaymentcarcombo/1");
       }
      
-    }else{
+    }
+    else if (trip.booking_type == 'VMB') {
+      if (trip.pay_method!=51) {
+        se.navCtrl.navigateForward("/mytripaymentflightselect/0");
+      } else {
+        se.navCtrl.navigateForward("/mytripaymentflightselect/1");
+      }
+     
+    }
+    else{
       if (trip.pay_method!=51) {
         se.navCtrl.navigateForward("/mytripaymentselect/0");
       } else {
