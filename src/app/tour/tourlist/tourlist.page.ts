@@ -42,6 +42,8 @@ export class TourListPage implements OnInit{
   listTourCode = ['tailor-tour-ivivu','tour-nuoc-ngoai-cao-cap','cung-duong-dong-tay-bac'];
   allowclickcalendar: boolean = true;
   myCalendar: HTMLIonModalElement;
+  arrTour: any;
+  arrTourNoPrice: any[];
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
@@ -171,9 +173,11 @@ export class TourListPage implements OnInit{
       let listIds = se.slideData.map(item => item.Id).join(',');
       se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}, 'tourList', 'GetMercuriusPriceByTourIds').then((data)=>{
         if(data && data.Status == "Success" && data.Response && data.Response.length >0){
+          this.arrTour=[];
+          this.arrTourNoPrice=[];
           for (let index = 0; index < se.slideData.length; index++) {
             const element = se.slideData[index];
-            
+   
             data.Response.forEach((p)=> {
               if( p.Contract && p.Contract[0] && p.Contract[0].PriceAdult && p.Code == "TO"+element.Id){
                 element.PriceAdult = p.Contract[0].PriceAdult;
@@ -182,16 +186,27 @@ export class TourListPage implements OnInit{
                 }else {
                   element.priceShow = se.gf.convertNumberToString(element.MinPrice);
                 }
-                
+                element.DepartureTime= moment(p.Contract[0].DepartureTime[0]).format("DD-MM-YYYY") ;
+                element.sortByTime= p.Contract[0].DepartureTime[0];
+                this.arrTour.push(element);
               }
             })
           }
+          se.slideData.forEach(element => {
+            if (!element.priceShow) {
+              this.arrTourNoPrice.push(element);
+            }
+          });
+          this.sortTimeTour() ;
           se.loaddatadone = true;
         }else {
           se.loaddatadone = true;
         }
       })
+  
     }
+
+    
   }
 
   loadTourListDestination(id) {
@@ -449,8 +464,31 @@ export class TourListPage implements OnInit{
     {
       se.executeSort('name') 
     }
+    if(sortType == 4)//time
+    {
+      se.executeSort('sortByTime') 
+    }
   }
-
+  sortTimeTour(){
+      let direction = -1;
+      this.zone.run(() => this.arrTour.sort(function (a, b) {
+        let columnname = "sortByTime"
+        if (a[columnname] < b[columnname]) {
+          return 1 * direction;
+        }
+        else if (a[columnname] > b[columnname]) {
+          return -1 * direction;
+        }
+      }))
+      this.slideData=[];
+      this.arrTour.forEach(element => {
+        this.slideData.push(element);
+      });
+      this.arrTourNoPrice.forEach(element => {
+        this.slideData.push(element);
+      });
+  }
+ 
   executeSort(property) {
     let se = this;
     se.zone.run(() => se.slideData.sort(function (a, b) {
@@ -460,12 +498,17 @@ export class TourListPage implements OnInit{
         col = 'Id';
       }
       col = (property == "ivivu") ? 'Id' : (property == "duration" ? "sortTourTime" : 'Name');
-
+      if (property=='sortByTime') {
+        col = 'sortByTime';
+      }
       if(property == 'ivivu'){
         return a[col] - b[col];
       }
       else if(property == 'duration'){
         return b[col] - a[col];
+      }
+      else if(property == 'sortByTime'){
+        return a[col] - b[col];
       }
       else{
         return b[col].localeCompare(a[col]);
