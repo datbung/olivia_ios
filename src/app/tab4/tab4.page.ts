@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { NetworkProvider } from '../network-provider.service';
 import { flightService } from '../providers/flightService';
 import { tourService } from '../providers/tourService';
-
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 /**
  * Generated class for the InboxPage page.
  *
@@ -24,7 +24,7 @@ import { tourService } from '../providers/tourService';
   styleUrls: ['./tab4.page.scss'],
 })
 export class Tab4Page implements OnInit{
-  // items= [.
+  // items= [
   //   {id:1, title: 'Cập nhật trạng thái booking', message: 'iVIVU đã kiểm tra tình trạng phòng của Booking IVIVU123456 tại Swiss-Belresort Tuyền Lâm - Đà Lạt và đã gửi thông tin thanh toán cho Quý khách.',date: '1 giờ trước', status: 0},
   //   {id:2, title: 'Chia sẻ nhận xét về khách sạn', message: 'Quý khách hãy đánh giá khách sạn Imperial Vũng Tàu để nhận đến 10 điểm tích luỹ và giúp mọi người hiểu hơn về khách sạn nhé!',date: '12/10/2018', status: 1},
   //   {id:3, title: 'Chuẩn bị khởi hành đi Imperial Vũng Tàu', message: 'Xe sẽ khởi hành đi Imperial Vũng Tàu tại số 1 Lê Duẩn, Q1 - Cổng Thảo Cầm Viên lúc 10 giờ. Quý khách vui lòng có mặt tại điểm đón trước 20 phút',date: '10/10/2018', status: 1},
@@ -54,7 +54,7 @@ export class Tab4Page implements OnInit{
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     public activityService: ActivityService, public _flightService: flightService,
-    public tourService: tourService,public searchhotel: SearchHotel) {
+    public tourService: tourService,public searchhotel: SearchHotel,    private fcm: FirebaseMessaging) {
     //google analytic
     gf.googleAnalytion('inbox','load','');
     //get phone
@@ -264,13 +264,15 @@ export class Tab4Page implements OnInit{
             element.date = moment(element.created).format('DD/MM/YYYY');
           }
           element.deleted = false;
-          if (this.listStatus && this.listStatus.length>0) {
-            if(!se.checkItemInArray(element.id)){
-              element.status=1
-            }else{
-              element.status=0
+          if (element.memberId=='alluser') {
+            element.status=0;
+            if (this.listStatus && this.listStatus.length>0) {
+              if(se.checkItemInArray(element.id)){
+                element.status=1
+              }
             }
           }
+         
         
           if(se.items.length >0){
             if(!se.gf.checkExistsItemInArray(se.items,element,'trip')){
@@ -352,11 +354,12 @@ export class Tab4Page implements OnInit{
     se.items.forEach(element => {
       if(element.id == item.id){
         se.zone.run(()=>{
-          if(element.status == 1){
-            element.status = 0;
+          if(element.status == 0){
+            element.status = 1;
             
             //update status xuống db
             se.valueGlobal.countNotifi--;
+            se.fcm.setBadge(se.valueGlobal.countNotifi);
             if (element.memberId=='alluser') {
               se.callUpdateStatusProduct(element);
             }else{
@@ -672,7 +675,14 @@ export class Tab4Page implements OnInit{
             se.gf.setParams(BookingCode,'notifiBookingCode');
             se.navCtrl.navigateForward(['/app/tabs/tab3']);
           }else{//Chưa thanh toán về trang thanh toán
-            se.paymentselect(itemMap[0], idx);
+            if (itemMap[0].booking_type == 'VMB')  {
+              se.gf.setParams(BookingCode,'notifiBookingCode');
+              se.navCtrl.navigateForward(['/app/tabs/tab3']);
+            }
+            else{
+              se.paymentselect(itemMap[0], idx);
+            }
+          
           }
           
         }else{
@@ -792,7 +802,16 @@ export class Tab4Page implements OnInit{
         se.navCtrl.navigateForward("/mytripaymentcarcombo/1");
       }
      
-    }else{
+    }
+    else if (trip.booking_type == 'VMB') {
+      if (trip.pay_method!=51) {
+        se.navCtrl.navigateForward("/mytripaymentflightselect/0");
+      } else {
+        se.navCtrl.navigateForward("/mytripaymentflightselect/1");
+      }
+     
+    }
+    else{
       if (trip.pay_method!=51) {
         se.navCtrl.navigateForward("/mytripaymentselect/0");
       } else {

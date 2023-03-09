@@ -335,6 +335,7 @@ export class HotelDetailPage implements OnInit {
             se.updateLikeStatus();
           }
           se.valueGlobal.notRefreshDetail = false;
+          se.searchhotel.rootPage = '';
           //se.loaddata(false);
         }
         if (se.valueGlobal.backValue == 'popupinfobkg') {
@@ -1145,7 +1146,12 @@ export class HotelDetailPage implements OnInit {
           se.name = jsondata.Name;
           se.searchhotel.gaHotelDetail = {...jsondata};
           se.searchhotel.gaHotelDetail.RatingValue = se.searchhotel.gaHotelDetail.Rating/10;
-          se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
+          let key = 'hoteldetail_' + se.HotelID+"_"+se.cindisplay+"_"+se.coutdisplay+"_"+(se.searchhotel.adult ||0)+"_"+(se.searchhotel.child ||0)+"_"+(se.searchhotel.roomnumber ||0);
+          if((se.searchhotel.keySearchHotelDetail && se.searchhotel.keySearchHotelDetail != key) || !se.searchhotel.keySearchHotelDetail){
+            se.searchhotel.keySearchHotelDetail = key;
+            se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
+          }
+          
           se.json = jsondata.Rating;
           
           se.AvgPoint = jsondata.AvgPoint;
@@ -1884,7 +1890,7 @@ export class HotelDetailPage implements OnInit {
     this.cout = moment(date).format('YYYY-MM-DD');
     if (this.room && this.guest) {
       //this.presentLoading5000();
-      this.ischeck = false
+      this.ischeck = false;
       this.presentLoading();
     }
   }
@@ -1899,7 +1905,7 @@ export class HotelDetailPage implements OnInit {
     else {
       if (this.room && this.guest) {
         // this.presentLoading5000();
-        this.ischeck = false
+        this.ischeck = false;
         this.presentLoading();
       }
     }
@@ -2932,6 +2938,10 @@ async bookcombo() {
       se.hotelname=msg.Name;
       se.searchhotel.isRefreshDetail = true;
       se.searchhotel.hotelID = msg.Id;
+      se.loadpricecombodone = false;
+      se.loadcomplete = false;
+      se.hotelRoomClasses = [];
+      se.ischeck = false;
       se.setCacheHotel();
       se.presentLoading();
       se.loadTopSale24h(msg.Id);

@@ -16,7 +16,7 @@ import * as moment from 'moment';
 import {ValueGlobal,SearchHotel} from '../providers/book-service';
 import {flightService} from '../providers/flightService';
 import { tourService } from '../providers/tourService';
-
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 @Component({selector: 'app-flightnotify', templateUrl: './flightnotify.page.html', styleUrls: ['./flightnotify.page.scss']})
 export class FlightnotifyPage {
     public items = [];
@@ -45,7 +45,7 @@ export class FlightnotifyPage {
     textnotifyType = "";countNoti
     listStatus: any;
     constructor(private navCtrl : NavController, private gf : GlobalFunction, public _flightService : flightService, public platform : Platform, private badge : Badge, private storage : Storage, private zone : NgZone, public toastCtrl : ToastController, public valueGlobal : ValueGlobal, private modalCtrl : ModalController, private alertCtrl : AlertController, public activityService : ActivityService,
-        public tourService: tourService,public searchhotel: SearchHotel) { // get phone
+        public tourService: tourService,public searchhotel: SearchHotel,private fcm: FirebaseMessaging) { // get phone
         this.storage.get('phone').then(data => {
             if (data) {
                 this.phone = data;
@@ -132,13 +132,15 @@ export class FlightnotifyPage {
                                             element.date = moment(element.created).format('DD/MM/YYYY');
                                         }
                                         element.deleted = false;
-                                        if (se.listStatus && se.listStatus.length>0) {
-                                            if(!se.checkItemInArray(element.id)){
-                                                element.status=1
-                                              }else{
-                                                element.status=0
-                                              }
+                                        if (element.memberId=='alluser') {
+                                            element.status=0;
+                                            if (se.listStatus && se.listStatus.length>0) {
+                                                if(se.checkItemInArray(element.id)){
+                                                    element.status=1;
+                                                  }
+                                            }
                                         }
+                                       
                                         if (se.items.length > 0) {
                                             if (! se.gf.checkExistsItemInArray(se.items, element, 'trip')) {
                                                 se.items.push(element);
@@ -247,8 +249,10 @@ export class FlightnotifyPage {
         se.items.forEach(element => {
             if (element.id == item.id) {
                 se.zone.run(() => {
-                    if (element.status == 1) {
-                        element.status = 0;
+                    if (element.status == 0) {
+                        element.status = 1;
+                        se.valueGlobal.countNotifi--;
+                        se.fcm.setBadge(se.valueGlobal.countNotifi);
                         // update status xuống db
                         if (element.memberId=='alluser') {
                             se.callUpdateStatusProduct(element);
@@ -550,7 +554,7 @@ export class FlightnotifyPage {
                         error.param = JSON.stringify(options);
                         C.writeErrorLog(error, response);
                     } else if (body && body.success) {
-                        se.valueGlobal.countNotifi --;
+                        // se.valueGlobal.countNotifi --;
                     }
                 });
             }

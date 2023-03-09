@@ -298,6 +298,8 @@ export class SearchHotel {
   gaComboId: any;
   gaDiscountPromo: any;
   RatingValue: number;
+  keysearchhoteldetail: string;
+  keySearchHotelDetail: string;
 }
 export class child {
     text: string;

@@ -576,7 +576,8 @@ export class RoomadddetailsPage implements OnInit {
                 let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + priceBooking + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
                 se.gf.CreateUrl(url);
               }
-              
+              se.searchhotel.paymentType = 'office';
+              se.gf.logEventFirebase('office',se.searchhotel, 'roomadddetails', 'add_payment_info', 'Hotels');
               se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
             }
             else {
@@ -878,6 +879,7 @@ export class RoomadddetailsPage implements OnInit {
                 let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + priceBooking + '&orderCode=' + body.code + '&buyerPhone=' + se.Roomif.phone+ '&memberId=' + se.jti;
                 se.gf.CreateUrl(url);
               }
+              se.searchhotel.paymentType = 'On request';
               se.gf.logEventFirebase('On request',se.searchhotel, 'roomadddetails', 'add_payment_info', 'Hotels');
             se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + se.Roomif.payment);
             se.loader.dismiss();
@@ -1052,6 +1054,10 @@ export class RoomadddetailsPage implements OnInit {
     }
     if(!se.activityService.objBankInStallment){
       se.presentToastWarning("Đang tính giá trả góp, xin quý khách vui lòng đợi trong giây lát!");
+      return;
+    }
+    if(se.activityService.objBankInStallment && !se.activityService.objBankInStallment.banks){
+      se.presentToastWarning("Phương thức thanh toán đang cập nhật, vui lòng chọn hình thức thanh toán khác!");
       return;
     }
     let checkappleemail=(se._email.includes("appleid") || se._email.includes('vivumember.info'));

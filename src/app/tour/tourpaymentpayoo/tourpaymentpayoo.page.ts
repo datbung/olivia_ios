@@ -67,7 +67,7 @@ export class TourPaymentPayooPage implements OnInit {
 
     this._tourService.gaPaymentType = 'payoo';
     this._tourService.totalPrice = this.total;
-    this.gf.logEventFirebase(this._tourService.gaPaymentType,this._tourService, 'tourpaymentselect', 'add_payment_info', 'Tours');
+    this.gf.logEventFirebase(this._tourService.gaPaymentType,this._tourService, 'tourpaymentpayoo', 'add_payment_info', 'Tours');
   }
   goback() {
     if (this.stt == 1) {

@@ -65,6 +65,7 @@ export class FlightcombochosebankPage implements OnInit {
 
   openWebpage(url: string) {
     var se=this;
+    se.searchhotel.paymentType = 'atm';
     se.gf.logEventFirebase('atm',se.searchhotel, 'flightcomboatm', 'add_payment_info', 'Combo');
     this.safariViewController.isAvailable()
   .then((available: boolean) => {

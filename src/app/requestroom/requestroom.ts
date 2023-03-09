@@ -121,7 +121,8 @@ export class RequestRoomPage implements OnInit{
      var priceshow:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? Number(se.bookCombo.ComboDetail.comboDetail.totalPriceSale.toString().replace(/\./g, '').replace(/\,/g, '')) : se.gf.convertNumberToFloat(se.bookCombo.ComboRoomPrice);
      //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout, value: priceshow ,currency: "VND"});
      se.bookCombo.location = se.location;
-     se.searchhotel.gaComboId = se.bookCombo.HotelCode;
+     se.searchhotel.gaComboId = se.bookCombo.HotelCode ? se.bookCombo.HotelCode : se.searchhotel.gaHotelDetail.Code;
+     se.searchhotel.gaComboName = se.bookCombo.HotelName;
      se.searchhotel.totalPrice = priceshow;
      se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'begin_checkout', 'Combo');
 
@@ -308,6 +309,7 @@ export class RequestRoomPage implements OnInit{
                   se.modalCtrl.dismiss();
                 },200);
                 let priceshow =  se.booking.cost ? Number( se.booking.cost.toString().replace(/\./g, '').replace(/\,/g, '')) : 0;
+                se.searchhotel.paymentType = 'On request';
                 //se.gf.googleAnalytionCustom('purchase',{items: [{item_category:'requestroom' , item_name: se.booking.HotelName, item_id: se.booking.HotelId, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.booking.Address ? se.booking.Address : '' }], value: se.gf.convertStringToNumber(priceshow) ,currency: "VND"});
                 se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'purchase', 'Combo');
                 se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_ADDED_TO_CART, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.HotelId,'fb_num_items': 1, 'fb_value': se.gf.convertStringToNumber(priceshow) ,  'fb_currency': 'VND' , 

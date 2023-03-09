@@ -64,7 +64,7 @@ export class FlightpaymentdonepayooPage implements OnInit {
       this.PeriodPaymentHour=moment(this._flightService.itemFlightCache.pnr.periodPaymentDate).format('HH:mm');
     }
     //se.gf.googleAnalytionCustom('purchase', { item_category: 'flights', start_date: moment(se._flightService.itemFlightCache.checkInDate).format("YYYY-MM-DD"), end_date:moment(se._flightService.itemFlightCache.checkOutDate).format("YYYY-MM-DD") , item_name: se._flightService.itemFlightCache.departCity+'-'+se._flightService.itemFlightCache.returnCity, item_id: se._flightService.itemFlightCache.departCode, value: se._flightService.itemFlightCache.totalPrice, currency: "VND" });
-    se.gf.logEventFirebase('payoo', se._flightService.itemFlightCache, 'flightpaymentselect', 'purchase', 'Flights');
+    se.gf.logEventFirebase(se.searchhotel.paymentType, se._flightService.itemFlightCache, 'flightpaymentselect', 'purchase', 'Flights');
   }
 
   ionViewWillEnter(){

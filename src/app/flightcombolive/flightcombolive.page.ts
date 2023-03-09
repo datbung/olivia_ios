@@ -74,6 +74,7 @@ export class FlightcombolivePage implements OnInit {
                     if(se.jti){
                       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se.bookCombo.totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookCombo.bookingcode+ '&memberId=' + se.jti;
                       se.gf.CreatePayoo(url);
+                      se.searchhotel.paymentType = 'office';
                       se.gf.logEventFirebase('office',se.searchhotel, 'flightcombolive', 'add_payment_info', 'Combo');
                     }
                     if(se._voucherService.selectVoucher){

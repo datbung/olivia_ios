@@ -108,6 +108,7 @@ export class TourPaymentAtmPage implements OnInit {
   }
   openWebpage(url: string) {
     var se=this;
+    se.gf.logEventFirebase(se.tourService.gaPaymentType,se.tourService, 'tourpaymentatm', 'add_payment_info', 'Tours');
     this.safariViewController.isAvailable()
   .then((available: boolean) => {
       if (available) {

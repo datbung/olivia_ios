@@ -173,44 +173,44 @@ export class GlobalFunction{
       this.googleAnalytionCustom(viewAction, { 
       items: itemcache.roundTrip ? [
       {
-        item_id: itemcache.departCode+"-di-"+itemcache.returnCode,
-        item_name: itemcache.departCity+" đi "+itemcache.returnCity,
+        item_id: "Ve-may-bay-"+itemcache.departCode+"-di-"+itemcache.returnCode,
+        item_name: "Vé Máy Bay "+itemcache.departCity+" đi "+itemcache.returnCity,
         discount: itemcache.discount,
         item_brand: "iVIVU.com",
         item_category: category,
         item_category2: itemcache.departCode,
-        item_category3: itemcache.departFlight ? this.getTicketClass(itemcache.departFlight) : itemcache.isInternationalFlight ? this.getTicketClass(itemcache.itemFlightInternationalDepart) : '',
+        item_category3: itemcache.departFlight ? this.getTicketClass(itemcache.departFlight) : itemcache.isInternationalFlight && itemcache.itemFlightInternationalDepart ? this.getTicketClass(itemcache.itemFlightInternationalDepart) : '',
         item_category4: itemcache.isInternationalFlight ? 'Travelport' :"Api", 
         item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice)/1000000 : '',
+        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : '',
         quantity: itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0),
       },
       {
-        item_id: itemcache.returnCode+"-di-"+itemcache.departCode,
-        item_name: itemcache.returnCity+" đi "+itemcache.departCity,
+        item_id: "Ve-may-bay-"+itemcache.returnCode+"-di-"+itemcache.departCode,
+        item_name: "Vé Máy Bay "+itemcache.returnCity+" đi "+itemcache.departCity,
         discount: 0,
         item_brand: "iVIVU.com",
         item_category: category,
         item_category2: itemcache.returnCode,
-        item_category3: itemcache.returnFlight ? this.getTicketClass(itemcache.returnFlight) : itemcache.isInternationalFlight ? this.getTicketClass(itemcache.itemFlightInternationalReturn) : '',
+        item_category3: itemcache.returnFlight ? this.getTicketClass(itemcache.returnFlight) : itemcache.isInternationalFlight && itemcache.itemFlightInternationalReturn ? this.getTicketClass(itemcache.itemFlightInternationalReturn) : '',
         item_category4: itemcache.isInternationalFlight ? 'Travelport' :"Api", 
         item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice)/1000000 : '',
+        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : '',
         quantity: itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0),
       }
      ] : 
      [
       {
-        item_id: itemcache.departCode+"-di-"+itemcache.returnCode,
-        item_name: itemcache.departCity+" đi "+itemcache.returnCity,
+        item_id: "Ve-may-bay-"+itemcache.departCode+"-di-"+itemcache.returnCode,
+        item_name: "Vé Máy Bay "+itemcache.departCity+" đi "+itemcache.returnCity,
         discount: itemcache.discount,
         item_brand: "iVIVU.com",
         item_category: category,
         item_category2: itemcache.departCode,
-        item_category3: itemcache.departFlight ? this.getTicketClass(itemcache.departFlight) : itemcache.isInternationalFlight ? this.getTicketClass(itemcache.itemFlightInternationalDepart) : '',
+        item_category3: itemcache.departFlight ? this.getTicketClass(itemcache.departFlight) : itemcache.isInternationalFlight && itemcache.itemFlightInternationalDepart? this.getTicketClass(itemcache.itemFlightInternationalDepart) : '',
         item_category4: itemcache.isInternationalFlight ? 'Travelport' :"Api", 
         item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice)/1000000 : '',
+        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : '',
         quantity: itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0),
       }
      ],
@@ -224,7 +224,7 @@ export class GlobalFunction{
       let date2 = new Date(itemcache.CheckOutDate);
       let timeDiff = Math.abs(date2.getTime() - date1.getTime());
       let duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      console.log(itemcache.gaHotelDetail);
+      //console.log(itemcache.gaHotelDetail);
       this.gaSetScreenName(itemcache.gaHotelDetail.Url);
       this.googleAnalytionCustom(viewAction, {
         currency: "VND",
@@ -244,14 +244,14 @@ export class GlobalFunction{
                     item_category3: itemcache.gaHotelDetail ? itemcache.gaHotelDetail.RatingValue.toString() : '',
                     item_category4: category == 'Combo' ? 'Combo' : 'Room',
                     item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice)/1000000 : 0,
+                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : 0,
                     quantity: itemcache.roomnumber * duration
                 }
             ]
       })
     }
     else if(category == 'Tours'){
-      this.gaSetScreenName('/du-lich/'+itemcache.gaTourDetail.Code);
+      this.gaSetScreenName('/du-lich/'+itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''));
       this.googleAnalytionCustom(viewAction, {
         currency: "VND",
             value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
@@ -259,7 +259,7 @@ export class GlobalFunction{
             payment_type: paymentType ? this.getGAPaymentType(paymentType) : '',
             items: [
                 {
-                    item_id: itemcache.gaTourDetail.Code || '',
+                    item_id: itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''),
                     item_name: itemcache.gaTourDetail.Name,
                     discount: itemcache.gaDiscountPromo || 0,
                     index: 0,
@@ -269,7 +269,7 @@ export class GlobalFunction{
                     item_category3: '',
                     item_category4: itemcache.gaTourDetail.TourType ||'',
                     item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice)/1000000 : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr)/1000000 : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice)/1000000 || 0)),
+                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
                     quantity: this.searchhotel.adult +(this.searchhotel.child || 0)
                 }
             ]
