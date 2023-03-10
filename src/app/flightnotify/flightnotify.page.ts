@@ -159,7 +159,7 @@ export class FlightnotifyPage {
                         // se.badge.set(countNoti);
                         // se.valueGlobal.countNotifi = countNoti;
                         // sort lại notifi mới nhất lên trước
-                        se.sortNotifi();
+                        se.sortNotifi('booking');
                       
                         se.loaddatadone = true;
                     })
@@ -278,7 +278,7 @@ export class FlightnotifyPage {
                     // se.badge.set(countNoti);
                     // se.valueGlobal.countNotifi = countNoti;
                     // sort lại notifi mới nhất lên trước
-                    se.sortNotifi();
+                    se.sortNotifi('');
 
                     se.loaddatadone = true;
                   });
@@ -323,22 +323,34 @@ export class FlightnotifyPage {
   /**
    * Thực hiện sort theo date
    */
-  sortNotifi() {
+  sortNotifi(stt) {
     var se = this;
-    if (se.items && se.items.length > 0) {
-      se.zone.run(() =>
-        se.items.sort(function (a, b) {
+    if (!stt) {
+      if (se.items && se.items.length > 0) {
+        se.zone.run(() => se.items.sort(function (a, b) {
           let direction = -1;
-          if (moment(a["created"]).diff(moment(b["created"]), "minutes") <= 0) {
-            return -1 * direction;
-          } else {
-            return 1 * direction;
-          }
-        })
-      );
-      // sort ưu tiên đơn hàng
-      //  se.sortNotifibyBooking();
+            if (moment(a['created']).diff(moment(b['created']), 'minutes') <0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+        }));
+      }
+    }else{
+      if (se.itembookings && se.itembookings.length > 0) {
+        se.zone.run(() => se.itembookings.sort(function (a, b) {
+          let direction = -1;
+            if (moment(a['created']).diff(moment(b['created']), 'minutes') <0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+        }));
+      }
     }
+    
   }
   sortNotifibyBooking() {
     var se = this;
