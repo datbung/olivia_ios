@@ -23,6 +23,7 @@ export class MytripService {
   isFlightPaymentBank: any;
   totalHistoryTripText: string;
   totalHistoryFoodCountText: string="";
+  listcount: number;
 
   constructor() { }
 }

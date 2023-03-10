@@ -140,25 +140,30 @@ export class TourListPage implements OnInit{
       let res = JSON.parse(data);
       console.log(res.Response);
       se.slideData = res.Response;
-      se.slideData.forEach(element => {
-        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id && item.TotalQuest >0 );
-        if(itemmap && itemmap.length >0){
-          element.TopSale = itemmap[0].TotalPax;
-        }
-        if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
-          let arr = element.TourTimeName.split(' ');
-          element.sortTourTime = arr[0]*1 + arr[2]*1;
-        }else{
-          element.sortTourTime = 0;
-        }
-
-        if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
-          element.AvartarLink = 'https:'+element.AvartarLink;
-        }
-        se.convertAvgPoint(element);
-      });
-
-      se.mapingPriceTour();
+      if(se.slideData && se.slideData.length >0){
+        se.slideData.forEach(element => {
+          let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id && item.TotalQuest >0 );
+          if(itemmap && itemmap.length >0){
+            element.TopSale = itemmap[0].TotalPax;
+          }
+          if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
+            let arr = element.TourTimeName.split(' ');
+            element.sortTourTime = arr[0]*1 + arr[2]*1;
+          }else{
+            element.sortTourTime = 0;
+          }
+  
+          if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
+            element.AvartarLink = 'https:'+element.AvartarLink;
+          }
+          se.convertAvgPoint(element);
+        });
+  
+        se.mapingPriceTour();
+      }else{
+        se.loaddatadone = true;
+      }
+      
     })
   }
 
@@ -223,6 +228,9 @@ export class TourListPage implements OnInit{
       if(se.slideData && se.slideData.length >0){
         //se.name = se.slideData[0].Destination;
       }
+      else{
+        se.loaddatadone = true;
+      }
       se.slideData.forEach(element => {
         let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
         if(itemmap && itemmap.length >0){
@@ -257,6 +265,9 @@ export class TourListPage implements OnInit{
       // if(se.slideData && se.slideData.length >0){
       //   se.name = se.slideData[0].Destination;
       // }
+      if(se.slideData && se.slideData.length ==0){
+        se.loaddatadone = true;
+      }
       se.slideData.forEach(element => {
         let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
         if(itemmap && itemmap.length >0){
@@ -283,6 +294,9 @@ export class TourListPage implements OnInit{
     se.gf.RequestApi('GET', url, null, null, 'tourlist', 'loadTourListByRegionCode').then((data) => {
       let res = JSON.parse(data);
       se.slideData = res;
+      if(se.slideData && se.slideData.length ==0){
+        se.loaddatadone = true;
+      }
       if(se.slideData && se.slideData.length >0){
         //se.name = se.slideData[0].RegionName;
       }
@@ -360,8 +374,8 @@ export class TourListPage implements OnInit{
         let res = JSON.parse(data);
         console.log(res.Response);
         se.slideData = res.Response;
-        if(se.slideData && se.slideData.length >0){
-          //se.name = se.slideData[0].Destination;
+        if(se.slideData && se.slideData.length ==0){
+          se.loaddatadone = true;
         }
         se.slideData.forEach(element => {
           let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );

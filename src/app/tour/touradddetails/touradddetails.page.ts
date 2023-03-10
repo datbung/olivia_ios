@@ -166,7 +166,7 @@ export class TourAddDetailsPage implements OnInit {
         this.priceshow = this.Roomif.priceshow;
       }
       else {
-        this.priceshow = this.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
+        this.priceshow = this.gf.convertNumberToString(this.Roomif.priceshow);
       }
 
     }
@@ -178,7 +178,7 @@ export class TourAddDetailsPage implements OnInit {
           this.ischeckbtn = false;
         }
         else {
-          this.priceshow = this.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
+          this.priceshow = this.gf.convertNumberToString(this.Roomif.priceshow);
         }
       }
     }
@@ -188,9 +188,9 @@ export class TourAddDetailsPage implements OnInit {
     //var roomtype:any = this.Roomif.roomtype;
     var priceBooking:any = "";
     if(this.Roomif.priceshow){
-      priceBooking = this.Roomif.priceshow.replace(/\./g, '').replace(/\,/g, '');
+      priceBooking = this.gf.convertNumberToString(this.Roomif.priceshow);
     }else if(this.booking.cost){
-      priceBooking = this.booking.cost.replace(/\./g, '').replace(/\,/g, '');
+      priceBooking = this.gf.convertNumberToString(this.booking.cost);
     }
    
     this.GetUserInfo();

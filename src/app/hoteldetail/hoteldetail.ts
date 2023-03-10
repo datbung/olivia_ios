@@ -241,7 +241,16 @@ export class HotelDetailPage implements OnInit {
       // imgLoaderConfigService.setConcurrency(10);
       this.platform.resume.subscribe(async()=>{
         this.zone.run(()=>{
-          this.loaddata(true);
+          
+          this.subscription = this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd && (event.url.indexOf('/hoteldetail/') != -1) ) {
+              let key = 'hoteldetail_' + this.HotelID;
+              if((this.searchhotel.keySearchHotelDetail && this.searchhotel.keySearchHotelDetail != key) || !this.searchhotel.keySearchHotelDetail){
+                this.searchhotel.keySearchHotelDetail = key;
+                this.loaddata(true);
+              }
+            }
+          })
         })
       })
 
@@ -377,6 +386,7 @@ export class HotelDetailPage implements OnInit {
       }
 
   loaddata(isResume){
+    
       if(this.isLoadingData){
         this.isLoadingData = false;
         return;
@@ -401,7 +411,7 @@ export class HotelDetailPage implements OnInit {
           this.HotelID = this.activeRoute.snapshot.paramMap.get('id');
         }
       }
-      this.searchhotel.gaHotelId = this.HotelID;
+      
       this.checkBODdone = false;
       this.hasComboRoom = false;
       //this.ischeck = false;
@@ -1085,7 +1095,7 @@ export class HotelDetailPage implements OnInit {
             se.valueGlobal.titlecombo=jsondata.Combos.MiniTitle
           }
           //google analytic
-          se.gf.googleAnalytion('hoteldetail', 'Search', jsondata.Code + '|' + se.cin + '|' + se.cout);
+         // se.gf.googleAnalytion('hoteldetail', 'Search', jsondata.Code + '|' + se.cin + '|' + se.cout);
           se.updateLikeStatus();
           se.objDetail = jsondata;
           se.hotelDetail = [];
@@ -1146,9 +1156,10 @@ export class HotelDetailPage implements OnInit {
           se.name = jsondata.Name;
           se.searchhotel.gaHotelDetail = {...jsondata};
           se.searchhotel.gaHotelDetail.RatingValue = se.searchhotel.gaHotelDetail.Rating/10;
-          let key = 'hoteldetail_' + se.HotelID+"_"+se.cindisplay+"_"+se.coutdisplay+"_"+(se.searchhotel.adult ||0)+"_"+(se.searchhotel.child ||0)+"_"+(se.searchhotel.roomnumber ||0);
+          let key = 'hoteldetail_' + se.HotelID;
           if((se.searchhotel.keySearchHotelDetail && se.searchhotel.keySearchHotelDetail != key) || !se.searchhotel.keySearchHotelDetail){
             se.searchhotel.keySearchHotelDetail = key;
+            se.searchhotel.gaHotelId = jsondata.Code;
             se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
           }
           

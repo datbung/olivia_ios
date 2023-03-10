@@ -369,10 +369,10 @@ export class Tab4Page implements OnInit{
         });
       }
 
-      if(se.valueGlobal.updatedLastestVersion){
-        se.addUpdateLasterVersionNotify();
-        se.valueGlobal.updatedLastestVersion = false;
-      }
+      // if(se.valueGlobal.updatedLastestVersion){
+      //   se.addUpdateLasterVersionNotify();
+      //   se.valueGlobal.updatedLastestVersion = false;
+      // }
 
       // let countNoti = se.items.filter(item=>{ return item.status == 1 }).length;
       

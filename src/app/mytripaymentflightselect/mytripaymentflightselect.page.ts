@@ -484,7 +484,25 @@ export class MytripaymentflightselectPage implements OnInit {
     }
   }
   goback(){
-    this.navCtrl.navigateForward('mytripdetail', {animated: true});
+    if (this._flightService.tabFlightIndex == 2) {
+      if (this._mytripService.listcount==1) {
+        this.navCtrl.back();
+      }
+      else{
+        this._mytripService.backfrompage = "mytripdetail"
+        this.navCtrl.navigateForward('mytripdetail', {animated: true});
+      }
+    
+
+    }else{
+      if (this._mytripService.listcount==1) {
+        this.navCtrl.navigateForward(['/app/tabs/tab3']);
+      }
+      else{
+        this.navCtrl.navigateForward('mytripdetail', {animated: true});
+      }
+    }
+  
   }
 
   buildLinkPaymentVisa(){
