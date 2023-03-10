@@ -161,7 +161,7 @@
           <label>Quý khách chưa có tin nhắn mới</label>
         </div>
       </div>
-      <div class="mess-card" *ngFor="let item of items" class="mess-card">
+      <div class="mess-card" *ngFor="let item of itembookings" class="mess-card">
         <div *ngIf="item.notifyType==textnotifyType" class="div-detail" (click)="updateStatusMessage(item)">
           <div class="div-flex">
             <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />

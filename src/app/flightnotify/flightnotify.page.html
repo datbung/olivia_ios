@@ -1,143 +1,197 @@
 <ion-header class="flightnotify-header">
-      <ion-row>
-        <ion-col class="header-title"><label>Thông báo <span *ngIf="valueGlobal.countNotifi>0">({{valueGlobal.countNotifi}})</span></label>
-        </ion-col>
-    </ion-row>
+  <ion-row>
+    <ion-col class="header-title"><label>Thông báo <span
+          *ngIf="valueGlobal.countNotifi>0">({{valueGlobal.countNotifi}})</span></label>
+    </ion-col>
+  </ion-row>
 </ion-header>
 
 <div class="flightnotify-content">
   <div class="inbox-content" *ngIf="!loaddatadone else loaddone">
     <ion-row *ngFor="let item of itemskeleton">
-        <ion-row class="cls-border-bottom" style="width:100%">
-                <ion-item style="--padding-start:0;--background: transparent;--border-style:none;--inner-padding-end:0;width: 100%;">
-                  <ion-row style="width:100%">
-                      <ion-col size="1.2" style="padding: 0">
-                          <div>
-                            <ion-skeleton-text animated style="width:100%;margin-top: 6px;height: 24px;width: 24px;border-radius:24px"></ion-skeleton-text>
-                          </div>
-                        </ion-col>
-                        <ion-col size="10.8" style="padding: 0">
-                          <div><ion-skeleton-text animated style="width:100%;margin-top: 8px;height: 16px;"></ion-skeleton-text></div>
-                          <div><ion-skeleton-text animated style="width:100%;margin-top: 8px;height: 16px;"></ion-skeleton-text></div>
-                          <div><ion-skeleton-text animated style="width:25%;margin-top: 8px;height: 16px;"></ion-skeleton-text></div>
-                      </ion-col>
-                  </ion-row>
-                </ion-item>
+      <ion-row class="cls-border-bottom" style="width:100%">
+        <ion-item
+          style="--padding-start:0;--background: transparent;--border-style:none;--inner-padding-end:0;width: 100%;">
+          <ion-row style="width:100%">
+            <ion-col size="1.2" style="padding: 0">
+              <div>
+                <ion-skeleton-text animated
+                  style="width:100%;margin-top: 6px;height: 24px;width: 24px;border-radius:24px"></ion-skeleton-text>
+              </div>
+            </ion-col>
+            <ion-col size="10.8" style="padding: 0">
+              <div><ion-skeleton-text animated style="width:100%;margin-top: 8px;height: 16px;"></ion-skeleton-text>
+              </div>
+              <div><ion-skeleton-text animated style="width:100%;margin-top: 8px;height: 16px;"></ion-skeleton-text>
+              </div>
+              <div><ion-skeleton-text animated style="width:25%;margin-top: 8px;height: 16px;"></ion-skeleton-text>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-item>
       </ion-row>
     </ion-row>
   </div>
   <ng-template #loaddone>
     <div class="inbox-content-empty" *ngIf="items.length == 0 && loaddatadone">
       <div class="img-inbox-empty">
-        <div class="img-empty"><img  src="../../assets/empty/island.svg"></div>
+        <div class="img-empty"><img src="../../assets/empty/island.svg"></div>
       </div>
       <div class="text-trip-empty">
         <label>Quý khách chưa có tin nhắn mới</label>
       </div>
-  </div>
+    </div>
 
 
- 
-  <div class="inbox-content" *ngIf="items && items.length > 0 && loaddatadone">
-    <div  class="div-scroll margin-left-16" *ngIf="items && items.length > 0 && loaddatadone">
+    <div class="div-scroll margin-left-16" *ngIf="items && items.length > 0 && loaddatadone">
       <div class="div-flex">
         <div class="div-33">
-          <button 
-          ion-button round outline [ngClass]="isAll ? 'btn-typeMessenger-action margin-left-0': 'btn-typeMessenger margin-left-0'" (click)="funcAll()">Tất cả</button>
+          <button ion-button round outline
+            [ngClass]="isAll ? 'btn-typeMessenger-action margin-left-0': 'btn-typeMessenger margin-left-0'"
+            (click)="funcAll()">Tất cả</button>
         </div>
         <div class="div-33">
-          <button 
-          ion-button round outline [ngClass]="isProduct ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcProduct()">Ưu đãi</button>
+          <button ion-button round outline [ngClass]="isProduct ? 'btn-typeMessenger-action': 'btn-typeMessenger'"
+            (click)="funcProduct()">Ưu đãi</button>
         </div>
-       <div class="div-33">
-          <button 
-          ion-button round outline [ngClass]="isOrder ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcOrder()">Đơn hàng</button>
+        <div class="div-33">
+          <button ion-button round outline [ngClass]="isOrder ? 'btn-typeMessenger-action': 'btn-typeMessenger'"
+            (click)="funcOrder()">Đơn hàng</button>
         </div>
-       
-      
+
+
         <!-- <button 
-        ion-button round outline [ngClass]="isOther ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcOther()">Khác</button> -->
+      ion-button round outline [ngClass]="isOther ? 'btn-typeMessenger-action': 'btn-typeMessenger'" (click)="funcOther()">Khác</button> -->
       </div>
     </div>
-    <div *ngIf="!textnotifyType">
-      <div  class="mess-card" *ngFor="let item of items" class="mess-card">
-        <div class="div-detail" (click)="updateStatusMessage(item)" >
-          <div class="div-flex">
-            <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
-            <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
-            <div *ngIf="item.notifyType == 'product'" [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text'" >
-              Sản phẩm
-            </div>
-            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text'">
-              Đơn hàng
-            </div>
-        
-            <div class="d-flex">
-              <div *ngIf="item.status == 0" class="cls-dot">
-              
-              </div>
-              <div [ngClass]="item.status == 0 ? 'noti-text-time text-bold' : 'noti-text-time'">{{item.date}}</div>
-            </div>
-        </div>
-        <div class="cls-border">
-
-        </div>
-        <div [ngClass]="item.status == 0 ? 'noti-text-title text-bold' : 'noti-text-title'">
-          {{item.title}}
-        </div>
-        <div class="noti-text-content">
-          {{item.message}}
-        </div>
-        </div>
-      </div>
-    </div>
-  
-    <div *ngIf="textnotifyType">
-      <div class="inbox-content-empty" *ngIf="countNoti == 0">
-        <div class="img-inbox-empty">
+    <div class="inbox-content"
+      *ngIf="items && items.length > 0 && loaddatadone && (!textnotifyType || textnotifyType=='product')">
+      <div *ngIf="textnotifyType">
+        <div class="inbox-content-empty" *ngIf="countNoti == 0">
+          <div class="img-inbox-empty">
             <img class="img-empty" src="./assets/empty/island.svg">
+          </div>
+          <div class="text-trip-empty">
+            <label>Quý khách chưa có tin nhắn mới</label>
+          </div>
         </div>
-        <div class="text-trip-empty">
-          <label>Quý khách chưa có tin nhắn mới</label>
-        </div>
-    </div>
-      <div class="mess-card" *ngFor="let item of items"  class="mess-card">
-        <div *ngIf="item.notifyType==textnotifyType" class="div-detail" (click)="updateStatusMessage(item)" >
-          <div class="div-flex">
-            <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
-            <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img" src="./assets/imgs/noti_clipboard.svg" />
-            <div *ngIf="item.notifyType == 'product'" [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
-              Sản phẩm
-            </div>
-            <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"  [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
-              Đơn hàng
-            </div>
-            <div class="d-flex">
-              <div *ngIf="item.status == 0" class="cls-dot">
-              
+        <div class="mess-card" *ngFor="let item of items" class="mess-card">
+          <div *ngIf="item.notifyType==textnotifyType" class="div-detail" (click)="updateStatusMessage(item)">
+            <div class="div-flex">
+              <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
+              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img"
+                src="./assets/imgs/noti_clipboard.svg" />
+              <div *ngIf="item.notifyType == 'product'"
+                [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
+                Sản phẩm
               </div>
-              <div [ngClass]="item.status == 0 ? 'noti-text-time text-bold' : 'noti-text-time' ">{{item.date}}</div>
-            </div>
-        </div>
-        <div class="cls-border">
+              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"
+                [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
+                Đơn hàng
+              </div>
+              <div class="d-flex">
+                <div *ngIf="item.status == 0" class="cls-dot">
 
-        </div>
-        <div [ngClass]="item.status == 0 ? 'noti-text-title text-bold' : 'noti-text-title'">
-          {{item.title}}
-        </div>
-        <div class="noti-text-content">
-          {{item.message}}
-        </div>
+                </div>
+                <div [ngClass]="item.status == 0 ? 'noti-text-time text-bold' : 'noti-text-time' ">{{item.date}}</div>
+              </div>
+            </div>
+            <div class="cls-border">
+
+            </div>
+            <div [ngClass]="item.status == 0 ? 'noti-text-title text-bold' : 'noti-text-title'">
+              {{item.title}}
+            </div>
+            <div class="noti-text-content">
+              {{item.message}}
+            </div>
+          </div>
         </div>
       </div>
-</div>
-</div>
+      <div *ngIf="!textnotifyType">
+        <div class="mess-card" *ngFor="let item of items" class="mess-card">
+          <div class="div-detail" (click)="updateStatusMessage(item)">
+            <div class="div-flex">
+              <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
+              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img"
+                src="./assets/imgs/noti_clipboard.svg" />
+              <div *ngIf="item.notifyType == 'product'"
+                [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text'">
+                Sản phẩm
+              </div>
+              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"
+                [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text'">
+                Đơn hàng
+              </div>
+
+              <div class="d-flex">
+                <div *ngIf="item.status == 0" class="cls-dot">
+
+                </div>
+                <div [ngClass]="item.status == 0 ? 'noti-text-time text-bold' : 'noti-text-time'">{{item.date}}</div>
+              </div>
+            </div>
+            <div class="cls-border">
+
+            </div>
+            <div [ngClass]="item.status == 0 ? 'noti-text-title text-bold' : 'noti-text-title'">
+              {{item.title}}
+            </div>
+            <div class="noti-text-content">
+              {{item.message}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="itembookings && itembookings.length > 0 && loaddatadone && textnotifyType=='booking'">
+      <div *ngIf="textnotifyType">
+        <div class="inbox-content-empty" *ngIf="countNoti == 0">
+          <div class="img-inbox-empty">
+            <img class="img-empty" src="./assets/empty/island.svg">
+          </div>
+          <div class="text-trip-empty">
+            <label>Quý khách chưa có tin nhắn mới</label>
+          </div>
+        </div>
+        <div class="mess-card" *ngFor="let item of itembookings" class="mess-card">
+          <div *ngIf="item.notifyType==textnotifyType" class="div-detail" (click)="updateStatusMessage(item)">
+            <div class="div-flex">
+              <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
+              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img"
+                src="./assets/imgs/noti_clipboard.svg" />
+              <div *ngIf="item.notifyType == 'product'"
+                [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
+                Sản phẩm
+              </div>
+              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"
+                [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
+                Đơn hàng
+              </div>
+              <div class="d-flex">
+                <div *ngIf="item.status == 0" class="cls-dot">
+
+                </div>
+                <div [ngClass]="item.status == 0 ? 'noti-text-time text-bold' : 'noti-text-time' ">{{item.date}}</div>
+              </div>
+            </div>
+            <div class="cls-border">
+
+            </div>
+            <div [ngClass]="item.status == 0 ? 'noti-text-title text-bold' : 'noti-text-title'">
+              {{item.title}}
+            </div>
+            <div class="noti-text-content">
+              {{item.message}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </ng-template>
 
-    
 </div>
-    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="!loadend">
-      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="!loadend">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
