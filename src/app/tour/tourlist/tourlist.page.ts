@@ -478,14 +478,19 @@ export class TourListPage implements OnInit{
     {
       se.executeSort('name') 
     }
-    if(sortType == 4)//time
-    {
-      se.executeSort('sortByTime') 
-    }
   }
   sortTimeTour(){
+    var se = this
       let direction = -1;
-      this.zone.run(() => this.arrTour.sort(function (a, b) {
+      var daycin= moment(se.searchhotel.CheckInDate).format("YYYY-MM-DDT00:00:00")
+     
+      this.slideData=[];
+      this.arrTour.forEach(element => {
+        if (element.sortByTime>=daycin) {
+          this.slideData.push(element);
+        }
+      });
+       this.zone.run(() => this.slideData.sort(function (a, b) {
         let columnname = "sortByTime"
         if (a[columnname] < b[columnname]) {
           return 1 * direction;
@@ -494,10 +499,12 @@ export class TourListPage implements OnInit{
           return -1 * direction;
         }
       }))
-      this.slideData=[];
       this.arrTour.forEach(element => {
-        this.slideData.push(element);
+        if (element.sortByTime<daycin) {
+          this.slideData.push(element);
+        }
       });
+   
       this.arrTourNoPrice.forEach(element => {
         this.slideData.push(element);
       });
@@ -520,9 +527,6 @@ export class TourListPage implements OnInit{
       }
       else if(property == 'duration'){
         return b[col] - a[col];
-      }
-      else if(property == 'sortByTime'){
-        return a[col] - b[col];
       }
       else{
         return b[col].localeCompare(a[col]);

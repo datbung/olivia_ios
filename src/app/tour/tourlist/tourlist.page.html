@@ -41,9 +41,9 @@
               </div>
 
               <div class="cls-row-viewtopsale d-flex" >
-                  <div class="width-70 div-flex-end"><span *ngIf="slide.TopSale" class="text-topsale">Đã bán {{ slide.TopSale }} khách trong 24h qua</span></div>
-                  <div class=" width-45 " >
-                    <div  class="text-departureTime">Khởi hành {{slide.DepartureTime}}</div>
+                  <div class="width-125 div-flex-end"><span *ngIf="slide.TopSale" class="text-topsale">Đã bán {{ slide.TopSale }} khách trong 24h qua</span></div>
+                  <div class=" width-100 " >
+                    <div  class="text-departureTime" *ngIf="slide.priceShow">Khởi hành {{slide.DepartureTime}}</div>
                     <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.PriceAdult < slide.MinPrice && slide.MinPrice > slide.AdultSalePrice">{{ gf.convertNumberToString(slide.MinPrice) }}đ</div>
                     <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.PriceAdult > slide.MinPrice && slide.MinPrice == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div>
                     <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.MinPrice && slide.MinPrice < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div>

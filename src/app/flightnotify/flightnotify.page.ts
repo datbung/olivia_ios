@@ -904,7 +904,7 @@ export class FlightnotifyPage {
     this.isProduct = false;
     this.isOrder = true;
     this.textnotifyType = "booking";
-    this.countNoti = this.items.filter((item) => {
+    this.countNoti = this.itembookings.filter((item) => {
       return item.notifyType == this.textnotifyType;
     }).length;
   }

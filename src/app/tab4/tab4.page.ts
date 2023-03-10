@@ -943,7 +943,7 @@ export class Tab4Page implements OnInit{
     this.isOrder=true;
     this.isOther=false;
     this.textnotifyType="booking";
-    this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
+    this.countNoti = this.itembookings.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
   }
   // funcOther(){
   //   this.isAll=false;
