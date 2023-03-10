@@ -1666,6 +1666,7 @@ import { normalizeURL } from 'ionic-angular';
               se.loadUserNotificationAndMapFlightChange();
     
               if (se.gf.getParams('notifiBookingCode') ) {
+                var co =0
                 //Map số bkg trong listtrip để focus vào bkg được notifi
                 var idxMap = se.listMyTrips.map((item, index) => {
                   return item.booking_id == se.gf.getParams('notifiBookingCode');
@@ -1674,25 +1675,26 @@ import { normalizeURL } from 'ionic-angular';
                   var idx = idxMap.findIndex((el) => { return el == true });
                   se.currentTrip = idx;
                   if (this.listMyTrips[idx].delivery_payment_date_display  && (this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10) && !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)) {
+                    se.amount_after_tax='';
                     this._mytripservice.tripdetail = this.listMyTrips[idx];
                     this._mytripservice.currentTrip = this.currentTrip;
+                    this._mytripservice.listcount =  this.listMyTrips.length;
                     this.paymentselect(se.listMyTrips[idx],0); 
-                    se.gf.setParams('', 'notifiBookingCode');
-                    return;
+                    co=1;
                   }
                   else if (this.listMyTrips[idx].delivery_payment_date_display&&!(this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10)&& !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)){
                     se.amount_after_tax='';
                     this._mytripservice.tripdetail = this.listMyTrips[idx];
                     this._mytripservice.currentTrip = this.currentTrip;
+                    this._mytripservice.listcount =  this.listMyTrips.length;
                     this.paymentselect(se.listMyTrips[idx],1); 
-                    se.gf.setParams('', 'notifiBookingCode');
-                    return;
+                    co=1;
                   }
                   se.gf.setParams('', 'notifiBookingCode');
             
-                  if (idx != -1) {
+                  if (idx != -1 && co==0) {
                     se.showtripdetail(se.listMyTrips[idx]);
-                  } else {
+                  } else if (co==0) {
     
                     //Map số bkg trong listtrip để focus vào bkg được notifi
                     var idxMaphis = se.listHistoryTrips.map((item, index) => {

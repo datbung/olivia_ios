@@ -411,7 +411,7 @@ export class HotelDetailPage implements OnInit {
           this.HotelID = this.activeRoute.snapshot.paramMap.get('id');
         }
       }
-      this.searchhotel.gaHotelId = this.HotelID;
+      
       this.checkBODdone = false;
       this.hasComboRoom = false;
       //this.ischeck = false;
@@ -1095,7 +1095,7 @@ export class HotelDetailPage implements OnInit {
             se.valueGlobal.titlecombo=jsondata.Combos.MiniTitle
           }
           //google analytic
-          se.gf.googleAnalytion('hoteldetail', 'Search', jsondata.Code + '|' + se.cin + '|' + se.cout);
+         // se.gf.googleAnalytion('hoteldetail', 'Search', jsondata.Code + '|' + se.cin + '|' + se.cout);
           se.updateLikeStatus();
           se.objDetail = jsondata;
           se.hotelDetail = [];
@@ -1159,6 +1159,7 @@ export class HotelDetailPage implements OnInit {
           let key = 'hoteldetail_' + se.HotelID;
           if((se.searchhotel.keySearchHotelDetail && se.searchhotel.keySearchHotelDetail != key) || !se.searchhotel.keySearchHotelDetail){
             se.searchhotel.keySearchHotelDetail = key;
+            se.searchhotel.gaHotelId = jsondata.Code;
             se.gf.logEventFirebase('',se.searchhotel, 'hoteldetail', 'view_item', 'Hotels');
           }
           

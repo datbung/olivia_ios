@@ -79,7 +79,7 @@ export class PaymentqrcodePage implements OnInit {
               this.gf.logEventFirebase(this.searchhotel.paymentType,this.searchhotel, 'paymentqrcode', 'purchase', 'Hotels');
             }
             else if(this.activityService.qrcodepaymentfrom ==3){//tour
-              this.gf.logEventFirebase(this.searchhotel.paymentType,this.searchhotel, 'paymentqrcode', 'purchase', 'Tours');
+              this.gf.logEventFirebase(this.searchhotel.paymentType,this.tourService, 'paymentqrcode', 'purchase', 'Tours');
             }
             else if(this.activityService.qrcodepaymentfrom ==4){//comboflight
               this.gf.logEventFirebase(this.searchhotel.paymentType,this.searchhotel, 'paymentqrcode', 'purchase', 'Combo');
@@ -194,7 +194,17 @@ export class PaymentqrcodePage implements OnInit {
   }
 
   gotomytrip(){
-    this.navCtrl.navigateBack(['/app/tabs/tab3']);
+    if(this.activityService.qrcodepaymentfrom == 1){//vmb
+      this._flightService.itemTabFlightActive.emit(true);
+      this.valueGlobal.backValue = "homeflight";
+      this._flightService.itemMenuFlightClick.emit(2);
+      this._flightService.bookingCodePayment = this.bookingCode;
+      this._flightService.bookingSuccess = true;
+      this.navCtrl.navigateBack('/tabs/tab1');
+    }else{
+      this.navCtrl.navigateBack(['/app/tabs/tab3']);
+    }
+    
   }
 
   public async showConfirm() {

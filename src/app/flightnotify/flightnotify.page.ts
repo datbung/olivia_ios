@@ -371,7 +371,18 @@ export class FlightnotifyPage {
                         $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
                         $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
                     } else { // Chưa thanh toán về trang thanh toán
-                        se.paymentselect(itemMap[0], idx);
+                        if (itemMap[0].booking_type == 'VMB')  {
+                            se.gf.setParams(BookingCode, 'notifiBookingCode');
+                            se._flightService.tabFlightIndex = 2;
+                            se._flightService.itemMenuFlightClick.emit(2);
+            
+                            $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+                            $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+                            $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
+                          }
+                          else{
+                            se.paymentselect(itemMap[0], idx);
+                          }
                     }
 
                 }else{

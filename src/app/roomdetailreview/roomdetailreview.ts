@@ -221,7 +221,11 @@ export class RoomdetailreviewPage implements OnInit {
     
     //this.gf.googleAnalytionCustom('add_to_cart',{item_category:'roomdetail' , item_name: this.booking.HotelName, item_id: this.booking.code, start_date: this.booking.CheckInDate, end_date: this.booking.CheckOutDate, value: Number(this.booking.cost.replace(/\./g, '').replace(/\,/g, '') ), currency: 'VND'});
     let se = this;
-    se.searchhotel.totalPrice = this.booking.cost;
+    if(se.Roomif.priceshow){
+      se.searchhotel.totalPrice = se.Roomif.priceshow;
+    }else if(se.booking.cost){
+      se.searchhotel.totalPrice = se.booking.cost;
+    }
     se.gf.logEventFirebase('',this.searchhotel, 'roomdetailreview', 'begin_checkout', 'Hotels');
    
     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.booking.cost) ,  'fb_currency': 'VND' , 
