@@ -25,7 +25,7 @@ import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 })
 export class Tab4Page implements OnInit{
   // items= [
-  //   {id:1, title: 'Cập nhật trạng thái booking', message:'iVIVU đã kiểm tra tình trạng phòng của Booking IVIVU123456 tại Swiss-Belresort Tuyền Lâm - Đà Lạt và đã gửi thông tin thanh toán cho Quý khách.',date: '1 giờ trước', status: 0},
+  //   {id:1, title: 'Cập nhật trạng thái booking', message: 'iVIVU đã kiểm tra tình trạng phòng của Booking IVIVU123456 tại Swiss-Belresort Tuyền Lâm - Đà Lạt và đã gửi thông tin thanh toán cho Quý khách.',date: '1 giờ trước', status: 0},
   //   {id:2, title: 'Chia sẻ nhận xét về khách sạn', message: 'Quý khách hãy đánh giá khách sạn Imperial Vũng Tàu để nhận đến 10 điểm tích luỹ và giúp mọi người hiểu hơn về khách sạn nhé!',date: '12/10/2018', status: 1},
   //   {id:3, title: 'Chuẩn bị khởi hành đi Imperial Vũng Tàu', message: 'Xe sẽ khởi hành đi Imperial Vũng Tàu tại số 1 Lê Duẩn, Q1 - Cổng Thảo Cầm Viên lúc 10 giờ. Quý khách vui lòng có mặt tại điểm đón trước 20 phút',date: '10/10/2018', status: 1},
   //   {id:4, title: '6 điểm check-in giải nhiệt nắng hè đẹp tựa trời Tây ở Vũng Tàu', message: 'Những ngày đầu hè nắng nóng, bạn hãy tìm cho mình điểm đến giải nhiệt hiệu quả. Vũng Tàu là một trong những gợi ý phù hợp dành cho bạn.',date: '10/10/2018', status: 1},
@@ -45,6 +45,7 @@ export class Tab4Page implements OnInit{
   textnotifyType="";
   countNoti: number;
   listStatus: any;
+  itembookings = [];
   constructor(public platform: Platform,public navCtrl: NavController,public gf: GlobalFunction,
     private storage: Storage,
     private zone: NgZone,
@@ -139,6 +140,59 @@ export class Tab4Page implements OnInit{
                   se.listStatus = JSON.parse(body);
                 }
                 se.loadUserNotification();
+                se.loadUserNotificationBooking();
+            }
+            });
+      }else{
+        se.zone.run(()=>{
+          se.loadend = true;
+          se.loaddatadone = true;
+          if(se.pageIndex == 1){
+            se.items = [];
+            se.valueGlobal.countNotifi=0;
+          }
+        })
+      }
+    })
+  }
+  loadUserNotificationBooking() {
+    var se = this;
+
+    se.storage.get('auth_token').then(auth_token => {
+      if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var options = {
+            method: 'GET',
+            url: C.urls.baseUrl.urlMobile +'/mobile/OliviaApis/GetNotificationByUserOrderIVV?pageIndex='+se.pageIndex +'&pageSize=' + se.pageSize,
+            timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+            headers:
+            {
+                'cache-control': 'no-cache',
+                'content-type': 'application/json',
+                authorization: text
+            }
+            };
+            request(options, function (error, response, body) {
+            if (error) {
+                error.page = "inbox";
+                error.func = "loadUserNotification";
+                error.param =  JSON.stringify(options);
+                C.writeErrorLog(error,response);
+            }else{
+                if(body && body != "[]"){
+                  var data = JSON.parse(body);
+                  se.loadDataNotify(data,'booking');
+
+                }else{
+                  se.zone.run(()=>{
+                    se.loadend = true;
+                    se.loaddatadone = true;
+                    if(se.pageIndex == 1){
+                      se.items = [];
+                      se.valueGlobal.countNotifi=0;
+                    }
+                  })
+                }
             }
             });
       }else{
@@ -205,17 +259,9 @@ export class Tab4Page implements OnInit{
                   C.writeErrorLog(error,response);
               }else{
                   if(body && body != "[]"){
-                      var data = JSON.parse(body);
-                      
-                    se.loadDataNotify(data);
-              
-                    //   if (se.objnotication && se.objnotication.length > 0) {
-                    //     for (let i = 0; i < se.objnotication.length; i++) {
-                    //         const element = se.objnotication[i];
-                    //         data.push(element);
-                    //     }
-                    // }
-                     
+                    var data = JSON.parse(body);
+                    se.loadDataNotify(data,'');
+
                   }else{
                     se.zone.run(()=>{
                       se.loadend = true;
@@ -245,44 +291,83 @@ export class Tab4Page implements OnInit{
       
   }
 
-  loadDataNotify(data){
+  loadDataNotify(data,stt){
     var se = this;
     se.zone.run(()=>{
-      data.forEach(element =>{
-        if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
-          let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
-          let d = new Date(Number(arrdate[2]), Number(arrdate[1])-1, Number(arrdate[0]),Number(arrdate[3]),Number(arrdate[4]));
-          let today = new Date();
-          if( moment(today).diff(d, 'hours') <= 24){
-            let diffhours = moment(today).diff(d, 'hours');
-            element.date = moment(today).diff(d, 'hours') + " giờ trước";
-            if(diffhours == 0){
-              element.date = moment(today).diff(d, 'minutes') + " phút trước";
+      if (!stt) {
+        data.forEach(element =>{
+          if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
+            let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
+            let d = new Date(Number(arrdate[2]), Number(arrdate[1])-1, Number(arrdate[0]),Number(arrdate[3]),Number(arrdate[4]));
+            let today = new Date();
+            if( moment(today).diff(d, 'hours') <= 24){
+              let diffhours = moment(today).diff(d, 'hours');
+              element.date = moment(today).diff(d, 'hours') + " giờ trước";
+              if(diffhours == 0){
+                element.date = moment(today).diff(d, 'minutes') + " phút trước";
+              }
+              
+            }else{
+              element.date = moment(element.created).format('DD/MM/YYYY');
             }
-            
-          }else{
-            element.date = moment(element.created).format('DD/MM/YYYY');
-          }
-          element.deleted = false;
-          if (element.memberId=='alluser') {
-            element.status=0;
-            if (this.listStatus && this.listStatus.length>0) {
-              if(se.checkItemInArray(element.id)){
-                element.status=1
+            element.deleted = false;
+            if (element.memberId=='alluser') {
+              element.status=0;
+              if (this.listStatus && this.listStatus.length>0) {
+                if(se.checkItemInArray(element.id)){
+                  element.status=1
+                }
               }
             }
-          }
-         
-        
-          if(se.items.length >0){
-            if(!se.gf.checkExistsItemInArray(se.items,element,'trip')){
-              se.items.push(element)
+           
+          
+            if(se.items.length >0){
+              if(!se.gf.checkExistsItemInArray(se.items,element,'trip')){
+                se.items.push(element)
+              }
+            }else{
+              se.items.push(element);
             }
-          }else{
-            se.items.push(element);
           }
-        }
-      });
+        });
+      }
+      else{
+        data.forEach(element =>{
+          if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
+            let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
+            let d = new Date(Number(arrdate[2]), Number(arrdate[1])-1, Number(arrdate[0]),Number(arrdate[3]),Number(arrdate[4]));
+            let today = new Date();
+            if( moment(today).diff(d, 'hours') <= 24){
+              let diffhours = moment(today).diff(d, 'hours');
+              element.date = moment(today).diff(d, 'hours') + " giờ trước";
+              if(diffhours == 0){
+                element.date = moment(today).diff(d, 'minutes') + " phút trước";
+              }
+              
+            }else{
+              element.date = moment(element.created).format('DD/MM/YYYY');
+            }
+            element.deleted = false;
+            if (element.memberId=='alluser') {
+              element.status=0;
+              if (this.listStatus && this.listStatus.length>0) {
+                if(se.checkItemInArray(element.id)){
+                  element.status=1
+                }
+              }
+            }
+           
+          
+            if(se.itembookings.length >0){
+              if(!se.gf.checkExistsItemInArray(se.itembookings,element,'trip')){
+                se.itembookings.push(element)
+              }
+            }else{
+              se.itembookings.push(element);
+            }
+          }
+        });
+      }
 
       // if(se.valueGlobal.updatedLastestVersion){
       //   se.addUpdateLasterVersionNotify();
@@ -292,7 +377,7 @@ export class Tab4Page implements OnInit{
       // let countNoti = se.items.filter(item=>{ return item.status == 1 }).length;
       
       // se.valueGlobal.countNotifi = countNoti;
-      se.sortNotifi();
+      se.sortNotifi(stt);
       se.loaddatadone = true;
     })
   }
@@ -332,19 +417,34 @@ export class Tab4Page implements OnInit{
   /**
    * Thực hiện sort theo date
    */
-  sortNotifi() {
+  sortNotifi(stt) {
     var se = this;
-    if (se.items && se.items.length > 0) {
-      se.zone.run(() => se.items.sort(function (a, b) {
-        let direction = -1;
-          if (moment(a['created']).diff(moment(b['created']), 'minutes') <0) {
-            return -1 * direction;
-          }
-          else {
-            return 1 * direction;
-          }
-      }));
+    if (!stt) {
+      if (se.items && se.items.length > 0) {
+        se.zone.run(() => se.items.sort(function (a, b) {
+          let direction = -1;
+            if (moment(a['created']).diff(moment(b['created']), 'minutes') <0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+        }));
+      }
+    }else{
+      if (se.itembookings && se.itembookings.length > 0) {
+        se.zone.run(() => se.itembookings.sort(function (a, b) {
+          let direction = -1;
+            if (moment(a['created']).diff(moment(b['created']), 'minutes') <0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+        }));
+      }
     }
+    
   }
   /**
    * Hàm set lại trạng thái thông báo
