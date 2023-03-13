@@ -3922,7 +3922,7 @@ export class Tab1Page implements OnInit {
     else if (currentIndex === 3) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
-
+      this.valueGlobal.ischeckFavourite='Tour'
       $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
       if (document.querySelector(".tabbar")) {
       document.querySelector(".tabbar")['style'].display = 'flex';
@@ -3963,6 +3963,7 @@ export class Tab1Page implements OnInit {
     }
     else{
       this._mytripservice.rootPage = "homehotel";
+      this.valueGlobal.ischeckFavourite='Hotel'
       $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
     if (document.querySelector(".tabbar")) {
     document.querySelector(".tabbar")['style'].display = 'flex';
