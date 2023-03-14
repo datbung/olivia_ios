@@ -833,15 +833,10 @@ export class FlightPaymentSelectPage implements OnInit {
                       this.hideLoading();
                       //let data = JSON.parse(datapayoo);
                       if (data.success) {
-                      //   if(this._voucherService.selectVoucher){
-                      //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-                      //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
-                      //   this._voucherService.selectVoucher = null;
-                      // }
-
+                        
                         this._flightService.itemFlightCache.BillingCode = data.payooStoreData.BillingCode;
                         this._flightService.itemFlightCache.periodPaymentDate = data.payooStoreData.periodPayment;
-                        console.log(this._flightService.itemFlightCache.periodPaymentDate);
+                        //console.log(this._flightService.itemFlightCache.periodPaymentDate);
                         if (this.loader) {
                           this.loader.dismiss();
                         }
@@ -878,18 +873,10 @@ export class FlightPaymentSelectPage implements OnInit {
         this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 6, "","").then(datatype => {
           if (datatype && datatype.isHoldSuccess) {
             let itemcache = this._flightService.itemFlightCache;
-            //this._flightService.itemFlightCache.periodPaymentDate = datatype.periodPaymentDate;
             var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2';
             this.gf.CreatePayoo(url).then((data) => {
               this.hideLoading();
-              //let data = JSON.parse(datapayoo);
               if (data.success) {
-                // if(this._voucherService.selectVoucher){
-                //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-                //   this._voucherService.publicClearVoucherAfterPaymentDone(1);
-                //   this._voucherService.selectVoucher = null;
-                // }
-                
 
                 this._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
                 this._flightService.itemFlightCache.qrimg = data.payooQrData.QRCodeUrl;

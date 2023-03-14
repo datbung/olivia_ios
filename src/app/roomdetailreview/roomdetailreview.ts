@@ -230,7 +230,9 @@ export class RoomdetailreviewPage implements OnInit {
    
     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'hotel'  ,'fb_content_id': se.booking.code,'fb_num_items': se.searchhotel.roomnumber, 'fb_value': se.gf.convertNumberToDouble(se.booking.cost) ,  'fb_currency': 'VND' , 
     'checkin_date': se.searchhotel.CheckInDate ,'checkout_date ': se.searchhotel.CheckOutDate,'num_adults': se.searchhotel.adult,'num_children': (se.searchhotel.child ? se.searchhotel.child : 0),
-    'value': se.gf.convertNumberToDouble(se.booking.cost) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.booking.cost) );
+    'value': se.gf.convertNumberToDouble(se.booking.cost) ,  'currency': 'VND' }, se.gf.convertNumberToFloat(se.booking.cost) ).then((res)=>{
+      console.log(res);
+    });
  
   }
   ionViewWillEnter() {
