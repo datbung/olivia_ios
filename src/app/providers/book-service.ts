@@ -141,6 +141,7 @@ export class ValueGlobal {
   arrsuggest: any;
   BookingCodeHis: any;
   listhistory: any;
+  ischeckFavourite : any
 }
 export class SearchHotel {
   paymentType: string='';

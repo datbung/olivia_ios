@@ -132,16 +132,7 @@ export class FlightnotifyPage {
                         element.date = moment(element.created).format('DD/MM/YYYY');
                       }
                       element.deleted = false;
-                      if (element.memberId=='alluser') {
-                        element.status=0;
-                        if (this.listStatus && this.listStatus.length>0) {
-                          if(se.checkItemInArray(element.id)){
-                            element.status=1
-                          }
-                        }
-                      }
-                     
-                    
+
                       if(se.itembookings.length >0){
                         if(!se.gf.checkExistsItemInArray(se.itembookings,element,'trip')){
                           se.itembookings.push(element)
@@ -505,7 +496,13 @@ export class FlightnotifyPage {
               .addClass("cls-disabled");
           } else {
             // Chưa thanh toán về trang thanh toán
-            se.paymentselect(itemMap[0], idx);
+            se.gf.setParams(BookingCode, 'notifiBookingCode');
+            se._flightService.tabFlightIndex = 2;
+            se._flightService.itemMenuFlightClick.emit(2);
+
+            $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+            $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+            $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
           }
         } else {
           se.getdatamytripHis().then((data) => {
