@@ -56,6 +56,7 @@ export class Tab5Page implements OnInit {
     checkIsCompany : any;
     linkfb : any;
     validemail = true;
+    _email
   version: any;
     constructor(public platform : Platform, public navCtrl : NavController, public storage : Storage, public modalCtrl : ModalController, private router : Router, private callNumber : CallNumber, public valueGlobal : ValueGlobal, public zone : NgZone, public alertCtrl : AlertController, public gf : GlobalFunction, public loadingCtrl : LoadingController, public network : Network, public networkProvider : NetworkProvider, public actionsheetCtrl : ActionSheetController, 
       private camera : Camera, private crop : Crop, private file : File, 
@@ -69,6 +70,11 @@ export class Tab5Page implements OnInit {
         this.storage.get('fbaccesstoken').then((accesstoken) => {
             this.linkfb = accesstoken;
         });
+        this.storage.get('email').then(email => {
+            if(email){
+              this._email = email;
+            }
+            })
         this.handleSplashScreen();
         // Lấy danh sách nhân viên hỗ trợ
 
@@ -1348,7 +1354,7 @@ export class Tab5Page implements OnInit {
               if (body) {
                 var data = JSON.parse(body);
                 if (data.status==0) {
-                  se.showConfirmEmail();
+                  se.showChangeEmail();
                 }else if(data.status==1){
                  // alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư '+data.email+' để hoàn tất việc xóa tài khoản của bạn');
                  se.navCtrl.navigateForward('accountdeletionsms');
@@ -1392,42 +1398,34 @@ export class Tab5Page implements OnInit {
       console.log(response.body);
     });
   }
-    public async showConfirmEmail(){
-      let alert = await this.alertCtrl.create({
-        message: "Vui lòng cập nhật địa chỉ email để đảm bảo quý khách nhận được thông tin từ iVIVU!",
-        cssClass: "cls-alert-showmore",
-        buttons: [
-          {
-          text: 'Đổi email',
-          role: 'OK',
-          handler: () => {
-            this.showChangeEmail();
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+//     public async showConfirmEmail(){
+//       let alert = await this.alertCtrl.create({
+//         message: "Vui lòng cập nhật địa chỉ email để đảm bảo quý khách nhận được thông tin từ iVIVU!",
+//         cssClass: "cls-alert-showmore",
+//         buttons: [
+//           {
+//           text: 'Đổi email',
+//           role: 'OK',
+//           handler: () => {
+//             this.showChangeEmail();
+//           }
+//         }
+//       ]
+//     });
+//     alert.present();
+//   }
   async showChangeEmail(){
     var se = this;
-    const modal: HTMLIonModalElement =
-            await se.modalCtrl.create({
-              component: ConfirmemailaccountPage,
-              componentProps: {
-                aParameter: true,
-              }
-            });
-          modal.present();
-          modal.onDidDismiss().then((data: OverlayEventDetail) => {
-            if(data && data.data && data.data.email){
-              if(data.data.email){
+   
+         
+            if(this._email){
                 se.storage.get('jti').then((memberid) => {
                   se.storage.get('auth_token').then(auth_token => {
                     var text = "Bearer " + auth_token;
                     if (auth_token) {
                       var options = {
                         method: 'GET',
-                        url: C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateEmailMemberUser?userid='+memberid+'&email='+data.data.email,
+                        url: C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateEmailMemberUser?userid='+memberid+'&email='+this._email,
                         timeout: 10000, maxAttempts: 5, retryDelay: 2000,
                         headers:
                         {
@@ -1458,9 +1456,9 @@ export class Tab5Page implements OnInit {
                     }
                   })
               })
-              }
+              
             }
-          })
+          
     }
     showUserVoucher(){
         let se = this;
