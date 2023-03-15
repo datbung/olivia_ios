@@ -164,8 +164,8 @@ export class CombocarnewPage implements OnInit {
     this.Avatar = Roomif.imgHotel;
     this.Name = booking.HotelName;
     this.Address = Roomif.Address;
-    this.cin = booking.CheckInDate;
-    this.cout = booking.CheckOutDate;
+    this.cin = moment(this.gf.getCinIsoDate(booking.CheckInDate)).format('YYYY-MM-DD');
+    this.cout = moment(this.gf.getCinIsoDate(booking.CheckOutDate)).format('YYYY-MM-DD');
     this.duration = moment(this.cout).diff(moment(this.cin), 'days');
     this.TotalNight = this.duration;
     this.dur = Roomif.dur;
@@ -2117,10 +2117,10 @@ export class CombocarnewPage implements OnInit {
     this.allowclickcalendar = false;
     let arr:any = se.cinshow.split('-');
     let arr1:any = se.coutshow.split('-');
-    let newdatecin = new Date(arr[2], arr[1] - 1, arr[0]);
-    let newdatecout = new Date(arr1[2], arr1[1] - 1, arr1[0]);
-    let fromdate = new Date(moment(newdatecin).format('YYYY-MM-DD'));
-    let todate = new Date(moment(newdatecout).format('YYYY-MM-DD'));
+    let newdatecin = se.gf.getCinIsoDate(new Date(arr[2], arr[1] - 1, arr[0]));
+    let newdatecout = se.gf.getCinIsoDate(new Date(arr1[2], arr1[1] - 1, arr1[0]));
+    let fromdate = new Date(moment(se.gf.getCinIsoDate(newdatecin)).format('YYYY-MM-DD'));
+    let todate = new Date(moment(se.gf.getCinIsoDate(newdatecout)).format('YYYY-MM-DD'));
     // if(this.valueGlobal.dayhot){
     //   for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
     //     this._daysConfig.push({
@@ -2188,20 +2188,7 @@ export class CombocarnewPage implements OnInit {
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
               //add event close header
               $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
-              // if(se.valueGlobal.dayhot.length>0){
-              //   let divmonth = $('.month-box');
-              //   if(divmonth && divmonth.length >0){
-              //     for (let index = 0; index < divmonth.length; index++) {
-              //        const em = divmonth[index];
-              //       //   let divsmall = $('#'+em.id+' dayhot');
-              //       //   if(divsmall && divsmall.length >0){
-              //           $('#'+em.id).append("<div class='div-month-text-small'></div>")
-              //           $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
-              //         // }
-              //     }
-              //   }
-              // }
-
+          
               let divmonth = $('.month-box');
               if(divmonth && divmonth.length >0){
                 for (let index = 0; index < divmonth.length; index++) {
@@ -2263,8 +2250,8 @@ export class CombocarnewPage implements OnInit {
           yearstartdate = objTextMonthStartDate.split('/')[1];
           monthenddate = objTextMonthEndDate.split('/')[0];
           yearenddate = objTextMonthEndDate.split('/')[1];
-          var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
-          var todate = new Date(yearenddate, monthenddate - 1, tday);
+          var fromdate = se.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
+          var todate = se.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday));
           if (fromdate && todate && moment(todate).diff(fromdate, 'days') > 0) {
             if (moment(todate).diff(fromdate, "days") > 30) {
               this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
@@ -2362,12 +2349,12 @@ export class CombocarnewPage implements OnInit {
         var BOD = JSON.parse(body);
         var arrBOD = BOD.BlackOutDates;
         if (arrBOD.length > 0) {
-          var checkcintemp = new Date(se.cin);
-          var checkdatecout = new Date(se.cout);
+          var checkcintemp = new Date(se.gf.getCinIsoDate(se.cin));
+          var checkdatecout = new Date(se.gf.getCinIsoDate(se.cout));
           var checkcin = moment(checkcintemp).format('YYYYMMDD');
           var checkcout = moment(checkdatecout).format('YYYYMMDD');
           for (let i = 0; i < arrBOD.length; i++) {
-            var checkBODtemp = new Date(arrBOD[i]);
+            var checkBODtemp = new Date(se.gf.getCinIsoDate(arrBOD[i]));
             var checkBOD = moment(checkBODtemp).format('YYYYMMDD');
             if (checkcin <= checkBOD && checkBOD < checkcout) {
               resolve(false);

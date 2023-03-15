@@ -211,15 +211,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
         }
       })
 
-      // this.fb.login(['public_profile', 'user_friends', 'email'])
-      //   .then((res: FacebookLoginResponse) => console.log('Logged into Facebook!', res))
-      //   .catch(e => console.log('Error logging into Facebook', e));
-
-
-      //this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);
-      // this.gf.googleAnalytionCustom('Searched', {'Origination City' : _flightService.itemFlightCache.departCity ,
-      //  'Destination City': _flightService.itemFlightCache.returnCity,
-      //  'Departure Date': _flightService.itemFlightCache.checkInDate ,'Return Date': _flightService.itemFlightCache.checkOutDate,'Number of Passengers': _flightService.itemFlightCache.pax})
+     
       let se = this;
       se.gf.logEventFirebase(null, se._flightService.itemFlightCache, 'flightsearchresultinternational', 'view_item', 'Flights');
       se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_SEARCHED, {'fb_content_type': 'flight', 'fb_content_id': se._flightService.itemFlightCache.departCode +"_"+se._flightService.itemFlightCache.returnCode,
@@ -267,8 +259,12 @@ export class FlightSearchResultInternationalPage implements OnInit {
 
     this._flightService.itemChangeTicketFlight.pipe().subscribe((data) => {
       if(data){
+        
         let obj= this._flightService.objSearch;
         this.step = this._flightService.itemFlightCache.step;
+        if(data == 2 && this._flightService.objectFilterInternational.classSelected){
+          obj.classSelected = this._flightService.objectFilterInternational.classSelected;
+        }
         this.zone.run(()=>{
           this.resetValue();
           //this.clearMinMaxPriceFilter();
@@ -575,7 +571,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           "timeIndayRecomment": obj.timeDepartPriority ? obj.timeDepartPriority : "09:00",
           "version": "2.0",
           "roundTrip": obj.roundTrip,
-          "ticketClass": null
+          "ticketClass": obj.classSelected || null
         },
         "requestTo": {
           "fromPlace": obj.arrivalCode,
@@ -588,7 +584,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           "timeIndayRecomment": obj.timeReturnPriority ? obj.timeReturnPriority : "15:00",
           "version": "2.0",
           "roundTrip": obj.roundTrip,
-          "ticketClass": null
+          "ticketClass": obj.classSelected || null
         },
         "roundTrip": obj.roundTrip,
         "noCache": true,
@@ -1732,6 +1728,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           se.buttoniVIVUSelected = true;
           se.sortairline = true;
          
+          se.countFilterResult = 0;
         })
         
       }

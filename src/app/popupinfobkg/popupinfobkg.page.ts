@@ -57,24 +57,24 @@ export class PopupinfobkgPage implements OnInit {
     }
     //check ngày tháng
     if (this.searchhotel.CheckInDate) {
-      this.cin = this.searchhotel.CheckInDate;
-      this.cout = this.searchhotel.CheckOutDate;
+      this.cin = this.gf.getCinIsoDate(this.searchhotel.CheckInDate);
+      this.cout = this.gf.getCinIsoDate(this.searchhotel.CheckOutDate);
 
-      this.datecin = new Date(this.searchhotel.CheckInDate);
-      this.datecout = new Date(this.searchhotel.CheckOutDate);
+      this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+      this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
       this.cindisplay = moment(this.datecin).format('DD-MM');
       this.coutdisplay = moment(this.datecout).format('DD-MM');
     } else {
-      this.cin = new Date();
+      this.cin = new Date(this.gf.getCinIsoDate(new Date()));
       var rescin = this.cin.setTime(this.cin.getTime() + (7 * 24 * 60 * 60 * 1000));
-      var datein = new Date(rescin);
+      var datein = new Date(this.gf.getCinIsoDate(rescin));
       this.cin = moment(datein).format('YYYY-MM-DD');
       this.cindisplay = moment(datein).format('DD-MM');
       this.datecin = new Date(rescin);
 
-      this.cout = new Date();
+      this.cout = new Date(this.gf.getCinIsoDate(new Date()));
       var res = this.cout.setTime(this.cout.getTime() + (8 * 24 * 60 * 60 * 1000));
-      var date = new Date(res);
+      var date = new Date(this.gf.getCinIsoDate(res));
       this.cout = moment(date).format('YYYY-MM-DD');
       this.coutdisplay = moment(date).format('DD-MM');
       this.datecout = new Date(res);
@@ -127,9 +127,9 @@ export class PopupinfobkgPage implements OnInit {
       }
      }
      
-    let Year=new Date().getFullYear()
-    let Month=new Date().getMonth()
-    let Day=new Date().getDate()
+    let Year=new Date(this.gf.getCinIsoDate(new Date())).getFullYear()
+    let Month=new Date(this.gf.getCinIsoDate(new Date())).getMonth()
+    let Day=new Date(this.gf.getCinIsoDate(new Date())).getDate()
     const options: CalendarModalOptions = {
       pickMode: 'range',
       title: 'Chọn ngày',
@@ -209,13 +209,13 @@ export class PopupinfobkgPage implements OnInit {
     if (event.data) {
       const from: CalendarResult = date.from;
       const to: CalendarResult = date.to;
-      se.cin = moment(from.dateObj).format('YYYY-MM-DD');
-      se.cout = moment(to.dateObj).format('YYYY-MM-DD');
+      se.cin = moment(this.gf.getCinIsoDate(from.dateObj)).format('YYYY-MM-DD');
+      se.cout = moment(this.gf.getCinIsoDate(to.dateObj)).format('YYYY-MM-DD');
       se.zone.run(() => {
         se.searchhotel.CheckInDate = se.cin;
         se.searchhotel.CheckOutDate = se.cout;
-        se.datecin = new Date(se.cin);
-        se.datecout = new Date(se.cout);
+        se.datecin = new Date(this.gf.getCinIsoDate(se.cin));
+        se.datecout = new Date(this.gf.getCinIsoDate(se.cout));
         se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
         se.coutdisplay = moment(se.datecout).format('DD-MM-YYYY');
         se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
@@ -291,20 +291,20 @@ export class PopupinfobkgPage implements OnInit {
               se.modalCtrl.dismiss();
             }, 100)
 
-            se.cin = moment(fromdate).format('YYYY-MM-DD');
-            se.cout = moment(todate).format('YYYY-MM-DD');
+            se.cin = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
+            se.cout = moment(se.gf.getCinIsoDate(todate)).format('YYYY-MM-DD');
             se.zone.run(() => {
               se.searchhotel.CheckInDate = se.cin;
               se.searchhotel.CheckOutDate = se.cout;
-              se.datecin = new Date(se.cin);
-              se.datecout = new Date(se.cout);
+              se.datecin = new Date(se.gf.getCinIsoDate(se.cin));
+              se.datecout = new Date(se.gf.getCinIsoDate(se.cout));
               se.cindisplay = moment(se.datecin).format('DD-MM');
               se.coutdisplay = moment(se.datecout).format('DD-MM');
               se.cindisplay = moment(se.datecin).format('DD-MM');
               se.coutdisplay = moment(se.datecout).format('DD-MM');
               se.nightCount = moment(se.datecout).diff( moment(se.datecin), 'days');
               //xử lý âm lịch
-              this.bindlunar();
+              se.bindlunar();
               se.getDayName(se.datecin, se.datecout);
             });
             se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});

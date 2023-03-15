@@ -104,8 +104,8 @@ export class HotelListPage implements OnInit{
         item.arrchild= this.searchhotel.arrchild;
         item.roomnumber= this.searchhotel.roomnumber;
         item.imageUrl = this.searchhotel.objRecent.imageUrl;
-        var checkInDate=new Date(this.searchhotel.CheckInDate);
-        var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+        var checkInDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+        var checkOutDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
         item.CheckInDate=this.searchhotel.CheckInDate
         item.CheckOutDate=this.searchhotel.CheckOutDate;
         item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
@@ -113,8 +113,8 @@ export class HotelListPage implements OnInit{
         item.id=this.searchhotel.objRecent.id;
         item.name=this.searchhotel.objRecent.name;
         item.isType=this.searchhotel.objRecent.isType;
-        this.datecin = new Date(this.searchhotel.CheckInDate);
-        this.datecout = new Date(this.searchhotel.CheckOutDate);
+        this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+        this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
         this.cindisplayhr = moment(this.datecin).format('DD/MM');
         this.coutdisplayhr = moment(this.datecout).format('DD/MM');
         this.guest = this.searchhotel.child + this.searchhotel.adult;
@@ -1036,8 +1036,8 @@ export class HotelListPage implements OnInit{
       else{
         item.Avatar='https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg';
       }
-      var checkInDate=new Date(this.searchhotel.CheckInDate);
-      var checkOutDate=new Date(this.searchhotel.CheckOutDate);
+      var checkInDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+      var checkOutDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
       item.CheckInDate=this.searchhotel.CheckInDate
       item.CheckOutDate=this.searchhotel.CheckOutDate;
       item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
@@ -1091,8 +1091,8 @@ export class HotelListPage implements OnInit{
     }
 
     public async onEnter(): Promise<void> {
-      this.datecin = new Date(this.searchhotel.CheckInDate);
-      this.datecout = new Date(this.searchhotel.CheckOutDate);
+      this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+      this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
       this.cindisplayhr = moment(this.datecin).format('DD/MM');
       this.coutdisplayhr = moment(this.datecout).format('DD/MM');
       this.guest = this.searchhotel.child + this.searchhotel.adult;

@@ -11,6 +11,7 @@ import { AdddiscountPage } from './../adddiscount/adddiscount.page';
 import * as $ from 'jquery';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { voucherService } from '../providers/voucherService';
+import * as moment from 'moment';
 /**
  * Generated class for the RoomdetailreviewPage page.
  *
@@ -50,8 +51,8 @@ export class RoomdetailreviewPage implements OnInit {
       this.Avatar = Roomif.imgHotel;
       this.Name = booking.HotelName;
       this.Address = Roomif.Address;
-      this.cin = booking.CheckInDate;
-      this.cout = booking.CheckOutDate;
+      this.cin = moment(this.gf.getCinIsoDate(booking.CheckInDate)).format('YYYY-MM-DD');
+      this.cout = moment(this.gf.getCinIsoDate(booking.CheckOutDate)).format('YYYY-MM-DD');
       this.dur = Roomif.dur;
       this.roomnumber = Roomif.roomnumber;
       this.adults = booking.Adults;
