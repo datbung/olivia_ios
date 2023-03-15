@@ -54,6 +54,7 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
     this._email = this._flightService.itemFlightCache.email;
     if (this.stt==0) {
       this.BillingCode=this._flightService.itemFlightCache.BillingCode;
+      this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'flightsearchresultinternational', 'purchase', 'Flights');
     }
     else
     {

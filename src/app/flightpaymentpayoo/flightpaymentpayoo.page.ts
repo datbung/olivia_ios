@@ -44,6 +44,7 @@ export class FlightpaymentpayooPage implements OnInit {
       this.getSummaryBooking(this._flightService.itemFlightCache).then((databkg:any) => {
         this._flightService.itemFlightCache.dataSummaryBooking = databkg;
       })    
+      this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'flightpaymentpayoo', 'add_payment_info', 'Flights');
     }
 
   ngOnInit() {
@@ -52,6 +53,7 @@ export class FlightpaymentpayooPage implements OnInit {
     this._email = this._flightService.itemFlightCache.email;
     if (this.stt==0) {
       this.BillingCode=this._flightService.itemFlightCache.BillingCode;
+      this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'flightpaymentpayoo', 'purchase', 'Flights');
     }
     else
     {
