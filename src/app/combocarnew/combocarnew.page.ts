@@ -2119,8 +2119,8 @@ export class CombocarnewPage implements OnInit {
     let arr1:any = se.coutshow.split('-');
     let newdatecin = se.gf.getCinIsoDate(new Date(arr[2], arr[1] - 1, arr[0]));
     let newdatecout = se.gf.getCinIsoDate(new Date(arr1[2], arr1[1] - 1, arr1[0]));
-    let fromdate = new Date(moment(se.gf.getCinIsoDate(newdatecin)).format('YYYY-MM-DD'));
-    let todate = new Date(moment(se.gf.getCinIsoDate(newdatecout)).format('YYYY-MM-DD'));
+    let fromdate = new Date(se.gf.getCinIsoDate(newdatecin));
+    let todate = new Date(se.gf.getCinIsoDate(newdatecout));
     // if(this.valueGlobal.dayhot){
     //   for (let j = 0; j < this.valueGlobal.dayhot.length; j++) {
     //     this._daysConfig.push({
@@ -2250,8 +2250,8 @@ export class CombocarnewPage implements OnInit {
           yearstartdate = objTextMonthStartDate.split('/')[1];
           monthenddate = objTextMonthEndDate.split('/')[0];
           yearenddate = objTextMonthEndDate.split('/')[1];
-          var fromdate = se.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
-          var todate = se.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday));
+          var fromdate = this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
+          var todate = this.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday));
           if (fromdate && todate && moment(todate).diff(fromdate, 'days') > 0) {
             if (moment(todate).diff(fromdate, "days") > 30) {
               this.presentToastwarming('Ngày nhận và trả phòng phải trong vòng 30 ngày');
@@ -2349,12 +2349,12 @@ export class CombocarnewPage implements OnInit {
         var BOD = JSON.parse(body);
         var arrBOD = BOD.BlackOutDates;
         if (arrBOD.length > 0) {
-          var checkcintemp = new Date(se.gf.getCinIsoDate(se.cin));
-          var checkdatecout = new Date(se.gf.getCinIsoDate(se.cout));
+          var checkcintemp = new Date(this.gf.getCinIsoDate(se.cin));
+          var checkdatecout = new Date(this.gf.getCinIsoDate(se.cout));
           var checkcin = moment(checkcintemp).format('YYYYMMDD');
           var checkcout = moment(checkdatecout).format('YYYYMMDD');
           for (let i = 0; i < arrBOD.length; i++) {
-            var checkBODtemp = new Date(se.gf.getCinIsoDate(arrBOD[i]));
+            var checkBODtemp = new Date(this.gf.getCinIsoDate(arrBOD[i]));
             var checkBOD = moment(checkBODtemp).format('YYYYMMDD');
             if (checkcin <= checkBOD && checkBOD < checkcout) {
               resolve(false);

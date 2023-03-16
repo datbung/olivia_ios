@@ -153,6 +153,8 @@ export class MytripdetailPage implements OnInit {
         }
         if(this.trip.booking_json_data){
           console.log(JSON.parse(this.trip.booking_json_data));
+          let curdate = new Date()
+          let _timezone = curdate.getTimezoneOffset();
           this.bookingjson = JSON.parse(this.trip.booking_json_data);
           if(this.bookingjson && this.bookingjson.length >0){
             this.bookingjson.forEach(elementbkg => {
@@ -161,15 +163,27 @@ export class MytripdetailPage implements OnInit {
                 
                 for (let index = 0; index < elementbkg.Transits.length; index++) {
                   const element = elementbkg.Transits[index];
-                  element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                  element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                  let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                  if(_timezone != -420){
+                    element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('HH:mm');
+                    element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('HH:mm');
+  
+                    element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('MM');
+                    element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('MM');
+                    cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('YYYY-MM-DD');
 
-                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-
+                  }else{
+                    element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                    element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+  
+                    element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+                    element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+                    
+                  }
+                  
                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                  let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
+                 
                   element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
                   
                   let elementNext = elementbkg.Transits[index+1];
@@ -253,8 +267,8 @@ export class MytripdetailPage implements OnInit {
    }
   loadDetailInfo() {
     let se = this;
-    se.datecin = new Date(this.trip.checkInDate ? this.trip.checkInDate : this.trip.start_date);
-        se.datecout = new Date(this.trip.checkOutDate ? this.trip.checkOutDate : this.trip.end_date);
+    se.datecin = new Date(se.gf.getCinIsoDate(this.trip.checkInDate ? this.trip.checkInDate : this.trip.start_date));
+        se.datecout = new Date(se.gf.getCinIsoDate(this.trip.checkOutDate ? this.trip.checkOutDate : this.trip.end_date));
         se.cindisplay = se.gf.getDayOfWeek(se.datecin).dayname+ ", " + moment(se.datecin).format('DD') + "Thg " + moment(se.datecin).format('MM');
         se.coutdisplay = se.gf.getDayOfWeek(se.datecout).dayname+ ", " + moment(se.datecout).format('DD') + "Thg " + moment(se.datecout).format('MM');
 

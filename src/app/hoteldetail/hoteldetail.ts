@@ -1882,45 +1882,6 @@ export class HotelDetailPage implements OnInit {
     this.navCtrl.navigateForward('/RoomdetailPage/'+ JSON.stringify(value));
     // alert(self.arrroom);
   }
-  
-  selectclick(event, text) {
-    for (let i = 0; i < this.arrchild.length; i++) {
-      if (this.arrchild[i].text == text) {
-        this.arrchild[i].numage = event;
-        break;
-      }
-    }
-  }
-  selectclickcin() {
-
-    this.cout = new Date(this.cin);
-    var datecin = new Date(this.cin);
-    this.cincombo = moment(datecin).format('YYYYMMDD');
-    var res = this.cout.setTime(this.cout.getTime() + (1 * 24 * 60 * 60 * 1000));
-    var date = new Date(res);
-    this.cout = moment(date).format('YYYY-MM-DD');
-    if (this.room && this.guest) {
-      //this.presentLoading5000();
-      this.ischeck = false;
-      this.presentLoading();
-    }
-  }
-  selectclickout() {
-
-    var datecin = Date.parse(this.cin);
-    var datecout = Date.parse(this.cout);
-
-    if (datecin >= datecout) {
-      this.presentToastwarming('Ngày check in không lớn hơn hoặc bằng ngày check out');
-    }
-    else {
-      if (this.room && this.guest) {
-        // this.presentLoading5000();
-        this.ischeck = false;
-        this.presentLoading();
-      }
-    }
-  }
 
   async presentToastwarming(msg) {
     const toast = await this.toastCtrl.create({

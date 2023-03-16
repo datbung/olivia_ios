@@ -43,12 +43,12 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
     this.cout = booking.CheckOutDate;
     this.arrchild = this.searchhotel.arrchild;
 
-    var cintemp = new Date(this.cin);
+    var cintemp = new Date(this.gf.getCinIsoDate(this.cin));
     var thu = moment(cintemp).format('dddd');
     var textthu = this.getDay(thu);
     this.cin = textthu + ', ' + moment(cintemp).format('DD') + ' ' + 'thg' + ' ' + moment(cintemp).format('MM')
 
-    var couttemp = new Date(this.cout);
+    var couttemp = new Date(this.gf.getCinIsoDate(this.cout));
     var thu = moment(couttemp).format('dddd');
     var textthu = this.getDay(thu);
     this.cout = textthu + ', ' + moment(couttemp).format('DD') + ' ' + 'thg' + ' ' + moment(couttemp).format('MM')
