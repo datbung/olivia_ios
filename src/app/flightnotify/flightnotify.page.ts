@@ -39,6 +39,7 @@ export class FlightnotifyPage {
   countNoti;
   listStatus: any;
   itembookings = [];
+  loginuser=true;
   constructor(
     private navCtrl: NavController,
     private gf: GlobalFunction,
@@ -72,16 +73,21 @@ export class FlightnotifyPage {
   }
 
   ngOnInit() {
-    // this._flightService.itemMenuFlightClick.pipe().subscribe(data => {
-    //     if (data == 3) {
-    //         this.storage.get('objnotication').then(datanoti => {
-    //             if (datanoti) {
-    //                 this.objnotication = datanoti;
-    //             }
-    //             this.loadUserNotification();
-    //         })
-    //     }
-    // })
+    this._flightService.itemMenuFlightClick.pipe().subscribe(data => {
+      if (data == 3) {
+        setTimeout(()=>{
+
+            this.storage.get('auth_token').then(auth_token => {
+              if (auth_token) {
+                this.loadUserNotificationStatus();
+              }
+            })
+
+        }, 350)
+      }
+      });
+         
+    
   }
   loadUserNotificationBooking() {
     var se = this;
@@ -162,8 +168,8 @@ export class FlightnotifyPage {
                 se.loadend = true;
                 se.loaddatadone = true;
                 if (se.pageIndex == 1) {
-                  se.items = [];
-                  se.valueGlobal.countNotifi = 0;
+                  se.itembookings = [];
+                  // se.valueGlobal.countNotifi = 0;
                 }
               });
             }
@@ -922,6 +928,7 @@ export class FlightnotifyPage {
 
     se.storage.get("auth_token").then((auth_token) => {
       if (auth_token) {
+        se.loginuser=true;
         var text = "Bearer " + auth_token;
         var options = {
           method: "GET",
@@ -953,6 +960,7 @@ export class FlightnotifyPage {
         });
       } else {
         se.zone.run(() => {
+          se.loginuser=false;
           se.loadend = true;
           se.loaddatadone = true;
           if (se.pageIndex == 1) {
@@ -974,4 +982,15 @@ export class FlightnotifyPage {
   //     }).length;
 
   // }
+  goToLogin() {
+    this.storage.get('auth_token').then(auth_token => {
+      if (!auth_token) {
+        this.valueGlobal.backValue="flightnotify"
+        this.navCtrl.navigateForward('/login');
+      }
+    });
+  }
+  goToRegister() {
+    this.navCtrl.navigateForward('/register');
+  }
 }

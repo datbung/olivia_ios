@@ -196,9 +196,13 @@ export class LoginusernamePage implements OnInit {
             if(se.valueGlobal.backValue == 'foodaccount'){
               se.foodService.menuFooterClick.emit(4);
             }
+            if(se.valueGlobal.backValue == "flightnotify"){
+              se._flightService.itemMenuFlightClick.emit(3);
+            }
             if(se.valueGlobal.backValue == "flightaccount"){
               se._flightService.itemMenuFlightClick.emit(4);
             }
+            
           if (se.valueGlobal.logingoback) {
             if(se.valueGlobal.logingoback =="flightadddetails" || se.valueGlobal.logingoback == "flightadddetailsinternational"){
               se._flightService.itemFlightLogin.emit(1);

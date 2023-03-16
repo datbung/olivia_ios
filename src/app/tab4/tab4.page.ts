@@ -46,6 +46,7 @@ export class Tab4Page implements OnInit{
   countNoti: number;
   listStatus: any;
   itembookings = [];
+  loginuser=true;
   constructor(public platform: Platform,public navCtrl: NavController,public gf: GlobalFunction,
     private storage: Storage,
     private zone: NgZone,
@@ -117,6 +118,7 @@ export class Tab4Page implements OnInit{
     }
     se.storage.get('auth_token').then(auth_token => {
       if (auth_token) {
+        se.loginuser=true;
           var text = "Bearer " + auth_token;
           var options = {
             method: 'GET',
@@ -140,11 +142,12 @@ export class Tab4Page implements OnInit{
                   se.listStatus = JSON.parse(body);
                 }
                 se.loadUserNotification();
-                se.loadUserNotificationBooking();
+               
             }
             });
       }else{
         se.zone.run(()=>{
+          se.loginuser=false;
           se.loadend = true;
           se.loaddatadone = true;
           if(se.pageIndex == 1){
@@ -188,8 +191,7 @@ export class Tab4Page implements OnInit{
                     se.loadend = true;
                     se.loaddatadone = true;
                     if(se.pageIndex == 1){
-                      se.items = [];
-                      se.valueGlobal.countNotifi=0;
+                      se.itembookings = [];
                     }
                   })
                 }
@@ -258,6 +260,7 @@ export class Tab4Page implements OnInit{
                   error.param =  JSON.stringify(options);
                   C.writeErrorLog(error,response);
               }else{
+
                   if(body && body != "[]"){
                     var data = JSON.parse(body);
                     se.loadDataNotify(data,'');
@@ -268,10 +271,11 @@ export class Tab4Page implements OnInit{
                       se.loaddatadone = true;
                       if(se.pageIndex == 1){
                         se.items = [];
-                        se.valueGlobal.countNotifi=0;
+
                       }
                     })
                   }
+                  se.loadUserNotificationBooking();
               }
               });
         }else{
@@ -945,12 +949,14 @@ export class Tab4Page implements OnInit{
     this.textnotifyType="booking";
     this.countNoti = this.itembookings.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
   }
-  // funcOther(){
-  //   this.isAll=false;
-  //   this.isProduct=false;
-  //   this.isOrder=false;
-  //   this.isOther=true;
-  //   this.textnotifyType="other";
-  //   this.countNoti = this.items.filter(item=>{ return item.notifyType== this.textnotifyType}).length;
-  // }
+  goToLogin() {
+    this.storage.get('auth_token').then(auth_token => {
+      if (!auth_token) {
+        this.navCtrl.navigateForward('/login');
+      }
+    });
+  }
+  goToRegister() {
+    this.navCtrl.navigateForward('/register');
+  }
 }
