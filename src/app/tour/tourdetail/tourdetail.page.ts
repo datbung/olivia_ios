@@ -77,58 +77,62 @@ export class TourDetailPage {
             apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
           };
           this.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetTourById?id='+this.tourService.tourDetailId, headers, {}, 'tourDetail', 'init').then((data)=>{
-            if(data && data.Status == "Success" && data.Response){
-              this.itemDetail = data.Response;
-              this.tourService.gaTourDetail = this.itemDetail;
-              
-              if(this.itemDetail && this.itemDetail.Image){
-                let itemmap = this.tourService.listTopSale.filter((item) => item.Id == this.tourService.tourDetailId );
-                if(itemmap && itemmap.length >0){
-                  this.itemDetail.TopSale = itemmap[0].TotalPax;
-                }
-                this.itemDetail.ImagesSlide = this.itemDetail.Image.split(', ');
-                this.itemDetail.ImagesSlide.forEach(element => {
-                  if(element.indexOf('http') == -1){
-                    this.listSlides.push({ImageUrl: 'https:'+element});
-                  }else{
-                    this.listSlides.push({ImageUrl: element});
+            this.zone.run(()=>{
+              if(data && data.Status == "Success" && data.Response){
+           
+                this.itemDetail = data.Response;
+                this.tourService.gaTourDetail = this.itemDetail;
+                
+                if(this.itemDetail && this.itemDetail.Image){
+                  let itemmap = this.tourService.listTopSale.filter((item) => item.Id == this.tourService.tourDetailId );
+                  if(itemmap && itemmap.length >0){
+                    this.itemDetail.TopSale = itemmap[0].TotalPax;
                   }
-                });
-                setTimeout(()=>{
-                  this.loadslidedone = true;
-                }, 3000)
-                let countstring = this.itemDetail.ProgramContent.match(/cdn2/g || []).length;
-                for (let index = 0; index < countstring; index++) {
-                  this.itemDetail.ProgramContent = this.itemDetail.ProgramContent.replace('src="//cdn2','src="https://cdn2');
-                }
-                if(this.itemDetail.YoutubeId){
-                  this.youtubeId = this.itemDetail.YoutubeId;
-                  this.itemDetail.trustedVideoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+this.itemDetail.YoutubeId);
-                }
-                this.gf.RequestApiWithQueryString('GET', `https://www.ivivu.com/hotelrequest/morereviews?hotelSlug=${this.itemDetail.Code}&total=100&offset=0&mode=2&timespan=${new Date().getTime()}`, headers,{}, 'tourDetail', 'morereviews').then((data)=>{
-                  if(data && data.reviews){
-                    
-                    if(data.reviews && data.reviews.length >0){
-                      this.zone.run(()=>{
-                        this.totalReview = data.loaded;
-                        this.AvgPoint = (data.reviews.reduce((total,b) => {return total+ (b.ReviewPoint*1 || 0); },0)/data.loaded).toFixed(1);
-                        this.tourReviews = data.reviews;
-                      })
-                     
-                      
-                     
-                     
+                  this.itemDetail.ImagesSlide = this.itemDetail.Image.split(', ');
+                  this.itemDetail.ImagesSlide.forEach(element => {
+                    if(element.indexOf('http') == -1){
+                      this.listSlides.push({ImageUrl: 'https:'+element});
+                    }else{
+                      this.listSlides.push({ImageUrl: element});
                     }
+                  });
+                  setTimeout(()=>{
+                    this.loadslidedone = true;
+                  }, 3000)
+                  let countstring = this.itemDetail.ProgramContent.match(/cdn2/g || []).length;
+                  for (let index = 0; index < countstring; index++) {
+                    this.itemDetail.ProgramContent = this.itemDetail.ProgramContent.replace('src="//cdn2','src="https://cdn2');
                   }
-                })
+                  if(this.itemDetail.YoutubeId){
+                    this.youtubeId = this.itemDetail.YoutubeId;
+                    this.itemDetail.trustedVideoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+this.itemDetail.YoutubeId);
+                  }
+                  this.gf.RequestApiWithQueryString('GET', `https://www.ivivu.com/hotelrequest/morereviews?hotelSlug=${this.itemDetail.Code}&total=100&offset=0&mode=2&timespan=${new Date().getTime()}`, headers,{}, 'tourDetail', 'morereviews').then((data)=>{
+                    if(data && data.reviews){
+                      
+                      if(data.reviews && data.reviews.length >0){
+                        this.zone.run(()=>{
+                          this.totalReview = data.loaded;
+                          this.AvgPoint = (data.reviews.reduce((total,b) => {return total+ (b.ReviewPoint*1 || 0); },0)/data.loaded).toFixed(1);
+                          this.tourReviews = data.reviews;
+                        })
+                       
+                        
+                       
+                       
+                      }
+                    }
+                  })
+                }
+                if(this.itemDetail.AvgPoint && (this.itemDetail.AvgPoint.toString().length == 1 || this.itemDetail.AvgPoint === 10)){
+                  this.itemDetail.AvgPoint = this.itemDetail.AvgPoint +".0";
+                }
+              }else{
+                this.gf.showAlertMessageOnly('Trang hết hiệu lực. Quý khách vui lòng tải lại trang mới!');
+                this.goback();
               }
-              if(this.itemDetail.AvgPoint && (this.itemDetail.AvgPoint.toString().length == 1 || this.itemDetail.AvgPoint === 10)){
-                this.itemDetail.AvgPoint = this.itemDetail.AvgPoint +".0";
-              }
-            }else{
-              this.gf.showAlertMessageOnly('Trang hết hiệu lực. Quý khách vui lòng tải lại trang mới!');
-              this.goback();
-            }
+            })
+         
           })
           this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: this.tourService.tourDetailId, date: moment(this.searchHotel.CheckInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
             if(data && data.Status == "Success" && data.Response && data.Response.length >0){
