@@ -4,6 +4,7 @@ import { ToastController, NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 var request = require("request");
 import { C } from '../providers/constants';
+import { Storage } from '@ionic/storage';
 @Component({
   selector: 'app-accountdeletionsms',
   templateUrl: './accountdeletionsms.page.html',
@@ -11,8 +12,13 @@ import { C } from '../providers/constants';
 })
 export class AccountDeletionSmsPage implements OnInit {
   phone
-  constructor(private toastCtrl: ToastController, public navCtrl: NavController, public valueGlobal: ValueGlobal) { }
+  constructor(private toastCtrl: ToastController, public navCtrl: NavController, public valueGlobal: ValueGlobal, public storage: Storage) { }
   ngOnInit() {
+    this.storage.get('phone').then(phone => {
+      if(phone){
+        this.phone = phone
+      }
+      })
   }
   goback() {
     this.navCtrl.back();
