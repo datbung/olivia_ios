@@ -58,6 +58,7 @@ export class Tab5Page implements OnInit {
     validemail = true;
     _email
   version: any;
+    phone: any;
     constructor(public platform : Platform, public navCtrl : NavController, public storage : Storage, public modalCtrl : ModalController, private router : Router, private callNumber : CallNumber, public valueGlobal : ValueGlobal, public zone : NgZone, public alertCtrl : AlertController, public gf : GlobalFunction, public loadingCtrl : LoadingController, public network : Network, public networkProvider : NetworkProvider, public actionsheetCtrl : ActionSheetController, 
       private camera : Camera, private crop : Crop, private file : File, 
       private fcm : FCM, public bizTravelService : BizTravelService, private appVersion: AppVersion,
@@ -75,6 +76,11 @@ export class Tab5Page implements OnInit {
               this._email = email;
             }
             })
+            this.storage.get('phone').then(phone => {
+                if(phone){
+                  this.phone = phone
+                }
+                })
         this.handleSplashScreen();
         // Lấy danh sách nhân viên hỗ trợ
 
@@ -1354,7 +1360,8 @@ export class Tab5Page implements OnInit {
               if (body) {
                 var data = JSON.parse(body);
                 if (data.status==0) {
-                  se.showChangeEmail();
+                    se.navCtrl.navigateForward('accountdeletionsms');
+      
                 }else if(data.status==1){
                  // alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư '+data.email+' để hoàn tất việc xóa tài khoản của bạn');
                  se.navCtrl.navigateForward('accountdeletionsms');
@@ -1475,4 +1482,5 @@ export class Tab5Page implements OnInit {
         });
         
     }
+   
 }

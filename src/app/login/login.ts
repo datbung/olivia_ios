@@ -785,6 +785,7 @@ export class LoginPage implements OnInit{
         se.storage.remove("auth_token");
         se.storage.set("auth_token", body.auth_token);
         se.storage.set("username", decoded.fullname);
+        se.storage.set("phone", decoded.phone);
         var checkfullname=se.hasWhiteSpace(decoded.fullname);
         var info;
         if (checkfullname) {

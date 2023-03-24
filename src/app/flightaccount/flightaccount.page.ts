@@ -45,6 +45,7 @@ export class FlightaccountPage {
   fileType: any;
   linkfb: any;
   version: any;
+  phone: any;
   constructor(public platform: Platform,public navCtrl: NavController, public storage: Storage,public modalCtrl: ModalController,private router: Router,private callNumber: CallNumber,
     public valueGlobal:ValueGlobal,public zone : NgZone,public alertCtrl: AlertController,public gf: GlobalFunction,public loadingCtrl: LoadingController,
     public network: Network,
@@ -67,7 +68,11 @@ export class FlightaccountPage {
     storage.get('auth_token').then(auth_token => {
       this.loginuser = auth_token;
      });
-
+     this.storage.get('phone').then(phone => {
+      if(phone){
+        this.phone = phone
+      }
+      })
      setInterval(()=>{
       this.refreshUserName();
       this.refreshPoint();
@@ -1225,9 +1230,15 @@ export class FlightaccountPage {
                   if (body) {
                     var data = JSON.parse(body);
                     if (data.status==0) {
-                      se.showConfirmEmail();
+                      // se.showConfirmEmail();
+                    
+                        se.navCtrl.navigateForward('accountdeletionsms');
+                     
                     }else if(data.status==1){
-                      alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư để hoàn tất việc xóa tài khoản của bạn');
+                      // alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư để hoàn tất việc xóa tài khoản của bạn');
+                    
+                        se.navCtrl.navigateForward('accountdeletionsms');
+                     
                     } else if (data.status==2) {
                       alert('Tài khoản của quý khách đang có booking sắp đi. Vui lòng thử lại sau');
                     }else if(data.status==-2){
@@ -1378,5 +1389,6 @@ export class FlightaccountPage {
               }
           });
         }
+       
     }
     
