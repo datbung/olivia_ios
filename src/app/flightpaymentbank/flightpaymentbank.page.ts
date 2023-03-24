@@ -882,7 +882,12 @@ export class FlightpaymentbankPage implements OnInit {
     this.activityService.bankTransfer = this.bankTransfer;
     this.activityService.bankAccount = this.accountNumber;
     this.activityService.totalPriceTransfer = this._flightService.itemFlightCache.totalPrice;
-    this.activityService.bookingCode = this.bookingCode;
+    if(this._flightService.itemFlightCache.objHotelCitySelected){
+      this.activityService.bookingCode = this._flightService.itemFlightCache.pnr.bookingCode;
+    }else{
+      this.activityService.bookingCode = this.bookingCode;
+    }
+    
     this.gf.showLoading();
     this.callBuildLink().then(data => {
       if (data ) {

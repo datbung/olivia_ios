@@ -898,13 +898,13 @@ export class Tab1Page implements OnInit {
             this.datecout = new Date(this.gf.getCinIsoDate(res));
 
 
-            this.searchhotel.CheckInDate = this.cin;
-            this.searchhotel.CheckOutDate = this.cout;
+            this.searchhotel.CheckInDate = this.gf.getCinIsoDate(this.cin);
+            this.searchhotel.CheckOutDate = this.gf.getCinIsoDate(this.cout);
             
-            this.searchhotel.datecin = new Date(this.cin);
-            this.searchhotel.datecout = new Date(this.cout);
-            this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
-            this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
+            this.searchhotel.datecin = new Date(this.gf.getCinIsoDate(this.cin));
+            this.searchhotel.datecout = new Date(this.gf.getCinIsoDate(this.cout));
+            this.searchhotel.cindisplay = moment(this.gf.getCinIsoDate(this.searchhotel.datecin)).format("DD-MM-YYYY");
+            this.searchhotel.coutdisplay = moment(this.gf.getCinIsoDate(this.searchhotel.datecout)).format("DD-MM-YYYY");
 
             this.getCinCoutDayName();
           
@@ -3591,7 +3591,7 @@ export class Tab1Page implements OnInit {
           }
 
           if(eluseful && eluseful.length >0){
-            let h = 1100 + $('.div-topdeal-flight')[0].offsetHeight;
+            let h = 1100 + ($('.div-topdeal-flight')[0] ? $('.div-topdeal-flight')[0].offsetHeight : 0);
             if(event.detail.scrollTop >= h){
               if(eluseful.length >0 && !eluseful[0].classList.contains("cls-topdeal-float")){
                 eluseful[0].classList.add('cls-topdeal-float');

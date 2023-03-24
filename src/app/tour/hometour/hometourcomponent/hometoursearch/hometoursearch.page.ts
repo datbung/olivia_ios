@@ -237,8 +237,8 @@ export class HomeTourSearchPage implements OnInit {
             yearstartdate = objTextMonthStartDate.split(" ")[1];
             monthenddate = objTextMonthEndDate.split(" ")[0];
             yearenddate = objTextMonthEndDate.split(" ")[1];
-            var fromdate = this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
-            var todate = this.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday*1 +1));
+            var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
+            var todate = new Date(yearenddate, monthenddate - 1, tday*1 +1);
             if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {
               var se = this;
               setTimeout(() => {
@@ -247,9 +247,9 @@ export class HomeTourSearchPage implements OnInit {
   
             
               se.zone.run(() => {
-                se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
-                se.searchhotel.cindisplay = moment(fromdate).format("DD-MM-YYYY");
-                se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
+                se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format("YYYY-MM-DD");
+                se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(fromdate)).format("DD-MM-YYYY");
+                se.searchhotel.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format("YYYY-MM-DD");
               });
               
             }

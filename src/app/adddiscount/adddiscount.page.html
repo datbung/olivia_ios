@@ -1,4 +1,4 @@
-<ion-header [ngClass]="_voucherService.hasVoucher ? 'header-discount no-shadow' : 'header-discount'">
+<ion-header [ngClass]="_voucherService.hasVoucher || !loginuser ? 'header-discount no-shadow' : 'header-discount'">
   <ion-toolbar class="toolbar-infobkg">
     <ion-title class="title-infobkg">Chọn hoặc nhập mã voucher</ion-title>
     <ion-buttons start class="cls-button">
@@ -20,15 +20,15 @@
         <div></div>
       </div>
       <div class="div-button">
-        <button *ngIf="!ischeckbtnpromo" (click)="promofunc()" ion-button round outline class="button btnnone">Áp dụng</button>
+        <button *ngIf="!ischeckbtnpromo" (click)="applyVoucher()" ion-button round outline [ngClass]=" promocode? 'button btnnone' : 'button btnnone cls-deactive'">Áp dụng</button>
           <button *ngIf="ischeckbtnpromo"  ion-button round outline class="button btnnonesuccess"><span>
               <ion-icon name="checkmark"></ion-icon>
           </span></button>
       </div>
   </div>
   <ion-row *ngIf="msg">
-    <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px; margin-bottom: 12px;    margin-top: 4px;">{{msg}}</ion-label>
-    <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px; margin-bottom: 12px;    margin-top: 4px;">{{msg}}</ion-label>
+    <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px; margin-bottom: 12px;    margin-top: 10px;">{{msg}}</ion-label>
+    <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px; margin-bottom: 12px;    margin-top: 10px;">{{msg}}</ion-label>
   </ion-row>
 </div>
 </ion-header>
@@ -43,3 +43,8 @@
     <app-voucherslidetour class="voucher-list cls-flightaddservice" *ngIf="_voucherService.openFrom == 'touradddetails'"></app-voucherslidetour>
 </div>
 </ion-content>
+<ion-footer *ngIf="loginuser">
+  <div class="div-voucher-footer">
+    <button (click)="applyVoucher()" ion-button round outline class="button button2">Áp dụng Voucher</button>
+  </div>
+</ion-footer>

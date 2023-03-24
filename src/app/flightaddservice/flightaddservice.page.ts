@@ -81,6 +81,9 @@ export class FlightaddservicePage implements OnInit {
   itemVoucher: any;
   checkEmptyHotelCity: boolean;
   jti: any;
+  listVouchersApply=[];
+  strPromoCode: string = '';
+  totaldiscountpromo = 0;
   
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -419,21 +422,26 @@ export class FlightaddservicePage implements OnInit {
           })
         }
       })
+      this._voucherService.getVoucherUsedObservable().subscribe(async (itemVoucher)=> {
+        if(itemVoucher){
+          this.showAlertVoucherUsed();
+        }
+      })
 
-       this._voucherService.getObservable().subscribe((itemVoucher)=> {
+       this._voucherService.getObservable().subscribe(async (itemVoucher)=> {
         if(itemVoucher){
           if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
             this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-            this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+            this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
             return;
           }
-          let databkg = this._flightService.itemFlightCache.dataSummaryBooking;
-          let itemflightcache = this._flightService.itemFlightCache;
-          if(databkg && itemflightcache.promotionCode && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.hasvoucher && itemflightcache.hasvoucher != this.promotionCode){
-            this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-            this.showAlertPromoCode();
-            return;
-          }
+          // let databkg = this._flightService.itemFlightCache.dataSummaryBooking;
+          // let itemflightcache = this._flightService.itemFlightCache;
+          // if(databkg && itemflightcache.promotionCode && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.hasvoucher && itemflightcache.hasvoucher != this.promotionCode){
+          //   this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          //   this.showAlertPromoCode();
+          //   return;
+          // }
           //this._voucherService.selectVoucher = itemVoucher;
           this.zone.run(()=>{
             if(itemVoucher.claimed){
@@ -441,19 +449,33 @@ export class FlightaddservicePage implements OnInit {
               this.promocode = itemVoucher.code;
               this.promotionCode = itemVoucher.code;
               this.discountpromo = itemVoucher.rewardsItem.price;
-              // if(!itemVoucher.rewardsItem.price && itemVoucher.discountSpecialCase){
-              //   this.discountpromo = itemVoucher.discountSpecialCase;
-              // }
+              if(!this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
+                this.listVouchersApply.push(itemVoucher);
+              }
+             this.buildStringPromoCode();
+              
             }else{
               this.itemVoucher = null;
               this.promocode = "";
               this.promotionCode = "";
               this.discountpromo = 0;
+              if(this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
+                this.gf.removeItemInArray(this.listVouchersApply, itemVoucher);
+              }
+              this.buildStringPromoCode();
+
+              if(this.listVouchersApply && this.listVouchersApply.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+                this.strPromoCode = '';
+                this.totaldiscountpromo = 0;
+              }
             }
             this.totalPriceAll(0);
           })
-          
-          this.modalCtrl.dismiss();
+          // const element = await this.modalCtrl.getTop();
+          //   if (element) {
+          //     element.dismiss();
+          //   }
+          //this.modalCtrl.dismiss();
         }
       })
 
@@ -464,21 +486,20 @@ export class FlightaddservicePage implements OnInit {
           this.promotionCode = "";
           this.discountpromo = 0;
           this._flightService.itemFlightCache.hasvoucher = false;
+          this._flightService.itemFlightCache.listVouchersAlreadyApply = [];
+          this._voucherService.totalDiscountPromoCode =0;
+          this._voucherService.listPromoCode =[];
+          this._voucherService.voucherSelected = [];
           this.totalPriceAll(0);
         }
       })
     }
 
     async showdiscount(){
-        //$('.div-point').removeClass('div-disabled');
-      //this.valueGlobal.PriceAvgPlusTAStr=this.PriceAvgPlusTAStr;
-      //this.textpromotion="iVIVU Voucher | Mobile Gift";
       this.promocode="";
       this.promotionCode = "";
       this.discountpromo =0;
       this.itemVoucher = null;
-      //this.ischeckbtnpromo=false;
-      //this.ischeckpromo=false;
       this._voucherService.isFlightPage = true;
       this.msg="";
       this._voucherService.openFrom = 'flightaddservice';
@@ -491,9 +512,22 @@ export class FlightaddservicePage implements OnInit {
          this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
          this._voucherService.selectVoucher = null;
        }
+       this._voucherService.listPromoCode = [];
+       this.buildStringPromoCode();
       this.totalPriceAll(0);
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
-        if (data.data) {
+        //case multi voucher tiền mặt
+        if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+          if(this.strPromoCode){
+            this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+            this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+          }else{
+            this.strPromoCode = this._voucherService.listPromoCode.join(', ');
+            this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
+          }
+         
+          this.totalPriceAll(0);
+        }else if (data.data) {//case voucher km
           let vc = data.data;
           if(vc.applyFor && vc.applyFor != 'flight'){
             this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
@@ -887,9 +921,18 @@ export class FlightaddservicePage implements OnInit {
                 totalprice += this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo;
                 totalprice += this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn;
               }
-              if(this.promotionCode && this.discountpromo>0){
+              if((this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0) || (this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0)){
+                if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+                  let totaldiscount = this.listVouchersApply.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+                  totalprice = totalprice - totaldiscount;
+                }
+                if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+                  totalprice = totalprice - this._voucherService.totalDiscountPromoCode;
+                }
+              }else if(this.promotionCode && this.discountpromo>0){
                 totalprice= totalprice-this.discountpromo;
               }
+              
               if(this.isCathay){
                 totalprice=totalprice+this.priceCathay;
               }
@@ -926,18 +969,30 @@ export class FlightaddservicePage implements OnInit {
                 }
                 
               }
-              if(this.promotionCode && this.discountpromo>0){
-                this._flightService.itemFlightCache.totalPriceBeforeApplyVoucher = totalprice + this.discountpromo;
-              }
+              
                //thêm luồng voucher heniken
               // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
               //   this._flightService.itemFlightCache.totalPriceBeforeApplyVoucher = totalprice;
               //   totalprice = totalprice - this._voucherService.selectVoucher.rewardsItem.price;
               // }
+              if((this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0) || (this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0)){
+                if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+                  let totaldiscount = this.listVouchersApply.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+                  this._flightService.itemFlightCache.totalPriceBeforeApplyVoucher = totalprice + totaldiscount;
+                }
+                if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+                  this._flightService.itemFlightCache.totalPriceBeforeApplyVoucher = totalprice + this._voucherService.totalDiscountPromoCode;
+                }
+              }else if(this.promotionCode && this.discountpromo>0){
+                this._flightService.itemFlightCache.totalPriceBeforeApplyVoucher = totalprice + this.discountpromo;
+              }
               if(totalprice*1 <0){
                 totalprice = 0;
               }
               this.totalPriceDisplay = this.gf.convertNumberToString(totalprice);
+              if(!this.totalPriceDisplay){
+                this.totalPriceDisplay = '0';
+              }
               this._flightService.itemFlightCache.totalPrice = totalprice;
               this._flightService.itemFlightCache.totalPriceDisplay = this.totalPriceDisplay;
               
@@ -2018,6 +2073,7 @@ export class FlightaddservicePage implements OnInit {
         this._flightService.itemFlightCache.isnewmodelreturnseat = false;
         this._flightService.itemFlightCache.backtochoiceseat = false;
         this._flightService.itemFlightCache.hasvoucher = false;
+        this._flightService.itemFlightCache.listVouchersAlreadyApply = [];
         this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
         this._voucherService.selectVoucher = null;
         this.checkEmptyHotelCity = false;
@@ -2037,8 +2093,10 @@ export class FlightaddservicePage implements OnInit {
     }
 
     async showPriceDetail(){
-      this._flightService.itemFlightCache.promotionCode=this.promotionCode;
-      this._flightService.itemFlightCache.discount=this.discountpromo;
+      // this._flightService.itemFlightCache.promotionCode=this.promotionCode;
+      // this._flightService.itemFlightCache.discount=this.discountpromo;
+      this._flightService.itemFlightCache.promotionCode=this.strPromoCode;
+      this._flightService.itemFlightCache.discount=this.totaldiscountpromo;
         const modal: HTMLIonModalElement =
         await this.modalCtrl.create({
           component: FlightpricedetailPage,
@@ -2046,9 +2104,37 @@ export class FlightaddservicePage implements OnInit {
       modal.present();
     }
 
+    async showAlertVoucherUsed() {
+      var se = this;
+      let msg = `Mã voucher ${se._flightService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se._flightService.itemFlightCache.pnr.resNo}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+      let alert = await se.alertCtrl.create({
+        message: msg,
+        cssClass: "cls-alert-choiceseat",
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: 'OK',
+            role: 'OK',
+            handler: () => {
+              alert.dismiss();
+              this.goback();
+            }
+          },
+          {
+            text: 'Hủy',
+            role: 'Cancel',
+            handler: () => {
+              alert.dismiss();
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
     async showAlertPromoCode() {
       var se = this;
-      let msg = `Mã voucher ${se._flightService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se._flightService.itemFlightCache.pnr.resNo} Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+      let msg = `Mã voucher ${se._flightService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se._flightService.itemFlightCache.pnr.resNo}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
       let alert = await se.alertCtrl.create({
         message: msg,
         cssClass: "cls-alert-choiceseat",
@@ -2088,9 +2174,12 @@ export class FlightaddservicePage implements OnInit {
         return;
       }
        //thêm luồng voucher heniken
-       if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
-        se._flightService.itemFlightCache.promotionCode=se._voucherService.selectVoucher.code;
-        se._flightService.itemFlightCache.discount=se._voucherService.selectVoucher.rewardsItem.price;
+       //if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+      if(se._voucherService.voucherSelected && se._voucherService.voucherSelected.length >0){
+        se._flightService.itemFlightCache.promotionCode = se.strPromoCode;
+        se._flightService.itemFlightCache.discount = se.totaldiscountpromo;
+        //se._flightService.itemFlightCache.promotionCode=se._voucherService.selectVoucher.code;
+        //se._flightService.itemFlightCache.discount=se._voucherService.selectVoucher.rewardsItem.price;
       }else{
         se._flightService.itemFlightCache.promotionCode=se.promotionCode;
         se._flightService.itemFlightCache.discount=se.discountpromo;
@@ -2989,7 +3078,24 @@ export class FlightaddservicePage implements OnInit {
                 let Json = JSON.stringify(AirTicketObj);
                 bookingJsonData = Json;
               }
-
+              let voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+                let newitem = {};
+                newitem["voucherCode"] = v.code;
+                newitem["voucherName"] = v.rewardsItem.title;
+                newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+                newitem["voucherDiscount"] = v.rewardsItem.price;
+                newitem["keepCurrentVoucher"] = this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0 ? this._flightService.itemFlightCache.listVouchersAlreadyApply.some(item => item.code == v.code) :false;
+                return newitem;
+              });
+              let promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+                let newitem = {};
+                newitem["voucherCode"] = v.code;
+                newitem["voucherName"] = v.name;
+                newitem["voucherType"] = 2;
+                newitem["voucherDiscount"] = v.price;
+                newitem["keepCurrentVoucher"] = this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0 ? this._flightService.itemFlightCache.listVouchersAlreadyApply.some(item => item.code == v.code) :false;
+                return newitem;
+              });
           return new Promise((resolve, reject) => {
             let objPass
                objPass = {
@@ -3013,16 +3119,20 @@ export class FlightaddservicePage implements OnInit {
                 "isHoldTicket": false,//tạm thời chưa giữ chỗ
                 "departFlightId": data.departFlight ? data.departFlight.id : "",
                 "returnFlightId": data.returnFlight ? data.returnFlight.id : "",
-                "voucher":{ voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
+                //"voucher":{ voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
+                "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
                 "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                 "bookingJsonData":bookingJsonData,//đi chung
                 "InsuranceType":se._flightService.itemFlightCache.InsuranceType
               }
-              if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
-              {
-                objPass.voucher={};
-                objPass.voucher.keepCurrentVoucher=true;
-                objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
+              
+              if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
+                if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
+                {
+                  objPass.voucher={};
+                  objPass.voucher.keepCurrentVoucher=true;
+                  objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
+                }
               }
               var options = {
                 method: 'POST',
@@ -3457,28 +3567,40 @@ export class FlightaddservicePage implements OnInit {
             se.ischeckerror = 0;
             se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.promotionCode=se.promocode;
+
+            se.strPromoCode = se.promocode;
+            se.totaldiscountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.totalPriceAll(0);
           }
           else if (json.error == 1) {
             se.msg = json.msg;
             se.discountpromo = 0;
             se.ischeckerror = 1;
+
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else if (json.error == 2) {
             se.msg = json.msg;
             se.discountpromo = 0;
             se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else if (json.error == 3) {
             se.msg = json.msg;
             se.discountpromo = 0;
   
             se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else {
             se.msg = json.msg;
             se.discountpromo = 0;
             se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
         })
       });
@@ -3736,5 +3858,25 @@ async showAlertChoiceHotelCity(){
   ]
 });
 alert.present();
+}
+
+buildStringPromoCode(){
+  if(this.listVouchersApply && this.listVouchersApply.length >0){
+    this.strPromoCode = this.listVouchersApply.map(item => item.code).join(', ');
+    this.totaldiscountpromo = this.listVouchersApply.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+  }else{
+    this.strPromoCode = '';
+    this.totaldiscountpromo = 0;
+  }
+
+  if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+    if(this.strPromoCode){
+      this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+    }else{
+      this.strPromoCode += this._voucherService.listPromoCode.join(', ');
+    }
+      
+      this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+  }
 }
 }

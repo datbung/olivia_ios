@@ -1397,8 +1397,8 @@ export class HotelDetailPage implements OnInit {
         //resolve(result);
         var options;
         var form = {
-          CheckInDate: se.cin,
-          CheckOutDate: se.cout,
+          CheckInDate: moment(se.gf.getCinIsoDate(se.cin)).format('YYYY-MM-DD'),
+          CheckOutDate: moment(se.gf.getCinIsoDate(se.cout)).format('YYYY-MM-DD'),
           CityID: '',
           CountryID: '',
           HotelID: se.HotelID,
@@ -1901,8 +1901,8 @@ async getdataroom() {
   var options;
   let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0" ) ;
   var form = {
-    CheckInDate: self.cin,
-    CheckOutDate: self.cout,
+    CheckInDate: moment(se.gf.getCinIsoDate(se.cin)).format('YYYY-MM-DD'),
+    CheckOutDate: moment(se.gf.getCinIsoDate(se.cout)).format('YYYY-MM-DD'),
     CityID: '',
     CountryID: '',
     HotelID: self.HotelID,

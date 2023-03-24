@@ -374,7 +374,6 @@
                             <img class="img-info" src="./assets/ic_flight/icon_action_check_circle.svg">
                         </div>
                     </ng-template>
-                    <!-- <div class="div-text-refund" >{{ departConditionInfo.ticketRefund}}</div> -->
                     <div class="div-text-refund" *ngIf="( (departConditionInfo && (!departConditionInfo.ticketRefund || departConditionInfo.ticketRefund.indexOf('Không') != -1)) || !departConditionInfo ) else returnrefund">Không hoàn huỷ</div>
                     <ng-template #returnrefund>
                         <div class="div-text-refund" >Có thể hoàn huỷ</div>
@@ -389,7 +388,6 @@
                             <img class="img-info" src="./assets/ic_flight/icon_action_check_circle.svg">
                         </div>
                     </ng-template>
-                    <!-- <div [ngClass]="( (departConditionInfo && departConditionInfo.changeDepartTime.indexOf('Không') != -1) || !departConditionInfo) ? 'div-text-changeflight not-allow': 'div-text-refund'" >{{ departConditionInfo.changeDepartTime}}</div> -->
                     <div class="div-text-changeflight not-allow" *ngIf="((departConditionInfo && departConditionInfo.changeDepartTime.indexOf('Không') != -1 ) || !departConditionInfo ) else departChangeDepartTime">Không đổi lịch bay</div>
                     <ng-template #departChangeDepartTime>
                         <div class="div-text-changeflight" >Có thể đổi lịch bay</div>
@@ -407,7 +405,6 @@
                     <img class="logo-vj" *ngIf="returnFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
                     <img *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                     <img class="logo-vna" *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && !returnFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
-                    <!-- <img *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && returnFlight.operatedBy" src="./assets/ic_airticket/ic_pacific.png"> -->
                     <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo" [src]="returnFlight.urlLogo">
                     <img *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                 </div>
@@ -445,7 +442,6 @@
                             <img class="img-info" src="./assets/ic_flight/icon_action_check_circle.svg">
                         </div>
                     </ng-template>
-                    <!-- <div class="div-text-refund" > {{ returnConditionInfo.ticketRefund }}</div> -->
                     <div class="div-text-refund" *ngIf="( (returnConditionInfo && (!returnConditionInfo.ticketRefund || returnConditionInfo.ticketRefund.indexOf('Không') != -1)) || !returnConditionInfo ) else returnrefund">Không hoàn huỷ</div>
                     <ng-template #returnrefund>
                         <div class="div-text-refund" >Có thể hoàn huỷ</div>
@@ -465,56 +461,27 @@
                     <ng-template #returnChangeDepartTime>
                         <div class="div-text-changeflight" >Có thể đổi lịch bay</div>
                     </ng-template> 
-                    <!-- <div [ngClass]="( (returnConditionInfo && returnConditionInfo.changeDepartTime.indexOf('Không') != -1) || !returnConditionInfo) ? 'div-text-changeflight not-allow': 'div-text-refund'" >{{ returnConditionInfo.changeDepartTime}}</div>-->
                 </div>
                 
             </div>
         </div>
-        <!-- <div (click)="showdiscount()" *ngIf="!ischeck" class="div-promotion">
-            <ion-row >
-                <label *ngIf="!promocode" class="depart-title" >Nhập mã ưu đãi...</label>
-                <label *ngIf="promocode" class="depart-title" >{{textpromotion}}</label>
-        </ion-row>
-        <ion-row> 
-            <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
-            <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
-        </ion-row>
-         </div> -->
+       
          <div  class="div-promotion-active">
-            <!-- <ion-row style="margin-left: -5px">
-                <ion-col  size="8.5">
-                  <ion-item class="ion-item">
-                    <ion-input   placeholder="Nhập mã ưu đãi..."  (ionInput)="textchange()" [(ngModel)]="promocode" type="text"  class="none"  ></ion-input>
-                  
-                  </ion-item>
-                </ion-col>
-                <ion-col  size="3.5" class="text-right cls-col">
-                    <button *ngIf="!promotionCode" (click)="promofunc()" ion-button round outline class="button btnnone">Áp dụng</button>
-                    <button *ngIf="promotionCode"  ion-button round outline class="button btnnonesuccess"><span>
-                        <ion-icon name="checkmark"></ion-icon>
-                    </span></button>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-label *ngIf="ischeckerror==1 && msg" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
-                <ion-label *ngIf="ischeckerror==0 && msg" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
-              </ion-row> -->
-              <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!promocode">
+            
+              <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode">
                 <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
                 <div class="div-text-center">
                   <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
                 </div>
                 <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
               </div>
-              <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
-                <div class="width-200">
-                  <span class="text-normal">Ưu đãi (</span>
-                  <!-- <span class="text-code" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{_voucherService.selectVoucher.code}}</span> -->
-                  <span class="text-code" *ngIf="promocode">{{promocode}}</span>
-                  <span class="text-normal">)</span> 
+              <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+                <div class="width-250 div-overflow">
+                  <span class="text-normal">Ưu đãi (<span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span><span class="text-normal">)</span> </span>
+                  
+                  
                 </div>
-                <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
-                <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}đ</div>
+                <div class="width-100 text-normal text-right p-r-5" *ngIf="strPromoCode">{{gf.convertNumberToString(totaldiscountpromo)}}đ</div>
               </div>
               <ion-row> 
                 <ion-label *ngIf="ischeckerror==1&& msg" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>

@@ -262,7 +262,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
         
         let obj= this._flightService.objSearch;
         this.step = this._flightService.itemFlightCache.step;
-        if(data == 2 && this._flightService.objectFilterInternational.classSelected){
+        if(data == 2 && this._flightService.objectFilterInternational && this._flightService.objectFilterInternational.classSelected){
           obj.classSelected = this._flightService.objectFilterInternational.classSelected;
         }
         this.zone.run(()=>{
@@ -594,8 +594,6 @@ export class FlightSearchResultInternationalPage implements OnInit {
       
       var options = {
         'method': 'POST',
-        //'url': C.urls.baseUrl.urlFlight +'gate/apiv1/GetSessionFlight',
-        //'url': 'https://55786b74.ngrok.io/gate/apiv1/GetSessionFlight',
         'url': C.urls.baseUrl.urlFlightInt + 'api/FlightSearch/GetSessions?'+ new Date().getTime(),
         'headers': {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
@@ -655,7 +653,9 @@ export class FlightSearchResultInternationalPage implements OnInit {
                 
               }
              
-              if (!result.stop && !se.stoprequest && se.allowSearch) {
+              if (!result.stop 
+                && !se.stoprequest 
+                && se.allowSearch) {
               
                 //obj.source = result.sources;
                 setTimeout(()=>{
@@ -725,8 +725,17 @@ export class FlightSearchResultInternationalPage implements OnInit {
         se.listDepartConditions = [];
         se.listReturnConditions = [];
         se.stoprequest = false;
-          se.loadFlightCacheDataByAirline({...obj});
-          
+        // data.data.forEach(element => {
+        //   let _data = [];
+        //   _data.push(element);
+        //   let _objdata = {"data" : _data};
+        //   obj.source = _objdata;
+        //   se.loadFlightCacheDataByAirline({...obj});
+        // });
+        se.loadFlightCacheDataByAirline({...obj});
+        setTimeout(()=>{
+          this.stoprequest = true;
+        }, 60 * 1000);
       }
     })
 

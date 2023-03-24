@@ -114,20 +114,20 @@
 
              <div class="div-split-panel"></div>
 
-            <div class="div-voucher-apply" *ngIf="promocode" (click)="showdiscount()">
+            <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
                 <div class="width-200">
                 <span class="text-normal">Ưu đãi (</span>
-                <span class="text-code" *ngIf="promocode">{{promocode}}</span>
+                <span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span>
                 <span class="text-normal">)</span> 
                 </div>
-            <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}</div>
+            <div class="width-100 text-normal text-right p-r-5" *ngIf="strPromoCode">{{gf.convertNumberToString(totaldiscountpromo)}}</div>
             </div>
             <div class="m-top-4" *ngIf="msg"> 
                 <div *ngIf="ischeckerror==1&& msg" class="text-red">{{msg}}</div>
                 <div *ngIf="ischeckerror==0&& msg" class="text-grey">{{msg}}</div>
             </div> 
 
-            <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!promocode">
+            <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode">
               <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
               <div class="div-text-center">
                 <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>

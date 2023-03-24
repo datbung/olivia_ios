@@ -843,7 +843,7 @@ import { normalizeURL } from 'ionic-angular';
                           element.accountNumber = obj.accountNumber;
                           element.bankName = obj.bankName;
                           element.url = obj.url;
-                        } else if (element.pay_method == 3) {
+                        } else if (element.pay_method == 3 && element.payment_info) {
                           if (element.payment_info && element.payment_info.length > 0) {
                             element.payment_info = JSON.parse(element.payment_info);
                           }
@@ -1088,11 +1088,19 @@ import { normalizeURL } from 'ionic-angular';
                     }
                     if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
                       element.isFlyBooking = true;
-    
+                      //console.log(JSON.parse(element.booking_json_data));
+                      //check đã xuất vé + có checkin online
+                      if( (element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate!='' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate!='')) )
+                      {
+                        let objjson = JSON.parse(element.booking_json_data);
+                        let _checked = objjson.some(item => {return item.Passengers && item.Passengers.some(p => p.CheckinInfo)});
+                        element.hadCheckinOnline = _checked;
+                        console.log(JSON.parse(element.booking_json_data));
+                      }
                       if (element.hotel_name.indexOf("VMB QT") != -1) {
     
                         if (element.booking_json_data) {
-                          console.log(JSON.parse(element.booking_json_data));
+                          
                           element.bookingjson = JSON.parse(element.booking_json_data);
                           if (element.bookingjson && element.bookingjson.length > 0) {
                             element.totalCost = 0;
@@ -6506,6 +6514,21 @@ import { normalizeURL } from 'ionic-angular';
         }
         goToRegister() {
             this.navCtrl.navigateForward('/register');
+        }
+
+        showCheckinOnline(trip){
+          if(trip){
+            this.enableheader = false;
+            if(this._mytripservice.rootPage == "homeflight"){
+              this._mytripservice.backroute = "tabs/tab1";
+            }else{
+              this._mytripservice.backroute = "/app/tabs/tab3";
+            }
+
+            this._mytripservice.tripdetail = trip;
+            this.navCtrl.navigateForward('/mytripcheckinonline');
+          }
+          
         }
         }
 

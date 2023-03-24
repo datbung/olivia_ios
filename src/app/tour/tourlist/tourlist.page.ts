@@ -67,7 +67,7 @@ export class TourListPage implements OnInit{
   }
   ionViewWillEnter(){
     if(this.searchhotel.CheckInDate){
-      this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
+      this.cindisplayhr = moment(this.gf.getCinIsoDate(this.searchhotel.CheckInDate)).format('DD/MM');
     }
     this.hidetopbar();
   }
@@ -104,7 +104,7 @@ export class TourListPage implements OnInit{
     }
 
     if(this.searchhotel.CheckInDate){
-      this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
+      this.cindisplayhr = moment(this.gf.getCinIsoDate(this.searchhotel.CheckInDate)).format('DD/MM');
     }
 
     if(this.tourService.itemShowList && this.tourService.itemShowList.Name){
@@ -574,8 +574,8 @@ export class TourListPage implements OnInit{
     }
     
     se.allowclickcalendar = false;
-    let fromdate = new Date(se.searchhotel.CheckInDate);
-    let todate = new Date(se.searchhotel.CheckOutDate);
+    let fromdate = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckInDate));
+    let todate = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckOutDate));
     let _daysConfig: DayConfig[] = [];
     if(se.tourService.departures && se.tourService.departures.length >0) {
       for (let j = 0; j < se.tourService.departures.length; j++) {
@@ -662,9 +662,9 @@ export class TourListPage implements OnInit{
       const date = event.data;
       if (event.data) {
          se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
-           se.searchhotel.datecin = new Date(event.data.from);
-           se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
+           se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
+           se.searchhotel.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
+           se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
          })
       }
   }
@@ -713,9 +713,9 @@ export class TourListPage implements OnInit{
                 se.modalCtrl.dismiss();
               }, 300);
               se.zone.run(() => {
-                se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
-                se.searchhotel.datecin = fromdate;
-                se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
+                se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
+                se.searchhotel.datecin = se.gf.getCinIsoDate(fromdate);
+                se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
               })
               se.loadData();
               

@@ -19,6 +19,7 @@ import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { FlightselecttimepriorityPage } from '../flightselecttimepriority/flightselecttimepriority.page';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightsearchresult',
@@ -140,7 +141,8 @@ export class FlightsearchresultPage implements OnInit {
     public _flightService: flightService,
     private alertCtrl: AlertController,
     private pickerCtrl : PickerController,
-    private fb: Facebook) { 
+    private fb: Facebook,
+    public _voucherService: voucherService) { 
       this.step =2;
       clearInterval(this.intervalFlightTicket);
       if(_flightService.objSearch){
@@ -581,6 +583,11 @@ export class FlightsearchresultPage implements OnInit {
     this._flightService.itemFlightCache.promotionCode="";
     this._flightService.itemFlightCache.discount=0;
     this._flightService.itemFlightCache.hasvoucher = false;
+    this._flightService.itemFlightCache.listVouchersAlreadyApply = [];
+    this._voucherService.voucherSelected = [];
+    this._voucherService.listPromoCode = [];
+    this._voucherService.totalDiscountPromoCode =0;
+    
   }
 
   async showAlertRefreshPrice(msg){

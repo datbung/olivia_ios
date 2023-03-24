@@ -2130,8 +2130,7 @@
                       <div class="div-wrapimg">
                           <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar" src="https:{{trip.avatar}}"> -->
                           <div *ngIf="trip.avatar else noavatar">
-                            <img *ngIf="trip.avatar.indexOf('http') == -1" class="img-avatar" src="https:{{trip.avatar}}">
-                            <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}">
+                            <img class="img-avatar" src="{{trip.avatar}}">
                           </div>
                           <ng-template #noavatar>
                             <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">

@@ -18,6 +18,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { resolve } from 'dns';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { flightConfirmBookingDetailPage } from './../flightconfirmbookingdetail/flightconfirmbookingdetail.page';
+import { voucherService } from '../providers/voucherService';
 
 /**
  * Generated class for the OccupancyPage page.
@@ -93,7 +94,8 @@ export class FlightadddetailsPage implements OnInit {
     public formBuilder: FormBuilder,
     private _keyboard: Keyboard,
     private storage: Storage,public alertCtrl: AlertController,
-    private fb: Facebook) {
+    private fb: Facebook,
+    public _voucherService: voucherService) {
         if(this._flightService.itemFlightCache){
           this.listcountry = this.gf.getNationList();
           this.listcountryFull = [...this.listcountry];
@@ -3330,6 +3332,26 @@ alert.present();
                 let Json = JSON.stringify(AirTicketObj);
                 bookingJsonData = Json;
               }
+
+              let voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+                let newitem = {};
+                newitem["voucherCode"] = v.code;
+                newitem["voucherName"] = v.rewardsItem.title;
+                newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+                newitem["voucherDiscount"] = v.rewardsItem.price;
+                newitem["keepCurrentVoucher"] = this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0 ? this._flightService.itemFlightCache.listVouchersAlreadyApply.some(item => item.code == v.code) :false;
+                return newitem;
+              });
+              let promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+                let newitem = {};
+                newitem["voucherCode"] = v.code;
+                newitem["voucherName"] = v.name;
+                newitem["voucherType"] = 2;
+                newitem["voucherDiscount"] = v.price;
+                newitem["keepCurrentVoucher"] = this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0 ? this._flightService.itemFlightCache.listVouchersAlreadyApply.some(item => item.code == v.code) :false;
+                return newitem;
+              });
+
               return new Promise((resolve, reject) => {
                 let objPass
                    objPass = {
@@ -3358,15 +3380,19 @@ alert.present();
                     "memberId": se.jti ? se.jti : "",
                     "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                     "bookingJsonData":bookingJsonData,//đi chung
-                    "voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
+                    //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
+                    "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
                     "InsuranceType":se._flightService.itemFlightCache.InsuranceType
                   }
-                  if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
-                  {
-                    objPass.voucher={};
-                    objPass.voucher.keepCurrentVoucher=true;
-                    objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
+                  if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
+                    if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
+                    {
+                      objPass.voucher={};
+                      objPass.voucher.keepCurrentVoucher=true;
+                      objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
+                    }
                   }
+                  
                   var options = {
                     method: 'POST',
                     url: C.urls.baseUrl.urlFlight + "gate/apiv1/PassengerSave/"+data.reservationId,
@@ -3379,7 +3405,7 @@ alert.present();
                     body: JSON.stringify(objPass)
                   };
                   se.options = options;
-                  console.log(options)
+                  console.log(JSON.stringify(objPass))
                   request(options, function (error, response, body) {
                     let objError = {
                       page: "flightadddetails",

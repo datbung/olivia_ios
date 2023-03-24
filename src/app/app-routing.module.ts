@@ -180,6 +180,7 @@ const routes: Routes = [
   { path: 'mytripdetail', loadChildren: './mytripdetail/mytripdetail.module#MytripdetailPageModule' },
   { path: 'mytrippaymentbank', loadChildren: './mytrippaymentbank/mytrippaymentbank.module#MytrippaymentbankPageModule' },
   { path: 'mytripuppayment', loadChildren: './mytripuppayment/mytripuppayment.module#MytripuppaymentPageModule' },
+  { path: 'mytripcheckinonline', loadChildren: './mytripcheckinonline/mytripcheckinonline.module#MytripCheckinOnlinePageModule' },
   //add hotel city
   { path: 'hotelcityitemdetail', loadChildren: './hotelcityitemdetail/hotelcityitemdetail.module#HotelCityItemDetailPageModule' },
   { path: 'hotelcityroomupgrade', loadChildren: './hotelcityroomupgrade/hotelcityroomupgrade.module#HotelCityRoomUpgradePageModule' },

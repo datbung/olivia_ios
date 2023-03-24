@@ -26,6 +26,7 @@ export class VoucherSlidePage implements OnInit{
     public intervalID;
     vouchers = [];
   msgApplyFor: any;
+  msgMultiVoucherError='';
     constructor(public platform: Platform,public navCtrl: NavController,public toastCtrl: ToastController,
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
@@ -137,6 +138,35 @@ export class VoucherSlidePage implements OnInit{
     //         modal.present();
     // }
 
+    // async showAlertVoucherUsed(msg, voucher){
+    //   var se = this;
+    //   let alert = await this.alertCtrl.create({
+    //     header: '',
+    //     message: msg,
+    //     cssClass: "cls-alert-message",
+    //     backdropDismiss: false,
+    //     buttons: [
+    //     {
+    //       text: 'OK',
+    //       role: 'OK',
+    //       handler: () => {
+    //         voucher.claimed = false;
+    //         this.gf.removeItemInArray(this._voucherService.voucherSelected, voucher);
+    //         this._voucherService.publicVoucherClicked(voucher);
+    //       }
+    //     },
+    //     {
+    //       text: 'Hủy',
+    //       role: 'Cancel',
+    //       handler: () => {
+            
+    //       }
+    //     }
+    //   ]
+    // });
+    // alert.present();
+    // }
+
     voucherSelect(voucher){
       if(!voucher.isActive){
         return;
@@ -148,25 +178,38 @@ export class VoucherSlidePage implements OnInit{
           this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ voucher.applyFor == 'hotel' ? 'khách sạn' : 'tour'}. Quý khách vui lòng chọn lại mã khác!`);
           return;
         } else{
+          this.gf.showLoading();
           this.checkVoucherActive(voucher).then((check) => {
+            this.gf.hideLoading();
             if(!check){
               if(this.msgApplyFor){
                 this.gf.showAlertMessageOnly(this.msgApplyFor);
-              } else {
-                this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+              } 
+              if(this.msgMultiVoucherError){
+                
+                this.gf.showAlertMessageOnly(this.msgMultiVoucherError);
+              } 
+              else {
+                if(voucher.claimed){//Cảnh báo với voucher đã sử dụng
+                  this._voucherService.publicVoucherUsedClicked(voucher);
+                  //this.showAlertVoucherUsed('Mã voucher đã được dùng cho đơn hàng hiện tại, bạn có chắc chắn muốn bỏ tích chọn?',voucher);
+                }else{
+                  this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+                }
+                
               }
               
               return;
             }else{
-                  for (let index = 0; index < this._voucherService.vouchers.length; index++) {
-                    const element = this._voucherService.vouchers[index];
-                    if(element.id != voucher.id){
-                      element.claimed = false;
-                    }
-                    
-                  }
                   voucher.claimed = !voucher.claimed;
-                  console.log(this.item);
+                  if(voucher.claimed && !this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
+                    this._voucherService.voucherSelected.push(voucher);
+                    
+                    //console.log(this._voucherService.voucherSelectedMap);
+                  }else if(!voucher.claimed && this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
+                    this.gf.removeItemInArray(this._voucherService.voucherSelected, voucher);
+                  }
+                  //console.log(this.item);
                   //this._voucherService.itemSelectVoucher.emit(voucher);
                   this._voucherService.publicVoucherClicked(voucher);
               }
@@ -188,7 +231,7 @@ export class VoucherSlidePage implements OnInit{
                 'cache-control': 'no-cache',
                 'content-type': 'application/json'
               },
-              body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price ? itemVoucher.rewardsItem.price : se._flightService.itemFlightCache.totalPrice, comboDetailId: 0,
+              body: { bookingCode: 'VMB' ,code: itemVoucher.code, totalAmount: se._flightService.itemFlightCache.totalPrice ? se._flightService.itemFlightCache.totalPrice : itemVoucher.rewardsItem.price, comboDetailId: 0,
               couponData: itemVoucher.applyFor && itemVoucher.applyFor == 'flight' ? { flight: {
                   "tickets": this._flightService.itemFlightCache.roundTrip ? [
                     {
@@ -245,11 +288,16 @@ export class VoucherSlidePage implements OnInit{
               if (error) throw new Error(error);
                 var json = body;
                 if (json.error == 0) {
-                  // if(itemVoucher.rewardsItem.price == 0 && itemVoucher.limitUse >0){
-                  //   itemVoucher.discountSpecialCase = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
-                  // }
-                  resolve(true);
+                  itemVoucher.type = json.data.type;
+                  if(se._voucherService.voucherSelected && se._voucherService.voucherSelected.length >0 && se._voucherService.voucherSelected.some(v => v.type != json.data.type)){
+                    se.msgMultiVoucherError = "Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một mã";
+                    resolve(false);
+                  }else{
+                    resolve(true);
+                  }
+                  
                 }
+               
                 else{
                   if(json.msg && itemVoucher.applyFor && itemVoucher.applyFor == 'flight'){
                     se.msgApplyFor = json.msg;
@@ -368,14 +416,14 @@ export class VoucherSlidePage implements OnInit{
         if(data && data.length >0){
           data.forEach(element => {
             element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
-           // element.isActive = this.checkValidVoucher(element);
+            element.claimed = this._voucherService.voucherSelected.some(v => v.id == element.id);
           });
           this.zone.run(()=>{
           let voucheractive = data.filter((i)=> {return i.isActive});
           let voucherdeactive = data.filter((i)=> {return !i.isActive});
           this.vouchers = [...voucheractive, ...voucherdeactive];
           this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
-
+          this._voucherService.publicVoucherRefreshList(1);
             this._voucherService.hasVoucher = this._voucherService.vouchers && this._voucherService.vouchers.length >0;
 
             if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.hasvoucher){

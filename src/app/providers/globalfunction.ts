@@ -708,10 +708,10 @@ export class GlobalFunction{
         if (type == 'order') {
           res = arrays.some(r => r.booking_id == item.booking_id);
         }
-        if(type == 'experiencesearch' || type =='blog'){
+        if(type == 'experiencesearch' || type =='blog' || type == 'voucher'){
           res = arrays.some(r => r.id == item.id);
         }
-        if(type=='filtername'){
+        if(type=='filtername' || type=='code'){
           res = arrays.some(r => r == item);
         }
         

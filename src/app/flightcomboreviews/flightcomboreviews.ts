@@ -958,6 +958,8 @@ export class FlightComboReviewsPage implements OnInit{
    */
   loadFlightDataNew(hascache) {
     var se = this;
+    
+    se.resetValue();
     setTimeout(() => {
       se.stoprequest = true;
       se.loadpricedone = true;
@@ -2993,6 +2995,9 @@ export class FlightComboReviewsPage implements OnInit{
                 }
               }
     });
+    this.myCalendar.onDidDismiss().then(()=>{
+      this.allowclickcalendar = true;
+    })
   }
   async clickedElement(e: any) {
     var obj: any = e.currentTarget;
@@ -3302,5 +3307,27 @@ export class FlightComboReviewsPage implements OnInit{
   }
   nextShuttlebus(){
     this.navCtrl.navigateForward("/shuttlebusnote");
+  }
+
+  resetValue(){
+    this.currentDepartFlight = null;
+    this.currentReturnFlight = null;
+    this.listDepart = [];
+    this.listReturn = [];
+    this.listDeparture = [];
+    this.departfi = [];
+    this.returnfi = [];
+    this.de_departdatestr = '';
+    this.de_departtime = '';
+    this.de_departpriceincrease = false;
+    this.de_flightpricetitle = '';
+    this.de_returnpriceincrease = false;
+    this.re_departtime ='';
+    this.ar_departdatestr = '';
+    this.ar_departtime = '';
+    this.ar_departpriceincrease = false;
+    this.ar_flightpricetitle ='';
+    this.ar_returnpriceincrease = false;
+    this.ar_returntime = '';
   }
 }
