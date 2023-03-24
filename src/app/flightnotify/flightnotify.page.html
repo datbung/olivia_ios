@@ -122,13 +122,13 @@
           <div class="div-detail" (click)="updateStatusMessage(item)">
             <div class="div-flex">
               <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
-              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img"
+              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert' || item.notifyType == 'fly'" class="noti-img"
                 src="./assets/imgs/noti_clipboard.svg" />
               <div *ngIf="item.notifyType == 'product'"
                 [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text'">
                 Sản phẩm
               </div>
-              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"
+              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert' || item.notifyType == 'fly'"
                 [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text'">
                 Đơn hàng
               </div>
@@ -162,13 +162,13 @@
           <div class="div-detail" (click)="updateStatusMessage(item)">
             <div class="div-flex">
               <img *ngIf="item.notifyType == 'product'" class="noti-img" src="./assets/imgs/noti_fire.svg" />
-              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'" class="noti-img"
+              <img *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert' || item.notifyType == 'fly'" class="noti-img"
                 src="./assets/imgs/noti_clipboard.svg" />
               <div *ngIf="item.notifyType == 'product'"
                 [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
                 Sản phẩm
               </div>
-              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert'"
+              <div *ngIf="item.notifyType == 'booking' || item.notifyType == 'alert' || item.notifyType == 'fly'"
                 [ngClass]="item.status == 0 ? 'noti-text text-bold' : 'noti-text' ">
                 Đơn hàng
               </div>
