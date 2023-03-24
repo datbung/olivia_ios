@@ -306,8 +306,10 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               }
             })
 
-            this._voucherService.getVoucherRefreshList().subscribe(async (itemVoucher)=> {
-              if(itemVoucher){
+            this._voucherService.getVoucherRefreshList().subscribe(async (check)=> {
+              if(check){
+                this.strPromoCode = '';
+                this.totaldiscountpromo = 0;
                 this.buildStringPromoCode();
                 this.totalPriceAll();
               }
@@ -331,9 +333,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     this.discountpromo = itemVoucher.rewardsItem.price;
                     // this._flightService.itemFlightInternational.discountpromo = itemVoucher.rewardsItem.price;
                     // this._flightService.itemFlightInternational.promotionCode = itemVoucher.code;
-                    if(!this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
-                      this.listVouchersApply.push(itemVoucher);
-                    }
+                    // if(!this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
+                    //   this.listVouchersApply.push(itemVoucher);
+                    // }
                     this.buildStringPromoCode();
                   }else{
                     this.itemVoucher = null;
@@ -342,12 +344,12 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     this.discountpromo = 0;
                     // this._flightService.itemFlightInternational.discountpromo = 0;
                     // this._flightService.itemFlightInternational.promotionCode = "";
-                    if(this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
-                      this.gf.removeItemInArray(this.listVouchersApply, itemVoucher);
-                    }
+                    // if(this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
+                    //   this.gf.removeItemInArray(this.listVouchersApply, itemVoucher);
+                    // }
                     this.buildStringPromoCode();
 
-                    if(this.listVouchersApply && this.listVouchersApply.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+                    if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
                       this.strPromoCode = '';
                       this.totaldiscountpromo = 0;
                     }
@@ -4139,7 +4141,7 @@ alert.present();
           this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
 
           if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
-            let totaldiscount = this.listVouchersApply.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+            let totaldiscount = this._voucherService.voucherSelected.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
             this.totalPrice = this.totalPrice - totaldiscount;
           }
           if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
@@ -4156,6 +4158,7 @@ alert.present();
         //   this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
         //   this.totalPrice = this.totalPrice - this.discountpromo;
         // }
+        this._flightService.itemFlightInternational.totalPrice = this.totalPrice;
         this.totalPriceDisplay = this.gf.convertNumberToString(this.totalPrice);
       })
       
@@ -4389,9 +4392,9 @@ alert.present();
     }
 
     buildStringPromoCode(){
-      if(this.listVouchersApply && this.listVouchersApply.length >0){
-        this.strPromoCode = this.listVouchersApply.map(item => item.code).join(', ');
-        this.totaldiscountpromo = this.listVouchersApply.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+      if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+        this.strPromoCode = this._voucherService.voucherSelected.map(item => item.code).join(', ');
+        this.totaldiscountpromo = this._voucherService.voucherSelected.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
       }else{
         this.strPromoCode = '';
         this.totaldiscountpromo = 0;

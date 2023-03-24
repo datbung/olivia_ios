@@ -124,49 +124,6 @@ export class VoucherSlidePage implements OnInit{
         })
     }
 
-    // async showVoucherDetail(voucher){
-    //         var se = this;
-    //         se._voucherService.itemVoucher = voucher;
-    //           const modal: HTMLIonModalElement =
-    //           await se.modalCtrl.create({
-    //             component: VoucherDetailPage,
-    //             showBackdrop: true,
-    //             backdropDismiss: true,
-                
-    //             cssClass: "modal-voucher-detail"
-    //           });
-    //         modal.present();
-    // }
-
-    // async showAlertVoucherUsed(msg, voucher){
-    //   var se = this;
-    //   let alert = await this.alertCtrl.create({
-    //     header: '',
-    //     message: msg,
-    //     cssClass: "cls-alert-message",
-    //     backdropDismiss: false,
-    //     buttons: [
-    //     {
-    //       text: 'OK',
-    //       role: 'OK',
-    //       handler: () => {
-    //         voucher.claimed = false;
-    //         this.gf.removeItemInArray(this._voucherService.voucherSelected, voucher);
-    //         this._voucherService.publicVoucherClicked(voucher);
-    //       }
-    //     },
-    //     {
-    //       text: 'Hủy',
-    //       role: 'Cancel',
-    //       handler: () => {
-            
-    //       }
-    //     }
-    //   ]
-    // });
-    // alert.present();
-    // }
-
     voucherSelect(voucher){
       if(!voucher.isActive){
         return;
@@ -423,7 +380,7 @@ export class VoucherSlidePage implements OnInit{
           let voucherdeactive = data.filter((i)=> {return !i.isActive});
           this.vouchers = [...voucheractive, ...voucherdeactive];
           this._voucherService.vouchers = [...voucheractive, ...voucherdeactive];
-          this._voucherService.publicVoucherRefreshList(1);
+          //this._voucherService.publicVoucherRefreshList(1);
             this._voucherService.hasVoucher = this._voucherService.vouchers && this._voucherService.vouchers.length >0;
 
             if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.hasvoucher){
@@ -436,6 +393,28 @@ export class VoucherSlidePage implements OnInit{
                 
               }
             }
+
+            //check list voucher mới nhất còn voucher đang tích chọn không? Không còn áp dụng thì bỏ tích
+            if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+              this._voucherService.voucherSelected.forEach(element => {
+                let vc = this._voucherService.vouchers.some(v => v.id == element.id && v.isActive);
+                if(!vc){
+                  this.gf.removeItemInArray(this._voucherService.voucherSelected, element);
+                  this._voucherService.publicVoucherRefreshList(1);
+                }
+              });
+            }
+            
+            if(this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length>0){
+              this._voucherService.listObjectPromoCode.forEach(element => {
+                let vctm = this._voucherService.vouchers.some(v => v.code == element.code && v.isActive);
+                if(!vctm){
+                  this.gf.removeItemInArray(this._voucherService.listObjectPromoCode, element);
+                  this._voucherService.publicVoucherRefreshList(1);
+                }
+              });
+            }
+            
           })
           
         }else if(data.error == 401){

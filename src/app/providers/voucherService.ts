@@ -27,7 +27,7 @@ export class voucherService{
   voucherUsedSubject= new Subject<any>();
   voucherRefreshListSubject= new Subject<any>();
   getVoucherRefreshList(): Subject<any> {
-    return this.clearVoucherSubject;
+    return this.voucherRefreshListSubject;
   }
   publicVoucherRefreshList(data: any) {
     this.voucherRefreshListSubject.next(data);
