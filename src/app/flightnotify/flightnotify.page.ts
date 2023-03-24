@@ -123,7 +123,7 @@ export class FlightnotifyPage {
               var data = JSON.parse(body);
               if (data && data.length > 0) {
                 data.forEach(element =>{
-                    if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
+                    // if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
                       let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
                       let d = new Date(Number(arrdate[2]), Number(arrdate[1])-1, Number(arrdate[0]),Number(arrdate[3]),Number(arrdate[4]));
                       let today = new Date();
@@ -146,7 +146,7 @@ export class FlightnotifyPage {
                       }else{
                         se.itembookings.push(element);
                       }
-                    }
+                    // }
                   });
                 setTimeout(() => {
                     se.zone.run(() => { // count số notifi
