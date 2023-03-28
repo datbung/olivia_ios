@@ -220,6 +220,7 @@ const routes: Routes = [
   { path: 'accountdeletionsms', loadChildren: './accountdeletionsms/accountdeletionsms.module#AccountDeletionSmsPageModule' },
   { path: 'accountdeletionsmsverify', loadChildren: './accountdeletionsmsverify/accountdeletionsmsverify.module#AccountDeletionSmsVerifyPageModule' },
   { path: 'accountdeletiondone', loadChildren: './accountdeletiondone/accountdeletiondone.module#AccountDeletionDonePageModule' },
+  { path: 'accountdeletion', loadChildren: './accountdeletion/accountdeletion.module#AccountDeletionPageModule' },
 
   { path: 'myvoucher', loadChildren: './voucher/myvoucher/myvoucher.module#MyVoucherPageModule' },
 
