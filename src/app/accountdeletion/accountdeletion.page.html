@@ -14,9 +14,15 @@
   </ion-header>
 
 <ion-content padding>
-  <div class="div-DK">
+  <div class="text-DK-1" style="font-weight: bold;">
+    Những điều quan trọng bạn nên biết
+  </div>
+  <div class="text-DK-1"> 
+    Vui lòng xác nhận những điều này trước khi xóa tài khoản
+  </div>
+  <div class="div-DK  m-top-10">
     <div class="width-5">
-      <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckDK1" (ionChange)="checkDk1()"></ion-checkbox>
+      <ion-checkbox mode='md' [ngClass]="ischeckDK1?'checkbox-DK-active':'checkbox-DK'" [checked]="ischeckDK1" (ionChange)="checkDk1()"></ion-checkbox>
     </div>
    
     <div  class="text-DK">
@@ -25,28 +31,28 @@
   </div>
   <div class="div-DK m-top-10">
     <div class="width-5">
-      <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckDK2" (ionChange)="checkDk2()"></ion-checkbox>
+      <ion-checkbox mode='md' [ngClass]="ischeckDK2?'checkbox-DK-active':'checkbox-DK'"  [checked]="ischeckDK2" (ionChange)="checkDk2()"></ion-checkbox>
     </div>    <div class="text-DK">
       Bạn sẽ không nhận được bất kỳ thông báo nào từ các kênh truyền thông tiếp thị của chúng tôi nữa.
     </div>
   </div>
   <div class="div-DK m-top-10">
     <div class="width-5">
-      <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckDK3" (ionChange)="checkDk3()"></ion-checkbox>
+      <ion-checkbox mode='md' [ngClass]="ischeckDK3?'checkbox-DK-active':'checkbox-DK'"  [checked]="ischeckDK3" (ionChange)="checkDk3()"></ion-checkbox>
     </div>    <div class="text-DK">
       Bạn không thể đăng ký hoặc đăng nhập bằng tài khoản vừa yêu cầu xóa.
     </div>
   </div>
   <div class="div-DK m-top-10">
     <div class="width-5">
-      <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckDK4" (ionChange)="checkDk4()"></ion-checkbox>
+      <ion-checkbox mode='md' [ngClass]="ischeckDK4?'checkbox-DK-active':'checkbox-DK'"  [checked]="ischeckDK4" (ionChange)="checkDk4()"></ion-checkbox>
     </div>    <div class="text-DK">
       Nếu tài khoản của bạn đã bị xóa và bạn muốn yêu cầu hoàn lại tiền cho đặt phòng đang diễn ra hoặc có bất kỳ câu hỏi nào liên quan đến các đặt phòng trước đây, Vui lòng liên hệ CSKH của chúng tôi bằng tổng đài qua tổng đài 1900 1870   
     </div>
   </div>
   <div class="div-DK m-top-10">
     <div class="width-5">
-      <ion-checkbox [disabled]="!(ischeckDK1 && ischeckDK2 && ischeckDK3 && ischeckDK4)" mode='md' class="checkbox-DK"  [checked]="ischeckDK5" (ionChange)="checkDk5()"></ion-checkbox>
+      <ion-checkbox [disabled]="!(ischeckDK1 && ischeckDK2 && ischeckDK3 && ischeckDK4)" mode='md' class="checkbox-DK-active"  [checked]="ischeckDK5" (ionChange)="checkDk5()"></ion-checkbox>
     </div>
     <div class="text-DK">
       Tôi đồng ý và xác nhận xóa tài khoản trên iVIVU.com
