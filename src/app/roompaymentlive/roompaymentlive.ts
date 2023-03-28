@@ -190,7 +190,7 @@ export class RoompaymentlivePage implements OnInit{
                     }
                   })
                 }else{
-                  se.showAlertMessageOnly(body.Msg);
+                  se.gf.showAlertMessageOnly(body.Msg);
                 }
                 
               })

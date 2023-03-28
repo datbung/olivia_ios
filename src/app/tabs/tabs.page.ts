@@ -788,7 +788,6 @@ export class TabsPage implements OnInit {
 
       setTimeout(()=>{
         this.fcmNative.onNotification().subscribe( (data:any)=>{
-          debugger;
           if(data.wasTapped){
             this.showNotification(data);
             //update lại trạng thái bkg

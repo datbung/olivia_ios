@@ -24,6 +24,7 @@ export class VoucherSlideHotelPage implements OnInit{
     public isShowConfirm = false;
     public intervalID;
     vouchers = [];
+  msgMultiVoucherError: any;
     constructor(public platform: Platform,public navCtrl: NavController,public toastCtrl: ToastController,
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
@@ -52,6 +53,20 @@ export class VoucherSlideHotelPage implements OnInit{
             }
             
           }
+        }
+      })
+
+      this._voucherService.getRollbackAllSelectedVoucher().subscribe((check) => {
+        if(check){
+          this.zone.run(()=>{
+            for (let index = 0; index < this._voucherService.vouchers.length; index++) {
+              const element = this._voucherService.vouchers[index];
+              if(element.claimed){
+                element.claimed = false;
+              }
+            }
+          })
+          
         }
       })
     }
@@ -118,20 +133,6 @@ export class VoucherSlideHotelPage implements OnInit{
         })
     }
 
-    // async showVoucherDetail(voucher){
-    //         var se = this;
-    //         se._voucherService.itemVoucher = voucher;
-    //           const modal: HTMLIonModalElement =
-    //           await se.modalCtrl.create({
-    //             component: VoucherDetailPage,
-    //             showBackdrop: true,
-    //             backdropDismiss: true,
-                
-    //             cssClass: "modal-voucher-detail"
-    //           });
-    //         modal.present();
-    // }
-
     voucherSelect(voucher){
       if(!voucher.isActive){
         return;
@@ -145,18 +146,27 @@ export class VoucherSlideHotelPage implements OnInit{
         } else{
           this.checkVoucherActive(voucher).then((check) => {
             if(!check){
-              this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
-              return;
-            }else{
-              for (let index = 0; index < this._voucherService.vouchers.length; index++) {
-                const element = this._voucherService.vouchers[index];
-                if(element.id != voucher.id){
-                  element.claimed = false;
+              if(this.msgMultiVoucherError){
+                this.gf.showAlertMessageOnly(this.msgMultiVoucherError);
+              } else {
+                if(voucher.claimed){//Cảnh báo với voucher đã sử dụng
+                  this._voucherService.publicVoucherUsedClicked(voucher);
+                }else{
+                  this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
                 }
-                
               }
+              // this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+              return;
+            }
+            
+            else{
+             
               voucher.claimed = !voucher.claimed;
-              console.log(this.item);
+              if(voucher.claimed && !this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
+                this._voucherService.voucherSelected.push(voucher);
+              }else if(!voucher.claimed && this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
+                this.gf.removeItemInArray(this._voucherService.voucherSelected, voucher);
+              }
               this._voucherService.publicVoucherHotelClicked(voucher);
               }
           })
@@ -185,7 +195,15 @@ export class VoucherSlideHotelPage implements OnInit{
               if (error) throw new Error(error);
                 var json = body;
                 if (json.error == 0) {
-                  resolve(true);
+
+                  itemVoucher.type = json.data.type;
+                  if(se._voucherService.voucherSelected && se._voucherService.voucherSelected.length >0 && (se._voucherService.voucherSelected.some(v => v.type != json.data.type && v.id != itemVoucher.id) || se._voucherService.voucherSelected.some(v => v.type != 2 && v.id != itemVoucher.id))){
+                    se.msgMultiVoucherError = "Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một mã";
+                    resolve(false);
+                  }else{
+                    resolve(true);
+                  }
+                  //resolve(true);
                 }
                 else{
                   resolve(false);
@@ -266,6 +284,7 @@ export class VoucherSlideHotelPage implements OnInit{
         if(data && data.length >0){
           data.forEach(element => {
             element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
+            element.claimed = this._voucherService.voucherSelected.some(v => v.id == element.id);
           });
         //  this.vouchers = [...data];
         //  this._voucherService.vouchers = [...data];

@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { ActivatedRoute } from '@angular/router';
 import { ActivityService } from './../providers/globalfunction';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoomchoosebankPage page.
  *
@@ -32,7 +33,8 @@ export class RoomchoosebankPage implements OnInit{
   _inAppBrowser: any;  isremember=true;stt;isdisable=false;isshowRemember=false;ischeckedDK=true;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,  public alertCtrl: AlertController,
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
-    public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,private safariViewController: SafariViewController,private activatedRoute: ActivatedRoute,public activityService: ActivityService) {
+    public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,private safariViewController: SafariViewController,private activatedRoute: ActivatedRoute,public activityService: ActivityService,
+    public _voucherService: voucherService) {
    
     //google analytic
     //gf.googleAnalytion('roomchoosebank', 'load', '');
@@ -163,13 +165,9 @@ export class RoomchoosebankPage implements OnInit{
                 
                
               }
-              // se.Roomif.promocode ="ttkkm45";
-              if (se.Roomif.promocode && se.bookingCode) {
-                // alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
+              if (se._voucherService.hotelPromoCode && se.bookingCode) {
                 se.Roomif.bookingCode=se.bookingCode
-                se.showInfo("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!")
-                // se.Roomif.promocode="";
-               
+                se.showInfo("Mã giảm giá "+se._voucherService.hotelPromoCode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!")
               }
             }
           clearInterval(se.intervalID);
@@ -327,6 +325,28 @@ export class RoomchoosebankPage implements OnInit{
     if (this.Roomif.order) {
       Invoice = 1;
     }
+    let voucherSelectedMap = [],promoSelectedMap =[];
+    if(this._voucherService.hotelPromoCode){
+      voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+        let newitem = {};
+        newitem["voucherCode"] = v.code;
+        newitem["voucherName"] = v.rewardsItem.title;
+        newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+        newitem["voucherDiscount"] = v.rewardsItem.price;
+        newitem["keepCurrentVoucher"] = false;
+        return newitem;
+      });
+      promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+        let newitem = {};
+        newitem["voucherCode"] = v.code;
+        newitem["voucherName"] = v.name;
+        newitem["voucherType"] = 2;
+        newitem["voucherDiscount"] = v.price;
+        newitem["keepCurrentVoucher"] = false;
+        return newitem;
+      });
+    }
+
     return new Promise((resolve, reject) => {
       var options = {
         method: 'POST',
@@ -361,10 +381,11 @@ export class RoomchoosebankPage implements OnInit{
           CompanyAddress: this.Roomif.address,
           CompanyTaxCode: this.Roomif.tax,
           BillingAddress: this.Roomif.addressorder,
-          promotionCode: this.Roomif.promocode,
+          //promotionCode: this.Roomif.promocode,
           comboid: this.bookCombo.ComboId,
           PenaltyDescription: this.Roomif.textcancel,
-          companycontactname: this.Roomif.nameOrder
+          companycontactname: this.Roomif.nameOrder,
+          vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
         },
         json: true
       };
@@ -434,7 +455,7 @@ export class RoomchoosebankPage implements OnInit{
                 }
               })
             }else{
-              se.showAlertMessageOnly(body.Msg);
+              se.gf.showAlertMessageOnly(body.Msg);
             }
             
           })
@@ -533,10 +554,8 @@ export class RoomchoosebankPage implements OnInit{
             // alert("Điểm tích luỹ "+se.Roomif.point+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
             se.showInfo("Điểm tích luỹ "+se.Roomif.point+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
           }
-          if (se.Roomif.promocode && se.bookingCode) {
-            // se.navCtrl.navigateForward('/roomdetailreview');
-            // alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
-            se.showInfo("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
+          if (se._voucherService.hotelPromoCode && se.bookingCode) {
+            se.showInfo("Mã giảm giá "+se._voucherService.hotelPromoCode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
             
           }
         }

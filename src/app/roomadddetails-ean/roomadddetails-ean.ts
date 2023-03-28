@@ -16,6 +16,7 @@ import jwt_decode from 'jwt-decode';
 import {ConfirmemailPage} from '../confirmemail/confirmemail.page';
 import {OverlayEventDetail} from '@ionic/core';
 import * as moment from "moment";
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoomadddetailsEanPage page.
  *
@@ -68,7 +69,8 @@ export class RoomadddetailsEanPage implements OnInit {
     currentSelectPax : any;
 
     constructor(public platform : Platform, public navCtrl : NavController, public Roomif : RoomInfo, private toastCtrl : ToastController, public booking : Booking, public bookcombo : Bookcombo, public zone : NgZone, public storage : Storage, public loadingCtrl : LoadingController, public gf : GlobalFunction, public alertCtrl : AlertController, private modalCtrl : ModalController, public activityService : ActivityService,
-        public searchhotel: SearchHotel) {
+        public searchhotel: SearchHotel,
+        public _voucherService: voucherService) {
         this.ischeckpayment = Roomif.ischeckpayment;
         this.roomnumber = Roomif.roomnumber;
         this.note = Roomif.notetotal;
@@ -1489,6 +1491,27 @@ export class RoomadddetailsEanPage implements OnInit {
         if (se.Roomif.order) {
             Invoice = 1;
         }
+        let voucherSelectedMap = [],promoSelectedMap =[];
+        if(this._voucherService.hotelPromoCode){
+        voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+            let newitem = {};
+            newitem["voucherCode"] = v.code;
+            newitem["voucherName"] = v.rewardsItem.title;
+            newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+            newitem["voucherDiscount"] = v.rewardsItem.price;
+            newitem["keepCurrentVoucher"] = false;
+            return newitem;
+        });
+        promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+            let newitem = {};
+            newitem["voucherCode"] = v.code;
+            newitem["voucherName"] = v.name;
+            newitem["voucherType"] = 2;
+            newitem["voucherDiscount"] = v.price;
+            newitem["keepCurrentVoucher"] = false;
+            return newitem;
+        });
+        }
         var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -1522,9 +1545,10 @@ export class RoomadddetailsEanPage implements OnInit {
                 CompanyAddress: se.Roomif.address,
                 CompanyTaxCode: se.Roomif.tax,
                 BillingAddress: se.Roomif.addressorder,
-                promotionCode: se.Roomif.promocode,
+                //promotionCode: se.Roomif.promocode,
                 comboid: se.bookcombo.ComboId,
-                PenaltyDescription: se.Roomif.textcancel
+                PenaltyDescription: se.Roomif.textcancel,
+                vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
             },
             json: true
         };
@@ -1780,6 +1804,27 @@ export class RoomadddetailsEanPage implements OnInit {
         if (se.Roomif.order) {
             Invoice = 1;
         }
+        let voucherSelectedMap = [],promoSelectedMap =[];
+        if(this._voucherService.hotelPromoCode){
+        voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+            let newitem = {};
+            newitem["voucherCode"] = v.code;
+            newitem["voucherName"] = v.rewardsItem.title;
+            newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+            newitem["voucherDiscount"] = v.rewardsItem.price;
+            newitem["keepCurrentVoucher"] = false;
+            return newitem;
+        });
+        promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+            let newitem = {};
+            newitem["voucherCode"] = v.code;
+            newitem["voucherName"] = v.name;
+            newitem["voucherType"] = 2;
+            newitem["voucherDiscount"] = v.price;
+            newitem["keepCurrentVoucher"] = false;
+            return newitem;
+        });
+        }
         var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -1813,9 +1858,10 @@ export class RoomadddetailsEanPage implements OnInit {
                 CompanyAddress: se.Roomif.address,
                 CompanyTaxCode: se.Roomif.tax,
                 BillingAddress: se.Roomif.addressorder,
-                promotionCode: se.Roomif.promocode,
+                //promotionCode: se.Roomif.promocode,
                 comboid: se.bookcombo.ComboId,
-                PenaltyDescription: se.Roomif.textcancel
+                PenaltyDescription: se.Roomif.textcancel,
+                vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
             },
             json: true
         };
@@ -1863,7 +1909,7 @@ export class RoomadddetailsEanPage implements OnInit {
                             }
                           })
                         }else{
-                          se.showAlertMessageOnly(body.Msg);
+                            se.gf.showAlertMessageOnly(body.Msg);
                         }
                         
                       })

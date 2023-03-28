@@ -150,7 +150,7 @@ export class RoompaymentdonenewPage implements OnInit {
     if (this.checkreview == 0) {
       this.showConfirm();
     }
-    this.navCtrl.navigateBack('/');
+    this.navCtrl.navigateBack('/app/tabs/tab1');
   }
   clearClonePage(pagename) {
     //Xóa clone do push page

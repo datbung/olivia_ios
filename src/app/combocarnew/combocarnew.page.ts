@@ -132,6 +132,8 @@ export class CombocarnewPage implements OnInit {
   statusRoom: any;
   itemVoucherCarCombo: any;
   elementRooom: any;
+  strPromoCode: string;
+  totaldiscountpromo: number;
   constructor(private storage: Storage, private zone: NgZone, public valueGlobal: ValueGlobal,
     private navCtrl: NavController,
     private actionSheetCtrl: ActionSheetController,
@@ -372,9 +374,14 @@ export class CombocarnewPage implements OnInit {
 
     this._voucherService.getCarComboObservable().subscribe((itemVoucher)=> {
       if(itemVoucher){
+        // if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherCarCombo){
+        //   this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+        //   this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+        //   return;
+        // }
         if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherCarCombo){
           this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+          this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
           return;
         }
         this.zone.run(()=>{
@@ -387,6 +394,7 @@ export class CombocarnewPage implements OnInit {
           this.bookCombo.discountpromo = this.discountpromo;
           this.ischeckbtnpromo = true;
           this.ischeckpromo = true;
+          this.buildStringPromoCode();
         }
         else{
           this._voucherService.selectVoucher = null;
@@ -397,10 +405,17 @@ export class CombocarnewPage implements OnInit {
           this.bookCombo.discountpromo = 0;
           this.ischeckbtnpromo = false;
           this.ischeckpromo = false;
+          this.buildStringPromoCode();
+          if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+            this.strPromoCode = '';
+            this.totaldiscountpromo = 0;
+            this.ischeckbtnpromo = false;
+            this.ischeckpromo = false;
+          }
         }
           this.edit();
         })
-        this.modalCtrl.dismiss();
+        //this.modalCtrl.dismiss();
       }
     })
     this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
@@ -413,6 +428,15 @@ export class CombocarnewPage implements OnInit {
           this.bookCombo.discountpromo = 0;
           this.ischeckbtnpromo = false;
           this.ischeckpromo = false;
+
+          this.strPromoCode = '';
+          this.totaldiscountpromo = 0;
+          this._voucherService.voucherSelected = [];
+          this._voucherService.listPromoCode = "";
+          this._voucherService.listObjectPromoCode = [];
+          this._voucherService.totalDiscountPromoCode = 0;
+          this._voucherService.comboCarPromoCode = "";
+          this._voucherService.comboCarTotalDiscount = 0;
       }
     })
   }
@@ -857,16 +881,16 @@ export class CombocarnewPage implements OnInit {
     self.bookCombo.totalPriceBeforeApplyVoucher = total;
     if (self.ischeckbtnpromo) {
       //total = self.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
-      self.bookCombo.ischeckbtnpromo = self.ischeckbtnpromo;
-      self.bookCombo.discountpromo = self.discountpromo;
-      self.Roomif.promocode = self.promocode;
+      self.bookCombo.ischeckbtnpromo = true;
+      self.bookCombo.discountpromo = self.totaldiscountpromo;
+      self.Roomif.promocode = self.strPromoCode;
       self.bookCombo.totalprice = self.Pricepointshow;
     }
     else {
-      self.bookCombo.ischeckbtnpromo = self.ischeckbtnpromo;
+      self.bookCombo.ischeckbtnpromo = false;
       self.bookCombo.discountpromo = 0;
       self.promocode = "";
-      self.Roomif.promocode = self.promocode;
+      self.Roomif.promocode = "";
       self.bookCombo.totalprice = total;
     }
     self.searchhotel.gaDiscountPromo = self.bookCombo.discountpromo;
@@ -935,7 +959,26 @@ export class CombocarnewPage implements OnInit {
     }
     self.totalPriceDep = priceseatdep + (self.surchargedepd + self.surchargedept) * self.totalAdult;
     self.totalPriceRet = priceseatret + (self.surchargeretd + self.surchargerett) * self.totalAdult;
-    
+
+    let voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+      let newitem = {};
+      newitem["voucherCode"] = v.code;
+      newitem["voucherName"] = v.rewardsItem.title;
+      newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+      newitem["voucherDiscount"] = v.rewardsItem.price;
+      newitem["keepCurrentVoucher"] = false;
+      return newitem;
+    });
+    let promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+      let newitem = {};
+      newitem["voucherCode"] = v.code;
+      newitem["voucherName"] = v.name;
+      newitem["voucherType"] = 2;
+      newitem["voucherDiscount"] = v.price;
+      newitem["keepCurrentVoucher"] = false;
+      return newitem;
+    });
+
         var objectCar = {
           TransferBooking: {
             fromPlaceCode: self.bookCombo.ComboDetail.comboDetail.departureCode,
@@ -1040,7 +1083,8 @@ export class CombocarnewPage implements OnInit {
             Supplier: (self.elementMealtype.IsHoliday ? "Holiday" : (self.elementMealtype.IsVoucher ? "Voucher" : self.elementMealtype.Supplier)),
             MemberId: jti,
             UsePointPrice: pointprice,
-            promotionCode: self.promocode,
+            //promotionCode: self.promocode,
+            vouchers : [...voucherSelectedMap,...promoSelectedMap],
             SupplierName: self.elementMealtype.Supplier,
             HotelCheckDetailTokenVinHms: self.elementMealtype.HotelCheckDetailTokenVinHms ? self.elementMealtype.HotelCheckDetailTokenVinHms : "",
             HotelCheckPriceTokenSMD: self.elementMealtype.HotelCheckPriceTokenSMD ? self.elementMealtype.HotelCheckPriceTokenSMD : "",
@@ -1836,7 +1880,7 @@ export class CombocarnewPage implements OnInit {
           if (this.ischeckpromo) {
             this.price = this.point.toLocaleString();
             var tempprice = this.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
-            this.Pricepoint = tempprice - this.point - this.discountpromo;
+            this.Pricepoint = tempprice - this.point - this.totaldiscountpromo;
             if (this.Pricepoint<=0) {
               this.Pricepoint=0;
             }
@@ -1858,7 +1902,7 @@ export class CombocarnewPage implements OnInit {
         if (this.ischeckpromo) {
           this.PriceAvgPlusTAStr = this.total.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           var tempprice = this.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
-          this.Pricepointshow = tempprice - this.discountpromo;
+          this.Pricepointshow = tempprice - this.totaldiscountpromo;
           if (this.Pricepointshow<=0) {
             this.Pricepointshow=0;
           }
@@ -1895,6 +1939,16 @@ export class CombocarnewPage implements OnInit {
             this.discountpromo = 0;
             this.bookCombo.promoCode = "";
             this.bookCombo.discountpromo = 0;
+
+            this.strPromoCode = '';
+          this.totaldiscountpromo = 0;
+          this._voucherService.voucherSelected = [];
+          this._voucherService.listPromoCode = "";
+          this._voucherService.listObjectPromoCode = [];
+          this._voucherService.totalDiscountPromoCode = 0;
+          this._voucherService.hotelPromoCode = "";
+          this._voucherService.hotelTotalDiscount = 0;
+          this._voucherService.vouchers = [];
       this.GetUserInfo();
     }
     
@@ -2027,13 +2081,13 @@ export class CombocarnewPage implements OnInit {
       $('.div-point').removeClass('div-disabled');
     this.valueGlobal.PriceAvgPlusTAStr=this.PriceAvgPlusTAStr;
     this.textpromotion="iVIVU Voucher | Mobile Gift";
-    this.promocode="";
-    this.discountpromo = 0;
-    this.ischeckbtnpromo=false;
-    this.ischeckpromo=false;
-          this.itemVoucherCarCombo = null;
-          this.bookCombo.promoCode = "";
-          this.bookCombo.discountpromo = 0;
+    // this.promocode="";
+    // this.discountpromo = 0;
+    // this.ischeckbtnpromo=false;
+    // this.ischeckpromo=false;
+    //       this.itemVoucherCarCombo = null;
+    //       this.bookCombo.promoCode = "";
+    //       this.bookCombo.discountpromo = 0;
     this.msg="";
     this._voucherService.openFrom = 'combocarnew';
     const modal: HTMLIonModalElement =
@@ -2041,22 +2095,47 @@ export class CombocarnewPage implements OnInit {
       component: AdddiscountPage,
     });
     modal.present();
-    if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
-      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-      this._voucherService.selectVoucher = null;
-    }
+    this._voucherService.listPromoCode = [];
+    this.buildStringPromoCode();
     this.edit();
     modal.onDidDismiss().then((data: OverlayEventDetail) => {
-      if (data.data) {
-        this.zone.run(() => {
-          if (data.data.promocode) {
-            $('.div-point').addClass('div-disabled');
-            this.promocode=data.data.promocode;
-            this.textpromotion=data.data.promocode;
-            this.promofunc();
-          }
-        })
+      if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+        if(this.strPromoCode){
+          this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+          this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+        }else{
+          this.strPromoCode = this._voucherService.listPromoCode.join(', ');
+          this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
+        }
+       
+        this.edit();
+      }else if (data.data) {//case voucher km
+        let vc = data.data;
+        if(vc.applyFor && vc.applyFor != 'combocar'){
+          this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'hotel' ? 'khách sạn' : 'vé máy bay'}. Quý khách vui lòng chọn lại mã khác!`);
+          this._voucherService.rollbackSelectedVoucher.emit(vc);
+          return;
+        }
+        else {
+          this.zone.run(() => {
+            if (data.data.promocode) {
+              $('.div-point').addClass('div-disabled');
+              this.promocode=data.data.promocode;
+              this.promofunc();
+            }
+          })
+        }
       }
+      // if (data.data) {
+      //   this.zone.run(() => {
+      //     if (data.data.promocode) {
+      //       $('.div-point').addClass('div-disabled');
+      //       this.promocode=data.data.promocode;
+      //       this.textpromotion=data.data.promocode;
+      //       this.promofunc();
+      //     }
+      //   })
+      // }
     })
     }
   }
@@ -2600,5 +2679,31 @@ export class CombocarnewPage implements OnInit {
       }
     },1000)
     
+  }
+
+  buildStringPromoCode(){
+  
+    if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+      this.strPromoCode = this._voucherService.voucherSelected.map(item => item.code).join(', ');
+      this.totaldiscountpromo = this._voucherService.voucherSelected.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+      this.ischeckpromo = true;
+    }else{
+      this.strPromoCode = '';
+      this.totaldiscountpromo = 0;
+    }
+  
+    if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+      this.ischeckpromo = true;
+      if(this.strPromoCode){
+        this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+      }else{
+        this.strPromoCode += this._voucherService.listPromoCode.join(', ');
+      }
+        
+        this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+    }
+
+    this._voucherService.comboCarPromoCode = this.strPromoCode;
+    this._voucherService.comboCarTotalDiscount = this.totaldiscountpromo;
   }
 }

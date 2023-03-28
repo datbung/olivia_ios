@@ -339,6 +339,9 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
             tintColor: '#23BFD8'
           })
           .subscribe((result: any) => {
+            if((this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0) || (this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0)){
+              this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
+            }
             se._flightService.itemFlightInternational.hasvoucher = se._flightService.itemFlightInternational.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
               if(result.event === 'opened') console.log('Opened');
               else if(result.event === 'loaded') console.log('Loaded');
@@ -369,7 +372,13 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
                       se._flightService.paymentError = checkpay;
-                      se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+                      if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                        let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                        this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+                      }else{
+                        se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+                      }
+                      
                     }
                   })
                 }
@@ -437,7 +446,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
                     clearInterval(se.intervalID);
                     console.log(rs);
                     se._flightService.paymentError = rs.error;
-                    se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+                    if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                      let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                      this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+                    }else{
+                      se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+                    }
         }
       }
       else {
@@ -451,7 +465,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
         clearInterval(se.intervalID);
         console.log(rs);
         se._flightService.paymentError = "";
-        se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+        if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+          let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+          this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+        }else{
+          se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+        }
       }
 
     });
@@ -479,6 +498,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       if (datatype && datatype.isHoldSuccess) {
 
           let itemcache = this._flightService.itemFlightCache;
+          this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
           var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=momo&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&buyerPhone=' + itemcache.phone +'&rememberToken='+this.isremember+'&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight'+ '&memberId=' + this.jti+'&version=2';
           this.gf.CreatePayoo(url).then((data) => {
             if (data.success) {
@@ -535,7 +555,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
               this.safariViewController.hide();
               clearInterval(this.intervalID);
               this._flightService.paymentError = checkpay;
-              this.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+              if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+              }else{
+                this.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+              }
             }
           })
         })
@@ -696,6 +721,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
             if (datatype && datatype.isHoldSuccess) {
              
               let itemcache = se._flightService.itemFlightCache;
+              this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
                   let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookingCode + '&buyerPhone=' +itemcache.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2&isFlightInt=true';
                   se.gf.CreatePayoo(url).then((data) => {
                    
@@ -748,6 +774,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       if (datatype && datatype.isHoldSuccess) {
         this.presentLoading();
             let itemcache = this._flightService.itemFlightCache;
+            this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
               var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2&isFlightInt=true';
               this.gf.CreatePayoo(url).then((data) => {
                 this.hideLoading();
@@ -786,6 +813,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       if (datatype && datatype.isHoldSuccess) {
         let itemcache = this._flightService.itemFlightCache;
         let totalprice = itemcache.totalPrice;
+        this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&rememberToken='+this.isremember+'&buyerPhone=' + itemcache.phone+ '&memberId=' + this.jti+'&version=2&isFlightInt=true';
         this.gf.CreatePayoo(url).then((data) => {
           this.hideLoading();
@@ -837,7 +865,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
                     se.gf.hideLoading();
                     se.safariViewController.hide();
                     clearInterval(se.intervalID);
-                    se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+                    if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                      let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                      this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+                    }else{
+                      se.navCtrl.navigateForward('/flightinternationalpaymenttimeout/0');
+                    }
                   }
         else{
             se._flightService.itemFlightCache.ischeckpayment= 1;
@@ -1043,6 +1076,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
         this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
           if(check){
                   let itemcache = this._flightService.itemFlightCache;
+                  this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
                   var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + this.bookingCode + '&buyerPhone=' + itemcache.phone +'&memberId='+this.jti+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2&isFlightInt=true';
                   this.gf.CreatePayoo(url).then((data) => {
                     //let data = JSON.parse(datapayoo);
@@ -1156,6 +1190,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
       se._flightService.itemFlightCache.paymentType = 'bnpl';
       se.presentLoading();
               let itemcache = se._flightService.itemFlightCache;
+              this._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
                   let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=bnpl&source=app&amount=' + this._flightService.itemFlightCache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + se.bookingCode + '&buyerPhone=' +itemcache.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&BankId=bnpl'+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2&isFlightInt=true';
                   se.gf.CreatePayoo(url).then((data) => {
                    
@@ -1171,6 +1206,37 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
                     }
                     
                   })
+    }
+
+    async alertMessage(msg){
+      let alert = await this.alertCtrl.create({
+        message: msg,
+        cssClass: "cls-alert-flighttimeout",
+        backdropDismiss: false,
+        buttons: [
+        {
+          text: 'OK',
+          role: 'OK',
+          handler: () => {
+            this._flightService.itemChangeTicketFlight.emit(1);
+            if(this._voucherService.selectVoucher){
+              
+              this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+              this._voucherService.selectVoucher = null;
+              
+            }
+            this._voucherService.publicClearVoucherAfterPaymentDone(1);
+            this._flightService.itemFlightCache.promotionCode = "";
+            this._flightService.itemFlightCache.promocode = "";
+            this._flightService.itemFlightCache.discount = 0;
+            this.navCtrl.navigateBack('flightsearchresultinternational');
+            alert.dismiss();
+          }
+        }
+      ]
+    });
+    alert.present();
+    return;
     }
   }
   

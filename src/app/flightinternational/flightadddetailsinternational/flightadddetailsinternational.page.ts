@@ -22,6 +22,7 @@ import { FlightDetailInternationalPage } from '../flightdetailinternational/flig
 
 import { voucherService } from '../../providers/voucherService';
 import { AdddiscountPage } from 'src/app/adddiscount/adddiscount.page';
+import { HTMLIonOverlayElement } from '@ionic/core';
 
 /**
  * Generated class for the OccupancyPage page.
@@ -264,6 +265,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
     }
     async showAlertVoucherUsed() {
       var se = this;
+      const overlays = document.querySelectorAll('ion-alert, ion-modal');
+      const overlaysArr = Array.from(overlays) as HTMLIonOverlayElement[];
+      
       let msg = `Mã voucher ${se._flightService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se._flightService.itemFlightCache.pnr.resNo}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
       let alert = await se.alertCtrl.create({
         message: msg,
@@ -274,7 +278,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             text: 'OK',
             role: 'OK',
             handler: () => {
-              alert.dismiss();
+              overlaysArr.forEach(o => o.dismiss());
               this.gobackToSearchPage();
             }
           },
@@ -282,7 +286,19 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             text: 'Hủy',
             role: 'Cancel',
             handler: () => {
-              alert.dismiss();
+              this.promocode = "";
+              this.promotionCode = "";
+              this.discountpromo = 0;
+              this._flightService.itemFlightInternational.discountpromo = 0;
+              this._flightService.itemFlightInternational.promotionCode = "";
+              this.strPromoCode ='';
+              this.totaldiscountpromo=0;
+              this._voucherService.totalDiscountPromoCode =0;
+              this._voucherService.listPromoCode =[];
+              this._voucherService.voucherSelected = [];
+              this._voucherService.listObjectPromoCode = [];
+              overlaysArr.forEach(o => o.dismiss());
+              //alert.dismiss();
             }
           }
         ]
@@ -300,20 +316,20 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     
                 }
             })
-            this._voucherService.getVoucherUsedObservable().subscribe(async (itemVoucher)=> {
+            this._voucherService.getVoucherInternationalUsedObservable().subscribe(async (itemVoucher)=> {
               if(itemVoucher){
                 this.showAlertVoucherUsed();
               }
             })
 
-            this._voucherService.getVoucherRefreshList().subscribe(async (check)=> {
-              if(check){
-                this.strPromoCode = '';
-                this.totaldiscountpromo = 0;
-                this.buildStringPromoCode();
-                this.totalPriceAll();
-              }
-            })
+            // this._voucherService.getVoucherRefreshList().subscribe(async (check)=> {
+            //   if(check){
+            //     this.strPromoCode = '';
+            //     this.totaldiscountpromo = 0;
+            //     this.buildStringPromoCode();
+            //     this.totalPriceAll();
+            //   }
+            // })
 
             this._voucherService.getObservable().subscribe((itemVoucher)=> {
               if(itemVoucher){
@@ -331,22 +347,14 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     this.promocode = itemVoucher.code;
                     this.promotionCode = itemVoucher.code;
                     this.discountpromo = itemVoucher.rewardsItem.price;
-                    // this._flightService.itemFlightInternational.discountpromo = itemVoucher.rewardsItem.price;
-                    // this._flightService.itemFlightInternational.promotionCode = itemVoucher.code;
-                    // if(!this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
-                    //   this.listVouchersApply.push(itemVoucher);
-                    // }
+                   
                     this.buildStringPromoCode();
                   }else{
                     this.itemVoucher = null;
                     this.promocode = "";
                     this.promotionCode = "";
                     this.discountpromo = 0;
-                    // this._flightService.itemFlightInternational.discountpromo = 0;
-                    // this._flightService.itemFlightInternational.promotionCode = "";
-                    // if(this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
-                    //   this.gf.removeItemInArray(this.listVouchersApply, itemVoucher);
-                    // }
+                    
                     this.buildStringPromoCode();
 
                     if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
@@ -847,6 +855,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
           this._voucherService.totalDiscountPromoCode =0;
           this._voucherService.listPromoCode =[];
           this._voucherService.voucherSelected = [];
+          this._voucherService.listObjectPromoCode = [];
 
           this.navCtrl.navigateBack('/flightsearchresultinternational');
         }
@@ -1171,12 +1180,12 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             var se = this;
             se.checkchangeemail=false;
             se.hasinput = false;
-            let itemflightcache= se._flightService.itemFlightInternational;
-            if(se.promotionCode && se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && itemflightcache.hasvoucher && itemflightcache.hasvoucher != se.promotionCode){
-              //this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-              this.showAlertPromoCode();
-              return;
-            }
+            //let itemflightcache= se._flightService.itemFlightInternational;
+            // if(se.promotionCode && se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightInternational.promotionCode && se._flightService.itemFlightInternational.promotionCode != se.strPromoCode){
+            //   //this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+            //   this.showAlertPromoCode();
+            //   return;
+            // }
             if(se.activeStep == 2){
                 if(se.adults && se.adults.length >0){
                     for (let index = 0; index < se.adults.length; index++) {
@@ -1224,19 +1233,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             elementAdult.textErrorName = "Họ và tên Người lớn "+(index+1)+" không hợp lệ. Vui lòng kiểm tra lại!";
                             return;
                           }
-                          // var checktext = se.hasWhiteSpace(elementAdult.name.trim());
-                          // if (!checktext) {
-                          //   elementAdult.errorName = !elementAdult.errorName;
-                          //   elementAdult.textErrorName = "Họ và tên Người lớn "+(index+1)+" Không hợp lệ. Vui lòng kiểm tra lại!";
-                          //   return;
-                          // }
-
-                          // if(!se.validateNameNotContainNumber(elementAdult.name)){
-                          //   elementAdult.errorName = !elementAdult.errorName;
-                          //   elementAdult.textErrorName = "Vui lòng nhập Họ tên Người lớn "+(index+1)+" không chứa ký tự số";
-                          //     return;
-                          // }
-
+                         
                           else if(se.isExtenal){
                             if(!elementAdult.dateofbirth){
                               elementAdult.errorDateofbirth = true;
@@ -1366,20 +1363,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                 elementChild.textErrorName = "Họ và tên Trẻ em "+elementChild.id+" không hợp lệ. Vui lòng kiểm tra lại!";
                                 return;
                               }
-                              // var checktext = se.hasWhiteSpace(elementChild.name.trim());
-                              // if (!checktext) {
-                              //   //se.gf.showToastWarning("Họ tên Trẻ em "+(elementChild.id)+" không hợp lệ. Vui lòng kiểm tra lại!");
-                              //   elementChild.errorName = true;
-                              //   elementChild.textErrorName = "Họ và tên Trẻ em "+(elementChild.id)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                              //   return;
-                              // }
-
-                              // if(!elementChild.isInfant && !se.validateNameNotContainNumber(elementChild.name)){
-                              //   //se.gf.showToastWarning("Họ tên Trẻ em "+(elementChild.id)+" không được chứa ký tự số. Vui lòng kiểm tra lại!");
-                              //   elementChild.errorName = true;
-                              //   elementChild.textErrorName = "Vui lòng nhập họ tên Trẻ em "+(elementChild.id)+" không chứa ký tự số";
-                              //   return;
-                              // }
+                            
 
                               if(!elementChild.dateofbirth){
                                 //se.gf.showToastWarning("Ngày sinh Trẻ em "+(elementChild.id)+" không được để trống. Vui lòng kiểm tra lại!");
@@ -1427,21 +1411,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                               elementChild.textErrorName = "Họ và tên Em bé "+idx+" không hợp lệ. Vui lòng kiểm tra lại!";
                               return;
                             }
-                            // var checktext = se.hasWhiteSpace(elementChild.name.trim());
-                            // if (!checktext) {
-                            //   //se.gf.showToastWarning("Họ tên Em bé "+(idx)+" không hợp lệ. Vui lòng kiểm tra lại!");
-                            //     elementChild.errorName = true;
-                            //     elementChild.textErrorName = "Họ và tên Em bé "+idx+" không hợp lệ. Vui lòng kiểm tra lại!";
-                            //   return;
-                            // }
-
-                            // //Check tên có chứa số
-                            // if(elementChild.isInfant && !se.validateNameNotContainNumber(elementChild.name)){
-                            //   //se.gf.showToastWarning("Họ tên Em bé "+(idx)+" không được chứa ký tự số. Vui lòng kiểm tra lại!");
-                            //     elementChild.errorName = true;
-                            //     elementChild.textErrorName = "Vui lòng nhập họ tên Em bé "+idx+" không chứa ký tự số";
-                            //     return;
-                            // }
+                           
                           }
                           if(!elementChild.dateofbirth){
                             //se.gf.showToastWarning("Ngày sinh Trẻ em "+(idx)+" không được để trống. Vui lòng kiểm tra lại!");
@@ -3445,11 +3415,13 @@ alert.present();
                     "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
                     //"InsuranceType":se._flightService.itemFlightCache.InsuranceType
                   }
-                  if(se._flightService.itemFlightInternational.pnr && se._flightService.itemFlightInternational.pnr.resNo && se._flightService.itemFlightInternational.hasvoucher && se._flightService.itemFlightInternational.promotionCode)
-                  {
-                    objPass.voucher={};
-                    objPass.voucher.keepCurrentVoucher=true;
-                    objPass.voucher.voucherCode = se._flightService.itemFlightInternational.promotionCode ? se._flightService.itemFlightInternational.promotionCode:"";
+                  if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
+                    if(se._flightService.itemFlightInternational.pnr && se._flightService.itemFlightInternational.pnr.resNo && se._flightService.itemFlightInternational.hasvoucher && se._flightService.itemFlightInternational.promotionCode)
+                    {
+                      objPass.voucher={};
+                      objPass.voucher.keepCurrentVoucher=true;
+                      objPass.voucher.voucherCode = se._flightService.itemFlightInternational.promotionCode ? se._flightService.itemFlightInternational.promotionCode:"";
+                    }
                   }
                   
                   var options = {
@@ -4184,8 +4156,7 @@ alert.present();
             text: 'Hủy',
             role: 'Cancel',
             handler: () => {
-              se.promocode = se._flightService.itemFlightInternational.hasvoucher;
-              se.promotionCode = se._flightService.itemFlightInternational.promotionCode;
+              se.totalPriceAll();
               alert.dismiss();
             }
           }
@@ -4229,12 +4200,7 @@ alert.present();
           }else {
             
             this.zone.run(() => {
-              // if (data.data.promocode) {
-              //   //$('.div-point').addClass('div-disabled');
-              //   this.promocode=data.data.promocode;
-              //   this._flightService.itemFlightInternational.promocode = data.data.promocode;
-              //   this.promofunc(data.data);
-              // }
+             
               if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
                 if(this.strPromoCode){
                   this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
@@ -4251,7 +4217,8 @@ alert.present();
                   this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
                   this._voucherService.rollbackSelectedVoucher.emit(vc);
                   return;
-                }else {
+                }
+                else {
                   this._voucherService.isFlightPage = false;
                   this.zone.run(() => {
                     if (data.data.promocode) {

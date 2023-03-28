@@ -40,6 +40,8 @@ export class RoomdetailreviewPage implements OnInit {
   arrroomFS: any[];
   statusRoom: any;
   itemVoucherHotel: any;
+  strPromoCode: string;
+  totaldiscountpromo: number;
   constructor(public searchhotel: SearchHotel, public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, private Roomif: RoomInfo, public zone: NgZone,
     public booking: Booking,public bookCombo: Bookcombo, public storage: Storage, public alertCtrl: AlertController, public value: ValueGlobal, public modalCtrl: ModalController, public gf: GlobalFunction,public loadingCtrl: LoadingController,
     private fb: Facebook,private activityService: ActivityService,
@@ -114,16 +116,10 @@ export class RoomdetailreviewPage implements OnInit {
   }
   ngOnInit() {
     this._voucherService.getHotelObservable().subscribe((itemVoucher)=> {
-      if(this._voucherService.itemSelectVoucherHotel.observers && this._voucherService.itemSelectVoucherHotel.observers.length >1){
-        if(this._voucherService.itemSelectVoucherHotel.observers[1]){
-            this._voucherService.itemSelectVoucherHotel.observers.pop();
-        }
-      }
       if(itemVoucher){
-       
         if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherHotel){
           this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+          this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
           return;
         }
         if(itemVoucher.claimed){
@@ -133,16 +129,25 @@ export class RoomdetailreviewPage implements OnInit {
           this.discountpromo = itemVoucher.rewardsItem.price;
           this.ischeckbtnpromo = true;
           this.ischeckpromo = true;
+
+          this.buildStringPromoCode();
         }else{
           this._voucherService.selectVoucher = null;
           this.itemVoucherHotel = null;
           this.promocode = "";
           this.discountpromo = 0;
-          this.ischeckbtnpromo = false;
-          this.ischeckpromo = false;
+
+          this.buildStringPromoCode();
+
+          if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+            this.strPromoCode = '';
+            this.totaldiscountpromo = 0;
+            this.ischeckbtnpromo = false;
+            this.ischeckpromo = false;
+          }
         }
         this.edit();
-        this.modalCtrl.dismiss();
+        //this.modalCtrl.dismiss();
       }
     })
     this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
@@ -155,16 +160,57 @@ export class RoomdetailreviewPage implements OnInit {
           this.ischeckpromo = false;
           this.Roomif.promocode = "";
           this.Roomif.priceshow = "";
+
+          this.strPromoCode = '';
+          this.totaldiscountpromo = 0;
+          this._voucherService.voucherSelected = [];
+          this._voucherService.listPromoCode = "";
+          this._voucherService.listObjectPromoCode = [];
+          this._voucherService.totalDiscountPromoCode = 0;
+          this._voucherService.hotelPromoCode = "";
+          this._voucherService.hotelTotalDiscount = 0;
+
         this.edit();
       }
     })
+
+    this._voucherService.getVoucherHotelUsedObservable().subscribe((check)=>{
+      if(check){
+
+      }
+    })
   }
+
+  async showAlertVoucherUsed() {
+    var se = this;
+    
+    let msg = `Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!`;
+    let alert = await se.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-choiceseat",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'OK',
+          handler: () => {
+            alert.dismiss();
+            this.goback();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   roompaymentbreakdow() {
     // var value = { room: this.room, dur: this.dur, PriceAvgPlusTAStr: this.PriceAvgPlusTAStr, roomnumber: this.roomnumber, roomtype: this.roomtype, indexme: this.indexme, indexroom: this.indexroom };
     var dur = this.dur;
     var roomnumber = this.roomnumber;
     this.searchhotel.backPage = "roomdetailreview";
     this.valueGlobal.backValue = 'roompaymentbreakdown';
+    this._voucherService.hotelPromoCode = this.strPromoCode;
+    this._voucherService.hotelTotalDiscount = this.totaldiscountpromo;
     this.navCtrl.navigateForward('/roompaymentbreakdown/' + dur + '/' + roomnumber);
   }
   async presentLoading() {
@@ -262,7 +308,15 @@ export class RoomdetailreviewPage implements OnInit {
     this.ischeckpromo=false;
     this.msg="";
     this.itemVoucherHotel = null;
-
+    this.strPromoCode = '';
+        this.totaldiscountpromo = 0;
+        this._voucherService.voucherSelected = [];
+        this._voucherService.listPromoCode = "";
+        this._voucherService.listObjectPromoCode = [];
+        this._voucherService.totalDiscountPromoCode = 0;
+        this._voucherService.hotelPromoCode = "";
+        this._voucherService.hotelTotalDiscount = 0;
+        this._voucherService.vouchers = [];
   }
     this.bookCombo.upgradeRoomChange.pipe().subscribe((dataRoomChange)=>{         
       if(dataRoomChange){
@@ -468,7 +522,8 @@ export class RoomdetailreviewPage implements OnInit {
           if (this.ischeckpromo) {
             this.price = this.point.toLocaleString();
             var tempprice = this.roomtype.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
-            this.Pricepoint = tempprice - this.point-this.discountpromo;
+            //this.Pricepoint = tempprice - this.point-this.discountpromo;
+            this.Pricepoint = tempprice - this.point-this.totaldiscountpromo;
             if(this.Pricepoint*1 <0){
               this.Pricepoint = 0;
             }
@@ -493,7 +548,8 @@ export class RoomdetailreviewPage implements OnInit {
       } else {
         if (this.ischeckpromo) {
           var tempprice = this.roomtype.PriceAvgPlusTAStr.replace(/\./g, '').replace(/\,/g, '');
-          this.Pricepointshow = tempprice -  this.discountpromo;
+          //this.Pricepointshow = tempprice -  this.discountpromo;
+          this.Pricepointshow = tempprice -  this.totaldiscountpromo;
          
           if ( this.Pricepointshow*1 <=0) {
             this.Pricepointshow = 0;
@@ -515,6 +571,14 @@ export class RoomdetailreviewPage implements OnInit {
     this.discountpromo=0;
     this.itemVoucherHotel=null;
     this.valueGlobal.backValue = '';
+
+    this.strPromoCode = '';
+        this.totaldiscountpromo = 0;
+        this._voucherService.voucherSelected = [];
+        this._voucherService.listPromoCode = "";
+        this._voucherService.listObjectPromoCode = [];
+        this._voucherService.totalDiscountPromoCode = 0;
+
     this.navCtrl.navigateBack('/hoteldetail/'+ this.booking.HotelId);
   }
 
@@ -562,10 +626,16 @@ export class RoomdetailreviewPage implements OnInit {
             }
             se.discountpromo= json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.Pricepointshow = total -  se.discountpromo;
+
+            se.strPromoCode = se.promocode;
+            se.totaldiscountpromo = total - se.discountpromo;
+            se.edit();
+
             if (se.Pricepointshow>0) {
               se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
               se.ischeckbtnpromo = true;
               se.ischeckpromo=true;
+              
             }
             else
             {
@@ -635,9 +705,9 @@ export class RoomdetailreviewPage implements OnInit {
     this.textpromotion="iVIVU Voucher | Mobile Gift";
     this.promocode="";
     this.discountpromo=0;
-    this.ischeckbtnpromo=false;
-    this.ischeckpromo=false;
-    this.itemVoucherHotel = null;
+    //this.ischeckbtnpromo=false;
+    //this.ischeckpromo=false;
+    //this.itemVoucherHotel = null;
     this._voucherService.openFrom = 'roomdetailreview';
     this.msg="";
     const modal: HTMLIonModalElement =
@@ -645,22 +715,53 @@ export class RoomdetailreviewPage implements OnInit {
       component: AdddiscountPage,
     });
     modal.present();
-    if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
-      this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-      this._voucherService.selectVoucher = null;
-    }
+    // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+    //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+    //   this._voucherService.selectVoucher = null;
+    // }
+    
+    this._voucherService.listPromoCode = [];
+    this.buildStringPromoCode();
     this.edit();
     modal.onDidDismiss().then((data: OverlayEventDetail) => {
-      if (data.data) {
-        this.zone.run(() => {
-          if (data.data.promocode) {
-            $('.div-point').addClass('div-disabled');
-            this.promocode=data.data.promocode;
-            this.textpromotion=data.data.promocode;
-            this.promofunc();
-          }
-        })
+      if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+        if(this.strPromoCode){
+          this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+          this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+        }else{
+          this.strPromoCode = this._voucherService.listPromoCode.join(', ');
+          this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
+        }
+       
+        this.edit();
+      }else if (data.data) {//case voucher km
+        let vc = data.data;
+        if(vc.applyFor && vc.applyFor != 'hotel'){
+          this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'hotel' ? 'khách sạn' : 'vé máy bay'}. Quý khách vui lòng chọn lại mã khác!`);
+          this._voucherService.rollbackSelectedVoucher.emit(vc);
+          return;
+        }
+        else {
+          this.zone.run(() => {
+            if (data.data.promocode) {
+              $('.div-point').addClass('div-disabled');
+              this.promocode=data.data.promocode;
+              this.promofunc();
+            }
+          })
+        }
       }
+      // if (data.data) {
+      //   this.zone.run(() => {
+      //     if (data.data.promocode) {
+      //       $('.div-point').addClass('div-disabled');
+      //       this.promocode=data.data.promocode;
+      //       this.textpromotion=data.data.promocode;
+      //       this.promofunc();
+      //     }
+      //   })
+        
+      // }
     })
     //}
   }
@@ -700,5 +801,31 @@ export class RoomdetailreviewPage implements OnInit {
   }
   nextShuttlebus(){
     this.navCtrl.navigateForward("/shuttlebusnote");
+  }
+
+  buildStringPromoCode(){
+  
+    if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+      this.strPromoCode = this._voucherService.voucherSelected.map(item => item.code).join(', ');
+      this.totaldiscountpromo = this._voucherService.voucherSelected.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+      this.ischeckpromo = true;
+    }else{
+      this.strPromoCode = '';
+      this.totaldiscountpromo = 0;
+    }
+  
+    if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+      this.ischeckpromo = true;
+      if(this.strPromoCode){
+        this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+      }else{
+        this.strPromoCode += this._voucherService.listPromoCode.join(', ');
+      }
+        
+        this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+    }
+
+    this._voucherService.hotelPromoCode = this.strPromoCode;
+    this._voucherService.hotelTotalDiscount = this.totaldiscountpromo;
   }
 }
