@@ -1232,12 +1232,12 @@ export class FlightaccountPage {
                     if (data.status==0) {
                       // se.showConfirmEmail();
                     
-                        se.navCtrl.navigateForward('accountdeletionsms');
+                        se.navCtrl.navigateForward('accountdeletion');
                      
                     }else if(data.status==1){
                       // alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư để hoàn tất việc xóa tài khoản của bạn');
                     
-                        se.navCtrl.navigateForward('accountdeletionsms');
+                        se.navCtrl.navigateForward('accountdeletion');
                      
                     } else if (data.status==2) {
                       alert('Tài khoản của quý khách đang có booking sắp đi. Vui lòng thử lại sau');
