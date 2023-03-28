@@ -2257,7 +2257,7 @@
                                     <div class="div-wrapimg">
                                         <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar" src="https:{{trip.avatar}}"> -->
                                         <div *ngIf="trip.avatar else noavatar">
-                                            <img class="img-avatar" src="https:{{trip.avatar}}">
+                                            <img class="img-avatar" src="{{trip.avatar}}">
                                             <!-- <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}"> -->
                                         </div>
                                         <ng-template #noavatar>
@@ -2984,8 +2984,8 @@
 
         <ng-template #divshowlisttrip>
           <div class="div-mytrip" >
-            <div [ngClass]="i ==0 ? 'first-content ' : 'first-content p-top-0'" (click)="showtripdetail(trip)">
-              <ion-item-group>
+            <div [ngClass]="i ==0 ? 'first-content ' : 'first-content p-top-0'" >
+              <ion-item-group (click)="showtripdetail(trip)">
                 <ion-row class="padding-9-16" >
                   <ion-col size="8" class="col-bookingid" *ngIf="!trip.isFlyBooking else flybooking"><label class="label-bkg-id">Mã booking: <span
                         class="bkg-id">{{trip.booking_id}}</span></label>
@@ -3229,7 +3229,7 @@
                           <div class="div-wrapimg">
                               <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar" src="https:{{trip.avatar}}"> -->
                               <div *ngIf="trip.avatar else noavatar">
-                                <img  class="img-avatar" src="https:{{trip.avatar}}">
+                                <img  class="img-avatar" src="{{trip.avatar}}">
                                 <!-- <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}"> -->
                               </div>
                               <ng-template #noavatar>
@@ -3309,6 +3309,8 @@
                           </div>
                         </div>
             <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="div-line-new-1 margin-0-16"></div>
+
+           
             <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="d-flex div-big-waitpayment padding-8-16">
               <div>
               
@@ -3324,6 +3326,8 @@
               </div>
             </div>
                   </ng-template>
+
+                  
 
                 </div>
                 <!-- bkg tour -->
@@ -3442,6 +3446,19 @@
               
               </ion-item-group>
               <!-- <div class="div-split-listtrip"></div> -->
+
+               <!-- Checkin online -->
+               <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div>
+               <div *ngIf="trip.hadCheckinOnline" class="d-flex div-checkin-online" (click)="showCheckinOnline(trip)">
+                 <div class="div-icon-check">
+                   <img  class="img-check"  src="./assets/ic_mytripbooking/check.svg">
+                 </div>
+                 <div class="div-text-checkin">Đã có thẻ lên máy bay (Boarding Pass)</div>
+                 <div class="div-icon-arrow">
+                   <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
+                 </div>
+               </div>
+         
             </div>
           
           </div>

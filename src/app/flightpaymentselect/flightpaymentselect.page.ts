@@ -186,7 +186,13 @@ export class FlightPaymentSelectPage implements OnInit {
   {
     var se = this;
       se.gf.showLoading();
-      se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+      if((this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0) || (this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0)){
+        se._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
+      }
+      else if(se._flightService.itemFlightCache.promotionCode){
+        se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+      }
+      
       se.getSummaryBooking(se._flightService.itemFlightCache).then((databkg:any) => {
         let data = se._flightService.itemFlightCache;
         let dataancinaly = databkg.paxInfo.passengers[0].ancillaryJson ? JSON.parse(databkg.paxInfo.passengers[0].ancillaryJson) : '';
@@ -368,7 +374,12 @@ export class FlightPaymentSelectPage implements OnInit {
             tintColor: '#23BFD8'
           })
           .subscribe((result: any) => {
-            se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+            if((this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0) || (this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0)){
+              se._flightService.itemFlightCache.listVouchersAlreadyApply = [...this._voucherService.voucherSelected, ...this._voucherService.listPromoCode];
+            }
+            else if(se._flightService.itemFlightCache.promotionCode){
+              se._flightService.itemFlightCache.hasvoucher = se._flightService.itemFlightCache.promotionCode;//set param xac dinh da nhap voucher o buoc chon dich vu
+            }
               if(result.event === 'opened') console.log('Opened');
               else if(result.event === 'loaded') console.log('Loaded');
               else if(result.event === 'closed') 

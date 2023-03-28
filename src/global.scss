@@ -1722,3 +1722,21 @@ button.days-btn {
     margin-right: 16px !important;
   }
 }
+.div-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+}
+.text-bnpl-discount{
+  color: #26bed6;
+  position: absolute;
+  bottom: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.67;
+  letter-spacing: -0.24px;
+  margin: 0;
+}

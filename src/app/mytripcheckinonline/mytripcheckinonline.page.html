@@ -1,0 +1,38 @@
+<ion-header class="flightpage-header">
+    <div class="div-checkin-online-header">
+     <ion-row>
+       <ion-col class="col-header">
+         <div class="d-flex">
+           <div class="div-goback" style="margin-left: -2px" (click)="goback()">
+               <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
+           </div>
+           <div class="div-header-title">
+             <div class="div-title">Thẻ lên máy bay (Boarding Pass)</div>
+           </div>
+         </div>
+       </ion-col>
+     </ion-row>
+   </div>
+ </ion-header>
+ <ion-content>
+    <div class="p-all-16 text-center div-checkin-online-content">
+        <div *ngFor="let objBooking of bookingjson">
+            <div *ngIf="objBooking.hadCheckinOnline">
+                <div class="div-text-title">{{objBooking.FlightFrom}} ({{objBooking.DepartCode}}) <img class="img-flight" src="./assets/ic_mytripbooking/icon_maps_flight.svg" > {{objBooking.FlightTo}} ({{objBooking.ArrivalCode}})</div>
+
+            <div class="div-text-date m-top-10 m-bottom-10">{{cindisplay}}</div>
+
+            <div *ngFor="let pass of objBooking.Passengers; let idx = index">
+                <div class="div-passinfo m-top-12">
+                    <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
+                        <img class="header-img-back" [src]="pass.CheckinInfo" >
+                    </div>
+                    <div class="div-pass-name">{{pass.Name}}</div>
+                </div>
+            </div>
+            </div>
+            
+        </div>
+        
+    </div>
+ </ion-content>

@@ -109,26 +109,27 @@ export class GlobalFunction{
               .catch((error: any) => console.error(error));
           })
         }
-        else if(C.ENV == "dev") {
-          this.platform.ready().then(() => {
-            if(this.platform.is('android') || this.platform.is('iphone')){
-              this.fba.logEvent(action, params)
-              .then((res: any) => {console.log('test');})
-              .catch((error: any) => console.error(error));
-            }
+        // else if(C.ENV == "dev") {
+        //   this.platform.ready().then(() => {
+        //     if(this.platform.is('android') || this.platform.is('iphone')){
+        //       this.fba.logEvent(action, params)
+        //       .then((res: any) => {console.log('test');})
+        //       .catch((error: any) => console.error(error));
+        //     }
             
-        })
-        }
+        //   })
+        // }
   }
 
   public gaSetScreenName(_screenName){
-    this.platform.ready().then(() => {
-      if(this.platform.is('android') || this.platform.is('iphone')){
-          this.fba.setCurrentScreen(_screenName)
-                .catch((error: any) => console.error(error));
-          }
-        })
-      
+    if(C.ENV == "prod" || C.ENV == "release"){
+      this.platform.ready().then(() => {
+        if(this.platform.is('android') || this.platform.is('iphone')){
+            this.fba.setCurrentScreen(_screenName)
+                  .catch((error: any) => console.error(error));
+            }
+          })
+    }
   }
   public getGAPaymentType(paymentType){
     if(paymentType == 'visa'){
@@ -225,7 +226,9 @@ export class GlobalFunction{
       let timeDiff = Math.abs(date2.getTime() - date1.getTime());
       let duration = Math.ceil(timeDiff / (1000 * 3600 * 24));
       //console.log(itemcache.gaHotelDetail);
-      this.gaSetScreenName(itemcache.gaHotelDetail.Url);
+      if(itemcache && itemcache.gaHotelDetail && itemcache.gaHotelDetail.Url){
+        this.gaSetScreenName(itemcache.gaHotelDetail.Url);
+      }
       this.googleAnalytionCustom(viewAction, {
         currency: "VND",
             value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : 0,
@@ -705,10 +708,10 @@ export class GlobalFunction{
         if (type == 'order') {
           res = arrays.some(r => r.booking_id == item.booking_id);
         }
-        if(type == 'experiencesearch' || type =='blog'){
+        if(type == 'experiencesearch' || type =='blog' || type == 'voucher'){
           res = arrays.some(r => r.id == item.id);
         }
-        if(type=='filtername'){
+        if(type=='filtername' || type=='code'){
           res = arrays.some(r => r == item);
         }
         

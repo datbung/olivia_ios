@@ -19,6 +19,19 @@ export class voucherService{
   openFrom: string;
 
   private clearVoucherSubject = new Subject<any>();
+  voucherSelected: any=[];åß
+  voucherSelectedMap: any;
+  listPromoCode: any=[];
+  totalDiscountPromoCode: any=0;
+  listObjectPromoCode: any=[];
+  voucherUsedSubject= new Subject<any>();
+  voucherRefreshListSubject= new Subject<any>();
+  getVoucherRefreshList(): Subject<any> {
+    return this.voucherRefreshListSubject;
+  }
+  publicVoucherRefreshList(data: any) {
+    this.voucherRefreshListSubject.next(data);
+  }
   publicClearVoucherAfterPaymentDone(data: any) {
     this.clearVoucherSubject.next(data);
   }
@@ -37,8 +50,16 @@ export class voucherService{
     this.voucherSubject.next(data);
   }
 
+  publicVoucherUsedClicked(data: any) {
+    this.voucherUsedSubject.next(data);
+  }
+
   getObservable(): Subject<any> {
     return this.voucherSubject;
+  }
+
+  getVoucherUsedObservable(): Subject<any> {
+    return this.voucherUsedSubject;
   }
 
   publicVoucherFlightComboClicked(data: any) {

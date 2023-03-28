@@ -132,6 +132,7 @@
 
   .div-inputcode {
     margin-left: 4px;
+    width: 100%;
   }
 
   .div-img-header {
@@ -140,4 +141,23 @@
     justify-content: center;
 
   }
+}
+.div-voucher-footer {
+  .button2 {
+    background: #f79321;
+    color: #fff;
+    border-color: #f79321;
+    border: solid 1px #f79321;
+    width: 92%;
+    font-size: 17px !important;
+    font-weight: bold !important;
+    margin: 8px 16px!important;
+    padding: 0;
+    margin-right: 16px !important;
+  }
+}
+.cls-deactive {
+  opacity: 0.6;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
 }

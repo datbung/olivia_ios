@@ -46,6 +46,10 @@ export class FlightInternationalSearchfilterPage implements OnInit {
   count0Stops = 0;
   count1Stops: number=0;
   count2Stops: number=0;
+  divItemClass2Selected: boolean;
+  divItemClass3Selected: boolean;
+  divItemClass4Selected: boolean;
+  divItemClass5Selected: boolean;
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -57,7 +61,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
     public valueGlobal: ValueGlobal,
     public searchhotel: SearchHotel,
     public _flightService: flightService) { 
-      console.log(this._flightService.listAllFlightInternational);
+      //console.log(this._flightService.listAllFlightInternational);
       if(this._flightService.listAirlinesFilter) {
         this.listAirlines = this._flightService.listAirlinesFilter;
 
@@ -118,7 +122,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
             this.minpricedisplay = this.gf.convertNumberToString(minValue) + " triệu"; 
             this.maxpricedisplay = this.gf.convertNumberToString(maxValue) + " triệu";
 
-            this.minoverlaydisplay = this.gf.convertNumberToString(minOverlayValue) + " giờ"; 
+            this.minoverlaydisplay = this.gf.convertNumberToString(minOverlayValue)||1 + " giờ"; 
             this.maxoverlaydisplay = this.gf.convertNumberToString(maxOverlayValue) + " giờ";
 
              this.isCheckAll = this._flightService.objectFilterInternational ? this._flightService.objectFilterInternational.isCheckAll : false;
@@ -160,6 +164,13 @@ export class FlightInternationalSearchfilterPage implements OnInit {
                   
               });
             }
+
+            if(this._flightService.objSearch && this._flightService.objSearch.classSelected){
+              if(!this._flightService.objectFilterInternational){
+                this._flightService.objectFilterInternational = {};
+              }
+              this._flightService.objectFilterInternational.classSelected = this._flightService.objSearch.classSelected;
+            }
           
       })
       
@@ -184,7 +195,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
     changeprice(value) {
         //this.minpricedisplay = this.gf.convertNumberToString(this.priceobject.lower) + " triệu"; 
         //this.maxpricedisplay = this.gf.convertNumberToString(this.priceobject.upper) + " triệu";
-      console.log(value.detail.value);
+      //console.log(value.detail.value);
       //this.filterItem();
       if(value.detail.value){
         this._flightService.objectFilterInternational = this._flightService.objectFilterInternational || {};
@@ -224,6 +235,10 @@ export class FlightInternationalSearchfilterPage implements OnInit {
           
         this._flightService.listflightInternationalFilter = this._flightService.listAllFlightInternational;
         //this._flightService.publicItemFlightInternationalFilter(1);
+        if(this._flightService.objSearch && this._flightService.objSearch.classSelected){
+          this._flightService.objSearch.classSelected = null;
+          this._flightService.itemChangeTicketFlight.emit(1);
+        }
     }
 
     checkAll(value) {
@@ -269,20 +284,90 @@ export class FlightInternationalSearchfilterPage implements OnInit {
           this._flightService.objectFilterInternational = {};
         }
         item.stopEventDefault;
-        this._flightService.objectFilterInternational.stopSelected = -1;
-        if(item.detail.checked){
+        //this._flightService.objectFilterInternational.stopSelected = -1;
+        if(this._flightService.objectFilterInternational.stopSelected != value){
           this._flightService.objectFilterInternational.stopSelected = value;
+        }else{
+          this._flightService.objectFilterInternational.stopSelected = -1;
         }
       }
 
-      //this._flightService.publicItemFlightInternationalFilter(1);
     }
 
     ionViewWillLeave(){
       this._flightService.publicItemFlightInternationalFilter(1);
+      if(this._flightService.objectFilterInternational 
+        && this._flightService.objectFilterInternational.classSelected 
+        && this._flightService.objectFilterInternational.classSelected != '-1'
+        && (this._flightService.objSearch 
+        && this._flightService.objSearch.classSelected != this._flightService.objectFilterInternational.classSelected) ){
+        this._flightService.itemChangeTicketFlight.emit(2);
+      }else if(this._flightService.objectFilterInternational && this._flightService.objectFilterInternational.classSelected && this._flightService.objectFilterInternational.classSelected == '-1'
+        && (this._flightService.objSearch 
+        && this._flightService.objSearch.classSelected != this._flightService.objectFilterInternational.classSelected)){
+        this._flightService.objSearch.classSelected = null;
+        this._flightService.itemChangeTicketFlight.emit(1);
+      }
     }
 
     filter(){
       this.modalCtrl.dismiss();
+    }
+
+    checkItemClass(item, value){
+      if(!this._flightService.objectFilterInternational){
+        this._flightService.objectFilterInternational = {};
+      }
+      item.stopEventDefault;
+      this._flightService.objectFilterInternational.classSelected = -1;
+      if(item.detail.checked){
+        this._flightService.objectFilterInternational.classSelected = this.getTicketClassByType(value);
+      }
+    }
+
+    getTicketClassByType(type){
+      let res = '-1';
+      switch(type){
+        case 1:
+            res = 'Economy';
+          break;
+            case 2:
+            res = 'PremiumEconomy';
+          break;
+            case 3:
+            res = 'Business';
+          break;
+          case 4:
+            res = 'First';
+            break;
+          case 5:
+            res = 'PremiumFirst';
+            break;
+          default:
+            res = '-1'
+          break;
+      }
+      return res;
+    }
+
+    expandItemClass(event, type){
+      if($(event.currentTarget).siblings().hasClass('div-text-item-class')){
+        $(event.currentTarget).siblings().removeClass('div-text-item-class').addClass('m-width-90');
+      }else {
+        $(event.currentTarget).siblings().removeClass('m-width-90').addClass('div-text-item-class');
+      }
+
+      if(type == 2){
+        this.divItemClass2Selected = !this.divItemClass2Selected;
+      }
+      else if(type == 3){
+        this.divItemClass3Selected = !this.divItemClass3Selected;
+      }
+      else if(type == 4){
+        this.divItemClass4Selected = !this.divItemClass4Selected;
+      }
+      else if(type == 5){
+        this.divItemClass5Selected = !this.divItemClass5Selected;
+      }
     }
 }

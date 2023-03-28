@@ -108,8 +108,8 @@ export class HomeTourSearchPage implements OnInit {
     }
     
     se.allowclickcalendar = false;
-    let fromdate = new Date(this.searchhotel.CheckInDate);
-    let todate = new Date(this.searchhotel.CheckOutDate);
+    let fromdate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+    let todate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
     let _daysConfig: DayConfig[] = [];
     for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
       _daysConfig.push({
@@ -193,9 +193,9 @@ export class HomeTourSearchPage implements OnInit {
       const date = event.data;
       if (event.data) {
          se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
-           se.searchhotel.datecin = new Date(event.data.from);
-           se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
+           se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
+           se.searchhotel.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
+           se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
            se.getCinCoutDayName();
          })
       }
@@ -247,9 +247,9 @@ export class HomeTourSearchPage implements OnInit {
   
             
               se.zone.run(() => {
-                se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
-                se.searchhotel.cindisplay = moment(fromdate).format("DD-MM-YYYY");
-                se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
+                se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format("YYYY-MM-DD");
+                se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(fromdate)).format("DD-MM-YYYY");
+                se.searchhotel.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format("YYYY-MM-DD");
               });
               
             }

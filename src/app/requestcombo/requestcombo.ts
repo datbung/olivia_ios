@@ -81,25 +81,25 @@ export class RequestComboPage implements OnInit{
        let arrdatecout =  moment(se.searchhotel.CheckOutDate).format('DD-MM-YYYY').split('-');
        se.datecin = new Date(Number(arrdate[2]), Number(arrdate[1]) -1, Number(arrdate[0]));
        se.datecout = new Date(Number(arrdatecout[2]), Number(arrdatecout[1]) -1, Number(arrdatecout[0]));
-       se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
-       se.cin = moment(se.datecin).format('YYYY-MM-DD');
-       se.cout = moment(se.datecout).format('YYYY-MM-DD');
+       se.cindisplay = moment(se.gf.getCinIsoDate(se.datecin)).format('DD-MM-YYYY');
+       se.cin = moment(se.gf.getCinIsoDate(se.datecin)).format('YYYY-MM-DD');
+       se.cout = moment(se.gf.getCinIsoDate(se.datecout)).format('YYYY-MM-DD');
      }
      else if (se.searchhotel.CheckInDate) {
       let arrdatecin =  moment(se.searchhotel.CheckInDate).format('DD-MM-YYYY').split('-');
       let arrdatecout =  moment(se.searchhotel.CheckOutDate).format('DD-MM-YYYY').split('-');
        se.datecin = new Date(Number(arrdatecin[2]), Number(arrdatecin[1]) -1, Number(arrdatecin[0]));
        se.datecout = new Date(Number(arrdatecout[2]), Number(arrdatecout[1]) -1, Number(arrdatecout[0]));
-       se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
-       se.cin = moment(se.datecin).format('YYYY-MM-DD');
-       se.cout = moment(se.datecout).format('YYYY-MM-DD');
+       se.cindisplay = moment(se.gf.getCinIsoDate(se.datecin)).format('DD-MM-YYYY');
+       se.cin = moment(se.gf.getCinIsoDate(se.datecin)).format('YYYY-MM-DD');
+       se.cout = moment(se.gf.getCinIsoDate(se.datecout)).format('YYYY-MM-DD');
      } else {
-       se.cin = new Date();
+       se.cin = new Date(se.gf.getCinIsoDate(new Date()));
        var rescin = se.cin.setTime(se.cin.getTime() + (24 * 60 * 60 * 1000));
-       var datein = new Date(rescin);
+       var datein = new Date(se.gf.getCinIsoDate(rescin));
        se.cin = moment(datein).format('YYYY-MM-DD');
        se.cindisplay = moment(datein).format('DD-MM-YYYY');
-       se.datecin = new Date(rescin);
+       se.datecin = new Date(se.gf.getCinIsoDate(rescin));
      }
      se.isFlashSaleCombo = se.bookCombo.isFlashSale;
      
@@ -411,15 +411,15 @@ export class RequestComboPage implements OnInit{
               setTimeout(()=>{
                 se.modalCtrl.dismiss();
               },50)
-                se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
-                se.searchhotel.CheckOutDate = moment(todate).format('YYYY-MM-DD');
-                se.bookCombo.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
-                se.bookCombo.CheckOutDate = moment(todate).format('YYYY-MM-DD');
+                se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
+                se.searchhotel.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format('YYYY-MM-DD');
+                se.bookCombo.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
+                se.bookCombo.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format('YYYY-MM-DD');
                 se.zone.run(()=>{
                   se.cin = se.searchhotel.CheckInDate;
                   se.cout = se.searchhotel.CheckOutDate;
-                  se.datecin = new Date(se.searchhotel.CheckInDate);
-                  se.datecout = new Date(se.searchhotel.CheckOutDate);
+                  se.datecin = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckInDate));
+                  se.datecout = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckOutDate));
                   se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
                 })
                 se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
@@ -442,11 +442,11 @@ export class RequestComboPage implements OnInit{
         }
         this.allowclickcalendar = false;
       if(this.bookCombo.CheckInDate && this.bookCombo.CheckOutDate){
-        fromdate = new Date(this.bookCombo.CheckInDate);
-        todate = new Date(this.bookCombo.CheckOutDate);
+        fromdate = new Date(this.gf.getCinIsoDate(this.bookCombo.CheckInDate));
+        todate = new Date(this.gf.getCinIsoDate(this.bookCombo.CheckOutDate));
       }else{
-        fromdate = new Date(this.searchhotel.CheckInDate);
-        todate = new Date(this.searchhotel.CheckOutDate);
+        fromdate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+        todate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
       }
       let _daysConfig: DayConfig[] = [];
       for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
@@ -501,16 +501,16 @@ export class RequestComboPage implements OnInit{
         const date = event.data;
         const from: CalendarResult = date.from;
         const to: CalendarResult = date.to;
-        se.searchhotel.CheckInDate = moment(from.dateObj).format('YYYY-MM-DD');
-        se.searchhotel.CheckOutDate = moment(to.dateObj).format('YYYY-MM-DD');
-        se.bookCombo.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
-        se.bookCombo.CheckOutDate = moment(todate).format('YYYY-MM-DD');
+        se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(from.dateObj)).format('YYYY-MM-DD');
+        se.searchhotel.CheckOutDate = moment(se.gf.getCinIsoDate(to.dateObj)).format('YYYY-MM-DD');
+        se.bookCombo.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
+        se.bookCombo.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format('YYYY-MM-DD');
       }
       se.zone.run(()=>{
         se.cin = se.searchhotel.CheckInDate;
         se.cout = se.searchhotel.CheckOutDate;
-        se.datecin = new Date(se.searchhotel.CheckInDate);
-        se.datecout = new Date(se.searchhotel.CheckOutDate);
+        se.datecin = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckInDate));
+        se.datecout = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckOutDate));
         se.cindisplay = moment(se.datecin).format('DD-MM-YYYY');
       })
       se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});

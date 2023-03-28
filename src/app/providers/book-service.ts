@@ -284,8 +284,8 @@ export class SearchHotel {
   hasShowCalendarFirstTime :boolean;
   cindisplay: string;
   coutdisplay: string;
-  datecin: Date;
-  datecout: Date;
+  datecin: any;
+  datecout: any;
   cinthu: string;
   coutthu: string;
   isRecent:any;

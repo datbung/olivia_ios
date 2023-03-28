@@ -48,12 +48,12 @@
       <div [ngClass]="activeTab ==1 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Vé máy bay</div>
     </div>
 
-    <!-- <div (click)="setActiveTab(2)" [ngClass]="activeTab ==2 ? 'div-combo' : 'div-combo home-deactive-tab'">
+    <div (click)="setActiveTab(2)" [ngClass]="activeTab ==2 ? 'div-combo' : 'div-combo home-deactive-tab'">
       <div class="div-icon-home text-center">
           <img src="./assets/ic_home/combo_enable.svg" />
       </div>
       <div [ngClass]="activeTab ==2 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Combo</div>
-    </div> -->
+    </div>
 
     <div (click)="setActiveTab(3)" [ngClass]="activeTab ==3 ? 'div-food' : 'div-food home-deactive-tab'">
       <div class="div-icon-home text-center">
@@ -63,12 +63,12 @@
       <div [ngClass]="activeTab ==3 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Tour</div>
     </div>
 
-    <div (click)="setActiveTab(4)" [ngClass]="activeTab ==4 ? 'div-ticket' : 'div-ticket home-deactive-tab'">
+    <!-- <div (click)="setActiveTab(4)" [ngClass]="activeTab ==4 ? 'div-ticket' : 'div-ticket home-deactive-tab'">
       <div class="div-icon-home text-center">
           <img src="./assets/ic_ticket/theme_park.svg" />
       </div>
       <div [ngClass]="activeTab ==4 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Vé vui chơi</div>
-    </div>
+    </div> -->
   </div>
   <ion-slides (ionSlideDidChange)="slidechange()" #myHomeSlider class="home-slider" >
     <ion-slide class="slide-hotel">
@@ -995,7 +995,7 @@
 
     <div class="item-award">
       <div class="div-logo-award"><img class="img-award" src="./assets/ic_home/HRA.png" /></div>
-      <div class="div-text-award m-top-8">Best Companies to Work for in Asian</div>
+      <div class="div-text-award m-top-8">Best Companies to Work for in Asia</div>
     </div>
 
     <div class="item-award">

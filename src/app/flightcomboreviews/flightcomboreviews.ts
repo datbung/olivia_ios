@@ -197,15 +197,15 @@ export class FlightComboReviewsPage implements OnInit{
       this.Avatar = Roomif.imgHotel;
       this.Name = booking.HotelName;
       this.Address = Roomif.Address;
-      this.cin = booking.CheckInDate;
-      this.cout = booking.CheckOutDate;
+      this.cin = moment(this.gf.getCinIsoDate(booking.CheckInDate)).format('YYYY-MM-DD');
+      this.cout = moment(this.gf.getCinIsoDate(booking.CheckOutDate)).format('YYYY-MM-DD');
       this.cinthudisplay = this.getDayOfWeek(this.cin);
       this.coutthudisplay = this.getDayOfWeek(this.cout);
       this.duration = moment(this.cout).diff(moment(this.cin), 'days');
-      var cintemp=new Date(this.cin);
+      var cintemp=new Date(this.gf.getCinIsoDate(this.cin));
       this.cindisplay=moment(cintemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(cintemp).format('MM')
   
-      var couttemp=new Date(this.cout);
+      var couttemp=new Date(this.gf.getCinIsoDate(this.cout));
       this.coutdisplay=moment(couttemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(couttemp).format('MM')
 
       this.TotalNight = this.duration;
@@ -225,8 +225,8 @@ export class FlightComboReviewsPage implements OnInit{
       this.room = Roomif.arrroom;
       var chuoicin = this.cin.split('-');
       var chuoicout = this.cout.split('-');
-      this.cin = chuoicin[2] + "-" + chuoicin[1] + "-" + chuoicin[0];
-      this.cout = chuoicout[2] + "-" + chuoicout[1] + "-" + chuoicout[0];
+      this.cin = chuoicin[0] + "-" + chuoicin[1] + "-" + chuoicin[2];
+      this.cout = chuoicout[0] + "-" + chuoicout[1] + "-" + chuoicout[2];
       this.nameroom = this.room[0].ClassName;
       this.breakfast = this.bookCombo.MealTypeName;
       this.value.flagreview = 1;
@@ -933,10 +933,10 @@ export class FlightComboReviewsPage implements OnInit{
     var flightprice = 0;
     if (departFlight && departFlight.priceSummaries) {
       flightprice += departFlight.totalPrice;
-      se.daydeparttitle = se.getDayOfWeek(new Date(departFlight.departTime)) + ', ' + moment(new Date(departFlight.departTime)).format('DD-MM-YYYY');
+      se.daydeparttitle = se.getDayOfWeek(this.gf.getCinIsoDate(departFlight.departTime)) + ', ' + moment(new Date(this.gf.getCinIsoDate(departFlight.departTime))).format('DD-MM-YYYY');
     } if (returnFlight && returnFlight.priceSummaries) {
       flightprice += returnFlight.totalPrice;
-      se.dayreturntitle = se.getDayOfWeek(new Date(returnFlight.departTime)) + ', ' + moment(new Date(returnFlight.departTime)).format('DD-MM-YYYY');
+      se.dayreturntitle = se.getDayOfWeek(new Date(this.gf.getCinIsoDate(returnFlight.departTime))) + ', ' + moment(new Date(this.gf.getCinIsoDate(returnFlight.departTime))).format('DD-MM-YYYY');
     }
     if (!departFlight && !returnFlight) {
       let cb = se.bookcombodetail;
@@ -958,6 +958,8 @@ export class FlightComboReviewsPage implements OnInit{
    */
   loadFlightDataNew(hascache) {
     var se = this;
+    
+    se.resetValue();
     setTimeout(() => {
       se.stoprequest = true;
       se.loadpricedone = true;
@@ -987,8 +989,8 @@ export class FlightComboReviewsPage implements OnInit{
         "requestFrom": {
           "fromPlace": se.bookCombo.ComboDetail.departureCode,
           "toPlace": se.bookCombo.arrivalCode,
-          "departDate": moment(new Date(moment(se.booking.CheckInDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-          "returnDate": moment(new Date(moment(se.booking.CheckInDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "departDate": moment(new Date(se.gf.getCinIsoDate(se.booking.CheckInDate))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "returnDate": moment(new Date(se.gf.getCinIsoDate(se.booking.CheckInDate))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
           "adult": se.adults,
           "child": (se.children - se.infant),
           "infant": se.infant,
@@ -998,8 +1000,8 @@ export class FlightComboReviewsPage implements OnInit{
         "requestTo": {
           "fromPlace": se.bookCombo.arrivalCode,
           "toPlace": se.bookCombo.ComboDetail.departureCode,
-          "departDate": moment(new Date(moment(se.booking.CheckOutDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-          "returnDate": moment(new Date(moment(se.booking.CheckOutDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "departDate": moment(new Date(se.gf.getCinIsoDate(se.booking.CheckOutDate))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+          "returnDate": moment(new Date(se.gf.getCinIsoDate(se.booking.CheckOutDate))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
           "adult": se.adults,
           "child": (se.children - se.infant),
           "infant": se.infant,
@@ -1039,13 +1041,14 @@ export class FlightComboReviewsPage implements OnInit{
     } else {
       se.allowSearchReturn = false;
     }
-
     let urlfindflightincache = type == "depart" ? C.urls.baseUrl.urlFlight + "gate/apiv1/GetFlightDepart" : C.urls.baseUrl.urlFlight + "gate/apiv1/GetFlightReturn";
     let objbody = {
       "fromPlace": type == 'depart' ? se.bookCombo.ComboDetail.departureCode : se.bookCombo.arrivalCode,
       "toPlace": type == 'depart' ? se.bookCombo.arrivalCode : se.bookCombo.ComboDetail.departureCode,
-      "departDate": type == 'depart' ? moment(new Date(moment(se.booking.CheckInDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(moment(se.booking.CheckOutDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
-      "returnDate": type == 'depart' ? moment(new Date(moment(se.booking.CheckInDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(moment(se.booking.CheckOutDate).format("YYYY-MM-DD"))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      //"departDate": type == 'depart' ? moment(new Date(se.gf.getCinIsoDate(se.booking.CheckInDate))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(se.gf.getCinIsoDate(se.booking.CheckOutDate))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      //"returnDate": type == 'depart' ? moment(new Date(se.gf.getCinIsoDate(se.booking.CheckInDate))).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(new Date(se.gf.getCinIsoDate(se.booking.CheckOutDate))).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      "departDate": type == 'depart' ? moment(se.booking.CheckInDate).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(se.booking.CheckOutDate).format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      "returnDate": type == 'depart' ? moment(se.booking.CheckInDate).format("YYYY-MM-DDTHH:mm:ss.SSS") : moment(se.booking.CheckOutDate).format("YYYY-MM-DDTHH:mm:ss.SSS"),
       "adult": se.adults,
       "child": (se.children - se.infant),
       "infant": se.infant,
@@ -1379,15 +1382,15 @@ export class FlightComboReviewsPage implements OnInit{
     if (departFlight && departFlight.length > 0) {
       se.listDeparture.push(departFlight[0]);
     
-      let de_date = new Date(departFlight[0].departTime);
-      let de_date_landing = new Date(departFlight[0].landingTime);
+      let de_date = new Date(se.gf.getCinIsoDate(departFlight[0].departTime));
+      let de_date_landing = new Date(se.gf.getCinIsoDate(departFlight[0].landingTime));
       let de_hour = moment(de_date).format("HH");
       let de_minute = moment(de_date).format("mm");
       let de_hour_landing = moment(de_date_landing).format("HH");
       let de_minute_landing = moment(de_date_landing).format("mm");
       if (departFlight[0].departTime.toString().indexOf('T')) {
-        de_date = new Date(departFlight[0].departTime.toString().split('T')[0]);
-        de_date_landing = new Date(departFlight[0].landingTime.toString().split('T')[0]);
+        de_date = new Date(se.gf.getCinIsoDate(departFlight[0].departTime.toString().split('T')[0]));
+        de_date_landing = new Date(se.gf.getCinIsoDate(departFlight[0].landingTime.toString().split('T')[0]));
         let de_time = departFlight[0].departTime.toString().split('T')[1];
         de_hour = de_time.toString().split(':')[0];
         de_minute = de_time.toString().split(':')[1];
@@ -1468,15 +1471,15 @@ export class FlightComboReviewsPage implements OnInit{
       }
       se.listDeparture.push(itemReturnFlight);
   
-      let ar_date = new Date(returnFlight[0].departTime);
-      let ar_date_landing = new Date(returnFlight[0].landingTime);
+      let ar_date = new Date(se.gf.getCinIsoDate(returnFlight[0].departTime));
+      let ar_date_landing = new Date(se.gf.getCinIsoDate(returnFlight[0].landingTime));
       let ar_hour = moment(ar_date).format("HH");
       let ar_minute = moment(ar_date).format("mm");
       let ar_hour_landing = moment(ar_date_landing).format("HH");
       let ar_minute_landing = moment(ar_date_landing).format("mm");
       if (returnFlight[0].departTime.toString().indexOf('T')) {
-        ar_date = new Date(returnFlight[0].departTime.toString().split('T')[0]);
-        ar_date_landing = new Date(returnFlight[0].landingTime.toString().split('T')[0]);
+        ar_date = new Date(se.gf.getCinIsoDate(returnFlight[0].departTime.toString().split('T')[0]));
+        ar_date_landing = new Date(se.gf.getCinIsoDate(returnFlight[0].landingTime.toString().split('T')[0]));
         let ar_time = returnFlight[0].departTime.toString().split('T')[1];
         ar_hour = ar_time.toString().split(':')[0];
         ar_minute = ar_time.toString().split(':')[1];
@@ -2920,12 +2923,12 @@ export class FlightComboReviewsPage implements OnInit{
 
     this.allowclickcalendar = false;
     this.msgEmptyFlight = '';
-    let arr = se.cin.split('-');
-    let arr1 = se.cout.split('-');
-    let newdatecin = new Date(arr[2], arr[1] - 1, arr[0]);
-    let newdatecout = new Date(arr1[2], arr1[1] - 1, arr1[0]);
-    let fromdate = new Date(moment(newdatecin).format('YYYY-MM-DD'));
-    let todate = new Date(moment(newdatecout).format('YYYY-MM-DD'));
+    let arr:any = moment(se.cin).format('YYYY-MM-DD').split('-');
+    let arr1:any = moment(se.cout).format('YYYY-MM-DD').split('-');
+    let newdatecin = new Date(arr[0], arr[1] - 1, arr[2]);
+    let newdatecout = new Date(arr1[0], arr1[1] - 1, arr1[2]);
+    let fromdate = new Date(se.gf.getCinIsoDate(newdatecin));
+    let todate = new Date(se.gf.getCinIsoDate(newdatecout));
      if(this.valueGlobal.notSuggestDailyCB){
       for (let j = 0; j < this.valueGlobal.notSuggestDailyCB.length; j++) {
         this._daysConfig.push({
@@ -2976,26 +2979,14 @@ export class FlightComboReviewsPage implements OnInit{
       cssClass: 'hotel-calendar-custom',
       componentProps: { options }
     });
-
+    
     this.myCalendar.present().then(() => {
       this.allowclickcalendar = true;
       $('.days-btn').click(e => this.clickedElement(e));
       $('.hotel-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_flight/icon_back.svg' ></div>");
         //add event close header
         $('.hotel-calendar-custom .header-img-close').click((e => this.closecalendar()));
-        // if(se.valueGlobal.dayhot.length>0){
-        //   let divmonth = $('.month-box');
-        //   if(divmonth && divmonth.length >0){
-        //     for (let index = 0; index < divmonth.length; index++) {
-        //        const em = divmonth[index];
-        //       //   let divsmall = $('#'+em.id+' dayhot');
-        //       //   if(divsmall && divsmall.length >0){
-        //           $('#'+em.id).append("<div class='div-month-text-small'></div>")
-        //           $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
-        //         // }
-        //     }
-        //   }
-        // }
+        
         let divmonth = $('.month-box');
               if(divmonth && divmonth.length >0){
                 for (let index = 0; index < divmonth.length; index++) {
@@ -3004,6 +2995,9 @@ export class FlightComboReviewsPage implements OnInit{
                 }
               }
     });
+    this.myCalendar.onDidDismiss().then(()=>{
+      this.allowclickcalendar = true;
+    })
   }
   async clickedElement(e: any) {
     var obj: any = e.currentTarget;
@@ -3054,23 +3048,9 @@ export class FlightComboReviewsPage implements OnInit{
           yearstartdate = objTextMonthStartDate.split('/')[1];
           monthenddate = objTextMonthEndDate.split('/')[0];
           yearenddate = objTextMonthEndDate.split('/')[1];
-          var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
-          var todate = new Date(yearenddate, monthenddate - 1, tday);
-          //theem phan check ngay bat dau va ket thuc combo
-          //pdanh 14-03-2022: Sửa lại rule cho giống page detail
-          // var diffday = 1;
-          // var diffdaystart =1;
-          // if(this.bookCombo.objComboDetail && this.bookCombo.objComboDetail.comboDetail && this.bookCombo.objComboDetail.comboDetail.stayTo){
-          //   diffday = moment(todate).diff(moment(this.bookCombo.objComboDetail.comboDetail.stayTo),'days');
-          // }
-          // if(this.bookCombo.objComboDetail && this.bookCombo.objComboDetail.comboDetail && this.bookCombo.objComboDetail.comboDetail.stayFrom){
-          //   diffdaystart = moment(fromdate).diff(moment(this.bookCombo.objComboDetail.comboDetail.stayFrom),'days');
-          // }
-          // //Combo vé máy bay
-          // if(diffday >1 || diffdaystart<0){
-          //   this.presentToastwarming('Combo bắt đầu từ '+ moment(this.bookCombo.objComboDetail.comboDetail.stayFrom).format('DD-MM-YYYY') +' đến '+ moment(this.bookCombo.objComboDetail.comboDetail.stayTo).format('DD-MM-YYYY')+', Xin vui lòng chọn lại ngày khởi hành.');
-          //   return;
-          // }
+          var fromdate = this.gf.getCinIsoDate(new Date(yearstartdate, monthstartdate - 1, fday));
+          var todate = this.gf.getCinIsoDate(new Date(yearenddate, monthenddate - 1, tday));
+          
           let arr_ed = this.bookCombo.objComboDetail.endDate.split('-');
           let ed = new Date(arr_ed[2], arr_ed[1] - 1, arr_ed[0]);
           if (moment(fromdate).diff(ed, 'days') > 0) {
@@ -3090,13 +3070,13 @@ export class FlightComboReviewsPage implements OnInit{
             if(_duration == 1){
               se.booking.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
               se.booking.CheckOutDate = (moment(todate).add('days',1)).format('YYYY-MM-DD');
-              se.cin = moment(fromdate).format('DD-MM-YYYY');
-              se.cout = (moment(todate).add('days',1)).format('DD-MM-YYYY');
+              se.cin = moment(fromdate).format('YYYY-MM-DD');
+              se.cout = (moment(todate).add('days',1)).format('YYYY-MM-DD');
             }else{
               se.booking.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
               se.booking.CheckOutDate = moment(todate).format('YYYY-MM-DD');
-              se.cin = moment(fromdate).format('DD-MM-YYYY');
-              se.cout = moment(todate).format('DD-MM-YYYY');
+              se.cin = moment(fromdate).format('YYYY-MM-DD');
+              se.cout = moment(todate).format('YYYY-MM-DD');
             }
             se.searchhotel.CheckInDate = se.booking.CheckInDate;
             se.searchhotel.CheckOutDate = se.booking.CheckOutDate;
@@ -3108,10 +3088,10 @@ export class FlightComboReviewsPage implements OnInit{
             se.dur = se.duration;
             se.TotalNight = se.duration;
             //hiện ngày check in out
-            var cintemp=new Date(se.searchhotel.CheckInDate);
+            var cintemp=new Date(se.gf.getCinIsoDate(se.searchhotel.CheckInDate));
             se.cindisplay=moment(cintemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(cintemp).format('MM')
 
-            var couttemp=new Date(se.searchhotel.CheckOutDate);
+            var couttemp=new Date(se.gf.getCinIsoDate(se.searchhotel.CheckOutDate));
             se.coutdisplay=moment(couttemp).format('DD')+ ' '+ 'thg' + ' ' +  moment(couttemp).format('MM');
             se.cinthudisplay = se.getDayOfWeek(se.searchhotel.CheckInDate);
             se.coutthudisplay = se.getDayOfWeek(se.searchhotel.CheckOutDate);
@@ -3249,12 +3229,12 @@ export class FlightComboReviewsPage implements OnInit{
         var BOD = JSON.parse(body);
         var arrBOD = BOD.BlackOutDates;
         if (arrBOD.length > 0) {
-          var checkcintemp = new Date(se.booking.CheckInDate);
-          var checkdatecout = new Date(se.booking.CheckOutDate);
+          var checkcintemp = new Date(se.gf.getCinIsoDate(se.booking.CheckInDate));
+          var checkdatecout = new Date(se.gf.getCinIsoDate(se.booking.CheckOutDate));
           var checkcin = moment(checkcintemp).format('YYYYMMDD');
           var checkcout = moment(checkdatecout).format('YYYYMMDD');
           for (let i = 0; i < arrBOD.length; i++) {
-            var checkBODtemp = new Date(arrBOD[i]);
+            var checkBODtemp = new Date(se.gf.getCinIsoDate(arrBOD[i]));
             var checkBOD = moment(checkBODtemp).format('YYYYMMDD');
             if (checkcin <= checkBOD && checkBOD < checkcout) {
               resolve(false);
@@ -3327,5 +3307,27 @@ export class FlightComboReviewsPage implements OnInit{
   }
   nextShuttlebus(){
     this.navCtrl.navigateForward("/shuttlebusnote");
+  }
+
+  resetValue(){
+    this.currentDepartFlight = null;
+    this.currentReturnFlight = null;
+    this.listDepart = [];
+    this.listReturn = [];
+    this.listDeparture = [];
+    this.departfi = [];
+    this.returnfi = [];
+    this.de_departdatestr = '';
+    this.de_departtime = '';
+    this.de_departpriceincrease = false;
+    this.de_flightpricetitle = '';
+    this.de_returnpriceincrease = false;
+    this.re_departtime ='';
+    this.ar_departdatestr = '';
+    this.ar_departtime = '';
+    this.ar_departpriceincrease = false;
+    this.ar_flightpricetitle ='';
+    this.ar_returnpriceincrease = false;
+    this.ar_returntime = '';
   }
 }

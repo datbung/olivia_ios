@@ -50,8 +50,8 @@ export class RoompaymentselectPage implements OnInit{
     this.Avatar = Roomif.imgHotel;
     this.Name = booking.HotelName;
     this.Address = Roomif.Address;
-    this.cin = booking.CheckInDate;
-    this.cout = booking.CheckOutDate;
+    this.cin = moment(booking.CheckInDate).format('YYYY-MM-DD');
+    this.cout = moment(booking.CheckOutDate).format('YYYY-MM-DD');
     this.dur = Roomif.dur;
     this.roomnumber = Roomif.roomnumber;
     this.adults = booking.Adults;

@@ -823,9 +823,19 @@ import { normalizeURL } from 'ionic-angular';
                         element.deliveryPaymentDisplay = "";
                       }
                       else {
-                      
-                        element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
-                        element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
+                        let _timezone = new Date().getTimezoneOffset();
+                        if(_timezone != -420){
+                          let arr1 = element.delivery_payment_date.toString().split('T');
+                          let arr2 = arr1[1].split(':')
+                          let arr3 = arr1[0].split('-');
+                          
+                          element.delivery_payment_time_display = arr2[0]+':'+arr2[1];
+                          element.delivery_payment_date_display = arr3[2]+'-'+arr3[1]+'-'+arr3[0];
+                        }else{
+                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
+                        }
+                        
                         if (!(element.pay_method == 3 || element.pay_method == 51 || element.pay_method == 2)) {
                           var obj = se.gf.getbank(element.pay_method);
                           element.urlimgbank = obj.urlimgbank;
@@ -833,7 +843,7 @@ import { normalizeURL } from 'ionic-angular';
                           element.accountNumber = obj.accountNumber;
                           element.bankName = obj.bankName;
                           element.url = obj.url;
-                        } else if (element.pay_method == 3) {
+                        } else if (element.pay_method == 3 && element.payment_info) {
                           if (element.payment_info && element.payment_info.length > 0) {
                             element.payment_info = JSON.parse(element.payment_info);
                           }
@@ -887,11 +897,22 @@ import { normalizeURL } from 'ionic-angular';
     
                     element.isRequestTrip = false;
                     //date display
-                    element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM-YYYY');
-                    element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
-    
-                    element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM');
-                    element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+                    let _timezone = new Date().getTimezoneOffset();
+                    if(_timezone != -420){
+                      element.checkInDisplayCity = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkInDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkInDate)).format('DD-MM-YYYY');
+                      element.checkOutDisplayCity = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkOutDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkOutDate)).format('DD-MM-YYYY');
+      
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkInDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkInDate)).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+                    }
+                    else{
+                      element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM-YYYY');
+                      element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+      
+                      element.checkInDisplayShort = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format('DD-MM');
+                      element.checkOutDisplayShort = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format('DD-MM-YYYY');
+                    }
+                   
                     element.departAirport = se.getAirportByCode(element.departCode);
                     element.returnAirport = se.getAirportByCode(element.arrivalCode);
                     se.getRatingStar(element);
@@ -920,8 +941,15 @@ import { normalizeURL } from 'ionic-angular';
                         element.bookingsComboData[0].flightTimeDisplay = h + m;
                       }
                       let ddate = element.checkInDate;
+                      let _timezone = new Date().getTimezoneOffset();
+                    if(_timezone != -420){
                       element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format("DD-MM-YYYY");
                       element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format("DD-MM-YYYY");
+                    }else{
+                      element.checkInDisplayCity = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkInDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkInDate)).format("DD-MM-YYYY");
+                      element.checkOutDisplayCity = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkOutDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkOutDate)).format("DD-MM-YYYY");
+                    }
+                      
                       //Thay mới ngày bay
                       if (element.bookingsComboData) {
                         if (element.bookingsComboData && element.bookingsComboData.length > 1) {
@@ -1060,14 +1088,23 @@ import { normalizeURL } from 'ionic-angular';
                     }
                     if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
                       element.isFlyBooking = true;
-    
+                      //console.log(JSON.parse(element.booking_json_data));
+                      //check đã xuất vé + có checkin online
+                      if( (element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate!='' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate!='')) )
+                      {
+                        let objjson = JSON.parse(element.booking_json_data);
+                        let _checked = objjson.some(item => {return item.Passengers && item.Passengers.some(p => p.CheckinInfo)});
+                        element.hadCheckinOnline = _checked;
+                        console.log(JSON.parse(element.booking_json_data));
+                      }
                       if (element.hotel_name.indexOf("VMB QT") != -1) {
     
                         if (element.booking_json_data) {
-                          console.log(JSON.parse(element.booking_json_data));
+                          
                           element.bookingjson = JSON.parse(element.booking_json_data);
                           if (element.bookingjson && element.bookingjson.length > 0) {
                             element.totalCost = 0;
+                            let _timezone = new Date().getTimezoneOffset();
                             element.bookingjson.forEach(elementbkg => {
                               if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
                                 element.isBookingVMBQT = true;
@@ -1078,14 +1115,24 @@ import { normalizeURL } from 'ionic-angular';
     
                                 for (let index = 0; index < elementbkg.Transits.length; index++) {
                                   const element = elementbkg.Transits[index];
+                                  let cin = moment(new Date(this.gf.getCinIsoDate(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('YYYY-MM-DD');
+                                  if(_timezone != -420){
+                                    element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('HH:mm');
+                                    element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('HH:mm');
+                  
+                                    element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('MM');
+                                    element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('MM');
+                                    cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('YYYY-MM-DD');
+                
+                                  }else{
                                   element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
                                   element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
-                                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
-                                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
-    
+                                  element.DepartDayDisplay = moment(new Date(this.gf.getCinIsoDate(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('DD') + "Thg " + moment(new Date(this.gf.getCinIsoDate(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('MM');
+                                  element.LandingDayDisplay = moment(new Date(this.gf.getCinIsoDate(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1))).format('DD') + "Thg " + moment(new Date(this.gf.getCinIsoDate(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1))).format('MM');
+                                  }
                                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                                  let cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('YYYY-MM-DD');
+                                  
                                   element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort+ ", " + moment(cin).format('DD-MM-YYYY')
     
                                   let elementNext = elementbkg.Transits[index + 1];
@@ -1131,11 +1178,25 @@ import { normalizeURL } from 'ionic-angular';
                           if (minutes < 10) {
                             minutes = "0" + minutes;
                           }
-                          element.time_payment = moment(element.delivery_payment_date).format("HH:mm");
-                          element.date_payment = moment(element.delivery_payment_date).format("DD-MM-YYYY");
-                          element.delivery_payment_date_display = "Hạn thanh toán trước " + moment(element.delivery_payment_date).format("HH:mm") + " " + se.gf.getDayOfWeek(element.delivery_payment_date).daynameshort+ ", " + moment(element.delivery_payment_date).format("DD") + " thg " + moment(element.delivery_payment_date).format("MM") + ", " + moment(element.delivery_payment_date).format("YYYY");
-                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
-                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY");
+                          let _timezone = new Date().getTimezoneOffset();
+                          if(_timezone != -420){
+                            let arr1 = element.delivery_payment_date.toString().split('T');
+                            let arr2 = arr1[1].split(':')
+                            let arr3 = arr1[0].split('-');
+                            
+                            element.time_payment = arr2[0]+':'+arr2[1];
+                            element.date_payment = arr3[2]+'-'+arr3[1]+'-'+arr3[0];
+                            element.delivery_payment_date_display = "Hạn thanh toán trước " + arr2[0]+':'+arr2[1]; + " " + se.gf.getDayOfWeek(new Date(arr1[0])).daynameshort+ ", " + arr3[2] + " thg " + arr3[1] + ", " + arr3[0];
+                            element.delivery_payment_time_display = arr2[0]+':'+arr2[1];
+                            element.delivery_payment_date_display = arr3[2]+'-'+arr3[1]+'-'+arr3[2];
+                          }else{
+                            element.time_payment = moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("HH:mm");
+                            element.date_payment = moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("DD-MM-YYYY");
+                            element.delivery_payment_date_display = "Hạn thanh toán trước " + moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("HH:mm") + " " + se.gf.getDayOfWeek(this.gf.getCinIsoDate(element.delivery_payment_date)).daynameshort+ ", " + moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("DD") + " thg " + moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("MM") + ", " + moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("YYYY");
+                            element.delivery_payment_time_display = moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("HH:mm");
+                            element.delivery_payment_date_display = moment(this.gf.getCinIsoDate(element.delivery_payment_date)).format("DD-MM-YYYY");
+                          }
+                         
                           //element.delivery_payment_date_display = "Vui lòng thanh toán trong vòng " + hours + 'h'+ minutes +"'";
                           if (!(element.pay_method == 3 || element.pay_method == 51 || element.pay_method == 2)) {
                             var obj = se.gf.getbank(element.pay_method);
@@ -1151,9 +1212,15 @@ import { normalizeURL } from 'ionic-angular';
                         }
     
                       }
-                      element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format("DD-MM-YYYY");
-                      element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format("DD-MM-YYYY");
-    
+                      let _timezone = new Date().getTimezoneOffset();
+                      if(_timezone != -420){
+                        element.checkInDisplayCity = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkInDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkInDate)).format("DD-MM-YYYY");
+                        element.checkOutDisplayCity = se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkOutDate)).daynameshort + ", " + moment(se.gf.getCinIsoDate(element.checkOutDate)).format("DD-MM-YYYY");
+                      }
+                      else{
+                        element.checkInDisplayCity = se.gf.getDayOfWeek(element.checkInDate).daynameshort + ", " + moment(element.checkInDate).format("DD-MM-YYYY");
+                        element.checkOutDisplayCity = se.gf.getDayOfWeek(element.checkOutDate).daynameshort + ", " + moment(element.checkOutDate).format("DD-MM-YYYY");
+                      }
                       //Thay mới ngày bay
                       if (element.bookingsComboData){
                         if (element.bookingsComboData && element.bookingsComboData.length > 1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(element.bookingsComboData[1].trip_Code) == -1 && element.bookingsComboData[1].airlineName && element.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) {
@@ -1519,8 +1586,18 @@ import { normalizeURL } from 'ionic-angular';
                         }
                       }
                       element.deliveryPaymentDisplay = "" + hour + ", " + day;
-                      element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
-                      element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY"); let arrhours = arrpaymentdate[1].split(":");
+                      let _timezone = new Date().getTimezoneOffset();
+                        if(_timezone != -420){
+                          let arr1 = element.delivery_payment_date.toString().split('T');
+                          let arr2 = arr1[1].split(':')
+                          let arr3 = arr1[0].split('-');
+                          element.delivery_payment_time_display = arr2[0]+':'+arr2[1];
+                          element.delivery_payment_date_display = arr3[2]+'-'+arr3[1]+'-'+arr3[2];
+                        }else{
+                          element.delivery_payment_time_display = moment(element.delivery_payment_date).format("HH:mm");
+                          element.delivery_payment_date_display = moment(element.delivery_payment_date).format("DD-MM-YYYY"); 
+                        }
+                        let arrhours = arrpaymentdate[1].split(":");
                       let today = new Date();
                       let d = new Date(Number(arrday[0]), Number(arrday[1]) - 1, Number(arrday[2]), Number(arrhours[0]), Number(arrhours[1]), 0);
                       let diffminutes = moment(d).diff(today, 'minutes');
@@ -3082,8 +3159,8 @@ import { normalizeURL } from 'ionic-angular';
         se.arrinsurrance = [];
         se.arrchildinsurrance = [];
         se.isFlyBooking = (obj.booking_id.indexOf('FLY') != -1 || obj.booking_id.indexOf("VMB") != -1 || obj.booking_type == "CB_FLY_HOTEL") ? true : false;
-        se.datecin = new Date(obj.checkInDate);
-        se.datecout = new Date(obj.checkOutDate);
+        se.datecin = new Date(se.gf.getCinIsoDate(obj.checkInDate));
+        se.datecout = new Date(se.gf.getCinIsoDate(obj.checkOutDate));
         se.cindisplay = se.gf.getDayOfWeek(se.datecin).daynameshort+ " " + moment(se.datecin).format('DD-MM-YYYY')
         se.coutdisplay = se.gf.getDayOfWeek(se.datecout).daynameshort+ " " + moment(se.datecout).format('DD-MM-YYYY')
         if (obj.bookingsComboData) {
@@ -6437,6 +6514,21 @@ import { normalizeURL } from 'ionic-angular';
         }
         goToRegister() {
             this.navCtrl.navigateForward('/register');
+        }
+
+        showCheckinOnline(trip){
+          if(trip){
+            this.enableheader = false;
+            if(this._mytripservice.rootPage == "homeflight"){
+              this._mytripservice.backroute = "tabs/tab1";
+            }else{
+              this._mytripservice.backroute = "/app/tabs/tab3";
+            }
+
+            this._mytripservice.tripdetail = trip;
+            this.navCtrl.navigateForward('/mytripcheckinonline');
+          }
+          
         }
         }
 

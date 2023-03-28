@@ -395,9 +395,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
         loadLocation(){
           var se = this;
-          //let urlPath = "https://www.ivivu.com/ve-may-bay/data/allplace.json";
-          //let urlPath = "https://beta-air.ivivu.com/data/allplace.json";
-          //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace?token=3b760e5dcf038878925b5613c32615ea3ds";
           let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
             var options = {
               method: 'GET',

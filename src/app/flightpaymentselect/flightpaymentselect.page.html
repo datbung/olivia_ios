@@ -108,7 +108,7 @@
     </div>
     <div class="div-split"></div>
     <div class="div-voucher-apply" *ngIf="_flightService.itemFlightCache.promotionCode">
-      <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_flightService.itemFlightCache.promotionCode}}</span><span class="text-normal">)</span> </div>
+      <div class="width-250 div-overflow"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_flightService.itemFlightCache.promotionCode}}</span><span class="text-normal">)</span> </div>
       <div class="width-100 text-normal text-right">{{gf.convertNumberToString(_flightService.itemFlightCache.discount)}}đ</div>
     </div>
     <div class="d-flex ">
@@ -188,6 +188,7 @@
             Mua trước trả sau <img class="img-homecredit" src="./assets/ic_ticket/logo-home-credit.jpg">
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward" [ngClass]="blockPayCard ? 'm-right-16' : 'm-right-16' " *ngIf="!blockPayCard"></ion-icon>
+          <div  class="text-bnpl-discount" >Giảm thêm 300.000đ</div>
         </ion-item>
 
         <ion-item  (click)="flightpaymentmomo()" [ngClass]="blockPayCard ? 'cls-minheight' : 'cls-minheight' ">

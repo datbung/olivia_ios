@@ -21,6 +21,7 @@ import { Market } from '@ionic-native/market/ngx';
 import { flightService } from '../providers/flightService';
 import * as moment from 'moment';
 import {tourService} from '../providers/tourService';
+import { resolve } from 'dns';
  
 @Component({
   selector: 'app-tabs',
@@ -537,10 +538,16 @@ export class TabsPage implements OnInit {
         
       }
       else if(data.flyNotify){
-        this._flightService.itemTabFlightActive.emit(true);
-        // this.setNotification(data,"product");
-        this.valueGlobal.backValue = "homeflight";
-        this.navCtrl.navigateForward('/tabs/tab1');
+        if(data.flyNotify == '1'){
+          this._flightService.itemTabFlightActive.emit(true);
+          // this.setNotification(data,"product");
+          this.valueGlobal.backValue = "homeflight";
+          this.navCtrl.navigateForward('/tabs/tab1');
+        }else{
+          let _params = data.flyNotify.split('&');
+          this.gotoFlightSearchPage(_params);
+        }
+        
       }
       else if (data.customParamNoti) {
         let msg ='';
@@ -1376,6 +1383,195 @@ export class TabsPage implements OnInit {
       se.navCtrl.navigateForward('/tourdetail');
       //se.slideData = res.Response;
       //se.loaddatadone = true;
+    })
+  }
+
+  gotoFlightSearchPage(params){
+    let se = this;
+    se._flightService.itemFlightCache = {};
+        se._flightService.objectFilter = {};
+        se._flightService.objectFilterInternational = {};
+        se._flightService.objectFilterReturn = {};
+        se._flightService.itemFlightCache.departFlight = null;
+        se._flightService.itemFlightCache.returnFlight = null;
+        se._flightService.itemFlightCache.itemFlight = null;
+        se.storage.remove('flightfilterobject');
+       
+        se.checkLoadLocation().then((dataLocation)=>{
+          let placeFrom = dataLocation.filter((itemairport) => {return itemairport.code == params[0]});
+          let placeTo = dataLocation.filter((itemairport) => {return itemairport.code == params[1]});
+          if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+            let departCode = placeFrom[0].code,
+                returnCode = placeTo[0].code,
+                cin = params[2],
+                cout = params[3],
+                cinthu = se.gf.getDayOfWeek(params[2]).dayname,
+                coutthu = se.gf.getDayOfWeek(params[3]).dayname,
+                cinthushort = se.gf.getDayOfWeek(params[2]).daynameshort,
+                coutthushort = se.gf.getDayOfWeek(params[3]).daynameshort,
+                departCity = placeFrom[0].city,
+                returnCity = placeTo[0].city,
+                departAirport = placeFrom[0].airport,
+                returnAirport = placeTo[0].airport,
+                adult = 1,
+                child = 0,
+                infant = 0,
+                roundtrip = params[4];
+
+
+            se._flightService.objSearch = {
+              departCode: departCode,
+              arrivalCode: returnCode,
+              departDate: cin,
+              returnDate: cout,
+              adult: adult,
+              child: child ? child : 0,
+              infant: infant ? infant : 0,
+              title: departCity +" → " + returnCity,
+              dayDisplay: cinthu + ", " +moment(cin).format("DD") +  " thg " +moment(cin).format("M"),
+              subtitle : " · " + (adult + child + (infant ? infant : 0) ) + " khách"+ " · " + (roundtrip ? ' Khứ hồi' : ' Một chiều'),
+              titleReturn: returnCity +" → " + departCity,
+              dayReturnDisplay: coutthu + ", " +moment(cout).format("DD") + " thg " + moment(cout).format("M") ,
+              subtitleReturn :  " · " + (adult + child + (infant ? infant : 0)) + " khách"+ " · " + (roundtrip ? ' Khứ hồi' : ' Một chiều'),
+              itemSameCity: '',
+              itemDepartSameCity: '',
+              itemReturnSameCity: '',
+              departCity: departCity,
+              returnCity: returnCity,
+              roundTrip : roundtrip
+            }
+
+            se._flightService.itemFlightCache.roundTrip = roundtrip;
+            se._flightService.itemFlightCache.checkInDate = cin;
+            se._flightService.itemFlightCache.checkOutDate = cout;
+            se._flightService.itemFlightCache.checkInDisplayMonth = moment(cin).format("DD") + " tháng " + moment(cin).format("MM") + ", " + moment(cin).format("YYYY");
+            se._flightService.itemFlightCache.checkOutDisplayMonth = moment(cout).format("DD") + " tháng " + moment(cout).format("MM") + ", " + moment(cout).format("YYYY");
+            se._flightService.itemFlightCache.adult = adult;
+            se._flightService.itemFlightCache.child = child;
+            se._flightService.itemFlightCache.infant = infant ? infant : 0;
+            se._flightService.itemFlightCache.pax = adult + (child ? child :0)+ (infant ? infant : 0);
+            se._flightService.itemFlightCache.arrchild = [];
+            se._flightService.itemFlightCache.departCity = departCity;
+            se._flightService.itemFlightCache.departCode = departCode;
+            se._flightService.itemFlightCache.departAirport = departAirport;
+            se._flightService.itemFlightCache.returnCity = returnCity;
+            se._flightService.itemFlightCache.returnCode = returnCode;
+            se._flightService.itemFlightCache.returnAirport = returnAirport;
+            se._flightService.itemFlightCache.step = 1;
+            
+          
+            se._flightService.itemFlightCache.departTimeDisplay = cinthu + ", " + moment(cin).format("DD") + " thg " + moment(cin).format("MM");
+            se._flightService.itemFlightCache.returnTimeDisplay = coutthu + ", " + moment(cout).format("DD") + " thg " + moment(cout).format("MM");
+    
+            se._flightService.itemFlightCache.departInfoDisplay = "Chiều đi" + " · " + cinthu + ", " + moment(cin).format("DD") + " thg " + moment(cin).format("MM");
+            se._flightService.itemFlightCache.returnInfoDisplay = "Chiều về" + " · " + coutthu + ", " + moment(cout).format("DD") + " thg " + moment(cout).format("MM");
+
+            se._flightService.itemFlightCache.departPaymentTitleDisplay = cinthushort + ", " + moment(cin).format("DD-MM")+ " · " + departCode + " → " +returnCode+ " · ";
+            se._flightService.itemFlightCache.returnPaymentTitleDisplay = coutthushort + ", " + moment(cout).format("DD-MM")+ " · "+ returnCode + " → " +departCode+ " · ";
+
+            se._flightService.itemFlightCache.checkInDisplay = se.gf.getDayOfWeek(cin).dayname +", " + moment(cin).format("DD") + " thg " + moment(cin).format("MM");
+            se._flightService.itemFlightCache.checkOutDisplay = se.gf.getDayOfWeek(cout).dayname +", " + moment(cout).format("DD") + " thg " + moment(cout).format("MM");
+
+            se._flightService.itemFlightCache.checkInDisplaysort = se.gf.getDayOfWeek(cin).daynameshort +", " + moment(cin).format("DD") + " thg " + moment(cin).format("MM");
+            se._flightService.itemFlightCache.checkOutDisplaysort = se.gf.getDayOfWeek(cout).daynameshort +", " + moment(cout).format("DD") + " thg " + moment(cout).format("MM");
+            se._flightService.itemFlightCache.objSearch = se._flightService.objSearch;
+            
+            se.storage.get("itemFlightCache").then((data)=>{
+              if(data){
+                se.storage.remove("itemFlightCache").then(()=>{
+                  se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+                })
+
+              }else{
+                se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+              }
+            })
+          
+            if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+              let placeFrom = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == departCode});
+              let placeTo = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == returnCode});
+              if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+                
+                se._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
+                se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+                se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+                if(se._flightService.itemFlightCache.isInternationalFlight){
+                  se.navCtrl.navigateForward("/flightsearchresultinternational");
+                }else{
+                    se._flightService.itemFlightCache.isInternationalFlight = false;
+                    se._flightService.itemFlightCache.isExtenalDepart = false;
+                    se._flightService.itemFlightCache.isExtenalReturn = false;
+                    se.navCtrl.navigateForward("/flightsearchresult");
+                }
+                
+              }else {
+                se._flightService.itemFlightCache.isInternationalFlight = false;
+                se._flightService.itemFlightCache.isExtenalDepart = false;
+                se._flightService.itemFlightCache.isExtenalReturn = false;
+                se.navCtrl.navigateForward("/flightsearchresult");
+              }
+            }else{
+              se._flightService.itemFlightCache.isInternationalFlight = false;
+              se._flightService.itemFlightCache.isExtenalDepart = false;
+              se._flightService.itemFlightCache.isExtenalReturn = false;
+              se.navCtrl.navigateForward("/flightsearchresult");
+            }
+          }
+          else{
+
+          }
+        })
+
+        
+  }
+
+  loadLocation():Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject)=>{
+      let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
+        var options = {
+          method: 'GET',
+          url: urlPath,
+          timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+          'headers': {
+            "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+            'Content-Type': 'application/json; charset=utf-8'
+            },
+        };
+
+        request(options, function (error, response, body) {
+          if (error) {
+            error.page = "homeflight";
+            error.func = "loadlocation";
+            error.param =  JSON.stringify(options);
+            C.writeErrorLog(error,response);
+            resolve([]);
+            throw new Error(error);
+          };
+          let result = JSON.parse(body);
+          if(result && result.data && result.data.length >0){
+            se.storage.set("listAirport", result.data);
+            se._flightService.listAirport = result.data;
+            resolve(result.data);
+          }else{
+            resolve([]);
+          }
+      })
+    })
+  }
+
+  checkLoadLocation():Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject)=>{
+      se.storage.get("listAirport").then((data)=>{
+        if(!data){
+          se.loadLocation().then((data)=>{
+            resolve(data);
+          });
+        }else{
+          resolve(se._flightService.listAirport = data);
+        }
+      })
     })
   }
 }
