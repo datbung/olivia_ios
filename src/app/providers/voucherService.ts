@@ -19,13 +19,31 @@ export class voucherService{
   openFrom: string;
 
   private clearVoucherSubject = new Subject<any>();
-  voucherSelected: any=[];åß
+  voucherSelected: any=[];
   voucherSelectedMap: any;
   listPromoCode: any=[];
   totalDiscountPromoCode: any=0;
   listObjectPromoCode: any=[];
   voucherUsedSubject= new Subject<any>();
   voucherRefreshListSubject= new Subject<any>();
+  hotelPromoCode: string;
+  hotelTotalDiscount: number;
+  rollbackAllSelectedVoucher= new Subject<any>();
+  comboFLightTotalDiscount: any;
+  comboFlightPromoCode: string;
+  comboFlightTotalDiscount: number;
+  comboCarPromoCode: string;
+  comboCarTotalDiscount: number;
+  flightPromoCode: string;
+  flightTotalDiscount: number;
+
+  publicRollbackAllSelectedVoucher(data: any) {
+    this.rollbackAllSelectedVoucher.next(data);
+  }
+  getRollbackAllSelectedVoucher(): Subject<any> {
+    return this.rollbackAllSelectedVoucher;
+  }
+
   getVoucherRefreshList(): Subject<any> {
     return this.voucherRefreshListSubject;
   }
@@ -45,13 +63,22 @@ export class voucherService{
   private voucherHotelSubject = new Subject<any>();
   private voucherCarComboSubject = new Subject<any>();
   private voucherTourSubject = new Subject<any>();
+  private voucherInternationalUsedSubject = new Subject<any>();
+  private voucherHotelUsedSubject = new Subject<any>();
 
   publicVoucherClicked(data: any) {
     this.voucherSubject.next(data);
   }
 
+  publicInternationalVoucherUsedClicked(data: any) {
+    this.voucherInternationalUsedSubject.next(data);
+  }
+
   publicVoucherUsedClicked(data: any) {
     this.voucherUsedSubject.next(data);
+  }
+  publicVoucherHotelUsedClicked(data: any) {
+    this.voucherHotelUsedSubject.next(data);
   }
 
   getObservable(): Subject<any> {
@@ -60,6 +87,14 @@ export class voucherService{
 
   getVoucherUsedObservable(): Subject<any> {
     return this.voucherUsedSubject;
+  }
+
+  getVoucherInternationalUsedObservable(): Subject<any> {
+    return this.voucherInternationalUsedSubject;
+  }
+
+  getVoucherHotelUsedObservable(): Subject<any> {
+    return this.voucherHotelUsedSubject;
   }
 
   publicVoucherFlightComboClicked(data: any) {

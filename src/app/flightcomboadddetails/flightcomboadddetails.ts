@@ -951,7 +951,8 @@ export class FlightComboAddDetailsPage implements OnInit {
     this.bookcombo.totalprice = this.PriceAvgPlusTAOld;
 
     if (this.bookcombo.ischeckbtnpromo) {
-      this.objectFlight.HotelBooking.TotalPrices = Number(this.objectFlight.HotelBooking.TotalPrices) + Number(this.bookcombo.discountpromo);
+      this.objectFlight.HotelBooking.TotalPrices = Number(this.bookcombo.totalPriceBeforeApplyVoucher);
+      //Number(this.objectFlight.HotelBooking.TotalPrices) + Number(this.bookcombo.discountpromo);
     }
     this.objectFlight.HotelBooking.TotalPrices = Number(this.objectFlight.HotelBooking.TotalPrices).toFixed(0);
     var arrPassengers = []
@@ -1044,6 +1045,8 @@ export class FlightComboAddDetailsPage implements OnInit {
     this.bookcombo.hoten = this.hoten;
     this.bookcombo.phone = this.phone;
     this.presentLoading();
+
+    console.log(JSON.stringify(search));
     var settings = {
       "async": true,
       "crossDomain": true,

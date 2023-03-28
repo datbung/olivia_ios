@@ -11,6 +11,7 @@ import jwt_decode from 'jwt-decode';
 
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoompaymentbankPage page.
  *
@@ -47,7 +48,8 @@ export class RoompaymentbankPage implements OnInit{
     public alertCtrl: AlertController,
     public clipboard: Clipboard,
     private safariViewController: SafariViewController,
-    public searchhotel: SearchHotel
+    public searchhotel: SearchHotel,
+    public _voucherService: voucherService
     ) {
     this.ischeckvietin = true;
     this.ischeckacb = true;
@@ -518,6 +520,27 @@ export class RoompaymentbankPage implements OnInit{
           if (se.Roomif.order) {
             Invoice=1;
           }
+          let voucherSelectedMap = [],promoSelectedMap =[];
+          if(this._voucherService.hotelPromoCode){
+            voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+              let newitem = {};
+              newitem["voucherCode"] = v.code;
+              newitem["voucherName"] = v.rewardsItem.title;
+              newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+              newitem["voucherDiscount"] = v.rewardsItem.price;
+              newitem["keepCurrentVoucher"] = false;
+              return newitem;
+            });
+            promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+              let newitem = {};
+              newitem["voucherCode"] = v.code;
+              newitem["voucherName"] = v.name;
+              newitem["voucherType"] = 2;
+              newitem["voucherDiscount"] = v.price;
+              newitem["keepCurrentVoucher"] = false;
+              return newitem;
+            });
+          }
           var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost +'/mInsertBooking',
@@ -551,10 +574,11 @@ export class RoompaymentbankPage implements OnInit{
               CompanyAddress:se.Roomif.address,
               CompanyTaxCode:se.Roomif.tax,
               BillingAddress :se.Roomif.addressorder,
-              promotionCode:se.Roomif.promocode,
+              //promotionCode:se.Roomif.promocode,
               comboid:se.bookCombo.ComboId,
               PenaltyDescription:se.Roomif.textcancel,
-              companycontactname: this.Roomif.nameOrder
+              companycontactname: this.Roomif.nameOrder,
+              vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
             },
             json: true
           };
@@ -603,7 +627,7 @@ export class RoompaymentbankPage implements OnInit{
                       }
                     })
                   }else{
-                    se.showAlertMessageOnly(body.Msg);
+                    se.gf.showAlertMessageOnly(body.Msg);
                   }
                   
                 })

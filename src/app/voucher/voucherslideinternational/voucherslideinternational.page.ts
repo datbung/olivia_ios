@@ -2,21 +2,21 @@ import { Component,NgZone ,OnInit, EventEmitter, Input} from '@angular/core';
 import { Platform, NavController, AlertController,  ToastController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as request from 'requestretry';
-import { C } from './../../providers/constants';
+import { C } from '../../providers/constants';
 import { Bookcombo, ValueGlobal } from '../../providers/book-service';
-import { GlobalFunction } from './../../providers/globalfunction';
+import { GlobalFunction } from '../../providers/globalfunction';
 import { VoucherDetailPage } from '../voucherdetail/voucherdetail.page';
 import { voucherService } from 'src/app/providers/voucherService';
 import * as moment from 'moment';
 import { flightService } from 'src/app/providers/flightService';
 
 @Component({
-  selector: 'app-voucherslide',
-  templateUrl: 'voucherslide.page.html',
-  styleUrls: ['voucherslide.page.scss'],
+  selector: 'app-voucherslideinternational',
+  templateUrl: 'voucherslideinternational.page.html',
+  styleUrls: ['voucherslideinternational.page.scss'],
 })
 
-export class VoucherSlidePage implements OnInit{
+export class VoucherSlideInternationalPage implements OnInit{
   @Input() item:any;
     userRewardData:any;
     userInfoData:any;
@@ -58,12 +58,12 @@ export class VoucherSlidePage implements OnInit{
           }
         }
       })
-
       this._voucherService.getVoucherRefreshList().subscribe((check) => {
         if(check){
           this.vouchers = [];
           this._voucherService.vouchers = [];
-          //this._voucherService.publicClearVoucherAfterPaymentDone(1);
+          this._voucherService.publicClearVoucherAfterPaymentDone(1);
+
           this.storage.get('auth_token').then(auth_token => {
             if (auth_token) {
               this.loadVoucherClaimed(auth_token);
@@ -162,7 +162,7 @@ export class VoucherSlidePage implements OnInit{
               } 
               else {
                 if(voucher.claimed){//Cảnh báo với voucher đã sử dụng
-                  this._voucherService.publicVoucherUsedClicked(voucher);
+                  this._voucherService.publicInternationalVoucherUsedClicked(voucher);
                 }else{
                   this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
                 }

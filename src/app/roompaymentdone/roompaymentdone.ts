@@ -129,10 +129,10 @@ export class RoompaymentdonePage implements OnInit {
        this.showConfirm();
     }
     if(this.searchhotel.rootPage == "topdeallist"){
-      this.navCtrl.navigateBack('/topdeallist');
+      this.navCtrl.navigateForward('/topdeallist');
       this.searchhotel.rootPage = "";
     }else{
-      this.navCtrl.navigateBack('/');
+      this.navCtrl.navigateBack('/app/tabs/tab1');
     }
    //this.navCtrl.navigateBack('/');
   }

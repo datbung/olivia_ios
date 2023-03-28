@@ -734,7 +734,7 @@ export class RoompaymentselectEanPage implements OnInit{
                 }
               })
             }else{
-              se.showAlertMessageOnly(databook.Msg);
+              se.gf.showAlertMessageOnly(databook.Msg);
             }
             
           })
@@ -796,6 +796,27 @@ export class RoompaymentselectEanPage implements OnInit{
     if (this.Roomif.order) {
       Invoice = 1;
     }
+    let voucherSelectedMap = [],promoSelectedMap =[];
+    if(this._voucherService.hotelPromoCode){
+      voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+        let newitem = {};
+        newitem["voucherCode"] = v.code;
+        newitem["voucherName"] = v.rewardsItem.title;
+        newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+        newitem["voucherDiscount"] = v.rewardsItem.price;
+        newitem["keepCurrentVoucher"] = false;
+        return newitem;
+      });
+      promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+        let newitem = {};
+        newitem["voucherCode"] = v.code;
+        newitem["voucherName"] = v.name;
+        newitem["voucherType"] = 2;
+        newitem["voucherDiscount"] = v.price;
+        newitem["keepCurrentVoucher"] = false;
+        return newitem;
+      });
+    }
     return new Promise((resolve, reject) => {
       var options = {
         method: 'POST',
@@ -830,10 +851,11 @@ export class RoompaymentselectEanPage implements OnInit{
           CompanyAddress: this.Roomif.address,
           CompanyTaxCode: this.Roomif.tax,
           BillingAddress: this.Roomif.addressorder,
-          promotionCode: this.Roomif.promocode,
+          //promotionCode: this.Roomif.promocode,
           comboid: this.bookcombo.ComboId,
           PenaltyDescription: this.Roomif.textcancel,
-          companycontactname: this.Roomif.nameOrder
+          companycontactname: this.Roomif.nameOrder,
+          vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
         },
         json: true
       };
@@ -934,9 +956,9 @@ export class RoompaymentselectEanPage implements OnInit{
             
            
           }
-          if (se.Roomif.promocode && se.bookingCode) {
-            // alert("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
-            se.showInfo("Mã giảm giá "+se.Roomif.promocode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!")
+          if (se._voucherService.hotelPromoCode && se.bookingCode) {
+            // alert("Mã giảm giá "+se._voucherService.hotelPromoCode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!");
+            se.showInfo("Mã giảm giá "+se._voucherService.hotelPromoCode+" đã được dùng cho booking "+se.bookingCode+".Xin vui lòng thao tác lại booking!")
             // se.Roomif.promocode="";
            
           }
@@ -1071,6 +1093,7 @@ export class RoompaymentselectEanPage implements OnInit{
           alert.dismiss();
           this.Roomif.promocode="";
           this._voucherService.publicClearVoucherAfterPaymentDone(1);
+          this._voucherService.publicRollbackAllSelectedVoucher(1);
           this.navCtrl.navigateForward('/roomdetailreview');
         }
       }

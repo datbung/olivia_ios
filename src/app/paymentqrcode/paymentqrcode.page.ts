@@ -15,6 +15,7 @@ import { Storage } from '@ionic/storage';
 import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import {tourService } from '../providers/tourService';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-paymentqrcode',
@@ -47,6 +48,7 @@ export class PaymentqrcodePage implements OnInit {
         public bookCombo: Bookcombo,
         public Roomif: RoomInfo,
         public booking: Booking,
+        public _voucherService: voucherService
          ){
             this.bankName = activityService.bankName;
             this.bankTransfer = activityService.bankTransfer;
@@ -151,6 +153,8 @@ export class PaymentqrcodePage implements OnInit {
     if (this.checkreview == 0) {
       this.showConfirm();
     }
+      
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
     if(this.activityService.qrcodepaymentfrom == 1){//vmb
       this._flightService.itemTabFlightActive.emit(true);
       this.valueGlobal.backValue = "homeflight";
@@ -194,6 +198,7 @@ export class PaymentqrcodePage implements OnInit {
   }
 
   gotomytrip(){
+    this._voucherService.publicClearVoucherAfterPaymentDone(1);
     if(this.activityService.qrcodepaymentfrom == 1){//vmb
       this._flightService.itemTabFlightActive.emit(true);
       this.valueGlobal.backValue = "homeflight";

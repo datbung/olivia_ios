@@ -12,6 +12,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { ConfirmemailPage } from '../confirmemail/confirmemail.page';
 import { OverlayEventDetail } from '@ionic/core';
 import { Z_ERRNO } from 'zlib';
+import { voucherService } from '../providers/voucherService';
 /**
  * Generated class for the RoomadddetailsPage page.
  *
@@ -52,7 +53,8 @@ export class RoomadddetailsPage implements OnInit {
     public keyboard: Keyboard,
     public activityService: ActivityService,public alertCtrl: AlertController,
     public modalCtrl: ModalController,
-    public searchhotel: SearchHotel) {
+    public searchhotel: SearchHotel,
+    public _voucherService: voucherService) {
     this.ischeckpayment = Roomif.ischeckpayment;
     this.storage.get('email').then(email => {
       if(email){
@@ -301,7 +303,7 @@ export class RoomadddetailsPage implements OnInit {
               this.presentToastOrder();
               return;
             }
-          } 
+          }
          
           var order1 = { companyname: this.companyname, address: this.address, tax: this.tax, addressorder: this.addressorder,ishideNameMail: this.ishideNameMail,hotenhddt:this.hotenhddt,emailhddt:this.emailhddt }
           this.storage.set("order", order1);
@@ -496,6 +498,26 @@ export class RoomadddetailsPage implements OnInit {
         if (se.Roomif.order) {
           Invoice = 1;
         }
+
+        let voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+          let newitem = {};
+          newitem["voucherCode"] = v.code;
+          newitem["voucherName"] = v.rewardsItem.title;
+          newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+          newitem["voucherDiscount"] = v.rewardsItem.price;
+          newitem["keepCurrentVoucher"] = false;
+          return newitem;
+        });
+        let promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+          let newitem = {};
+          newitem["voucherCode"] = v.code;
+          newitem["voucherName"] = v.name;
+          newitem["voucherType"] = 2;
+          newitem["voucherDiscount"] = v.price;
+          newitem["keepCurrentVoucher"] = false;
+          return newitem;
+        });
+
         var options = {
           method: 'POST',
           url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -529,10 +551,11 @@ export class RoomadddetailsPage implements OnInit {
             CompanyAddress: se.Roomif.address,
             CompanyTaxCode: se.Roomif.tax,
             BillingAddress: se.Roomif.addressorder,
-            promotionCode:se.Roomif.promocode,
+            //promotionCode:se.Roomif.promocode,
             comboid:se.bookcombo.ComboId,
             PenaltyDescription:se.Roomif.textcancel,
-            companycontactname: se.Roomif.nameOrder
+            companycontactname: se.Roomif.nameOrder,
+            vouchers : [...voucherSelectedMap,...promoSelectedMap],
           },
           json: true
         };
@@ -804,6 +827,25 @@ export class RoomadddetailsPage implements OnInit {
         if (se.Roomif.order) {
           Invoice = 1;
         }
+        let voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+          let newitem = {};
+          newitem["voucherCode"] = v.code;
+          newitem["voucherName"] = v.rewardsItem.title;
+          newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+          newitem["voucherDiscount"] = v.rewardsItem.price;
+          newitem["keepCurrentVoucher"] = false;
+          return newitem;
+        });
+        let promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+          let newitem = {};
+          newitem["voucherCode"] = v.code;
+          newitem["voucherName"] = v.name;
+          newitem["voucherType"] = 2;
+          newitem["voucherDiscount"] = v.price;
+          newitem["keepCurrentVoucher"] = false;
+          return newitem;
+        });
+        
         var options = {
           method: 'POST',
           url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -838,10 +880,11 @@ export class RoomadddetailsPage implements OnInit {
             CompanyAddress: se.Roomif.address,
             CompanyTaxCode: se.Roomif.tax,
             BillingAddress: se.Roomif.addressorder,
-            promotionCode:se.Roomif.promocode,
+            //promotionCode:se.Roomif.promocode,
             comboid:se.bookcombo.ComboId,
             PenaltyDescription:se.Roomif.textcancel,
-            companycontactname: this.Roomif.nameOrder
+            companycontactname: this.Roomif.nameOrder,
+            vouchers : [...voucherSelectedMap,...promoSelectedMap],
           },
           json: true
         };
@@ -901,7 +944,7 @@ export class RoomadddetailsPage implements OnInit {
                   }
                 })
               }else{
-                se.showAlertMessageOnly(body.Msg);
+                se.gf.showAlertMessageOnly(body.Msg);
               }
               
             })

@@ -214,7 +214,11 @@ export class FlightpricedetailPage implements OnInit {
             if(totalprice*1 <0){
               totalprice = 0;
             }
+            
           this.totalpricedisplay = this.gf.convertNumberToString(totalprice);
+          if(!this.totalpricedisplay){
+            this.totalpricedisplay = '0';
+          }
           this.totalPrice = this.gf.convertStringToNumber(totalprice);
         }
     }

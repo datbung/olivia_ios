@@ -24,6 +24,7 @@ export class VoucherSlideCarComboPage implements OnInit{
     public isShowConfirm = false;
     public intervalID;
     vouchers = [];
+    msgMultiVoucherError: any;
     constructor(public platform: Platform,public navCtrl: NavController,public toastCtrl: ToastController,
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
@@ -52,6 +53,19 @@ export class VoucherSlideCarComboPage implements OnInit{
             }
             
           }
+        }
+      })
+      this._voucherService.getRollbackAllSelectedVoucher().subscribe((check) => {
+        if(check){
+          this.zone.run(()=>{
+            for (let index = 0; index < this._voucherService.vouchers.length; index++) {
+              const element = this._voucherService.vouchers[index];
+              if(element.claimed){
+                element.claimed = false;
+              }
+            }
+          })
+          
         }
       })
     }
@@ -139,7 +153,13 @@ export class VoucherSlideCarComboPage implements OnInit{
               if (error) throw new Error(error);
                 var json = body;
                 if (json.error == 0) {
-                  resolve(true);
+                  itemVoucher.type = json.data.type;
+                  if(se._voucherService.voucherSelected && se._voucherService.voucherSelected.length >0 && (se._voucherService.voucherSelected.some(v => v.type != json.data.type && v.id != itemVoucher.id) || se._voucherService.voucherSelected.some(v => v.type != 2 && v.id != itemVoucher.id))){
+                    se.msgMultiVoucherError = "Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một mã";
+                    resolve(false);
+                  }else{
+                    resolve(true);
+                  }
                 }
                 else{
                   resolve(false);
@@ -162,17 +182,23 @@ export class VoucherSlideCarComboPage implements OnInit{
         } else{
           this.checkVoucherActive(voucher).then((check) => {
             if(!check){
-              this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+              if(this.msgMultiVoucherError){
+                this.gf.showAlertMessageOnly(this.msgMultiVoucherError);
+              } else {
+                if(voucher.claimed){//Cảnh báo với voucher đã sử dụng
+                  this._voucherService.publicVoucherUsedClicked(voucher);
+                }else{
+                  this.gf.showAlertMessageOnly('Mã voucher không còn hiệu lực. Vui lòng chọn mã voucher khác!');
+                }
+              }
               return;
             }else{
-                for (let index = 0; index < this._voucherService.vouchers.length; index++) {
-                  const element = this._voucherService.vouchers[index];
-                  if(element.id != voucher.id){
-                    element.claimed = false;
-                  }
-                  
-                }
-                voucher.claimed = !voucher.claimed;
+              voucher.claimed = !voucher.claimed;
+              if(voucher.claimed && !this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
+                this._voucherService.voucherSelected.push(voucher);
+              }else if(!voucher.claimed && this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
+                this.gf.removeItemInArray(this._voucherService.voucherSelected, voucher);
+              }
                 this._voucherService.publicVoucherCarComboClicked(voucher);
               }
             })
@@ -244,12 +270,13 @@ export class VoucherSlideCarComboPage implements OnInit{
           }
         },
       };
-      this.gf.RequestApi('GET', url, headers, body, 'myvoucher', 'loadVoucher').then((data)=> {
+      this.gf.RequestApi('POST', url, headers, body, 'myvoucher', 'loadVoucher').then((data)=> {
         //console.log(data);
         //this.vouchersClaimed = data;
         if(data && data.length >0){
           data.forEach(element => {
             element.validdateDisplay = moment(element.to).format('DD-MM-YYYY');
+            element.claimed = this._voucherService.voucherSelected.some(v => v.id == element.id);
           });
          // this.vouchers = [...data];
          // this._voucherService.vouchers = [...data];

@@ -2,6 +2,7 @@ import { Bookcombo } from './../providers/book-service';
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-flightcombopaymentbreakdown',
@@ -24,7 +25,8 @@ export class FlightcombopaymentbreakdownPage implements OnInit {
   Luggage;
   constructor(public activityService: ActivityService,
     private navCtrl: NavController,public bookcombo:Bookcombo,
-    public gf: GlobalFunction) {
+    public gf: GlobalFunction,
+    public _voucherService: voucherService) {
       var se = this;
       se.objFlightComboDetail = se.activityService.objFlightComboPaymentBreakDown.objDetail;
       if(se.bookcombo.Luggage){

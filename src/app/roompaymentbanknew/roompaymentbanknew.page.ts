@@ -606,6 +606,27 @@ export class RoompaymentbanknewPage implements OnInit {
           if (se.Roomif.order) {
             Invoice=1;
           }
+          let voucherSelectedMap = [],promoSelectedMap =[];
+          if(this._voucherService.hotelPromoCode){
+            voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+              let newitem = {};
+              newitem["voucherCode"] = v.code;
+              newitem["voucherName"] = v.rewardsItem.title;
+              newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+              newitem["voucherDiscount"] = v.rewardsItem.price;
+              newitem["keepCurrentVoucher"] = false;
+              return newitem;
+            });
+            promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+              let newitem = {};
+              newitem["voucherCode"] = v.code;
+              newitem["voucherName"] = v.name;
+              newitem["voucherType"] = 2;
+              newitem["voucherDiscount"] = v.price;
+              newitem["keepCurrentVoucher"] = false;
+              return newitem;
+            });
+          }
           var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost +'/mInsertBooking',
@@ -626,7 +647,7 @@ export class RoompaymentbanknewPage implements OnInit {
               note:se.Roomif.notetotal,
               source  :'6',
               MemberToken: se.auth_token,
-              CustomersStr: JSON.stringify(se.Roomif.arrcustomer),
+              CustomersStr: se.Roomif.arrcustomer ? JSON.stringify(se.Roomif.arrcustomer) : '',
               UsePointPrice:se.Roomif.pricepoint,
               NoteCorp:se.Roomif.order,
               Invoice:Invoice,
@@ -639,13 +660,16 @@ export class RoompaymentbanknewPage implements OnInit {
               CompanyAddress:se.Roomif.address,
               CompanyTaxCode:se.Roomif.tax,
               BillingAddress :se.Roomif.addressorder,
-              promotionCode:se.Roomif.promocode,
+              //promotionCode:se.Roomif.promocode,
               comboid:se.bookCombo.ComboId,
               PenaltyDescription:se.Roomif.textcancel,
-              companycontactname: this.Roomif.nameOrder
+              companycontactname: this.Roomif.nameOrder,
+              vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
             },
             json: true
           };
+
+          console.log(JSON.stringify(options.body));
           request(options, function (error, response, body) {
             if(response.statusCode != 200){
               var objError ={
@@ -729,7 +753,7 @@ export class RoompaymentbanknewPage implements OnInit {
                       }
                     })
                   }else{
-                    se.showAlertMessageOnly(body.Msg);
+                    se.gf.showAlertMessageOnly(body.Msg);
                   }
                   
                 })

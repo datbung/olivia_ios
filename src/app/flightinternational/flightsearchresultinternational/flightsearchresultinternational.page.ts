@@ -693,6 +693,11 @@ export class FlightSearchResultInternationalPage implements OnInit {
 
   loadFlightData(obj, hascache){
     var se = this;
+    se._voucherService.totalDiscountPromoCode =0;
+    se._voucherService.listPromoCode =[];
+    se._voucherService.voucherSelected = [];
+    se._voucherService.listObjectPromoCode = [];
+    se._voucherService.rollbackSelectedVoucher.emit(1);
     setTimeout(() => {
       se.zone.run(()=>{
           se.progressbarloading += 0.05;
@@ -715,7 +720,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
       if(!this.listDepart || this.listDepart.length ==0){
         this.emptyFilterResult = true;
       }
-    }, 50 * 1000);
+    }, 120 * 1000);
 
     se.checkLoadCacheData(obj,hascache).then(data => {
       if(data){
@@ -1738,6 +1743,11 @@ export class FlightSearchResultInternationalPage implements OnInit {
           se.sortairline = true;
          
           se.countFilterResult = 0;
+
+          se._voucherService.totalDiscountPromoCode =0;
+          se._voucherService.listPromoCode =[];
+          se._voucherService.voucherSelected = [];
+          se._voucherService.listObjectPromoCode = [];
         })
         
       }

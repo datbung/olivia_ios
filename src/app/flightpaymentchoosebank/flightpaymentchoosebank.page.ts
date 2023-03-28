@@ -2,7 +2,7 @@ import { foodService } from './../providers/foodService';
 import { Bookcombo, foodInfo } from './../providers/book-service';
 import { Booking, RoomInfo, SearchHotel } from '../providers/book-service';
 import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
-import { NavController, LoadingController, ToastController, Platform } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, Platform, AlertController } from '@ionic/angular';
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -35,7 +35,8 @@ export class FlightpaymentchoosebankPage implements OnInit {
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,private safariViewController: SafariViewController,
     public loadingCtrl: LoadingController,public _flightService : flightService, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
     private backgroundmode: BackgroundMode,
-    public _voucherService: voucherService) {
+    public _voucherService: voucherService,
+    private alertCtrl: AlertController) {
       this.priceshow = this._flightService.itemFlightCache.totalPriceDisplay;
 
       this.platform.ready().then(()=>{
@@ -169,7 +170,12 @@ export class FlightpaymentchoosebankPage implements OnInit {
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
                       se._flightService.paymentError = checkpay;
-                      se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+                      if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                        let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                        this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+                      }else{
+                        se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+                      }
                     }
                   
                   })
@@ -244,8 +250,7 @@ export class FlightpaymentchoosebankPage implements OnInit {
     let itemcache = this._flightService.itemFlightCache;
     se.gf.updatePaymentMethod(se._flightService.itemFlightCache, 2, se.bankid,"").then((data)=>{
       if(data && data.isHoldSuccess){
-        // se._flightService.itemFlightCache.periodPaymentDate = data.periodPaymentDate;
-
+        se._flightService.itemFlightCache.listVouchersAlreadyApply = [...se._voucherService.voucherSelected, ...se._voucherService.listPromoCode];
         var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ? itemcache.pnr.bookingCode :  itemcache.pnr.resNo) + '&buyerPhone=' + itemcache.phone + '&memberId=' + se.jti + '&BankId=' + bankid + '&TokenId=' + se.TokenId + '&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
         se.gf.CreatePayoo(url).then(datapayoo => {
           if(se._voucherService.selectVoucher){
@@ -334,7 +339,12 @@ export class FlightpaymentchoosebankPage implements OnInit {
           se.safariViewController.hide();
           clearInterval(se.intervalID);
           se._flightService.paymentError = rs.error;
-          se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+          if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                      let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                      this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+                    }else{
+                      se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+                    }
         }
       }
       else {
@@ -346,7 +356,12 @@ export class FlightpaymentchoosebankPage implements OnInit {
         se.gf.hideLoading();
         clearInterval(se.intervalID);
         se._flightService.paymentError = "";
-        se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+        if(this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0){
+                      let strpromocode = this._flightService.itemFlightCache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+                      this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
+                    }else{
+                      se.navCtrl.navigateForward('/flightpaymenttimeout/0');
+                    }
       }
 
     });
@@ -775,5 +790,35 @@ export class FlightpaymentchoosebankPage implements OnInit {
       }
     }
   );
+  }
+
+  async alertMessage(msg){
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-flighttimeout",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this._flightService.itemChangeTicketFlight.emit(1);
+          if(this._voucherService.selectVoucher){
+            
+            this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+            this._voucherService.selectVoucher = null;
+            
+          }
+          this._voucherService.publicClearVoucherAfterPaymentDone(1);
+          this._flightService.itemFlightCache.promotionCode = "";
+          this._flightService.itemFlightCache.promocode = "";
+          this._flightService.itemFlightCache.discount = 0;
+          this.navCtrl.navigateBack('/flightsearchresult');
+          alert.dismiss();
+        }
+      }
+    ]
+  });
+  alert.present();
   }
 }

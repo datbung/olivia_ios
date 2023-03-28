@@ -1,5 +1,5 @@
 import { GlobalFunction ,ActivityService} from './../../providers/globalfunction';
-import { AlertController, NavController, Platform } from '@ionic/angular';
+import { AlertController, IonRouterOutlet, NavController, Platform } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Component, NgZone, OnInit } from '@angular/core';
 import * as request from 'requestretry';
@@ -31,7 +31,8 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
     private zone: NgZone,
     private alertCtrl: AlertController,
     public _mytripservice: MytripService,
-    public _voucherService: voucherService) { 
+    public _voucherService: voucherService,
+    private routerOutlet: IonRouterOutlet,) { 
  
     }
 
@@ -39,14 +40,16 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
     this.stt= this.activatedRoute.snapshot.paramMap.get('stt');
     // if (this.stt==0) {
     //   this.errorMsg = this._flightService.paymentError.noteIpn;
-    //   this.callCheckHoldTicket('',this._flightService.itemFlightCache).then((check) => {
-    //         if(this._flightService.itemFlightCache.dataSummaryBooking && this._flightService.itemFlightCache.dataSummaryBooking.urlPaymentAgain){
-    //           this.zone.run(()=>{
-    //             this.allowrepay = true;
-    //           })
-                
-    //         }
-    //       })
+       this.callCheckHoldTicket('',this._flightService.itemFlightCache).then((check) => {
+        let itemflightcache = this._flightService.itemFlightCache;
+            let databkg = itemflightcache.dataSummaryBooking;
+            this.zone.run(()=>{
+              
+              this.allowrepay = !(databkg && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.listVouchersAlreadyApply && itemflightcache.listVouchersAlreadyApply.length >0);
+              this.routerOutlet.swipeGesture = !(databkg && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.listVouchersAlreadyApply && itemflightcache.listVouchersAlreadyApply.length >0);
+            })
+   
+           })
     // }
     // else{
     //   this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
@@ -59,10 +62,11 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
     //     }
     //   })
     // }
+
     this.allowrepay = true;
   }
 
-  callCheckHoldTicket(url, data){
+  callCheckHoldTicket(url, data):Promise<any>{
     var res = false;
     var se = this;
     se.gf.showLoading();
@@ -95,6 +99,7 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
               }
             })
           }
+          resolve(true);
         }
       })
     })
@@ -174,35 +179,18 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
   }
 
   async rePayment(){
-    if(!this.allowrepay){
-        let alert = await this.alertCtrl.create({
-          message: 'Vé máy bay hết hạn thanh toán. Vui lòng chọn vé khác!',
-          cssClass: "cls-alert-flighttimeout",
-          backdropDismiss: false,
-          buttons: [
-          {
-            text: 'OK',
-            role: 'OK',
-            handler: () => {
-              this._flightService.itemChangeTicketFlight.emit(1);
-              if(this._voucherService.selectVoucher){
-                
-                this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
-                this._voucherService.selectVoucher = null;
-                
-              }
-              this._voucherService.publicClearVoucherAfterPaymentDone(1);
-              this._flightService.itemFlightCache.promotionCode = "";
-              this._flightService.itemFlightCache.promocode = "";
-              this._flightService.itemFlightCache.discount = 0;
-              this.navCtrl.navigateBack('flightsearchresultinternational');
-              alert.dismiss();
-            }
-          }
-        ]
-      });
-      alert.present();
+    //case đã qua cổng thanh toán giữ lại tích cho những voucher đã áp dụng cho bkg bị active = false
+    let itemflightcache = this._flightService.itemFlightCache;
+    let databkg = itemflightcache.dataSummaryBooking;
+    
+    let hasvoucherused = (databkg && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.listVouchersAlreadyApply && itemflightcache.listVouchersAlreadyApply.length >0);
+    let strpromocode = itemflightcache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+    if(hasvoucherused){
+      this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
       return;
+    }
+    else if(!this.allowrepay){
+        
     }
     if (this.stt==0) {
       this.navCtrl.navigateBack('flightinternationalpaymentselect');
@@ -210,5 +198,36 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
       this.navCtrl.back();
     }
    
+  }
+
+  async alertMessage(msg){
+    let alert = await this.alertCtrl.create({
+      message: msg ? msg : 'Vé máy bay hết hạn thanh toán. Vui lòng chọn vé khác!',
+      cssClass: "cls-alert-flighttimeout",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this._flightService.itemChangeTicketFlight.emit(1);
+          if(this._voucherService.selectVoucher){
+            
+            this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+            this._voucherService.selectVoucher = null;
+            
+          }
+          this._voucherService.publicClearVoucherAfterPaymentDone(1);
+          this._flightService.itemFlightCache.promotionCode = "";
+          this._flightService.itemFlightCache.promocode = "";
+          this._flightService.itemFlightCache.discount = 0;
+          this.navCtrl.navigateBack('flightsearchresultinternational');
+          alert.dismiss();
+        }
+      }
+    ]
+  });
+  alert.present();
+  return;
   }
 }

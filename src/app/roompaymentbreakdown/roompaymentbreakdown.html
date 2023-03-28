@@ -82,18 +82,20 @@
         </ion-item>
     </div>
    <hr>
-   <div class="div-voucher-apply" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">
-    <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_voucherService.selectVoucher.code}}</span><span class="text-normal">)</span> </div>
-    <div class="width-100 text-normal text-right total-price">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div>
+   <div class="div-voucher-apply" *ngIf="_voucherService.hotelPromoCode">
+    <!-- <div class="width-200"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_voucherService.selectVoucher.code}}</span><span class="text-normal">)</span> </div>
+    <div class="width-100 text-normal text-right total-price">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
+    <div class="width-250 div-overflow"><span class="text-normal">Ưu đãi (<span class="text-code" *ngIf="_voucherService.hotelPromoCode">{{_voucherService.hotelPromoCode}}</span><span class="text-normal">)</span> </span></div>
+    <div class="width-100 text-normal text-right total-price">{{gf.convertNumberToString(_voucherService.hotelTotalDiscount)}}đ</div>
   </div>
     <div style="margin-left: -15px">
       <ion-item style="--border-style: none">
         <ion-label style="font-size: 14px">Tổng cộng</ion-label>
-        <p class="total-price1"  slot="end"  *ngIf="!(_voucherService.selectVoucher && _voucherService.selectVoucher.claimed)">
+        <p class="total-price1"  slot="end"  *ngIf="!_voucherService.hotelPromoCode">
           {{total}}đ
         </p>
-        <p class="total-price1"  slot="end"  *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed">
-          {{gf.convertNumberToString((totalPrice - _voucherService.selectVoucher.rewardsItem.price) >0 ? totalPrice - _voucherService.selectVoucher.rewardsItem.price : 0)}}đ
+        <p class="total-price1"  slot="end"  *ngIf="_voucherService.hotelPromoCode">
+          {{gf.convertNumberToString((totalPrice - _voucherService.hotelTotalDiscount) >0 ? totalPrice - _voucherService.hotelTotalDiscount : 0)}}đ
         </p>
       </ion-item>
     </div>

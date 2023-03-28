@@ -961,6 +961,11 @@ export class FlightsearchresultPage implements OnInit {
 
   loadFlightData(obj, hascache){
     var se = this;
+    se._voucherService.totalDiscountPromoCode =0;
+    se._voucherService.listPromoCode =[];
+    se._voucherService.voucherSelected = [];
+    se._voucherService.listObjectPromoCode = [];
+    se._voucherService.rollbackSelectedVoucher.emit(1);
     setTimeout(() => {
       se.zone.run(()=>{
           se.progressbarloading += 0.05;
