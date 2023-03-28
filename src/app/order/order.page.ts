@@ -552,7 +552,7 @@ import { normalizeURL } from 'ionic-angular';
             var text = "Bearer " + (token ? token : auth_token);
             var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory? 10:25),
+              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory? 30:25),
               //url: "http://localhost:34290/"+ '/api/dashboard/getMyTripPaging?memberId=91f60b04-328e-4e04-a603-cd49139e2c0c&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=b2d138c8-378f-404f-ac1e-647df522defa&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               headers:
@@ -667,7 +667,7 @@ import { normalizeURL } from 'ionic-angular';
           var text = "Bearer " + token;
           var options = {
             method: 'GET',
-            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory?5:25),
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory?30:25),
             headers:
             {
               'accept': 'application/json',
@@ -1751,23 +1751,27 @@ import { normalizeURL } from 'ionic-angular';
                 if (idxMap && idxMap.length > 0) {
                   var idx = idxMap.findIndex((el) => { return el == true });
                   se.currentTrip = idx;
-                  if (this.listMyTrips[idx].delivery_payment_date_display  && (this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10) && !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)) {
-                    se.amount_after_tax='';
-                    this._mytripservice.tripdetail = this.listMyTrips[idx];
-                    this._mytripservice.currentTrip = this.currentTrip;
-                    this._mytripservice.listcount =  this.listMyTrips.length;
-                    this.paymentselect(se.listMyTrips[idx],0); 
-                    co=1;
+                  if (idx != -1 ) {
+                    if (this.listMyTrips[idx].delivery_payment_date_display  && (this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10) && !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)) {
+                      se.amount_after_tax='';
+                      this._mytripservice.tripdetail = this.listMyTrips[idx];
+                      this._mytripservice.currentTrip = this.currentTrip;
+                      this._mytripservice.listcount =  this.listMyTrips.length;
+                      this.paymentselect(se.listMyTrips[idx],0); 
+                      co=1;
+                    }
+                    else if (this.listMyTrips[idx].delivery_payment_date_display&&!(this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10)&& !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)){
+                      se.amount_after_tax='';
+                      this._mytripservice.tripdetail = this.listMyTrips[idx];
+                      this._mytripservice.currentTrip = this.currentTrip;
+                      this._mytripservice.listcount =  this.listMyTrips.length;
+                      this.paymentselect(se.listMyTrips[idx],1); 
+                      co=1;
+                    }
+                    se.gf.setParams('', 'notifiBookingCode');
                   }
-                  else if (this.listMyTrips[idx].delivery_payment_date_display&&!(this.listMyTrips[idx].pay_method==0||this.listMyTrips[idx].pay_method==5||this.listMyTrips[idx].pay_method==10)&& !(this.listMyTrips[idx].payment_status == 1 || this.listMyTrips[idx].payment_status == 5|| this.listMyTrips[idx].payment_status == 9|| this.listMyTrips[idx].payment_status == -2 ||this.listMyTrips[idx].payment_status == 3)){
-                    se.amount_after_tax='';
-                    this._mytripservice.tripdetail = this.listMyTrips[idx];
-                    this._mytripservice.currentTrip = this.currentTrip;
-                    this._mytripservice.listcount =  this.listMyTrips.length;
-                    this.paymentselect(se.listMyTrips[idx],1); 
-                    co=1;
-                  }
-                  se.gf.setParams('', 'notifiBookingCode');
+                 
+                
             
                   if (idx != -1 && co==0) {
                     se.showtripdetail(se.listMyTrips[idx]);
@@ -1775,13 +1779,14 @@ import { normalizeURL } from 'ionic-angular';
     
                     //Map số bkg trong listtrip để focus vào bkg được notifi
                     var idxMaphis = se.listHistoryTrips.map((item, index) => {
-                      return item.booking_id == se.valueGlobal.BookingCodeHis;
+                      return item.booking_id ==se.gf.getParams('notifiBookingCode');
                     });
                     if (idxMaphis && idxMaphis.length > 0) {
                       var idxhis = idxMaphis.findIndex((el) => { return el == true });
                       se.currentTrip = idxhis;
-                      se.gf.setParams('', 'notifiBookingCode');
+                 
                       if (idxhis != -1) {
+                        se.gf.setParams('', 'notifiBookingCode');
                         se.showtripdetail(se.listHistoryTrips[idxhis]);
                       } else {
                         se.getdata(null, true);
