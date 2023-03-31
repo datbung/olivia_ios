@@ -121,3 +121,45 @@
     width: 100px;
     margin-left: 5px;
 }
+.div-flight-inout{
+    padding: 0px 18px;
+    width: 32px;
+    height: 32px;
+    position: relative;
+
+    .img-flight-inout{
+      width: 32px;
+      height: 32px;
+      position: absolute;
+      left: 0;
+      top: -2px;
+    }
+  }
+  .img-oneway{
+    width: 12px !important;
+    margin-left: 12px;
+  }
+  .text-flight-datetime{
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+    color: #000000;
+  }
+  .div-width-600{
+    width: 600%;
+  }
+  .div-width-60{
+    width: 60%;
+  }
+  .text-flight-title{
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: -0.51px;
+    color: #000000;
+  }
+    
+  .d-flex{
+    display: flex;
+}

@@ -128,7 +128,7 @@ export class TourDetailPage {
                   this.itemDetail.AvgPoint = this.itemDetail.AvgPoint +".0";
                 }
               }else{
-                this.gf.showAlertMessageOnly('Trang hết hiệu lực. Quý khách vui lòng tải lại trang mới!');
+                this.gf.showAlertMessageOnly('Sản phẩm đang được cập nhật, Quý khách vui lòng chọn thông báo khác!');
                 this.goback();
               }
             })
