@@ -3,7 +3,7 @@ import { LoadingController, ModalController, NavController, Platform } from '@io
 import { Storage } from '@ionic/storage';
 import { NetworkProvider } from '../network-provider.service';
 import { foodService } from '../providers/foodService';
-import { GlobalFunction } from '../providers/globalfunction';
+import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
 import { UserReviewsPage } from '../userreviews/userreviews';
 import { OverlayEventDetail } from '@ionic/core';
@@ -49,7 +49,7 @@ export class MytripHistoryPage implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     public _flightService: flightService,
-    public valueGlobal: ValueGlobal) { 
+    public valueGlobal: ValueGlobal,public activityService: ActivityService) { 
     this.networkProvider.getNetworkStatus().subscribe((connected: boolean) => {
       this.isConnected = connected;
       if (!this.isConnected) {
@@ -134,6 +134,7 @@ export class MytripHistoryPage implements OnInit {
       se.gf.showLoading();
       se.checkBookingReview(trip).then((result) => {
         if (result) {
+          this.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se._mytripservice.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
           se.showUserFeedBackPage(trip);
         }else{
           se.gf.hideLoading();

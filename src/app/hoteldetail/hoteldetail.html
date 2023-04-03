@@ -539,9 +539,9 @@
                               <img class="icon-detail-fix" src="./assets/iocnsearch/ic_people.svg">
                             </ion-col>
                             <ion-col class="no-padding p-top-10">
-                              <span
+                              <!-- <span
                                 *ngIf="hotelroom.Rooms[0].MaxAdults != hotelroom.Rooms[0].IncludeAdults && hotelroom.Rooms[0].MaxChils >0 && hotelroom.Rooms[0].MaxAdults>0"
-                                class="text-room-class-description">{{hotelroom.Rooms[0].MaxAdults}} người lớn |
+                                class="text-room-class-description">{{hotelroom.Rooms[0].MaxAdults}} người lớn <span *ngIf="(hotelroom.Rooms[0].MaxPax - hotelroom.Rooms[0].MaxAdults) > 0" >&  {{hotelroom.Rooms[0].MaxPax - hotelroom.Rooms[0].MaxAdults}} trẻ em</span> |
                                 {{hotelroom.Rooms[0].IncludeAdults}} người lớn & {{hotelroom.Rooms[0].MaxChils}} trẻ
                                 em</span>
                               <span
@@ -553,7 +553,39 @@
                                 class="text-room-class-description">Phòng tối đa {{hotelroom.Rooms[0].MaxPax}} khách</span>
                                 <span
                                 *ngIf="hotelroom.Rooms[0].MaxAdults ==0"
-                                class="text-room-class-description">Phòng tối đa {{hotelroom.Rooms[0].MaxPax}} khách</span>
+                                class="text-room-class-description">Phòng tối đa {{hotelroom.Rooms[0].MaxPax}} khách</span> -->
+
+                                 <span class="text-room-class-description" *ngIf="(CheckHasInternal(hotelroom.MealTypeRates)|| hotelroom.Rooms[0].DataFromERP)&& hotelroom.Rooms[0].MaxChils>0">
+
+                            <span  >{{hotelroom.Rooms[0].MaxAdults}}</span> người lớn 
+                            <span
+                              *ngIf="hotelroom.Rooms[0].MaxPaxNotAdult>0"> &amp; <span>{{ hotelroom.Rooms[0].MaxPaxNotAdult
+                                }}</span> trẻ em</span>
+                                <span *ngIf="hotelroom.Rooms[0].MaxAdults !=hotelroom.Rooms[0].IncludeAdults"> |
+                              <span>{{hotelroom.Rooms[0].IncludeAdults}}</span> người lớn &amp;
+                              <span>{{hotelroom.Rooms[0].MaxChils}}</span> trẻ em</span>
+                          </span>
+                          <span class="text-room-class-description" 
+                            *ngIf="(!CheckHasInternal(hotelroom.MealTypeRates) && !hotelroom.Rooms[0].DataFromERP)|| hotelroom.Rooms[0].MaxChils==0">
+                              Phòng tối đa
+                            <span>{{hotelroom.Rooms[0].MaxPax}}</span> khách
+                          </span>
+
+                          <!-- <p ng-if="(CheckHasInternal(roomClass.MealTypeRates)|| roomClass.Rooms[0].DataFromERP)&& roomClass.Rooms[0].MaxChils>0"
+  data-html="true" class="capacity v-tooltip" data-toggle="tooltip" data-placement="bottom"
+  data-delay='{"show":100, "hide":50}'
+  title="<b>Sức chứa tối đa:</b><br/> 
+  {{roomClass.Rooms[0].MaxAdults}} người lớn {{  roomClass.Rooms[0].MaxPaxNotAdult>0 ? (', ' + roomClass.Rooms[0].MaxPaxNotAdult + ' trẻ em'):''  }} {{roomClass.Rooms[0].MaxAdults !=roomClass.Rooms[0].IncludeAdults?('hoặc ' + roomClass.Rooms[0].IncludeAdults + ' người lớn, ' + roomClass.Rooms[0].MaxChils +' trẻ em'):'' }} ({{childAgeFrom + ' - ' + childAgeTo}} tuổi)">
+  <i class="vicon vicon-travelers facility-icon"></i>Tối đa <b>{{roomClass.Rooms[0].MaxAdults}}</b> người lớn <span
+    ng-if="roomClass.Rooms[0].MaxPaxNotAdult>0"> &amp; <b>{{ roomClass.Rooms[0].MaxPaxNotAdult }}</b> trẻ em</span><span
+    ng-if="roomClass.Rooms[0].MaxAdults !=roomClass.Rooms[0].IncludeAdults"> |
+    <b>{{roomClass.Rooms[0].IncludeAdults}}</b> người lớn &amp; <b>{{roomClass.Rooms[0].MaxChils}}</b> trẻ em</span>
+  <small><i class="vicon vicon-hover-details vicon-cancellation"></i></small>
+</p>
+<p class="capacity"
+  ng-if="(!CheckHasInternal(roomClass.MealTypeRates) && !roomClass.Rooms[0].DataFromERP)|| roomClass.Rooms[0].MaxChils==0">
+  <i class="vicon vicon-travelers facility-icon"></i>Phòng tối đa <b>{{roomClass.Rooms[0].MaxPax}}</b> khách
+</p> -->
                             </ion-col>
                           </ion-row>
                           <ion-row

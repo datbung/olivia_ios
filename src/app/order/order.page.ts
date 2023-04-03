@@ -552,7 +552,7 @@ import { normalizeURL } from 'ionic-angular';
             var text = "Bearer " + (token ? token : auth_token);
             var options = {
               method: 'GET',
-              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory? 30:25),
+              url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory? 20:25),
               //url: "http://localhost:34290/"+ '/api/dashboard/getMyTripPaging?memberId=91f60b04-328e-4e04-a603-cd49139e2c0c&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=b2d138c8-378f-404f-ac1e-647df522defa&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
               headers:
@@ -667,7 +667,7 @@ import { normalizeURL } from 'ionic-angular';
           var text = "Bearer " + token;
           var options = {
             method: 'GET',
-            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory?30:25),
+            url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+(ishistory?20:25),
             headers:
             {
               'accept': 'application/json',
@@ -1787,7 +1787,12 @@ import { normalizeURL } from 'ionic-angular';
                  
                       if (idxhis != -1) {
                         se.gf.setParams('', 'notifiBookingCode');
-                        se.showtripdetail(se.listHistoryTrips[idxhis]);
+                        if (se.valueGlobal.notifyAction=="sharereview") {
+                          se.feedback(se.listHistoryTrips[idxhis]);
+                        }else{
+                          se.showtripdetail(se.listHistoryTrips[idxhis]);
+                        }
+                      
                       } else {
                         se.getdata(null, true);
                       }
@@ -4107,7 +4112,7 @@ import { normalizeURL } from 'ionic-angular';
         modal.present();
     
         modal.onDidDismiss().then((data: OverlayEventDetail) => {
-          this.reloadHistoryTrip();
+          se.navCtrl.back();
     
         })
       }

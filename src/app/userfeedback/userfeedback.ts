@@ -3,7 +3,7 @@ import { NavController, Platform, ActionSheetController, ModalController ,Loadin
 import { Storage } from '@ionic/storage';
 import * as request from 'requestretry';
 import { C } from './../providers/constants';
-import { GlobalFunction } from './../providers/globalfunction';
+import { ActivityService, GlobalFunction } from './../providers/globalfunction';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { Crop } from '@ionic-native/crop/ngx';
@@ -47,15 +47,34 @@ export class UserFeedBackPage implements OnInit{
     outputType: number;
   };
     imageResponse = [];
+  returnCity: any;
+  returnCode: any;
+  checkOutDisplayFullYear: any;
+  departCity: any;
+  departCode: any;
+  checkInDisplayFullYear: any;
     constructor(public platform: Platform,public navCtrl: NavController,public zone: NgZone,public storage: Storage,
-      public gf: GlobalFunction,private ActivatedRoute: ActivatedRoute, public camera: Camera,public modalCtrl: ModalController, public loadingCtrl: LoadingController,
+      public gf: GlobalFunction,public activityService: ActivityService, public camera: Camera,public modalCtrl: ModalController, public loadingCtrl: LoadingController,
       private imagePicker: ImagePicker,
       private crop: Crop,
       public actionsheetCtrl: ActionSheetController,
       private file: File,){
-        let trip = this.gf.getParams('tripFeedBack');
-        if(trip){
-            this.loadInfoTrip(trip);
+        this.trip = this.gf.getParams('tripFeedBack');
+        if(!this.trip.isFlyBooking){
+            this.loadInfoTrip(this.trip);
+          }else{
+            this.departCity=this.activityService.objPaymentMytrip.trip.flightFrom;
+            this.departCode=this.activityService.objPaymentMytrip.trip.bookingsComboData[0].departCode;
+            this.checkInDisplayFullYear=this.activityService.objPaymentMytrip.trip.checkInDisplay;
+        
+            if (this.activityService.objPaymentMytrip.trip.flightTo) {
+              this.returnCity=this.activityService.objPaymentMytrip.trip.flightTo;
+              this.returnCode=this.activityService.objPaymentMytrip.trip.bookingsComboData[0].arrivalCode;
+        
+            }
+            if (this.activityService.objPaymentMytrip.trip.checkOutDisplay) {
+              this.checkOutDisplayFullYear=this.activityService.objPaymentMytrip.trip.checkOutDisplay;
+            } 
           }
     }
 
@@ -73,7 +92,6 @@ export class UserFeedBackPage implements OnInit{
 
     loadInfoTrip(trip){
       var se = this;
-      se.trip = trip;
       se.cindisplay = moment(trip.checkInDate).format('DD-MM-YYYY');
       se.coutdisplay = moment(trip.checkOutDate).format('DD-MM-YYYY');
      
