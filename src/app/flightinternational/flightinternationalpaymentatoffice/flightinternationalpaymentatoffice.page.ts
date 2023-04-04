@@ -122,15 +122,7 @@ export class FlightInternationalPaymentatOfficePage implements OnInit{
       itemcache.ischeckpayment = 0;
       var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + se._flightService.itemFlightInternational.fare.price.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2&isFlightInt=true';
                   se.gf.CreatePayoo(url).then((data) => {
-                    // if(se._voucherService.selectVoucher){
-                    //   se._voucherService.rollbackSelectedVoucher.emit(se._voucherService.selectVoucher);
-                    //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
-                    //   setTimeout(()=> {
-                    //   se._voucherService.selectVoucher = null;
-                    // },300)
-                    // }
-                    //console.log(data);
-                    //var data = JSON.parse(datapayoo);
+                   
                         resolve(data.success);
                 })
     })
@@ -205,7 +197,6 @@ export class FlightInternationalPaymentatOfficePage implements OnInit{
           }
         }
       })
-     
       
     })
   }

@@ -134,6 +134,9 @@ export class VoucherSlideInternationalPage implements OnInit{
                 }
                 
                 });
+            }else{
+              se._voucherService.hasVoucher = false;
+              se._voucherService.vouchers = [];
             }
         })
     }
