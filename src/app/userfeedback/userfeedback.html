@@ -49,10 +49,12 @@
         </ion-col>
     </ion-row>
 
-    <div class="d-flex" *ngIf="trip.isFlyBooking">
-    
+    <div *ngIf="trip.isFlyBooking">
+        <div class="text-flight-title ">{{trip.booking_id }}</div>
         <div class="text-flight-title div-width-600 d-flex">
+         
             <div>
+               
                 <div>{{ departCity }} ({{ departCode }})</div>
                 <div class="text-flight-datetime">{{ checkInDisplayFullYear }} </div>
             </div>
