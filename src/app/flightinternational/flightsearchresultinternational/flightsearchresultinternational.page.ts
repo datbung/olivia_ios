@@ -646,6 +646,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           else{
             let result = body;
             se.allowSearch = true;
+            //obj.source = body.data;
             if(result){
               if(result.data && result.data.flights && result.data.flights.length >0){
                 
@@ -656,7 +657,6 @@ export class FlightSearchResultInternationalPage implements OnInit {
               if (!result.stop 
                 && !se.stoprequest 
                 && se.allowSearch) {
-              
                 //obj.source = result.sources;
                 setTimeout(()=>{
                   se.loadFlightCacheDataByAirline(obj);
@@ -730,13 +730,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
         se.listDepartConditions = [];
         se.listReturnConditions = [];
         se.stoprequest = false;
-        // data.data.forEach(element => {
-        //   let _data = [];
-        //   _data.push(element);
-        //   let _objdata = {"data" : _data};
-        //   obj.source = _objdata;
-        //   se.loadFlightCacheDataByAirline({...obj});
-        // });
+        
         se.loadFlightCacheDataByAirline({...obj});
         setTimeout(()=>{
           this.stoprequest = true;
@@ -799,7 +793,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
     //se.loadpricedone = true;
     se.zone.run(() => {
       se.count++;
-      se.stoprequest = true;
+      //se.stoprequest = true;
       if(!se.listDepart || (se.listDepart && se.listDepart.length == 0) ){
         se.listDepart = jsondata;
       }

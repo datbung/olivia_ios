@@ -2572,36 +2572,28 @@ alert.present();
               se._flightService.itemFlightCache.pnr = data.data;
               console.log(data);
               se.gf.hideLoading();
-              se.navCtrl.navigateForward('/flightinternationalpaymentselect');
-              // if(se._flightService.itemFlightCache.totalPrice==0)
-              //             {
+              //se.navCtrl.navigateForward('/flightinternationalpaymentselect');
+              if(se._flightService.itemFlightInternational.totalPrice==0)
+                          {
                            
-              //               let itemcache = se._flightService.itemFlightCache;
-              //               itemcache.ischeckpayment = 0;
-              //               this.gf.checkTicketInternationalAvaiable(this._flightService.itemFlightCache.dataBookingInternational.id ).then((check) =>{
-              //                 if(check){
-              //                   var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
-              //                               se.gf.CreatePayoo(url).then((data) => {
-              //                                 se.gf.hideLoading();
-              //                               if(data.success){
-              //                                 se._flightService.itemFlightCache.ischeckpayment= 1;
-              //                                     se.navCtrl.navigateForward('flightpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-              //                                   }else{
-              //                                     se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
-              //                                     se.gf.hideLoading();
-              //                                   }
-              //                             })
-              //                     }
-              //                     else{
-              //                       se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
-              //                       se.gf.hideLoading();
-              //                     }
-              //               })
-              //             }
-              //             else{
-              //               se.gf.hideLoading();
-              //               se.navCtrl.navigateForward('/flightpaymentselect');
-              //             }
+                            let itemcache = se._flightService.itemFlightCache;
+                            itemcache.ischeckpayment = 0;
+                                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=0&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
+                                            se.gf.CreatePayoo(url).then((data) => {
+                                              se.gf.hideLoading();
+                                            if(data.success){
+                                              se._flightService.itemFlightCache.ischeckpayment= 1;
+                                                  se.navCtrl.navigateForward('flightinternationalpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
+                                                }else{
+                                                  se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
+                                                  se.gf.hideLoading();
+                                                }
+                                          })
+                          }
+                          else{
+                            se.gf.hideLoading();
+                            se.navCtrl.navigateForward('/flightinternationalpaymentselect');
+                          }
             }else{
               se.gf.showToastWarning(data.error);
               se.gf.hideLoading();
@@ -4124,7 +4116,9 @@ alert.present();
           this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
           this.totalPrice = this.totalPrice - this.discountpromo;
         }
-
+        if(this.totalPrice <=0){
+          this.totalPrice = 0;
+        }
         // if(this.discountpromo){
         //   this.totalPriceBeforeDiscount = this._flightService.itemFlightInternational.fare.price;
         //   this._flightService.itemFlightInternational.totalPriceBeforeApplyVoucher = this._flightService.itemFlightInternational.fare.price;
@@ -4132,6 +4126,9 @@ alert.present();
         // }
         this._flightService.itemFlightInternational.totalPrice = this.totalPrice;
         this.totalPriceDisplay = this.gf.convertNumberToString(this.totalPrice);
+        if(!this.totalPriceDisplay){
+          this.totalPriceDisplay = '0';
+        }
       })
       
     }
