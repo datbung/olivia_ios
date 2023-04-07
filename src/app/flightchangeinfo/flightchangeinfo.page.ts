@@ -17,6 +17,7 @@ import { FlightselectpaxPage } from '../flightselectpax/flightselectpax.page';
 import { FlightselecttimepriorityPage } from '../flightselecttimepriority/flightselecttimepriority.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
+import { FlightInternationalFilterClassPage } from '../flightinternational/flightinternationalfilterclass/flightinternationalfilterclass.page';
 
 @Component({
   selector: 'app-flightchangeinfo',
@@ -61,6 +62,7 @@ export class FlightchangeinfoPage implements OnInit {
   allowclickcalendar: any = true;
   isInternationalFlight: any;
   showLunarCalendar: any;
+  classSelectedName: any;
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -233,8 +235,7 @@ export class FlightchangeinfoPage implements OnInit {
                 se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
               }
             })
-
-            se.modalCtrl.dismiss(true);
+            se.modalCtrl.dismiss(this._flightService.classSelected != -1 ? 2 : true);
         }
 
         getDayName(datecin, datecout) {
@@ -1474,4 +1475,23 @@ export class FlightchangeinfoPage implements OnInit {
       }, 100)
     }
 
+    async showFilterTicketClass(){
+        const modal: HTMLIonModalElement =
+        await this.modalCtrl.create({
+          component: FlightInternationalFilterClassPage,
+          componentProps: {
+            aParameter: true,
+          },
+          showBackdrop: true,
+          backdropDismiss: true,
+          enterAnimation: CustomAnimations.iosCustomEnterAnimation,
+          leaveAnimation: CustomAnimations.iosCustomLeaveAnimation,
+          cssClass: "modal-flight-filter-class",
+        });
+      modal.present();
+
+      modal.onDidDismiss().then((data: OverlayEventDetail) => {
+        this.classSelectedName = this._flightService.objectFilterInternational.classSelectedName;
+      })
+    }
 }

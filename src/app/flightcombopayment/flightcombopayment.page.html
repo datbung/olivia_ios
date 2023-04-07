@@ -38,7 +38,7 @@
   
   <hr >
   <div class="div-voucher-apply" *ngIf="_voucherService.comboFlightPromoCode">
-    <div class="width-200" *ngIf="_voucherService.comboFlightPromoCode"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_voucherService.comboFlightPromoCode}}</span><span class="text-normal">)</span> </div>
+    <div class="width-250 div-overflow" *ngIf="_voucherService.comboFlightPromoCode"><span class="text-normal">Ưu đãi (</span><span class="text-code">{{_voucherService.comboFlightPromoCode}}</span><span class="text-normal">)</span> </div>
     <div class="width-100 text-normal text-right" *ngIf="_voucherService.comboFlightTotalDiscount">{{gf.convertNumberToString(_voucherService.comboFlightTotalDiscount)}}đ</div>
   </div>
 

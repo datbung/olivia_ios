@@ -482,4 +482,115 @@
       --height: calc( env(safe-area-inset-top) + 486px) !important;
       align-items: flex-start;
     }
+
+      .select-icon{
+        display: none;
+      }
+      .select-icon-inner {
+        border-top: transparent!important;
+      }
+      ion-row:last-child{
+        border-bottom: none !important;
+      }
+
+      
+      .action-sheets-flight-departure .sc-ion-alert-ios-h {
+        --background: var(--ion-overlay-background-color,#fff);
+        font-size: 14px;
+        align-items: flex-end !important;
+      }
+    
+      .action-sheets-flight-departure .alert-head.sc-ion-alert-ios{
+        display: none;
+    }
+    .action-sheets-flight-departure .alert-wrapper.sc-ion-alert-ios{
+      width: 100% ;
+      min-width: 100% ;
+      border-radius: 0 ;
+    }
+    .action-sheets-flight-departure .alert-button-inner.sc-ion-alert-ios {
+        justify-content: center;
+    }
+    .action-sheets-flight-departure .alert-button.sc-ion-alert-ios{
+        height: 48px !important;
+        border-radius: 28px !important;
+        font-size: 18px !important;
+        border-color: #f79221;
+        color: #ffffff !important;
+        background: #f79221 !important;
+        width: 90%;
+        text-align: center;
+        margin: 16px !important;
+    }
+    .action-sheets-flight-departure .alert-button-group.sc-ion-alert-ios button:first-child{
+        display: none !important;
+    }
+    .action-sheets-flight-departure .alert-checkbox-group.sc-ion-alert-ios{
+        border: none;
+    }
+    
+    .action-sheets-flight-departure .action-sheet-container.sc-ion-action-sheet-ios{
+        padding: 0;
+    }
+    .action-sheets-flight-departure .action-sheet-group.sc-ion-action-sheet-ios:first-child {
+        margin: 0;
+    }
+    .action-sheets-flight-departure .action-sheet-group.action-sheet-group-cancel.sc-ion-action-sheet-ios {
+        display: none;
+    }
+    .action-sheets-flight-departure .action-sheet-group.sc-ion-action-sheet-ios {
+        border-radius: 0px;
+        overflow: hidden;
+    }
+    .action-sheets-flight-departure .action-sheet-button-inner.sc-ion-action-sheet-ios {
+        width: 100%;
+        height: 100%;
+        color: black;
+        font-size: 14px;
+        justify-content: left;
+    }
+    .action-sheets-flight-departure .action-sheet-button.sc-ion-action-sheet-ios {
+        padding: 0;
+        border-bottom: solid 1px #ccc;
+        margin-left: 16px;
+        margin-right: 16px !important;
+        width: 92%;
+        height: 56px;
+    }
+    .action-sheets-flight-departure .action-sheet-selected.sc-ion-action-sheet-ios{
+        background-image: url('../../assets/imgs/ic_check.svg');
+        background-repeat: no-repeat;
+        background-position: right;
+        width: 92%;
+    }
+}
+.no-padding {
+  padding: 0;
+}
+.img-seat {
+  padding: 10px 16px;
+  padding-left: 10px;
+  position: absolute;
+}
+.div-filter-ticketclass {
+
+  .div-text {
+    font-size: 16px;
+    text-align: left;
+    color: #3f3b3b;
+    
+  }
+  .max-width-100 {
+    max-width: 100px;
+  }
+}
+
+.bg-none {
+  background: none !important;
+}
+.cls-bg-white {
+  background: #fff;
+}
+.m-left-8 {
+  margin-left: 8px;
 }

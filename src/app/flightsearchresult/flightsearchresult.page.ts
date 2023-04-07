@@ -548,7 +548,7 @@ export class FlightsearchresultPage implements OnInit {
           se._flightService.itemFlightCache.totalPrice = _totalprice;
           //se.gf.gaSetScreenName('flightsearchresult');
           se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightsearchresult', 'begin_checkout', 'Flights');
-
+          se._flightService.itemFlightCache.isApiDirect = false;
           se.navCtrl.navigateForward('/flightaddservice');
           se.stoprequest = true;
       }else{
@@ -3156,6 +3156,7 @@ export class FlightsearchresultPage implements OnInit {
             if(data && data.data){
               if(se._flightService.itemFlightCache.isInternationalFlight){
                 se._flightService.itemChangeTicketFlight.emit(1);
+                se._flightService.itemFlightCache.isApiDirect = true;
                 se.navCtrl.navigateForward('/flightsearchresultinternational');
               }else{
                 let obj = se._flightService.objSearch;

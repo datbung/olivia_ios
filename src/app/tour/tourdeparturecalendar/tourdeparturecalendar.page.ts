@@ -77,7 +77,7 @@ export class TourDepartureCalendarPage implements OnInit{
           apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
         };
         se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(_date).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child :0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}`, headers, body, 'tourdeparturecalendar', 'GetMercuriusTourPrice').then((data)=>{
-            if(data.Status != 'Error' && data.Status != 'ER' && data.Status != 'False'){
+            if(data.Status != 'Error' && data.Response.Status != 'ER' && data.Response.Status != 'False'){
               this.itemDepartureCalendar = data.Response.TourRate;
              
               this.zone.run(()=>{

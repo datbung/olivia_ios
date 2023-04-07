@@ -526,7 +526,21 @@ export class TourAddDetailsPage implements OnInit {
               objTourReq.PromoPrice = this.discountpromo || 0;
               objTourReq.Username = "itsupport";
               objTourReq.PaymentMethod = 2;
-              
+
+              if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.RateSurchargeAdult && this.tourService.itemDepartureCalendar.Note){
+                let JsonSurchargeFee = [];
+                JsonSurchargeFee.push({
+                  "name": this.tourService.itemDepartureCalendar.Note,
+                  "quantity": 1,
+                  "price": this.tourService.itemDepartureCalendar.RateSurchargeAdult,
+                  "priceNet": this.tourService.itemDepartureCalendar.RateSurchargeAdult
+                });
+                objTourReq.JsonSurchargeFee = JSON.stringify(JsonSurchargeFee);
+                objTourReq.Supplement = this.tourService.itemDepartureCalendar.Note;
+              }else {
+                objTourReq.JsonSurchargeFee = JSON.stringify([]);
+                objTourReq.Supplement = "";
+              }
               this.tourService.TourBooking = objTourReq;
               resolve(true);
     })

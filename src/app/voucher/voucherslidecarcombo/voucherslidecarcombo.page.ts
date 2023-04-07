@@ -128,6 +128,9 @@ export class VoucherSlideCarComboPage implements OnInit{
                 }
                 
                 });
+            }else{
+              se._voucherService.hasVoucher = false;
+              se._voucherService.vouchers = [];
             }
         })
     }

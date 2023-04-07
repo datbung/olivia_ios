@@ -2861,7 +2861,12 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   goToSearchFlight(){
     this._flightService.itemFlightCache.step = 2;
     this._flightService.itemChangeTicketFlight.emit(1);
-    this.navCtrl.navigateBack('/flightsearchresult');
+    //this.navCtrl.navigateBack('/flightsearchresult');
+    if(this._flightService.itemFlightCache.isApiDirect){
+      this.navCtrl.navigateBack('/flightsearchresultinternational');
+    }else{
+      this.navCtrl.navigateBack('/flightsearchresult');
+    }
   }
 
   goToSearchFlightInternational(){

@@ -813,7 +813,11 @@ export class FlightpaymentchoosebankPage implements OnInit {
           this._flightService.itemFlightCache.promotionCode = "";
           this._flightService.itemFlightCache.promocode = "";
           this._flightService.itemFlightCache.discount = 0;
-          this.navCtrl.navigateBack('/flightsearchresult');
+          if(this._flightService.itemFlightCache.isApiDirect){
+            this.navCtrl.navigateBack('/flightsearchresultinternational');
+          }else{
+            this.navCtrl.navigateBack('/flightsearchresult');
+          }
           alert.dismiss();
         }
       }

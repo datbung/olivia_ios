@@ -183,7 +183,11 @@ export class FlightpaymenttimeoutPage implements OnInit {
         return;
       }
        this._flightService.itemChangeTicketFlight.emit(1);
-        this.navCtrl.navigateBack('/flightsearchresult');
+       if(this._flightService.itemFlightCache.isApiDirect){
+        this.navCtrl.navigateBack('/flightsearchresultinternational');
+        }else{
+          this.navCtrl.navigateBack('/flightsearchresult');
+        }
     }
     else{
       this._flightService.itemTabFlightActive.emit(true);
@@ -240,7 +244,11 @@ export class FlightpaymenttimeoutPage implements OnInit {
           this._flightService.itemFlightCache.promotionCode = "";
           this._flightService.itemFlightCache.promocode = "";
           this._flightService.itemFlightCache.discount = 0;
-          this.navCtrl.navigateBack('/flightsearchresult');
+          if(this._flightService.itemFlightCache.isApiDirect){
+            this.navCtrl.navigateBack('/flightsearchresultinternational');
+          }else{
+            this.navCtrl.navigateBack('/flightsearchresult');
+          }
           alert.dismiss();
         }
       }

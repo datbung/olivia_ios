@@ -856,15 +856,15 @@ export class Tab1Page implements OnInit {
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           } else {
             this.cin = this.gf.getCinIsoDate(new Date());
-            var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
+            var rescin = new Date(this.cin).setTime(new Date(this.cin).getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
             this.cout = this.gf.getCinIsoDate(new Date());
-            var res = this.cout.setTime(
-              this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
+            let res = new Date(this.cout).setTime(
+              new Date(this.cout).getTime() + (2 * 24 * 60 * 60 * 1000)
             );
             var date = new Date(this.gf.getCinIsoDate(res));
             this.cout = moment(date).format("YYYY-MM-DD");
@@ -882,15 +882,15 @@ export class Tab1Page implements OnInit {
   
         }else if(!this.cin || !this.searchhotel.CheckInDate){
             this.cin = new Date(this.gf.getCinIsoDate(new Date()));
-            var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
+            var rescin = new Date(this.cin).setTime(new Date(this.cin).getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
             this.cout = new Date(this.gf.getCinIsoDate(new Date()));
-            var res = this.cout.setTime(
-              this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
+            let res:any = new Date(this.cout).setTime(
+              new Date(this.cout).getTime() + (2 * 24 * 60 * 60 * 1000)
             );
             var date = new Date(this.gf.getCinIsoDate(res));
             this.cout = moment(date).format("YYYY-MM-DD");

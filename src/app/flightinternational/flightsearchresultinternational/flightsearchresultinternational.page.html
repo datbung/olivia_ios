@@ -424,8 +424,10 @@
                   </div>
 
                   <div class="div-note m-top-16" *ngIf="item && !item.isHidenTwoWay && item.fare && item.fare.airlineNotes && item.fare.airlineNotes.length >0">
-                      <div class="div-item-note" *ngFor="let itemNote of item.fare.airlineNotes[0].note.split('\n')">
-                        {{itemNote}}
+                      <div  *ngFor="let itemNote of item.fare.airlineNotes[0].note.split('\n')">
+                        <div class="div-item-note" *ngIf="itemNote">
+                          {{itemNote}}
+                        </div>
                       </div>
                   </div>
                 </div>
@@ -752,8 +754,10 @@
                   </div>
 
                   <div class="div-note m-top-16" *ngIf="item && !item.isHidenTwoWay && item.fare && item.fare.airlineNotes && item.fare.airlineNotes.length >0">
-                      <div class="div-item-note" *ngFor="let itemNote of item.fare.airlineNotes[0].note.split('\n')">
-                        {{itemNote}}
+                      <div *ngFor="let itemNote of item.fare.airlineNotes[0].note.split('\n')">
+                        <div class="div-item-note" *ngIf="itemNote">
+                          {{itemNote}}
+                        </div>
                       </div>
                   </div>
                 </div>

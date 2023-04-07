@@ -374,6 +374,50 @@ export class TourDetailPage {
               elheader[1].classList.remove('float-arrow-enabled');
             }
           }
+
+          if ($('#content2') && $('#content2').length >0 && event.detail.currentY >= $('#content2')[0].offsetTop - 50) {
+            $($('.item-tour-header')[1]).siblings().removeClass('item-header-actived');
+            $($('.item-tour-header')[1]).addClass('item-header-actived');
+
+            if ($('#content3') && $('#content3').length >0&& event.detail.currentY >= $('#content3')[0].offsetTop - 50) {
+              $($('.item-tour-header')[2]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[2]).addClass('item-header-actived');
+            }else if ($('#content3') && $('#content3').length >0 && $('#content2').length >0 && event.detail.currentY < $('#content3')[0].offsetTop - 50 && event.detail.currentY > $('#content2')[0].offsetTop - 50){
+              $($('.item-tour-header')[1]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[1]).addClass('item-header-actived');
+            }
+
+              if ($('#content4') && $('#content4').length >0&& event.detail.currentY >= $('#content4')[0].offsetTop - 50) {
+                $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[3]).addClass('item-header-actived');
+              }else if ($('#content4') && $('#content4').length >0 && $('#content3').length >0 && event.detail.currentY < $('#content4')[0].offsetTop - 50 && event.detail.currentY > $('#content3')[0].offsetTop - 50){
+                $($('.item-tour-header')[2]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[2]).addClass('item-header-actived');
+              }
+    
+              if ($('#content5') && $('#content5').length >0&& event.detail.currentY >= $('#content5')[0].offsetTop - 50) {
+                $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[4]).addClass('item-header-actived');
+              }else if ($('#content5') && $('#content5').length >0 && $('#content4').length >0 && event.detail.currentY < $('#content5')[0].offsetTop - 50 && event.detail.currentY > $('#content4')[0].offsetTop - 50){
+                $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[3]).addClass('item-header-actived');
+              }
+    
+              if ($('#content6') && $('#content6').length >0&& event.detail.currentY >= $('#content6')[0].offsetTop - 50) {
+                $($('.item-tour-header')[5]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[5]).addClass('item-header-actived');
+              }else if ($('#content6') && $('#content6').length >0 && $('#content5').length >0&& event.detail.currentY < $('#content6')[0].offsetTop - 50 && event.detail.currentY > $('#content5')[0].offsetTop - 50){
+                $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[4]).addClass('item-header-actived');
+              }
+
+          }else {
+            $($('.item-tour-header')[0]).siblings().removeClass('item-header-actived');
+            $($('.item-tour-header')[0]).addClass('item-header-actived');
+          }
+
+          
+
         } catch (error) {
           error.page = "hoteldetail";
           error.func = "scrollFunction";

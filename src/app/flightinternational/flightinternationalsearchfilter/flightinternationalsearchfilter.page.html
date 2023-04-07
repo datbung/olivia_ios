@@ -18,7 +18,31 @@
 
 <ion-content class="flight-search-filter-content">
   <div class="p-16">
-    <div class="text-title m-top-8">Hạng vé</div>
+
+    <div class="text-title">Điểm dừng</div>
+    <div class="div-wrap-stop m-top-8">
+      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==1 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
+        <div class="text-stop-normal v-align-center" (click)="checkItem(1, $event, 1)">Chỉ bay thẳng
+          <!-- <span class="m-left-2" *ngIf="count0Stops"> ({{count0Stops}})</span> -->
+        </div>
+      </div>
+
+      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==2 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
+         <div class="text-stop-normal v-align-center"  (click)="checkItem(1, $event, 2)">Tối đa 1 điểm dừng
+          <!-- <span class="m-left-2" *ngIf="count1Stops"> ({{count1Stops}})</span> -->
+        </div>
+      </div>
+
+      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==3 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
+        <div class="text-stop-normal v-align-center"  (click)="checkItem(1, $event, 3)">Số điểm dừng bất kỳ
+          <!-- <span class="m-left-2" *ngIf="count2Stops"> ({{count2Stops}})</span> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="div-split-panel"></div>
+
+    <!-- <div class="text-title m-top-8">Hạng vé</div>
     <ion-radio-group >
       <div class="d-flex m-top-16">
         <div class="div-check-class">
@@ -129,30 +153,10 @@
         
       </div>
 
-    </ion-radio-group>
+    </ion-radio-group> -->
 
-    <div class="div-split-panel"></div>
+    
 
-    <div class="text-title">Điểm dừng</div>
-    <div class="div-wrap-stop m-top-8">
-      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==1 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
-        <div class="text-stop-normal v-align-center" (click)="checkItem(1, $event, 1)">Chỉ bay thẳng
-          <!-- <span class="m-left-2" *ngIf="count0Stops"> ({{count0Stops}})</span> -->
-        </div>
-      </div>
-
-      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==2 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
-         <div class="text-stop-normal v-align-center"  (click)="checkItem(1, $event, 2)">Tối đa 1 điểm dừng
-          <!-- <span class="m-left-2" *ngIf="count1Stops"> ({{count1Stops}})</span> -->
-        </div>
-      </div>
-
-      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==3 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
-        <div class="text-stop-normal v-align-center"  (click)="checkItem(1, $event, 3)">Số điểm dừng bất kỳ
-          <!-- <span class="m-left-2" *ngIf="count2Stops"> ({{count2Stops}})</span> -->
-        </div>
-      </div>
-    </div>
     
     <div class="div-split-panel"></div>
 
@@ -166,7 +170,7 @@
     <div *ngFor="let itemAirline of listAirlines">
       <div class="d-flex m-top-12 " >
         <div class="div-check">
-          <ion-checkbox color="primary" mode="md" class="chkAirline" id="{{itemAirline.value}}" (ionChange)="checkItem(2, itemAirline, $event)"></ion-checkbox>
+          <ion-checkbox color="primary" mode="md" class="chkAirline" id="{{itemAirline.namefilter}}" (ionChange)="checkItem(2, itemAirline, $event)"></ion-checkbox>
         </div>
         <div class="d-flex text-normal div-width-100 div-align-center">
           <div class="div-width-300">{{itemAirline.name}}</div>

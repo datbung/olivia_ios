@@ -120,6 +120,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
   expanddivflight: boolean;
   emptyFilterResult: boolean = false;
   countFilterResult: any;
+  listAirlinesFilterDirect = [];
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -569,7 +570,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           "child": obj.child,
           "infant": obj.infant ? obj.infant : 0,
           "timeIndayRecomment": obj.timeDepartPriority ? obj.timeDepartPriority : "09:00",
-          "version": "2.0",
+          "version": "3.0",
           "roundTrip": obj.roundTrip,
           "ticketClass": obj.classSelected || null
         },
@@ -582,7 +583,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           "child": obj.child,
           "infant": obj.infant ? obj.infant : 0,
           "timeIndayRecomment": obj.timeReturnPriority ? obj.timeReturnPriority : "15:00",
-          "version": "2.0",
+          "version": "3.0",
           "roundTrip": obj.roundTrip,
           "ticketClass": obj.classSelected || null
         },
@@ -620,7 +621,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
       var options = {
         method: "POST",
         url: urlfindflightincache,
-        body: obj.source.data,
+        body: obj.source && obj.source.data ? obj.source.data : obj.source,
         json: true,
         headers: {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
@@ -646,6 +647,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
           else{
             let result = body;
             se.allowSearch = true;
+            obj.source = body.data.sessions;
             if(result){
               if(result.data && result.data.flights && result.data.flights.length >0){
                 
@@ -653,15 +655,23 @@ export class FlightSearchResultInternationalPage implements OnInit {
                 
               }
              
-              if (!result.stop 
-                && !se.stoprequest 
-                && se.allowSearch) {
+              // if (!result.stop 
+              //   && !se.stoprequest 
+              //   && se.allowSearch) {
+              if(obj && obj.source && obj.source.length >0 && se.allowSearch){
               
                 //obj.source = result.sources;
                 setTimeout(()=>{
                   se.loadFlightCacheDataByAirline(obj);
                 },1000)
                 obj.countretry++;
+              } else if(obj.source && obj.source.length ==0){
+                   this.stoprequest = true;
+                  this.loadpricedone = true;
+
+                  if(!this.listDepart || this.listDepart.length ==0){
+                    this.emptyFilterResult = true;
+                  }
               }
   
             }
@@ -713,14 +723,14 @@ export class FlightSearchResultInternationalPage implements OnInit {
       })
     }, 1000)
 
-    setTimeout(()=>{
-      this.stoprequest = true;
-      this.loadpricedone = true;
+    // setTimeout(()=>{
+    //   this.stoprequest = true;
+    //   this.loadpricedone = true;
 
-      if(!this.listDepart || this.listDepart.length ==0){
-        this.emptyFilterResult = true;
-      }
-    }, 120 * 1000);
+    //   if(!this.listDepart || this.listDepart.length ==0){
+    //     this.emptyFilterResult = true;
+    //   }
+    // }, 120 * 1000);
 
     se.checkLoadCacheData(obj,hascache).then(data => {
       if(data){
@@ -799,7 +809,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
     //se.loadpricedone = true;
     se.zone.run(() => {
       se.count++;
-      se.stoprequest = true;
+      //se.stoprequest = true;
       if(!se.listDepart || (se.listDepart && se.listDepart.length == 0) ){
         se.listDepart = jsondata;
       }
@@ -808,9 +818,46 @@ export class FlightSearchResultInternationalPage implements OnInit {
           se.listDepart = [...se.listDepart,...jsondata];
         }
       }
-  
 
       if(se.listDepart && se.listDepart.length >0){
+        se.zone.run(()=>{
+          se.sortFlightsByPrice(se.listDepart);
+        })
+          se.listAirlinesFilterDirect = se.listDepart.map(item => {
+            let lstAirlineDepart = item.departFlights.map(d => {return {'name': d.airline, 'namefilter': d.airline.replace(/\ /g,''), 'value': d.airlineCode}});
+            let lstAirlineReturn = item.returnFlights.map(d => {return {'name': d.airline, 'namefilter': d.airline.replace(/\ /g,''), 'value': d.airlineCode}});
+            let arr = [];
+            if(lstAirlineDepart && lstAirlineDepart.length > 0){
+             if(lstAirlineReturn && lstAirlineReturn.length > 0){
+              if(lstAirlineDepart[0].namefilter != lstAirlineReturn[0].namefilter){
+                arr = [...lstAirlineDepart];
+                arr.push(lstAirlineReturn[0]);
+              }
+              else {
+                arr.push(lstAirlineDepart[0]);
+               }
+             }else {
+              arr.push(lstAirlineDepart[0]);
+             }
+            }
+            //let filterarr = Array.from(new Map(arr.map(item => [item['name'], item])).values());
+            return arr;
+            });
+        se.listAirlinesFilterDirect = se.listAirlinesFilterDirect.map(item => item[0]);
+        let _arr = Object.values(
+          se.listAirlinesFilterDirect.reduce((acc, obj) => ({ ...acc, [obj.namefilter]: obj }), {})
+        );
+        //let _arr:any = new Map(se.listAirlinesFilterDirect.map(item => [item['name'], item])).values();
+        // let _arr = se.listAirlinesFilterDirect.map(function(item){ 
+        //   return { 'name': item[0], 'value': item[1]};
+        // });
+        se.listAirlinesFilterDirect = _arr;
+        console.log(se.listAirlinesFilterDirect);
+
+        if(se.listAirlinesFilterDirect && se.listAirlinesFilterDirect.length >0){
+          se._flightService.listAirlinesFilter = se.listAirlinesFilterDirect;
+        }
+        
         se.listDepart.forEach(element => {
           let priceFlightAdult = 0;
           let priceFlightChild = 0;
@@ -823,6 +870,8 @@ export class FlightSearchResultInternationalPage implements OnInit {
             }else {
               elementDepart.ischeck = false;
             }
+
+            elementDepart.sessionsId = element.sessions;
             if(elementDepart.timeDepart){
               elementDepart.timeDepartShort = elementDepart.timeDepart.substring(0,5);
             }
@@ -867,6 +916,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
             else {
               elementReturn.ischeck = false;
             }
+            elementReturn.sessionsId = element.sessions;
             if(elementReturn.timeDepart){
               elementReturn.timeDepartShort = elementReturn.timeDepart.substring(0,5);
             }
@@ -894,9 +944,23 @@ export class FlightSearchResultInternationalPage implements OnInit {
             
           });
           
-          if(element.filters && element.filters.length >0){
-            se._flightService.listAirlinesFilter = element.filters[0].items;
-          }
+          // if(element.filters && element.filters.length >0){
+          //   se._flightService.listAirlinesFilter = element.filters[0].items;
+          //   debugger
+          //   if(se.listAirlinesFilterDirect && se.listAirlinesFilterDirect.length >0){
+          //     se.listAirlinesFilterDirect.forEach((a) => {
+          //       if(!se._flightService.listAirlinesFilter.some(i => i.name == a)){
+          //         let obj = {
+          //           name: a,
+          //           value: a == 'Vietnam Airlines' ? 'VN' : (a == 'VietJetAir' ? 'VJ' : 'BB')
+          //         }
+          //         se._flightService.listAirlinesFilter.push(obj);
+          //       }
+          //     })
+          //   }
+          //   console.log(se._flightService.listAirlinesFilter)
+          // }
+
         });
 
             //se._flightService.itemFlightCache.lisAirlines = se.listAirlines;
@@ -1429,7 +1493,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
   
             if(se._flightService.objectFilterInternational.airlineSelected && se._flightService.objectFilterInternational.airlineSelected.length >0){
               let filterAirline = listFilter.filter((filterairlineitem) => {
-                return se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.departFlights[0].airlineCode) != -1 ||(filterairlineitem.returnFlights && filterairlineitem.returnFlights.length >0 && se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.returnFlights[0].airlineCode) != -1) ;
+                return se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.departFlights[0].airline.replace(/\ /g,'')) != -1 ||(filterairlineitem.returnFlights && filterairlineitem.returnFlights.length >0 && se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.returnFlights[0].airline.replace(/\ /g,'')) != -1) ;
               })
               listFilter = [...filterAirline];
             }
@@ -1641,9 +1705,13 @@ export class FlightSearchResultInternationalPage implements OnInit {
               if(!se._flightService.itemFlightCache.isInternationalFlight){
                 se._flightService.itemFlightCache.isExtenalDepart = false;
                 se._flightService.itemFlightCache.isExtenalReturn = false;
+                se._flightService.itemFlightCache.isApiDirect = false;
                 se._flightService.itemChangeTicketFlight.emit(1);
                 se.navCtrl.navigateForward('/flightsearchresult');
               }else{
+                if(data.data == 2 && this._flightService.classSelected){
+                  obj.classSelected = this._flightService.classSelected;
+                }
                 se.resetValue();
                 se.title = obj.title;
                 se.subtitle = obj.subtitle;
@@ -2491,65 +2559,226 @@ export class FlightSearchResultInternationalPage implements OnInit {
         modal.present();
     }
 
-    confirm(item){
-      this.gf.showLoading();
-      let itemd = item.departFlights.filter((id)=>{return id.ischeck});
-      let itemr = item.returnFlights.filter((ir)=>{return ir.ischeck});
-      if(itemd && itemd.length >0 && itemr && itemr.length >0){
-        this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
-        this._flightService.itemFlightCache.itemFlightInternationalReturn = itemr[0];
-      } else if (itemd && itemd.length >0){
-        this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
-      }
+    selectInternalTicket() :Promise<any>{
+      var se = this;
+      se.canselect = false;
+      return new Promise((resolve, reject) => {
+          let obj = se._flightService.objSearch;
+          let objdepart = se._flightService.itemFlightCache.departFlight;
+          let objreturn = obj.roundTrip ? se._flightService.itemFlightCache.returnFlight : null;
+          let flighttype = obj.roundTrip ? 2 : 1;
+          let selectFlightURL ="";
+          if(obj.roundTrip){
+            selectFlightURL = C.urls.baseUrl.urlFlight +'gate/apiv1/InitBooking?token=Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09&from='+ obj.departCode +'&to='+obj.arrivalCode+'&departdate='+ obj.departDate +'&returndate='+ obj.returnDate +'&adult='+ obj.adult+'&child='+ obj.child+'&infant='+ obj.infant+'&flighttype='+flighttype;
+            selectFlightURL +='&departFlightId='+objdepart.id+'&returnFlightId='+objreturn.id+'&departTicketType='+(objdepart.airlineCode == "VietJetAir" ? objdepart.ticketType : objdepart.ticketClass)+'&returnTicketType=' +(objreturn.airlineCode == "VietJetAir" ? objreturn.ticketType: (objreturn.ticketClass||objreturn.ticketType))+'&Source=6&memberId=' +se.jti;
+          }else{
+            selectFlightURL = C.urls.baseUrl.urlFlight +'gate/apiv1/InitBooking?token=Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09&from='+ obj.departCode +'&to='+obj.arrivalCode+'&departdate='+ obj.departDate +'&returndate='+ obj.returnDate +'&adult='+ obj.adult+'&child='+ obj.child+'&infant='+ obj.infant+'&flighttype='+flighttype;
+            selectFlightURL +='&departFlightId='+objdepart.id+"&returnFlightId=''&departTicketType="+(objdepart.airlineCode == "VietJetAir" ? objdepart.ticketType : objdepart.ticketClass)+"&returnTicketType=''"+'&Source=6&memberId=' +se.jti;
+          }
+           
+  
+          var options = {
+            method: 'POST',
+            url: selectFlightURL,
+            timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+            headers: {
+              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+              'Content-Type': 'application/json; charset=utf-8'
+            }
+          };
+          request(options, function (error, response, body) {
+            let objError = {
+              page: "flightsearchresult",
+              func: "selectTicket",
+              message: response.statusMessage,
+              content: response.body,
+              type: "warning",
+              param: JSON.stringify(options)
+            };
+            if (error) {
+              error.page = "flightsearchresult";
+              error.func = "selectTicket";
+              error.param = JSON.stringify(options);
+              C.writeErrorLog(objError,response);
+            }
+            if (response.statusCode == 200) {
+              let jsondata = JSON.parse(body);
+              if(jsondata.error){
+                  resolve(false);
+              }else{
+                  resolve(jsondata);
+              }
+              
+            }
+          })
+      })
+      
+    }
 
-        let url = C.urls.baseUrl.urlFlightInt + "api/bookings/check-available";
-        let body = {
-          DepartId: itemd[0].id,
-          FareId: item.fare.key,
-          ReturnId: itemr && itemr.length >0 ? itemr[0].id : '',
-          SessionId: item.sessions,
-          Source: 6
-        }
+    setFlightMoreInfo(element){
+      let priceFlightAdult = 0;
+          let priceFlightChild = 0;
+          let priceFlightInfant = 0;
+          
+          element.timeDisplay = moment(element.departTime).format("HH:mm") + " → " + moment(element.landingTime).format("HH:mm");
+          let hours:any = Math.floor(element.flightDuration/60);
+          let minutes:any = element.flightDuration*1 - (hours*60);
+          if(hours < 10){
+            hours = hours != 0?  "0"+hours : "0";
+          }
+          if(minutes < 10){
+            minutes = "0"+minutes;
+          }
+          element.departTimeDisplay = moment(element.departTime).format("HH:mm");
+          element.landingTimeDisplay = moment(element.landingTime).format("HH:mm");
+          element.flightTimeDisplay = hours+"h"+minutes;
+          element.flightTimeDetailDisplay = hours+"h"+minutes+"m";
+          if(element.details[0].from.length > 3){
+            element.from = element.details[0].from.split(',')[1].trim();
+          }else{
+            element.from = element.details[0].from;
+          }
+          if(element.details[0].to.length > 3){
+            element.to = element.details[0].to.split(',')[1].trim();
+          }else{
+            element.to = element.details[0].to;
+          }
          
 
-        this.gf.RequestApi('POST', url, {}, body, 'flightsearchresultinternational', 'check-available').then((data) => {
-          if(data.success && data.data) {
-           
-            let urlbkg = C.urls.baseUrl.urlFlightInt + "api/bookings";
-            this.gf.RequestApi('POST', urlbkg, {}, body, 'flightsearchresultinternational', 'bookings').then((data) => {
-              if(data.success && data.data) {
-               this.gf.hideLoading();
-               this._flightService.itemFlightCache.dataBookingInternational = data.data;
-               this._flightService.itemFlightInternational = item;
-               this._flightService.itemFlightCache.reservationId = data.data.id;
-               this._voucherService.publicClearVoucherAfterPaymentDone(1);
-               this._flightService.itemFlightInternational.promotionCode = "";
-               this._flightService.itemFlightInternational.discountpromo = 0;
-               this._flightService.itemFlightInternational.hasvoucher = null;
-               this._flightService.itemFlightCache.totalPrice = item.fare.price;
-               //this.gf.gaSetScreenName('flightsearchresultinternational');
-               this.gf.logEventFirebase('', this._flightService.itemFlightCache, 'flightsearchresultinternational', 'begin_checkout', 'Flights');
-               this.navCtrl.navigateForward('/flightadddetailsinternational');
-              }else{
-                this.gf.showAlertMessageOnly('Phiên truy cập đã hết hiệu lực. Vui lòng tải lại trang và thử lại.').then(()=>{
-                  this.zone.run(()=>{
-                    this.resetValue();
+          element.priceSummaries.forEach(e => {
+            if (e.passengerType == 0) {
+              priceFlightAdult += e.price;
+            }
+            if (e.passengerType == 1) {
+              priceFlightChild += e.price;
+            }
+            if (e.passengerType == 2) {
+              priceFlightInfant += e.price;
+            }
+          });
+    }
+
+    confirm(item){
+      console.log(item);
+      //Luồng api direct hãng
+      this.gf.showLoading();
+      if(item.isInternal){
+        this._flightService.itemFlightInternational = item;
+        let itemd = item.departFlights.filter((id)=>{return id.ischeck});
+        let itemr = item.returnFlights.filter((ir)=>{return ir.ischeck});
+        if(itemd && itemd.length >0 && itemr && itemr.length >0){
+          this.setFlightMoreInfo(itemd[0]);
+          this.setFlightMoreInfo(itemr[0]);
+          this._flightService.itemFlightCache.departFlight = itemd[0];
+          this._flightService.itemFlightCache.returnFlight = itemr[0];
+        } else if (itemd && itemd.length >0){
+          this.setFlightMoreInfo(itemd[0]);
+          this._flightService.itemFlightCache.departFlight = itemd[0];
+        }
+        this.selectInternalTicket().then((data)=>{
+          let se = this;
+          se.gf.hideLoading();
+          if(data && data.id){
+            se._flightService.itemFlightCache.dataTicket = data;
+            se._flightService.itemFlightCache.dataBooking = data.detail;
+            
+              se._flightService.itemFlightCache.reservationId = data.id;
+              se._flightService.itemFlightCache.step = 3;
+              
+
+              se.storage.get("itemFlightCache").then((data)=>{
+                if(data){
+                  se.storage.remove("itemFlightCache").then(()=>{
+                    se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
                   })
-                  this.loadFlightData(this._flightService.objSearch, true);
-                });
-                this.gf.hideLoading();
-              }
-            })
-          }else{
-            this.gf.showAlertMessageOnly('Phiên truy cập đã hết hiệu lực. Vui lòng tải lại trang và thử lại.').then(()=>{
-              this.zone.run(()=>{
-                this.resetValue();
+                }else{
+                  se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
+                }
               })
-              this.loadFlightData(this._flightService.objSearch, true);
-            });
-            this.gf.hideLoading();
+              se._flightService.publicItemFlightReloadInfo(1);
+
+              se._flightService.itemFlightCache.departSeatChoice = [];
+              se._flightService.itemFlightCache.returnSeatChoice = [];
+              se._flightService.itemFlightCache.listdepartseatselected="";
+              se._flightService.itemFlightCache.listreturnseatselected ="";
+              se._flightService.itemFlightCache.departSeatChoiceAmout = 0;
+              se._flightService.itemFlightCache.returnSeatChoiceAmout = 0;
+              se.clearServiceInfo();
+              let _totalprice =  se._flightService.itemFlightCache.departFlight.totalPrice + (se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.totalPrice : 0);
+              let itemcache = se._flightService.itemFlightCache;
+              se._flightService.itemFlightCache.totalPrice = _totalprice;
+              se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightsearchresultinternational', 'confirm', 'Flights');
+
+              se._flightService.itemFlightCache.isApiDirect = true;
+              se.navCtrl.navigateForward('/flightaddservice');
+              se.stoprequest = true;
+          }else{
+            se.showAlertRefreshPrice('Vé máy bay bạn chọn hiện không còn. Vui lòng chọn lại!');
           }
+          
         })
+        
+      }else{
+        
+        let itemd = item.departFlights.filter((id)=>{return id.ischeck});
+        let itemr = item.returnFlights.filter((ir)=>{return ir.ischeck});
+        if(itemd && itemd.length >0 && itemr && itemr.length >0){
+          this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
+          this._flightService.itemFlightCache.itemFlightInternationalReturn = itemr[0];
+        } else if (itemd && itemd.length >0){
+          this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
+        }
+  
+          let url = C.urls.baseUrl.urlFlightInt + "api/bookings/check-available";
+          let body = {
+            DepartId: itemd[0].id,
+            FareId: item.fare.key,
+            ReturnId: itemr && itemr.length >0 ? itemr[0].id : '',
+            SessionId: item.sessions,
+            Source: 6
+          }
+           
+  
+          this.gf.RequestApi('POST', url, {}, body, 'flightsearchresultinternational', 'check-available').then((data) => {
+            if(data.success && data.data) {
+             
+              let urlbkg = C.urls.baseUrl.urlFlightInt + "api/bookings";
+              this.gf.RequestApi('POST', urlbkg, {}, body, 'flightsearchresultinternational', 'bookings').then((data) => {
+                if(data.success && data.data) {
+                 this.gf.hideLoading();
+                 this._flightService.itemFlightCache.dataBookingInternational = data.data;
+                 this._flightService.itemFlightInternational = item;
+                 this._flightService.itemFlightCache.reservationId = data.data.id;
+                 this._voucherService.publicClearVoucherAfterPaymentDone(1);
+                 this._flightService.itemFlightInternational.promotionCode = "";
+                 this._flightService.itemFlightInternational.discountpromo = 0;
+                 this._flightService.itemFlightInternational.hasvoucher = null;
+                 this._flightService.itemFlightCache.totalPrice = item.fare.price;
+                 //this.gf.gaSetScreenName('flightsearchresultinternational');
+                 this.gf.logEventFirebase('', this._flightService.itemFlightCache, 'flightsearchresultinternational', 'begin_checkout', 'Flights');
+                 this.navCtrl.navigateForward('/flightadddetailsinternational');
+                }else{
+                  this.gf.showAlertMessageOnly('Phiên truy cập đã hết hiệu lực. Vui lòng tải lại trang và thử lại.').then(()=>{
+                    this.zone.run(()=>{
+                      this.resetValue();
+                    })
+                    this.loadFlightData(this._flightService.objSearch, true);
+                  });
+                  this.gf.hideLoading();
+                }
+              })
+            }else{
+              this.gf.showAlertMessageOnly('Phiên truy cập đã hết hiệu lực. Vui lòng tải lại trang và thử lại.').then(()=>{
+                this.zone.run(()=>{
+                  this.resetValue();
+                })
+                this.loadFlightData(this._flightService.objSearch, true);
+              });
+              this.gf.hideLoading();
+            }
+          })
+      }
+      
 
         
     }
