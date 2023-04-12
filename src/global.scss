@@ -364,6 +364,7 @@ ion-toggle {
       bottom: -24px !important;
       margin-left: 3px;
     }
+    
 
     .min-price{
       color: #a0c245 !important;
@@ -1458,7 +1459,14 @@ height: 18px !important;
   }
 }
 .tour-calendar-custom .days-btn.on-selected {
-  background: #9fc43a !important;
+  // background: #9fc43a !important;
+  span{
+    color: #fff !important;
+  }
+  p{
+    color: #fff !important;
+  }
+  border: 0px !important;
 }
 
 .days-allotment.on-selected {
@@ -1467,25 +1475,66 @@ height: 18px !important;
     font-weight: 600 !important;
 }
 }
+
 .days-allotment {
   p{
-      color: #9fc43a !important;
+      // color: #9fc43a !important;
       font-weight: 600 !important;
+      margin-top: 6px !important;
+      margin-bottom: 7px !important;  
   }
 }
+.div-tour-text-departure-green {
+  font-size: 16px;
+  line-height: 1.4;
+  color: #9fc43a;
+}
+.div-tour-text-departure-red {
+  font-size: 16px;
+  line-height: 1.4;
+  color: #e52822;
+}
 .div-tour-text-departure {
-    font-size: 18px;
-    color: #9fc43a;
-    padding: 16px;
-    border-top: solid 1px #f2f2f2;
-    text-align: center;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #3f3b3b;
+}
+.m-left-16{
+  margin-left: 16px;
+}
+.m-top-16{
+  margin-top: 16px;
+}
+.m-bottom-8{
+  margin-bottom: 8px;
 }
 .days-btn.days-allotment {
-  border: solid 1px #9fc43a;
+  width: 44px !important;
+  height: 44px !important;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 0;
+  border-radius: 6px !important;
+  //border: solid 1px #9fc43a;
+  border: solid 1px #cccccc;
 }
-
+.days-btn.div-boder-KM {
+  //border: solid 1px #9fc43a;
+  border: solid 1px #9fc43a !important;
+  p{
+    color: #9fc43a !important;
+  }
+}
+.days-btn.div-boder-red  {
+  p{
+    color: #e52822 !important;
+  }
+}
 .days-allotment.on-selected {
-  background: #9fc43a !important;
+  //background: #9fc43a !important;
   color: #fff !important
 }
 
@@ -1636,7 +1685,7 @@ button.days-btn {
   border-top: solid 0.5px #fff !important;
 }
 .ticket-calendar-custom .days-btn.on-selected {
-  background: #9fc43a !important;
+  // background: #9fc43a !important;
 }
 .ticket-calendar-custom .week-toolbar .week-title{
   border-top: solid 0.5px #fff !important;
@@ -1756,4 +1805,16 @@ button.days-btn {
   line-height: 1.67;
   letter-spacing: -0.24px;
   margin: 0;
+}
+.price-calendar-text-tour-green{
+    font-size: 12px;
+    color: #9fc43a;
+}
+.price-calendar-text-tour-red{
+  font-size: 12px;
+  color: #e52822;
+}
+.price-calendar-text-tour{
+  font-size: 12px;
+  color: #828282;
 }

@@ -131,7 +131,7 @@
                 <ion-textarea  maxlength=1000  [(ngModel)]="Description" placeholder="Ý kiến của quý khách" class="cls-text-feedback"></ion-textarea>
             </ion-col>
         </ion-row>
-        <ion-row class="cls-row-text">
+        <ion-row *ngIf="!trip.isFlyBooking" class="cls-row-text">
             <ion-col style="padding: 0;"><label class="cls-text-share">Chia sẻ thêm hình ảnh về chuyến đi của Quý khách với mọi người. Nhận ngay 10 điểm tích lũy!
             </label></ion-col>
         </ion-row>

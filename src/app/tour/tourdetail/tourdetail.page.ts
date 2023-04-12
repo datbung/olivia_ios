@@ -145,6 +145,7 @@ export class TourDetailPage {
                           this.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/MercuriusTourDepartureDate', headers, {TourCode: this.tourService.tourDetailId,DepartureTime: data1.Response.StrListDepartures.split(',')},'tourDetail','MercuriusTourDeparture').then((data2)=>{
                             if(data2 && data2.Status == 'Success'){
                             let lstDepartures = JSON.parse(data2.Response);
+                            this.tourService.calendarDeparture=JSON.parse(data2.Response);
                             //console.log(lstDepartures);
 
                             lstDepartures.forEach(element => {
