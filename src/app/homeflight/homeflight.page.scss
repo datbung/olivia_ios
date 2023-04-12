@@ -40,18 +40,18 @@
   }
 
   .cls-bg-twoway {
-    height: calc(env(safe-area-inset-top) + 634px) !important;
+    height: calc(env(safe-area-inset-top) + 594px) !important;
   }
   .cls-bg-oneway {
-    height: calc(env(safe-area-inset-top) + 578px) !important;
+    height: calc(env(safe-area-inset-top) + 538px) !important;
   }
 
   .div-wc-twoway{
-    height: 408px !important;
+    height: 384px !important;
   }
 
   .div-wc-oneway{
-    height: 350px !important;
+    height: 328px !important;
   }
 
   .div-roundtrip {
@@ -80,7 +80,7 @@
         z-index: -1;
         width: 95.8%;
         height: 370px;
-        margin-top: -58px;
+        margin-top: -38px;
       }
       
       
@@ -188,7 +188,7 @@
 
             .text-home-hotel{
               
-                margin-top: 122px;
+                margin-top: 116px;
             
                 .label-home-hotel{
                   color: #ffffff;
@@ -415,8 +415,9 @@
             font-weight: 100;
             line-height: 1.5;
         }
+    
     }
-
+    
       .text-flight-datetime{
         font-size: 14px;
         font-weight: 300;
@@ -668,4 +669,20 @@
       padding-top: 2px;
     }
   }
- 
+  .div-text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    white-space: nowrap;
+  }
+  .div-group-name {
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3f3b3b;
+    margin-bottom: 8px;
+  }

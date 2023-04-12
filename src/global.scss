@@ -1194,6 +1194,11 @@ height: 18px !important;
 .div-flight-topdeal{
   top: calc(env(safe-area-inset-top) - 3px);
 }
+
+.div-flightinternational-topdeal{
+  top: calc(env(safe-area-inset-top) - 3px);
+}
+
 .cls-topdeal-float{
   background: #fff;
   margin: 0 -16px;
@@ -1213,6 +1218,10 @@ height: 18px !important;
     top: calc(env(safe-area-inset-top) - 3px) !important;
   }
 
+  .div-flightinternational-topdeal{
+    top: calc(env(safe-area-inset-top) - 3px) !important;
+  }
+
   .cls-topdeal-float{
     top: calc(env(safe-area-inset-top) + 3px) !important;
   }
@@ -1220,6 +1229,11 @@ height: 18px !important;
 
 @media(min-height:568px) and (max-height:736px){
   .div-flight-topdeal{
+    top: calc(env(safe-area-inset-top) - 22px) !important;
+    padding-top: 19px !important;
+    height: 68px !important;
+  }
+  .div-flightinternational-topdeal{
     top: calc(env(safe-area-inset-top) - 22px) !important;
     padding-top: 19px !important;
     height: 68px !important;

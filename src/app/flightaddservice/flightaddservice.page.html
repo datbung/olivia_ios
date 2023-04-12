@@ -268,7 +268,7 @@
             </div>
              <!-- thêm bao hiem -->
         <div *ngIf="returnFlight">
-            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !returnFlight.stops" class="div-item-service div-seat m-top-16">
+            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !returnFlight.stops && !isApiDirect" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
                     <div class="div-icon p-right-12">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
@@ -292,7 +292,7 @@
             </div>
         </div>
         <div *ngIf="!returnFlight">
-            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops" class="div-item-service div-seat m-top-16">
+            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !isApiDirect" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
                     <div class="div-icon p-right-12">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
@@ -337,7 +337,8 @@
                     <img class="logo-vj" *ngIf="departFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
                     <img *ngIf="departFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                     <img class="logo-vna" *ngIf="departFlight.airlineCode == 'VietnamAirlines' && !departFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
-                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.urlLogo" [src]="departFlight.urlLogo">
+                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.urlLogo &&!isApiDirect " [src]="departFlight.urlLogo">
+                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.operatedByLogo &&isApiDirect " [src]="departFlight.operatedByLogo">
                     <img *ngIf="departFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                 </div>
                 <div class="div-airline-name">
@@ -405,7 +406,8 @@
                     <img class="logo-vj" *ngIf="returnFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
                     <img *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                     <img class="logo-vna" *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && !returnFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
-                    <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo" [src]="returnFlight.urlLogo">
+                    <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo && !isApiDirect" [src]="returnFlight.urlLogo">
+                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.operatedByLogo && isApiDirect " [src]="returnFlight.operatedByLogo">
                     <img *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                 </div>
                 <div class="div-airline-name">
@@ -489,12 +491,17 @@
               </ion-row>
               <app-voucherslide></app-voucherslide>
          </div>
-        <div class="div-condition d-flex" (click)="showCondition()">
+        <div class="div-condition d-flex" (click)="showCondition()" *ngIf="!isApiDirect">
             <div class="div-width-100">Chi tiết điều kiện vé</div>
             <div class="div-width-100 text-right">
                 <img class="img-arrow" src="./assets/imgs/ic_arrow.svg">
             </div>
             
+        </div>
+        <div class="div-condition d-flex a-items-center" *ngIf="isApiDirect">
+            <div class="m-right-8">Chi tiết điều kiện vé</div>
+            <div class="div-text-tealish m-right-8" (click)="showFlightInfo(true)">{{departCodeDisplay}} - {{returnCodeDisplay}}</div>
+            <div class="div-text-tealish" *ngIf="roundtrip"  (click)="showFlightInfo(false)">| {{returnCodeDisplay}} - {{departCodeDisplay}}</div>
         </div>
     </div>
   </ion-content>

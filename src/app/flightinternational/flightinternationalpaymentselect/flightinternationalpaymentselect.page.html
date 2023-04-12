@@ -90,7 +90,14 @@
   </div>
       <div class="div-split-panel"></div>
       <ion-list class="cls-list">
-
+        <ion-item (click)="flightpaymentbank()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'" *ngIf="!blockPaylate">
+          <label class="text-list">
+            Chuyển khoản ngân hàng
+          </label>
+          <ion-icon slot="end" item-end name="ios-arrow-round-forward" [ngClass]="blockPaylate ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
+          <div class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
+      </ion-item>
+      
         <ion-item *ngIf="bizTravelService.isCompany" (click)="paymentbiztravel()" [ngClass]="blockPayCard ? 'cls-minheight h-54' : 'cls-minheight h-54'">
           <label  class="text-list m-bottom-8">
             Tài khoản công ty
@@ -98,6 +105,7 @@
           <div class="text-warning-creadit" *ngIf="bizTravelService.bizAccount && (bizTravelService.bizAccount.balanceAvaiable - _flightService.itemFlightCache.totalPrice)<=0">Số dư Credit không đủ để thực hiện thanh toán</div>
           <ion-icon slot="end" name="ios-arrow-round-forward" *ngIf="bizTravelService.bizAccount && (bizTravelService.bizAccount.balanceAvaiable - _flightService.itemFlightCache.totalPrice) >0" class='m-right-16'></ion-icon>
         </ion-item>
+        
 
         <ion-item (click)="flightpaymentatm()" [ngClass]="blockPayCard ? 'cls-minheight' : 'cls-minheight'">
             <label  class="text-list">
@@ -157,27 +165,22 @@
           <ion-icon slot="end" name="ios-arrow-round-forward"  [ngClass]="blockPayCard ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPayCard"></ion-icon>
         </ion-item>
         
-        <ion-item  (click)="flightpaymentpayoostore()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'"  *ngIf="!isPaymentMytrip">
+        <ion-item  (click)="flightpaymentpayoostore()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'"  *ngIf="!isPaymentMytrip || !blockPaylate">
           <label class="text-list">
             Trực tiếp tại cửa hàng tiện lợi <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward"  [ngClass]="blockPaylate ? 'm-right-16' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
           <div  class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
         </ion-item>
-        <ion-item (click)="flightpaymentbank()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'">
-            <label class="text-list">
-              Chuyển khoản ngân hàng
-            </label>
-            <ion-icon slot="end" item-end name="ios-arrow-round-forward" [ngClass]="blockPaylate ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
-            <div class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
-        </ion-item>
-        <ion-item (click)="flightpaymentatoffice()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'" *ngIf="!isPaymentMytrip">
+       
+        <ion-item (click)="flightpaymentatoffice()" [ngClass]="blockPaylate ? 'cls-minheight' : 'cls-minheight'" *ngIf="!isPaymentMytrip || !blockPaylate">
           <label class="text-list">
             Trực tiếp tại văn phòng
           </label>
           <ion-icon slot="end" item-end name="ios-arrow-round-forward" [ngClass]="blockPaylate ? 'm-right-2' : 'm-right-16' " *ngIf="!blockPaylate"></ion-icon>
           <div class="text-hotfare" *ngIf="blockPaylate">(Không áp dụng cho vé khuyến mãi)</div>
         </ion-item>
+
       </ion-list>
       <div class="div-DK">
         <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkDk()"></ion-checkbox>

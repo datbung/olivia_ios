@@ -19,6 +19,7 @@ import { AdddiscountPage } from './../adddiscount/adddiscount.page';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { voucherService } from '../providers/voucherService';
 import { HTMLIonOverlayElement } from '@ionic/core';
+import { FlightInfoInternationalPage } from '../flightinternational/flightinfointernationnal/flightinfointernational.page';
 
 @Component({
   selector: 'app-flightaddservice',
@@ -85,7 +86,9 @@ export class FlightaddservicePage implements OnInit {
   listVouchersApply=[];
   strPromoCode: string = '';
   totaldiscountpromo = 0;
-  
+  isApiDirect: any;
+  departCodeDisplay= '';
+  returnCodeDisplay='';
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -105,11 +108,21 @@ export class FlightaddservicePage implements OnInit {
             this.adult = this._flightService.itemFlightCache.adult;
             this.child = this._flightService.itemFlightCache.child*1 + (this._flightService.itemFlightCache.infant ? this._flightService.itemFlightCache.infant : 0)*1;
             //this.totalPriceDisplay = this.gf.convertNumberToString(this._flightService.itemFlightCache.departFlight.totalPrice + this._flightService.itemFlightCache.returnFlight.totalPrice);
-
-            this.departdisplay = this._flightService.itemFlightCache.departCity;
-            this.returndisplay = this._flightService.itemFlightCache.returnCity;
-            this.departtimedisplay = this._flightService.itemFlightCache.departTimeDisplay;
-            this.returntimedisplay = this._flightService.itemFlightCache.returnTimeDisplay;
+          this.isApiDirect = this._flightService.itemFlightCache.isApiDirect;
+            if(this._flightService.itemFlightCache.isApiDirect){
+              this.departdisplay = this._flightService.objSearch.departCity;
+              this.returndisplay = this._flightService.objSearch.returnCity;
+              this.departtimedisplay = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkInDate).dayname + ", " + moment(this._flightService.itemFlightCache.checkInDate).format("DD.MM");
+              this.returntimedisplay = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkOutDate).dayname + ", " + moment(this._flightService.itemFlightCache.checkOutDate).format("DD.MM");
+              this.departCodeDisplay = this._flightService.objSearch.departCode;
+              this.returnCodeDisplay = this._flightService.objSearch.arrivalCode;
+            }else{
+              this.departdisplay = this._flightService.itemFlightCache.departCity;
+              this.returndisplay = this._flightService.itemFlightCache.returnCity;
+              this.departtimedisplay = this._flightService.itemFlightCache.departTimeDisplay;
+              this.returntimedisplay = this._flightService.itemFlightCache.returnTimeDisplay;
+            }
+           
             this.departFlight = this._flightService.itemFlightCache.departFlight;
             this.returnFlight = this._flightService.itemFlightCache.returnFlight;
             if(this.departFlight){
@@ -1016,8 +1029,8 @@ export class FlightaddservicePage implements OnInit {
 
     getSeatMap(id){
         var se = this;
-        let departairlines = se._flightService.itemFlightCache.departFlight.airline;
-        let returnairlines = se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.airline : "";
+        let departairlines = se._flightService.itemFlightCache.departFlight.airline.replace(' ','');
+        let returnairlines = se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.airline.replace(' ','') : "";
         if(departairlines == returnairlines || !se._flightService.objSearch.roundTrip){
             let urlSeatMap = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+departairlines;
             se.getSeatMaps(urlSeatMap, departairlines, 3);
@@ -2105,7 +2118,11 @@ export class FlightaddservicePage implements OnInit {
         this._voucherService.flightPromoCode = "";
         this._voucherService.flightTotalDiscount=0;
 
-        this.navCtrl.navigateBack('/flightsearchresult');
+        if(this._flightService.itemFlightCache.isApiDirect){
+          this.navCtrl.navigateBack('/flightsearchresultinternational');
+        }else{
+          this.navCtrl.navigateBack('/flightsearchresult');
+        }
     }
 
     buyLuggage(){
@@ -2321,12 +2338,35 @@ export class FlightaddservicePage implements OnInit {
 
     
 
-    showCondition(){
+  async showCondition(){
       var se = this;
-      if(se._flightService.itemFlightCache.backtochoiceseat && se.checkseat){
+      // if(se._flightService.itemFlightCache.isApiDirect){
+      //   this._flightService.itemFlightInternationalInfo = itemFlight;
+      //   this._flightService.itemFlightInternational = item;
+      //   this._flightService.indexFlightInternational = index;
+    
+      //   let itemd = item.departFlights.filter((id)=>{return id.ischeck});
+      //   let itemr = item.returnFlights.filter((ir)=>{return ir.ischeck});
+      //   if(itemd && itemd.length >0 && itemr && itemr.length >0){
+      //     this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
+      //     this._flightService.itemFlightCache.itemFlightInternationalReturn = itemr[0];
+      //   } else if (itemd && itemd.length >0){
+      //     this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
+      //   }
+      
+      // const modal: HTMLIonModalElement =
+      //   await this.modalCtrl.create({
+      //     component: FlightInfoInternationalPage,
+      //   });
+      //   modal.present();
+      // }
+      //else{
+        if(se._flightService.itemFlightCache.backtochoiceseat && se.checkseat){
           se._flightService.itemFlightCache.backtochoiceseat = false;
-      }
+        }
         se.navCtrl.navigateForward('/flightcondition');
+      //}
+      
     }
 
     async showQuickBack(){
@@ -3940,4 +3980,26 @@ buildStringPromoCode(){
   this._voucherService.flightPromoCode = this.strPromoCode;
   this._voucherService.flightTotalDiscount = this.totaldiscountpromo;
 }
+
+  async showFlightInfo(isdepart) {
+    this._flightService.itemFlightInternationalInfo = isdepart ? this._flightService.itemFlightCache.departFlight : this._flightService.itemFlightCache.returnFlight;
+    this._flightService.indexFlightInternational = 0;
+    let item = this._flightService.itemFlightInternational;
+   
+      let itemd = item.departFlights.filter((id)=>{return id.ischeck});
+      let itemr = item.returnFlights.filter((ir)=>{return ir.ischeck});
+      if(itemd && itemd.length >0 && itemr && itemr.length >0){
+        this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
+        this._flightService.itemFlightCache.itemFlightInternationalReturn = itemr[0];
+      } else if (itemd && itemd.length >0){
+        this._flightService.itemFlightCache.itemFlightInternationalDepart = itemd[0];
+      }
+    
+    const modal: HTMLIonModalElement =
+      await this.modalCtrl.create({
+        component: FlightInfoInternationalPage,
+      });
+      modal.present();
+  }
+
 }

@@ -128,8 +128,8 @@ export class FlightaddseatPage implements OnInit {
         this.totalprice = this._flightService.itemFlightCache.departSeatChoiceAmout;
         this.totalreturnprice = this._flightService.itemFlightCache.returnSeatChoiceAmout;
 
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) +"đ";
-        this.totalreturnpricedisplay = this.gf.convertNumberToString(this.totalreturnprice) +"đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice) || '0') +"đ";
+        this.totalreturnpricedisplay = (this.gf.convertNumberToString(this.totalreturnprice) || '0')  +"đ";
        
     }
 

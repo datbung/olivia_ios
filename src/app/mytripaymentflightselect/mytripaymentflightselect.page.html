@@ -52,6 +52,13 @@
   </div>
       <div class="div-split-panel"></div>
       <ion-list class="cls-list">
+        <ion-item (click)="roompaymentbank()" *ngIf="!blockPaylate">
+          <label class="text-list">
+            Chuyển khoản ngân hàng
+          </label>
+          <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-16 cls-arrow-opt"  *ngIf="!blockPaylate"></ion-icon>
+        </ion-item>
+
         <ion-item *ngIf="bizTravelService.isCompany" (click)="paymentbiztravel()" class="=cls-minheight h-54">
           <label  class="text-list m-bottom-8">
             Tài khoản công ty
@@ -117,12 +124,7 @@
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward"  [ngClass]="blockPayCard ? 'm-right-2 cls-arrow-opt' : 'm-right-16 cls-arrow-opt' "  *ngIf="!blockPayCard"></ion-icon>
         </ion-item>
-        <ion-item (click)="roompaymentbank()">
-          <label class="text-list">
-            Chuyển khoản ngân hàng
-          </label>
-          <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-16 cls-arrow-opt"  *ngIf="!blockPaylate"></ion-icon>
-        </ion-item>
+        
       </ion-list>
       <div class="div-DK">
         <ion-checkbox mode='md' class="checkbox-DK"  [checked]="ischeckedDK" (ionChange)="checkDk()"></ion-checkbox>

@@ -218,7 +218,9 @@ export class FlightInternationalSearchfilterPage implements OnInit {
 
 
     clearFilter(){
-        $("#chkAll")[0].checked = false
+        $("#chkAll")[0].checked = false;
+        this._flightService.classSelected = '';
+        this._flightService.classSelectedName ='';
         this._flightService.objectFilterInternational = {};
         this._flightService.objectFilterInternational.stopSelected = -1;
         this._flightService.objectFilterInternational.airlineSelected = [];
@@ -273,11 +275,11 @@ export class FlightInternationalSearchfilterPage implements OnInit {
           })
         }
         
-        if(this._flightService.objectFilterInternational.airlineSelected && (this._flightService.objectFilterInternational.airlineSelected.length == 0 || this._flightService.objectFilterInternational.airlineSelected.indexOf(item.value) == -1)){
-            this._flightService.objectFilterInternational.airlineSelected.push(item.value);
+        if(this._flightService.objectFilterInternational.airlineSelected && (this._flightService.objectFilterInternational.airlineSelected.length == 0 || this._flightService.objectFilterInternational.airlineSelected.indexOf(item.namefilter) == -1)){
+            this._flightService.objectFilterInternational.airlineSelected.push(item.namefilter);
           }
           if(!value.detail.checked){
-            this.gf.removeItem(this._flightService.objectFilterInternational.airlineSelected, item.value);
+            this.gf.removeItem(this._flightService.objectFilterInternational.airlineSelected, item.namefilter);
           }
       }else if(type ==1) {
         if(!this._flightService.objectFilterInternational){
@@ -295,19 +297,41 @@ export class FlightInternationalSearchfilterPage implements OnInit {
     }
 
     ionViewWillLeave(){
+      
+      // if(this._flightService.objectFilterInternational 
+      //   && this._flightService.objectFilterInternational.classSelected 
+      //   && this._flightService.objectFilterInternational.classSelected != '-1'
+      //   && (this._flightService.objSearch 
+      //   && this._flightService.objSearch.classSelected != this._flightService.objectFilterInternational.classSelected) ){
+          
+      //     //rollback các tích chọn trước khi filter class
+      //     $("#chkAll")[0].checked = false
+      //     this._flightService.objectFilterInternational.stopSelected = -1;
+      //     this._flightService.objectFilterInternational.airlineSelected = [];
+      //     let listcheckboxs = $('.chkAirline');
+      //     for (let index = 0; index < listcheckboxs.length; index++) {
+      //       const element = listcheckboxs[index];
+      //       element.checked = false;
+      //     }
+          
+      //   let maxValue = Math.round(Math.max(...this._flightService.listAllFlightInternational.map(o => o.fare.price), 0)/1000000);
+      //       this.pinvalue = maxValue;
+      //       let maxOverlayValue = Math.round(Math.max(...this._flightService.listAllFlightInternational.map(o => o.fare.maxDepartTime),...this._flightService.listAllFlightInternational.map(o => o.fare.maxReturnTime))/60);
+      //       this.pinoverlayvalue = maxOverlayValue;
+
+      //   this._flightService.itemChangeTicketFlight.emit(2);
+      // }else if(this._flightService.objectFilterInternational && this._flightService.objectFilterInternational.classSelected && this._flightService.objectFilterInternational.classSelected == '-1'
+      //   && (this._flightService.objSearch 
+      //   && this._flightService.objSearch.classSelected != this._flightService.objectFilterInternational.classSelected)){
+      //     this._flightService.publicItemFlightInternationalFilter(1);
+      //     this._flightService.objSearch.classSelected = null;
+      //   this._flightService.itemChangeTicketFlight.emit(1);
+      // }else if(this._flightService.objectFilterInternational){
+      //   this._flightService.publicItemFlightInternationalFilter(1);
+      // }
       this._flightService.publicItemFlightInternationalFilter(1);
-      if(this._flightService.objectFilterInternational 
-        && this._flightService.objectFilterInternational.classSelected 
-        && this._flightService.objectFilterInternational.classSelected != '-1'
-        && (this._flightService.objSearch 
-        && this._flightService.objSearch.classSelected != this._flightService.objectFilterInternational.classSelected) ){
-        this._flightService.itemChangeTicketFlight.emit(2);
-      }else if(this._flightService.objectFilterInternational && this._flightService.objectFilterInternational.classSelected && this._flightService.objectFilterInternational.classSelected == '-1'
-        && (this._flightService.objSearch 
-        && this._flightService.objSearch.classSelected != this._flightService.objectFilterInternational.classSelected)){
-        this._flightService.objSearch.classSelected = null;
-        this._flightService.itemChangeTicketFlight.emit(1);
-      }
+      //this._flightService.objSearch.classSelected = null;
+      //this._flightService.itemChangeTicketFlight.emit(1);
     }
 
     filter(){

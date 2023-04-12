@@ -39,6 +39,14 @@
   </div>
       <div class="div-split-panel"></div>
       <ion-list class="cls-list">
+        <ion-item (click)="flightpaymentbank()" class="cls-minheight">
+          <label class="text-list">
+            Chuyển khoản ngân hàng
+          </label>
+          <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
+          <div class="text-hotfare">(Không áp dụng cho vé khuyến mãi)</div>
+      </ion-item>
+      
         <ion-item *ngIf="bizTravelService.isCompany" (click)="paymentbiztravel()" class="'cls-minheight h-54">
           <label  class="text-list m-bottom-8">
             Tài khoản công ty
@@ -101,13 +109,7 @@
           <ion-icon slot="end" name="ios-arrow-round-forward"  class="m-right-20" ></ion-icon>
           <div  class="text-hotfare">(Không áp dụng cho vé khuyến mãi)</div>
         </ion-item>
-        <ion-item (click)="flightpaymentbank()" class="cls-minheight">
-            <label class="text-list">
-              Chuyển khoản ngân hàng
-            </label>
-            <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
-            <div class="text-hotfare">(Không áp dụng cho vé khuyến mãi)</div>
-        </ion-item>
+       
         <ion-item (click)="flightpaymentatoffice()" class="cls-minheight">
           <label class="text-list">
             Trực tiếp tại văn phòng

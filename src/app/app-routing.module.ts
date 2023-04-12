@@ -256,7 +256,7 @@ const routes: Routes = [
     { path: 'flightinternationalpaymentpayoo/:code/:stt', loadChildren: './flightinternational/flightinternationalpaymentpayoo/flightinternationalpaymentpayoo.module#FlightInternationalPaymentPayooPageModule' },
     { path: 'flightinternationalpaymenttimeout/:stt', loadChildren: './flightinternational/flightinternationalpaymenttimeout/flightinternationalpaymenttimeout.module#FlightInternationalPaymentTimeoutPageModule' },
     { path: 'flightinternationalpaymentwarning', loadChildren: './flightinternational/flightinternationalpaymentwarning/flightinternationalpaymentwarning.module#FlightInternationalPaymentwarningPageModule' },
-
+    
     //Ticket
     { path: 'ticketsearch', loadChildren: './ticket/ticketsearch/ticketsearch.module#TicketSearchPageModule' },
     { path: 'ticketlist', loadChildren: './ticket/ticketlist/ticketlist.module#TicketListPageModule' },

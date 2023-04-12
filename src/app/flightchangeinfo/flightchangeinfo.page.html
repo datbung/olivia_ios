@@ -151,19 +151,36 @@
                         </div>
                     </ion-row>
 
-                    <ion-row class="row-pax" (click)="choicePax()">
-                        <div class="div-width">
-                            <div class="img-cin-cout">
-                                <img class="img-padding img-people" src="./assets/iocnsearch/ic_people.svg"/>
-                            </div>
-
-                            <div class="div-input-right div-flex-center">
-                                <div class="text-pax">
-                                    <div class="div-adult">{{ adult }} người lớn<span *ngIf="child>0">, {{ child }}  trẻ em</span><span *ngIf="infant>0">, {{ infant }} em bé</span></div>
-                                    <!-- <div class="div-child text-color">{{ child }} trẻ em, {{ infant }} trẻ sơ sinh</div> -->
+                    <ion-row class="row-pax bg-none">
+                        <ion-col class="no-padding cls-bg-white" (click)="choicePax()">
+                            <div class="div-width">
+                                <div class="img-cin-cout">
+                                    <img class="img-padding img-people" src="./assets/iocnsearch/ic_people.svg"/>
+                                </div>
+    
+                                <div class="div-input-right div-flex-center d-flex">
+                                    <div class="text-pax 0">
+                                        <!-- <div class="div-adult">{{ adult }} người lớn<span *ngIf="child>0">, {{ child }}  trẻ em</span><span *ngIf="infant>0">, {{ infant }} em bé</span></div> -->
+                                        <!-- <div class="div-child text-color">{{ child }} trẻ em, {{ infant }} trẻ sơ sinh</div> -->
+                                        <div class="div-adult">{{pax}} hành khách</div>
+                                    </div>
+                                 
                                 </div>
                             </div>
-                        </div>
+                        </ion-col>
+                        <ion-col class="no-padding cls-bg-white m-left-8" *ngIf="isInternationalFlight"  (click)="showFilterTicketClass()">
+                            <div class="div-width">
+                                <div class="img-seat">
+                                    <img src="./assets/ic_flight_international/seat.svg"/>
+                                </div>
+    
+                                <div class="div-input-right div-flex-center div-filter-ticketclass">
+                                    <div class="div-text" *ngIf="!_flightService.classSelected">Nhiều hạng vé</div>
+                                    <div class="div-text max-width-100" *ngIf="_flightService.classSelected">{{_flightService.classSelectedName}}</div>
+                                </div>
+                            </div>
+                        </ion-col>
+                        
                     </ion-row>
 
                     <div (click)="showFlightPriority()" class="div-timepriorityconfig" *ngIf="!isInternationalFlight">

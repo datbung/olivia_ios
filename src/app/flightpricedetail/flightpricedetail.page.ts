@@ -81,12 +81,50 @@ export class FlightpricedetailPage implements OnInit {
           this.child = this._flightService.itemFlightCache.child;
           this.infant = this._flightService.itemFlightCache.infant;
           if(this.departFlight){
+            if(this._flightService.itemFlightCache.isApiDirect){
+              let priceFlightAdult = 0;
+              let priceFlightChild = 0;
+              let priceFlightInfant = 0;
+              this.departFlight.priceSummaries.forEach(e => {
+                if (e.passengerType == 0) {
+                  priceFlightAdult += e.price;
+                }
+                if (e.passengerType == 1) {
+                  priceFlightChild += e.price;
+                }
+                if (e.passengerType == 2) {
+                  priceFlightInfant += e.price;
+                }
+              });
+              this.departFlight.priceAdult = priceFlightAdult;
+              this.departFlight.priceChild = priceFlightChild;
+              this.departFlight.priceInfant = priceFlightInfant;
+            }
             this.adultPriceDepartDisplay = this.gf.convertNumberToString(this.departFlight.priceAdult);
             this.childPriceDepartDisplay = this.gf.convertNumberToString(this.departFlight.priceChild);
             this.infantPriceDepartDisplay = this.gf.convertNumberToString(this.departFlight.priceInfant);
           }
           
           if(this.returnFlight){
+            if(this._flightService.itemFlightCache.isApiDirect){
+              let priceFlightAdult = 0;
+              let priceFlightChild = 0;
+              let priceFlightInfant = 0;
+              this.returnFlight.priceSummaries.forEach(e => {
+                if (e.passengerType == 0) {
+                  priceFlightAdult += e.price;
+                }
+                if (e.passengerType == 1) {
+                  priceFlightChild += e.price;
+                }
+                if (e.passengerType == 2) {
+                  priceFlightInfant += e.price;
+                }
+              });
+              this.returnFlight.priceAdult = priceFlightAdult;
+              this.returnFlight.priceChild = priceFlightChild;
+              this.returnFlight.priceInfant = priceFlightInfant;
+            }
             this.adultPriceReturnDisplay = this.gf.convertNumberToString(this.returnFlight.priceAdult);
             this.childPriceReturnDisplay = this.gf.convertNumberToString(this.returnFlight.priceChild);
             this.infantPriceReturnDisplay = this.gf.convertNumberToString(this.returnFlight.priceInfant);

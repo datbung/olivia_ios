@@ -138,6 +138,13 @@
     </div>
   <hr class="cls-hr">
     <ion-list class="cls-list">
+      <ion-item (click)="roompaymentbank()" class="cls-minheight">
+        <label>
+          Chuyển khoản ngân hàng
+        </label>
+        <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
+      </ion-item>
+      
       <ion-item *ngIf="bizTravelService.isCompany" (click)="paymentbiztravel()" class="=cls-minheight h-54">
         <label  class="text-list m-bottom-8">
           Tài khoản công ty
@@ -208,12 +215,7 @@
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
         </ion-item>
-        <ion-item (click)="roompaymentbank()" class="cls-minheight">
-          <label>
-            Chuyển khoản ngân hàng
-          </label>
-          <ion-icon slot="end" name="ios-arrow-round-forward" class="cls-arrow-payment-align-right"></ion-icon>
-        </ion-item>
+       
         <ion-item (click)="roompaymentlive()" class="cls-minheight">
           <label>
             Trực tiếp tại văn phòng iVIVU

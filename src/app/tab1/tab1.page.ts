@@ -856,15 +856,15 @@ export class Tab1Page implements OnInit {
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           } else {
             this.cin = this.gf.getCinIsoDate(new Date());
-            var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
+            var rescin = new Date(this.cin).setTime(new Date(this.cin).getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
             this.cout = this.gf.getCinIsoDate(new Date());
-            var res = this.cout.setTime(
-              this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
+            let res = new Date(this.cout).setTime(
+              new Date(this.cout).getTime() + (2 * 24 * 60 * 60 * 1000)
             );
             var date = new Date(this.gf.getCinIsoDate(res));
             this.cout = moment(date).format("YYYY-MM-DD");
@@ -882,15 +882,15 @@ export class Tab1Page implements OnInit {
   
         }else if(!this.cin || !this.searchhotel.CheckInDate){
             this.cin = new Date(this.gf.getCinIsoDate(new Date()));
-            var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
+            var rescin = new Date(this.cin).setTime(new Date(this.cin).getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
             this.cout = new Date(this.gf.getCinIsoDate(new Date()));
-            var res = this.cout.setTime(
-              this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
+            let res:any = new Date(this.cout).setTime(
+              new Date(this.cout).getTime() + (2 * 24 * 60 * 60 * 1000)
             );
             var date = new Date(this.gf.getCinIsoDate(res));
             this.cout = moment(date).format("YYYY-MM-DD");
@@ -3578,12 +3578,27 @@ export class Tab1Page implements OnInit {
           }
           //console.log(event.detail.scrollTop)
           let el = document.getElementsByClassName('div-flight-topdeal');
+          let el1 = document.getElementsByClassName('div-flightinternational-topdeal');
+          let elinter = $('.div-flightinternational-topdeal');
           let eluseful = document.getElementsByClassName('div-useful-title');
           if(el && el.length >0){
-            if(event.detail.scrollTop >= 1230){
-              if(el.length >0 && !el[0].classList.contains("cls-topdeal-float")){
-                el[0].classList.add('cls-topdeal-float');
+            if(event.detail.scrollTop >= 1230 ){
+              if(elinter && elinter.length >0 && event.detail.scrollTop < elinter[0].offsetTop - 30){
+                if(el.length >0 && !el[0].classList.contains("cls-topdeal-float")){
+                  el[0].classList.add('cls-topdeal-float');
+                }
+              }else{
+                el[0].classList.remove('cls-topdeal-float');
+
+                if(el1 && el1.length >0 && event.detail.scrollTop >= (1200 + $('.div-flight-topdeal')[0].offsetHeight)){
+                  if(el1.length >0 && !el1[0].classList.contains("cls-topdeal-float")){
+                    el1[0].classList.add('cls-topdeal-float');
+                  }
+                }else{
+                  el1[0].classList.remove('cls-topdeal-float');
+                }
               }
+             
             }else{
               el[0].classList.remove('cls-topdeal-float');
             }

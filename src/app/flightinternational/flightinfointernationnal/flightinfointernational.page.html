@@ -74,6 +74,16 @@
                     <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_legroom_extra.svg" ></div>
                     <div class="text-normal" *ngIf="itemFlight.ticketDetails.seatSpace">{{itemFlight.ticketDetails.seatSpace}}</div>
                   </div>
+
+                  <div class="d-flex" *ngIf="itemFlight.ticketDetails && itemFlight.ticketDetails.noOfSeat">
+                    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_recline.svg" ></div>
+                    <div class="text-normal" *ngIf="itemFlight.ticketDetails.noOfSeat">Số lượng ghế: {{itemFlight.ticketDetails.noOfSeat}}</div>
+                  </div>
+
+                  <div class="d-flex" *ngIf="itemFlight.ticketDetails && itemFlight.ticketDetails.seatMap">
+                    <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/airline_seat_recline.svg" ></div>
+                    <div class="text-normal" *ngIf="itemFlight.ticketDetails.seatMap">Sơ đồ ghế: {{itemFlight.ticketDetails.seatMap}}</div>
+                  </div>
                   
                   <div class="d-flex" *ngIf="itemFlight.ticketDetails && itemFlight.ticketDetails.mealAndBeverage">
                     <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/restaurant.svg" ></div>
@@ -145,7 +155,7 @@
           
           
 
-    <div class="text-title">Điều kiện hoàn hủy và thay đổi</div>      
+    <div class="text-title" *ngIf="changeDepartTime || (itemFlight.policy && itemFlight.policy.changeDepartTime) || ticketRefund || (itemFlight.policy && itemFlight.policy.ticketRefund)">Điều kiện hoàn hủy và thay đổi</div>      
     <!-- Thay đổi vé -->
         
           <div class="d-flex" *ngIf="changeDepartTime else emptyChangeDepartTime">
@@ -160,10 +170,10 @@
             <div class="d-flex" *ngIf="itemFlight.policy && itemFlight.policy.changeDepartTime">
               <div class="div-icon">
                 <img *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('không') !=-1" class="icon-info" src="./assets/ic_flight_international/disturb.svg">
-                <img *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('miễn phí') !=-1" class="icon-info" src="./assets/ic_flight_international/check.svg">
+                <img *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('miễn phí') !=-1 && itemFlight.policy.changeDepartTime.toLowerCase().indexOf('có thu phí') ==-1" class="icon-info" src="./assets/ic_flight_international/check.svg">
                 <img *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('có') !=-1 || (itemFlight.policy.changeDepartTime.toLowerCase().indexOf('không') ==-1 && itemFlight.policy.changeDepartTime.toLowerCase().indexOf('được') !=-1 && itemFlight.policy.changeDepartTime.toLowerCase().indexOf('miễn phí') ==-1) " class="icon-info" src="./assets/ic_flight_international/monetization.svg">
               </div>
-              <div class="text-normal" *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('có thu phí') !=-1">Thay đổi lịch bay có thu phí + Chênh lệch giá vé</div>
+              <div class="text-normal" *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('có thu phí') !=-1">Thay đổi lịch bay {{itemFlight.policy.changeDepartTime}}</div>
               <div class="text-normal" *ngIf="itemFlight.policy.changeDepartTime.toLowerCase().indexOf('có thu phí') ==-1">Thay đổi vé: {{itemFlight.policy.changeDepartTime}}</div>
             </div>
             

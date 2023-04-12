@@ -9,7 +9,9 @@
     padding-left: 4px;
 }
 .flight-add-service-content{
-
+    .m-right-8 {
+        margin-right: 8px;
+    }
     .p-16{
         padding: 16px;
     }
@@ -585,4 +587,13 @@
     font-weight: 600;
     margin: 10px 0;
     border-radius: 4px;
+}
+
+.div-text-tealish {
+    font-size: 16px;
+    font-weight: 600;
+    color: #26bed6;
+}
+.a-items-center {
+    align-items: center;
 }

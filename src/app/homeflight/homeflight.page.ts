@@ -1542,7 +1542,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
       loadflighttopdeal(){
         var se = this;
-        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+se.memberid : "");
+        //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+se.memberid : "");
+        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+se.memberid+"&version=2" : "?version=2");
             var options = {
               method: 'GET',
               url: urlPath,
@@ -1582,34 +1583,74 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
       loadcachetopdeal(data){
         var se = this;
-        se.zone.run(() => data.sort(function (a, b) {
-          let direction = -1;
-            if (a['price'] * 1 < b['price'] * 1) {
-              return 1 * direction;
+        if(data.list){
+          data.forEach(element => {
+            se.zone.run(() => element.list.sort(function (a, b) {
+              let direction = -1;
+                if (a['price'] * 1 < b['price'] * 1) {
+                  return 1 * direction;
+                }
+                else if (a['price'] * 1 > b['price'] * 1) {
+                  return -1 * direction;
+                }
+              }))
+          });
+        }else{
+            se.zone.run(() => data.sort(function (a, b) {
+              let direction = -1;
+                if (a['price'] * 1 < b['price'] * 1) {
+                  return 1 * direction;
+                }
+                else if (a['price'] * 1 > b['price'] * 1) {
+                  return -1 * direction;
+                }
+            }))
+        }
+        
+        if(data && data.length >0 && data[0] && data[0].list){
+          data.forEach(elementdata => {
+            elementdata.list.forEach(element => {
+              element.roundTrip = false;
+              if(element.depart){
+                element.fromPlaceName =  element.depart.fromPlaceName;
+                element.toPlaceNameDisplay = element.depart.toPlaceName;
+                element.dateDisplay = moment(element.depart.departTime).format('DD.MM');
+                element.dateDepartDisplay = se.getDayOfWeek(element.depart.departTime).dayname + ", " + moment(element.depart.departTime).format('DD') + ' thg '+moment(element.depart.departTime).format('MM');
+              }
+              if(element.return && element.return.fromPlaceName){
+                element.dateDisplay += " - " + moment(element.return.departTime).format('DD.MM');
+                element.dateReturnDisplay = se.getDayOfWeek(element.return.departTime).dayname + ", " + moment(element.return.departTime).format('DD') + ' thg '+ moment(element.return.departTime).format('MM');
+                element.roundTrip = true;
+              }
+              
+              element.priceDisplay = se.gf.convertNumberToString(element.price);
+            });
+          });
+          se.listflighttopdeal = data[0].list;
+          se.listinternationalflighttopdeal = data.splice(1,data.length -1);
+        }else{
+          data.forEach(element => {
+            element.roundTrip = false;
+            if(element.depart){
+              element.fromPlaceName =  element.depart.fromPlaceName;
+              element.toPlaceNameDisplay = element.depart.toPlaceName.split(',')[0];
+              element.dateDisplay = moment(element.depart.departTime).format('DD.MM');
+              element.dateDepartDisplay = se.getDayOfWeek(element.depart.departTime).dayname + ", " + moment(element.depart.departTime).format('DD') + ' thg '+moment(element.depart.departTime).format('MM');
             }
-            else if (a['price'] * 1 > b['price'] * 1) {
-              return -1 * direction;
+            if(element.return && element.return.toPlace){
+              element.dateDisplay += " - " + moment(element.return.departTime).format('DD.MM');
+              element.dateReturnDisplay = se.getDayOfWeek(element.return.departTime).dayname + ", " + moment(element.return.departTime).format('DD') + ' thg '+ moment(element.return.departTime).format('MM');
+              element.roundTrip = true;
             }
-          }))
-
-        data.forEach(element => {
-          element.roundTrip = false;
-          if(element.depart){
-            element.fromPlaceName =  element.depart.fromPlaceName;
-            element.toPlaceNameDisplay = element.depart.toPlaceName.split(',')[0];
-            element.dateDisplay = moment(element.depart.departTime).format('DD.MM');
-            element.dateDepartDisplay = se.getDayOfWeek(element.depart.departTime).dayname + ", " + moment(element.depart.departTime).format('DD') + ' thg '+moment(element.depart.departTime).format('MM');
-          }
-          if(element.return){
-            element.dateDisplay += " - " + moment(element.return.departTime).format('DD.MM');
-            element.dateReturnDisplay = se.getDayOfWeek(element.return.departTime).dayname + ", " + moment(element.return.departTime).format('DD') + ' thg '+ moment(element.return.departTime).format('MM');
-            element.roundTrip = true;
-          }
-          
-          element.priceDisplay = se.gf.convertNumberToString(element.price);
-        });
+            
+            element.priceDisplay = se.gf.convertNumberToString(element.price);
+          });
           se.listflighttopdeal = data.filter((item) => {return item.source == 'inbound'});
           se.listinternationalflighttopdeal = data.filter((item) => {return item.source == 'outbound' && (!item.roundTrip || (item.roundTrip && item.return.price))});
+        }
+        
+       
+          
           
           //console.log(se.listinternationalflighttopdeal);
          // console.log(data);
@@ -1635,9 +1676,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           let objdayreturn:any = se.getDayOfWeek(item.return.departTime);
           se._flightService.objSearch = {
               departCode: item.depart.fromPlace,
-              arrivalCode: item.return.fromPlace,
+              arrivalCode: item.roundTrip ? item.return.fromPlace : item.depart.toPlace,
               departDate: item.depart.departTime,
-              returnDate: item.return.departTime,
+              returnDate: item.roundTrip ? item.return.departTime : item.depart.departTime,
               adult: se.adult ? se.adult : 1,
               child: se.child ? se.child : 0,
               infant: se.infant ? se.infant : 0,

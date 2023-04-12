@@ -73,6 +73,8 @@ export class flightService{
   listAllPlaceByArea: any;
   listPrices: any=[];
   keyLoadMorePrices: string;
+  classSelected:any;
+  classSelectedName: string;
 
   publicItemFlightReloadInfo(data: any) {
     this.ItemFlightReloadInfoSubject.next(data);

@@ -127,8 +127,8 @@
                       <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                         {{item.promotions[0].promotionNote}}
                       </div>
-                      <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                      <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                      <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                      <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                       <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                     </div>
                     
@@ -246,8 +246,8 @@
                       <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                         {{item.promotions[0].promotionNote}}
                       </div>
-                      <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                      <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                      <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                      <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                       <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                     </div>
                     
@@ -366,8 +366,8 @@
                     <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                       {{item.promotions[0].promotionNote}}
                     </div>
-                    <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                    <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                    <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                    <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                     <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                   </div>
                   
@@ -502,8 +502,8 @@
                     <div class="div-text-promo" *ngIf="itemother.promotions && itemother.promotions.length>0" (click)="showPromo(itemother)">
                       {{itemother.promotions[0].promotionNote}}
                     </div>
-                    <div [ngClass]="itemother.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="itemother.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{itemother.priceBeforeDiscount}}</span></div>
-                    <div class="div-apply-discount" *ngIf="itemother.discountTitle">{{itemother.discountTitle}}</div>
+                    <div [ngClass]="itemother.discountTitle && !(itemother.promotions && itemother.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="itemother.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{itemother.priceBeforeDiscount}}</span></div>
+                    <div class="div-apply-discount" *ngIf="itemother.discountTitle && !(itemother.promotions && itemother.promotions.length>0)">{{itemother.discountTitle}}</div>
                     <div [ngClass]="itemother.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{itemother.priceDisplay}}</div>
                   </div>
                 </div>
@@ -623,8 +623,8 @@
                       <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                         {{item.promotions[0].promotionNote}}
                       </div>
-                      <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                      <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                      <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                      <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                       <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                     </div>
                     
@@ -742,8 +742,8 @@
                       <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                         {{item.promotions[0].promotionNote}}
                       </div>
-                      <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                      <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                      <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                      <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                       <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                     </div>
                     
@@ -862,8 +862,8 @@
                     <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                       {{item.promotions[0].promotionNote}}
                     </div>
-                    <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                    <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                    <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                    <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                     <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                   </div>
                   
@@ -976,8 +976,8 @@
                     <div class="div-text-promo" *ngIf="itemother.promotions && itemother.promotions.length>0" (click)="showPromo(itemother)">
                       {{itemother.promotions[0].promotionNote}}
                     </div>
-                    <div [ngClass]="itemother.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="itemother.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{itemother.priceBeforeDiscount}}</span></div>
-                    <div class="div-apply-discount" *ngIf="itemother.discountTitle">{{itemother.discountTitle}}</div>
+                    <div [ngClass]="itemother.discountTitle && !(itemother.promotions && itemother.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="itemother.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{itemother.priceBeforeDiscount}}</span></div>
+                    <div class="div-apply-discount" *ngIf="itemother.discountTitle && !(itemother.promotions && itemother.promotions.length>0)">{{itemother.discountTitle}}</div>
                     <div [ngClass]="itemother.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{itemother.priceDisplay}}</div>
                   </div>
                 </div>
@@ -1074,8 +1074,8 @@
                     <div class="div-text-promo" *ngIf="item.promotions && item.promotions.length>0" (click)="showPromo(item)">
                       {{item.promotions[0].promotionNote}}
                     </div>
-                    <div [ngClass]="item.discountTitle ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
-                    <div class="div-apply-discount" *ngIf="item.discountTitle">{{item.discountTitle}}</div>
+                    <div [ngClass]="item.discountTitle && !(item.promotions && item.promotions.length>0) ? 'flight-before-discount top-0' : 'flight-before-discount'" *ngIf="item.priceBeforeDiscount">Giá trước KM <span class="text-discount">{{item.priceBeforeDiscount}}</span></div>
+                    <div class="div-apply-discount" *ngIf="item.discountTitle && !(item.promotions && item.promotions.length>0)">{{item.discountTitle}}</div>
                     <div [ngClass]="item.priceBeforeDiscount ? 'flight-price fp-discount' : 'flight-price'">{{item.priceDisplay}}</div>
                   </div>
                   
