@@ -2024,7 +2024,9 @@ excuteLoadHotelRoom(data){
               let tail = element.Rooms[0].Images.substring(idexofdot, element.Rooms[0].Images.length);
               element.Rooms[0].Images = urlimage + "110x110" + tail;
             }
-            element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
+            if (element.Rooms[0].Images) {
+              element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
+            }
             for (let i = 0; i < element.MealTypeRates.length; i++) {
               var PriceAvgPlusTA=element.MealTypeRates[i].PriceAvgPlusTotalTA
               PriceAvgPlusTA=PriceAvgPlusTA/100000;
@@ -2123,8 +2125,9 @@ excuteLoadHotelRoom(data){
             } else {
               element.checkwarning = 0;
             }
-
-            element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
+            if (element.Rooms[0].Images) {
+              element.Rooms[0].Images = (element.Rooms[0].Images.toLocaleString().trim().indexOf("http") == -1) ? 'https:' + element.Rooms[0].Images : element.Rooms[0].Images;
+            }
             if (!element.Rooms[0].Images || element.Rooms[0].Images.indexOf('noimage') != -1) {
               element.Rooms[0].Images = "https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x110.jpg";
             } else if (element.Rooms[0].Images.indexOf('220x125') != -1) {
@@ -5056,4 +5059,7 @@ async bookcombo() {
   });
 modal.present();
  }
+ CheckHasInternal(Meal) {
+    return Meal.filter((el) => { return el.Supplier == 'Internal' || el.Supplier  == 'B2B' }).length > 0 ? true : false;
+  }
 }

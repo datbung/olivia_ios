@@ -12,7 +12,7 @@
     </ion-row>
 </ion-header>
 <ion-content padding>
-    <ion-row class="item-room">
+    <ion-row class="item-room" *ngIf="!trip.isFlyBooking">
         <!-- Ảnh hotel -->
         <ion-col size="4" style="padding: 0">
           <div class="div-wrapimg">
@@ -48,6 +48,29 @@
             </div>
         </ion-col>
     </ion-row>
+
+    <div *ngIf="trip.isFlyBooking">
+        <div class="text-flight-title ">{{trip.booking_id }}</div>
+        <div class="text-flight-title div-width-600 d-flex">
+         
+            <div>
+               
+                <div>{{ departCity }} ({{ departCode }})</div>
+                <div class="text-flight-datetime">{{ checkInDisplayFullYear }} </div>
+            </div>
+            <div class="div-flight-inout">
+                <img class="img-flight-inout" *ngIf="activityService.objPaymentMytrip && activityService.objPaymentMytrip.trip.bookingsComboData && activityService.objPaymentMytrip.trip.bookingsComboData.length >1" src="./assets/ic_flight/ic_flight_inout.svg">
+                <img class="img-flight-inout img-oneway" *ngIf="activityService.objPaymentMytrip && activityService.objPaymentMytrip.trip.bookingsComboData && activityService.objPaymentMytrip.trip.bookingsComboData.length ==1" src="./assets/imgs/ic_arrow.svg">
+            </div> 
+            <div *ngIf="returnCity&&returnCode">
+                <div>{{ returnCity }}  ({{ returnCode }})</div>
+                <div *ngIf="activityService.objPaymentMytrip && activityService.objPaymentMytrip.trip.bookingsComboData && activityService.objPaymentMytrip.trip.bookingsComboData.length >1" class="text-flight-datetime" >{{ checkOutDisplayFullYear }} </div>
+            </div>
+        </div>
+
+    </div>
+
+    
     <ion-row class="cls-row-text">
         <ion-col style="padding: 0"><label class="cls-row-text-title">1. Quý khách có hài lòng với nhân viên tư vấn của iVIVU.com?
         </label></ion-col>

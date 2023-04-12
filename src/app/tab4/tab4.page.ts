@@ -11,6 +11,8 @@ import { NetworkProvider } from '../network-provider.service';
 import { flightService } from '../providers/flightService';
 import { tourService } from '../providers/tourService';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
+import { UserFeedBackPage } from '../userfeedback/userfeedback';
+import { OverlayEventDetail } from '@ionic/core';
 /**
  * Generated class for the InboxPage page.
  *
@@ -514,13 +516,34 @@ export class Tab4Page implements OnInit{
     });
 
     
-    
+    se.valueGlobal.notifyAction="";
     //chuyển qua tab mytrip
     if(item && item.bookingCode && item.notifyAction != "cancel"){
-      if(item.notifyAction == "sharereviewofhotel"){
-        se.navCtrl.navigateForward(['/app/tabs/tab3']);
-        se.gf.setParams(item.bookingCode,'notifiBookingCode');
-        se.gf.setParams(2,'selectedTab3');
+      if (item.notifyAction == "sharereviewofhotel") {
+        se.checkBookingReview(item).then((result) => {
+          if (result) {
+            // se.navCtrl.navigateForward(['/app/tabs/tab3']);
+            se.valueGlobal.notifyAction="sharereview"
+            se.gf.setParams(item.bookingCode, 'notifiBookingCode');
+            se.getdatamytripHis().then((data) => {
+              se.gf.hideLoading();
+              var idxMaphis = data.map((itemhis) => {
+                return itemhis.booking_id ==item.bookingCode
+              });
+              if (idxMaphis && idxMaphis.length > 0) {
+                var idxhis = idxMaphis.findIndex((el) => { return el == true });
+
+                if (idxhis != -1) {
+                  se.showUserFeedBackPage(data[idxhis]);
+                
+                } 
+              }
+
+            })
+          }else{
+            alert("Chuyến đi của quý khách đã được đánh giá");
+          }
+        })
       }
       else if(item.notifyType == "blog" && item.notifyAction == "blogofmytrip"){
         se.valueGlobal.backValue = "tab4";
@@ -958,5 +981,67 @@ export class Tab4Page implements OnInit{
   }
   goToRegister() {
     this.navCtrl.navigateForward('/register');
+  }
+  async checkBookingReview(trip): Promise<any> {
+    var se = this;
+    var result = false;
+    return new Promise((resolve, reject) => {
+      se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+          var text = "Bearer " + auth_token;
+          var headerobj =
+          {
+            'cache-control': 'no-cache',
+            'content-type': 'application/json',
+            authorization: text
+          }
+
+          se.gf.RequestApi('GET', C.urls.baseUrl.urlSVC3 + 'review?BookingId=' + trip.bookingCode, null, null, 'MyTrip', 'CheckBookingReview').then((data: any) => {
+            if (data) {
+              //Trả về isSuccess = true => chưa review
+              //Trả về false => đã review hoặc có lỗi
+              data=JSON.parse(data);
+              result = data.isSuccess && !data.isReview;
+              resolve(result);
+            }
+          });
+        }
+      })
+    })
+  }
+  async showUserFeedBackPage(trip) {
+    var se = this;
+    if (trip.booking_type=='VMB') {
+      trip.isFlyBooking=true;
+      let departFlight = trip.bookingsComboData.filter((f) => { return moment(f.departureDate).format('DD-MM-YYYY') == moment(trip.checkInDate).format('DD-MM-YYYY') && f.airlineCode });
+      if (departFlight && departFlight.length > 0) {
+        trip.itemdepart = departFlight[0];
+
+      } else {
+        trip.itemdepart = trip.bookingsComboData[0];
+
+      }
+      trip.flightFrom = trip.itemdepart.flightFrom;
+      trip.flightTo = trip.itemdepart.flightTo;
+     
+      trip.checkInDisplay= se.gf.getDayOfWeek(trip.start_date).daynameshort + ", " + moment(trip.start_date).format('DD-MM-YYYY');
+      trip.checkOutDisplay = se.gf.getDayOfWeek(trip.end_date).daynameshort + ", " + moment(trip.end_date).format('DD-MM-YYYY');
+    }
+  
+    this.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: '', paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
+    se.gf.setParams(trip, 'tripFeedBack');
+    const modal: HTMLIonModalElement =
+      await this.modalCtrl.create({
+        component: UserFeedBackPage,
+        componentProps: {
+          aParameter: true,
+        }
+      });
+    modal.present();
+
+    modal.onDidDismiss().then((data: OverlayEventDetail) => {
+      // se.navCtrl.back();
+
+    })
   }
 }

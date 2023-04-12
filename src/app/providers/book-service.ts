@@ -142,6 +142,7 @@ export class ValueGlobal {
   BookingCodeHis: any;
   listhistory: any;
   ischeckFavourite : any
+  notifyAction: string;
 }
 export class SearchHotel {
   paymentType: string='';

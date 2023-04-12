@@ -63,16 +63,8 @@
     </div>
    
   </div> 
-  <!-- <div *ngIf="hasloadRQdata && listRequestTrips.length ==0" class="trip-empty"> -->
+
  <div *ngIf="loginuser">
-  <!-- <div class="inbox-content-empty" *ngIf="items.length == 0 && loaddatadone">
-    <div class="img-inbox-empty">
-      <img class="img-empty" src="./assets/empty/island.svg">
-    </div>
-    <div class="text-trip-empty">
-      <label>Quý khách chưa có tin nhắn mới</label>
-    </div>
-  </div> -->
 
   <div class="inbox-content" *ngIf="!loaddatadone">
     <ion-row *ngFor="let item of itemskeleton">

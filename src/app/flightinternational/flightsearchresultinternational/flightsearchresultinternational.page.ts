@@ -740,13 +740,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
         se.listDepartConditions = [];
         se.listReturnConditions = [];
         se.stoprequest = false;
-        // data.data.forEach(element => {
-        //   let _data = [];
-        //   _data.push(element);
-        //   let _objdata = {"data" : _data};
-        //   obj.source = _objdata;
-        //   se.loadFlightCacheDataByAirline({...obj});
-        // });
+        
         se.loadFlightCacheDataByAirline({...obj});
         setTimeout(()=>{
           this.stoprequest = true;
