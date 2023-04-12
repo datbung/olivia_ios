@@ -28,6 +28,7 @@ export class tourService{
   totalSale: any;
   gaTourDetail: any;
   gaPaymentType: string;
+  calendarDeparture: any;
   
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
