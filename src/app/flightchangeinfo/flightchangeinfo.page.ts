@@ -63,6 +63,7 @@ export class FlightchangeinfoPage implements OnInit {
   isInternationalFlight: any;
   showLunarCalendar: any;
   classSelectedName: any;
+  pax: any;
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -96,6 +97,7 @@ export class FlightchangeinfoPage implements OnInit {
                   this.child = data.child;
                   this.infant = data.infant ? data.infant : 0;
                   this.arrchild = data.arrchild;
+                  this.pax = this.adult + (this.child || 0) + (this.infant || 0);
   
                   this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
                   this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
@@ -145,7 +147,10 @@ export class FlightchangeinfoPage implements OnInit {
         }
 
         close(){
-          
+          this._flightService.classSelected = '';
+          this._flightService.classSelectedName = '';
+          this.classSelectedName='';
+
           this.search();
             //this.modalCtrl.dismiss();
         }
@@ -1114,6 +1119,8 @@ export class FlightchangeinfoPage implements OnInit {
           this._flightService.itemFlightCache.infant=0;
         }
         this.infant = this._flightService.itemFlightCache.infant;
+
+        this.pax = this.adult + (this.child || 0) + (this.infant || 0);
 
         this._flightService.itemFlightCache.adult = this.adult;
         this._flightService.itemFlightCache.child = this.child;

@@ -786,7 +786,7 @@
    </div>
 </ion-content>
 <ion-footer>
-  <ion-row class="div-footer-filtersort">
+  <ion-row [ngClass]="(!emptyFilterResult && (listDepart && listDepart.length > 0)) ? 'div-footer-filtersort' : ' div-footer-filtersort cls-deactive'">
     <ion-col style="align-self: center;" (click)="openSortFlight()">
         <div class="p-left-24">
             <img src="./assets/imgs/ic_sort.svg">

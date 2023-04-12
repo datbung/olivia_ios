@@ -703,3 +703,8 @@
     }
     
 }
+.cls-deactive {
+    opacity: 0.6;
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
+}

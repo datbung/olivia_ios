@@ -83,7 +83,7 @@ export class FlightInternationalFilterClassPage implements OnInit {
                 res = 'PremiumFirst';
                 break;
               default:
-                res = '-1'
+                res = '-1';
               break;
           }
           return res;

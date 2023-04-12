@@ -218,7 +218,9 @@ export class FlightInternationalSearchfilterPage implements OnInit {
 
 
     clearFilter(){
-        $("#chkAll")[0].checked = false
+        $("#chkAll")[0].checked = false;
+        this._flightService.classSelected = '';
+        this._flightService.classSelectedName ='';
         this._flightService.objectFilterInternational = {};
         this._flightService.objectFilterInternational.stopSelected = -1;
         this._flightService.objectFilterInternational.airlineSelected = [];

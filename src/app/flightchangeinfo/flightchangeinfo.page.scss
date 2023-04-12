@@ -594,3 +594,8 @@
 .m-left-8 {
   margin-left: 8px;
 }
+.div-adult {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}

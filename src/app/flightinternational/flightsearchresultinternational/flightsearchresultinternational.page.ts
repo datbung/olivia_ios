@@ -121,6 +121,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
   emptyFilterResult: boolean = false;
   countFilterResult: any;
   listAirlinesFilterDirect = [];
+  loadalldone: boolean;
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -277,7 +278,8 @@ export class FlightSearchResultInternationalPage implements OnInit {
 
   goback(){
     this.stoprequest = true;
-   
+    this._flightService.classSelected = '';
+    this._flightService.classSelectedName = '';
       this._flightService.itemTabFlightActive.emit(true);
       this._flightService.publicItemFlightReloadInfo(1);
       this.valueGlobal.backValue = "homeflight";
@@ -498,7 +500,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
     this._flightService.objectFilter.facilitySelected = [];
     this._flightService.objectFilter.minprice = 0;
     this._flightService.objectFilter.maxprice = 200;
-   
+    
   }
 
   clearSearchFilter(){
@@ -655,9 +657,6 @@ export class FlightSearchResultInternationalPage implements OnInit {
                 
               }
              
-              // if (!result.stop 
-              //   && !se.stoprequest 
-              //   && se.allowSearch) {
               if(obj && obj.source && obj.source.length >0 && se.allowSearch){
               
                 //obj.source = result.sources;
@@ -666,12 +665,16 @@ export class FlightSearchResultInternationalPage implements OnInit {
                 },1000)
                 obj.countretry++;
               } else if(obj.source && obj.source.length ==0){
-                   this.stoprequest = true;
-                  this.loadpricedone = true;
+                se.zone.run(()=>{
+                  se.stoprequest = true;
+                  se.loadpricedone = true;
+                  se.loadalldone = true;
 
-                  if(!this.listDepart || this.listDepart.length ==0){
-                    this.emptyFilterResult = true;
+                  if(!se.listDepart || se.listDepart.length ==0){
+                    se.emptyFilterResult = true;
                   }
+                })
+                  
               }
   
             }
@@ -1185,6 +1188,9 @@ export class FlightSearchResultInternationalPage implements OnInit {
           this.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
           return;
         }
+        if(!(!this.emptyFilterResult && (this.listDepart && this.listDepart.length > 0))){
+          return;
+        }
         let actionSheet = await this.actionsheetCtrl.create({
           cssClass: 'action-sheets-flightsearchresult-sort',
           buttons: [
@@ -1314,6 +1320,9 @@ export class FlightSearchResultInternationalPage implements OnInit {
       async openFilterFlight(){
         if(!this.loadpricedone){
           this.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
+          return;
+        }
+        if(!(!this.emptyFilterResult && (this.listDepart && this.listDepart.length > 0))){
           return;
         }
         this._flightService.itemFlightCache.step = this.step;
@@ -1671,7 +1680,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
 
     async showChangeInfo(){
       var se = this;
-      if(!se.loadpricedone){
+      if(!se.loadpricedone || !se.loadalldone){
         se.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
         return;
       }
@@ -1731,6 +1740,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
         var se = this;
         se.zone.run(()=>{
           se.loadpricedone = false;
+          se.loadalldone = false;
           se.listDepart = [];
           se.listReturn = [];
           se.departfi = [];
@@ -2405,7 +2415,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
 
       async openFlightSelectTimePriority(){
         var se = this;
-        if(!se.loadpricedone){
+        if(!se.loadpricedone || !se.loadalldone){
           se.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
           return;
         }

@@ -3578,12 +3578,27 @@ export class Tab1Page implements OnInit {
           }
           //console.log(event.detail.scrollTop)
           let el = document.getElementsByClassName('div-flight-topdeal');
+          let el1 = document.getElementsByClassName('div-flightinternational-topdeal');
+          let elinter = $('.div-flightinternational-topdeal');
           let eluseful = document.getElementsByClassName('div-useful-title');
           if(el && el.length >0){
-            if(event.detail.scrollTop >= 1230){
-              if(el.length >0 && !el[0].classList.contains("cls-topdeal-float")){
-                el[0].classList.add('cls-topdeal-float');
+            if(event.detail.scrollTop >= 1230 ){
+              if(elinter && elinter.length >0 && event.detail.scrollTop < elinter[0].offsetTop - 30){
+                if(el.length >0 && !el[0].classList.contains("cls-topdeal-float")){
+                  el[0].classList.add('cls-topdeal-float');
+                }
+              }else{
+                el[0].classList.remove('cls-topdeal-float');
+
+                if(el1 && el1.length >0 && event.detail.scrollTop >= (1200 + $('.div-flight-topdeal')[0].offsetHeight)){
+                  if(el1.length >0 && !el1[0].classList.contains("cls-topdeal-float")){
+                    el1[0].classList.add('cls-topdeal-float');
+                  }
+                }else{
+                  el1[0].classList.remove('cls-topdeal-float');
+                }
               }
+             
             }else{
               el[0].classList.remove('cls-topdeal-float');
             }
