@@ -395,23 +395,23 @@ export class TourDepartureCalendarPage implements OnInit {
             let objday = this.calendarDeparture.filter((f) => { return moment(f.AllotmentDate).format('YYYY-MM-DD') == fromdate });
             if (objday && objday.length > 0) {
               let totalprice;
-              if (objday[0].PriceAdultAvg > 10000000 && objday[0].PriceAdultAvg  < 100000000) {
-                  totalprice =  se.gf.convertNumberToString(objday[0].PriceAdultAvg)
-                  totalprice = totalprice.substring(0, 4);
-                  totalprice = totalprice + "tr";
-                  // console.log(totalprice);
-              } else if (objday[0].PriceAdultAvg >= 100000000) {
-                  totalprice = se.gf.convertNumberToString(objday[0].PriceAdultAvg)
-                  totalprice = totalprice.substring(0, 3);
-                  console.log(totalprice);
-                  totalprice = totalprice + "tr";
-              } else {
-                totalprice = (objday[0].PriceAdultAvg) / 1000 >= 1000 ? se.gf.convertNumberToString(Math.round(objday[0].PriceAdultAvg / 1000)) : Math.round((objday[0].PriceAdultAvg / 1000));
-                totalprice = totalprice + "k";
-              }
+              totalprice = objday[0].PriceAdultAvg >= 100000000 ? (objday[0].PriceAdultAvg / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].PriceAdultAvg >= 10000000 ? (((objday[0].PriceAdultAvg / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].PriceAdultAvg / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].PriceAdultAvg / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].PriceAdultAvg > 0 ? (objday[0].PriceAdultAvg / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
+              // if (objday[0].PriceAdultAvg > 10000000 && objday[0].PriceAdultAvg  < 100000000) {
+              //     // totalprice =  se.gf.convertNumberToString(objday[0].PriceAdultAvg)
+              //     // totalprice = totalprice.substring(0, 4);
+              //     totalprice = Math.round((objday[0].PriceAdultAvg / 1000000));
+              //     totalprice = totalprice + "tr";
+              //     // console.log(totalprice);
+              // } else if (objday[0].PriceAdultAvg >= 100000000) {
+              //     // totalprice = se.gf.convertNumberToString(objday[0].PriceAdultAvg)
+              //     // totalprice = totalprice.substring(0, 3);
+              //     totalprice = Math.round((objday[0].PriceAdultAvg / 1000000));
+              //     totalprice = totalprice + "tr";
+              // } else {
+              //   totalprice = (objday[0].PriceAdultAvg) / 1000 >= 1000 ? se.gf.convertNumberToString(Math.round(objday[0].PriceAdultAvg / 1000)) : Math.round((objday[0].PriceAdultAvg / 1000));
+              //   totalprice = totalprice + "k";
+              // }
 
-              //  totalprice = totalprice.substring(0, totalprice.length - 1);
-         
               if (objday[0].PriceAdultAvg == minPrice) {
                 $(elementday.children[0]).append(`<span class='price-calendar-text-tour-green'>${totalprice}</span>`);
                 $('.price-calendar-text-tour-green').parent().addClass('div-boder-KM');
@@ -429,24 +429,8 @@ export class TourDepartureCalendarPage implements OnInit {
               }
 
             }
-            // for (let m = 0; m < this.calendarDeparture.length; m++) {
-            //   const element  =  this.calendarDeparture[m];
-            //   if (fromdate ==  moment(element.AllotmentDate).format('YYYY-MM-DD')) {
-            //     let totalprice = (element.PriceAdultAvg) / 1000 >= 1000 ? se.gf.convertNumberToString(Math.round(element.PriceAdultAvg / 1000)) : Math.round((element.PriceAdultAvg / 1000));
-            //     totalprice = totalprice + "k";
-            //     if (element.ContractName.indexOf("Khuyến Mãi") == -1 ) {
-            //       $(elementday.children[0]).append(`<span class='price-calendar-text-tour-green'>${totalprice}</span>`);
-            //     }else if (element.ContractName.indexOf("Lễ") == -1) {
-            //       $(elementday.children[0]).append(`<span class='price-calendar-text-tour-red'>${totalprice}</span>`);
-            //     }else{
-            //       $(elementday.children[0]).append(`<span class='price-calendar-text-tour'>${totalprice}</span>`);
-            //     }
-            //   }
-
-            // }
           }
-
-
+         
           $('#' + em.id).addClass('cls-animation-calendar');
           let divsmall = $('#' + em.id + ' small');
           if (divsmall && divsmall.length > 0) {
