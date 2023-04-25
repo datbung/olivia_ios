@@ -35,15 +35,20 @@ export class TourListPage implements OnInit{
   isConnected=true;
   name: string;
   loginuser: any;
-  buttoniVIVUSelected: boolean= true;
+  buttoniVIVUSelected: boolean;
   buttonTourDuration: boolean;
   buttonTourName: boolean;
+  buttonTourDeparture: boolean = true;
+  buttonTourPrice : boolean;
   arrslk = [1,2,3,4,5,6];
   listTourCode = ['tailor-tour-ivivu','tour-nuoc-ngoai-cao-cap','cung-duong-dong-tay-bac'];
   allowclickcalendar: boolean = true;
   myCalendar: HTMLIonModalElement;
   arrTour: any;
   arrTourNoPrice: any[];
+  ischeckTimeTour :boolean= true;
+  ischeckDepartTour :boolean= false;
+  ischeckPriceTour :boolean= true;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
@@ -186,11 +191,12 @@ export class TourListPage implements OnInit{
             data.Response.forEach((p)=> {
               if( p.Contract && p.Contract[0] && p.Contract[0].PriceAdult && p.Code == "TO"+element.Id){
                 element.PriceAdult = p.Contract[0].PriceAdult;
-                if(p.Contract[0].PriceAdult < element.MinPrice) {
-                  element.priceShow = se.gf.convertNumberToString(p.Contract[0].PriceAdult);
-                }else {
-                  element.priceShow = se.gf.convertNumberToString(element.MinPrice);
-                }
+                // if(p.Contract[0].PriceAdult < element.MinPrice) {
+                //   element.priceShow = se.gf.convertNumberToString(p.Contract[0].PriceAdult);
+                // }else {
+                //   element.priceShow = se.gf.convertNumberToString(element.MinPrice);
+                // }
+                element.priceShow = p.Contract[0].PriceAdult;
                 element.DepartureTime= moment(p.Contract[0].DepartureTime[0]).format("DD-MM-YYYY") ;
                 element.sortByTime= p.Contract[0].DepartureTime[0];
                 this.arrTour.push(element);
@@ -412,12 +418,13 @@ export class TourListPage implements OnInit{
           text: "iVIVU đề xuất",
           cssClass:"btn-iVIVU cls-border-bottom",
           handler: () => {
-            this.buttoniVIVUSelected = !this.buttoniVIVUSelected;
+            this.buttoniVIVUSelected = true
             this.buttoniVIVUSelected ? $(".btn-iVIVU > span").addClass('selected') : $(".btn-iVIVU > span").removeClass('selected');
 
             this.buttonTourDuration = false;
             this.buttonTourName = false;
-
+            this.buttonTourDeparture = false;
+            this.buttonTourPrice = false;
             if(this.buttoniVIVUSelected){
               this.sortTour(1);
             }
@@ -427,39 +434,81 @@ export class TourListPage implements OnInit{
           text: "Thời lượng Tour",
           cssClass:"btn-duration cls-border-bottom",
           handler: () => {
-            this.buttonTourDuration = !this.buttonTourDuration;
+            this.buttonTourDuration = true;
             this.buttonTourDuration ? $(".btn-duration > span").addClass('selected') : $(".btn-duration > span").removeClass('selected');
 
             this.buttonTourName = false;
-            this.buttoniVIVUSelected = !this.buttonTourDuration;
-
+            this.buttoniVIVUSelected = false;
+            this.buttonTourDeparture = false;
+            this.buttonTourPrice = false;
             if(this.buttonTourDuration){
+              this.ischeckTimeTour=!this.ischeckTimeTour;
               this.sortTour(2);
             }
           }
         },
-        {
-          text: "Tên Tour",
-          cssClass:"btn-name cls-border-bottom",
-          handler: () => {
-            this.buttonTourName = !this.buttonTourName;
-            //this.textsort = this.buttonTourName ? "Cất cánh sớm nhất" : "";
-            this.buttonTourName ? $(".btn-name > span").addClass('selected') : $(".btn-name > span").removeClass('selected');
+        // {
+        //   text: "Tên Tour",
+        //   cssClass:"btn-name cls-border-bottom",
+        //   handler: () => {
+        //     this.buttonTourName = !this.buttonTourName;
+     
+        //     //this.textsort = this.buttonTourName ? "Cất cánh sớm nhất" : "";
+        //     this.buttonTourName ? $(".btn-name > span").addClass('selected') : $(".btn-name > span").removeClass('selected');
 
+        //     this.buttonTourDuration = false;
+        //     this.buttoniVIVUSelected = false;
+        //     this.buttonTourDeparture = false;
+        //     this.buttonTourPrice = false;
+        //     if(this.buttonTourName){
+        //       this.sortTour(3);
+        //     }
+        //   }
+        // },
+        {
+          text: "Ngày Khởi Hành",
+          cssClass:"btn-departure cls-border-bottom",
+          handler: () => {
+            this.buttonTourDeparture = true;
+            this.buttonTourDeparture ? $(".btn-duration > span").addClass('selected') : $(".btn-duration > span").removeClass('selected');
+
+            this.buttonTourName = false;
+            this.buttoniVIVUSelected = false;
             this.buttonTourDuration = false;
-            this.buttoniVIVUSelected = !this.buttonTourName;
-            if(this.buttonTourName){
-              this.sortTour(3);
+            this.buttonTourPrice=false
+            if(this.buttonTourDeparture){
+              this.ischeckDepartTour=!this.ischeckDepartTour;
+              this.sortTour(4);
             }
           }
-        }]
+        },
+        {
+          text: "Giá Tour",
+          cssClass:"btn-price cls-border-bottom",
+          handler: () => {
+            this.buttonTourPrice = true;
+            this.buttonTourPrice ? $(".btn-duration > span").addClass('selected') : $(".btn-duration > span").removeClass('selected');
+
+            this.buttonTourName = false;
+            this.buttoniVIVUSelected = false;
+            this.buttonTourDuration=false;
+            this.buttonTourDeparture=false
+            if(this.buttonTourPrice){
+              this.ischeckPriceTour=!this.ischeckPriceTour;
+              this.sortTour(5);
+            }
+          }
+        }
+      
+      ]
 
     });
    
     this.buttonTourDuration ? $(".btn-duration > span").addClass('selected') : $(".btn-duration > span").removeClass('selected');
     this.buttonTourName ? $(".btn-name > span").addClass('selected') : $(".btn-name > span").removeClass('selected');
     this.buttoniVIVUSelected ? $(".btn-iVIVU > span").addClass('selected') : $(".btn-iVIVU > span").removeClass('selected');
-    
+    this.buttonTourDeparture ? $(".btn-departure > span").addClass('selected') : $(".btn-departure> span").removeClass('selected');
+    this.buttonTourPrice ? $(".btn-price > span").addClass('selected') : $(".btn-price > span").removeClass('selected');
     actionSheet.present();
   
   }
@@ -470,13 +519,21 @@ export class TourListPage implements OnInit{
     {
       se.executeSort('ivivu') 
     }
-    if(sortType == 2)//duration
+    else if(sortType == 2)//duration
     {
       se.executeSort('duration') 
     }
-    if(sortType == 3)//ivivu
+    else if(sortType == 3)//ivivu
     {
       se.executeSort('name') 
+    }
+    else if(sortType == 4)//time
+    {
+      se.sortTimeTour() 
+    }
+    else if(sortType == 5)//price
+    {
+      se.executeSort('price') 
     }
   }
   sortTimeTour(){
@@ -492,12 +549,22 @@ export class TourListPage implements OnInit{
       });
        this.zone.run(() => this.slideData.sort(function (a, b) {
         let columnname = "sortByTime"
-        if (a[columnname] < b[columnname]) {
-          return 1 * direction;
+        if (!se.ischeckDepartTour) {
+          if (a[columnname] < b[columnname]) {
+            return 1 * direction;
+          }
+          else if (a[columnname] > b[columnname]) {
+            return -1 * direction;
+          }
+        }else{
+          if (b[columnname] < a[columnname]) {
+            return 1 * direction;
+          }
+          else if (b[columnname] > a[columnname]) {
+            return -1 * direction;
+          }
         }
-        else if (a[columnname] > b[columnname]) {
-          return -1 * direction;
-        }
+       
       }))
       this.arrTour.forEach(element => {
         if (element.sortByTime<daycin) {
@@ -522,11 +589,26 @@ export class TourListPage implements OnInit{
       if (property=='sortByTime') {
         col = 'sortByTime';
       }
+      if (property=='price') {
+        col = 'priceShow';
+      }
       if(property == 'ivivu'){
         return a[col] - b[col];
       }
       else if(property == 'duration'){
-        return b[col] - a[col];
+        if (!se.ischeckTimeTour) {
+          return b[col] - a[col];
+        }else{
+          return a[col] - b[col];
+        }
+      
+      }else if(property == 'price'){
+        if (!se.ischeckPriceTour) {
+          return a[col] - b[col];
+        }else{
+          return b[col] - a[col];
+        }
+       
       }
       else{
         return b[col].localeCompare(a[col]);
