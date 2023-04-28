@@ -40,7 +40,7 @@
                     
                 </div> -->
 
-                <ion-row class="row-flight">
+                <ion-row [ngClass]="_flightService.filterFromRequestSearchFlight ? 'row-flight cls-deactive' : 'row-flight' ">
                     <div class="div-width div-relative">
                         <div class="img-input"  (click)="searchFlight(1)">
                             <img class="img-padding img-location" src="./assets/ic_flight/flight_cin.svg"/>
@@ -64,7 +64,7 @@
                     </div>
                 </ion-row>
 
-                <ion-row class="row-flight">
+                <ion-row [ngClass]="_flightService.filterFromRequestSearchFlight ? 'row-flight cls-deactive' : 'row-flight' ">
                     <div class="div-width">
                         <div class="img-input"  (click)="searchFlight(2)">
                             <img class="img-padding img-location" src="./assets/ic_flight/flight_cout.svg"/>
@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="div-roundtrip  div-width-100">
+                            <div class="div-roundtrip  div-width-100" *ngIf="!_flightService.filterFromRequestSearchFlight">
                                 <div class=" d-flex t-right"> 
                                     <div class="j-center h-48 text-roundtrip div-width-100">Khứ hồi?</div>
                                     <div class="j-center h-48 m-r-16"><ion-toggle (ionChange)="changeRoundTrip($event)" [checked]="flighttype == 'twoway' ? true : false"></ion-toggle></div>
@@ -151,7 +151,7 @@
                         </div>
                     </ion-row>
 
-                    <ion-row class="row-pax bg-none">
+                    <ion-row class="row-pax bg-none" *ngIf="!_flightService.filterFromRequestSearchFlight">
                         <ion-col class="no-padding cls-bg-white" (click)="choicePax()">
                             <div class="div-width">
                                 <div class="img-cin-cout">
@@ -183,7 +183,7 @@
                         
                     </ion-row>
 
-                    <div (click)="showFlightPriority()" class="div-timepriorityconfig" *ngIf="!isInternationalFlight">
+                    <div (click)="showFlightPriority()" class="div-timepriorityconfig" *ngIf="!isInternationalFlight && !_flightService.filterFromRequestSearchFlight">
                         <div *ngIf="(!timedepartpriorityconfig && !timereturnpriorityconfig) else haspriorityconfig">
                             <span>Bạn có giờ bay ưu tiên? <span class="cls-sub-color"> Chọn ngay <img class="img-right" src="./assets/ic_flight/ic_right_tealish.svg"/></span></span>
                         </div>

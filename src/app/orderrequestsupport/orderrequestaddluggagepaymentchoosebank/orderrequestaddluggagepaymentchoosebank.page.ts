@@ -2,7 +2,7 @@ import { foodService } from './../../providers/foodService';
 import { Bookcombo, foodInfo } from './../../providers/book-service';
 import { Booking, RoomInfo, SearchHotel } from '../../providers/book-service';
 import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
-import { NavController, LoadingController, ToastController, Platform } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, Platform, AlertController } from '@ionic/angular';
 import { C } from '../../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -35,7 +35,8 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
     public loadingCtrl: LoadingController,public _flightService : flightService, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
     public activityService: ActivityService,
-    private safariViewController: SafariViewController) {
+    private safariViewController: SafariViewController,
+    private alertCtrl: AlertController) {
       this.priceshow = this._flightService.itemFlightCache.totalPriceDisplay;
       this.storage.get('infocus').then(infocus => {
         if (infocus) {
@@ -76,6 +77,7 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
 
     if (this.bookingCode) {
       this.CreateUrlOnePay(this.id);
+      
     }
   }
 
@@ -106,7 +108,18 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
                       se.gf.hideLoading();
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
-                      se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                      if(se._flightService.fromOrderRequestChangeFlight){
+                        this.updateChangeFlight().then((success) => {
+                          if(success){
+                            this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                          }else{
+                            this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                          }
+                        })
+                      }else {
+                        se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                      }
+                     
                     }
                     else
                     {
@@ -347,7 +360,18 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
                 this.safariViewController.hide();
               }
               clearInterval(this.intervalID);
-              this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+              if(this._flightService.fromOrderRequestChangeFlight){
+                this.updateChangeFlight().then((success) => {
+                  if(success){
+                    this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                  }else{
+                    this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                  }
+                })
+              }else{
+                this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+              }
+              
             }
             else if(checkpay.ipnCall == "CALLED_FAIL" || checkpay.ipnCall == "CALLED_TIMEOUT")//hủy
                       {
@@ -388,7 +412,18 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
               window.close();
               se.safariViewController.hide();
               clearInterval(se.intervalID);
-              se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+              if(se._flightService.fromOrderRequestChangeFlight){
+                this.updateChangeFlight().then((success) => {
+                  if(success){
+                    this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                  }else{
+                    this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                  }
+                })
+              }else{
+                se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+              }
+              
             }else{//hold vé thất bại về trang tìm kiếm
               clearInterval(se.intervalID);
               se.gf.hideLoading();
@@ -521,4 +556,72 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
     this.isremember=!this.isremember
   }
 
+  updateChangeFlight(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      let header = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8'
+      };
+      let url = '';
+      let trip = this.activityService.objPaymentMytrip.trip;
+      if(this.activityService.typeChangeFlight == 1){
+        //this.
+          url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
+          this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+            if(data && data.success && data.priceChange){
+              resolve(true);
+            }else{
+              resolve(false);
+            }
+              
+          })
+      }else if(this.activityService.typeChangeFlight == 2){
+          url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
+          this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+            if(data && data.success && data.priceChange){
+              resolve(true);
+            }else{
+              resolve(false);
+            }
+          })
+      }else {
+        url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
+        this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+          if(data && data.success && data.priceChange){
+            resolve(true);
+          }else{
+            resolve(false);
+          }
+        });
+
+        let url1 = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
+        this.gf.RequestApi('GET', url1, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+          if(data && data.success && data.priceChange){
+            resolve(true);
+          }else{
+            resolve(false);
+          }
+            
+        })
+      }
+    })
+    
+  }
+
+  public async showConfirm(msg){
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      cssClass: 'cls-global-confirm',
+      buttons: [
+      {
+        text: 'Xác nhận',
+        role: 'OK',
+        handler: () => {
+          this.navCtrl.navigateBack('/orderrequestsearchflight');
+        }
+        }
+      ]
+    });
+    alert.present();
+  }
 }

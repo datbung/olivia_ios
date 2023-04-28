@@ -599,3 +599,8 @@
   text-overflow: ellipsis;
   max-width: 120px;
 }
+.cls-deactive {
+  opacity: 0.6;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+}

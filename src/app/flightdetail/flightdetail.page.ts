@@ -128,10 +128,20 @@ export class FlightdetailPage implements OnInit {
            //this.departAirPort = this._flightService.itemFlightCache.departAirport;
            //this.returnAirPort = this._flightService.itemFlightCache.returnAirPort;
            if(!this.departAirPort){
-               this.departAirPort = this.itemFlightDetail.fromAirport.substring(0, this.itemFlightDetail.fromAirport.length -5 );
+            if(this.itemFlightDetail.fromAirport){
+              this.departAirPort = this.itemFlightDetail.fromAirport.substring(0, this.itemFlightDetail.fromAirport.length -5 );
+            }else if(this.itemFlightCache.departAirport){
+              this.departAirPort =this.itemFlightCache.departAirport;
+            }
+               
            }
            if(!this.returnAirPort){
-            this.returnAirPort = this.itemFlightDetail.toAirport.substring(0, this.itemFlightDetail.toAirport.length -5 );
+            if(this.itemFlightDetail.toAirport){
+              this.returnAirPort = this.itemFlightDetail.toAirport.substring(0, this.itemFlightDetail.toAirport.length -5 );
+            }else if(this.itemFlightCache.returnAirport){
+              this.returnAirPort =this.itemFlightCache.returnAirport;
+            }
+            
         }
            this.adult = this.itemFlightCache.adult;
            this.child = this.itemFlightCache.child + (this.itemFlightCache.infant ? this.itemFlightCache.infant : 0);

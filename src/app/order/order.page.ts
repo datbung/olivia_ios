@@ -1075,7 +1075,7 @@ import { normalizeURL } from 'ionic-angular';
                     if (element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1) {
                       element.booking_type = "COMBO_VXR";
                     }
-    
+                    
                     //if (element.payment_status != 3 && element.payment_status != -2) {
                     //if (element.payment_status != 3) {
                     if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1) {
@@ -1570,6 +1570,8 @@ import { normalizeURL } from 'ionic-angular';
                         });
     
                       }
+
+                      
                     }
                     if (element.delivery_payment_date) {
                       let arrpaymentdate = element.delivery_payment_date.split("T");
@@ -1982,6 +1984,7 @@ import { normalizeURL } from 'ionic-angular';
               //chặng dừng nếu có
               if (se.listMyTrips[0].booking_json_data) {
                 this.booking_json_data = JSON.parse(se.listMyTrips[0].booking_json_data);
+                
                 let TotalPriceReturn = 0;
                 let TotalPriceGo = 0;
                 this.booking_json_data.forEach(item => {

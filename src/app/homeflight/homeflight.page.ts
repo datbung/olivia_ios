@@ -24,7 +24,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
     styleUrls: ['./homeflight.page.scss'],
   })
   export class HomeflightPage {
-    @ViewChild('xxxx') content: IonContent;
     
 
     cindisplay = '25-05-2020';
@@ -78,6 +77,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
   isExtenalReturn: boolean;
   showLunarCalendar: any;
   listinternationalflighttopdeal=[];
+  showmoreflight = false;
+  showDivFlightTopDeal: any;
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -253,7 +254,15 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
             this.storage.get('flighttopdeal').then((data) => {
               if(data){
-                  this.loadcachetopdeal(data);
+                this.storage.get('clearcacheflighttopdeal').then((data) => {
+                  if(!data){
+                    this.storage.remove('flighttopdeal');
+                    this.loadflighttopdeal();
+                  }else{
+                    this.loadcachetopdeal(data);
+                  }
+                  
+                })
               }else{
                   this.loadflighttopdeal();
               }
@@ -697,7 +706,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
           this.reloadInfoOneway(!ev.currentTarget.checked);
           this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
-          
+
+          if(this.listflighttopdeal && this.listflighttopdeal.length >0){
+           this.showDivFlightTopDeal = this.listflighttopdeal.some(item => item.roundTrip == ev.currentTarget.checked);
+          }
         }
 
         searchFlight(index){
@@ -1543,7 +1555,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
       loadflighttopdeal(){
         var se = this;
         //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+se.memberid : "");
-        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+se.memberid+"&version=2" : "?version=2");
+        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+(se.memberid||'')+"&version=2" : "?version=2");
+        //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal?version=2";
             var options = {
               method: 'GET',
               url: urlPath,
@@ -1583,34 +1596,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
       loadcachetopdeal(data){
         var se = this;
-        if(data.list){
-          data.forEach(element => {
-            se.zone.run(() => element.list.sort(function (a, b) {
-              let direction = -1;
-                if (a['price'] * 1 < b['price'] * 1) {
-                  return 1 * direction;
-                }
-                else if (a['price'] * 1 > b['price'] * 1) {
-                  return -1 * direction;
-                }
-              }))
-          });
-        }else{
-            se.zone.run(() => data.sort(function (a, b) {
-              let direction = -1;
-                if (a['price'] * 1 < b['price'] * 1) {
-                  return 1 * direction;
-                }
-                else if (a['price'] * 1 > b['price'] * 1) {
-                  return -1 * direction;
-                }
-            }))
-        }
         
         if(data && data.length >0 && data[0] && data[0].list){
           data.forEach(elementdata => {
             elementdata.list.forEach(element => {
               element.roundTrip = false;
+              element.timesortorder = new Date(element.depart.departTime).getTime();
               if(element.depart){
                 element.fromPlaceName =  element.depart.fromPlaceName;
                 element.toPlaceNameDisplay = element.depart.toPlaceName;
@@ -1627,7 +1618,64 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             });
           });
           se.listflighttopdeal = data[0].list;
-          se.listinternationalflighttopdeal = data.splice(1,data.length -1);
+          if(data.length >1){
+            se.listinternationalflighttopdeal = data.splice(1,data.length -1);
+            se.showDivFlightTopDeal = se.listflighttopdeal.some(item => item.roundTrip == (this.flighttype == 'twoway'));
+          }
+         
+          setTimeout(()=>{
+            if(se.listinternationalflighttopdeal && se.listinternationalflighttopdeal.length >0 && se.listinternationalflighttopdeal[0] && se.listinternationalflighttopdeal[0].list){
+              se.listinternationalflighttopdeal.forEach(element => {
+                se.zone.run(() => element.list.sort(function (a, b) {
+                  let direction = -1;
+                    //if((a['roundTrip'] && b['roundTrip']) || (!a['roundTrip'] && !b['roundTrip'])){
+                      if (a['price'] * 1 < b['price'] * 1 ) {
+                        return 1 * direction;
+                      }
+                      else if (a['price'] * 1 > b['price'] * 1) {
+                        return -1 * direction;
+                      }else if(a['price'] *1 == b['price']*1){
+                        return a['timesortorder'] - b['timesortorder'];
+                      }
+                  
+                  }))
+              });
+            }
+            if(data && data.length >0 && data[0] && data[0].list){
+              data.forEach(element => {
+                se.zone.run(() => element.list.sort(function (a, b) {
+                  let direction = -1;
+                    if((a['roundTrip'] && b['roundTrip']) || (!a['roundTrip'] && !b['roundTrip'])){
+                      if (a['price'] * 1 < b['price'] * 1 ) {
+                        return 1 * direction;
+                      }
+                      else if (a['price'] * 1 > b['price'] * 1) {
+                        return -1 * direction;
+                      }
+                    }else if(a['roundTrip'] && !b['roundTrip']){
+                      return 1 * direction;
+                    }else if(!a['roundTrip'] && b['roundTrip']){
+                      return -1 * direction;
+                    }
+                  }))
+              });
+            }else{
+                se.zone.run(() => data.sort(function (a, b) {
+                  let direction = -1;
+                  if (a['price'] * 1 < b['price'] * 1) {
+                    return 1 * direction;
+                  }
+                  else if (a['price'] * 1 > b['price'] * 1) {
+                    return -1 * direction;
+                  }
+                    
+                }))
+            }
+
+            
+          },100)
+          
+
         }else{
           data.forEach(element => {
             element.roundTrip = false;
@@ -1649,16 +1697,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           se.listinternationalflighttopdeal = data.filter((item) => {return item.source == 'outbound' && (!item.roundTrip || (item.roundTrip && item.return.price))});
         }
         
-       
-          
-          
-          //console.log(se.listinternationalflighttopdeal);
-         // console.log(data);
-        //  se.loadflighttrips().then((data)=>{
-        //   if(data && data.tripFuture.length >0){
-        //       se.filterFlightTopDealByTrips(data.tripFuture);
-        //   }
-        //   });
       }
 
       select(item){
@@ -1684,10 +1722,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               infant: se.infant ? se.infant : 0,
               title: "Đi " + item.fromPlaceName +" → " + item.toPlaceNameDisplay,
               dayDisplay: objday.dayname + ", " +moment(item.depart.departTime).format("DD") +  " thg " +moment(item.depart.departTime).format("M"),
-              subtitle : " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
+              subtitle : " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return && item.roundTrip ? ' Khứ hồi' : ' Một chiều'),
               titleReturn: "Về " + item.toPlaceNameDisplay +" → " + item.fromPlaceName,
               dayReturnDisplay: objdayreturn.dayname + ", " + moment(item.return.departTime).format("DD") + " thg " +moment(item.return.departTime).format("M"),
-              subtitleReturn : " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return ? ' Khứ hồi' : ' Một chiều'),
+              subtitleReturn : " · " + ((se.adult ? se.adult : 1) + (se.child ? se.child : 0) + (se.infant ? se.infant : 0) ) + " khách" + " · " + (item.depart && item.return && item.roundTrip ? ' Khứ hồi' : ' Một chiều'),
               itemSameCity: null,
               itemDepartSameCity: "",
               itemReturnSameCity: "",
@@ -2231,5 +2269,34 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
         searchArea() {
           this.navCtrl.navigateForward('/flightsearcharea');
+        }
+
+        showMoreFlight(){
+          if($('.div-wrap-flighttopdeal').hasClass('div-collapse')){
+            this.showmoreflight = true;
+            $('.div-wrap-flighttopdeal').removeClass('div-collapse').addClass('div-expand');
+          }else{
+            this.showmoreflight = false;
+            $('.div-wrap-flighttopdeal').removeClass('div-expand').addClass('div-collapse');
+            this._flightService.publicItemShowMoreFlightTopDeal('divshowmoreflight');
+          }
+          
+        }
+
+        showMoreFlightInternational(item,index){
+          if(typeof(item.showmoreflight) == 'undefined'){
+            item.showmoreflight = false;
+          }
+          item.showmoreflight = !item.showmoreflight;
+          
+          if($(`.div-wrap-flightinternationaltopdeal_${index}`).hasClass('div-collapse')){
+            //this.showmoreflight = true;
+            $(`.div-wrap-flightinternationaltopdeal_${index}`).removeClass('div-collapse').addClass('div-expand');
+          }else{
+            //this.showmoreflight = false;
+            $(`.div-wrap-flightinternationaltopdeal_${index}`).removeClass('div-expand').addClass('div-collapse');
+            this._flightService.publicItemShowMoreFlightTopDeal(`divshowmoreflight_${index}`);
+          }
+          
         }
   }

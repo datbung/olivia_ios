@@ -782,7 +782,7 @@ export class FlightComboReviewsPage implements OnInit{
     return new Promise((resolve, reject) => {
       if (data) {
         data.IsPackageRateInternal = true;
-        data.IsPackageRate = true;
+        //data.IsPackageRate = true;
         data.GetVinHms = 1;
         data.GetSMD= 1;
         data.IsB2B=true;
@@ -790,6 +790,10 @@ export class FlightComboReviewsPage implements OnInit{
         data.IsAgoda= true;
         data.GetOTAPackage = 1;
         data.IsOccWithBed = false;
+        data['RoomsRequest[0][Adults][label]'] = se.adults ? se.adults : "2";
+        data['RoomsRequest[0][Child][label]'] = se.children ? se.children : "0";
+        data.CheckInDate = moment(data.CheckInDate).format('YYYY-MM-DD');
+        data.CheckOutDate = moment(data.CheckOutDate).format('YYYY-MM-DD');
         var form = data;
         var options = {
           method: 'POST',

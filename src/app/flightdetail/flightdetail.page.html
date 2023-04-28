@@ -369,10 +369,10 @@
                         
                     </div>
 
-                    <div class="div-text-title p-top-24">Chi tiết giá</div>
+                    <div class="div-text-title p-top-24" *ngIf="!_flightService.fromOrderRequestChangeFlight">Chi tiết giá</div>
 
 
-                    <div class="div-flight-pricesummary">
+                    <div class="div-flight-pricesummary" *ngIf="!_flightService.fromOrderRequestChangeFlight">
                         <div *ngFor="let itemprice of priceSummaries" class="m-bottom-16">
                             <div class="d-flex " *ngIf="itemprice.passengerType == 0 && itemprice.code == 'NET'">
                                 <div class="div-width-400 text-name" >Giá vé người lớn</div>
@@ -478,7 +478,7 @@
       </div>
   </ion-content>
   <ion-footer>
-    <div class="div-footer d-flex-footer">
+    <div class="div-footer d-flex-footer" *ngIf="!_flightService.fromOrderRequestChangeFlight">
         <div class="d-flex-footer div-width-100">
             <div class="div-total">
                 <div class="d-flex-footer text-sub-total">

@@ -354,3 +354,88 @@
 .div-luggest{
     margin-top: 10px;
 }
+.text-normal {
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+    text-align: left;
+    color: #3f3b3b;
+}
+.div-change-flight {
+    .text-flight-code {
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -0.48px;
+        text-align: left;
+        color: #3f3b3b;
+    }
+
+    .text-flight-datetime {
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -0.28px;
+        text-align: left;
+        color: #6d6e71;
+        margin: 10px 0 12px;
+    }
+
+    .div-ticket {
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: -0.34px;
+        text-align: right;
+        color: #6d6e71;
+    }
+
+    .text-time {
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -0.48px;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .text-sub {
+        font-size: 12px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.67;
+        letter-spacing: -0.34px;
+        text-align: left;
+        color: #6d6e71;
+    }
+    .f-14 {
+        font-size: 14px;
+    }
+    .img-flight-inout {
+        width: 16px !important;
+    }
+    .div-airlinename {
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: -0.28px;
+        text-align: left;
+        color: #3f3b3b;
+        margin-left: 8px;
+    }
+}
+.div-width-300 {
+    width: 250%;
+    justify-content: space-between;
+    margin-right: 100px;
+}

@@ -88,7 +88,7 @@ export class OrderRequestAddluggagePage implements OnInit {
       if(itemFlightTrip && itemFlightTrip.itemdepart && itemFlightTrip.itemdepart){
         this.getLuggage(itemFlightTrip.itemdepart).then((data) =>{
           this.loadluggagedepartdone = true;
-          if(data && data.baggage){
+          if(data && data.baggage && data.baggage.length >0){
             if(itemFlightTrip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') != -1){
               this.departLuggage = data.baggage;
             }else{
@@ -120,7 +120,7 @@ export class OrderRequestAddluggagePage implements OnInit {
         this.getLuggage(itemFlightTrip.itemreturn).then((datareturn) =>{
           //Chiều về và chiều đi cùng mã pnr
           if(itemFlightTrip && itemFlightTrip.itemdepart && itemFlightTrip.itemdepart.ticketCode == itemFlightTrip.itemreturn.ticketCode){
-            if(datareturn && datareturn.returnBaggage){
+            if(datareturn && datareturn.returnBaggage && datareturn.returnBaggage.length >0){
               if(itemFlightTrip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') != -1){
                 this.returnLuggage = datareturn.returnBaggage;
               }else{

@@ -1684,7 +1684,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
         se.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
         return;
       }
-         
+         se._flightService.filterFromRequestSearchFlight = false;
       setTimeout(()=>{
         se._flightService.itemAllFlightCount.emit(( this.listDepart ? this.listDepart.length: 0) + (this.listReturn ? this.listReturn.length : 0));
       },350)

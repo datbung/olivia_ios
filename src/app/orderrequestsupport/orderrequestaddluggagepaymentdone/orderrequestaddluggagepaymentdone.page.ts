@@ -33,6 +33,7 @@ export class OrderRequestAddluggagePaymentDonePage implements OnInit {
   returnCode: string;
   itemLuggageDifferent: any = [];
   diffcode: any;
+  trip: any;
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
     private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -49,31 +50,53 @@ export class OrderRequestAddluggagePaymentDonePage implements OnInit {
           this.checkreview = checkreview;
         }
       })
-      console.log(this.activityService.objRequestAddLuggage);
+     
     this.total = this.activityService.objRequestAddLuggage.totalPriceDisplay;
-    this.itemAddLuggage = this.activityService.objRequestAddLuggage;
-    if(this.activityService.objRequestAddLuggage.bookingCode){
-      this.bookingCode = this.activityService.objRequestAddLuggage.bookingCode;
-    }
-    this.zone.run(()=> {
-      if(this.itemAddLuggage && this.itemAddLuggage.objectDepartLuggage && this.itemAddLuggage.objectDepartLuggage.items && this.itemAddLuggage.objectDepartLuggage.items.length >0){
-        this.arrlugdepart = this.itemAddLuggage.objectDepartLuggage.items;
-        this.departCode = this.activityService.objPaymentMytrip.trip.itemdepart.departCode + ' - ' + this.activityService.objPaymentMytrip.trip.itemdepart.arrivalCode;
+    if(!this._flightService.fromOrderRequestChangeFlight){
+      this.itemAddLuggage = this.activityService.objRequestAddLuggage;
+      if(this.activityService.objRequestAddLuggage.bookingCode){
+        this.bookingCode = this.activityService.objRequestAddLuggage.bookingCode;
       }
+      this.zone.run(()=> {
+        if(this.itemAddLuggage && this.itemAddLuggage.objectDepartLuggage && this.itemAddLuggage.objectDepartLuggage.items && this.itemAddLuggage.objectDepartLuggage.items.length >0){
+          this.arrlugdepart = this.itemAddLuggage.objectDepartLuggage.items;
+          this.departCode = this.activityService.objPaymentMytrip.trip.itemdepart.departCode + ' - ' + this.activityService.objPaymentMytrip.trip.itemdepart.arrivalCode;
+        }
+    
+        if(this.itemAddLuggage && this.itemAddLuggage.objectReturnLuggage && this.itemAddLuggage.objectReturnLuggage.items && this.itemAddLuggage.objectReturnLuggage.items.length >0){
+          this.arrlugreturn = this.itemAddLuggage.objectReturnLuggage.items;
+          this.returnCode = this.activityService.objPaymentMytrip.trip.itemreturn.departCode + ' - ' + this.activityService.objPaymentMytrip.trip.itemreturn.arrivalCode;
+        }
   
-      if(this.itemAddLuggage && this.itemAddLuggage.objectReturnLuggage && this.itemAddLuggage.objectReturnLuggage.items && this.itemAddLuggage.objectReturnLuggage.items.length >0){
-        this.arrlugreturn = this.itemAddLuggage.objectReturnLuggage.items;
-        this.returnCode = this.activityService.objPaymentMytrip.trip.itemreturn.departCode + ' - ' + this.activityService.objPaymentMytrip.trip.itemreturn.arrivalCode;
+        if(this.itemAddLuggage && this.itemAddLuggage.objectReturnLuggage && this.itemAddLuggage.objectReturnLuggage.items && this.itemAddLuggage.objectReturnLuggage.items.length >0
+          && this.itemAddLuggage.objectDepartLuggage && this.itemAddLuggage.objectDepartLuggage.items && this.itemAddLuggage.objectDepartLuggage.items.length >0
+          ){
+            this.itemLuggageDifferent = this.activityService.objRequestAddLuggage.objectReturnLuggage.items.filter((itemr) => {return !this.activityService.objRequestAddLuggage.objectDepartLuggage.items.some(itemd => (itemd.lastName + ' ' + itemd.firstName.replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','').trim()) == (itemr.lastName + ' ' + itemr.firstName.replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','').trim()))});
+            this.diffcode = this.activityService.objPaymentMytrip.trip.itemreturn.departCode + ' - ' + this.activityService.objPaymentMytrip.trip.itemreturn.arrivalCode;
+        }
+      
+      })
+    }else{
+      this.trip = this.activityService.objPaymentMytrip.trip;
+      if(this.trip.bookingsComboData[0] && this.trip.bookingsComboData[0].passengers && this.trip.bookingsComboData[0].passengers.length >0){
+        for (let index = 0; index < this.trip.bookingsComboData[0].passengers.length; index++) {
+          const pax = this.trip.bookingsComboData[0].passengers[index];
+          if(pax.hanhLyshow && pax.hanhLyshow!='0'){
+            this.trip.bookingsComboData[0].lugfree = this.trip.bookingsComboData[0].hanhLyshow + ' kg';
+          }
+        }
       }
 
-      if(this.itemAddLuggage && this.itemAddLuggage.objectReturnLuggage && this.itemAddLuggage.objectReturnLuggage.items && this.itemAddLuggage.objectReturnLuggage.items.length >0
-        && this.itemAddLuggage.objectDepartLuggage && this.itemAddLuggage.objectDepartLuggage.items && this.itemAddLuggage.objectDepartLuggage.items.length >0
-        ){
-          this.itemLuggageDifferent = this.activityService.objRequestAddLuggage.objectReturnLuggage.items.filter((itemr) => {return !this.activityService.objRequestAddLuggage.objectDepartLuggage.items.some(itemd => (itemd.lastName + ' ' + itemd.firstName.replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','').trim()) == (itemr.lastName + ' ' + itemr.firstName.replace('MSTR','').replace('MISS','').replace('MR','').replace('MRS','').replace('MS','').trim()))});
-          this.diffcode = this.activityService.objPaymentMytrip.trip.itemreturn.departCode + ' - ' + this.activityService.objPaymentMytrip.trip.itemreturn.arrivalCode;
+      if(this.trip.bookingsComboData[1] && this.trip.bookingsComboData[1].passengers && this.trip.bookingsComboData[1].passengers.length >0){
+        for (let index = 0; index < this.trip.bookingsComboData[1].passengers.length; index++) {
+          const pax = this.trip.bookingsComboData[1].passengers[index];
+          if(pax.hanhLyshow && pax.hanhLyshow!='0'){
+            this.trip.bookingsComboData[1].lugfree = this.trip.bookingsComboData[1].hanhLyshow + ' kg';
+          }
+        }
       }
+    }
     
-    })
     
 
   }

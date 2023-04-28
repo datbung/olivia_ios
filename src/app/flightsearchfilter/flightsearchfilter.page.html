@@ -17,7 +17,7 @@
 <ion-content class="flight-search-filter-content">
   <div class="p-16">
     <div *ngIf="step ==2 else filterReturn">
-      <div class="div-price">
+      <div class="div-price" *ngIf="!_flightService.filterFromRequestSearchFlight">
         <div class="text-title m-bottom-8">Giá</div>
         <div class="div-fitler-price d-flex">
           <div class="div-left text-price">{{minpricedisplay}}</div>
@@ -292,7 +292,7 @@
 
     <!-- Chiều về -->
     <ng-template #filterReturn>
-      <div class="div-price">
+      <div class="div-price" *ngIf="!_flightService.filterFromRequestSearchFlight">
         <div class="text-title m-bottom-8">Giá</div>
         <div class="div-fitler-price d-flex">
           <div class="div-left text-price">{{minpricereturndisplay}}</div>

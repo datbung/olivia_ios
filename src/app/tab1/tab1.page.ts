@@ -474,6 +474,12 @@ export class Tab1Page implements OnInit {
         }
       },100)
     })
+
+    se.flightService.getItemShowMoreFlightTopDeal().subscribe((data)=>{
+      if(data){
+        se.scrollToDivShowMore(data);
+      }
+    })
     
     se.storage.get('auth_token').then((data)=>{
       if(!data){
@@ -3582,27 +3588,52 @@ export class Tab1Page implements OnInit {
           let elinter = $('.div-flightinternational-topdeal');
           let eluseful = document.getElementsByClassName('div-useful-title');
           if(el && el.length >0){
-            if(event.detail.scrollTop >= 1230 ){
-              if(elinter && elinter.length >0 && event.detail.scrollTop < elinter[0].offsetTop - 30){
-                if(el.length >0 && !el[0].classList.contains("cls-topdeal-float")){
-                  el[0].classList.add('cls-topdeal-float');
-                }
-              }else{
-                el[0].classList.remove('cls-topdeal-float');
-
-                if(el1 && el1.length >0 && event.detail.scrollTop >= (1200 + $('.div-flight-topdeal')[0].offsetHeight)){
-                  if(el1.length >0 && !el1[0].classList.contains("cls-topdeal-float")){
-                    el1[0].classList.add('cls-topdeal-float');
+            if(event.detail.scrollTop >= 1200 ){
+              if(elinter && elinter.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop - 250){
+               // setTimeout(()=>{
+                  if(el.length >0 && el[0] && !el[0].classList.contains("cls-topdeal-float")){
+                    el[0].classList.add('cls-topdeal-float');
                   }
-                }else{
-                  el1[0].classList.remove('cls-topdeal-float');
-                }
+                  if(el1 && el1[0] && el1[0].classList.contains("cls-topdeal-float")){
+                    el1[0].classList.remove('cls-topdeal-float');
+                  }
+                //},100)
+               
+              }else{
+                
+                  //el[0].classList.remove('cls-topdeal-float');
+                  //setTimeout(()=>{
+                    if(el1 && el1.length >0 && event.detail.scrollTop >= $('.div-group-name')[0].offsetTop - 220 ){
+                    
+                        if(el1.length >0 && el1[0] && !el1[0].classList.contains("cls-topdeal-float")){
+                          el1[0].classList.add('cls-topdeal-float');
+                        }
+                      
+                    }
+                    else if(el1 && el1[0] && el1.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop -120){
+                      el1[0].classList.remove('cls-topdeal-float');
+                    }
+                //},100)
               }
              
             }else{
-              el[0].classList.remove('cls-topdeal-float');
+              if(el[0]){
+                el[0].classList.remove('cls-topdeal-float');
+              }
+              if(el1[0]){
+                el1[0].classList.remove('cls-topdeal-float');
+              }
+              
             }
 
+          }else{
+            if(el1 && el1.length >0 && event.detail.scrollTop >= $('.div-group-name')[0].offsetTop - 120){
+              if(el1.length >0 && el1[0] && !el1[0].classList.contains("cls-topdeal-float")){
+                el1[0].classList.add('cls-topdeal-float');
+              }
+            }if(el1 && el1.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop - 100){
+              el1[0].classList.remove('cls-topdeal-float');
+            }
           }
 
           if(eluseful && eluseful.length >0){
@@ -4118,6 +4149,12 @@ export class Tab1Page implements OnInit {
     item.checkInDate=moment(this.searchhotel.datecin).format('DD')+ ' '+ 'tháng' + ' ' +  moment(this.searchhotel.datecin).format('MM') +', ' +moment(this.searchhotel.datecin).format('YYYY')
     item.checkOutDate=moment(this.searchhotel.datecout).format('DD')+ ' '+ 'tháng' + ' ' +  moment(this.searchhotel.datecout).format('MM') +', ' +moment(this.searchhotel.datecout).format('YYYY')
     this.gf.setCacheSearch(item,0);
+  }
+
+  scrollToDivShowMore(id){
+    setTimeout(()=>{
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+    },100)
   }
 }
 
