@@ -147,7 +147,7 @@ export class TourDetailPage {
                             let lstDepartures = JSON.parse(data2.Response);
                             this.tourService.calendarDeparture=JSON.parse(data2.Response);
                             //console.log(lstDepartures);
-
+                            this.listDepartureDate=[];
                             lstDepartures.forEach(element => {
                               let _item = {
                                 AllotmentDateStr: `${moment(element.AllotmentDate).format('DD/MM/YYYY')}`,
@@ -164,6 +164,7 @@ export class TourDetailPage {
                               }
                               this.listDepartureDate.push(_item);
                             });
+                            this.tourService.departures = [];
                             this.tourService.departures = this.listDepartureDate.map(o => o.DepartureDate);
                             this.tourService.departuresItemList = this.listDepartureDate;
 
