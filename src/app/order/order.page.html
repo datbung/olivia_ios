@@ -734,7 +734,7 @@
                         </div>
                         <div  class="div-width-50 v-align-center">
                             <div class="div-flex-end">
-                              <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin"></ion-toggle>
+                              <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                             </div>
                         </div>
                       </div>
@@ -3038,7 +3038,7 @@
                         Yêu cầu Checkin-Online
                       </div>
                       <div  class="position-absolute">
-                        <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin"></ion-toggle>
+                        <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                       </div>
                     </div>
                      <!-- Checkin online -->
@@ -3557,7 +3557,7 @@
               <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson"  class="d-flex div-checkin-online-1">
                
                 <div class="div-text-checkin-online">Yêu cầu Checkin-Online</div>
-                <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin"></ion-toggle></div>
+                <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
               </div>
 
           
