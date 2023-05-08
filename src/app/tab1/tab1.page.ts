@@ -861,7 +861,7 @@ export class Tab1Page implements OnInit {
             this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           } else {
-            this.cin = this.gf.getCinIsoDate(new Date());
+            this.cin = new Date(this.gf.getCinIsoDate(new Date()));
             var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");

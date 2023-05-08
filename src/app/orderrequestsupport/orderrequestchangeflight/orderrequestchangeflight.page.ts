@@ -42,42 +42,45 @@ export class OrderRequestChangeFlightPage implements OnInit {
         this.trip = this.activityService.objPaymentMytrip.trip;
         this.itemdepart = this.activityService.objPaymentMytrip.trip.itemdepart;
         this.itemreturn = this.activityService.objPaymentMytrip.trip.itemreturn;
-        this.trip.bookingsComboData[0].passengers.forEach((elementlug, index) => {
-          let yearold = 18;
-          if (elementlug.dob) {
-            let arr = [];
-            if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
-              arr = elementlug.dob.split('/');
-            }
-            else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
-              arr = elementlug.dob.split('-');
-            }
+        // this.trip.adult =0;
+        // this.trip.child =0;
+        // this.trip.infant =0;
+        // this.trip.bookingsComboData[0].passengers.forEach((elementlug, index) => {
+        //   let yearold = 18;
+        //   if (elementlug.dob) {
+        //     let arr = [];
+        //     if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
+        //       arr = elementlug.dob.split('/');
+        //     }
+        //     else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
+        //       arr = elementlug.dob.split('-');
+        //     }
 
-            if (arr.length > 0) {
-              let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-              yearold = moment(this.trip.checkInDate).diff(moment(newdob), 'years');
-            }
+        //     if (arr.length > 0) {
+        //       let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+        //       yearold = moment(this.trip.checkInDate).diff(moment(newdob), 'years');
+        //     }
 
-            elementlug.isAdult = yearold > 12 ? true : false;
-            if (elementlug.isAdult) {
-              this.trip.adult += 1;
-            } else {
-              if (!this.trip.textChildDisplay) {
-                this.trip.textChildDisplay = "(";
-              }
-              if (yearold < 2) {
-                this.trip.infant += 1;
+        //     elementlug.isAdult = yearold > 12 ? true : false;
+        //     if (elementlug.isAdult) {
+        //       this.trip.adult += 1;
+        //     } else {
+        //       if (!this.trip.textChildDisplay) {
+        //         this.trip.textChildDisplay = "(";
+        //       }
+        //       if (yearold < 2) {
+        //         this.trip.infant += 1;
                
-              } else {
-                this.trip.child += 1;
-              }
-            }
+        //       } else {
+        //         this.trip.child += 1;
+        //       }
+        //     }
 
-          }else {
-            this.trip.adult += 1;
-          }
+        //   }else {
+        //     this.trip.adult += 1;
+        //   }
 
-        });
+        // });
   }
 
   ngOnInit() {
@@ -137,8 +140,8 @@ export class OrderRequestChangeFlightPage implements OnInit {
       return;
     }
     this.allowclickcalendar = false;
-    let fromdate = new Date(this._flightService.itemFlightCache.checkInDate || this.trip.itemdepart.departureDate);
-    let todate = new Date(this._flightService.itemFlightCache.checkOutDate || this.trip.itemdepart.arrivalDate);
+    let fromdate = new Date(this._flightService.itemFlightCache.checkInDate || this.trip.checkInDate);
+    let todate = new Date(this._flightService.itemFlightCache.checkOutDate || this.trip.checkOutDate);
 
     
     let _daysConfig: DayConfig[] = [];
