@@ -3382,7 +3382,8 @@ alert.present();
                     "bookingJsonData":bookingJsonData,//đi chung
                     //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
                     "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
-                    "InsuranceType":se._flightService.itemFlightCache.InsuranceType
+                    "InsuranceType":se._flightService.itemFlightCache.InsuranceType,
+                    "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline
                   }
                   if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
                     if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
@@ -4092,5 +4093,9 @@ alert.present();
       {
           se.emailinvalid = false;
       }
+    }
+    togglecheckinonline(event){
+      this._flightService.itemFlightCache.isCheckinOnline=event.detail.checked
+      // console.log(this._flightService.itemFlightCache.isCheckinOnline);
     }
 }

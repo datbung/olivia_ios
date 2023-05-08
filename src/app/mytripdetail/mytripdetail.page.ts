@@ -17,7 +17,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { normalizeURL } from 'ionic-angular';
-
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -125,7 +125,7 @@ export class MytripdetailPage implements OnInit {
     private platform: Platform,
     private socialSharing: SocialSharing,
     private file: File,
-    private zone: NgZone) {
+    private zone: NgZone,private transfer:FileTransfer) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
         // this.getmhoteldetail();
@@ -265,6 +265,7 @@ export class MytripdetailPage implements OnInit {
         }
       }
    }
+   fileTransfer: FileTransferObject = this.transfer.create();
   loadDetailInfo() {
     let se = this;
     se.datecin = new Date(se.gf.getCinIsoDate(this.trip.checkInDate ? this.trip.checkInDate : this.trip.start_date));
@@ -1509,5 +1510,40 @@ async downloadqrcode(){
     } catch (error) {
     this.gf.hideLoading();
     }
+  }
+  share(item) {
+    this.socialSharing.share(null, null, null, item.CheckinInfo).then(() => {
+      // Success!
+    }).catch(() => {
+      // Error!
+    });
+  }
+  async downloadimg(item,trip) {
+    console.log(trip);
+    if (trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1 || trip.bookingsComboData[0].airlineName.indexOf('BAMBOO') != -1) {
+      this.downloadPDF(item.CheckinInfo);
+    } else {
+      try {
+        this.socialSharing.saveToPhotoAlbum(item.CheckinInfo).then(() => {
+          // this.gf.hideLoading();
+          this.presentToastr('Đã lưu');
+        });
+      } catch (error) {
+        this.gf.hideLoading();
+      }
+    }
+   
+  }
+
+
+  downloadPDF(url) {
+    // debugger;
+    // const url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
+    this.fileTransfer.download(url, this.file.documentsDirectory + 'file.pdf').then((entry) => {
+      // console.log('download complete: ' + entry.toURL());
+      this.presentToastr('Đã lưu');
+    }, (error) => {
+      // handle error
+    });
   }
 }

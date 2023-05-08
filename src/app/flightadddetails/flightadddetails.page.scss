@@ -472,3 +472,25 @@
   .p-top-6{
     padding-top: 6px;
 }
+.div-line{
+    height: 1px;
+    background-color: #e9eaec;
+    margin: 12px 0;
+}
+.div-checkin-online-1 {
+    align-items: center;
+    .div-text-checkin-online{
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.4;
+        letter-spacing: normal;
+        color: #3f3b3b;
+    }
+    .cls-toggle{
+        position: absolute;
+        right: 16px;
+    }
+    
+}
