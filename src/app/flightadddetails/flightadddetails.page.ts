@@ -4094,8 +4094,7 @@ alert.present();
           se.emailinvalid = false;
       }
     }
-    togglecheckinonline(event){
+    togglecheckinonline(event){ 
       this._flightService.itemFlightCache.isCheckinOnline=event.detail.checked
-      // console.log(this._flightService.itemFlightCache.isCheckinOnline);
     }
 }
