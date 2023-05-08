@@ -443,8 +443,8 @@ export class HotelDetailPage implements OnInit {
         }
 
         if (this.searchhotel.CheckInDate && moment(this.gf.getCinIsoDate(this.searchhotel.CheckInDate)).diff(moment(moment(this.gf.getCinIsoDate(new Date())).format('YYYY-MM-DD')), 'days') >=0) {
-          this.cin = this.gf.getCinIsoDate(this.searchhotel.CheckInDate);
-          this.cout = this.gf.getCinIsoDate(this.searchhotel.CheckOutDate);
+          this.cin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+          this.cout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
           this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
           this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
           this.cindisplay = moment(this.datecin).format('DD-MM-YYYY');
@@ -498,8 +498,8 @@ export class HotelDetailPage implements OnInit {
                 this.totalAdult++;
               }
             }
-            this.cin = this.gf.getCinIsoDate(data.checkInDate);
-              this.cout = this.gf.getCinIsoDate(data.checkOutDate);
+            this.cin = new Date(this.gf.getCinIsoDate(data.checkInDate));
+              this.cout = new Date(this.gf.getCinIsoDate(data.checkOutDate));
               this.datecin = new Date(this.gf.getCinIsoDate(data.checkInDate));
               this.datecout =new Date(this.gf.getCinIsoDate(data.checkOutDate));
               this.cindisplay = moment(this.datecin).format('DD-MM-YYYY');
@@ -509,7 +509,7 @@ export class HotelDetailPage implements OnInit {
               this.bookCombo.CheckInDate = data.checkInDate;
               this.bookCombo.CheckOutDate = data.checkOutDate;
           }else{
-            this.cin = this.gf.getCinIsoDate(new Date());
+            this.cin = new Date(this.gf.getCinIsoDate(new Date()));
             var rescin = this.cin.setTime(this.cin.getTime() + (1*24 * 60 * 60 * 1000));
             var datein = this.gf.getCinIsoDate(new Date(rescin));
             this.cin = moment(datein).format('YYYY-MM-DD');
@@ -517,7 +517,7 @@ export class HotelDetailPage implements OnInit {
             this.cindisplayhr = moment(datein).format('DD/MM');
             this.datecin = new Date(rescin);
       
-            this.cout = this.gf.getCinIsoDate(new Date());
+            this.cout = new Date(this.gf.getCinIsoDate(new Date()));
             var res = this.cout.setTime(this.cout.getTime() + (2 * 24 * 60 * 60 * 1000));
             var date = this.gf.getCinIsoDate(new Date(res));
             this.cout = moment(date).format('YYYY-MM-DD');
