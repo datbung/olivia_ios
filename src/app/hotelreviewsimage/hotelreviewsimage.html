@@ -30,7 +30,8 @@
      
       <ion-slide *ngFor="let slide of arrimgreview; let idx = index">
           
-        <img style="height: 350px;width: 100%;object-fit: cover" [src]="slide.ImageUrl" />
+        <img *ngIf="slide.ImageUrl" style="height: 350px;width: 100%;object-fit: cover" [src]="slide.ImageUrl" />
+        <img *ngIf="slide.imageUrl" style="height: 350px;width: 100%;object-fit: cover" [src]="slide.imageUrl" />
       </ion-slide>
     </ion-slides>
   </div>

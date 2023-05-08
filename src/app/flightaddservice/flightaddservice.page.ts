@@ -3220,7 +3220,8 @@ export class FlightaddservicePage implements OnInit {
                 "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
                 "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                 "bookingJsonData":bookingJsonData,//đi chung
-                "InsuranceType":se._flightService.itemFlightCache.InsuranceType
+                "InsuranceType":se._flightService.itemFlightCache.InsuranceType,
+                "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline
               }
               
               if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){

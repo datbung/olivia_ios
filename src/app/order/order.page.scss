@@ -4435,6 +4435,9 @@ color: #e52822
 .m-left-8{
     margin-left: -8px;
 }
+.m-left-8px{
+    margin-left: 8px;
+}
 .position-absolute{
     position: absolute;
     right: 16px;
@@ -4688,24 +4691,21 @@ and (orientation: portrait) {
 .m-0-16 {
     margin: 0 16px;
 }
-
 .div-checkin-online {
     align-items: center;
-    padding: 14px 0;
+    padding: 14px 16px;
 
     .div-icon-check {
         width: 18px;
         height: 18px;
         margin-right: 4px;
-        margin-left: 14px;
-
         .img-check {
             max-width: 18px;
         }
     }
     .div-text-checkin{
-        font-size: 14px;
-        font-weight: normal;
+        font-size: 16px;
+        font-weight: 500;
         font-stretch: normal;
         font-style: normal;
         line-height: normal;
@@ -4713,6 +4713,16 @@ and (orientation: portrait) {
         text-align: left;
         color: #9fc43a;
         width: 100%;
+    }
+    .div-text-checkin-online{
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3f3b3b;
     }
     .div-icon-arrow {
         width: 18px;
@@ -4724,4 +4734,58 @@ and (orientation: portrait) {
             max-width: 18px;
         }
     }
+    .cls-toggle{
+        position: absolute;
+        right: 16px;
+    }
+    .div-name{
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #2f80ed;
+        text-decoration: underline;
+    }
+    .witdh-204{
+        width: 204px;
+    }
+    .align-items-end{
+        align-items: end;
+    }
+
+}
+.div-checkin-online-1 {
+    align-items: center;
+    padding: 20px 16px;
+
+    .div-text-checkin-online{
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .cls-toggle{
+        position: absolute;
+        right: 16px;
+    }
+    
+}
+.div-checkin-online-2{
+    align-items: center;
+    padding: 4px 0px;
+}
+.text-title-broading {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    color: #3f3b3b;
+    margin-bottom: 0px;
 }

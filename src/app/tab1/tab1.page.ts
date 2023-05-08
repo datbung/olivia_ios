@@ -862,15 +862,15 @@ export class Tab1Page implements OnInit {
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           } else {
             this.cin = this.gf.getCinIsoDate(new Date());
-            var rescin = new Date(this.cin).setTime(new Date(this.cin).getTime() + (1 * 24 * 60 * 60 * 1000) );
+            var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
             this.cout = this.gf.getCinIsoDate(new Date());
-            let res = new Date(this.cout).setTime(
-              new Date(this.cout).getTime() + (2 * 24 * 60 * 60 * 1000)
+            var res = this.cout.setTime(
+              this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
             );
             var date = new Date(this.gf.getCinIsoDate(res));
             this.cout = moment(date).format("YYYY-MM-DD");
@@ -888,15 +888,15 @@ export class Tab1Page implements OnInit {
   
         }else if(!this.cin || !this.searchhotel.CheckInDate){
             this.cin = new Date(this.gf.getCinIsoDate(new Date()));
-            var rescin = new Date(this.cin).setTime(new Date(this.cin).getTime() + (1 * 24 * 60 * 60 * 1000) );
+            var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
             this.cout = new Date(this.gf.getCinIsoDate(new Date()));
-            let res:any = new Date(this.cout).setTime(
-              new Date(this.cout).getTime() + (2 * 24 * 60 * 60 * 1000)
+            var res = this.cout.setTime(
+              this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
             );
             var date = new Date(this.gf.getCinIsoDate(res));
             this.cout = moment(date).format("YYYY-MM-DD");
@@ -3584,9 +3584,9 @@ export class Tab1Page implements OnInit {
           }
           //console.log(event.detail.scrollTop)
           let el = document.getElementsByClassName('div-flight-topdeal');
-          let el1 = document.getElementsByClassName('div-flightinternational-topdeal');
-          let elinter = $('.div-flightinternational-topdeal');
           let eluseful = document.getElementsByClassName('div-useful-title');
+          let elinter = document.getElementsByClassName('div-flightinternational-topdeal');
+          let el1 = $('.div-flightinternational-topdeal');
           if(el && el.length >0){
             if(event.detail.scrollTop >= 1200 ){
               if(elinter && elinter.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop - 250){
@@ -3615,7 +3615,6 @@ export class Tab1Page implements OnInit {
                     }
                 //},100)
               }
-             
             }else{
               if(el[0]){
                 el[0].classList.remove('cls-topdeal-float');
@@ -3965,7 +3964,7 @@ export class Tab1Page implements OnInit {
       //this.getAddress();
       
     }
-    else if (currentIndex === 3) {//Tour
+    else if (currentIndex === 2) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.ischeckFavourite='Tour'
@@ -3991,7 +3990,7 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    else if (currentIndex === 4) {//Ticket
+    else if (currentIndex === 3) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
 
@@ -4122,26 +4121,26 @@ export class Tab1Page implements OnInit {
     }
   }
   private newMethod(item: any) {
-    this.cin = this.gf.getCinIsoDate(new Date());
+    this.cin = new Date();
     var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000));
-    var datein = new Date(this.gf.getCinIsoDate(rescin));
+    var datein = new Date(rescin);
     this.cin = moment(datein).format("YYYY-MM-DD");
     this.cindisplay = moment(datein).format("DD-MM-YYYY");
-    this.datecin = new Date(this.gf.getCinIsoDate(rescin));
+    this.datecin = new Date(rescin);
     let diffdateCheckout = moment(item.CheckOutDate).diff(moment(item.CheckInDate), 'days');
-    this.cout = this.gf.getCinIsoDate(new Date());
+    this.cout = new Date();
     var res = this.cout.setTime(
       this.cout.getTime() + ((diffdateCheckout + 1) * 24 * 60 * 60 * 1000)
     );
-    var date = new Date(this.gf.getCinIsoDate(res));
+    var date = new Date(res);
     this.cout = moment(date).format("YYYY-MM-DD");
     this.coutdisplay = moment(date).format("DD-MM-YYYY");
-    this.datecout = new Date(this.gf.getCinIsoDate(res));
+    this.datecout = new Date(res);
 
     this.searchhotel.CheckInDate = this.cin;
     this.searchhotel.CheckOutDate = this.cout;
-    this.searchhotel.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
-    this.searchhotel.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
+    this.searchhotel.datecin = new Date(this.searchhotel.CheckInDate);
+    this.searchhotel.datecout = new Date(this.searchhotel.CheckOutDate);
     this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
     this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
     item.CheckInDate=this.searchhotel.CheckInDate;
