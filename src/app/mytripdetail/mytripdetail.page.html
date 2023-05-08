@@ -1380,7 +1380,7 @@
                     <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                   </div> -->
                   <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
-                   <div class="d-flex align-items-end" [ngClass]="trip.bookingjson[1]?'':'m-top-12'">
+                   <div class="d-flex align-items-end" [ngClass]="trip.bookingjson[1].Passengers[0].CheckinInfo?'':'m-top-12'">
                        <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
                            <img class="header-img-back" [src]="pass.CheckinInfo" >
                        </div> -->
@@ -2898,11 +2898,11 @@
                           <!-- <div class="div-icon-arrow">
                             <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                           </div> -->
-                          <div  class="text-title-broading m-top-12" *ngIf="trip.bookingjson[1]">
+                          <div  class="text-title-broading m-top-12" *ngIf="trip.bookingjson[1] && trip.bookingjson[1].Passengers[0].CheckinInfo">
                             Chiều đi
                           </div>
                            <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
-                            <div class="d-flex align-items-end" [ngClass]="trip.bookingjson[1]?'':'m-top-12'">
+                            <div class="d-flex align-items-end" [ngClass]="trip.bookingjson[1].Passengers[0].CheckinInfo?'':'m-top-12'">
                                 <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
                                     <img class="header-img-back" [src]="pass.CheckinInfo" >
                                 </div> -->
@@ -2911,13 +2911,13 @@
                                 <img  (click)="share(pass)" class="m-left-8px"  src="./assets/ic_mytripbooking/share.svg">
                             </div>
                         </div>
-                        <div  class="text-title-broading m-top-12" *ngIf="trip.bookingjson[1]">
+                        <div  class="text-title-broading m-top-12" *ngIf="trip.bookingjson[1] && trip.bookingjson[1].Passengers[0].CheckinInfo">
                           Chiều về
                         </div>
                        
-                        <div *ngIf="trip.bookingjson[1]">
+                        <div *ngIf="trip.bookingjson[1] && trip.bookingjson[1].Passengers[0].CheckinInfo">
                           <div *ngFor="let pass of trip.bookingjson[1].Passengers; let idx = index">
-                            <div class="d-flex  align-items-end">
+                            <div class="d-flex  align-items-end" [ngClass]="trip.bookingjson[1].Passengers[0].CheckinInfo?'m-top-12':''">
                               <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
                                   <img class="header-img-back" [src]="pass.CheckinInfo" >
                               </div> -->
