@@ -192,7 +192,7 @@
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 16px;
+                  font-size: 17px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;
@@ -208,7 +208,7 @@
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 16px;
+                  font-size: 17px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;
@@ -393,11 +393,11 @@
             letter-spacing: -0.28px;
 
             .div-flight-inout{
-              padding: 0px 22px;
-              width: 32px;
-              height: 32px;
+              //margin: 0px 8px;
+              margin-right: 8px;
+              width: 12px;
+              height: 10px;
               position: relative;
-              margin-left: 12px;
 
               .img-flight-inout{
                 width: 32px;
@@ -516,7 +516,7 @@
           }
           .text-sub-price{
             font-size: 14px;
-            font-weight: 300;
+            font-weight: 600;
             line-height: 1.5;
             letter-spacing: -0.4px;
           }
@@ -578,11 +578,11 @@
           
       }
       .div-flight-inout{
-        padding: 0px 18px;
-        width: 32px;
-        height: 32px;
-        position: relative;
-  
+        margin-right: 8px;
+              width: 16px;
+              height: 10px;
+              position: relative;
+
         .img-flight-inout{
           width: 32px;
           height: 32px;
@@ -605,8 +605,8 @@
       }
       }
       .img-oneway{
-        width: 12px !important;
-        margin-left: 8px;
+        width: 16px !important;
+        //margin-left: 8px;
         top: -5px;
       }
 }
@@ -685,4 +685,66 @@
     text-align: left;
     color: #3f3b3b;
     margin-bottom: 8px;
+  }
+
+
+  
+  .div-wrap-flighttopdeal .div-expand{
+    display: block;
+    animation: showNav 1000ms ease-in-out both;
+  }
+  .div-wrap-flightinternationaltopdeal .div-expand{
+    display: block;
+    animation: showNav 1000ms ease-in-out both;
+  }
+
+  .div-collapse {
+    transition: opacity 1.5s ease-out;
+    display: block;
+    //opacity: 0; 
+    height: 836px;
+    overflow: hidden;
+    padding: 0;
+    //animation: hideNav 500ms ease-in-out both;
+  }
+
+  .div-collapse1 {
+    transition: opacity 1.5s ease-out;
+    display: block;
+    //opacity: 0; 
+    height: 728px;
+    overflow: hidden;
+    padding: 0;
+    //animation: hideNav 500ms ease-in-out both;
+  }
+
+  @keyframes showNav {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes hideNav {
+    from {opacity: 1;}
+    to {opacity: 0;}
+  }
+
+  .img-seemoreroom{
+    margin-left: 4px;
+    height: 9px;
+  }
+
+  .div-showmore-flighttopdeal, .div-showmore-flightinternationaltopdeal {
+    margin-top: 13px;
+    font-size: 18px;
+    text-align: left;
+    color: #2f80ed;
+    text-decoration: underline;
+    display: flex;
+    justify-content: center;
+  }
+  .width-36 {
+    width: 36px !important;
+  }
+  .h-1264 {
+    height: 1264px !important;
   }

@@ -2470,6 +2470,7 @@ export class FlightsearchresultPage implements OnInit {
           this.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
           return;
         }
+        this._flightService.filterFromRequestSearchFlight = false;
         this._flightService.itemFlightCache.step = this.step;
             this._flightService.listAllFlightDepart = this.listDepartNoFilter;
             if(this.listReturnNoFilter && this.listReturnNoFilter.length >0){
@@ -3134,7 +3135,7 @@ export class FlightsearchresultPage implements OnInit {
         se.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
         return;
       }
-         
+      se._flightService.filterFromRequestSearchFlight = false;
       setTimeout(()=>{
         se._flightService.itemAllFlightCount.emit(( this.listDepart ? this.listDepart.length: 0) + (this.listReturn ? this.listReturn.length : 0));
       },350)

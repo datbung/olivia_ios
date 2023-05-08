@@ -731,11 +731,20 @@ export class FlightsearchfilterPage implements OnInit {
           || this._flightService.objectFilter.facilitySelected.length >0
         ))
         {
-          this._flightService.itemFlightFilterChange.emit(1);
+          if(this._flightService.filterFromRequestSearchFlight){//filter bên trang đổi hành trình(orderrequestsearchflight)
+            this._flightService.publicOrderRequestSearchFlightFilter(1);
+          }else{
+            this._flightService.itemFlightFilterChange.emit(1);
+          }
+          
         }else{
           this.filterItem();
           //this._flightService.itemFlightFilterChange.emit(0);
-          this._flightService.itemFlightFilterChange.emit(0);
+          if(this._flightService.filterFromRequestSearchFlight){//filter bên trang đổi hành trình(orderrequestsearchflight)
+            this._flightService.publicOrderRequestSearchFlightFilter(0);
+          }else{
+            this._flightService.itemFlightFilterChange.emit(0);
+          }
         }
       }else{
         this._flightService.objectFilterReturn = {};
@@ -758,10 +767,18 @@ export class FlightsearchfilterPage implements OnInit {
           || this._flightService.objectFilterReturn.facilitySelectedReturn.length >0
         ))
         {
+          if(this._flightService.filterFromRequestSearchFlight){//filter bên trang đổi hành trình(orderrequestsearchflight)
+            this._flightService.publicOrderRequestSearchFlightFilter(2);
+          }else{
            this._flightService.itemFlightFilterChangeReturn.emit(1);
+          }
         }else{
           this.filterItem();
+          if(this._flightService.filterFromRequestSearchFlight){//filter bên trang đổi hành trình(orderrequestsearchflight)
+            this._flightService.publicOrderRequestSearchFlightFilter(3);
+          }else{
            this._flightService.itemFlightFilterChangeReturn.emit(0);
+          }
         }
       }
       

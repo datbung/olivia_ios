@@ -541,6 +541,10 @@ export class RoompaymentbankPage implements OnInit{
               return newitem;
             });
           }
+          let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+          let arrpromocode = this.Roomif.promocode ?[{"voucherCode": this.Roomif.promocode, "voucherName": this.Roomif.promocode,"voucherType": 1,"voucherDiscount": this.Roomif.discountpromo ,"keepCurrentVoucher": false  }]:[];
+
+          
           var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost +'/mInsertBooking',
@@ -578,7 +582,7 @@ export class RoompaymentbankPage implements OnInit{
               comboid:se.bookCombo.ComboId,
               PenaltyDescription:se.Roomif.textcancel,
               companycontactname: this.Roomif.nameOrder,
-              vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
+              vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
             },
             json: true
           };

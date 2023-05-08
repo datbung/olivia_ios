@@ -629,6 +629,7 @@ export class RoomdetailreviewPage implements OnInit {
 
             se.strPromoCode = se.promocode;
             se.totaldiscountpromo = total - se.discountpromo;
+            se.Roomif.discountpromo = se.discountpromo;
             se.edit();
 
             if (se.Pricepointshow>0) {

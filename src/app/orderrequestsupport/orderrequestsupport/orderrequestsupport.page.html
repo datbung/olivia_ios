@@ -16,7 +16,7 @@
   <ion-content>
       <div class="p-all-16 div-orderrequestsupport-content">
         <div class="label-title m-top-8">Thay đổi dịch vụ</div>
-        <div class="row-item d-flex m-top-8 cls-disabled-luggage">
+        <div [ngClass]="allowChangeFlight ? 'row-item d-flex m-top-8' : 'row-item d-flex m-top-8 cls-disabled-luggage' ">
             <div class="text-normal div-width-200">Tôi muốn đổi chuyến/giờ bay</div>
             <div class="icon-right div-width-100">
                 <img src="./assets/ic_ordersupport/next.svg">

@@ -7,6 +7,7 @@ import {  ActivityService, GlobalFunction} from '../../providers/globalfunction'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MytripService } from 'src/app/providers/mytrip-service.service';
 import * as moment from 'moment';
+import { flightService } from 'src/app/providers/flightService';
 @Component({
   selector: 'app-orderrequestsupport',
   templateUrl: './orderrequestsupport.page.html',
@@ -15,6 +16,7 @@ import * as moment from 'moment';
 export class OrderRequestSupportPage implements OnInit {
   listSupport: any[];
   allowBuyMoreLuggage: any= true;
+  allowChangeFlight: boolean;
   constructor(public navCtrl: NavController,
     public alertCtrl: AlertController, 
     private storage: Storage,
@@ -23,7 +25,8 @@ export class OrderRequestSupportPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     public _mytripservice: MytripService,
     private zone: NgZone,
-    public gf: GlobalFunction) { 
+    public gf: GlobalFunction,
+    public _flightService: flightService) { 
         storage.get('auth_token').then(auth_token => {
             if(auth_token){
                 if(this._mytripservice.listSupport && this._mytripservice.listSupport.length >0){
@@ -52,7 +55,24 @@ export class OrderRequestSupportPage implements OnInit {
             }
           }
         }
-        
+        // let trip = this.activityService.objPaymentMytrip.trip;
+        // this.allowChangeFlight = trip.hotel_name.indexOf('VMB QT') == -1;
+        // //check bkg chưa thanh toán
+        // this.allowChangeFlight = (trip.payment_status == 1 || trip.payment_status == 5);
+        // if(this.allowChangeFlight){
+        //   //Check bkg chờ xử lý
+        //   this.allowChangeFlight = trip.bookingsComboData[0].issueTicketDate && trip.approve_date;
+        // }
+        // if(this.allowChangeFlight){
+        //   if(trip.itemreturn && !this.checkValidFlightTime(trip.itemreturn)){
+        //     this.allowChangeFlight = false;
+        //   }else if(trip.itemdepart && !this.checkValidFlightTime(trip.itemdepart)){
+        //     this.allowChangeFlight = false;
+        //   }
+        // }
+        // if(this.allowChangeFlight){
+        //   this.allowChangeFlight = !trip.isRoundTrip ? trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 : (trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 || trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1);
+        // }
         
   }
 
@@ -60,7 +80,7 @@ export class OrderRequestSupportPage implements OnInit {
   }
   goback() {
   
-    this.navCtrl.back();
+    this.navCtrl.navigateBack('/mytripdetail');
 
   }
 
@@ -146,6 +166,7 @@ export class OrderRequestSupportPage implements OnInit {
         this.gf.showMessageWarning('Không hỗ trợ mua thêm hành lý. Xin vui lòng kiểm tra lại!');
         return;
     }
+    this._flightService.fromOrderRequestChangeFlight = false;
       this.navCtrl.navigateForward('/orderrequestaddluggage');
   }
 
@@ -206,6 +227,14 @@ export class OrderRequestSupportPage implements OnInit {
   checkAllowBuyMoreLuggage(itemFlight){
       return itemFlight.itemdepart.passengers && itemFlight.itemdepart.passengers.some((p) => { return itemFlight.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') != -1 || (!p.isInfant && p.giaTienHanhLy == '0' && p.hanhLy == '0kg')}) 
       || (itemFlight.itemreturn && (itemFlight.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') != -1 || (itemFlight.itemreturn.passengers && itemFlight.itemreturn.passengers.some((p) => { return !p.isInfant && p.giaTienHanhLy == '0' && p.hanhLy == '0kg'})) ) );
+  }
+
+  modifyFlight(){
+    if(!this.allowChangeFlight){
+      return;
+    }
+    this._flightService.fromOrderRequestChangeFlight = true;
+    this.navCtrl.navigateForward('/orderrequestchangeflight');
   }
 }
 

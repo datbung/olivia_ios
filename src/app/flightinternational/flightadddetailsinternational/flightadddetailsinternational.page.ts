@@ -3373,6 +3373,9 @@ alert.present();
                 return newitem;
               });
 
+              let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+              let arrpromocode = this._flightService.itemFlightInternational.promotionCode ? [{"voucherCode": this._flightService.itemFlightInternational.promotionCode, "voucherName": this._flightService.itemFlightInternational.promotionCode,"voucherType": 1,"voucherDiscount": this._flightService.itemFlightInternational.discountpromo ,"keepCurrentVoucher": false  }] : [];
+
               return new Promise((resolve, reject) => {
                 let objPass
                    objPass = {
@@ -3404,7 +3407,7 @@ alert.present();
                     //"hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                     //"bookingJsonData":bookingJsonData,//đi chung
                     //"voucher": { voucherCode: se._flightService.itemFlightInternational.promotionCode ? se._flightService.itemFlightInternational.promotionCode:"" },
-                    "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
+                    "vouchers" : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
                     //"InsuranceType":se._flightService.itemFlightCache.InsuranceType
                   }
                   if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
@@ -4314,6 +4317,7 @@ alert.present();
 
               se.strPromoCode = se.promocode;
               se.totaldiscountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+
               se.totalPriceAll();
             }
             else if (json.error == 1) {

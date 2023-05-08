@@ -1520,6 +1520,7 @@ async showChangeEmail(){
 postapi()
 {
   this.presentLoading();
+  //console.log(JSON.stringify(this.search));
   var settings = {
     "async": true,
     "crossDomain": true,

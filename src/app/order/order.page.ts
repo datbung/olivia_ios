@@ -188,7 +188,7 @@ export class OrderPage {
     public _tourService: tourService,
     private safariViewController: SafariViewController,
     private socialSharing: SocialSharing,
-    private file: File,private nativeHTTP: HTTP,private transfer:FileTransfer
+    private file: File,private transfer:FileTransfer
     //private pdfGenerator: PDFGenerator
   ) {
     this.handleSplashScreen();

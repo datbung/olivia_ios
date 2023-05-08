@@ -89,6 +89,30 @@ export class RoompaymentlivePage implements OnInit{
         if (se.Roomif.order) {
           Invoice=1;
         }
+        let voucherSelectedMap = [],promoSelectedMap =[];
+        if(this._voucherService.hotelPromoCode){
+          voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
+            let newitem = {};
+            newitem["voucherCode"] = v.code;
+            newitem["voucherName"] = v.rewardsItem.title;
+            newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
+            newitem["voucherDiscount"] = v.rewardsItem.price;
+            newitem["keepCurrentVoucher"] = false;
+            return newitem;
+          });
+          promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
+            let newitem = {};
+            newitem["voucherCode"] = v.code;
+            newitem["voucherName"] = v.name;
+            newitem["voucherType"] = 2;
+            newitem["voucherDiscount"] = v.price;
+            newitem["keepCurrentVoucher"] = false;
+            return newitem;
+          });
+        }
+        let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+        let arrpromocode = this.Roomif.promocode ?[{"voucherCode": this.Roomif.promocode, "voucherName": this.Roomif.promocode,"voucherType": 1,"voucherDiscount": this.Roomif.discountpromo ,"keepCurrentVoucher": false  }] : [];
+
         var options = {
           method: 'POST',
           url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -122,10 +146,11 @@ export class RoompaymentlivePage implements OnInit{
             CompanyAddress:se.Roomif.address,
             CompanyTaxCode:se.Roomif.tax,
             BillingAddress :se.Roomif.addressorder,
-            promotionCode:se.Roomif.promocode,
+            //promotionCode:se.Roomif.promocode,
             comboid:se.bookcombo.ComboId,
             PenaltyDescription:se.Roomif.textcancel,
-            companycontactname: this.Roomif.nameOrder
+            companycontactname: this.Roomif.nameOrder,
+            vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode ,
           },
           json: true
         };

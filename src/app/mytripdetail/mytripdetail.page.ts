@@ -263,6 +263,64 @@ export class MytripdetailPage implements OnInit {
         if(!(this.trip.pay_method==3||this.trip.pay_method==51||this.trip.pay_method==2)){
           this.buildLinkQrCode();
         }
+
+        //parse obj flight_ticket_info để lấy flightDuration
+        if(this.trip.flight_ticket_info){
+          
+          let _finfo = this.trip.flight_ticket_info.split('|');
+          if(_finfo && _finfo.length >0){
+            if(_finfo[0]){
+              let _arr = _finfo[0].trimEnd().split(' ');
+              if(_arr && _arr.length >0){
+                let _lastitem = _arr[_arr.length -1];
+                if(_lastitem && this.trip.itemdepart){
+                   let _arrItem = _lastitem.split('(');
+                   this.trip.itemdepart.flightDuration = _arrItem[_arrItem.length -1].replace(")",'');
+                   let hours:any = Math.floor(this.trip.itemdepart.flightDuration/60);
+                   let minutes:any = this.trip.itemdepart.flightDuration*1 - (hours*60);
+                   if(hours < 10){
+                     hours = hours != 0?  "0"+hours : "0";
+                   }
+                   if(minutes < 10){
+                     minutes = "0"+minutes;
+                   }
+                   this.trip.itemdepart.flightTimeDisplay = hours+"h"+minutes+"p";
+                }
+              }
+              
+            }
+
+            if(_finfo[1]){
+              let _arr = _finfo[1].trimStart().split(' ');
+              if(_arr && _arr.length >0){
+                let _lastitem = _arr[_arr.length -1];
+                if(_lastitem && this.trip.itemreturn){
+                   let _arrItem = _lastitem.split('(');
+                   this.trip.itemreturn.flightDuration = _arrItem[_arrItem.length -1].replace(")",'');
+                   let hours:any = Math.floor(this.trip.itemreturn.flightDuration/60);
+                   let minutes:any = this.trip.itemreturn.flightDuration*1 - (hours*60);
+                   if(hours < 10){
+                     hours = hours != 0?  "0"+hours : "0";
+                   }
+                   if(minutes < 10){
+                     minutes = "0"+minutes;
+                   }
+                   this.trip.itemreturn.flightTimeDisplay = hours+"h"+minutes+"p";
+                }
+              }
+              
+            }
+          }
+        }
+
+        this.trip.isRoundTrip = this.trip.itemdepart && this.trip.itemreturn ? true : false;
+        if(this.trip.itemdepart){
+          this.trip.itemdepart.allowChangeFlight = this.trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1;
+        }
+        if(this.trip.itemreturn){
+          this.trip.itemreturn.allowChangeFlight = this.trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1;
+        }
+        
       }
    }
    fileTransfer: FileTransferObject = this.transfer.create();
@@ -464,6 +522,7 @@ export class MytripdetailPage implements OnInit {
     
            if(item.Transits && item.Transits.length>1) {
             this.ischeckStops=true;
+            this.trip.hasStops = true;
            }
           })
           if(this.ischeckStops){

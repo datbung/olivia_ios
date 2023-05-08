@@ -3352,6 +3352,9 @@ alert.present();
                 return newitem;
               });
 
+              let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+              let arrpromocode = se._voucherService.flightPromoCode ? [{"voucherCode": se._voucherService.flightPromoCode, "voucherName": se._voucherService.flightPromoCode,"voucherType": 1,"voucherDiscount": se._voucherService.flightTotalDiscount,"keepCurrentVoucher": false  }] : [];
+
               return new Promise((resolve, reject) => {
                 let objPass
                    objPass = {

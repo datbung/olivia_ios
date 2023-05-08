@@ -28,6 +28,7 @@ export class FlightsearchairportPage implements OnInit {
   itemsRegular = [];
   itemsRegularInternational = [];
   itemsFilter: any = [];
+  arrsk = [1,2,3,4,5];
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -46,8 +47,8 @@ export class FlightsearchairportPage implements OnInit {
         }else{
 
           this.zone.run(()=>{
-            let datainbound = data.filter((item) =>{ return item.code != 'FDF' && (item.country && (item.country == C.urls.baseUrl.countryName || item.country.toLowerCase() == 'vietnam'))});
-            let dataoutbound = data.filter((item) =>{ return item.code != 'FDF' && item.country && item.country != C.urls.baseUrl.countryName && item.country.toLowerCase() != 'vietnam'});
+            let datainbound = data.filter((item) =>{ return item.code != 'FDF' && (item.country && (item.country == C.urls.baseUrl.countryName || (item.country && item.country.toLowerCase() == 'vietnam')))});
+            let dataoutbound = data.filter((item) =>{ return item.code != 'FDF' && item.country && item.country != C.urls.baseUrl.countryName && (item.country && item.country.toLowerCase() != 'vietnam')});
             this.items = [...data];
             this.itemsfull = [...data];
             //this.itemsfull.sort((a,b)=>{ return (a.count - b.count)*-1 });
@@ -131,8 +132,8 @@ export class FlightsearchairportPage implements OnInit {
                     se.items.forEach(element => {
                       element.show = true;
                     });
-                    let datainbound = se.items.filter((item) =>{ return item.code != 'FDF' && (item.country == C.urls.baseUrl.countryName || item.country.toLowerCase() == 'vietnam')});
-                    let dataoutbound = se.items.filter((item) =>{ return item.code != 'FDF' && item.country != C.urls.baseUrl.countryName && item.country.toLowerCase() != 'vietnam'});
+                    let datainbound = se.items.filter((item) =>{ return item.code != 'FDF' && (item.country == C.urls.baseUrl.countryName || (item.country && item.country.toLowerCase() == 'vietnam'))});
+                    let dataoutbound = se.items.filter((item) =>{ return item.code != 'FDF' && item.country != C.urls.baseUrl.countryName && (item.country && item.country.toLowerCase() != 'vietnam')});
                     datainbound.sort((a,b)=>{ return (a.count - b.count)*-1 });
                     for (let index = 0; index < 5; index++) {
                       const element = datainbound[index];
@@ -203,6 +204,11 @@ export class FlightsearchairportPage implements OnInit {
         se._flightService.itemFlightCache.departCity = item.city;
         se._flightService.itemFlightCache.departAirport = item.airport;
         se._flightService.itemFlightCache.itemDepartLocation = item;
+        if(se._flightService.itemFlightCache.objSearch){
+          se._flightService.itemFlightCache.objSearch.departCode = item.code;
+          se._flightService.itemFlightCache.objSearch.departCity = item.city;
+          se._flightService.itemFlightCache.objSearch.departAirport = item.airport;
+        }
         //se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
         //se._flightService.itemFlightCache.isExtenalDepart = item.country != "Việt Nam" ? true : false;
       }else{
@@ -210,6 +216,11 @@ export class FlightsearchairportPage implements OnInit {
         se._flightService.itemFlightCache.returnCity = item.city;
         se._flightService.itemFlightCache.returnAirport = item.airport;
         se._flightService.itemFlightCache.itemReturnLocation = item;
+        if(se._flightService.itemFlightCache.objSearch){
+          se._flightService.itemFlightCache.objSearch.returnCode = item.code;
+          se._flightService.itemFlightCache.objSearch.returnCity = item.city;
+          se._flightService.itemFlightCache.objSearch.returnAirport = item.airport;
+        }
         //se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
         //se._flightService.itemFlightCache.isExtenalReturn = item.country != "Việt Nam" ? true : false;
       }

@@ -1223,7 +1223,8 @@ height: 18px !important;
   }
 
   .cls-topdeal-float{
-    top: calc(env(safe-area-inset-top) + 3px) !important;
+    height: 68px !important;
+    top: calc(env(safe-area-inset-top) + 7px) !important;
   }
 }
 

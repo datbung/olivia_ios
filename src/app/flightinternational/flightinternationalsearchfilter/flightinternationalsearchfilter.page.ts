@@ -50,6 +50,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
   divItemClass3Selected: boolean;
   divItemClass4Selected: boolean;
   divItemClass5Selected: boolean;
+  stopSelected: any;
 
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -88,7 +89,9 @@ export class FlightInternationalSearchfilterPage implements OnInit {
       }
       
         this.zone.run(()=>{
-         
+          if(this._flightService.objectFilterInternational && this._flightService.objectFilterInternational.stopSelected && this._flightService.objectFilterInternational.stopSelected >0){
+            this.stopSelected = _flightService.objectFilterInternational.stopSelected.toString();
+          }
           
             let maxValue = Math.round(Math.max(...this._flightService.listAllFlightInternational.map(o => o.fare.price), 0)/1000000);
             let minValue = Math.round(Math.min(...this._flightService.listAllFlightInternational.map(o => o.fare.price))/1000000);
@@ -287,8 +290,8 @@ export class FlightInternationalSearchfilterPage implements OnInit {
         }
         item.stopEventDefault;
         //this._flightService.objectFilterInternational.stopSelected = -1;
-        if(this._flightService.objectFilterInternational.stopSelected != value){
-          this._flightService.objectFilterInternational.stopSelected = value;
+        if(this._flightService.objectFilterInternational.stopSelected != item.detail.value*1){
+          this._flightService.objectFilterInternational.stopSelected = item.detail.value*1;
         }else{
           this._flightService.objectFilterInternational.stopSelected = -1;
         }

@@ -40,7 +40,7 @@
         </div>
   
         <div class="div-label-text m-top-8">Sân bay nội địa phổ biến</div>
-        
+        <div *ngIf="itemsRegular && itemsRegular.length >0 else loadingInternal">
           <div (click)="itemclick(item)" *ngFor="let item of itemsRegular; let idxr = index">
             <div *ngIf="item && item.show">
               <div [ngClass]="idxr == itemsRegular.length -1 ? 'div-item-search' : (idx==0 ? 'div-item-search div-border-bottom m-top-16' : 'div-item-search div-border-bottom m-top-12') ">
@@ -52,20 +52,33 @@
              
             </div>
           </div>
+        </div>
+        <ng-template #loadingInternal>
+          <div class="cls-row-width" *ngFor="let sk of arrsk">
+            <ion-skeleton-text animated style="width: 100%;height: 52px;margin: 10px 0;border-radius: 6px;"></ion-skeleton-text>
+          </div>
+        </ng-template>
+          
         
           <div class="div-label-text m-top-8">Sân bay quốc tế phổ biến</div>
-        
-          <div (click)="itemclick(item)" *ngFor="let item of itemsRegularInternational; let idxr = index">
-            <div *ngIf="item && item.show">
-              <div [ngClass]="idxr == itemsRegularInternational.length -1 ? 'div-item-search' : (idx==0 ? 'div-item-search div-border-bottom m-top-16' : 'div-item-search div-border-bottom m-top-12') ">
-                <div class="title-text">
-                  {{item.city}} ({{item.code}})
+          <div *ngIf="itemsRegularInternational && itemsRegularInternational.length >0 else loadingInternational">
+            <div (click)="itemclick(item)" *ngFor="let item of itemsRegularInternational; let idxr = index">
+              <div *ngIf="item && item.show">
+                <div [ngClass]="idxr == itemsRegularInternational.length -1 ? 'div-item-search' : (idx==0 ? 'div-item-search div-border-bottom m-top-16' : 'div-item-search div-border-bottom m-top-12') ">
+                  <div class="title-text">
+                    {{item.city}} ({{item.code}})
+                  </div>
+                  <div class="aiport-text">{{item.airport}}</div>
                 </div>
-                <div class="aiport-text">{{item.airport}}</div>
+               
               </div>
-             
             </div>
           </div>
+          <ng-template #loadingInternational>
+            <div class="cls-row-width" *ngFor="let sk of arrsk">
+              <ion-skeleton-text animated style="width: 100%;height: 52px;margin: 10px 0;border-radius: 6px;"></ion-skeleton-text>
+            </div>
+          </ng-template>
       </div>
       
 

@@ -1512,6 +1512,10 @@ export class RoomadddetailsEanPage implements OnInit {
             return newitem;
         });
         }
+        let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+        let arrpromocode = this.Roomif.promocode ?[{"voucherCode": this.Roomif.promocode, "voucherName": this.Roomif.promocode,"voucherType": 1,"voucherDiscount": this.Roomif.discountpromo ,"keepCurrentVoucher": false  }] : [];
+
+
         var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -1548,7 +1552,7 @@ export class RoomadddetailsEanPage implements OnInit {
                 //promotionCode: se.Roomif.promocode,
                 comboid: se.bookcombo.ComboId,
                 PenaltyDescription: se.Roomif.textcancel,
-                vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
+                vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
             },
             json: true
         };
@@ -1825,6 +1829,10 @@ export class RoomadddetailsEanPage implements OnInit {
             return newitem;
         });
         }
+
+        let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+        let arrpromocode = this.Roomif.promocode ? [{"voucherCode": this.Roomif.promocode, "voucherName": this.Roomif.promocode,"voucherType": 1,"voucherDiscount": this.Roomif.discountpromo ,"keepCurrentVoucher": false  }] : [];
+
         var options = {
             method: 'POST',
             url: C.urls.baseUrl.urlPost + '/mInsertBooking',
@@ -1861,7 +1869,7 @@ export class RoomadddetailsEanPage implements OnInit {
                 //promotionCode: se.Roomif.promocode,
                 comboid: se.bookcombo.ComboId,
                 PenaltyDescription: se.Roomif.textcancel,
-                vouchers : this._voucherService.hotelPromoCode ? [...voucherSelectedMap,...promoSelectedMap] : [],
+                vouchers : !checkpromocode? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
             },
             json: true
         };

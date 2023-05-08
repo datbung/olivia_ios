@@ -76,6 +76,19 @@ export class flightService{
   classSelected:any;
   classSelectedName: string;
 
+  private itemShowMoreFlightTopDeal = new Subject<any>();
+  orderRequestDepartFlight: any;
+  orderRequestReturnFlight: any;
+  filterFromRequestSearchFlight: boolean;
+  fromOrderRequestChangeFlight: boolean;
+  publicItemShowMoreFlightTopDeal(data: any) {
+    this.itemShowMoreFlightTopDeal.next(data);
+  }
+
+  getItemShowMoreFlightTopDeal(): Subject<any> {
+    return this.itemShowMoreFlightTopDeal;
+  }
+
   publicItemFlightReloadInfo(data: any) {
     this.ItemFlightReloadInfoSubject.next(data);
   }
@@ -93,6 +106,14 @@ export class flightService{
     return this.ItemFlightInternationalFilterSubject;
   }
   
+  private ItemOrderRequestSearchFlightFilterSubject = new Subject<any>();
+  publicOrderRequestSearchFlightFilter(data: any) {
+    this.ItemOrderRequestSearchFlightFilterSubject.next(data);
+  }
+
+  getOrderRequestSearchFlightFilter(): Subject<any> {
+    return this.ItemOrderRequestSearchFlightFilterSubject;
+  }
   
   
     

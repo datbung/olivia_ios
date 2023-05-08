@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, HostListener, NgZone, Input } from '@angular/core';
 import { NavController, ModalController, ToastController, ActionSheetController, IonSlides } from '@ionic/angular';
-import { GlobalFunction } from '../providers/globalfunction';
+import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import * as $ from 'jquery';
 import { C } from './../providers/constants';
 import { OverlayEventDetail } from '@ionic/core';
@@ -74,58 +74,84 @@ export class FlightchangeinfoPage implements OnInit {
         private actionsheetCtrl: ActionSheetController,
         public valueGlobal: ValueGlobal,
         public searchhotel: SearchHotel,
-        public _flightService: flightService) { 
+        public _flightService: flightService,
+        public activityService: ActivityService) { 
                 if(this._flightService.itemFlightCache){
-                  let data = this._flightService.itemFlightCache;
-                  this.flighttype = data.roundTrip ? 'twoway' : 'oneway';
-                  if(!data.roundTrip){
-                    $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
-                  }else{
-                    $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
-                  }
-                  this.departCode = data.departCode;
-                  this.departCity = data.departCity;
-                  this.departAirport = data.departAirport;
-  
-                  this.returnCode = data.returnCode;
-                  this.returnCity = data.returnCity;
-                  this.returnAirport = data.returnAirport;
-                  this.cin = data.checkInDate;
-                  this.cout = data.checkOutDate;
-                  this.getDayName(this.cin, this.cout);
-                  this.adult = data.adult;
-                  this.child = data.child;
-                  this.infant = data.infant ? data.infant : 0;
-                  this.arrchild = data.arrchild;
-                  this.pax = this.adult + (this.child || 0) + (this.infant || 0);
-  
-                  this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
-                  this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
-  
-                  this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
-                  this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
-
-
-                  this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
-                  this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
-                  this.bindlunar();
-                  storage.get('timedepartpriorityconfig').then((data) => {
-                    if(data){
-                      this.zone.run(() => {
-                        this.timedepartpriorityconfig = data;
-                      })
-                       
+                  if(!this._flightService.filterFromRequestSearchFlight){
+                    let data = this._flightService.itemFlightCache;
+                    this.flighttype = data.roundTrip ? 'twoway' : 'oneway';
+                    if(!data.roundTrip){
+                      $('.sc-ion-modal-ios-h.modal-flight-change-info').removeClass('twoway');
+                    }else{
+                      $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
                     }
-                  })
-            
-                  storage.get('timereturnpriorityconfig').then((data) => {
+                    this.departCode = data.departCode;
+                    this.departCity = data.departCity;
+                    this.departAirport = data.departAirport;
+    
+                    this.returnCode = data.returnCode;
+                    this.returnCity = data.returnCity;
+                    this.returnAirport = data.returnAirport;
+                    this.cin = data.checkInDate;
+                    this.cout = data.checkOutDate;
+                    this.getDayName(this.cin, this.cout);
+                    this.adult = data.adult;
+                    this.child = data.child;
+                    this.infant = data.infant ? data.infant : 0;
+                    this.arrchild = data.arrchild;
+                    this.pax = this.adult + (this.child || 0) + (this.infant || 0);
+    
+                    this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+                    this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+    
+                    this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
+                    this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+  
+  
+                    this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
+                    this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
+                    this.bindlunar();
+                    storage.get('timedepartpriorityconfig').then((data) => {
                       if(data){
                         this.zone.run(() => {
-                          this.timereturnpriorityconfig = data;
+                          this.timedepartpriorityconfig = data;
                         })
+                         
                       }
-                  })
+                    })
+              
+                    storage.get('timereturnpriorityconfig').then((data) => {
+                        if(data){
+                          this.zone.run(() => {
+                            this.timereturnpriorityconfig = data;
+                          })
+                        }
+                    })
+  
+                  }
+                  else{//Gán lại một số biến khi mở từ form đổi hành trình
+                    this.departCity = this.activityService.objPaymentMytrip.trip.itemdepart.flightFrom;
+                    this.departCode = this.activityService.objPaymentMytrip.trip.itemdepart.departCode;
+                    this.departAirport = this.activityService.objPaymentMytrip.trip.departAirport;
 
+                    this.returnCity = this.activityService.objPaymentMytrip.trip.itemdepart.flightTo;
+                    this.returnCode = this.activityService.objPaymentMytrip.trip.itemdepart.arrivalCode;
+                    this.returnAirport = this.activityService.objPaymentMytrip.trip.returnAirport;
+
+                    this.cin = (this._flightService.objSearch && this._flightService.objSearch.departDate) ? this._flightService.objSearch.departDate : this.activityService.objPaymentMytrip.trip.checkInDate;
+                    this.cout = (this._flightService.objSearch && this._flightService.objSearch.returnDate) ? this._flightService.objSearch.returnDate : this.activityService.objPaymentMytrip.trip.checkOutDate;
+
+                    this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+                    this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+    
+                    this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
+                    this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+  
+  
+                    this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
+                    this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
+                  }
+                  
                  this.isInternationalFlight = this._flightService.itemFlightCache.isInternationalFlight;
                  this.showlowestprice = this._flightService.itemFlightCache.showCalendarLowestPrice;
                 }
@@ -230,7 +256,7 @@ export class FlightchangeinfoPage implements OnInit {
             //   se._flightService.itemFlightCache.itemDepartSameCity = se.itemDepartSameCity;
             //   se._flightService.itemFlightCache.itemReturnSameCity = se.itemReturnSameCity;
             // }
-    
+          if(!se._flightService.filterFromRequestSearchFlight){
             se.storage.get("itemFlightCache").then((data)=>{
               if(data){
                 se.storage.remove("itemFlightCache").then(()=>{
@@ -240,6 +266,8 @@ export class FlightchangeinfoPage implements OnInit {
                 se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
               }
             })
+          }
+            
             se.modalCtrl.dismiss(this._flightService.classSelected != -1 ? 2 : true);
         }
 
@@ -331,7 +359,9 @@ export class FlightchangeinfoPage implements OnInit {
               
               $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
             }
-  
+            if(!this._flightService.objSearch){
+              this._flightService.objSearch = {};
+            }
             this._flightService.objSearch.departDate = this.cin;
             this._flightService.objSearch.returnDate = this.cout;
 
@@ -434,6 +464,9 @@ export class FlightchangeinfoPage implements OnInit {
             }
 
         async searchFlight(index){
+          if(this._flightService.filterFromRequestSearchFlight){
+            return;
+          }
             this.valueGlobal.backValue ="flightchangeinfo";
             this._flightService.searchDepartCode = index == 1 ? true : false;
             //this.navCtrl.navigateForward("/flightsearchairport");
@@ -549,13 +582,15 @@ export class FlightchangeinfoPage implements OnInit {
           this.countdaydisplay = diffday +1;
 
           let difftodate = moment(fromdate).diff(moment(this.gf.getCinIsoDate(new Date())).format("YYYY-MM-DD"), 'days');
-          // if(difftodate <1){
-          //   let d = moment(fromdate);
-          //   this.gf.showToastWarning('Ngày khởi hành phải lớn hơn ' + d.format('DD') + ' thg ' + d.format('MM') + '. Vui lòng chọn lại!');
-          // }
+          
           var se = this;
           //let allowseach = se.flighttype=="twoway" ? (diffday > 0 ? true : false) : (diffday >=0 ? true : false);
           let allowseach = diffday >=0 ? true : false;
+          //check case đổi hành trình
+          if(se._flightService.filterFromRequestSearchFlight && moment(fromdate).diff(moment(se.gf.getCinIsoDate(se.activityService.objPaymentMytrip.trip.checkOutDate)).format("YYYY-MM-DD"), 'days') >=0 ){
+            se.gf.showToastWarning('Ngày chọn mới đang lớn hơn ngày về. Quý khách vui lòng kiểm tra lại!');
+            return;
+          }
           if (fromdate && todate && allowseach) {
             setTimeout(() => {
               se.modalCtrl.dismiss();
@@ -574,6 +609,9 @@ export class FlightchangeinfoPage implements OnInit {
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
               se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
 
+              if(!se._flightService.objSearch){
+                se._flightService.objSearch = {};
+              }
               se._flightService.objSearch.departDate = se.cin;
               se._flightService.objSearch.returnDate = se.cout;
               se._flightService.itemFlightCache.checkInDate = se.cin;
@@ -629,17 +667,20 @@ export class FlightchangeinfoPage implements OnInit {
         
         let tetConfig = ['29 Tết','30 Tết','Mùng 1','Mùng 2','Mùng 3','Mùng 4','Mùng 5','Mùng 6','Mùng 7','Mùng 8','Mùng 9','Mùng 10',];
         let _daysConfig: DayConfig[] = [];
-        for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-          const lunar: Lunar = new Lunar();
-          let _day = this.valueGlobal.listlunar[j].date;
-          lunar.getBlockLunarDate(_day);
-
-        _daysConfig.push({
-            date: this.valueGlobal.listlunar[j].date,
-            subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name+':'+ (lunar.getBlockLunarDate(_day).lunarDate == 1 ? `${lunar.getBlockLunarDate(_day).lunarDate.toString()}/${lunar.getBlockLunarDate(_day).lunarMonth.toString()}`: lunar.getBlockLunarDate(_day).lunarDate.toString()),
-            cssClass: 'lunarcalendar lunardate'
-        })
+        if(this.valueGlobal.listlunar && this.valueGlobal.listlunar.length >0){
+            for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
+              const lunar: Lunar = new Lunar();
+              let _day = this.valueGlobal.listlunar[j].date;
+              lunar.getBlockLunarDate(_day);
+    
+            _daysConfig.push({
+                date: this.valueGlobal.listlunar[j].date,
+                subTitle: moment(this.valueGlobal.listlunar[j].date).format('DD')+':' +this.valueGlobal.listlunar[j].name+':'+ (lunar.getBlockLunarDate(_day).lunarDate == 1 ? `${lunar.getBlockLunarDate(_day).lunarDate.toString()}/${lunar.getBlockLunarDate(_day).lunarMonth.toString()}`: lunar.getBlockLunarDate(_day).lunarDate.toString()),
+                cssClass: 'lunarcalendar lunardate'
+            })
+          }
         }
+        
 
         for (let k = 0; k < 365; k++) {
           let addday = moment(new Date()).add(k, 'days').format('YYYY-MM-DD');

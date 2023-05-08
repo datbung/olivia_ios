@@ -68,6 +68,7 @@ export class OrderRequestAddluggagePaymentSelectPage implements OnInit {
       
       this.itemflight = this._flightService.itemFlightCache;
       this.bookingCode = this.activityService.objRequestAddLuggage.bookingCode;
+      this._flightService.fromOrderRequestChangeFlight = false;
     }
     
     this.storage.get('jti').then(jti => {
@@ -205,6 +206,7 @@ export class OrderRequestAddluggagePaymentSelectPage implements OnInit {
                       se.gf.hideLoading();
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
+                      se._flightService.fromOrderRequestChangeFlight = false;
                       se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                     }
                     else
@@ -284,6 +286,7 @@ export class OrderRequestAddluggagePaymentSelectPage implements OnInit {
                 this.safariViewController.hide();
               }
               clearInterval(this.intervalID);
+              this._flightService.fromOrderRequestChangeFlight = false;
               this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
             }
             else if(checkpay.ipnCall == "CALLED_FAIL" || checkpay.ipnCall == "CALLED_TIMEOUT")//hủy
@@ -638,6 +641,7 @@ export class OrderRequestAddluggagePaymentSelectPage implements OnInit {
               this.bizTravelService.paymentType = 1;
               this.flightPayment().then((checkvalid) => {
                 if(checkvalid){
+                  this._flightService.fromOrderRequestChangeFlight = false;
                   this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                 }
                 

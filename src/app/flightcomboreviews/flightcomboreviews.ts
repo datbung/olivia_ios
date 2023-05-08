@@ -782,7 +782,7 @@ export class FlightComboReviewsPage implements OnInit{
     return new Promise((resolve, reject) => {
       if (data) {
         data.IsPackageRateInternal = true;
-        data.IsPackageRate = true;
+        //data.IsPackageRate = true;
         data.GetVinHms = 1;
         data.GetSMD= 1;
         data.IsB2B=true;
@@ -790,6 +790,10 @@ export class FlightComboReviewsPage implements OnInit{
         data.IsAgoda= true;
         data.GetOTAPackage = 1;
         data.IsOccWithBed = false;
+        data['RoomsRequest[0][Adults][label]'] = se.adults ? se.adults : "2";
+        data['RoomsRequest[0][Child][label]'] = se.children ? se.children : "0";
+        data.CheckInDate = moment(data.CheckInDate).format('YYYY-MM-DD');
+        data.CheckOutDate = moment(data.CheckOutDate).format('YYYY-MM-DD');
         var form = data;
         var options = {
           method: 'POST',
@@ -1724,6 +1728,9 @@ export class FlightComboReviewsPage implements OnInit{
       newitem["keepCurrentVoucher"] = false;
       return newitem;
     });
+    let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+    let arrpromocode = this.promocode ? [{"voucherCode": this.promocode , "voucherName": this.promocode,"voucherType": 1,"voucherDiscount": this.discountpromo ,"keepCurrentVoucher": false  }] : [];
+
     // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
     //   this.bookCombo.discountpromo= this._voucherService.selectVoucher.rewardsItem.price;
     //   this.promocode = this._voucherService.selectVoucher.code;
@@ -1842,7 +1849,7 @@ export class FlightComboReviewsPage implements OnInit{
                 MemberId: jti,
                 UsePointPrice: pointprice,
                 //promotionCode: this.promocode,
-                vouchers : [...voucherSelectedMap,...promoSelectedMap],
+                vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
                 AllomentBreak: this.elementMealtype.AllomentBreak,
                 IsPromotionAllotment: this.elementMealtype.IsPromotionAllotment,
                 //hasInsurrance = true: đã bao gồm bảo hiểm trong giá combo
@@ -1963,7 +1970,7 @@ export class FlightComboReviewsPage implements OnInit{
               MemberId: jti,
               UsePointPrice: pointprice,
               //promotionCode: this.promocode,
-              vouchers : [...voucherSelectedMap,...promoSelectedMap],
+              vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
               AllomentBreak: this.elementMealtype.AllomentBreak,
               IsPromotionAllotment: this.elementMealtype.IsPromotionAllotment,
               //hasInsurrance = true: đã bao gồm bảo hiểm trong giá combo
@@ -2083,7 +2090,7 @@ export class FlightComboReviewsPage implements OnInit{
                 MemberId: jti,
                 UsePointPrice: pointprice,
                 //promotionCode: this.promocode,
-                vouchers : [...voucherSelectedMap,...promoSelectedMap],
+                vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
                 AllomentBreak: this.elementMealtype.AllomentBreak,
                 IsPromotionAllotment: this.elementMealtype.IsPromotionAllotment,
                 //hasInsurrance = true: đã bao gồm bảo hiểm trong giá combo
@@ -2758,6 +2765,10 @@ export class FlightComboReviewsPage implements OnInit{
             }
             let discountpromo=json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.Pricepointshow = total -  discountpromo;
+            se.discountpromo = discountpromo;
+            se.promocode = json.data.code;
+            se.strPromoCode = json.data.code;
+            se.totaldiscountpromo = discountpromo;
             if (se.Pricepointshow>0) {
               se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
               se.ischeckbtnpromo = true;

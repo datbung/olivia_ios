@@ -971,6 +971,9 @@ public getAppVersion() {
                   else if(body && body.tags || body.length >=0 || body.listRegion || body.childRegions || body.subRegions || body.post || body.status == 0 || (body.arrivals && body.arrivals.length >=0) || (body.departs && body.departs.length >=0)){
                       resolve(body);
                   }
+                  else if(body && body.msg && body.error){
+                    resolve(body);
+                  }
                   else if(body && body.msg){
                     resolve(body.msg);
                   }
@@ -4067,7 +4070,7 @@ export class ActivityService {
   objCarComboPaymentBreakDown: any;
   installmentPriceStr: string;
   backValue: string;
-  objRequestAddLuggage: { bookingCode: any; totalPrice: number; totalPriceDisplay: any; departWeight: any; returnWeight: any; objectDepartLuggage: any; objectReturnLuggage: any; };
+  objRequestAddLuggage: any;
   itemRefreshDeletionAccount=new EventEmitter();
   bankName: string;
   bankAccount: string;
@@ -4075,5 +4078,6 @@ export class ActivityService {
   bookingCode: any;
   bankTransfer: string;
   qrcodepaymentfrom: number;//1 - vmb; 2 -ks; 
+    typeChangeFlight: any;
   //abortSearch: boolean;
 }
