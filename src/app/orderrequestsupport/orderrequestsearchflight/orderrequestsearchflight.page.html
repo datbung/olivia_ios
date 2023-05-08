@@ -5,14 +5,14 @@
         <div class="div-goback" (click)="goback()">
             <img class="header-img-back" src="./assets/imgs/ios-arrow-round-back.svg" >
         </div>
-        <div class="div-header-title" *ngIf="step==2 else returntitle" (click)="showChangeInfo()">
+        <div class="div-header-title" *ngIf="step==2 else returntitle">
           <div class="div-title">{{ title }}</div>
-          <div class="div-subtitle"><span class="cls-text-tealish">{{dayDisplay}}</span> {{ subtitle }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_orange.svg"></span></div>
+          <div class="div-subtitle"><span>{{dayDisplay}}</span> {{ subtitle }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_orange.svg"></span></div>
         </div>
         <ng-template #returntitle>
-          <div class="div-header-title" (click)="showChangeInfo()">
+          <div class="div-header-title">
             <div class="div-title">{{ titlereturn }}</div>
-            <div class="div-subtitle"><span class="cls-text-tealish">{{dayReturnDisplay}}</span> {{ subtitlereturn }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_orange.svg"></span></div>
+            <div class="div-subtitle"><span>{{dayReturnDisplay}}</span> {{ subtitlereturn }} <span class="arrow-down"><img class="img-down" src="./assets/ic_flight/icon_down_orange.svg"></span></div>
           </div>
         </ng-template>
 <!--         

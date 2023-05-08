@@ -303,11 +303,13 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                     let checkpay=JSON.parse(datapayment);
                     if (checkpay.ipnCall == "CALLED_OK") { 
                       se._flightService.itemFlightCache.ischeckpayment= 1;
-                      se.hideLoading();
-                      se.gf.hideLoading();
+                      //se.hideLoading();
+                      //se.gf.hideLoading();
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
                       se.updateChangeFlight().then((success) => {
+                        se.hideLoading();
+                        se.gf.hideLoading();
                         if(success){
                           se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                         }else{
@@ -391,13 +393,14 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
             var checkpay=JSON.parse(data);
             if (checkpay.ipnCall == "CALLED_OK") {
               this._flightService.itemFlightCache.ischeckpayment= 1;
-              this.hideLoading();
-              this.gf.hideLoading();
+              
               if(this.safariViewController){
                 this.safariViewController.hide();
               }
               clearInterval(this.intervalID);
               this.updateChangeFlight().then((success) => {
+                this.hideLoading();
+              this.gf.hideLoading();
                 if(success){
                   this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                 }else{
@@ -631,8 +634,6 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
           se.hideLoading();
         }
       })
-    }else{
-      se.updateChangeFlight();
     }
     
   }
@@ -684,8 +685,6 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
             this.hideLoading();
           }
         })
-      }else{
-        this.updateChangeFlight();
       }
   }
   flightpaymentpayooqr() {
@@ -709,9 +708,7 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
               }
             })
           }
-          else{
-            this.updateChangeFlight();
-          }
+          
   }
 
   async showFlightDetail(){
@@ -788,6 +785,7 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                 this.flightPayment().then((checkvalid) => {
                   if(checkvalid){
                     this.updateChangeFlight().then((success) => {
+                      this.hideLoading();
                       if(success){
                         this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                       }else{
@@ -797,8 +795,6 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                   }
                   
                 })
-              }else{
-                this.updateChangeFlight();
               }
               
             }else{

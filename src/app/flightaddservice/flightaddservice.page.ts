@@ -3667,6 +3667,8 @@ export class FlightaddservicePage implements OnInit {
 
             se.strPromoCode = se.promocode;
             se.totaldiscountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+            se._voucherService.flightPromoCode = se.strPromoCode;
+            se._voucherService.flightTotalDiscount = se.totaldiscountpromo;
             se.totalPriceAll(0);
           }
           else if (json.error == 1) {

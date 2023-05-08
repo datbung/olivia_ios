@@ -147,19 +147,36 @@ export class OrderRequestSearchFlightPage implements OnInit {
       
       this.trip = this.activityService.objPaymentMytrip.trip;
 
-      let objday:any = this.gf.getDayOfWeek(this.trip.checkInDate);
-      let objdayreturn:any = this.gf.getDayOfWeek(this.trip.checkOutDate);
+      //let objday:any = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkInDate);
+      //let objdayreturn:any = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkOutDate);
 
-      this.title = "Đi " + this.trip.itemdepart.flightFrom +" → " + this.trip.itemdepart.flightTo;
-      this.subtitle = " · " + this.trip.itemdepart.numberOfPax + " khách";
-      this.titlereturn = "Về " + this.trip.itemreturn.flightFrom +" → " + this.trip.itemreturn.flightTo;
-      this.subtitlereturn = " · " + this.trip.itemreturn.numberOfPax + " khách";
-      this.dayDisplay = objday.dayname + ", " +moment(this.trip.checkInDate).format("DD") +  " thg " +moment(this.trip.checkInDate).format("M");
-      this.dayReturnDisplay = objdayreturn.dayname + ", " + moment(this.trip.checkOutDate).format("DD") + " thg " +moment(this.trip.checkOutDate).format("M");
-      this.trip.dayDisplay = this.dayDisplay;
-      this.trip.dayReturnDisplay = this.dayReturnDisplay;
-      this.checkInDate = this.trip.checkInDate;
-      this.checkOutDate = this.trip.checkOutDate;
+      // this.title = "Đi " + this.trip.itemdepart.flightFrom +" → " + this.trip.itemdepart.flightTo;
+      // this.subtitle = " · " + this.trip.itemdepart.numberOfPax + " khách";
+      // this.titlereturn = "Về " + this.trip.itemreturn.flightFrom +" → " + this.trip.itemreturn.flightTo;
+      // this.subtitlereturn = " · " + this.trip.itemreturn.numberOfPax + " khách";
+      // this.dayDisplay = objday.dayname + ", " +moment(this.trip.checkInDate).format("DD") +  " thg " +moment(this.trip.checkInDate).format("M");
+      // this.dayReturnDisplay = objdayreturn.dayname + ", " + moment(this.trip.checkOutDate).format("DD") + " thg " +moment(this.trip.checkOutDate).format("M");
+      // this.trip.dayDisplay = this.dayDisplay;
+      // this.trip.dayReturnDisplay = this.dayReturnDisplay;
+      // this.checkInDate = this.trip.checkInDate;
+      // this.checkOutDate = this.trip.checkOutDate;
+      this.checkInDate = this._flightService.itemFlightCache.checkInDate;
+                this.checkOutDate = this._flightService.itemFlightCache.checkOutDate;
+                let objday:any = this.gf.getDayOfWeek(this.checkInDate);
+                let objdayreturn:any = this.gf.getDayOfWeek(this.checkOutDate);
+                this.title = "Đi " + (this._flightService.itemFlightCache.departCity || this.trip.itemdepart.flightFrom) +" → " + (this._flightService.itemFlightCache.returnCity ||this.trip.itemdepart.flightTo);
+                this.subtitle = " · " + this.trip.itemdepart.numberOfPax + " khách";
+                if(this.trip.itemreturn){
+                  this.titlereturn = "Về " + (this._flightService.itemFlightCache.returnCity || this.trip.itemreturn.flightFrom) +" → " + (this._flightService.itemFlightCache.departCity || this.trip.itemreturn.flightTo);
+                  this.subtitlereturn = " · " + this.trip.itemreturn.numberOfPax + " khách";
+                }
+              
+                this.dayDisplay = objday.dayname + ", " +moment(this.checkInDate).format("DD") +  " thg " +moment(this.checkInDate).format("M");
+                this.dayReturnDisplay = objdayreturn.dayname + ", " + moment(this.checkOutDate).format("DD") + " thg " +moment(this.checkOutDate).format("M");
+                this.trip.dayDisplay = this.dayDisplay;
+                this.trip.dayReturnDisplay = this.dayReturnDisplay;
+                this.checkInDate = this._flightService.itemFlightCache.checkInDate || this.trip.checkInDate;
+                this.checkOutDate = this._flightService.itemFlightCache.checkOutDate || this.trip.checkOutDate;
 
       this.storage.get('jti').then(jti => {
         if (jti) {
@@ -559,7 +576,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
         })
     }else {
       this.step=2;
-      url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this.trip.checkInDate).format('YYYY-MM-DD')}&flightNumber=${this.trip.itemdepart.flightNumner}&ticketClass=${this.trip.itemdepart.ticketClass}&funAction=search&fromCode=${this.trip.itemdepart.departCode}&toCode=${this.trip.itemdepart.arrivalCode}`;
+      url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this.checkInDate).format('YYYY-MM-DD')}&flightNumber=${this.trip.itemdepart.flightNumner}&ticketClass=${this.trip.itemdepart.ticketClass}&funAction=search&fromCode=${this.trip.itemdepart.departCode}&toCode=${this.trip.itemdepart.arrivalCode}`;
       this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
         if(!data.error&& data != 'no data'){
           this.loadmultidata(data.data, 'depart');
@@ -570,7 +587,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
           
       });
 
-      let url1 = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this.trip.checkOutDate).format('YYYY-MM-DD')}&flightNumber=${this.trip.itemreturn.flightNumner}&ticketClass=${this.trip.itemreturn.ticketClass}&funAction=search&fromCode=${this.trip.itemreturn.departCode}&toCode=${this.trip.itemreturn.arrivalCode}`;
+      let url1 = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this.checkOutDate).format('YYYY-MM-DD')}&flightNumber=${this.trip.itemreturn.flightNumner}&ticketClass=${this.trip.itemreturn.ticketClass}&funAction=search&fromCode=${this.trip.itemreturn.departCode}&toCode=${this.trip.itemreturn.arrivalCode}`;
       this.gf.RequestApi('GET', url1, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
         if(!data.error){
           this.loadmultidata(data.data, 'return');
@@ -3059,8 +3076,8 @@ export class OrderRequestSearchFlightPage implements OnInit {
                 this.dayReturnDisplay = objdayreturn.dayname + ", " + moment(this.checkOutDate).format("DD") + " thg " +moment(this.checkOutDate).format("M");
                 this.trip.dayDisplay = this.dayDisplay;
                 this.trip.dayReturnDisplay = this.dayReturnDisplay;
-                this.checkInDate = this.trip.checkInDate;
-                this.checkOutDate = this.trip.checkOutDate;
+                // this.checkInDate = this.trip.checkInDate;
+                // this.checkOutDate = this.trip.checkOutDate;
                
               obj.dayDisplay = objday.dayname + ", " + moment(date.from).format("DD") +  " thg " +moment(date.from).format("M");
               obj.subtitle = " · " + (se._flightService.itemFlightCache.adult + se._flightService.itemFlightCache.child + (se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0) ) + " khách";

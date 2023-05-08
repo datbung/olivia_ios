@@ -7,17 +7,7 @@
 ion-footer {
     background-color: #ffffff;
 }
-ion-radio {
-    width: 24px;
-    height: 24px;
-    border: solid 2.5px rgba(var(--ion-text-color-rgb,0,0,0),0.51);
-    --color-checked: #fff;
-    border-radius: 4px;
-  }
-  .radio-checked {
-    background: var(--ion-color-primary);
-    border: solid 2.5px var(--ion-color-primary);
-  }
+
 .flight-search-filter-content{
     .p-16{
         padding: 16px;
@@ -177,6 +167,11 @@ ion-radio {
             max-width: 88.2%;
         }
     }
+    .m-top-20 {
+        margin-top: 20px;
+        align-items: center;
+      }
+    
 }
 
 .div-flightfilter-footer{

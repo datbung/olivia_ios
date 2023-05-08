@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div [ngClass]=" itemdepart.allowChangeFlight && itemreturn.allowChangeFlight ? 'div-wrap-item-flight m-top-16' : 'div-wrap-item-flight m-top-16 cls-deactive' " *ngIf="itemdepart && itemreturn"  (click)="clickChangeFlight(3)">
+            <!-- <div [ngClass]=" itemdepart.allowChangeFlight && itemreturn.allowChangeFlight ? 'div-wrap-item-flight m-top-16' : 'div-wrap-item-flight m-top-16 cls-deactive' " *ngIf="itemdepart && itemreturn"  (click)="clickChangeFlight(3)">
                 <div class="d-flex">
                     <div class="text-tealish div-width-100">Đổi 2 chiều</div>
                     <div class="icon-right div-width-100">
@@ -113,7 +113,7 @@
                     </div>
                     <div class="text-flight-info">{{itemreturn.flightNumner}} <span *ngIf="itemreturn.departureTime">| {{itemreturn.departureTime}} </span> <span *ngIf="itemreturn.departureTime">| {{trip.checkOutDisplay}}</span></div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
   </ion-content>

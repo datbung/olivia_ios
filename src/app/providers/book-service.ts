@@ -94,6 +94,7 @@ export class RoomInfo {
     ExcludeVAT:any;
     RoomClass: any;
     DescriptionTaxFee:any
+  discountpromo: any;
 }
 export class ValueGlobal {
     checksendcb:boolean;

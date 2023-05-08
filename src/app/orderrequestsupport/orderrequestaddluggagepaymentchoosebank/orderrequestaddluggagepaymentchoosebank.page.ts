@@ -109,7 +109,9 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
                       if(se._flightService.fromOrderRequestChangeFlight){
+                        se.gf.showLoading();
                         this.updateChangeFlight().then((success) => {
+                          se.gf.hideLoading();
                           if(success){
                             this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                           }else{
@@ -361,7 +363,9 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
               }
               clearInterval(this.intervalID);
               if(this._flightService.fromOrderRequestChangeFlight){
+                this.gf.showLoading();
                 this.updateChangeFlight().then((success) => {
+                  this.gf.hideLoading();
                   if(success){
                     this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                   }else{
@@ -412,8 +416,11 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
               window.close();
               se.safariViewController.hide();
               clearInterval(se.intervalID);
+              
               if(se._flightService.fromOrderRequestChangeFlight){
-                this.updateChangeFlight().then((success) => {
+                se.gf.showLoading();
+                se.updateChangeFlight().then((success) => {
+                  se.gf.hideLoading();
                   if(success){
                     this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
                   }else{

@@ -3352,6 +3352,9 @@ alert.present();
                 return newitem;
               });
 
+              let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+              let arrpromocode = se._voucherService.flightPromoCode ? [{"voucherCode": se._voucherService.flightPromoCode, "voucherName": se._voucherService.flightPromoCode,"voucherType": 1,"voucherDiscount": se._voucherService.flightTotalDiscount,"keepCurrentVoucher": false  }] : [];
+
               return new Promise((resolve, reject) => {
                 let objPass
                    objPass = {
@@ -3381,7 +3384,7 @@ alert.present();
                     "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                     "bookingJsonData":bookingJsonData,//đi chung
                     //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
-                    "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
+                    "vouchers" : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
                     "InsuranceType":se._flightService.itemFlightCache.InsuranceType
                   }
                   if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){

@@ -978,6 +978,8 @@ export class CombocarnewPage implements OnInit {
       newitem["keepCurrentVoucher"] = false;
       return newitem;
     });
+    let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
+    let arrpromocode = this.promocode ? [{"voucherCode": this.promocode , "voucherName": this.promocode,"voucherType": 1,"voucherDiscount": this.discountpromo ,"keepCurrentVoucher": false  }] : [];
 
         var objectCar = {
           TransferBooking: {
@@ -1084,7 +1086,7 @@ export class CombocarnewPage implements OnInit {
             MemberId: jti,
             UsePointPrice: pointprice,
             //promotionCode: self.promocode,
-            vouchers : [...voucherSelectedMap,...promoSelectedMap],
+            vouchers : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
             SupplierName: self.elementMealtype.Supplier,
             HotelCheckDetailTokenVinHms: self.elementMealtype.HotelCheckDetailTokenVinHms ? self.elementMealtype.HotelCheckDetailTokenVinHms : "",
             HotelCheckPriceTokenSMD: self.elementMealtype.HotelCheckPriceTokenSMD ? self.elementMealtype.HotelCheckPriceTokenSMD : "",
@@ -1106,6 +1108,7 @@ export class CombocarnewPage implements OnInit {
           self.Roomif.payment = "RQ";
           self.Roomif.ischeckpayment = false;
         }
+        //console.log(objectCar);
         self.navCtrl.navigateForward("comboadddetails");
       }
     })
@@ -1825,6 +1828,9 @@ export class CombocarnewPage implements OnInit {
             }
             se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.Pricepointshow = total - se.discountpromo;
+            se.promocode = json.data.code;
+            se.strPromoCode = json.data.code;
+            se.totaldiscountpromo = se.discountpromo;
             if (se.Pricepointshow > 0) {
               se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
               se.ischeckbtnpromo = true;

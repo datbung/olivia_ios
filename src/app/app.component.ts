@@ -24,6 +24,7 @@ import { flightService } from './providers/flightService';
 import {tourService} from './providers/tourService';
 
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { C } from './providers/constants';
 //import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
@@ -40,6 +41,8 @@ export class AppComponent {
   countcart: any;
   enableCountFilter: number;
   allowShowCart: boolean=true;
+  deviceid: any;
+  appversion: string;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -77,6 +80,12 @@ export class AppComponent {
     // this.storage.remove('deviceToken');
     // this.storage.remove('listexeperienceregion');
     this.valueGlobal.countNotifi = 0;
+    this.storage.get('deviceToken').then((devicetoken) => {
+      this.deviceid = devicetoken;
+    });
+    this.appVersion.getVersionNumber().then(version => {
+      this.appversion = version;
+    });
   }
 
   ionViewDidEnter() {
@@ -232,7 +241,9 @@ export class AppComponent {
       this.codePush.notifyApplicationReady().then(()=>{
         this.codePush.checkForUpdate().then((data)=>{
           if(data){
-            this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }).subscribe((syncStatus) => console.log(syncStatus));
+            this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
+
+            });
              this.valueGlobal.updatedLastestVersion = true;
           }
         })
@@ -407,5 +418,28 @@ export class AppComponent {
 
     toast.present();
   }
+
+  codePushStatusDidChange = (status: any) => {
+    let objError = {
+      page: "appComponent",
+      func: "codePushStatusDidChange",
+      message: 'Auto Update Failed',
+      content: JSON.stringify({ deviceId:  this.deviceid, appVersion: this.appversion}),
+      type: "warning",
+      param: ''
+    };
+    try {
+      switch (status) {
+        case SyncStatus.UPDATE_IGNORED:
+          C.writeErrorLog(objError,'UPDATE_IGNORED');
+          break;
+          case SyncStatus.ERROR:
+            C.writeErrorLog(objError,'ERROR');
+            break;
+      }
+    } catch (err) {
+      C.writeErrorLog(objError,'UNKNOW');
+    }
+  };
 
 }
