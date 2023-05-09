@@ -3964,7 +3964,7 @@ export class Tab1Page implements OnInit {
       //this.getAddress();
       
     }
-    else if (currentIndex === 2) {//Tour
+    else if (currentIndex === 3) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.ischeckFavourite='Tour'
@@ -3990,7 +3990,7 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    else if (currentIndex === 3) {//Ticket
+    else if (currentIndex === 4) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
 

@@ -48,6 +48,7 @@ export class Tab2Page implements OnInit {
   istextplace: boolean = false;
   listTourFavourite = [];
   slideData: any;
+ 
   constructor(public platform: Platform, public navCtrl: NavController, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel, public gf: GlobalFunction, public valueGlobal: ValueGlobal,
     public network: Network, public loadingCtrl: LoadingController, private socialSharing: SocialSharing,
     public networkProvider: NetworkProvider, public router: Router, public modalCtrl: ModalController, public tourService: tourService) {
@@ -1053,6 +1054,9 @@ export class Tab2Page implements OnInit {
         element.Liked=true;
         se.convertAvgPoint(element);
       });
+      if(se.slideData.length>0){
+        se.nodata=false;
+      }
       se.mapingPriceTour();
     })
   }
@@ -1198,5 +1202,8 @@ export class Tab2Page implements OnInit {
         });
       }
     });
+  }
+  goToRegister() {
+    this.navCtrl.navigateForward('/register');
   }
 }
