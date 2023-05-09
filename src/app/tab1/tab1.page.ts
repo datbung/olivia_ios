@@ -3990,7 +3990,7 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    else if (currentIndex === 3) {//Ticket
+    else if (currentIndex === 4) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
 

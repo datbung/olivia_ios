@@ -3408,6 +3408,7 @@ alert.present();
                     //"bookingJsonData":bookingJsonData,//đi chung
                     //"voucher": { voucherCode: se._flightService.itemFlightInternational.promotionCode ? se._flightService.itemFlightInternational.promotionCode:"" },
                     "vouchers" : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
+                    "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline
                     //"InsuranceType":se._flightService.itemFlightCache.InsuranceType
                   }
                   if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
@@ -4377,5 +4378,8 @@ alert.present();
           
           this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
       }
+    }
+    togglecheckinonline(event){ 
+      this._flightService.itemFlightCache.isCheckinOnline=event.detail.checked
     }
 }

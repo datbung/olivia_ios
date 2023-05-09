@@ -79,9 +79,8 @@ export class OrderRequestSupportPage implements OnInit {
   ngOnInit() {
   }
   goback() {
-  
-    this.navCtrl.navigateBack('/mytripdetail');
-
+    // this.navCtrl.navigateBack('/mytripdetail');
+    this.navCtrl.back();
   }
 
   changeInfo() {
