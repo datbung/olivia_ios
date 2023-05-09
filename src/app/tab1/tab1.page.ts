@@ -868,7 +868,7 @@ export class Tab1Page implements OnInit {
             this.cindisplay = moment(datein).format("DD-MM-YYYY");
             this.datecin = new Date(this.gf.getCinIsoDate(rescin));
       
-            this.cout = this.gf.getCinIsoDate(new Date());
+            this.cout = new Date(this.gf.getCinIsoDate(new Date()));
             var res = this.cout.setTime(
               this.cout.getTime() + (2 * 24 * 60 * 60 * 1000)
             );

@@ -389,8 +389,8 @@ ion-toggle {
       line-height: 16px;
       visibility: hidden;
     }
-
-    .div-month-text-small{
+    
+    .div-month-text-small, .div-month-text-hot{
       transition: visibility 1s, opacity 1s linear;
       margin-left: 26px;
       display: flex;
@@ -430,7 +430,9 @@ ion-toggle {
         margin-left: 21px !important;
       }
     }
-
+    .div-month-text-hot{
+      margin-bottom: 16px;
+    }
     .div-cout-oneway{
           border: solid 0.5px #fff;
           padding: 9px 12px;
@@ -1625,7 +1627,10 @@ height: 18px !important;
 .p-bottom-14 {
   padding-bottom: 14px;
 }
-
+button.days-btn.dayhot {
+  width: 36px !important;
+  height: 28px !important;
+}
 button.days-btn {
   width: 28px !important;
   height: 28px !important;

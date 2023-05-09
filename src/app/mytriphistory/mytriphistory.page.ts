@@ -64,15 +64,31 @@ export class MytripHistoryPage implements OnInit {
 
   ngOnInit() {
     this.loadMytripHistory();
+
+    //pdanh 09-05-2023
+    //Check api load mytrip history done
+    let se = this;
+    this._mytripservice.getLoadDataMytripHistorySubject().subscribe((check)=>{
+      if(check){
+        se.hasloaddata = true;
+        se.totalHistoryTrip = se._mytripservice.totalHistoryTrip;
+        se.listHistoryTrips = se._mytripservice.listHistoryTrips ? se._mytripservice.listHistoryTrips : [];
+        se.listFoodOrders = se._mytripservice.mylistOrders ? se._mytripservice.mylistOrders : [];
+        se.historytripcount = se.listHistoryTrips ? se.listHistoryTrips.length : 0;
+      }else{
+        se.hasloaddata = false;
+        se.totalHistoryTrip = 0;
+        se.listHistoryTrips = [];
+        se.listFoodOrders = [];
+        se.historytripcount = 0;
+      }
+    })
   }
 
   loadMytripHistory() {
     var se = this;
-    se.totalHistoryTrip = se._mytripservice.totalHistoryTrip;
-    se.listHistoryTrips = se._mytripservice.listHistoryTrips ? se._mytripservice.listHistoryTrips : [];
-    se.listFoodOrders = se._mytripservice.mylistOrders ? se._mytripservice.mylistOrders : [];
-    se.historytripcount = se.listHistoryTrips ? se.listHistoryTrips.length : 0;
-    se.hasloaddata = true;
+    
+    //se.hasloaddata = true;
     se.isConnected = true;
     let itemf = se.listFoodOrders.filter((o) => !o.isActive);
     if(itemf.length ==0){

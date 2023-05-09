@@ -296,6 +296,7 @@ export class OrderPage {
         se.expandDivTourNotes = false;
         if (se.networkProvider.isOnline()) {
           se.getdata(null, false);
+          se._mytripservice.publicLoadDataMytripHistorySubject(1);
           se.getdata(null, true);
           //se.loadOrder();
         }
@@ -340,6 +341,7 @@ export class OrderPage {
       se.getdata(null, false);
 
       setTimeout(() => {
+        se._mytripservice.publicLoadDataMytripHistorySubject(0);
         se.getdata(null, true);
       }, 1000)
       //se.loadOrder();
@@ -618,6 +620,7 @@ export class OrderPage {
                   })
                   se.loadMytrip(lstTrips, ishistory);
                   se._mytripservice.totalHistoryTrip = lstTrips.total;
+                  
                 }
 
                 se.hideloader();
@@ -718,6 +721,7 @@ export class OrderPage {
                 })
                 se.loadMytrip(lstTrips, ishistory);
                 se._mytripservice.totalHistoryTrip = lstTrips.total;
+                
               }
               se.hideloader();
             });
@@ -1805,6 +1809,7 @@ export class OrderPage {
                     }
 
                   } else {
+                    se._mytripservice.publicLoadDataMytripHistorySubject(0);
                     se.getdata(null, true);
                   }
                 }
@@ -2971,7 +2976,7 @@ export class OrderPage {
 
 
         se._mytripservice.listHistoryTrips = se.listHistoryTrips;
-
+        se._mytripservice.publicLoadDataMytripHistorySubject(1);
         if (se.valueGlobal.BookingCodeHis && se.gf.getParams('selectedTab3')) {
           se.activeTabTrip = 3;
           se.tabtrip = 'historytrip';
@@ -2996,6 +3001,7 @@ export class OrderPage {
             if (idxhis != -1) {
               se.showtripdetail(se.listHistoryTrips[idxhis]);
             } else {
+              
               se.getdata(null, true);
             }
           }
@@ -4006,6 +4012,7 @@ export class OrderPage {
               if (idxhis != -1) {
                 se.showtripdetail(se.listHistoryTrips[idxhis]);
               } else {
+                se._mytripservice.publicLoadDataMytripHistorySubject(0);
                 se.getdata(null, true);
               }
             }
@@ -4924,6 +4931,7 @@ export class OrderPage {
       if (event) {
         event.target.complete();
       }
+      se._mytripservice.publicLoadDataMytripHistorySubject(0);
       se.getdata(null, true);
     }, 1000);
     se.storage.remove('listrequesttrips');
