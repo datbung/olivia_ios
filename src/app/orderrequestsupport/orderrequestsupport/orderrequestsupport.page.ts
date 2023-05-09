@@ -55,24 +55,24 @@ export class OrderRequestSupportPage implements OnInit {
             }
           }
         }
-        let trip = this.activityService.objPaymentMytrip.trip;
-        this.allowChangeFlight = trip.hotel_name.indexOf('VMB QT') == -1;
-        //check bkg chưa thanh toán
-        this.allowChangeFlight = (trip.payment_status == 1 || trip.payment_status == 5);
-        if(this.allowChangeFlight){
-          //Check bkg chờ xử lý
-          this.allowChangeFlight = trip.bookingsComboData[0].issueTicketDate && trip.approve_date;
-        }
-        if(this.allowChangeFlight){
-          if(trip.itemreturn && !this.checkValidFlightTime(trip.itemreturn)){
-            this.allowChangeFlight = false;
-          }else if(trip.itemdepart && !this.checkValidFlightTime(trip.itemdepart)){
-            this.allowChangeFlight = false;
-          }
-        }
-        if(this.allowChangeFlight){
-          this.allowChangeFlight = !trip.isRoundTrip ? trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 : (trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 || trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1);
-        }
+        // let trip = this.activityService.objPaymentMytrip.trip;
+        // this.allowChangeFlight = trip.hotel_name.indexOf('VMB QT') == -1;
+        // //check bkg chưa thanh toán
+        // this.allowChangeFlight = (trip.payment_status == 1 || trip.payment_status == 5);
+        // if(this.allowChangeFlight){
+        //   //Check bkg chờ xử lý
+        //   this.allowChangeFlight = trip.bookingsComboData[0].issueTicketDate && trip.approve_date;
+        // }
+        // if(this.allowChangeFlight){
+        //   if(trip.itemreturn && !this.checkValidFlightTime(trip.itemreturn)){
+        //     this.allowChangeFlight = false;
+        //   }else if(trip.itemdepart && !this.checkValidFlightTime(trip.itemdepart)){
+        //     this.allowChangeFlight = false;
+        //   }
+        // }
+        // if(this.allowChangeFlight){
+        //   this.allowChangeFlight = !trip.isRoundTrip ? trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 : (trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 || trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1);
+        // }
         
   }
 
