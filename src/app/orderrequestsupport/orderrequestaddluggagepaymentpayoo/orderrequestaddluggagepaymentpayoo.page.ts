@@ -210,7 +210,25 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
       if (rs.ipnCall == "CALLED_OK") {
         se.gf.hideLoading();
         clearInterval(se.intervalID);
-        se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+        if(se._flightService.fromOrderRequestChangeFlight){
+          se.gf.showLoading();
+          se.updateChangeFlight().then((success) => {
+            se.gf.hideLoading();
+            if(success){
+              let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
+                      this.gf.RequestApi('POST', _url, {
+                        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                        'Content-Type': 'application/json; charset=utf-8',
+                      }, 
+                      {bookingCode: se.bookingCode}, 'orderrequestaddluggagepaymentpayoo','UpdateTicketFlight');
+              this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+            }else{
+              this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+            }
+          })
+        }else{
+          se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+        }
 
       }
       else if(rs.ipnCall == "CALLED_FAIL" && rs.errorCode == '99')//hủy
@@ -353,4 +371,55 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
     modal.present();
   }
 
+  updateChangeFlight(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      let header = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8'
+      };
+      let url = '';
+      let trip = this.activityService.objPaymentMytrip.trip;
+      if(this.activityService.typeChangeFlight == 1){
+        //this.
+          url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
+          this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+            if(data && data.success && data.priceChange){
+              resolve(true);
+            }else{
+              resolve(false);
+            }
+              
+          })
+      }else if(this.activityService.typeChangeFlight == 2){
+          url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
+          this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+            if(data && data.success && data.priceChange){
+              resolve(true);
+            }else{
+              resolve(false);
+            }
+          })
+      }else {
+        url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
+        this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+          if(data && data.success && data.priceChange){
+            resolve(true);
+          }else{
+            resolve(false);
+          }
+        });
+
+        let url1 = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
+        this.gf.RequestApi('GET', url1, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
+          if(data && data.success && data.priceChange){
+            resolve(true);
+          }else{
+            resolve(false);
+          }
+            
+        })
+      }
+    })
+    
+  }
 }

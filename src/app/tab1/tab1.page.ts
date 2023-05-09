@@ -776,15 +776,14 @@ export class Tab1Page implements OnInit {
       if (this.searchhotel.roomnumber) {
         this.roomnumber = this.searchhotel.roomnumber;
       }
-      
       if (this.searchhotel.CheckInDate && moment(this.searchhotel.CheckInDate).diff(moment(moment(new Date()).format('YYYY-MM-DD')), 'days') >=0) {
         let diffcincout = moment(this.searchhotel.CheckOutDate).diff(this.searchhotel.CheckInDate, 'days');
         if(diffcincout <=0){
           this.searchhotel.CheckOutDate = moment(this.searchhotel.CheckInDate).add(1, 'days').format('YYYY-MM-DD');
         }
 
-        this.cin = this.gf.getCinIsoDate(this.searchhotel.CheckInDate);
-        this.cout = this.gf.getCinIsoDate(this.searchhotel.CheckOutDate);
+        this.cin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+        this.cout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
   
         this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
         this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
@@ -796,6 +795,7 @@ export class Tab1Page implements OnInit {
         this.searchhotel.cindisplay = moment(this.gf.getCinIsoDate(this.searchhotel.datecin)).format("DD-MM-YYYY");
         this.searchhotel.coutdisplay = moment(this.gf.getCinIsoDate(this.searchhotel.datecout)).format("DD-MM-YYYY");
       } else {
+        
         this.cin = new Date(this.gf.getCinIsoDate(new Date()));
         var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
         var datein = this.gf.getCinIsoDate(new Date(rescin));
@@ -861,7 +861,7 @@ export class Tab1Page implements OnInit {
             this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           } else {
-            this.cin = this.gf.getCinIsoDate(new Date());
+            this.cin = new Date(this.gf.getCinIsoDate(new Date()));
             var rescin = this.cin.setTime(this.cin.getTime() + (1 * 24 * 60 * 60 * 1000) );
             var datein = new Date(this.gf.getCinIsoDate(rescin));
             this.cin = moment(datein).format("YYYY-MM-DD");
@@ -3994,17 +3994,17 @@ export class Tab1Page implements OnInit {
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
 
-      // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
-      // if (document.querySelector(".tabbar")) {
-      // document.querySelector(".tabbar")['style'].display = 'flex';
-      // if(document.querySelector(".tabbar")[1]){
-      //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
-      //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
-      // }
-      // }
-      // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-      // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
-      // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
+      $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
+      if (document.querySelector(".tabbar")) {
+      document.querySelector(".tabbar")['style'].display = 'flex';
+      if(document.querySelector(".tabbar")[1]){
+        document.querySelector(".tabbar")[0]['style'].display = 'flex';
+        document.querySelector(".tabbar")[1]['style'].display = 'flex';
+      }
+      }
+      $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+      $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+      $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
     }
     else{
       this._mytripservice.rootPage = "homehotel";

@@ -3384,7 +3384,7 @@ alert.present();
                     "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
                     "bookingJsonData":bookingJsonData,//đi chung
                     //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
-                    "vouchers" : [...voucherSelectedMap,...promoSelectedMap],
+                    "vouchers" : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
                     "InsuranceType":se._flightService.itemFlightCache.InsuranceType,
                     "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline
                   }
