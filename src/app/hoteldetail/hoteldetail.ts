@@ -3484,8 +3484,8 @@ async bookcombo() {
                 const em = divmonth[index];
                 //   let divsmall = $('#'+em.id+' dayhot');
                 //   if(divsmall && divsmall.length >0){
-                    $('#'+em.id).append("<div class='div-month-text-small'></div>")
-                    $('#'+em.id+' .div-month-text-small').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
+                    $('#'+em.id).append("<div class='div-month-text-hot'></div>")
+                    $('#'+em.id+' .div-month-text-hot').append("<div class='div-hot-price'><img class='img-hot-price' src='./assets/imgs/ic_fire.svg'/>  Giai đoạn giá siêu hot</div>");
                   // }
               }
             }
