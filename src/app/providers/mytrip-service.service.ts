@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,4 +28,14 @@ export class MytripService {
   fromRequestChangeFlight: boolean;
 
   constructor() { }
+
+  private object
+
+  private loadDataMytripHistorySubject = new Subject<any>();
+  publicLoadDataMytripHistorySubject(data: any) {
+    this.loadDataMytripHistorySubject.next(data);
+  }
+  getLoadDataMytripHistorySubject(): Subject<any> {
+    return this.loadDataMytripHistorySubject;
+  }
 }

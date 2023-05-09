@@ -1,6 +1,6 @@
 
   <div class="div-order-content-his div-history-trip" >
-    <div *ngIf="listHistoryTrips.length >0 && historytripcount > 0" class="card-background-page-history-trips">
+    <div *ngIf="listHistoryTrips.length >0 && historytripcount > 0 && hasloaddata" class="card-background-page-history-trips">
       <ion-list (click)="showtripdetail(trip)" style="padding: 0" *ngFor="let trip of listHistoryTrips; let i = index">
       
           <div >
@@ -386,7 +386,7 @@
       </div>
     </div>
     <!-- history nodata -->
-    <div *ngIf="hasloaddata && historytripcount == 0" class="trip-empty">
+    <div *ngIf="hasloaddata && listHistoryTrips.length == 0" class="trip-empty">
       <div class="img-trip-empty">
         <img class="img-empty" src="./assets/empty/trip_empty.svg">
       </div>
@@ -395,6 +395,46 @@
       </div>
       <div class="button-trip-empty">
         <button ion-button round outline class="button btn-trip-empty" (click)="gohomepage()">Khám phá ngay</button>
+      </div>
+
+    </div>
+
+    <div *ngIf="!hasloaddata" style="height: 100%;width:100%;padding: 16px; padding-top: 100px">
+      <div>
+        <ion-skeleton-text animated style="width:100%;margin: 0;height: 16px;margin-bottom: 16px"></ion-skeleton-text>
+      </div>
+      <div>
+        <div class="div-sk-detail">
+          <ion-row class="row-item-hoteldetail-sk">
+            <ion-col size="4" style="padding: 0">
+              <ion-skeleton-text animated
+                style="width:104px;height:104px;border-radius:6px;margin:0;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="8" class="col-description-hoteldetail-sk" style="line-height: 16px;padding-top: 0">
+              <ion-skeleton-text animated style="width: 50%;margin: 0;height: 16px;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 100%;margin: 0;margin-top:40px;height: 16px;">
+              </ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 50%;margin: 0;margin-top:16px;height: 16px;">
+              </ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="row-item-description-sk">
+            <ion-skeleton-text animated style="width: 104px;margin: 0;margin-top:32px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 83%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 67%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 67%;margin: 0;margin-top:16px;height: 16px;">
+            </ion-skeleton-text>
+          </ion-row>
+          <ion-row class="row-item-button-sk">
+            <ion-skeleton-text animated
+              style="width: 100%;margin: 0;height: 48px;border-radius: 6px;margin-top:48px"></ion-skeleton-text>
+          </ion-row>
+        </div>
       </div>
 
     </div>
