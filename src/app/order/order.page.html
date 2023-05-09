@@ -728,7 +728,7 @@
                       </div>
                       <div class="div-line-total"></div>
 
-                      <div *ngIf="trip.bookingjson && !trip.isBookingVMBQT" class="d-flex h-36" >
+                      <div *ngIf="trip.bookingjson && !trip.isBookingVMBQT && trip.bookingjson[0].RequestCheckin==1" class="d-flex h-36" >
                         <div class="div-width-250 v-align-center">
                             <div class="text-title">Yêu cầu Checkin-Online</div>
                         </div>
@@ -3033,7 +3033,7 @@
                       </div>
                     </div>
                     <div  class="div-panel-1px" *ngIf="trip.booking_type != 'TOUR'"></div>
-                    <div  class="d-flex m-l-16 div-checkin-online-2" *ngIf="trip.booking_type != 'TOUR' && !trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT">
+                    <div  class="d-flex m-l-16 div-checkin-online-2" *ngIf="trip.booking_type != 'TOUR' && !trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && trip.bookingjson[0].RequestCheckin==1">
                       <div class="text-info-2 font-weight-500">
                         Yêu cầu Checkin-Online
                       </div>
@@ -3553,8 +3553,8 @@
               
               </ion-item-group>
               <!-- <div class="div-split-listtrip"></div> -->
-              <div *ngIf="!trip.hadCheckinOnline"  class="div-line-new-1 m-0-16"></div>
-              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT"  class="d-flex div-checkin-online-1">
+              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && trip.bookingjson[0].RequestCheckin==1"  class="div-line-new-1 m-0-16"></div>
+              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && trip.bookingjson[0].RequestCheckin==1"  class="d-flex div-checkin-online-1">
                
                 <div class="div-text-checkin-online">Yêu cầu Checkin-Online</div>
                 <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
