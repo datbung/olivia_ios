@@ -1622,11 +1622,8 @@ export class OrderPage {
                     let arrpax = element.extra_guest_info.split('|');
                     if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
                       element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                      element.adult = arrpax[0];
-                      element.child = arrpax[1];
                     } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
                       element.paxDisplay = arrpax[0].toString() + " người lớn";
-                      element.adult = arrpax[0];
                     }
                   }
                   if (element.amount_after_tax) {
