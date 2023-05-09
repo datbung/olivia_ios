@@ -184,8 +184,9 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
     let databkg = itemflightcache.dataSummaryBooking;
     
     let hasvoucherused = (databkg && itemflightcache.pnr && itemflightcache.pnr.resNo && itemflightcache.listVouchersAlreadyApply && itemflightcache.listVouchersAlreadyApply.length >0);
-    let strpromocode = itemflightcache.listVouchersAlreadyApply.map(v => v.code).join(', ');
+    
     if(hasvoucherused){
+      let strpromocode = itemflightcache.listVouchersAlreadyApply.map(v => v.code).join(', ');
       this.alertMessage(`Mã giảm giá ${strpromocode} đã được dùng cho booking ${this._flightService.itemFlightCache.pnr.resNo}. Vui lòng thao tác lại booking!`);
       return;
     }
