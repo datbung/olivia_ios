@@ -353,6 +353,7 @@ export class MytripdetailPage implements OnInit {
                 let objData = JSON.parse(data);
                 if(objData.insurObj && objData.insurObj.adultList){
                   let dataCathay = objData.insurObj;
+                  se.arrinsurrance=[];
                  dataCathay.adultList.forEach(objAdult => {
                    if(!objAdult.claimedFlights ){
                     let itemAdult = { claimed: objAdult.claimedFlights, insurance_code: objAdult.insurance_code, customer_name: objAdult.customer_name, customer_id: objAdult.customer_cmnd, customer_address: '', customer_dob: objAdult.customer_dob};
@@ -375,6 +376,7 @@ export class MytripdetailPage implements OnInit {
                     se.arrinsurrance.push(itemAdult);
                    }
                   });
+                  se.arrchildinsurrance=[];
                     dataCathay.childList.forEach(objChild => {
                       if(!objChild.claimedFlights){
                         let itemChild = { claimed: objChild.claimedFlights, insurance_code: objChild.insurance_code, customer_name: objChild.customer_name, customer_id: objChild.customer_cmnd, customer_address: '', customer_dob: objChild.customer_dob, 
