@@ -821,8 +821,8 @@ export class FlightSearchResultInternationalPage implements OnInit {
           se.sortFlightsByPrice(se.listDepart);
         })
           se.listAirlinesFilterDirect = se.listDepart.map(item => {
-            let lstAirlineDepart = item.departFlights.map(d => {return {'name': d.airline, 'namefilter': d.airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,''), 'value': d.airlineCode}});
-            let lstAirlineReturn = item.returnFlights.map(d => {return {'name': d.airline, 'namefilter': d.airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,''), 'value': d.airlineCode}});
+            let lstAirlineDepart = item.departFlights.map(d => {return {'name': d.airline, 'namefilter': d.airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,'').replace(/\(/g,'').replace(/\)/g,''), 'value': d.airlineCode}});
+            let lstAirlineReturn = item.returnFlights.map(d => {return {'name': d.airline, 'namefilter': d.airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,'').replace(/\(/g,'').replace(/\)/g,''), 'value': d.airlineCode}});
             let arr = [];
             if(lstAirlineDepart && lstAirlineDepart.length > 0){
              if(lstAirlineReturn && lstAirlineReturn.length > 0){
@@ -1496,7 +1496,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
   
             if(se._flightService.objectFilterInternational.airlineSelected && se._flightService.objectFilterInternational.airlineSelected.length >0){
               let filterAirline = listFilter.filter((filterairlineitem) => {
-                return se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.departFlights[0].airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,'')) != -1 ||(filterairlineitem.returnFlights && filterairlineitem.returnFlights.length >0 && se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.returnFlights[0].airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,'')) != -1) ;
+                return se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.departFlights[0].airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,'').replace(/\(/g,'').replace(/\)/g,'')) != -1 ||(filterairlineitem.returnFlights && filterairlineitem.returnFlights.length >0 && se._flightService.objectFilterInternational.airlineSelected.indexOf(filterairlineitem.returnFlights[0].airline.replace(/\ /g,'').replace(/\./g,'').replace(/\'/g,'').replace(/\(/g,'').replace(/\)/g,'')) != -1) ;
               })
               listFilter = [...filterAirline];
             }

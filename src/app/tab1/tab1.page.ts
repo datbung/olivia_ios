@@ -762,7 +762,6 @@ export class Tab1Page implements OnInit {
     } else {
       this.chuoi = this.searchhotel.chuoi;
     }
-
     if(this.searchhotel.CheckInDate){
       if (this.searchhotel.adult) {
         this.adult = this.searchhotel.adult;
@@ -776,6 +775,7 @@ export class Tab1Page implements OnInit {
       if (this.searchhotel.roomnumber) {
         this.roomnumber = this.searchhotel.roomnumber;
       }
+      
       if (this.searchhotel.CheckInDate && moment(this.searchhotel.CheckInDate).diff(moment(moment(new Date()).format('YYYY-MM-DD')), 'days') >=0) {
         let diffcincout = moment(this.searchhotel.CheckOutDate).diff(this.searchhotel.CheckInDate, 'days');
         if(diffcincout <=0){
@@ -812,8 +812,8 @@ export class Tab1Page implements OnInit {
         this.coutdisplay = moment(date).format("DD-MM-YYYY");
         this.datecout = new Date(this.gf.getCinIsoDate(res));
 
-        this.searchhotel.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
-        this.searchhotel.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
+        this.searchhotel.datecin = new Date(this.gf.getCinIsoDate(this.cin));
+        this.searchhotel.datecout = new Date(this.gf.getCinIsoDate(this.cout));
         this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
         this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
       }
@@ -847,8 +847,8 @@ export class Tab1Page implements OnInit {
             this.cin = this.gf.getCinIsoDate(data.checkInDate);
             this.cout = this.gf.getCinIsoDate(data.checkOutDate);
       
-            this.datecin = new Date(this.gf.getCinIsoDate(data.checkInDate));
-            this.datecout = new Date(this.gf.getCinIsoDate(data.checkOutDate));
+            this.datecin = new Date(this.gf.getCinIsoDate(this.cin));
+            this.datecout = new Date(this.gf.getCinIsoDate(this.cout));
             this.cindisplay = moment(this.datecin).format("DD-MM-YYYY");
             this.coutdisplay = moment(this.datecout).format("DD-MM-YYYY");
 
@@ -856,8 +856,8 @@ export class Tab1Page implements OnInit {
             this.searchhotel.CheckInDate = this.cin;
             this.searchhotel.CheckOutDate = this.cout;
             
-            this.searchhotel.datecin = new Date(this.searchhotel.CheckInDate);
-            this.searchhotel.datecout = new Date(this.searchhotel.CheckOutDate);
+            this.searchhotel.datecin = new Date(this.cin);
+            this.searchhotel.datecout = new Date(this.cout);
             this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           } else {
@@ -878,8 +878,8 @@ export class Tab1Page implements OnInit {
             this.datecout = new Date(this.gf.getCinIsoDate(res));
             this.searchhotel.CheckInDate = this.cin;
             this.searchhotel.CheckOutDate = this.cout;
-            this.searchhotel.datecin = new Date(this.searchhotel.CheckInDate);
-            this.searchhotel.datecout = new Date(this.searchhotel.CheckOutDate);
+            this.searchhotel.datecin = new Date(this.cin);
+            this.searchhotel.datecout = new Date(this.cout);
             this.searchhotel.cindisplay = moment(this.searchhotel.datecin).format("DD-MM-YYYY");
             this.searchhotel.coutdisplay = moment(this.searchhotel.datecout).format("DD-MM-YYYY");
           }
