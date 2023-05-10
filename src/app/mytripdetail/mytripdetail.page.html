@@ -1380,7 +1380,7 @@
                     <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                   </div> -->
                   <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
-                   <div class="d-flex align-items-end m-top-12" >
+                   <div class="d-flex align-items-end m-top-12" *ngIf="pass.CheckinInfo">
                        <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
                            <img class="header-img-back" [src]="pass.CheckinInfo" >
                        </div> -->
@@ -2887,46 +2887,51 @@
                           </div>
                         </div>
                         <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="div-panel-1px"></div>
-                        <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="m-l-8 padding-bottom-20 div-checkin-online padding-0">
-                         <div class="d-flex">
-                           <div class="div-icon-check">
-                             <img  class="img-check"  src="./assets/ic_mytripbooking/check.svg">
-                           </div>
-                           <div class="div-text-checkin">Đã có thẻ lên máy bay (Boarding Pass)</div>
-                         </div>
-                         
-                          <!-- <div class="div-icon-arrow">
-                            <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
-                          </div> -->
-                          <div  class="text-title-broading m-top-12" *ngIf="trip.bookingjson[1] && trip.bookingjson[1].Passengers[0].CheckinInfo">
-                            Chiều đi
+                        <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline"
+                        class="m-l-8 padding-bottom-20 div-checkin-online padding-0">
+                        <div class="d-flex">
+                          <div class="div-icon-check">
+                            <img class="img-check" src="./assets/ic_mytripbooking/check.svg">
                           </div>
-                           <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
-                            <div class="d-flex align-items-end m-top-12" >
-                                <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
-                                    <img class="header-img-back" [src]="pass.CheckinInfo" >
-                                </div> -->
-                                <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span class="div-name">{{pass.Name}}</span> </label>
-                                <img  (click)="downloadimg(pass,trip)"  src="./assets/ic_mytripbooking/download.svg">
-                                <img  (click)="share(pass)" class="m-left-8px"  src="./assets/ic_mytripbooking/share.svg">
-                            </div>
+                          <div class="div-text-checkin">Đã có thẻ lên máy bay (Boarding Pass)</div>
                         </div>
-                        <div  class="text-title-broading m-top-12" *ngIf="trip.bookingjson[1] && trip.bookingjson[1].Passengers[0].CheckinInfo">
+                  
+                        <!-- <div class="div-icon-arrow">
+                                              <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
+                                            </div> -->
+                        <div class="text-title-broading m-top-12"
+                          *ngIf="trip.hadCheckinOnlineReturn">
+                          Chiều đi
+                        </div>
+                        <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
+                          <div class="d-flex align-items-end m-top-12"  *ngIf="pass.CheckinInfo">
+                            <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
+                                                      <img class="header-img-back" [src]="pass.CheckinInfo" >
+                                                  </div> -->
+                            <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
+                                class="div-name">{{pass.Name}}</span> </label>
+                            <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
+                            <img (click)="share(pass)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
+                          </div>
+                        </div>
+                        <div class="text-title-broading m-top-12"
+                        *ngIf="trip.hadCheckinOnlineReturn">
                           Chiều về
                         </div>
-                       
-                        <div *ngIf="trip.bookingjson[1] && trip.bookingjson[1].Passengers[0].CheckinInfo">
+                  
+                        <div  *ngIf="trip.hadCheckinOnlineReturn">
                           <div *ngFor="let pass of trip.bookingjson[1].Passengers; let idx = index">
-                            <div class="d-flex  align-items-end m-top-12" >
+                            <div class="d-flex  align-items-end m-top-12"  *ngIf="pass.CheckinInfo">
                               <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
-                                  <img class="header-img-back" [src]="pass.CheckinInfo" >
-                              </div> -->
-                              <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span class="div-name">{{pass.Name}}</span> </label>
-                              <img (click)="downloadimg(pass,trip)"  src="./assets/ic_mytripbooking/download.svg">
-                              <img (click)="share(pass)"  class="m-left-8px"  src="./assets/ic_mytripbooking/share.svg">
-                          </div>
-                          </div>
+                                                    <img class="header-img-back" [src]="pass.CheckinInfo" >
+                                                </div> -->
+                              <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
+                                  class="div-name">{{pass.Name}}</span> </label>
+                              <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
+                              <img (click)="share(pass)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
+                            </div>
                           </div>
                         </div>
+                      </div>
   </div>
 </ion-content>

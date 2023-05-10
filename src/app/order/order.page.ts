@@ -1108,6 +1108,16 @@ export class OrderPage {
                     let objjson = JSON.parse(element.booking_json_data);
                     let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo) });
                     element.hadCheckinOnline = _checked;
+                    element.hadCheckinOnlineReturn=false;
+                    if (objjson.length > 1 && objjson[1]) {
+                      for (let i = 0; i < objjson[1].Passengers.length; i++) {
+                        const el = objjson[1].Passengers[i];
+                        if (el.CheckinInfo) {
+                          element.hadCheckinOnlineReturn = true;
+                          break;
+                        }
+                      }
+                    }
                     // console.log(JSON.parse(element.booking_json_data));
                   }
                   if (element.hotel_name.indexOf("VMB QT") != -1) {
