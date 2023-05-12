@@ -927,7 +927,7 @@ export class OrderPage {
                 se.getRatingStar(element);
 
 
-                // if (element.booking_id=='VMB1909348') {
+                // if (element.booking_id=='VMB1723519') {
                 //   console.log(element.booking_json_data);
                 //   se.listMyTrips.push(element);
                 // }
@@ -1694,7 +1694,7 @@ export class OrderPage {
 
                 if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
 
-                  // if (element.booking_id=='VMB1909348') {
+                  // if (element.booking_id=='VMB1723519') {
                   //   console.log(element.booking_json_data);
                   //   se.listMyTrips.push(element);
                   // }
@@ -1743,7 +1743,7 @@ export class OrderPage {
                 element.address = element.hotelAddress;
                 element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                 se.getRatingStar(element);
-                // if (element.booking_id=='VMB1719504') {
+                // if (element.booking_id=='VMB1723519') {
                 //   se.listMyTrips.push(element);
                 // }
                 se.listMyTrips.push(element);
@@ -6589,37 +6589,57 @@ export class OrderPage {
    
   }
   checkinOnline(trip) {
+    
     var se = this;
-    this.gf.showLoading();
-    var options = {
-      method: 'POST',
-      url: C.urls.baseUrl.urlMobile + '/app/CRMOldApis/CreateSupportRequest',
-      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-      headers:
-      {
-        'cache-control': 'no-cache',
-        'content-type': 'application/json'
-      },
-      body:
-      {
-        bookingCode: trip.booking_id,
-        customerEmail: trip.cus_email,
-        customerName: trip.cus_name,
-        customerPhone: trip.cus_phone,
-        requestContent: "Yêu cầu checkin Online",
-        requestType: "Yêu cầu checkin Online",
-        sourceRequest: "App"
-      },
-      json: true
-    };
-    request(options, function (error, response, body) {
-      if (body.error == 0) {
-        trip.bookingjson[0].RequestCheckin=1;
-        se.gf.hideLoading();
-        alert("Gửi yêu cầu checkin online thành công");
-      }
+    let temp = trip.bookingsComboData[0].arrivalDate.split("/");
+    let daytemp=temp[2]+ temp[1] + temp[0];
+    // let daytemp="2023"+ "05" + "12";
+    var dep = moment(daytemp+ " " + trip.bookingsComboData[0].arrivalTime, "YYYYMMDD HH:mm")
+    let diffminutes = moment(dep).diff(new Date(), 'minutes');
+    console.log(diffminutes);
+    if (diffminutes > 210) {
+      this.gf.showLoading();
+      var options = {
+        method: 'POST',
+        url: C.urls.baseUrl.urlMobile + '/app/CRMOldApis/CreateSupportRequest',
+        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+        headers:
+        {
+          'cache-control': 'no-cache',
+          'content-type': 'application/json'
+        },
+        body:
+        {
+          bookingCode: trip.booking_id,
+          customerEmail: trip.cus_email,
+          customerName: trip.cus_name,
+          customerPhone: trip.cus_phone,
+          requestContent: "Yêu cầu checkin Online",
+          requestType: "Yêu cầu checkin Online",
+          sourceRequest: "App"
+        },
+        json: true
+      };
+      request(options, function (error, response, body) {
+        if (body.error == 0) {
+          trip.bookingjson[0].RequestCheckin=1;
+          se.gf.hideLoading();
+          alert("Gửi yêu cầu checkin online thành công");
+        }
+  
+      })
+    }else{
+      this.zone.run(() => {
+        trip.bookingjson[0].RequestCheckin=0;
+        trip.ischeckinOnl=true;
+      })
 
-    })
+
+      // alert("Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay");
+
+    }
+
+   
 
 
   }

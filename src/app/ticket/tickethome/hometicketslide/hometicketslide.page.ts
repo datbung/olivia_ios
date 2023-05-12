@@ -173,7 +173,7 @@ export class HomeTicketSlidePage implements OnInit {
   }
 
   ngOnInit(){
-
+    this.ticketService.itemTicketTopic='';
   }
 
   getAllExperiences() {

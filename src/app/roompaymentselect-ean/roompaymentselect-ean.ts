@@ -714,7 +714,9 @@ export class RoompaymentselectEanPage implements OnInit{
               }
             })
           }
-         
+          if (this.Roomif.notetotal) {
+            this.CreateSupportRequest();
+          }
         }
         else {
           if(se.loader){
@@ -1062,6 +1064,10 @@ export class RoompaymentselectEanPage implements OnInit{
                   alert("Đã có sự cố xảy ra, vui lòng thử lại!");
                 }
               })
+
+              if (this.Roomif.notetotal) {
+                this.CreateSupportRequest();
+              }
             }
             else {
               se.gf.hideLoading();
@@ -1143,6 +1149,36 @@ export class RoompaymentselectEanPage implements OnInit{
     this.searchhotel.paymentType = 'bnpl';
     this.continueBooking('bnpl');
   }
+  CreateSupportRequest() {
+    var se = this;
+    var options = {
+      method: 'POST',
+      url: C.urls.baseUrl.urlMobile + '/app/CRMOldApis/CreateSupportRequest',
+      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      headers:
+      {
+        'cache-control': 'no-cache',
+        'content-type': 'application/json'
+      },
+      body:
+      {
+        bookingCode: this.bookingCode,
+        customerEmail: this.booking.CEmail,
+        customerName: this.Roomif.hoten,
+        customerPhone: this.Roomif.phone,
+        requestContent: this.Roomif.notetotal,
+        requestType: "Khác",
+        sourceRequest: "App"
+      },
+      json: true
+    };
+    request(options, function (error, response, body) {
+      if (body.error == 0) {
+      }
 
+    })
+
+
+  }
 }
 

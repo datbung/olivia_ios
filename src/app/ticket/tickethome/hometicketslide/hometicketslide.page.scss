@@ -43,7 +43,7 @@
           color: var(--ion-color-primary);
           position: absolute;
           right: 16px;
-          top: 24px;
+          top: 10px;
       }
       .sub-title{
           line-height: 17px;
@@ -108,8 +108,7 @@
         background: #fff;
         padding: 8px;
         border-radius: 0 0 4px 4px;
-        min-height: 156px;
-  
+        padding-bottom: 17px;
         .div-hotel-name {
           //height: 45px;
   
@@ -382,9 +381,15 @@
         line-height: 1.5;
         text-align: left;
         color: #26bed6;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .cls-odd {
       background-color: #f2f2f2;
     }
+  }
+  .height-63{
+    height: 63px;
   }

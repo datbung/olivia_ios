@@ -429,6 +429,9 @@ export class RoomchoosebankPage implements OnInit{
           else{
             se.CreateUrlOnePay(bankid);
           }
+          if (se.Roomif.notetotal) {
+            se.gf.CreateSupportRequest(se.bookingCode,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+          }
         }
         else{
           if(se.loader){

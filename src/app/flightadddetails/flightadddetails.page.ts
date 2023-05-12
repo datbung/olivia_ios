@@ -96,67 +96,67 @@ export class FlightadddetailsPage implements OnInit {
     private storage: Storage,public alertCtrl: AlertController,
     private fb: Facebook,
     public _voucherService: voucherService) {
-        if(this._flightService.itemFlightCache){
-          this.listcountry = this.gf.getNationList();
-          this.listcountryFull = [...this.listcountry];
-          this.isExtenal = this._flightService.itemFlightCache.isExtenal;
-            this.showLotusPoint = ((this._flightService.itemFlightCache.departFlight && this._flightService.itemFlightCache.departFlight.airlineCode.indexOf('VietnamAirlines') != -1) || (this._flightService.itemFlightCache.returnFlight && this._flightService.itemFlightCache.returnFlight.airlineCode.indexOf('VietnamAirlines') != -1)) ? true : false;
-            this._flightService.itemFlightCache.showLotusPoint = this.showLotusPoint;
-          this.maxbod = moment(new Date()).format('YYYY-MM-DD');
-          let infant = this._flightService.itemFlightCache.infant >0 ? this._flightService.itemFlightCache.infant : 0;
-            this.adult = this._flightService.itemFlightCache.adult;
-            this.child = this._flightService.itemFlightCache.child*1 + infant*1;
-            this.totalPriceDisplay = this._flightService.itemFlightCache.totalPriceDisplay;
-            this.maxAgeOfChild = moment(new Date()).format('YYYY').toString();
-            let mindob ='2007', maxdob = '2020';
-            let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
-            let departdate = moment(this._flightService.itemFlightCache.checkOutDate);
-            for (let index = 0; index < this._flightService.itemFlightCache.adult; index++) {
-                this.adults.push({id: index+1, name: '', subName: '', gender: 1, genderdisplay: '', airlineMemberCode: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate,
-                                  errorName: false});
-            }
-            if(this._flightService.itemFlightCache.child >0){
+        // if(this._flightService.itemFlightCache){
+        //   this.listcountry = this.gf.getNationList();
+        //   this.listcountryFull = [...this.listcountry];
+        //   this.isExtenal = this._flightService.itemFlightCache.isExtenal;
+        //     this.showLotusPoint = ((this._flightService.itemFlightCache.departFlight && this._flightService.itemFlightCache.departFlight.airlineCode.indexOf('VietnamAirlines') != -1) || (this._flightService.itemFlightCache.returnFlight && this._flightService.itemFlightCache.returnFlight.airlineCode.indexOf('VietnamAirlines') != -1)) ? true : false;
+        //     this._flightService.itemFlightCache.showLotusPoint = this.showLotusPoint;
+        //   this.maxbod = moment(new Date()).format('YYYY-MM-DD');
+        //   let infant = this._flightService.itemFlightCache.infant >0 ? this._flightService.itemFlightCache.infant : 0;
+        //     this.adult = this._flightService.itemFlightCache.adult;
+        //     this.child = this._flightService.itemFlightCache.child*1 + infant*1;
+        //     this.totalPriceDisplay = this._flightService.itemFlightCache.totalPriceDisplay;
+        //     this.maxAgeOfChild = moment(new Date()).format('YYYY').toString();
+        //     let mindob ='2007', maxdob = '2020';
+        //     let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
+        //     let departdate = moment(this._flightService.itemFlightCache.checkOutDate);
+        //     for (let index = 0; index < this._flightService.itemFlightCache.adult; index++) {
+        //         this.adults.push({id: index+1, name: '', subName: '', gender: 1, genderdisplay: '', airlineMemberCode: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate,
+        //                           errorName: false});
+        //     }
+        //     if(this._flightService.itemFlightCache.child >0){
               
              
-              this.zone.run(()=>{
-                maxdob = moment( moment(moment(departdate).add(-2, 'years')).add(-1,'days') ).format('YYYY-MM-DD');//trên 2 tuổi
-                mindob = moment(moment(departdate).add(-12, 'years').add(1, 'days')).format('YYYY-MM-DD');//dưới 12 tuổi
-                  for (let index = 0; index < this._flightService.itemFlightCache.child; index++) {
-                      this.childs.push({id: index+1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: false, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate});
-                  }
-              })
+        //       this.zone.run(()=>{
+        //         maxdob = moment( moment(moment(departdate).add(-2, 'years')).add(-1,'days') ).format('YYYY-MM-DD');//trên 2 tuổi
+        //         mindob = moment(moment(departdate).add(-12, 'years').add(1, 'days')).format('YYYY-MM-DD');//dưới 12 tuổi
+        //           for (let index = 0; index < this._flightService.itemFlightCache.child; index++) {
+        //               this.childs.push({id: index+1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: false, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate});
+        //           }
+        //       })
               
-            }
-            if(this._flightService.itemFlightCache.infant >0){
+        //     }
+        //     if(this._flightService.itemFlightCache.infant >0){
 
               
-              this.zone.run(()=>{
-                maxdob = moment(moment(departdate).add(-14, 'days')).format('YYYY-MM-DD');//trên 15 ngày tuổi
-                mindob = moment( moment(moment(departdate).add(-2, 'years')).add(1,'days') ).format('YYYY-MM-DD');//dưới 2 tuổi
-                for (let index = 0; index < this._flightService.itemFlightCache.infant; index++) {
-                    this.childs.push({id: (this._flightService.itemFlightCache.child > 0 ? this._flightService.itemFlightCache.child : index) +1, iddisplay: index +1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: true, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate});
-                }
-              })
-          }
-            this.loadUserInfo();
-            //this.buildForm();
-            this.checkAndRebindPaxInfo();
+        //       this.zone.run(()=>{
+        //         maxdob = moment(moment(departdate).add(-14, 'days')).format('YYYY-MM-DD');//trên 15 ngày tuổi
+        //         mindob = moment( moment(moment(departdate).add(-2, 'years')).add(1,'days') ).format('YYYY-MM-DD');//dưới 2 tuổi
+        //         for (let index = 0; index < this._flightService.itemFlightCache.infant; index++) {
+        //             this.childs.push({id: (this._flightService.itemFlightCache.child > 0 ? this._flightService.itemFlightCache.child : index) +1, iddisplay: index +1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: true, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate});
+        //         }
+        //       })
+        //   }
+        //     this.loadUserInfo();
+        //     //this.buildForm();
+        //     this.checkAndRebindPaxInfo();
 
-            let se = this;
-            let item = se._flightService.itemFlightCache;
+        //     let se = this;
+        //     let item = se._flightService.itemFlightCache;
 
-            //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
+        //     //se.gf.googleAnalytionCustom('add_to_cart',{item_category:'flight' , start_date: se._flightService.itemFlightCache.checkInDate, end_date: se._flightService.itemFlightCache.checkOutDate,origin: se._flightService.itemFlightCache.departCode, destination: se._flightService.itemFlightCache.returnCode, value: se._flightService.itemFlightCache.totalPrice ,currency: "VND"});
 
-            se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'flight','fb_content_id': item.fromPlaceCode +"_"+item.toPlaceCode +"_"+item.flightNumber, 'fb_value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'fb_currency': 'VND' ,
-            'origin_airport' : se._flightService.itemFlightCache.departCode  ,
-            'destination_airport': se._flightService.itemFlightCache.returnCode,
-            'departing_departure_date': se._flightService.itemFlightCache.checkInDate ,'returning_departure_date ': se._flightService.itemFlightCache.checkOutDate,'num_adults': se._flightService.itemFlightCache.adult,'num_children': se._flightService.itemFlightCache.child ? se._flightService.itemFlightCache.child : 0,'num_infants': se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0
-            , 'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': 'VND'  }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
+        //     se.fb.logEvent(se.fb.EVENTS.EVENT_NAME_INITIATED_CHECKOUT, {'fb_content_type': 'flight','fb_content_id': item.fromPlaceCode +"_"+item.toPlaceCode +"_"+item.flightNumber, 'fb_value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'fb_currency': 'VND' ,
+        //     'origin_airport' : se._flightService.itemFlightCache.departCode  ,
+        //     'destination_airport': se._flightService.itemFlightCache.returnCode,
+        //     'departing_departure_date': se._flightService.itemFlightCache.checkInDate ,'returning_departure_date ': se._flightService.itemFlightCache.checkOutDate,'num_adults': se._flightService.itemFlightCache.adult,'num_children': se._flightService.itemFlightCache.child ? se._flightService.itemFlightCache.child : 0,'num_infants': se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0
+        //     , 'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': 'VND'  }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
          
-            let itemcache = se._flightService.itemFlightCache;
-            //se.gf.gaSetScreenName('flightadddetails');
-            se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
-        }
+        //     let itemcache = se._flightService.itemFlightCache;
+        //     //se.gf.gaSetScreenName('flightadddetails');
+        //     se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
+        // }
     }
 
     @HostListener('keydown', ['$event'])

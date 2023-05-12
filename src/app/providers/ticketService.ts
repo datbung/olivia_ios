@@ -22,10 +22,18 @@ export class ticketService{
   paymentType: number=0;
   totalPriceStr: Promise<boolean>;
   backPage: string;
-  itemSearchTicket: any;
+  itemSearchTicket = new EventEmitter();
   itemTicketTopic: any;
   ticketDetailId: any;
-  
+  hasAllotment:any
+  totalPriceNum: number;
+  indexDetail: number;
+  departureCalendarStr: string;
+  itemSearchDestination: any;
+  itemShowList: any;
+  itemSearchDepature: any;
+  input: any;
+  experience: any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

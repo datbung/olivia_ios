@@ -16,47 +16,49 @@
 </ion-header>
   <ion-content>
     <div *ngIf="loaddatadone else loadskeleton">
-      <div class="innerdeals1 slide2-scroll" style="overflow-x: auto;overflow-y: hidden" padding *ngIf="(slideData && slideData.length >0) else emptydata">
+      <div class="innerdeals1 slide2-scroll div-scroll"  padding *ngIf="(slideData && slideData.length >0) else emptydata">
           <div class="cls-deal" *ngFor="let slide of slideData">
             <img class="slide2 img" [src]="slide.avatarLink" (click)="itemclickht(slide)" >
             <div class="float-promo" *ngIf="slide.promotionTitle">
               <p class="float-promo-description">{{slide.promotionTitle}}</p>
             </div>
-
+            <div class="div-info">
               <h2 class="hotel-name m-top-8" (click)="itemclickht(slide)" >
-                  {{slide.experienceName}}
-              </h2>
-              <div class="d-flex m-top-8" *ngIf="slide.avgPoint">
-                <div class="div-badge" >
-                    <div class="text-point">{{slide.avgPoint}}</div>
-                    <div class="text-point-des" *ngIf="slide.avgPoint >=9 && slide.avgPoint <=10">Xuất sắc</div>
-                    <div class="text-point-des" *ngIf="slide.avgPoint>8 && slide.avgPoint <=9">Rất tốt</div>
-                    <div class="text-point-des" *ngIf="slide.avgPoint>7 && slide.avgPoint <=8">Khá tốt</div>
-                    <div class="text-point-des" *ngIf="slide.avgPoint>6 && slide.avgPoint <=7">Tạm được</div>
-                    <div class="text-point-des" *ngIf="slide.avgPoint>5 && slide.avgPoint <=6">Không tốt</div>
-                    <!-- <div  *ngIf="slide.TotalReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div> -->
-                    <div  *ngIf="slide.numOfReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div>
-                </div>
+                {{slide.experienceName}}
+            </h2>
+            <div class="d-flex m-top-8" *ngIf="slide.avgPoint">
+              <div class="div-badge" >
+                  <div class="text-point">{{slide.avgPoint}}</div>
+                  <div class="text-point-des" *ngIf="slide.avgPoint >=9 && slide.avgPoint <=10">Xuất sắc</div>
+                  <div class="text-point-des" *ngIf="slide.avgPoint>8 && slide.avgPoint <=9">Rất tốt</div>
+                  <div class="text-point-des" *ngIf="slide.avgPoint>7 && slide.avgPoint <=8">Khá tốt</div>
+                  <div class="text-point-des" *ngIf="slide.avgPoint>6 && slide.avgPoint <=7">Tạm được</div>
+                  <div class="text-point-des" *ngIf="slide.avgPoint>5 && slide.avgPoint <=6">Không tốt</div>
+                  <!-- <div  *ngIf="slide.TotalReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div> -->
+                  <div  *ngIf="slide.numOfReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div>
               </div>
+            </div>
 
-              <div class="div-notes m-top-16">
-                <div *ngFor="let n of slide.notes" class="d-flex m-bottom-8 m-right-16">
-                  <div class="div-icon-note"><img class="img-check" src="./assets/ic_ticket/check.svg"></div>
-                  <div class="div-des-note">{{ n.description }}</div>
-                </div>
+            <div class="div-notes m-top-16">
+              <div *ngFor="let item of slide.shortDescription.split('\n')" class="d-flex m-bottom-8 m-right-16">
+                <div class="div-icon-note"><img class="img-check" src="./assets/ic_ticket/check.svg"></div>
+                <div class="div-des-note">{{ item }}</div>
               </div>
+            </div>
 
-              <div class="cls-row-viewtopsale d-flex" >
-                  <div class="width-70 div-flex-end"><span *ngIf="slide.topSale" class="text-topsale">{{ slide.topSale }} khách đặt trong 24 giờ qua</span></div>
-                  <div class=" width-45 " >
-                    <div  class="cls-price-strike" *ngIf="slide.priceBefore && slide.priceDefault && slide.priceDefault < slide.priceBefore">{{ gf.convertNumberToString(slide.priceBefore) }}đ</div>
-                    <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.PriceAdult > slide.priceDefault && slide.priceDefault == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div> -->
-                    <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.priceDefault < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div> -->
-                    <div  class="text-price " *ngIf="slide.priceDefault else noprice">{{ gf.convertNumberToString(slide.priceDefault) }}đ</div>
-                    <ng-template #noprice><div  class="text-noprice ">Hết chỗ</div> </ng-template>
-                  </div>
-                  
-             </div>
+            <div class="cls-row-viewtopsale d-flex" >
+                <div class="width-70 div-flex-end"><span *ngIf="slide.topSale" class="text-topsale">{{ slide.topSale }} khách đặt trong 24 giờ qua</span></div>
+                <div class=" width-45 " >
+                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
+                  <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.PriceAdult > slide.priceDefault && slide.priceDefault == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div> -->
+                  <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.priceDefault < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div> -->
+                  <div  class="text-price " *ngIf="slide.salePrice else noprice">{{ gf.convertNumberToString(slide.salePrice) }}đ</div>
+                  <ng-template #noprice><div  class="text-noprice ">Hết chỗ</div> </ng-template>
+                </div>
+                
+           </div>
+            </div>
+          
 
           </div>
         </div>

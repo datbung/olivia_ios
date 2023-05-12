@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 import {  Router } from '@angular/router';
 import * as moment from 'moment';
 import { FCM } from "@ionic-native/fcm/ngx";
-import { tourService } from '../../providers/tourService';
 import * as $ from 'jquery';
 //import { TourListFilterPage } from '../tourlistfilter/tourlistfilter.page';
 import { OverlayEventDetail } from '@ionic/core';
@@ -49,10 +48,9 @@ export class TicketListPage implements OnInit{
     public activeRoute : ActivatedRoute,
     private fcm: FCM,
     private actionsheetCtrl: ActionSheetController,
-    public tourService: tourService,
     public ticketService: ticketService) {
     this.name = 'Vé vui chơi hot';
-    this.fromPlace = this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Destination || 'Hồ Chí Minh';
+    this.fromPlace = this.ticketService.itemSearchDepature && this.ticketService.itemSearchDepature.Destination || 'Hồ Chí Minh';
     //this.value.logingoback = "ComboListPage";
       storage.get('auth_token').then(auth_token => {
         this.loginuser = auth_token;
@@ -72,53 +70,7 @@ export class TicketListPage implements OnInit{
   
   loadData() {
     this.loaddatadone = false;
-    this.slideData = [
-      {
-          AvartarLink: 'https://cdn2.ivivu.com/2021/05/19/14/ivivu-hon-gam-ghi-phu-quoc-450x265.gif',
-          PromotionTitle: 'Vé bán chạy',
-          Name: 'Vé Vinpearl Safari Phú Quốc',
-          AvgPoint: 9.1,
-          NumOfReview: 54,
-          MinPrice: 400000,
-          Notes: [
-              { Description: '• Hoàn hủy miễn phí 24h'},
-              { Description: '• Xác nhận tức thời'},
-              { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-          ],
-          priceShow: '400.000',
-          TopSale: 8
-      },
-      {
-          AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-          PromotionTitle: 'Vé bán chạy',
-          Name: 'Vé Vinpearl Safari Nam Hội An',
-          AvgPoint: 9.2,
-          NumOfReview: 109,
-          MinPrice: 490000,
-          Notes: [
-              { Description: '• Hoàn hủy miễn phí 24h'},
-              { Description: '• Xác nhận tức thời'},
-              { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-          ],
-          priceShow: '490.000',
-          TopSale: 4
-      },
-      {
-          AvartarLink: 'https://cdn2.ivivu.com/2020/02/17/16/ivivu-safari-phu-quoc.gif',
-          PromotionTitle: 'Vé bán chạy',
-          Name: 'Vé Vinpearl Safari Phú Quốc',
-          AvgPoint: 9.1,
-          NumOfReview: 34,
-          MinPrice: 750000,
-          Notes: [
-              { Description: '• Hoàn hủy miễn phí 24h'},
-              { Description: '• Xác nhận tức thời'},
-              { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-          ],
-          priceShow: '750.000',
-          TopSale: 10
-      },
-  ];
+;
 
   setTimeout(()=>{
     this.loaddatadone = true;
@@ -127,191 +79,48 @@ export class TicketListPage implements OnInit{
   
   public async ngOnInit(){
     var se = this;
-    // se.tourService.getObservableFilterTour().subscribe((itemfilter) => {
+    // se.ticketService.getObservableFilterTour().subscribe((itemfilter) => {
     //   if(itemfilter && (itemfilter.code || itemfilter.Code)){
     //     this.loadTourListByRegionCode(itemfilter.code || itemfilter.Code);
     //     this.name =itemfilter.name || itemfilter.Name;
     //   }
     // })
     if(this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId){
-      this.loadTicketList(this.ticketService.itemTicketTopic.topicId);
+      this.loadTicketList(this.ticketService.itemTicketTopic.topicId,0);
     }
-    
+    if(this.ticketService.itemSearchDestination && this.ticketService.itemSearchDestination.id){
+      this.loadTicketList(this.ticketService.itemSearchDestination.id,1);
+    }
   }
 
-  loadTicketList(id) {
+  loadTicketList(id,stt) {
     let se = this;
-    let url = C.urls.baseUrl.urlTicket+'/api/Category/GetExperiencesByTopic/' + id;
+    let url = C.urls.baseUrl.urlTicket+'/api/Category/GetExperiencesByRequest';
     let headers = {
       apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
       apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
     };
-    se.gf.RequestApi('POST', url, headers, null, 'ticketlist', 'GetExperiencesByTopic').then((data) => {
-      let res = JSON.parse(data);
-      //console.log(res.Response);
-      se.name = res.data[0].topicName;
-      se.slideData = res.data[0].experienceHomeModels;
-      se.slideData.forEach(element => {
-        // let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id && item.TotalQuest >0 );
-        // if(itemmap && itemmap.length >0){
-        //   element.TopSale = itemmap[0].TotalPax;
-        // }
-        // if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
-        //   let arr = element.TourTimeName.split(' ');
-        //   element.sortTourTime = arr[0]*1 + arr[2]*1;
-        // }else{
-        //   element.sortTourTime = 0;
-        // }
-
-        // if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
-        //   element.AvartarLink = 'https:'+element.AvartarLink;
-        // }
-        se.convertAvgPoint(element);
-        element.notes = [
-            { description: 'Hoàn hủy miễn phí 24h'},
-            { description: 'Xác nhận tức thời'},
-            { description: 'Miễn phí trẻ em cao dưới 99cm'}
-        ];
-        element.topSale = 8;
-        element.priceDefault = 750000;
-      });
-
-      //se.mapingPriceTour();
-    })
-  }
-
-
-  mapingPriceTour() {
-    let se = this;
-    let headers = {
-      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-    };
-    if(se.slideData && se.slideData.length >0){
-      let listIds = se.slideData.map(item => item.Id).join(',');
-      se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}, 'tourList', 'GetMercuriusPriceByTourIds').then((data)=>{
-        if(data && data.Status == "Success" && data.Response && data.Response.length >0){
-          for (let index = 0; index < se.slideData.length; index++) {
-            const element = se.slideData[index];
-            
-            data.Response.forEach((p)=> {
-              if( p.Contract && p.Contract[0] && p.Contract[0].PriceAdult && p.Code == "TO"+element.Id){
-                element.PriceAdult = p.Contract[0].PriceAdult;
-                if(p.Contract[0].PriceAdult < element.MinPrice) {
-                  element.priceShow = se.gf.convertNumberToString(p.Contract[0].PriceAdult);
-                }else {
-                  element.priceShow = se.gf.convertNumberToString(element.MinPrice);
-                }
-                
-              }
-            })
-          }
-          se.loaddatadone = true;
-        }else {
-          se.loaddatadone = true;
-        }
+    let body = {
+      keyWord:"",
+      regionId:null,
+      topicId:0
+    }
+    if (stt==0) {
+      body.topicId=id;
+    }else{
+      body.regionId=id;
+    }
+   
+    se.gf.RequestApi('POST', url, headers, body, 'ticketlist', 'GetExperiencesByRequest').then((data) => {
+      let res = data;
+      se.zone.run(() => {
+        se.name = res.data[0].topicName;
+        se.slideData = res.data[0].experienceHomeModels;
       })
-    }
-  }
-
-  loadTourListDestination(id) {
-    let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?tourTopicId='+id+`&departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}`;
-    let headers = {
-      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-    };
-    se.gf.RequestApi('GET', url, headers, null, 'tourlist', 'loadTourList').then((data) => {
-      let res = JSON.parse(data);
-      console.log(res.Response);
-      se.slideData = res.Response;
-      if(se.slideData && se.slideData.length >0){
-        //se.name = se.slideData[0].Destination;
-      }
-      se.slideData.forEach(element => {
-        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
-        if(itemmap && itemmap.length >0){
-          element.TopSale = itemmap[0].TotalPax;
-        }
-        if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
-          let arr = element.TourTimeName.split(' ');
-          element.sortTourTime = arr[0]*1 + arr[2]*1;
-        }else{
-          element.sortTourTime = 0;
-        }
-
-        if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
-          element.AvartarLink = 'https:'+element.AvartarLink;
-        }
-        se.convertAvgPoint(element);
-      });
-      se.mapingPriceTour();
+    
     })
   }
 
-  loadTourListByListId(listId) {
-    let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/SearchTourDestination?lsIdTour='+listId+`&departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}`;
-    let headers = {
-      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-    };
-    se.gf.RequestApi('GET', url, headers, null, 'tourlist', 'loadTourListByListId').then((data) => {
-      let res = JSON.parse(data);
-      console.log(res.Response);
-      se.slideData = res.Response;
-      // if(se.slideData && se.slideData.length >0){
-      //   se.name = se.slideData[0].Destination;
-      // }
-      se.slideData.forEach(element => {
-        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
-        if(itemmap && itemmap.length >0){
-          element.TopSale = itemmap[0].TotalPax;
-        }
-        if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
-          let arr = element.TourTimeName.split(' ');
-          element.sortTourTime = arr[0]*1 + arr[2]*1;
-        }else{
-          element.sortTourTime = 0;
-        }
-        if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
-          element.AvartarLink = 'https:'+element.AvartarLink;
-        }
-        se.convertAvgPoint(element);
-      });
-      se.mapingPriceTour();
-    })
-  }
-
-  loadTourListByRegionCode(code) {
-    let se = this;
-    let url = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/SearchTourWithoutRegion?keyword=${code}&size=100&sizeLimit=45`;
-    se.gf.RequestApi('GET', url, null, null, 'tourlist', 'loadTourListByRegionCode').then((data) => {
-      let res = JSON.parse(data);
-      se.slideData = res;
-      if(se.slideData && se.slideData.length >0){
-        //se.name = se.slideData[0].RegionName;
-      }
-      se.slideData.forEach(element => {
-        let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
-        if(itemmap && itemmap.length >0){
-          element.TopSale = itemmap[0].TotalPax;
-        }
-        //element.TopSale = se.tourService.listTopSale.map((item) => item.Id == element.Id ? item.TotalQuest : 0 );
-        if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
-          let arr = element.TourTimeName.split(' ');
-          element.sortTourTime = arr[0]*1 + arr[2]*1;
-        }else{
-          element.sortTourTime = 0;
-        }
-        if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
-          element.AvartarLink = 'https:'+element.AvartarLink;
-        }
-        se.convertAvgPoint(element);
-      });
-      se.mapingPriceTour();
-    })
-  }
 
   convertAvgPoint(element){
     if(element.avgPoint && (element.avgPoint.toString().length == 1 || element.avgPoint === 10)){
@@ -319,25 +128,7 @@ export class TicketListPage implements OnInit{
     }
   }
 
-  getTourListIdByRegion() :Promise<any>{
-    let se = this;
-    return new Promise((resolve, reject) => {
-      let url = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/SearchTourWithoutRegion?keyword=${this.tourService.itemSearchDestination.RegionCode}&size=100&sizeLimit=45`;
-      se.gf.RequestApi('GET', url, null, null, 'tourlist', 'getTourListIdByRegion').then((data) => {
-        let res = JSON.parse(data);
-        console.log(res);
-     
-        if(res && res.length >0){
-          resolve(res.map((item)=> item.Id).join(','))
-        }
-        else {
-          resolve('');
-        }
-      })
-    })
-    
-  }
-
+ 
   getRegionIdByRegionCode(code) :Promise<any>{
     let se = this;
     return new Promise((resolve, reject) => {
@@ -354,43 +145,6 @@ export class TicketListPage implements OnInit{
     })
   }
 
-  loadTourListByDestinationId(code) {
-    let se = this;
-    se.getRegionIdByRegionCode(code).then((desId)=>{
-      let url = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/SearchTourDestination?departuredId=${((this.tourService.itemSearchDepature && this.tourService.itemSearchDepature.Id) ? this.tourService.itemSearchDepature.Id : 37)}&destinationId=${desId}`;
-      let headers = {
-        apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-        apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-      };
-      se.gf.RequestApi('GET', url, headers, null, 'tourlist', 'loadTourList').then((data) => {
-        let res = JSON.parse(data);
-        console.log(res.Response);
-        se.slideData = res.Response;
-        if(se.slideData && se.slideData.length >0){
-          //se.name = se.slideData[0].Destination;
-        }
-        se.slideData.forEach(element => {
-          let itemmap = this.tourService.listTopSale.filter((item) => item.Id == element.Id );
-          if(itemmap && itemmap.length >0){
-            element.TopSale = itemmap[0].TotalPax;
-          }
-          if(element.TourTimeName && element.TourTimeName.split(' ').length ==4){
-            let arr = element.TourTimeName.split(' ');
-            element.sortTourTime = arr[0]*1 + arr[2]*1;
-          }else{
-            element.sortTourTime = 0;
-          }
-  
-          if(element.AvartarLink && element.AvartarLink.indexOf('http') == -1){
-            element.AvartarLink = 'https:'+element.AvartarLink;
-          }
-          se.convertAvgPoint(element);
-        });
-        se.mapingPriceTour();
-      })
-    });
-    
-  }
 
   async openSortTour(){
     // if(!this.loadpricedone){
@@ -514,119 +268,20 @@ export class TicketListPage implements OnInit{
   }
 
   goback(){
-    this.tourService.itemSearchDestination = "";
-    this.tourService.itemShowList = "";
+    this.ticketService.itemSearchDestination = "";
+    this.ticketService.itemShowList = "";
     this.navCtrl.navigateBack('/app/tabs/tab1');
   }
 
   itemclickht(item){
-    this.tourService.backPage = 'ticketlist';
+    this.ticketService.backPage = 'ticketlist';
+    this.ticketService.itemTicketDetail=item;
     this.navCtrl.navigateForward('/ticketdetail');
   }
   closecalendar(){
     this.modalCtrl.dismiss();
   }
-  async changeInfo(){
-    let se = this;
-    if(!se.allowclickcalendar){
-      return;
-    }
-    
-    se.allowclickcalendar = false;
-    let fromdate = new Date(se.searchhotel.CheckInDate);
-    let todate = new Date(se.searchhotel.CheckOutDate);
-    let _daysConfig: DayConfig[] = [];
-    if(se.tourService.departures && se.tourService.departures.length >0) {
-      for (let j = 0; j < se.tourService.departures.length; j++) {
-        _daysConfig.push({
-          date: se.tourService.departures[j],
-          disable: false
-        })
-      }
-    }
-    if(this.valueGlobal.listlunar && this.valueGlobal.listlunar.length >0){
-      for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-        _daysConfig.push({
-          date: this.valueGlobal.listlunar[j].date,
-          subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
-          cssClass: 'lunarcalendar'
-       })
-      }
-    }
-    
-    let Year=new Date().getFullYear();
-    let Month=new Date().getMonth();
-    let Day=new Date().getDate();
-      const options: CalendarModalOptions = {
-        pickMode: "single",
-        title: "Chọn ngày khởi hành",
-        monthFormat: "MM YYYY",
-        weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
-        weekStart: 1,
-        closeLabel: "",
-        doneLabel: "",
-        step: 0,
-        defaultScrollTo: fromdate,
-        defaultDate: fromdate,
-        daysConfig: _daysConfig,
-        to: new Date(Year+1, Month, Day),
-      };
-  
-      se.myCalendar = await se.modalCtrl.create({
-        component: CalendarModal,
-        animated: true,
-        componentProps: { options },
-        cssClass: 'tour-calendar-custom',
-      });
-      se.myCalendar.present().then(() => {
-        se.allowclickcalendar = true;
-        $(".days-btn").click(e => se.clickedElement(e));
 
-        $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/imgs/icon_back.svg' ></div>");
-        //add event close header
-        $('.tour-calendar-custom .header-img-close').click((e => se.closecalendar()));
-
-        let divmonthtitle =  $('.month-title');
-        if(divmonthtitle && divmonthtitle.length >0){
-          for (let index = 0; index < divmonthtitle.length; index++) {
-            $(divmonthtitle[index])[0].innerHTML = 'Tháng ' + $(divmonthtitle[index])[0].innerHTML;
-          }
-        }
-
-       //Custom ngày lễ
-       let divmonth = $('.month-box');
-       if(divmonth && divmonth.length >0){
-         for (let index = 0; index < divmonth.length; index++) {
-           const em = divmonth[index];
-           $('#'+em.id).addClass('cls-animation-calendar');
-             let divsmall = $('#'+em.id+' small');
-             if(divsmall && divsmall.length >0){
-               $('#'+em.id).append("<div class='div-month-text-small'></div>");
-               
-               for (let i = 0; i < divsmall.length; i++) {
-                 const es = divsmall[i];
-                 let arres = es.innerHTML.split(':');
-                 $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
-                 if(arres && arres.length >1){
-                   es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
-                 }
-                 $('.sm-'+em.id+'-'+i).append(es);
-               }
-             }
-         }
-       }
-      });
-
-      const event: any = await se.myCalendar.onDidDismiss();
-      const date = event.data;
-      if (event.data) {
-         se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
-           se.searchhotel.datecin = new Date(event.data.from);
-           se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
-         })
-      }
-  }
    /**
    * Hàm bắt sự kiện click chọn ngày trên lịch bằng jquery
    * @param e biến event

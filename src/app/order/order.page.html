@@ -732,12 +732,15 @@
                         <div class="div-width-250 v-align-center">
                             <div class="text-title">Yêu cầu Checkin-Online</div>
                         </div>
-                        <div  class="div-width-50 v-align-center">
-                            <div class="div-flex-end">
+                        <div *ngIf="!trip.ischeckinOnl" class="div-width-50 v-align-center">
+                            <div  class="div-flex-end">
                               <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                             </div>
                         </div>
                       </div>
+                      <div *ngIf="trip.ischeckinOnl" class="text-note margin-16">
+                        * Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay 
+                    </div>
                        <!-- Checkin online -->
                <!-- <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div> -->
                <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="div-checkin-online">
@@ -3037,10 +3040,13 @@
                       <div class="text-info-2 font-weight-500">
                         Yêu cầu Checkin-Online
                       </div>
-                      <div  class="position-absolute">
+                      <div *ngIf="!trip.ischeckinOnl" class="position-absolute">
                         <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                       </div>
                     </div>
+                    <div *ngIf="trip.ischeckinOnl" class="text-note margin-16">
+                       * Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay 
+                  </div>
                      <!-- Checkin online -->
                <!-- <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div> -->
                <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="div-checkin-online">
@@ -3557,9 +3563,11 @@
               <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && trip.payment_status == 1 || trip.payment_status == 5"  class="d-flex div-checkin-online-1">
                
                 <div class="div-text-checkin-online">Yêu cầu Checkin-Online</div>
-                <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
+                <div *ngIf="!trip.ischeckinOnl" class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
               </div>
-
+              <div *ngIf="trip.ischeckinOnl"  class="text-note margin-16">
+                * Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay 
+            </div>
           
                <!-- Checkin online -->
                <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div>

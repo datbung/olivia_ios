@@ -462,6 +462,9 @@ export class RoompaymentselectPage implements OnInit{
                   }
                 }
               })
+              if (se.Roomif.notetotal) {
+                se.gf.CreateSupportRequest(se.bookingCode,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+              }
             }
             else {
               se.loader.dismiss();
@@ -494,6 +497,9 @@ export class RoompaymentselectPage implements OnInit{
               if (databook) {
                 if (databook.error == 0) {
                   this.bookingCode = databook.code;
+                  if (se.Roomif.notetotal) {
+                    se.gf.CreateSupportRequest(se.bookingCode,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+                  }
                   se.navCtrl.navigateForward('/roompaymentdone/' +  this.bookingCode  + '/RQ');
                 }
               }
@@ -812,6 +818,9 @@ export class RoompaymentselectPage implements OnInit{
                   alert("Đã có sự cố xảy ra, vui lòng thử lại!");
                 }
               })
+              if (se.Roomif.notetotal) {
+                se.gf.CreateSupportRequest(se.bookingCode,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+              }
             }
             else {
               se.gf.hideLoading();

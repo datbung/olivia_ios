@@ -342,7 +342,9 @@ export class InstallmentpaymentPage implements OnInit {
               se.booking.code = body.code;
               var code = body.code;
               var stt = body.bookingStatus;
-
+              if (se.Roomif.notetotal) {
+                se.gf.CreateSupportRequest(se.booking.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+              }
               //se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
               resolve(body);
             }

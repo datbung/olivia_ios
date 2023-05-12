@@ -86,7 +86,12 @@
                       </div>
                       
                     </div>
-                    
+                    <div class="m-top-10">
+                      <div *ngFor="let itemstyle of msg.Facilities; let idx = index">
+                          <div *ngIf="idx < 2" [ngClass]="idx == 1 ? 'sp-item-style m-right-0' : 'sp-item-style'">{{itemstyle.Name}}</div>
+                      </div>
+                      
+                    </div>
                     <div class="last-row">
                         <div *ngIf="loginuser || msg.IsShowPrice == 1" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''">
@@ -217,7 +222,12 @@
                       </div>
                       
                     </div>
-                    
+                    <div class="m-top-10">
+                      <div *ngFor="let itemstyle of msg.Facilities; let idx = index" >
+                          <div *ngIf="idx < 2" [ngClass]="idx == 1 ? 'sp-item-style m-right-0' : 'sp-item-style'">{{itemstyle.Name}}</div>
+                      </div>
+                      
+                    </div>
                     <div class="last-row">
                         <div *ngIf="loginuser || msg.IsShowPrice == 1" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''">

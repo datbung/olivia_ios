@@ -335,6 +335,11 @@
                         <label style="color: #4f4f4f;margin-left: 5px"> {{msg.SubLocation}}
                         </label>
                       </p> -->
+                      <div class="margin-top-10 d-flex-no-login">
+                        <div><img class="icon_clock cls-duration" src="../../../../../assets/ic_tour/ic_clock.svg" /></div>
+                        <div class="cls-tour-duration"> {{msg.TourTimeName}}</div>
+                      </div>
+
                       <div class="margin-top-10" *ngIf="msg.AvgPoint>0">
                         <ion-row *ngIf="msg.AvgPoint>9 && msg.AvgPoint<=10" class="m-top-5">
                           <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
