@@ -926,7 +926,7 @@ export class OrderPage {
                 element.returnAirport = se.getAirportByCode(element.arrivalCode);
                 se.getRatingStar(element);
 
-
+                
                 // if (element.booking_id=='VMB1723519') {
                 //   console.log(element.booking_json_data);
                 //   se.listMyTrips.push(element);
@@ -1703,7 +1703,17 @@ export class OrderPage {
 
 
                 if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
-
+                  let temp = element.bookingsComboData[0].arrivalDate.split("/");
+                  let daytemp=temp[2]+ temp[1] + temp[0];
+                  var dep = moment(daytemp+ " " + element.bookingsComboData[0].arrivalTime, "YYYYMMDD HH:mm")
+                  let diffminutes = moment(dep).diff(new Date(), 'minutes');
+                  if (diffminutes <= 210) {
+                    this.zone.run(() => {
+                      element.bookingjson[0].RequestCheckin=0;
+                      element.ischeckinOnl=true;
+                  
+                    })
+                  }
                   // if (element.booking_id=='VMB1723519') {
                   //   console.log(element.booking_json_data);
                   //   se.listMyTrips.push(element);
@@ -6639,14 +6649,11 @@ export class OrderPage {
     }else{
       this.zone.run(() => {
         trip.bookingjson[0].RequestCheckin=0;
+        trip.ischeckinOnl=true;
         alert("Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay");
       })
 
     }
-
-   
-
-
   }
 
   downloadPDF(url) {
