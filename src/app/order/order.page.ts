@@ -1108,7 +1108,17 @@ export class OrderPage {
                     let objjson = JSON.parse(element.booking_json_data);
                     let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo && p.CheckinInfo.indexOf('http') != -1) });
                     element.hadCheckinOnline = _checked;
+                    element.hadCheckinOnlineDepart=false;
                     element.hadCheckinOnlineReturn=false;
+                    if (objjson[0]) {
+                      for (let i = 0; i < objjson[0].Passengers.length; i++) {
+                        const el = objjson[0].Passengers[i];
+                        if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
+                          element.hadCheckinOnlineDepart = true;
+                          break;
+                        }
+                      }
+                    }
                     if (objjson.length > 1 && objjson[1]) {
                       for (let i = 0; i < objjson[1].Passengers.length; i++) {
                         const el = objjson[1].Passengers[i];
