@@ -1653,7 +1653,6 @@ async downloadqrcode(){
     }else{
       this.zone.run(() => {
         trip.bookingjson[0].RequestCheckin=0;
-        trip.ischeckinOnl=true;
         alert("Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay");
       })
 
