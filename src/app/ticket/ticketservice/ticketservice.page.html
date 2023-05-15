@@ -13,18 +13,18 @@
   <ion-content class="div-tourdeparturecalendar-content">
     <div class="p-all-16">
         <!-- <div class="text-center"><img src="./assets/step/tour_step_1.svg"></div> -->
-        <div *ngIf="itemTicketService.Name" class="text-service-name">{{itemTicketService.Name}}</div>
-        <div *ngIf="itemTicketService.Description" class="text-service-des m-top-8">{{itemTicketService.Description}}</div>
+        <div *ngIf="itemTicketService.name" class="text-service-name">{{itemTicketService.name}}</div>
+        <div *ngIf="itemTicketService.description" class="text-service-des m-top-8">{{itemTicketService.description}}</div>
         <div class="text-service-detail m-top-8" (click)="showTicketServiceDetail(itemTicketService)">Chi tiết gói <span><img class="img-arrow" src="./assets/ic_ticket/arrow-down.svg" /></span></div>
 
-        <div [ngClass]="itemTicketService ? 'm-top-18' : 'm-top-18 cls-no-departure' ">
+        <div [ngClass]="itemTicketService ? 'm-top-30' : 'm-top-30 cls-no-departure' ">
             <div class="div-item-departure-date d-flex">
-                <div class="width-60 text-label">
+                <div class="width-62 text-label">
                     Chọn ngày thăm quan:
                 </div>
-                <div class="width-50 d-flex" (click)="openPickupCalendar()">
-                    <div class="v-align-center m-r-8"><img src="./assets/ic_tour/ic_calendar.svg"></div>
-                    <div class="align-right v-align-center f-18" *ngIf="itemTicketService && loaddeparturedone else loadingsk">{{itemTicketService.AllotmentDateDisplay}}</div>
+                <div class="width-45 d-flex div-item-time" (click)="openPickupCalendar()">
+                    <div class="v-align-center m-r-8"><img src="./assets/ic_ticket/ic_calendar.svg"></div>
+                    <div class="align-right v-align-center f-18 text-normal" *ngIf="itemTicketService && loaddeparturedone else loadingsk">{{dateDisplay}}</div>
                     <ng-template #loadingsk>
                       <div class="text-normal align-right v-align-center" >
                         <ion-skeleton-text animated style="width: 100%;height: 24px;border-radius: 4px;"></ion-skeleton-text>
@@ -32,48 +32,53 @@
                     </ng-template>
                 </div>
             </div>
-
+            <div class="d-flex margin-left-16 div-scroll">
+              
+              <div (click)="funcdate(item)" class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngFor="let item of itemTicketService.dailyRatePkgs">
+                {{item.dailydisplay}}
+              </div>
+            </div>
             <div class="div-item-departure-date d-flex">
-              <div class="width-45">
+              <div class="width-35">
                   Người lớn
               </div>
-              <div class="text-price width-35" *ngIf="loaddeparturedone else loadingsk">
-               <span *ngIf="itemTicketService && itemTicketService.PriceAdultAvg">x {{gf.convertNumberToString(itemTicketService.PriceAdultAvg)}}</span>
+              <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
+               <span *ngIf="itemTicketService && itemTicketService.dailyRatePkgs[0].baseRateAdult">x {{gf.convertNumberToString(itemTicketService.dailyRatePkgs[0].baseRateAdult)}}</span>
               </div>
               <ng-template #loadingsk>
-                <div class="text-price width-35">
+                <div class="text-price width-25 margin-right-8">
                   <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
                 </div>
              </ng-template>
 
-              <div class="width-40 d-flex div-item-pax">
+              <div class="width-45 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(1)">-</div>
                   <div class="div-item-center">{{searchhotel.adult}}</div>
                   <div class="div-item-right f-24" (click)="addPax(1)">+</div>
               </div>
             </div>
 
-            <div class="div-item-departure-date d-flex">
-              <div class="width-45">
+            <div class="div-item-departure-date d-flex margin-top-12">
+              <div class="width-35">
                 <div>Trẻ em</div>
                 <div class="text-sub">Cao 100-139cm</div>
                   
               </div>
-              <div class="text-price width-35" *ngIf="loaddeparturedone else loadingsk">
-                <span *ngIf="itemTicketService && itemTicketService.PriceChildAvg ">x {{gf.convertNumberToString(itemTicketService.PriceChildAvg)}}</span>
+              <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
+                <span *ngIf="itemTicketService && itemTicketService.dailyRatePkgs[0].baseRateChild">x {{gf.convertNumberToString(itemTicketService.dailyRatePkgs[0].baseRateChild)}}</span>
               </div>
               <ng-template #loadingsk>
-                <div class="text-price width-35">
+                <div class="text-price width-25 margin-right-8">
                   <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
                 </div>
              </ng-template>
-              <div class="width-40 d-flex div-item-pax">
+              <div class="width-45 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(2)">-</div>
                   <div class="div-item-center">{{searchhotel.child}}</div>
                   <div class="div-item-right f-24" (click)="addPax(2)">+</div>
               </div>
             </div>
-            <div class="p-top-20">
+            <div >
               <label class="text-child-age" *ngIf="searchhotel.arrchild && searchhotel.arrchild.length >0">
                   Tuổi trẻ em
                 </label>
@@ -90,20 +95,20 @@
             
             </div>
 
-            <div class="div-item-departure-date d-flex">
-              <div class="width-45">
+            <div class="div-item-departure-date d-flex margin-top-12">
+              <div class="width-35">
                   <div>Người lớn tuổi</div>
                   <div class="text-sub">Trên 60+</div>
               </div>
-              <div class="text-price width-35" *ngIf="loaddeparturedone else loadingsk">
-                <span *ngIf="itemTicketService && itemTicketService.PriceElderAvg ">x {{gf.convertNumberToString(itemTicketService.PriceElderAvg)}}</span>
+              <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
+                <span *ngIf="itemTicketService && itemTicketService.dailyRatePkgs[0].baseRateSenior">x {{gf.convertNumberToString(itemTicketService.dailyRatePkgs[0].baseRateSenior )}}</span>
               </div>
               <ng-template #loadingsk>
-                <div class="text-price width-35">
+                <div class="text-price width-25">
                   <ion-skeleton-text animated style="width: 100%;height: 17px;border-radius: 4px;"></ion-skeleton-text>
                 </div>
              </ng-template>
-              <div class="width-40 d-flex div-item-pax">
+              <div class="width-45 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(3)">-</div>
                   <div class="div-item-center">{{searchhotel.elder}}</div>
                   <div class="div-item-right f-24" (click)="addPax(3)">+</div>
@@ -118,7 +123,7 @@
 
               <div [ngClass]="itemTicketService.Note ? 'd-flex div-total': 'd-flex div-total m-top-26'">
                 <div class="width-40 text-normal m-top-8">Tổng cộng</div>
-                <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPriceStr">{{totalPriceStr}}</span><span>đ</span></div>
+                <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPrice">{{gf.convertNumberToString(totalPrice)}}</span><span>đ</span></div>
               </div>
 
               <div class="div-point" *ngIf="point || pointbkg">

@@ -4046,6 +4046,38 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
   });
   alert.present();
   }
+  CreateSupportRequest(bookingCode,CEmail,hoten,phone,notetotal) {
+    var se = this;
+    var options = {
+      method: 'POST',
+      url: C.urls.baseUrl.urlMobile + '/app/CRMOldApis/CreateSupportRequest',
+      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      headers:
+      {
+        'cache-control': 'no-cache',
+        'content-type': 'application/json'
+      },
+      body:
+      {
+        bookingCode: bookingCode,
+        customerEmail: CEmail,
+        customerName: hoten,
+        customerPhone: phone,
+        requestContent: notetotal,
+        requestType: "Khác",
+        sourceRequest: "App"
+      },
+      json: true
+    };
+    request(options, function (error, response, body) {
+      if (body.error == 0) {
+      }
+
+    })
+
+
+  }
+
 }
 
 export class PlaceByArea {

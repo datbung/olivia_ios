@@ -605,6 +605,9 @@ export class RoomadddetailsPage implements OnInit {
               }
               se.searchhotel.paymentType = 'office';
               se.gf.logEventFirebase('office',se.searchhotel, 'roomadddetails', 'add_payment_info', 'Hotels');
+              if (se.Roomif.notetotal) {
+                se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+              }
               se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
             }
             else {
@@ -932,8 +935,12 @@ export class RoomadddetailsPage implements OnInit {
               }
               se.searchhotel.paymentType = 'On request';
               se.gf.logEventFirebase('On request',se.searchhotel, 'roomadddetails', 'add_payment_info', 'Hotels');
+              se.loader.dismiss();
+              if (se.Roomif.notetotal) {
+                se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+              }
             se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + se.Roomif.payment);
-            se.loader.dismiss();
+      
             //se.gf.googleAnalytion('paymentdirect', 'Purchases', 'hotelid:' + se.booking.cost + '/cin:' + se.jsonroom.CheckInDate + '/cout:' + se.jsonroom.CheckOutDate + '/adults:' + se.booking.Adults + '/child:' + se.booking.Child + '/price:' + se.booking.cost)
           }
           else {
@@ -1288,5 +1295,4 @@ async showChangeEmail(input){
               }
             }
           }
-    
 }

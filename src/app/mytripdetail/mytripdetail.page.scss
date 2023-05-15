@@ -997,6 +997,29 @@
     padding: 0px ;
     padding-bottom: 20px;
 }
+.div-checkin-online-detail {
+    align-items: center;
+    padding: 0px 8px;
+
+    .div-text-checkin-online{
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .cls-toggle{
+        position: absolute;
+        right: 16px;
+    }
+ 
+}
+.margin-16-detail{
+    margin: 11px 8px 16px;
+}
 
 
 

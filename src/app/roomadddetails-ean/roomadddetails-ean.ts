@@ -1591,6 +1591,9 @@ export class RoomadddetailsEanPage implements OnInit {
 
                     se.clearClonePage('page-roompaymentdoneean');
                     se.loader.dismiss();
+                    if (se.Roomif.notetotal) {
+                        se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+                      }
                     se.navCtrl.navigateForward('/roompaymentdoneean/' + id + '/' + total + '/' + ischeck);
                 } else {
                     se.loader.dismiss();
@@ -1897,6 +1900,9 @@ export class RoomadddetailsEanPage implements OnInit {
                     var stt = body.bookingStatus;
                     se.searchhotel.paymentType = 'On request';
                     se.gf.logEventFirebase('On request',se.searchhotel, 'roomadddetails-ean', 'add_payment_info', 'Hotels');
+                    if (se.Roomif.notetotal) {
+                        se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+                      }
                     se.navCtrl.navigateForward('/roompaymentdone/' + code + '/' + stt);
                     se.loader.dismiss();
                     

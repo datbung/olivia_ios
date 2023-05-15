@@ -91,8 +91,13 @@ export class TicketSearchPage implements OnInit{
     ];
     inputText: string='';
     listHotExperience: any;
+    ischecktext: boolean;
+    ischecklist: boolean;
+    items: any;
+  itemRegion: any;
+  itemTicket:any
   constructor(
-    public gf: GlobalFunction,public navCtrl: NavController, private storage: Storage, public ticketService: ticketService,) {
+    public gf: GlobalFunction,public navCtrl: NavController, private storage: Storage, public ticketService: ticketService,public zone: NgZone) {
         this.loadHistorySearch();
       this.loadRegion();
       this.loadBestExperience();
@@ -127,9 +132,42 @@ export class TicketSearchPage implements OnInit{
             this.listHistorySearch = [];
         }
     }
-    getItems(e){
-
-    }
+    getItems(ev: any) {
+        // Reset items back to all of the items
+        var se = this;
+        if(ev.detail.value){
+          const val = ev.detail.value;
+          let url = `${C.urls.baseUrl.urlTicket}/api/Home/SearchExperience?keyword=` +val;
+          let headers = {
+            apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+            apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+          };
+          se.gf.RequestApi('GET', url, headers, null, 'searchregion', 'getItems').then((data) => {
+                  se.zone.run(() => {
+                    let lstitems = JSON.parse(data);
+                    console.log(lstitems);
+                    if(lstitems.data.experiences.length && lstitems.data.experiences.length >0 || lstitems.data.regions.length && lstitems.data.regions.length >0){
+                      se.ischecktext=false;
+                      se.ischecklist = true;
+                      se.itemTicket = lstitems.data.experiences;
+                      se.itemRegion = lstitems.data.regions;
+                    }else{
+                      // se.items.forEach(element => {
+                      //   element.show = false;
+                      // });
+                      // se.ischecktext=true;
+                    }
+                  });
+          })
+         }
+        else {
+          se.ischecklist = false;
+          se.ischecktext=false;
+          // se.items.forEach(element => {
+          //     element.show = false;
+          // });
+        }
+      }
 
     loadRegion() {
         let se = this;
@@ -160,5 +198,11 @@ export class TicketSearchPage implements OnInit{
   }
   clearText(){
     this.inputText="";
+  }
+  itemclick(item,stt) {
+    item.stt=stt;
+    this.ticketService.input = item;
+    this.ticketService.itemSearchTicket.emit(1);
+    this.navCtrl.pop();
   }
 }

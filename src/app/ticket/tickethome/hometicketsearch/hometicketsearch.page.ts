@@ -8,7 +8,6 @@ import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import * as request from 'requestretry';
 import { SearchHotel, ValueGlobal } from 'src/app/providers/book-service';
-import { tourService } from 'src/app/providers/tourService';
 import { CalendarModal, CalendarModalOptions, DayConfig } from 'ion2-calendar';
 import { ticketService } from 'src/app/providers/ticketService';
 
@@ -32,50 +31,48 @@ export class HomeTicketSearchPage implements OnInit {
     private actionsheetCtrl: ActionSheetController,
     private platform: Platform,
     public searchhotel: SearchHotel,
-    public tourService: tourService,
-    public valueGlobal: ValueGlobal,
     public ticketService: ticketService) {
   }
 
   ngOnInit(){
-    this.ticketService.getObservableSearchTicketRegion().subscribe((data) => {
-      if(data){
-        this.itemSearch = data;
-      }
-    });
-    // this.tourService.itemSearchTour.subscribe((data) => {
+    // this.ticketService.getObservableSearchTicketRegion().subscribe((data) => {
     //   if(data){
-    //     this.zone.run(()=> {
-    //       this.itemSearch = this.tourService.input;
-    //       this.storage.get('listSearchTour').then((data) => {
-    //         if(data && data.length >0) {
-    //           if(data.length < 3) {
-    //             data = data.push(this.tourService.input);
-    //             this.storage.remove('listSearchTour').then(()=> {
-    //               this.storage.set('listSearchTour',data);
-    //             })
-    //           }else {
-    //             data = [...data.splice(0, 1)];
-    //             data = data.push(this.tourService.input);
-    //             this.storage.remove('listSearchTour').then(()=> {
-    //               this.storage.set('listSearchTour',data);
-    //             })
-    //           }
-    //         }else{
-    //           let list = [];
-    //           list.push(this.tourService.input);
-    //           this.storage.set('listSearchTour',list);
-    //         }
-    //       })
-    //     })
+    //     this.itemSearch = data;
     //   }
-    // })
+    // });
+    this.ticketService.itemSearchTicket.subscribe((data) => {
+      if(data){
+        this.zone.run(()=> {
+          this.itemSearch = this.ticketService.input;
+          this.storage.get('listSearchTicket').then((data) => {
+            if(data && data.length >0) {
+              if(data.length < 3) {
+                data = data.push(this.ticketService.input);
+                this.storage.remove('listSearchTicket').then(()=> {
+                  this.storage.set('listSearchTicket',data);
+                })
+              }else {
+                data = [...data.splice(0, 1)];
+                data = data.push(this.ticketService.input);
+                this.storage.remove('listSearchTicket').then(()=> {
+                  this.storage.set('listSearchTicket',data);
+                })
+              }
+            }else{
+              let list = [];
+              list.push(this.ticketService.input);
+              this.storage.set('listSearchTicket',list);
+            }
+          })
+        })
+      }
+    })
 
-    // this.tourService.itemSearchDeparture.subscribe((data) => {
+    // this.ticketService.itemSearchDeparture.subscribe((data) => {
     //   if(data){
     //     this.zone.run(()=> {
-    //       this.itemSearchDepature = this.tourService.itemDeparture;
-    //       this.tourService.itemSearchDepature = this.tourService.itemDeparture;
+    //       this.itemSearchDepature = this.ticketService.itemDeparture;
+    //       this.ticketService.itemSearchDepature = this.ticketService.itemDeparture;
     //     })
     //   }
     // })
@@ -105,14 +102,14 @@ export class HomeTicketSearchPage implements OnInit {
       this.gf.showToastWarning('Vui lòng chọn điểm đến!');
       return;
     }
-    if(this.itemSearch && this.itemSearch.Id && this.itemSearch.TourCode){
-      this.tourService.tourDetailId = this.itemSearch.Id;
-      this.tourService.backPage = 'hometour';
-      this.navCtrl.navigateForward('/tourdetail');
+    if(this.itemSearch && this.itemSearch.id && this.itemSearch.code && this.itemSearch.stt==1){
+      this.ticketService.ticketDetailId = this.itemSearch.id;
+      this.ticketService.backPage = 'hometicket';
+      this.navCtrl.navigateForward('/ticketdetail');
     }else {
-      this.tourService.itemSearchDestination = this.itemSearch;
-      this.tourService.itemShowList = null;
-      this.navCtrl.navigateForward('/tourlist');
+      this.ticketService.itemSearchDestination = this.itemSearch;
+      this.ticketService.itemShowList = null;
+      this.navCtrl.navigateForward('/ticketlist');
     }
     
   }
@@ -121,105 +118,7 @@ export class HomeTicketSearchPage implements OnInit {
     this.navCtrl.navigateForward('/searchdeparture');
   }
 
-  async openPickupCalendar(){
-    let se = this;
-    if(!se.allowclickcalendar){
-      return;
-    }
-    
-    se.allowclickcalendar = false;
-    let fromdate = new Date(this.searchhotel.CheckInDate);
-    let todate = new Date(this.searchhotel.CheckOutDate);
-    let _daysConfig: DayConfig[] = [];
-    for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
-      _daysConfig.push({
-        date: this.valueGlobal.listlunar[j].date,
-        subTitle: moment(this.valueGlobal.listlunar[j].date).format("DD/MM") + ': ' +this.valueGlobal.listlunar[j].name,
-        cssClass: 'lunarcalendar'
-     })
-    }
 
-    let Year=new Date().getFullYear();
-    let Month=new Date().getMonth();
-    let Day=new Date().getDate();
-      const options: CalendarModalOptions = {
-        pickMode: "single",
-        title: "Chọn ngày khởi hành",
-        monthFormat: "MM YYYY",
-        weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
-        weekStart: 1,
-        closeLabel: "",
-        doneLabel: "",
-        step: 0,
-        defaultScrollTo: fromdate,
-        defaultDate: fromdate,
-        daysConfig: _daysConfig,
-        to: new Date(Year+1, Month, Day),
-      };
-      
-      this.myCalendar = await this.modalCtrl.create({
-        component: CalendarModal,
-        animated: true,
-        componentProps: { options },
-        cssClass: 'tour-calendar-custom',
-      });
-      this.myCalendar.present().then(() => {
-        se.allowclickcalendar = true;
-        $(".days-btn").click(e => this.clickedElement(e));
-
-        $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/imgs/icon_back.svg' ></div>");
-        //add event close header
-        $('.tour-calendar-custom .header-img-close').click((e => this.closecalendar()));
-
-        let divmonthtitle =  $('.month-title');
-        if(divmonthtitle && divmonthtitle.length >0){
-          for (let index = 0; index < divmonthtitle.length; index++) {
-            $(divmonthtitle[index])[0].innerHTML = 'Tháng ' + $(divmonthtitle[index])[0].innerHTML;
-          }
-        }
-
-        // let divmonth = $('.month-box');
-        // if(divmonth && divmonth.length >0){
-        //   for (let index = 0; index < divmonth.length; index++) {
-        //     const em = divmonth[index];
-        //     $('#'+em.id).addClass('cls-animation-calendar');
-        //   }
-        // }
-        //Custom ngày lễ
-        let divmonth = $('.month-box');
-        if(divmonth && divmonth.length >0){
-          for (let index = 0; index < divmonth.length; index++) {
-            const em = divmonth[index];
-            $('#'+em.id).addClass('cls-animation-calendar');
-              let divsmall = $('#'+em.id+' small');
-              if(divsmall && divsmall.length >0){
-                $('#'+em.id).append("<div class='div-month-text-small'></div>");
-                
-                for (let i = 0; i < divsmall.length; i++) {
-                  const es = divsmall[i];
-                  let arres = es.innerHTML.split(':');
-                  $('#'+em.id+' .div-month-text-small').append("<div class='div-border-small sm-"+em.id+'-'+i+"'></div>");
-                  if(arres && arres.length >1){
-                    es.innerHTML = "<span class='text-red'>"+arres[0]+"</span>: "+"<span class='text-black'>"+arres[1]+"</span>";
-                  }
-                  $('.sm-'+em.id+'-'+i).append(es);
-                }
-              }
-          }
-        }
-      });
-
-      const event: any = await this.myCalendar.onDidDismiss();
-      const date = event.data;
-      if (event.data) {
-         se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
-           se.searchhotel.datecin = new Date(event.data.from);
-           se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
-           se.getCinCoutDayName();
-         })
-      }
-  }
    /**
    * Hàm bắt sự kiện click chọn ngày trên lịch bằng jquery
    * @param e biến event

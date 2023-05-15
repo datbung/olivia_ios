@@ -732,6 +732,9 @@ export class RoompaymentbanknewPage implements OnInit {
                   }
                 
                 //}
+                if (se.Roomif.notetotal) {
+                  se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+                }
                 se.activityService.qrcodepaymentfrom = 2;//ks 
                 se.navCtrl.navigateForward('/paymentqrcode');
               }

@@ -85,6 +85,7 @@ export class FlightadddetailsPage implements OnInit {
   ishideNameMail=true;hotenhddt;emailhddt;addressorder;
   hidepaxhint: any;
   listPaxSuggestByMemberId = [];
+  ischeckinOnl: boolean = true;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -157,6 +158,7 @@ export class FlightadddetailsPage implements OnInit {
             //se.gf.gaSetScreenName('flightadddetails');
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
+        this.checkinOnline();
     }
 
     @HostListener('keydown', ['$event'])
@@ -4099,5 +4101,13 @@ alert.present();
     }
     togglecheckinonline(event){ 
       this._flightService.itemFlightCache.isCheckinOnline=event.detail.checked
+    }
+
+    checkinOnline() {
+      var dep = moment(this._flightService.itemFlightCache.departFlight.departTime, "YYYYMMDD HH:mm")
+      let diffminutes = moment(dep).diff(new Date(), 'minutes');
+      if (diffminutes <= 210) {
+        this.ischeckinOnl=false;
+      }
     }
 }

@@ -197,6 +197,9 @@ export class RoompaymentlivePage implements OnInit{
                       se._voucherService.selectVoucher = null;
                     },300)
                   }
+                  if (se.Roomif.notetotal) {
+                    se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
+                  }
               se.navCtrl.navigateForward('/roompaymentdone/'+code+'/'+stt);
             }
             else{

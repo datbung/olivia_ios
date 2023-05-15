@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { NetworkProvider } from './../../../network-provider.service';
 import * as request from 'requestretry';
-import { tourService } from 'src/app/providers/tourService';
+import { ticketService } from 'src/app/providers/ticketService';
 
 @Component({
   selector: 'app-hometicket',
@@ -26,25 +26,12 @@ export class HomeTicketPage implements OnInit {
     private actionsheetCtrl: ActionSheetController,
     private platform: Platform,
     public networkProvider: NetworkProvider,
-    public tourService: tourService) {
+    public ticketService: ticketService) {
     
   }
-  loadTopSale() {
-    let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetAllBooking24h';
-    let headers = {
-      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-    };
-    se.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTopSale').then((data) => {
-      let res = JSON.parse(data);
-      console.log(res.Response);
-      this.tourService.listTopSale = res.Response;
-     
-    })
-  }
+
 
   ngOnInit(){
-   
+  
   }
 }

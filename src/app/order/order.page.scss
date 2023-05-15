@@ -4759,7 +4759,7 @@ and (orientation: portrait) {
 }
 .div-checkin-online-1 {
     align-items: center;
-    padding: 20px 16px;
+    padding: 16px 16px;
 
     .div-text-checkin-online{
         font-size: 16px;
@@ -4789,3 +4789,15 @@ and (orientation: portrait) {
     color: #3f3b3b;
     margin-bottom: 0px;
 }
+.text-note{
+    font-size:14px;
+    color:#828282;
+    font-style: italic;
+    letter-spacing: -0.34px;
+  }
+  .margin-16-one{
+    margin: 10px 16px 16px;
+  }
+  .margin-16{
+    margin: 0px 16px 16px;
+  }

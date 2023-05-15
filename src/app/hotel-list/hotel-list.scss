@@ -55,7 +55,7 @@
     position: relative;
       border-radius: 5px;
       width: 104px !important;
-      height: 123px !important;
+      height: 145px !important;
       --border-radius: 5px;
       object-fit: cover;
   }
@@ -362,7 +362,7 @@
   }
   .row-item-hotellist{
     margin: 16px;
-    height: 132px;
+    height: 150px;
   }
 
   .p-top-dealtype{
@@ -433,7 +433,7 @@
   }
   .col-img-hotellist{
     //height: 109px;
-    height: 123px;
+    height: 145px;
     position: absolute;
   }
   .badge-ios{
@@ -549,11 +549,11 @@
       background: #ffffff;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
+      // white-space: nowrap;
       max-height: 17px;
     }
     .fix-height-123{
-      height: 123px;
+      height: 145px;
     }
     .last-row{
       position: absolute;
@@ -567,7 +567,7 @@
 
     .m-top-10{
       margin-top:6px;
-      margin-bottom:12px;
+      // margin-bottom:12px;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;

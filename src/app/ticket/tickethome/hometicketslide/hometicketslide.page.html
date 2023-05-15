@@ -55,22 +55,24 @@
                         <div  *ngIf="slide.numOfReview"> | <span class="text-comment">{{slide.numOfReview}} đánh giá</span></div>
                     </div>
                   </div>
-                  <ng-template #noAvgPoint>
+                  <ng-template #noavgPoint>
                     <div class="text-point-des m-h-20 m-top-8">Chưa có đánh giá</div>
                   </ng-template>
   
-                  <div class="d-flex m-top-8 div-button-sale" *ngIf="slide.TopSale">
-                    <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24 giờ qua</ion-label>
-                  </div>
-
-                  <div *ngIf="slide.notes && slide.notes.length >0" class="m-top-16">
-                    <!-- <div *ngFor="let itemNote of slide.notes; let idx = index;">
-                        <div class="div-item-note">{{itemNote.notes}}</div>
-                    </div> -->
+                 
+                  <div *ngIf="slide.shortDescription" class="m-top-16 height-63">
+                   
+                    <li class="div-item-note" *ngFor="let item of slide.shortDescription.split('\n')" >{{item}}</li>
+                </div>
+                <div class="d-flex m-top-8 div-button-sale" *ngIf="slide.sortOrder">
+                  <ion-label class="text-topsale">{{slide.sortOrder}} khách đặt trong 24 giờ qua</ion-label>
+                </div>
+                  <!-- <div *ngIf="slide.notes && slide.notes.length >0" class="m-top-16">
+                   
                     <div class="div-item-note" *ngIf="slide.notes && slide.notes.length >0" [innerHTML]="slide.notes"></div>
-                  </div>
+                  </div> -->
 
-                  <div class="cls-price" >{{ gf.convertNumberToString(slide.priceCurrent) }}đ</div>
+                  <div class="cls-price" >{{ gf.convertNumberToString(slide.salePrice) }}đ</div>
                 </div>
               </div>
               
