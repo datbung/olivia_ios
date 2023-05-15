@@ -4020,7 +4020,6 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     
   }
   CreateSupportRequest(bookingCode,CEmail,hoten,phone,notetotal) {
-    var se = this;
     var options = {
       method: 'POST',
       url: C.urls.baseUrl.urlMobile + '/app/CRMOldApis/CreateSupportRequest',
