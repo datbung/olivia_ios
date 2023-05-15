@@ -2935,7 +2935,7 @@
                   
                         <div  *ngIf="trip.hadCheckinOnlineReturn">
                           <div *ngFor="let pass of trip.bookingjson[1].Passengers; let idx = index">
-                            <div class="d-flex  align-items-end m-top-12"  *ngIf="pass.CheckinInfo && pass.CheckinInfo.indexOf('http')">
+                            <div class="d-flex  align-items-end m-top-12"  *ngIf="pass.CheckinInfo && pass.CheckinInfo.indexOf('http') != -1">
                             
                               <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
                                   class="div-name">{{pass.Name}}</span> </label>
