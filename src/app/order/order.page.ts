@@ -1112,7 +1112,7 @@ export class OrderPage {
                     if (objjson.length > 1 && objjson[1]) {
                       for (let i = 0; i < objjson[1].Passengers.length; i++) {
                         const el = objjson[1].Passengers[i];
-                        if (el.CheckinInfo) {
+                        if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
                           element.hadCheckinOnlineReturn = true;
                           break;
                         }
