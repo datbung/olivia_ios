@@ -1106,7 +1106,7 @@ export class OrderPage {
                   // console.log(element.bookingjson);
                   if ((element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate != '' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate != ''))) {
                     let objjson = JSON.parse(element.booking_json_data);
-                    let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo) });
+                    let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo && p.CheckinInfo.indexOf('http') != -1) });
                     element.hadCheckinOnline = _checked;
                     element.hadCheckinOnlineReturn=false;
                     if (objjson.length > 1 && objjson[1]) {

@@ -1389,10 +1389,8 @@
                     <img  class="img-arrow"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                   </div> -->
                   <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
-                   <div class="d-flex align-items-end m-top-12" *ngIf="pass.CheckinInfo">
-                       <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
-                           <img class="header-img-back" [src]="pass.CheckinInfo" >
-                       </div> -->
+                   <div class="d-flex align-items-end m-top-12" *ngIf="pass.CheckinInfo && pass.CheckinInfo.indexOf('http') != -1">
+                
                        <label class="witdh-204">{{pass.Gender}}. <span class="div-name">{{pass.Name}}</span> </label>
                        <img  (click)="downloadimg(pass,trip)"  src="./assets/ic_mytripbooking/download.svg">
                        <img  (click)="share(pass)" class="m-left-8px"  src="./assets/ic_mytripbooking/share.svg">
@@ -2922,10 +2920,8 @@
                           Chiều đi
                         </div>
                         <div *ngFor="let pass of trip.bookingjson[0].Passengers; let idx = index">
-                          <div class="d-flex align-items-end m-top-12"  *ngIf="pass.CheckinInfo">
-                            <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
-                                                      <img class="header-img-back" [src]="pass.CheckinInfo" >
-                                                  </div> -->
+                          <div class="d-flex align-items-end m-top-12"  *ngIf="pass.CheckinInfo && pass.CheckinInfo.indexOf('http') != -1">
+                
                             <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
                                 class="div-name">{{pass.Name}}</span> </label>
                             <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
@@ -2939,10 +2935,8 @@
                   
                         <div  *ngIf="trip.hadCheckinOnlineReturn">
                           <div *ngFor="let pass of trip.bookingjson[1].Passengers; let idx = index">
-                            <div class="d-flex  align-items-end m-top-12"  *ngIf="pass.CheckinInfo">
-                              <!-- <div class="div-boardingpass" *ngIf="pass.CheckinInfo">
-                                                    <img class="header-img-back" [src]="pass.CheckinInfo" >
-                                                </div> -->
+                            <div class="d-flex  align-items-end m-top-12"  *ngIf="pass.CheckinInfo && pass.CheckinInfo.indexOf('http')">
+                            
                               <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
                                   class="div-name">{{pass.Name}}</span> </label>
                               <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
