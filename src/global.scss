@@ -1824,3 +1824,21 @@ button.days-btn {
   font-size: 12px;
   color: #828282;
 }
+.div-overflow-ticket {
+  @media (min-width: 340px) and (max-width: 375px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 148px;
+    display: inline !important;
+    margin-top: 4px;
+  }
+  @media (min-width: 414px) and (max-width: 480px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 194px;
+    display: inline !important;
+    margin-top: 4px;
+  }
+}

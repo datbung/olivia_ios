@@ -1973,7 +1973,13 @@ export class OrderPage {
               se.arrinsurrance = [];
             }
 
-
+            se.listMyTrips[0].isRoundTrip = se.listMyTrips[0].itemdepart && se.listMyTrips[0].itemreturn ? true : false;
+            if(se.listMyTrips[0].itemdepart){
+              se.listMyTrips[0].itemdepart.allowChangeFlight = se.listMyTrips[0].itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1;
+            }
+            if(se.listMyTrips[0].itemreturn){
+              se.listMyTrips[0].itemreturn.allowChangeFlight = se.listMyTrips[0].itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1;
+            }
           }
           if (se.listMyTrips[0].isFlyBooking) {
             this.getDetailTicketFromDat(0).then((data) => {

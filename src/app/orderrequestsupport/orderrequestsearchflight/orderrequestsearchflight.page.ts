@@ -147,19 +147,6 @@ export class OrderRequestSearchFlightPage implements OnInit {
       
       this.trip = this.activityService.objPaymentMytrip.trip;
 
-      //let objday:any = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkInDate);
-      //let objdayreturn:any = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkOutDate);
-
-      // this.title = "Đi " + this.trip.itemdepart.flightFrom +" → " + this.trip.itemdepart.flightTo;
-      // this.subtitle = " · " + this.trip.itemdepart.numberOfPax + " khách";
-      // this.titlereturn = "Về " + this.trip.itemreturn.flightFrom +" → " + this.trip.itemreturn.flightTo;
-      // this.subtitlereturn = " · " + this.trip.itemreturn.numberOfPax + " khách";
-      // this.dayDisplay = objday.dayname + ", " +moment(this.trip.checkInDate).format("DD") +  " thg " +moment(this.trip.checkInDate).format("M");
-      // this.dayReturnDisplay = objdayreturn.dayname + ", " + moment(this.trip.checkOutDate).format("DD") + " thg " +moment(this.trip.checkOutDate).format("M");
-      // this.trip.dayDisplay = this.dayDisplay;
-      // this.trip.dayReturnDisplay = this.dayReturnDisplay;
-      // this.checkInDate = this.trip.checkInDate;
-      // this.checkOutDate = this.trip.checkOutDate;
       this.checkInDate = this._flightService.itemFlightCache.checkInDate;
                 this.checkOutDate = this._flightService.itemFlightCache.checkOutDate;
                 let objday:any = this.gf.getDayOfWeek(this.checkInDate);
@@ -309,7 +296,11 @@ export class OrderRequestSearchFlightPage implements OnInit {
   select(type,item){
     var se = this;
     if(!item.allowChange){
-      this.gf.showToastWarning('Vé chưa được kiểm tra giá chênh lệch hoặc chưa hỗ trợ đổi vé. Xin quý khách vui lòng thử lại!');
+      se.gf.showToastWarning('Vé chưa được kiểm tra giá chênh lệch hoặc chưa hỗ trợ đổi vé. Xin quý khách vui lòng thử lại!');
+      return;
+    }
+    if(!se.checkChangeFlightPrice(item)){
+      se.gf.showToastWarning('Quý khách vui lòng chọn hạng vé cao hơn vé hiện tại.');
       return;
     }
     if(type ==1 ){
@@ -329,36 +320,22 @@ export class OrderRequestSearchFlightPage implements OnInit {
         })
        
       }else{
-        //if(se.canselect){
           se.choiceTicket(1, item);
           se.trip.roundTrip = false;
-         
           se.navCtrl.navigateForward('/orderrequestchangeflightpaymentselect');
-        //}
-        // se._flightService.itemFlightCache.hasChoiceLuggage = false;
-        // se._flightService.itemFlightCache.departLuggage = [];
-        // se._flightService.itemFlightCache.returnLuggage = [];
       }
     }else{
       
       //Nếu đi và về cùng ngày thì check thêm dk giờ về phải lớn hơn giờ đi 3h
       if(se.activityService.typeChangeFlight == 3)
       {
-        //if(se.canselect){
           se.choiceTicket(2, item);
           se.trip.roundTrip = true;
           se.navCtrl.navigateForward('/orderrequestchangeflightpaymentselect');
-        //}
       }else{
-        //se._flightService.itemFlightCache.returnFlight = se._flightService.objSearch.roundTrip ? item : null; 
-        //if(se.canselect){
           se.choiceTicket(2, item);
           se.trip.roundTrip = true;
           se.navCtrl.navigateForward('/orderrequestchangeflightpaymentselect');
-       // }
-        // se._flightService.itemFlightCache.hasChoiceLuggage = false;
-        // se._flightService.itemFlightCache.departLuggage = [];
-        // se._flightService.itemFlightCache.returnLuggage = [];
       }
       
     }
@@ -709,6 +686,10 @@ export class OrderRequestSearchFlightPage implements OnInit {
           }else{
             element.to = element.details[0].to;
           }
+
+          if(element.details[0] && element.details[0].ticketType){
+            element.ticketTypeSearch = element.details[0].ticketType;
+          }
          
 
           element.priceSummaries.forEach(e => {
@@ -894,6 +875,10 @@ export class OrderRequestSearchFlightPage implements OnInit {
             element.to = element.details[0].to;
           }
 
+          if(element.details[0] && element.details[0].ticketType){
+            element.ticketTypeSearch = element.details[0].ticketType;
+          }
+         
           let priceFlightAdult = 0;
           let priceFlightChild = 0;
           let priceFlightInfant = 0;
@@ -1113,7 +1098,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
                   }
 
                   setTimeout(()=>{
-                    if((se.listDepartFilter && se.listDepartFilter.length >0) || (se.listDepartFilter && se.listDepartFilter.length >0))
+                    if((se.listDepartFilter && se.listDepartFilter.length >0) || (se.listReturnFilter && se.listReturnFilter.length >0))
                     {
                       se.loadpricedone = true;
                     }
@@ -2900,7 +2885,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
           'Content-Type': 'application/json; charset=utf-8'
       };
-        let url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${type == 1 ? this.trip.itemdepart.ticketCode : this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=${type}&flightDate=${moment(item.departTime).format('YYYY-MM-DD')}&flightNumber=${item.flightNumber}&ticketClass=${item.ticketClass}&funAction=qoute&fromCode=${item.fromPlaceCode}&toCode=${item.toPlaceCode}`;
+        let url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${type == 1 ? this.trip.itemdepart.ticketCode : this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=${type}&flightDate=${moment(item.departTime).format('YYYY-MM-DD')}&flightNumber=${item.flightNumber}&ticketClass=${(item.ticketTypeSearch || item.ticketClass)}&funAction=qoute&fromCode=${item.fromPlaceCode}&toCode=${item.toPlaceCode}`;
         this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
             console.log(data);
             item.hasCheckPrice = true;
@@ -3186,5 +3171,9 @@ export class OrderRequestSearchFlightPage implements OnInit {
               }
             }
           }
+        }
+
+        checkChangeFlightPrice(item){
+          return item.price >= this.trip.totalPriceVMB;
         }
 }

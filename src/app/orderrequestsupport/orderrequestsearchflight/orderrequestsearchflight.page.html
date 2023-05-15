@@ -83,7 +83,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listDepartFilter && listDepartFilter.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Lựa chọn tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 div-width-150" >{{textsort}}</div>
-              <div class="text-refresh m-top-4 div-width-50" (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
+              <div class="text-refresh m-top-4 div-width-100" (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listDepartFilter && listDepartFilter.length >0 && (count >=1 || stoprequest) ) else nodepartFilterEmpty">
@@ -169,7 +169,7 @@
                     </div>
     
                     <div [ngClass]=" (item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(1,item)">
-                      <button ion-button round [ngClass]="((item.allowChange && item.hasCheckPrice) || !item.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                      <button ion-button round [ngClass]="item.allowChange && item.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                         Đổi
                       </button>
                     </div>
@@ -204,7 +204,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listDepart && listDepart.length >0)">
               <div *ngIf="!textsort" class="div-title-content p-bottom-8 div-width-150" >Lựa chọn tốt nhất</div>
               <div *ngIf="textsort" class="div-title-content p-bottom-8 div-width-150" >{{textsort}}</div>
-              <div class="text-refresh m-top-4 div-width-50" (click)="showWarningFee()">
+              <div class="text-refresh m-top-4 div-width-100" (click)="showWarningFee()">
                 <img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến
               </div>
             </div>
@@ -291,7 +291,7 @@
                     </div>
     
                     <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(1,item)">
-                      <button ion-button round [ngClass]="((item.allowChange && item.hasCheckPrice) || !item.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                      <button ion-button round [ngClass]="item.allowChange && item.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                         Đổi
                       </button>
                     </div>
@@ -327,7 +327,7 @@
         <ng-template #nosortdepart>
           <div class="d-flex" *ngIf="(bestpricedepart && bestpricedepart.length >0 && (count >=1 || stoprequest) )">
             <div class="div-title-content p-bottom-8 div-width-150" >Lựa chọn tốt nhất</div>
-            <div class="text-refresh m-top-4 div-width-50"  (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
+            <div class="text-refresh m-top-4 div-width-100"  (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
           </div>
           <div class="div-best-choice" *ngIf="(bestpricedepart && bestpricedepart.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == bestpricedepart.length-1 ? 'div-item-flight': (idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8') "  *ngFor="let item of bestpricedepart; let idx = index">
@@ -413,7 +413,7 @@
                   </div>
   
                   <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(1,item)">
-                    <button ion-button round [ngClass]="((item.allowChange && item.hasCheckPrice) || !item.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                    <button ion-button round [ngClass]="item.allowChange && item.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                       Đổi
                     </button>
                   </div>
@@ -423,19 +423,19 @@
               <div *ngIf="!item">
                 <div class='div-item-flight-other' style="height: 80px">
                   <div class="div-first d-flex">
-                    <div >
+                    <!-- <div >
                       <ion-skeleton-text animated style="width: 150px;height: 22px;margin-bottom: 8px;border-radius: 16px;"></ion-skeleton-text>
                         <div class="d-flex">
                           <ion-skeleton-text animated style="width: 16px;height: 16px; border-radius: 16px;margin-right: 8px"></ion-skeleton-text>
       
                           <ion-skeleton-text animated style="width: 150px;height: 16px; border-radius: 16px;"></ion-skeleton-text>
                         </div>
-                      </div>
+                      </div> -->
                   </div>
       
                   <div class="div-second d-flex p-top-8" style="margin-top: 0">
                     <div class="div-button">
-                      <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text>
+                      <!-- <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text> -->
                     </div>
                   </div>
                 </div>
@@ -549,7 +549,7 @@
                     <img class="img-down ic-down" src="./assets/ic_flight/icon_down.svg">
                   </div>
                   <div [ngClass]="(itemother.operatedBy || itemother.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' " (click)="select(1,itemother)">
-                    <button ion-button round [ngClass]="((itemother.allowChange && itemother.hasCheckPrice) || !itemother.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                    <button ion-button round [ngClass]="itemother.allowChange && itemother.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                       Đổi
                     </button>
                   </div>
@@ -586,7 +586,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturnFilter && listReturnFilter.length >0)">
               <div *ngIf="!textsort" [ngClass]="departFlight ? 'div-title-content p-bottom-8 m-top-54 div-width-150' : 'div-title-content p-bottom-8 div-width-150' " >Lựa chọn tốt nhất</div>
               <div *ngIf="textsort" [ngClass]="departFlight ? 'div-title-content p-bottom-8 m-top-54 div-width-150' : 'div-title-content p-bottom-8 div-width-150' " >{{textsort}}</div>
-              <div [ngClass]="departFlight ?  'text-refresh m-top-58 div-width-50' : 'text-refresh div-width-50' " (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
+              <div [ngClass]="departFlight ?  'text-refresh m-top-58 div-width-100' : 'text-refresh div-width-100' " (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listReturnFilter && listReturnFilter.length >0 && (count >=1 || stoprequest) ) else noreturnFilterEmpty">
@@ -671,7 +671,7 @@
                     </div>
     
                     <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(2,item)">
-                      <button ion-button round [ngClass]="((item.allowChange && item.hasCheckPrice) || !item.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                      <button ion-button round [ngClass]="item.allowChange && item.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                         Đổi
                       </button>
                     </div>
@@ -706,7 +706,7 @@
             <div class="d-flex" *ngIf="(count >=1 || stoprequest) && (listReturn && listReturn.length >0)">
               <div *ngIf="!textsort" [ngClass]="departFlight ?'div-title-content p-bottom-8 m-top-54 div-width-150' : 'div-title-content p-bottom-8 div-width-150'" >Lựa chọn tốt nhất</div>
               <div *ngIf="textsort" [ngClass]="departFlight ?'div-title-content p-bottom-8 m-top-54 div-width-150' : 'div-title-content p-bottom-8 div-width-150'" >{{textsort}}</div>
-              <div [ngClass]="departFlight ?'text-refresh m-top-58 div-width-50' : 'text-refresh div-width-50'" (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
+              <div [ngClass]="departFlight ?'text-refresh m-top-58 div-width-100' : 'text-refresh div-width-100'" (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
             </div>
   
             <div [ngClass]="!textsort ? 'div-best-choice' : ''" *ngIf="(listReturn && listReturn.length >0 && (count >=1 || stoprequest) ) else noreturnEmpty">
@@ -793,7 +793,7 @@
                     </div>
     
                     <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(2,item)">
-                      <button ion-button round [ngClass]="((item.allowChange && item.hasCheckPrice) || !item.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                      <button ion-button round [ngClass]="item.allowChange && item.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                         Đổi
                       </button>
                     </div>
@@ -829,7 +829,7 @@
         <ng-template #nosortreturn>
           <div class="d-flex" *ngIf="(bestpricereturn && bestpricereturn.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="departFlight ? 'div-title-content p-bottom-8 m-top-54 div-width-150' : 'div-title-content p-bottom-8 div-width-150'" >Lựa chọn tốt nhất</div>
-            <div [ngClass]="departFlight ? 'text-refresh m-top-58 div-width-50' : 'text-refresh div-width-50'"  (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
+            <div [ngClass]="departFlight ? 'text-refresh m-top-58 div-width-100' : 'text-refresh div-width-100'"  (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
           </div>
           <div class="div-best-choice" *ngIf="(bestpricereturn && bestpricereturn.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == bestpricereturn.length-1 ? 'div-item-flight':(idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8')"  *ngFor="let item of bestpricereturn; let idx = index">
@@ -914,7 +914,7 @@
                   </div>
   
                   <div [ngClass]="(item.operatedBy || item.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' "  (click)="select(2,item)">
-                    <button ion-button round [ngClass]="((item.allowChange && item.hasCheckPrice) || !item.hasCheckPrice)? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                    <button ion-button round [ngClass]="item.allowChange && item.hasCheckPrice? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                       Đổi
                     </button>
                   </div>
@@ -925,19 +925,19 @@
                 <div *ngIf="!item">
                   <div class='div-item-flight-other' style="height: 80px">
                     <div class="div-first d-flex">
-                      <div >
+                      <!-- <div >
                         <ion-skeleton-text animated style="width: 150px;height: 22px;margin-bottom: 8px;border-radius: 16px;"></ion-skeleton-text>
                           <div class="d-flex">
                             <ion-skeleton-text animated style="width: 16px;height: 16px; border-radius: 16px;margin-right: 8px"></ion-skeleton-text>
         
                             <ion-skeleton-text animated style="width: 150px;height: 16px; border-radius: 16px;"></ion-skeleton-text>
                           </div>
-                        </div>
+                        </div> -->
                     </div>
         
                     <div class="div-second d-flex p-top-8" style="margin-top: 0">
                       <div class="div-button">
-                        <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text>
+                        <!-- <ion-skeleton-text animated style="width: 100px;height: 30px;top: -28px"></ion-skeleton-text> -->
                       </div>
                     </div>
                   </div>
@@ -1051,7 +1051,7 @@
                     <img class="img-down ic-down" src="./assets/ic_flight/icon_down.svg">
                   </div>
                   <div [ngClass]="(itemother.operatedBy || itemother.priceBeforeDiscount) ? 'div-button top-0' : 'div-button' " (click)="select(2,itemother)">
-                    <button ion-button round [ngClass]="((itemother.allowChange && itemother.hasCheckPrice) || !itemother.hasCheckPrice) ? 'button btn-select' : 'button btn-select btn-deactive'" clear>
+                    <button ion-button round [ngClass]="itemother.allowChange && itemother.hasCheckPrice ? 'button btn-select' : 'button btn-select btn-deactive'" clear>
                       Đổi
                     </button>
                   </div>
@@ -1066,7 +1066,7 @@
         <ng-template #returnSeri>
           <div class="d-flex" *ngIf="(listReturnSeri && listReturnSeri.length >0 && (count >=1 || stoprequest) )">
             <div class="div-title-content p-bottom-8 div-width-150" >Lựa chọn tốt nhất</div>
-            <div class="text-refresh div-width-50"  (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
+            <div class="text-refresh div-width-100"  (click)="showWarningFee()"><img src="./assets/ic_green/ic_info.svg"> Phí đổi chuyến</div>
           </div>
           <div class="div-best-choice" *ngIf="(listReturnSeri && listReturnSeri.length >0 && (count >=1 || stoprequest) )">
             <div [ngClass]="idx == listReturnSeri.length-1 ? 'div-item-flight':(idx == 0 ? 'div-item-flight m-b-8 bp-firstitem' : 'div-item-flight m-b-8')"  *ngFor="let item of listReturnSeri; let idx = index">

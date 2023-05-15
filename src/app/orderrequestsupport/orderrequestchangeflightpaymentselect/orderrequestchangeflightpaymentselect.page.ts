@@ -311,15 +311,20 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                         se.hideLoading();
                         se.gf.hideLoading();
                         if(success){
-                          let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
-                            this.gf.RequestApi('POST', _url, {
-                              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                              'Content-Type': 'application/json; charset=utf-8',
-                            }, 
-                            {bookingCode: se.bookingCode}, 'orderrequestaddluggagepaymentchoosebank','UpdateTicketFlight');
-                          se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                          let _url = C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateTicketFlight';
+                          this.gf.RequestApi('POST', _url, {
+                            "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                            'Content-Type': 'application/json; charset=utf-8',
+                          }, 
+                          {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentselect','UpdateTicketFlight').then((data)=>{
+                            if(data.result){
+                              this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                            }else{
+                              this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                            }
+                          });
                         }else{
-                          se.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                          this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
                         }
                       })
                       
@@ -408,13 +413,18 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                 this.hideLoading();
               this.gf.hideLoading();
                 if(success){
-                  let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
-                            this.gf.RequestApi('POST', _url, {
-                              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                              'Content-Type': 'application/json; charset=utf-8',
-                            }, 
-                            {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentchoosebank','UpdateTicketFlight');
-                  this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                  let _url = C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateTicketFlight';
+                  this.gf.RequestApi('POST', _url, {
+                    "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                    'Content-Type': 'application/json; charset=utf-8',
+                  }, 
+                  {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentselect','UpdateTicketFlight').then((data)=>{
+                    if(data.result){
+                      this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                    }else{
+                      this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                    }
+                  });
                 }else{
                   this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
                 }
@@ -799,13 +809,18 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                     this.updateChangeFlight().then((success) => {
                       this.hideLoading();
                       if(success){
-                        let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
-                            this.gf.RequestApi('POST', _url, {
-                              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                              'Content-Type': 'application/json; charset=utf-8',
-                            }, 
-                            {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentchoosebank','UpdateTicketFlight');
-                        this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                        let _url = C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateTicketFlight';
+                        this.gf.RequestApi('POST', _url, {
+                          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                          'Content-Type': 'application/json; charset=utf-8',
+                        }, 
+                        {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentselect','UpdateTicketFlight').then((data)=>{
+                          if(data.result){
+                            this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                          }else{
+                            this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                          }
+                        });
                       }else{
                         this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
                       }

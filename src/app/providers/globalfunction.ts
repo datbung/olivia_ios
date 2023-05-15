@@ -4019,6 +4019,33 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     })
     
   }
+
+  async showAlertSupport(msg){
+    var se = this;
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-searchresult",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'Liên hệ hỗ trợ',
+        role: 'OK',
+        handler: () => {
+          window.open('https://zalo.me/3888313238733373810');
+          alert.dismiss();
+        }
+      },
+      {
+        text: 'Hủy',
+        role: 'Cancel',
+        handler: () => {
+          alert.dismiss();
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
 }
 
 export class PlaceByArea {

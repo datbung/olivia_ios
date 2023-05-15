@@ -81,6 +81,8 @@ export class flightService{
   orderRequestReturnFlight: any;
   filterFromRequestSearchFlight: boolean;
   fromOrderRequestChangeFlight: boolean;
+  requestSupportChangeFlight: boolean;
+  fromOrderRequestDetailSupport: boolean;
   publicItemShowMoreFlightTopDeal(data: any) {
     this.itemShowMoreFlightTopDeal.next(data);
   }
