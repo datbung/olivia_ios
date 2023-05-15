@@ -6593,10 +6593,8 @@ export class OrderPage {
     var se = this;
     let temp = trip.bookingsComboData[0].arrivalDate.split("/");
     let daytemp=temp[2]+ temp[1] + temp[0];
-    // let daytemp="2023"+ "05" + "12";
     var dep = moment(daytemp+ " " + trip.bookingsComboData[0].arrivalTime, "YYYYMMDD HH:mm")
     let diffminutes = moment(dep).diff(new Date(), 'minutes');
-    console.log(diffminutes);
     if (diffminutes > 210) {
       this.gf.showLoading();
       var options = {
@@ -6632,10 +6630,8 @@ export class OrderPage {
       this.zone.run(() => {
         trip.bookingjson[0].RequestCheckin=0;
         trip.ischeckinOnl=true;
+        alert("Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay");
       })
-
-
-      // alert("Chuyến bay trong khung đóng chuyến. Qúy khách vui lòng làm thủ tục tại kios hoặc quầy checkin tại sân bay");
 
     }
 

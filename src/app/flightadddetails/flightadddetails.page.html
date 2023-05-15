@@ -172,11 +172,11 @@
                 </div>
             </div>
             <div class="div-line"></div>
-            <div class="div-vat d-flex div-checkin-online-1">
+            <div *ngIf="ischeckinOnl" class="div-vat d-flex div-checkin-online-1">
                 <div class="div-text-checkin-online">Yêu cầu check-in online</div>
                 <div class="cls-toggle"><ion-toggle (ionChange)="togglecheckinonline($event)"></ion-toggle></div>
             </div>
-            <div class="text-note">
+            <div *ngIf="ischeckinOnl" class="text-note">
                  * Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến
             </div>
 
