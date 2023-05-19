@@ -299,7 +299,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
       se.gf.showToastWarning('Vé chưa được kiểm tra giá chênh lệch hoặc chưa hỗ trợ đổi vé. Xin quý khách vui lòng thử lại!');
       return;
     }
-    if(!se.checkChangeFlightPrice(item)){
+    if(!se.checkChangeFlightPrice(item, type)){
       se.gf.showToastWarning('Quý khách vui lòng chọn hạng vé cao hơn vé hiện tại.');
       return;
     }
@@ -1045,154 +1045,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
         se.listReturnNoFilter = [...se.listReturn];
       }
 
-        if(se._flightService.objectFilter &&
-          (se._flightService.objectFilter.minprice*1 != 0
-          || se._flightService.objectFilter.maxprice*1 != 15000000
-          || se._flightService.objectFilter.departTimeRange.length >0
-          || se._flightService.objectFilter.returnTimeRange.length >0
-          || se._flightService.objectFilter.airlineSelected.length >0
-          || se._flightService.objectFilter.classSelected.length >0
-          || se._flightService.objectFilter.stopSelected.length >0
-          || se._flightService.objectFilter.facilitySelected.length >0
-          )){
-          
-          se.filterItem().then(()=>{
-
               setTimeout(()=>{
-                if((se.listDepart && se.listDepart.length == 0) || (se.listReturn && se.listReturn.length == 0)){
-      
-                }else{
-                  if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                    se.bestpricedepart = se.listDepartFilter.length >=2 ? [...se.listDepartFilter].splice(0,2) : [...se.listDepartFilter];
-                    if(se.listDepartFilter.length > 2){
-                      let listotherpricedepart = [...se.listDepartFilter].splice(2,se.listDepartFilter.length);
-                      //listotherpricedepart = se.sortFlightsByPrice(listotherpricedepart);
-                      se.sortFlightsByPrice(listotherpricedepart).then((data)=>{
-                        se.bestpricedepart = [...se.bestpricedepart, data.splice(0,1)[0]];
-                        let listotherpricedepartmustreorder = [...data];
-                        se.sortFlights("priceorder", listotherpricedepartmustreorder);
-                        se.otherpricedepart = [...listotherpricedepartmustreorder];
-                      })
-                    }else{
-                      se.otherpricedepart = [];
-                    }
-                  }
-                
-                  if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                    se.bestpricereturn = se.listReturnFilter.length >=2 ? [...se.listReturnFilter].splice(0,2) : [...se.listReturnFilter];
-                    if(se.listReturnFilter.length >2){
-                      let listotherpricereturn = [...se.listReturnFilter].splice(2,se.listReturnFilter.length);
-                      //listotherpricereturn = se.sortFlightsByPrice(listotherpricereturn);
-                      se.sortFlightsByPrice(listotherpricereturn).then((data)=>{
-                        se.bestpricereturn = [...se.bestpricereturn, data.splice(0,1)[0]];
-    
-                        let listotherpricereturnmustreorder = [...data];
-                        se.sortFlights("priceorder", listotherpricereturnmustreorder);
-    
-                        se.otherpricereturn = [...listotherpricereturnmustreorder];
-                      })
-                    }else{
-                      se.otherpricereturn = [];
-                    }
-                    
-                  }
-
-                  setTimeout(()=>{
-                    if((se.listDepartFilter && se.listDepartFilter.length >0) || (se.listReturnFilter && se.listReturnFilter.length >0))
-                    {
-                      se.loadpricedone = true;
-                    }
-                    
-                      se.zone.run(()=>{
-                        se.progressbarloading = 1;
-                        se.progressbarbuffer = 1;
-                      })
-                      
-                  },100)
-                    
-                }
-              },50)
-      
-            
-            if(se.count >=1){
-             
-              setTimeout(()=>{
-              
-                // if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                //   se.bestpricedepart = [...se.listDepartFilter].splice(0,3);
-                //   se.otherpricedepart = [...se.listDepartFilter].splice(3,se.listDepartFilter.length);
-                // }
-      
-                // if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                //   se.bestpricereturn = [...se.listReturnFilter].splice(0,3);
-                //   se.otherpricereturn = [...se.listReturnFilter].splice(3,se.listReturnFilter.length);
-                // }
-                if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                  se.bestpricedepart = se.listDepartFilter.length >=2 ? [...se.listDepartFilter].splice(0,2) : [...se.listDepartFilter];
-                  if(se.listDepartFilter.length > 2){
-                    let listotherpricedepart = [...se.listDepartFilter].splice(2,se.listDepartFilter.length);
-                    //listotherpricedepart = se.sortFlightsByPrice(listotherpricedepart);
-                    se.sortFlightsByPrice(listotherpricedepart).then((data)=>{
-                      se.bestpricedepart = [...se.bestpricedepart, data.splice(0,1)[0]];
-                      let listotherpricedepartmustreorder = [...data];
-                      se.sortFlights("priceorder", listotherpricedepartmustreorder);
-                      se.otherpricedepart = [...listotherpricedepartmustreorder];
-                    })
-                  }else{
-                    se.otherpricedepart = [];
-                  }
-                }
-              
-                if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                  se.bestpricereturn = se.listReturnFilter.length >=2 ? [...se.listReturnFilter].splice(0,2) : [...se.listReturnFilter];
-                  if(se.listReturnFilter.length >2){
-                    let listotherpricereturn = [...se.listReturnFilter].splice(2,se.listReturnFilter.length);
-                    //listotherpricereturn = se.sortFlightsByPrice(listotherpricereturn);
-                    se.sortFlightsByPrice(listotherpricereturn).then((data)=>{
-                      se.bestpricereturn = [...se.bestpricereturn, listotherpricereturn.splice(0,1)[0]];
-
-                      let listotherpricereturnmustreorder = [...listotherpricereturn];
-                      se.sortFlights("priceorder", listotherpricereturnmustreorder);
-
-                      se.otherpricereturn = [...listotherpricereturnmustreorder];
-                    })
-                  }else{
-                    se.otherpricereturn = [];
-                  }
-                  
-                }
-
-                if((se.listDepartFilter && se.listDepartFilter.length >0) || (se.listDepartFilter && se.listDepartFilter.length >0))
-                    {
-                      se.loadpricedone = true;
-                      se.zone.run(()=>{
-                        se.progressbarloading = 1;
-                        se.progressbarbuffer = 1;
-                      })
-                    }
-              },150)
-              
-            }
-
-          
-          });
-        }else{
-            
-              setTimeout(()=>{
-                if((se.listDepart && se.listDepart.length == 0) || (se.listReturn && se.listReturn.length == 0)){
-      
-                }else{
-                //   if(se.listDepart && se.listDepart.length > 0) {
-                    
-                //     se.bestpricedepart = [...se.listDepart].splice(0,3);
-                //     se.otherpricedepart = [...se.listDepart].splice(3,se.listDepart.length);
-                  
-                //   }
-                //  // console.log(se.listReturnFilter);
-                //   if(se.listReturn && se.listReturn.length > 0){
-                //     se.bestpricereturn = [...se.listReturn].splice(0,3);
-                //     se.otherpricereturn = [...se.listReturn].splice(3,se.listReturn.length);
-                //   }
                 if(se.listDepart && se.listDepart.length > 0) {
                   se.bestpricedepart = se.listDepart.length >=2 ?  [...se.listDepart].splice(0,2) : [...se.listDepart];
                   if(se.listDepart.length > 2){
@@ -1238,10 +1091,9 @@ export class OrderRequestSearchFlightPage implements OnInit {
                       se.progressbarloading = 1;
                       se.progressbarbuffer = 1;
                     })
-                }
               }, 50);
          
-        if(se.count >=1){
+          if(se.count >=1){
           // se.sortFlightsByPriceOrder(se.listDepart);
           // se.sortFlightsByPriceOrder(se.listReturn);
           
@@ -1295,7 +1147,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
                       
                     }
           }
-        }
+        //}
         
      
     })
@@ -2894,7 +2746,12 @@ export class OrderRequestSearchFlightPage implements OnInit {
               item.priceDisplay = this.gf.convertNumberToString(data.priceChange) + " đ";
               item.priceChange = data.priceChange;
               item.allowChange = true;
-            }else {
+            }else if(data.data && data.data[0] && data.data[0].totalPrice){
+              item.priceDisplay = this.gf.convertNumberToString(data.data[0].totalPrice) + " đ";
+              item.priceChange = data.data[0].totalPrice;
+              item.allowChange = true;
+            }
+            else {
               item.priceDisplay = "0 đ";
               item.priceChange = 0;
               item.allowChange = false;
@@ -3173,7 +3030,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
           }
         }
 
-        checkChangeFlightPrice(item){
-          return item.price >= this.trip.totalPriceVMB;
+        checkChangeFlightPrice(item, type){
+          return type == 1 ? item.price >= this.trip.bookingsComboData[0].totalCost : item.price >= this.trip.bookingsComboData[1].totalCost;
         }
 }

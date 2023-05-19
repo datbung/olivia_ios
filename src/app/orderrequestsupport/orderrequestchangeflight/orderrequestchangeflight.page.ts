@@ -43,9 +43,21 @@ export class OrderRequestChangeFlightPage implements OnInit {
         this.itemreturn = this.activityService.objPaymentMytrip.trip.itemreturn;
         if(this.itemdepart){
           this.itemdepart.allowChangeFlight = this.trip.departChangeDepartTime;
+          if(this.itemdepart.allowChangeFlight) {
+            this.itemdepart.allowChangeFlight = this.trip.itemdepart.checkDepartValidTime;
+            if(this.itemdepart.allowChangeFlight){
+              this.itemdepart.allowChangeFlight = !(this.itemdepart.passengers && this.itemdepart.passengers.some((p) => { return (!p.isInfant && ((p.giaTienHanhLy != '0' && p.hanhLy != '0kg') || (p.seatNumber && p.seatPrice)) )}) );
+            }
+          }
         }
         if(this.itemreturn){
           this.itemreturn.allowChangeFlight = this.trip.returnChangeDepartTime;
+          if(this.itemreturn.allowChangeFlight) {
+            this.itemreturn.allowChangeFlight = this.trip.itemreturn.checkReturnValidTime;
+          }
+          if(this.itemreturn.allowChangeFlight){
+            this.itemreturn.allowChangeFlight = !(this.itemreturn.passengers && this.itemreturn.passengers.some((p) => { return (!p.isInfant && ((p.giaTienHanhLy != '0' && p.hanhLy != '0kg') || (p.seatNumber && p.seatPrice)) )}) );
+          }
         }
         this.trip.adult =0;
         this.trip.child =0;

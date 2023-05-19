@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MytripService } from 'src/app/providers/mytrip-service.service';
 import * as moment from 'moment';
 import { flightService } from 'src/app/providers/flightService';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-orderrequestsupport',
   templateUrl: './orderrequestsupport.page.html',
@@ -26,7 +27,8 @@ export class OrderRequestSupportPage implements OnInit {
     public _mytripservice: MytripService,
     private zone: NgZone,
     public gf: GlobalFunction,
-    public _flightService: flightService) { 
+    public _flightService: flightService,
+    private domSanitizer: DomSanitizer) { 
         storage.get('auth_token').then(auth_token => {
             if(auth_token){
                 if(this._mytripservice.listSupport && this._mytripservice.listSupport.length >0){
@@ -61,15 +63,24 @@ export class OrderRequestSupportPage implements OnInit {
         if(this.allowChangeFlight){
           this.allowChangeFlight = !trip.isRoundTrip ? trip.departChangeDepartTime : (trip.departChangeDepartTime || trip.returnChangeDepartTime );
         }
+        if(trip.itemreturn){
+          trip.itemreturn.checkReturnValidTime =true;
+        }
+        if(trip.itemdepart){
+          trip.itemdepart.checkDepartValidTime =true;
+        }
         
         if(this.allowChangeFlight){
-         
-            if(trip.itemreturn && trip.itemreturn.airlineCode && trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidFlightTime(trip.itemreturn)){
-              this.allowChangeFlight = false;
-            }else if(trip.itemdepart && trip.itemdepart.airlineCode && trip.itemdepart.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidFlightTime(trip.itemdepart)){
-              this.allowChangeFlight = false;
+            if(trip.itemreturn && trip.itemreturn.airlineCode && trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidChangeFlightTime(trip.itemreturn)){
+              //this.allowChangeFlight = false;
+              trip.itemreturn.checkReturnValidTime =false;
+            }else if(trip.itemdepart && trip.itemdepart.airlineCode && trip.itemdepart.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidChangeFlightTime(trip.itemdepart)){
+              //this.allowChangeFlight = false;
+              trip.itemdepart.checkDepartValidTime =false;
             }
-          
+          if((trip.itemreturn && trip.itemdepart && !trip.itemdepart.checkDepartValidTime &&!trip.itemreturn.checkReturnValidTime) || (!trip.itemreturn && !trip.itemdepart.checkDepartValidTime)){
+            this.allowChangeFlight = false;
+          }
         }
         if(this.allowChangeFlight){
           this.allowChangeFlight = !trip.isRoundTrip ? trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 : (trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 || trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1);
@@ -99,8 +110,10 @@ export class OrderRequestSupportPage implements OnInit {
   }
 
   changeInfo() {
-    if (!this.activityService.objPaymentMytrip.isRequestTrip && this.activityService.objPaymentMytrip.isFlyBooking) {
-        this.navCtrl.navigateForward('/ordersupport/1');
+    if (!this.activityService.objPaymentMytrip.isRequestTrip && this.activityService.objPaymentMytrip.trip.isFlyBooking) {
+        //this.navCtrl.navigateForward('/ordersupport/1');
+        //this.gf.showZaloOA('https%3A%2F%2Fzalo.me%2F3888313238733373810');
+        //window.open('https%3A%2F%2Fzalo.me%2F3888313238733373810');
       } else {
         this.navCtrl.navigateForward('/ordersupport/0');
       }
@@ -275,14 +288,14 @@ export class OrderRequestSupportPage implements OnInit {
     if(!this.allowChangeFlight){
       return;
     }
-    if(this.checkItemFlightHadLuggage(this.activityService.objPaymentMytrip.trip)){
-      this.gf.showAlertSupport('Chuyến bay của quý khách có mua Hành lý/ Chỗ ngồi. Quý khách vui lòng liên hệ qua Zalo OA iVIVU Flights để được hỗ trợ');
-      return;
-    }
-    if(this.checkValidChangeFlightTime(this.activityService.objPaymentMytrip.trip)){
-      this.gf.showAlertSupport('Chuyến bay sắp vào khung đóng chuyến. Gửi thông tin qua Zalo OA iVIVU Flights để được hỗ trợ');
-      return;
-    }
+    // if(this.checkItemFlightHadLuggage(this.activityService.objPaymentMytrip.trip)){
+    //   this.gf.showAlertSupport('Chuyến bay của quý khách có mua Hành lý/ Chỗ ngồi. Quý khách vui lòng liên hệ qua Zalo OA iVIVU Flights để được hỗ trợ');
+    //   return;
+    // }
+    // if(this.checkValidChangeFlightTime(this.activityService.objPaymentMytrip.trip)){
+    //   this.gf.showAlertSupport('Chuyến bay sắp vào khung đóng chuyến. Gửi thông tin qua Zalo OA iVIVU Flights để được hỗ trợ');
+    //   return;
+    // }
     this._flightService.fromOrderRequestChangeFlight = true;
     this._flightService.itemFlightCache.departCity = '';
     this._flightService.itemFlightCache.returnCity = '';

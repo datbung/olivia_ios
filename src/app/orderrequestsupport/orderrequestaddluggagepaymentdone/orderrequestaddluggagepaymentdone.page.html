@@ -167,11 +167,11 @@
 
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
-                  <div class="text-time">{{ trip.itemdepart.departureTime }}</div>
+                  <div class="text-time">{{ _flightService.orderRequestDepartFlight.departTimeDisplay }}</div>
                   <div class="div-icon"><img src="./assets/ic_flight/icon_flight_right.svg"></div>
-                  <div class="text-time">{{ trip.itemdepart.arrivalTime }}</div>
+                  <div class="text-time">{{ _flightService.orderRequestDepartFlight.landingTimeDisplay }}</div>
                 </div>
-                <div class="div-width-100 text-time text-center">{{ trip.itemdepart.flightTimeDisplay }}</div>
+                <div class="div-width-100 text-time text-center">{{ _flightService.orderRequestDepartFlight.flightTimeDisplay }}</div>
               </div>
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
@@ -228,11 +228,11 @@
 
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
-                  <div class="text-time">{{ trip.itemreturn.departureTime }}</div>
+                  <div class="text-time">{{ _flightService.orderRequestReturnFlight.departTimeDisplay }}</div>
                   <div class="div-icon"><img src="./assets/ic_flight/icon_flight_right.svg"></div>
-                  <div class="text-time">{{ trip.itemreturn.arrivalTime }}</div>
+                  <div class="text-time">{{ _flightService.orderRequestReturnFlight.landingTimeDisplay }}</div>
                 </div>
-                <div class="div-width-100 text-time text-center">{{ trip.itemreturn.flightTimeDisplay }}</div>
+                <div class="div-width-100 text-time text-center">{{ _flightService.orderRequestReturnFlight.flightTimeDisplay }}</div>
               </div>
               <div class="d-flex">
                 <div class="div-width-300 d-flex">

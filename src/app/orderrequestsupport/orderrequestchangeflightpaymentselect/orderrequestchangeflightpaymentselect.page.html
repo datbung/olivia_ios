@@ -25,20 +25,33 @@
     
     <div class="d-flex">
     
-      <div class="text-flight-title div-width-600 d-flex">
+      <div class="text-flight-title div-width-600 d-flex" *ngIf="activityService.typeChangeFlight == 1">
           <div>
               <div>{{ trip.itemdepart.flightFrom }} ({{ trip.itemdepart.departCode }})</div>
               <div class="text-flight-datetime">{{ trip.dayDisplay }} </div>
           </div>
           <div class="div-flight-inout">
-              <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout1.svg" *ngIf="trip.roundTrip else oneway">
-              <ng-template #oneway><img class="img-flight-inout img-oneway" src="./assets/imgs/ic_arrow.svg"></ng-template>
+              <img class="img-flight-inout img-oneway" src="./assets/imgs/ic_arrow.svg">
           </div> 
           <div>
               <div>{{ trip.itemdepart.flightTo }}  ({{ trip.itemdepart.arrivalCode }})</div>
               <div class="text-flight-datetime" *ngIf="trip.roundTrip">{{ trip.dayReturnDisplay }} </div>
           </div>
       </div>
+
+      <div class="text-flight-title div-width-600 d-flex" *ngIf="activityService.typeChangeFlight == 2">
+        <div>
+          <div>{{ trip.itemdepart.flightTo }}  ({{ trip.itemdepart.arrivalCode }})</div>
+          <div class="text-flight-datetime" *ngIf="trip.roundTrip">{{ trip.dayReturnDisplay }} </div>
+        </div>
+        <div class="div-flight-inout">
+            <img class="img-flight-inout img-oneway" src="./assets/imgs/ic_arrow.svg">
+        </div> 
+        <div>
+          <div>{{ trip.itemdepart.flightFrom }} ({{ trip.itemdepart.departCode }})</div>
+          <div class="text-flight-datetime">{{ trip.dayDisplay }} </div>
+      </div>
+    </div>
     
       <!-- <div class="div-width-60 v-align-center" >
          <img src="./assets/ic_flight/icon_down.svg">

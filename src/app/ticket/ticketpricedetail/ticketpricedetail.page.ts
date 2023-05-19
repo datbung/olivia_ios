@@ -21,11 +21,11 @@ export class TicketPriceDetailPage implements OnInit {
   totalPriceStr: Promise<boolean>;
   indexDetail: any;
  
-  constructor(private navCtrl: NavController, private gf: GlobalFunction,
+  constructor(private navCtrl: NavController, public gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private zone: NgZone,
-    public storage: Storage,
+    private storage: Storage,
     public ticketService: ticketService,
     public searchhotel: SearchHotel) {
       // if(ticketService.itemTicketService){
