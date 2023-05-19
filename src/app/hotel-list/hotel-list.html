@@ -21,7 +21,7 @@
   <ion-list *ngIf="ishide==true">
         <div class="card-background-detailpage">
           <div *ngFor="let msg of json1; let i = index">
-            <div *ngIf="!ischeckAL" class="row-item-hotellist">
+            <div *ngIf="!ischeckAL && msg.MinPriceOTAStr" class="row-item-hotellist">
               <!-- left image region-->
               <div class="col-img-hotellist">
                 <!-- <ion-thumbnail> -->
@@ -82,13 +82,13 @@
                   </div>
                     <div class="m-top-10">
                       <div *ngFor="let itemstyle of msg.StyleTag; let idx = index" [ngClass]="(msg.StyleTag.length >=2 && ((msg.StyleTag[0].ID == 1 && msg.StyleTag[1].ID == 5) || (msg.StyleTag[0].ID == 5 && msg.StyleTag[1].ID == 1))) ? 'm-width-49' : ''">
-                          <div *ngIf="idx < 2" [ngClass]="idx == 1 ? 'sp-item-style m-right-0' : 'sp-item-style'">{{itemstyle.Name}}</div>
+                          <div *ngIf="idx < 2" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
                       </div>
                       
                     </div>
                     <div class="m-top-10">
                       <div *ngFor="let itemstyle of msg.Facilities; let idx = index">
-                          <div *ngIf="idx < 2" [ngClass]="idx == 1 ? 'sp-item-style m-right-0' : 'sp-item-style'">{{itemstyle.Name}}</div>
+                          <div *ngIf="idx < 2 && itemstyle.Name" [ngClass]="itemstyle.Name.length < 15? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
                       </div>
                       
                     </div>
@@ -218,13 +218,13 @@
                   </div>
                     <div class="m-top-10">
                       <div *ngFor="let itemstyle of msg.StyleTag; let idx = index" [ngClass]="(msg.StyleTag.length >=2 && ((msg.StyleTag[0].ID == 1 && msg.StyleTag[1].ID == 5) || (msg.StyleTag[0].ID == 5 && msg.StyleTag[1].ID == 1))) ? 'm-width-49' : ''">
-                          <div *ngIf="idx < 2" [ngClass]="idx == 1 ? 'sp-item-style m-right-0' : 'sp-item-style'">{{itemstyle.Name}}</div>
+                          <div *ngIf="idx < 2" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style m-right-0' : 'sp-item-style-1 m-right-0'">{{itemstyle.Name}}</div>
                       </div>
                       
                     </div>
                     <div class="m-top-10">
                       <div *ngFor="let itemstyle of msg.Facilities; let idx = index" >
-                          <div *ngIf="idx < 2" [ngClass]="idx == 1 ? 'sp-item-style m-right-0' : 'sp-item-style'">{{itemstyle.Name}}</div>
+                          <div *ngIf="idx < 2 && itemstyle.Name" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
                       </div>
                       
                     </div>

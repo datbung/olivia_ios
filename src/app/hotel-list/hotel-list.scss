@@ -542,16 +542,16 @@
     .m-top-10{
       margin-top:10px;
     }
-    .sp-item-style{
-      padding:3px 5px;
-      border:solid 0.5px #26bed6;
-      color: #26bed6;
-      background: #ffffff;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      // white-space: nowrap;
-      max-height: 17px;
-    }
+    // .sp-item-style{
+    //   padding:3px 5px;
+    //   border:solid 0.5px #26bed6;
+    //   color: #26bed6;
+    //   background: #ffffff;
+    //   overflow: hidden;
+    //   text-overflow: ellipsis;
+    //   max-height: 17px;
+    //   width: 112px;
+    // }
     .fix-height-123{
       height: 145px;
     }
@@ -581,19 +581,31 @@
       background: #ffffff;
       margin-right: 8px;
       border-radius: 2px;
-    }
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-height: 17px;
 
+    }
+    .sp-item-style-1{
+      padding:3px 5px;
+      border:solid 0.5px #26bed6;
+      font-size: 10px;
+      color: #26bed6;
+      background: #ffffff;
+      margin-right: 8px;
+      border-radius: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-height: 17px;
+      width: 112px;
+    }
     .m-right-0{
       margin-right: 0;
     }
     .m-width-49{
       max-width: 49%;
-      
-      .sp-item-style{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
     }
 
     .div-title-header{
