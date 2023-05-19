@@ -1706,9 +1706,9 @@ export class OrderPage {
 
 
                 if (element.booking_id && (element.booking_id.indexOf("FLY") != -1 || element.booking_id.indexOf("VMB") != -1 || element.booking_type == "CB_FLY_HOTEL")) {
-                  let temp = element.bookingsComboData[0].arrivalDate.split("/");
+                  let temp = element.bookingsComboData[0].departureDate.split("/");
                   let daytemp=temp[2]+ temp[1] + temp[0];
-                  var dep = moment(daytemp+ " " + element.bookingsComboData[0].arrivalTime, "YYYYMMDD HH:mm")
+                  var dep = moment(daytemp+ " " + element.bookingsComboData[0].departureTime, "YYYYMMDD HH:mm")
                   let diffminutes = moment(dep).diff(new Date(), 'minutes');
                   if (diffminutes <= 210) {
                     this.zone.run(() => {

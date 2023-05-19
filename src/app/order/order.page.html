@@ -3279,7 +3279,7 @@
                     </div>
                   </div>
                   <ng-template #bookingflight>                      
-                    <div class="div-item-flight d-flex padding-8-16" [ngClass]="trip.ischeckinOnl ? 'padding-bottom-20' : ''">
+                    <div class="div-item-flight d-flex padding-8-16">
                       <div class="text-flight-title div-width-600 d-flex">
                           <div *ngIf="trip.bookingsComboData && trip.bookingsComboData[0]" class="min-width-100 cls-text-overflow">
                             <div class="div-logo div-width-100">
@@ -3401,7 +3401,7 @@
                           </div>
                         </div>
                         
-                        <div *ngIf="trip.booking_type != 'CB_FLY_HOTEL'" class="d-flex padding-8-16" [ngClass]="trip.ischeckinOnl ? 'padding-bottom-20' : ''">
+                        <div *ngIf="trip.booking_type != 'CB_FLY_HOTEL'" class="d-flex padding-8-16" >
                           <div>
                             <img src="./assets/imgs/ic_people.svg">
                             
