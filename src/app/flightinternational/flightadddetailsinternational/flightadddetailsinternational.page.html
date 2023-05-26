@@ -199,7 +199,10 @@
 
         </div>
         <ng-template #stepUserInfo>
-            
+            <!-- <div class="div-option-passport d-flex">
+                <div class="text-normal div-width-80">Bạn có muốn nhập thông tin hộ chiếu ngay bây giờ?</div>
+                <div class="div-btn-opt div-width-20"><ion-toggle [(ngModel)]="isExtenal" color="secondary"></ion-toggle></div>
+            </div> -->
             <div class="div-title m-bottom-12">Thông tin hành khách</div>
     
             <div *ngIf="adults && adults.length >0">
@@ -235,7 +238,7 @@
                         <ion-label class="text-sub">Điền đầy đủ Họ tên như trên giấy tờ tùy thân dùng để thực hiện chuyến bay</ion-label>
                     </div>
 
-                    <div *ngIf="isExtenal ">
+                    <div *ngIf="isExtenal">
                        
                         <div class="m-top-24 d-flex">
                             <div [ngClass]="(itemAdult.errorDateofbirth || (!itemAdult.dateofbirth && itemAdult.errorInfo)) ? 'p-relative div-width-100 m-r-8 cls-error' : 'p-relative div-width-100 m-r-8' ">

@@ -31,6 +31,7 @@ export class FlightInternationalPaymentDoneBankPage implements OnInit {
   checkInDisplayDC: string;
   checkOutDisplayDC: string;
   checkreview: number;
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
     private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -117,7 +118,9 @@ export class FlightInternationalPaymentDoneBankPage implements OnInit {
             'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) ,  'currency': 'VND' }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
          
             let flightItem = se._flightService.itemFlightCache;
-
+            this.storage.get('contactOption').then((option)=>{
+              this.contactOption = option;
+            })
   }
 
   addToCalendar(){

@@ -26,6 +26,7 @@ export class FlightInternationalPaymentDone implements OnInit {
   pacificVNAReturn: string="";listDiChung: any = "";
   checkInDisplayDC: string;
   checkOutDisplayDC: string;checkreview
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute,public _flightService: flightService,public alertCtrl: AlertController, private launchReview: LaunchReview,
     private navCtrl:NavController, public searchhotel: SearchHotel,public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -53,6 +54,9 @@ export class FlightInternationalPaymentDone implements OnInit {
         {
           this.checkreview=checkreview;
         }
+      })
+      this.storage.get('contactOption').then((option)=>{
+        this.contactOption = option;
       })
     }
 

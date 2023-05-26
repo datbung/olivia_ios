@@ -20,7 +20,7 @@ export class FlightpaymentdonepayooPage implements OnInit {
   event;
   total;_email;code;stt;startdate;enddate;PeriodPaymentDate;qrimg;
   PeriodPaymentHour;BillingCode
-  isDinner: any=false;checkreview
+  isDinner: any=false;checkreview;
   constructor(private activatedRoute: ActivatedRoute,public storage: Storage,public _flightService:flightService, 
     private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController,
     public valueGlobal: ValueGlobal,

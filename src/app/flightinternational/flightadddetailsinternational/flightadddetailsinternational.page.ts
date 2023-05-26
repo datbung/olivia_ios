@@ -100,7 +100,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   listVouchersApply=[];
   strPromoCode: string = '';
   totaldiscountpromo = 0;
-
+  optionPassport:boolean=false;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -171,6 +171,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             'departing_departure_date': se._flightService.itemFlightCache.checkInDate ,'returning_departure_date ': se._flightService.itemFlightCache.checkOutDate,'num_adults': se._flightService.itemFlightCache.adult,'num_children': se._flightService.itemFlightCache.child ? se._flightService.itemFlightCache.child : 0,'num_infants': se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0
             , 'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': 'VND'  }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
          
+            this.storage.get('optionPassport').then((op)=>{this.optionPassport = op});
         }
     }
 
@@ -408,7 +409,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         element.genderdisplay = elementcache.genderdisplay;
                         element.airlineMemberCode = elementcache.airlineMemberCode;
                         element.dateofbirth = elementcache.dateofbirth;
-                        if(se.isExtenal ){
+                        if(se.optionPassport ){
                           element.dateofbirth = elementcache.dateofbirth;
                           element.country = elementcache.country;
                           element.countryName = elementcache.countryName;
@@ -425,7 +426,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         this.checkInput(element, 2, true);
                       }
                       
-                      if(this.isExtenal ){
+                      if(this.optionPassport ){
                         if(element.dateofbirth){
                           this.checkInput(element, 3, true);
                         }
@@ -462,7 +463,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
                         element.dateofbirth = elementcache.dateofbirth;
-                        if(se.isExtenal ){
+                        if(se.optionPassport ){
                           element.country = elementcache.country;
                           element.countryName = elementcache.countryName;
                           element.passport = elementcache.passport;
@@ -494,7 +495,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                           this.checkInput(element, 3, false);
                         }
                         
-                        if(this.isExtenal ){
+                        if(this.optionPassport ){
                           if(element.country){
                             this.checkInput(element, 4, false);
                           }
@@ -578,7 +579,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             passportCountry: '', 
                             passportExpireDate: '',  errorName: false};
 
-                          if(se.isExtenal ){
+                          if(se.optionPassport ){
                             item= {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
                             genderdisplay: element.gender == 1? 'Ông' : 'Bà', 
                             airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
@@ -618,7 +619,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             passportExpireDate: '', 
                             maxepdate: maxepdate,
                               errorName: false}
-                              if(se.isExtenal){
+                              if(se.optionPassport){
                                 itemchild = {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
                                 genderdisplay: element.gender == 1? 'Bé trai' : 'Bé gái', 
                                 airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
@@ -972,7 +973,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     //   resolve(false);
                     // }
 
-                    else if(se.isExtenal){
+                    else if(se.optionPassport){
                       if(!elementAdult.dateofbirth){
                         elementAdult.errorDateofbirth = true;
                         elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
@@ -1141,7 +1142,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     
                   }
                   
-                  if(se.isExtenal){
+                  if(se.optionPassport){
                     if(!elementChild.dateofbirth){
                       resolve(false);
                     }
@@ -1234,7 +1235,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             return;
                           }
                          
-                          else if(se.isExtenal){
+                          else if(se.optionPassport){
                             if(!elementAdult.dateofbirth){
                               elementAdult.errorDateofbirth = true;
                               elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
@@ -1290,7 +1291,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             }
                             
                           }
-                          else if(se._flightService.itemFlightCache.priceCathay>0&&!se.isExtenal){
+                          else if(se._flightService.itemFlightCache.priceCathay>0&&!se.optionPassport){
                             if(!elementAdult.dateofbirth){
                               elementAdult.errorDateofbirth = true;
                               elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
@@ -1437,7 +1438,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                           
                         }
                         
-                        if(se.isExtenal){
+                        if(se.optionPassport){
                           if(!elementChild.dateofbirth){
                             //se.gf.showToastWarning("Ngày sinh "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" không được để trống. Vui lòng kiểm tra lại!");
                             elementChild.errorDateofbirth = true;
@@ -1489,6 +1490,8 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                       }
                     }
                 }
+
+                se.storage.set('optionPassport', se.optionPassport);
                 //check tên nhập trùng
                 let itempax = [...se.adults]
                 if(se.childs && se.childs.length >0){
@@ -1576,15 +1579,15 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   return;
                 }
 
-                if(!se.email){
-                    //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
-                    return;
-                }
-                else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
-                    //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
-                    se.emailinvalid = true;
-                    return;
-                }
+                  if(!se.email){
+                      //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
+                      return;
+                  }
+                  else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
+                      //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
+                      se.emailinvalid = true;
+                      return;
+                  }
 
                 if (se.ischeck) {
                   if (se.companyname && se.address && se.tax) {
@@ -1635,7 +1638,6 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   }
                 }
                 se.storage.set('email', se.email);
-
                   se._flightService.itemFlightCache.phone = se.sodienthoai;
                   se._flightService.itemFlightCache.email = se.email;
                   se._flightService.itemFlightCache.hoten = se.hoten;
@@ -1659,7 +1661,6 @@ export class FlightAdddetailsInternationalPage implements OnInit {
         
              
                
-                //se.navCtrl.navigateForward('/flightpaymentselect');
             }
             
         }
@@ -1803,7 +1804,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               }
              
 
-              if(se.isExtenal){
+              if(se.optionPassport){
                 
                 if(type == 3){
                   if(!inputcheck.dateofbirth){
@@ -2027,7 +2028,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               }
             }
 
-            if(se.isExtenal){
+            if(se.optionPassport){
               if(type == 3){
                 if(!inputcheck.dateofbirth){
                   inputcheck.errorDateofbirth = true;
@@ -3001,13 +3002,13 @@ alert.present();
                     "returnBaggage": returnluggageweight,
                     "birthDay": element.dateofbirth,
                     "email": "",
-                    "passportNumber": (se.isExtenal) ? element.passport :"",
-                    "passportExpired": (se.isExtenal) ? element.passportExpireDate : "", 
-                    "nationality": (se.isExtenal) ? element.country : "",
+                    "passportNumber": (se.optionPassport) ? element.passport :"",
+                    "passportExpired": (se.optionPassport) ? element.passportExpireDate : "", 
+                    "nationality": (se.optionPassport) ? element.country : "",
                     "destinationCity": "",
                     "destinationPostal": "",
                     "destinationStreet": "",
-                    "passportIssueCountry": (se.isExtenal) ? element.passportCountry : "",
+                    "passportIssueCountry": (se.optionPassport) ? element.passportCountry : "",
                     "airlineMemberCode": (element.airlineMemberCode) ? element.airlineMemberCode : "", 
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
@@ -3330,13 +3331,13 @@ alert.present();
                     "returnBaggage": returnluggageweight ? returnluggageweight : "",
                     "birthDay": element.dateofbirth,
                     "email": "",
-                    "passportNumber": ( se.isExtenal) ? element.passport :"",
-                    "passportExpired": ( se.isExtenal) ? element.passportExpireDate : "", 
-                    "nationality": ( se.isExtenal) ? element.country : "",
+                    "passportNumber": ( se.optionPassport) ? element.passport :"",
+                    "passportExpired": ( se.optionPassport) ? element.passportExpireDate : "", 
+                    "nationality": ( se.optionPassport) ? element.country : "",
                     "destinationCity": "",
                     "destinationPostal": "",
                     "destinationStreet": "",
-                    "passportIssueCountry": ( se.isExtenal) ? element.passportCountry : "",
+                    "passportIssueCountry": ( se.optionPassport) ? element.passportCountry : "",
                     "airlineMemberCode": "", 
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
@@ -3555,7 +3556,7 @@ alert.present();
                   item.errorName = true;
                   item.dateofbirth = '';
                   item.textErrorInfo = "Vui lòng nhập thông tin Người lớn " +item.id;
-                  if(se.isExtenal){
+                  if(se.optionPassport){
                     item.dateofbirth = '';
                     item.country = '';
                     item.countryName = '';
@@ -3582,7 +3583,7 @@ alert.present();
                   item.errorDateofbirth = true;
                   item.textErrorInfo = "Vui lòng nhập thông tin "+ (!item.isInfant ? "Trẻ em" : "Em bé")+" "+(!item.isInfant ? item.id : item.iddisplay);
 
-                  if(se.isExtenal){
+                  if(se.optionPassport){
                     item.dateofbirth = '';
                     item.country = '';
                     item.countryName = '';
@@ -3785,7 +3786,7 @@ alert.present();
                   se.currentSelectPax.errorDateofbirth = false;
                   se.currentSelectPax.textErrorDateofbirth = '';
                 }
-                if(se.isExtenal){
+                if(se.optionPassport){
                   se.currentSelectPax.country = paxhint.country ? paxhint.country: se.currentSelectPax.country;
                   se.currentSelectPax.passport = paxhint.passport ? paxhint.passport: se.currentSelectPax.passport; 
                   se.currentSelectPax.passportCountry = paxhint.passportCountry ? paxhint.passportCountry: se.currentSelectPax.passportCountry;

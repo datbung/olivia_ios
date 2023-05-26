@@ -272,7 +272,9 @@ export class FlightadddetailsPage implements OnInit {
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
                         element.airlineMemberCode = elementcache.airlineMemberCode;
-                        element.dateofbirth = elementcache.dateofbirth;
+                        if(this._flightService.itemFlightCache.priceCathay>0){
+                          element.dateofbirth = elementcache.dateofbirth;
+                        }
                         if(se.isExtenal && se.showLotusPoint){
                           element.dateofbirth = elementcache.dateofbirth;
                           element.country = elementcache.country;
@@ -324,7 +326,9 @@ export class FlightadddetailsPage implements OnInit {
                         element.subName = elementcache.subName;
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
-                        element.dateofbirth = elementcache.dateofbirth;
+                        if(this._flightService.itemFlightCache.priceCathay>0){
+                          element.dateofbirth = elementcache.dateofbirth;
+                        }
                         if(se.isExtenal && se.showLotusPoint){
                           element.country = elementcache.country;
                           element.passport = elementcache.passport;
@@ -432,7 +436,7 @@ export class FlightadddetailsPage implements OnInit {
                            genderdisplay: element.gender == 1? 'Ông' : 'Bà', 
                            airlineMemberCode: element.airlineMemberCode&& this.showLotusPoint ? element.airlineMemberCode:'',
                            airlineCardCode: element.airlineCardCode&& this.showLotusPoint ? element.airlineCardCode: '', 
-                           dateofbirth: element.dateOfBirth ? element.dateOfBirth:'', mindob: amindob, maxdob: amaxdob, isChild: false,
+                           dateofbirth: element.dateOfBirth && (this._flightService.itemFlightCache.priceCathay>0 || this.isExtenal) ? element.dateOfBirth:'', mindob: amindob, maxdob: amaxdob, isChild: false,
                            maxepdate: maxepdate,
                            country: '',
                             passport: '', 
@@ -472,7 +476,7 @@ export class FlightadddetailsPage implements OnInit {
                             genderdisplay: element.gender == 1? 'Bé trai' : 'Bé gái', 
                             airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
                             airlineCardCode: element.airlineCardCode && this.showLotusPoint ? element.airlineCardCode: '', 
-                            dateofbirth: element.dateOfBirth ? element.dateOfBirth:'', mindob: mindob, maxdob: maxdob, isChild: true, isInfant: isInfant,
+                            dateofbirth: element.dateOfBirth && (this._flightService.itemFlightCache.priceCathay>0 || this.isExtenal) ? element.dateOfBirth:'', mindob: mindob, maxdob: maxdob, isChild: true, isInfant: isInfant,
                             country:'',
                             passport:  '', 
                             passportCountry:'', 
@@ -1467,15 +1471,16 @@ export class FlightadddetailsPage implements OnInit {
                   return;
                 }
 
-                if(!se.email){
+                  if(!se.email){
                     //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
                     return;
-                }
-                else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
-                    //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
-                    se.emailinvalid = true;
-                    return;
-                }
+                  }
+                  else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
+                      //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
+                      se.emailinvalid = true;
+                      return;
+                  }
+                
 
                 if (se.ischeck) {
                   if (se.companyname && se.address && se.tax) {
@@ -2957,8 +2962,8 @@ alert.present();
                    }
                    element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
                    element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
-                  console.log(element.ancillaryJson);
-                  console.log(element.ancillaryReturnJson);
+                  //console.log(element.ancillaryJson);
+                  //console.log(element.ancillaryReturnJson);
                   listpassenger.push({
                     "passengerType": 0,
                     "gender": element.gender,
@@ -3365,7 +3370,7 @@ alert.present();
                       "firstName": lastnamecontact,
                       "lastName": firstnamecontact ,
                       "mobileNumber": se.sodienthoai,
-                      "email": se.email,
+                      "email": se.email || "",
                       "address": "",
                       "phoneNumber": se.sodienthoai,
                       "hasvoucher": se._flightService.itemFlightCache.promotionCode ? true : false,
