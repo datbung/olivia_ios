@@ -2459,6 +2459,7 @@ export class Tab1Page implements OnInit {
               se.searchhotel.recent.push(this.recent[0]);
             }
             se.searchhotel.recent.push(item1);
+
             se.isrefreshlist = "true";
           }
         } else {
@@ -3016,6 +3017,7 @@ export class Tab1Page implements OnInit {
         itemRecent.name=item.name;
         itemRecent.isType=1;
         itemRecent.code = item.regionCode;
+        this.searchhotel.objRecent=itemRecent;
         this.gf.setCacheSearch(itemRecent,0);
     this.navCtrl.navigateForward("/hotellist/true");
     this.hideStatusBar();
@@ -4109,6 +4111,12 @@ export class Tab1Page implements OnInit {
       this.searchhotel.CheckInDate =  item.CheckInDate;
       this.searchhotel.CheckOutDate = item.CheckOutDate;
       this.searchhotel.objRecent=item;
+      let obj = {
+        regionName: item.name,
+        regionId: item.id,
+        regionCode: item.code
+      };
+      this.searchhotel.gbmsg = obj;
       let diffdate = moment(item.CheckInDate).diff(moment(moment(new Date()).format('YYYY-MM-DD')), 'days');
       if (item.CheckInDate && diffdate < 0) {
         this.newMethod(item);

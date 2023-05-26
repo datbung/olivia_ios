@@ -86,6 +86,7 @@ export class FlightadddetailsPage implements OnInit {
   hidepaxhint: any;
   listPaxSuggestByMemberId = [];
   ischeckinOnl: boolean = true;
+  contactOption:number;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -1467,15 +1468,23 @@ export class FlightadddetailsPage implements OnInit {
                   return;
                 }
 
-                if(!se.email){
+                if(!se.contactOption){
+                  se.gf.showToastWarning('Chưa chọn kênh liên lạc và nhận vé. Vui lòng kiểm tra lại');
+                  return;
+                }
+
+                if(se.contactOption == 2){
+                  if(!se.email){
                     //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
                     return;
+                  }
+                  else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
+                      //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
+                      se.emailinvalid = true;
+                      return;
+                  }
                 }
-                else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
-                    //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
-                    se.emailinvalid = true;
-                    return;
-                }
+                
 
                 if (se.ischeck) {
                   if (se.companyname && se.address && se.tax) {
@@ -1526,6 +1535,7 @@ export class FlightadddetailsPage implements OnInit {
                   }
                 }
                 se.storage.set('email', se.email);
+                se.storage.set('contactOption', se.contactOption);
 
                   se._flightService.itemFlightCache.phone = se.sodienthoai;
                   se._flightService.itemFlightCache.email = se.email;
@@ -2957,8 +2967,8 @@ alert.present();
                    }
                    element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
                    element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
-                  console.log(element.ancillaryJson);
-                  console.log(element.ancillaryReturnJson);
+                  //console.log(element.ancillaryJson);
+                  //console.log(element.ancillaryReturnJson);
                   listpassenger.push({
                     "passengerType": 0,
                     "gender": element.gender,
@@ -3365,7 +3375,7 @@ alert.present();
                       "firstName": lastnamecontact,
                       "lastName": firstnamecontact ,
                       "mobileNumber": se.sodienthoai,
-                      "email": se.email,
+                      "email": se.email || "",
                       "address": "",
                       "phoneNumber": se.sodienthoai,
                       "hasvoucher": se._flightService.itemFlightCache.promotionCode ? true : false,
@@ -4109,5 +4119,8 @@ alert.present();
       if (diffminutes <= 210) {
         this.ischeckinOnl=false;
       }
+    }
+    contactOptionClick(value){
+      this.contactOption = value;
     }
 }

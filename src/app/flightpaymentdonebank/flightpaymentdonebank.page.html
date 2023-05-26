@@ -69,7 +69,7 @@
     </div>
     <div class="div-split-panel"></div>
     <div> <p class="text-payment-info" text-wrap>
-      Xác nhận đặt vé sẽ được gửi đến email của Quý khách <span class="text-bold">{{_email}}</span> sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được email Xác nhận sau 30 phút, vui lòng gửi chứng từ thanh toán (Uỷ nhiệm chi, Lệnh thanh toán) về email <span class="text-bold">support@ivivu.com</span> để được hỗ trợ xử lý.
+      Xác nhận đặt vé sẽ được gửi đến <span *ngIf="contactOption==1">zalo</span><span *ngIf="contactOption==2">email</span> của Quý khách <span *ngIf="contactOption==2" class="text-bold">{{_email}}</span> sau khi iVIVU.com nhận được tiền thanh toán. <span *ngIf="contactOption==1">Nếu Quý khách không nhận được mã xác nhận qua zalo, vui lòng gửi chứng từ thanh toán (Uỷ nhiệm chi, Lệnh thanh toán) về <a class="cls-textopen" href="https://zalo.me/3888313238733373810"></a></span><span *ngIf="contactOption==2">Nếu Quý khách không nhận được email Xác nhận sau 30 phút, vui lòng gửi chứng từ thanh toán (Uỷ nhiệm chi, Lệnh thanh toán) về email <span class="text-bold">support@ivivu.com</span> để được hỗ trợ xử lý.</span>
     </p>
   </div>
 </ion-content>

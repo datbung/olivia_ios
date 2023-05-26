@@ -37,7 +37,7 @@
     </div>
     <div class="p-top-12">
       <ion-label class="text" text-wrap>
-        Thông tin đơn hàng sẽ được gửi đến email <span class="text-tealish">{{_email}}</span> trong vòng vài phút. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư <span class="text-bold">Spam</span> hoặc <span class="text-bold">Junk Folder</span>
+        Thông tin đơn hàng sẽ được gửi đến <span *ngIf="contactOption==1">Zalo</span><span *ngIf="contactOption==2">email <span class="text-tealish">{{_email}}</span></span> trong vòng vài phút. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư <span class="text-bold">Spam</span> hoặc <span class="text-bold">Junk Folder</span>
       </ion-label>
     </div>
     

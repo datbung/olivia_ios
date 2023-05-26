@@ -31,6 +31,7 @@ export class FlightpaymentdonebankPage implements OnInit {
   checkInDisplayDC: string;
   checkOutDisplayDC: string;
   checkreview: number;
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
     private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -65,6 +66,9 @@ export class FlightpaymentdonebankPage implements OnInit {
       this._flightService.itemFlightCache.promotionCode = "";
         this._flightService.itemFlightCache.promocode = "";
         this._flightService.itemFlightCache.discount = 0;
+        this.storage.get('contactOption').then((option)=>{
+          this.contactOption = option;
+        })
     }
 
   ngOnInit() {

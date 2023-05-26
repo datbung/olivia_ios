@@ -2006,7 +2006,7 @@ excuteLoadHotelRoom(data){
         },100)
         se.booking.OriginalRoomClass = result.Hotels[0].RoomClasses;
         se.zone.run(()=> result.Hotels[0].RoomClasses.sort(function (a, b) {
-            return a.TotalPriceHadDiscountOta - b.TotalPriceHadDiscountOta;
+            return a.Supplier == 'Internal' && b.Supplier != 'Internal' ? -1 : 1;
         }));
         setTimeout(()=>{
         result.Hotels[0].RoomClasses.forEach((element, index) => {

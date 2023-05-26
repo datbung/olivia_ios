@@ -41,11 +41,27 @@
                         </ion-item>
                     </div>
     
-                    <div [ngClass]="((hasinput && !email) || emailinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' ">
-                        <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
-                            <ion-label class="sub-label m-bottom-6" position="stacked">Email</ion-label>
-                            <ion-input [(ngModel)]="email" type="email" (ionBlur)="checkInputUserInfo(3)" (ionFocus)="inputOnFocus(null, 11)"></ion-input>
-                        </ion-item>
+                    
+                    <div class="div-option-contact">
+                        <div class="text-normal m-bottom-6">Chọn kênh liên lạc và nhận vé</div>
+                        <div class="div-option">
+                            <ion-radio-group name="rdgContactOption" class="list-option" [(ngModel)]="contactOption">
+                                <div class="div-item-radio">
+                                    <ion-radio style="--color-checked:#26bed6" mode="md" value="1" (click)="contactOptionClick(1)"></ion-radio>
+                                    <ion-label class="text-label">Zalo</ion-label>
+                                    
+                                    <ion-radio style="margin-left:30px;--color-checked:#26bed6" mode="md" value="2" (click)="contactOptionClick(2)"></ion-radio>
+                                    <ion-label class="text-label">Email</ion-label>
+                                </div>
+                                
+                            </ion-radio-group>
+                        </div>
+                        <div [ngClass]="((hasinput && !email) || emailinvalid) ? 'm-bottom-12 cls-error': 'm-bottom-12' " *ngIf="contactOption==2">
+                            <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
+                                <ion-label class="sub-label m-bottom-6" position="stacked">Nhập email</ion-label>
+                                <ion-input [(ngModel)]="email" type="email" (ionBlur)="checkInputUserInfo(3)" (ionFocus)="inputOnFocus(null, 11)"></ion-input>
+                            </ion-item>
+                        </div>
                     </div>
                     
                     <div class="div-showerror m-bottom-12">
@@ -92,7 +108,7 @@
                             </div>
                         </div>
 
-                        <div class="d-flex cls-error m-top-8" *ngIf="hasinput && !email">
+                        <div class="d-flex cls-error m-top-8" *ngIf="hasinput && !email && contactOption==2">
                             <div class="div-icon-error">
                                 <img class="img-error" src="./assets/ic_flight/icon_warning.svg" >
                             </div>
@@ -199,7 +215,10 @@
 
         </div>
         <ng-template #stepUserInfo>
-            
+            <div class="div-option-passport d-flex">
+                <div class="text-normal div-width-80">Bạn có muốn nhập thông tin hộ chiếu ngay bây giờ?</div>
+                <div class="div-btn-opt div-width-20"><ion-toggle [(ngModel)]="optionPassport" color="secondary"></ion-toggle></div>
+            </div>
             <div class="div-title m-bottom-12">Thông tin hành khách</div>
     
             <div *ngIf="adults && adults.length >0">
@@ -235,7 +254,7 @@
                         <ion-label class="text-sub">Điền đầy đủ Họ tên như trên giấy tờ tùy thân dùng để thực hiện chuyến bay</ion-label>
                     </div>
 
-                    <div *ngIf="isExtenal ">
+                    <div *ngIf="optionPassport">
                        
                         <div class="m-top-24 d-flex">
                             <div [ngClass]="(itemAdult.errorDateofbirth || (!itemAdult.dateofbirth && itemAdult.errorInfo)) ? 'p-relative div-width-100 m-r-8 cls-error' : 'p-relative div-width-100 m-r-8' ">
@@ -430,7 +449,7 @@
                     </div>
                 
 
-                    <div *ngIf="isExtenal ">
+                    <div *ngIf="optionPassport ">
 
                         <div class="d-flex m-top-24">
                             <div [ngClass]="(itemChild.errorDateofbirth || (itemChild.errorInfo && !itemChild.dateofbirth) )? 'p-relative div-width-100 m-r-8 cls-error' : 'p-relative div-width-100 m-r-8' ">

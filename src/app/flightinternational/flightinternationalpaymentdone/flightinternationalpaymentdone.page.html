@@ -32,7 +32,7 @@
     </div>
     <div class="p-top-12">  
       <ion-label class="text">
-        Vé điện tử đang được xử lý sẽ được <span class='text-tealish'>iVIVU</span> gửi đến email của Quý khách trong vòng <span class="text-bold">24h tiếp theo.</span>
+        Vé điện tử đang được xử lý sẽ được <span class='text-tealish'>iVIVU</span> gửi đến <span *ngIf="contactOption==1">zalo</span><span *ngIf="contactOption==2">email</span> của Quý khách trong vòng <span class="text-bold">24h tiếp theo.</span>
         Cám ơn Quý khách đã sử dụng dịch vụ <span class='text-tealish'>iVIVU.com</span>
       </ion-label>
     </div>

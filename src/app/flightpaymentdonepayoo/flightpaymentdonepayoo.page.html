@@ -45,12 +45,12 @@
   </div>
   <div *ngIf="stt=='0'">
     <ion-label class="text" text-wrap>
-      Thông tin thanh toán đã được gửi đến email {{_email}}.
+      Thông tin thanh toán đã được gửi đến <span *ngIf="contactOption==1">zalo của quý khách</span><span *ngIf="contactOption==2">email {{_email}}</span>.
     </ion-label>
   </div>
   <div *ngIf="stt=='1'">
     <ion-label class="text" text-wrap>
-      Xác nhận đặt vé máy bay sẽ được gửi đến email của Quý khách.
+      Xác nhận đặt vé máy bay sẽ được gửi đến <span *ngIf="contactOption==1">zalo</span><span *ngIf="contactOption==2">email</span> của Quý khách.
     </ion-label>
   </div>
   <div *ngIf="stt=='0'&&BillingCode">
@@ -66,7 +66,7 @@
   
   <div>
     <ion-label class="text" text-wrap>
-      Nếu cần sự hỗ trợ vui lòng liên hệ tổng đài 1900 1870 hoặc email food@ivivu.com để được trợ giúp.
+      Nếu cần sự hỗ trợ vui lòng liên hệ tổng đài 1900 1870 hoặc email support@ivivu.com hoặc zalo <a class="text-tealish" href="https://zalo.me/3888313238733373810"></a> để được trợ giúp.
     </ion-label>
   </div>
   <div>

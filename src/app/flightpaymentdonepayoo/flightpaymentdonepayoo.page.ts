@@ -21,6 +21,7 @@ export class FlightpaymentdonepayooPage implements OnInit {
   total;_email;code;stt;startdate;enddate;PeriodPaymentDate;qrimg;
   PeriodPaymentHour;BillingCode
   isDinner: any=false;checkreview
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute,public storage: Storage,public _flightService:flightService, 
     private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController,
     public valueGlobal: ValueGlobal,
@@ -47,6 +48,9 @@ export class FlightpaymentdonepayooPage implements OnInit {
     this._flightService.itemFlightCache.promotionCode = "";
         this._flightService.itemFlightCache.promocode = "";
         this._flightService.itemFlightCache.discount = 0;
+        this.storage.get('contactOption').then((option)=>{
+          this.contactOption = option;
+        })
   }
 
   ngOnInit() {
