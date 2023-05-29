@@ -780,6 +780,9 @@ export class OrderPage {
                 if (element.flight_ticket_info && element.flight_ticket_info.indexOf("VXR") != -1) {
                   element.booking_type = "COMBO_VXR";
                 }
+                else if (element.booking_id.indexOf('VC') != -1) {
+                  element.booking_type = "TICKET";//TOUR
+                }
                 //tour
                 else if (element.booking_id && (element.booking_id.indexOf("DL") != -1 || element.booking_id.indexOf("TO") != -1)) {
                   element.booking_type = "TOUR";
@@ -1993,7 +1996,13 @@ export class OrderPage {
               se.arrinsurrance = [];
             }
 
-
+            se.listMyTrips[0].isRoundTrip = se.listMyTrips[0].itemdepart && se.listMyTrips[0].itemreturn ? true : false;
+            if(se.listMyTrips[0].itemdepart){
+              se.listMyTrips[0].itemdepart.allowChangeFlight = se.listMyTrips[0].itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1;
+            }
+            if(se.listMyTrips[0].itemreturn){
+              se.listMyTrips[0].itemreturn.allowChangeFlight = se.listMyTrips[0].itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1;
+            }
           }
           if (se.listMyTrips[0].isFlyBooking) {
             this.getDetailTicketFromDat(0).then((data) => {
@@ -2190,6 +2199,9 @@ export class OrderPage {
                 elementHis.isFlyBooking = false;
                 if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
                   elementHis.booking_type = "COMBO_VXR";
+                }
+                else if (elementHis.booking_id.indexOf('VC') != -1) {
+                  elementHis.booking_type = "TICKET";//TOUR
                 }
                 //tour
                 else if (elementHis.booking_id && (elementHis.booking_id.indexOf("DL") != -1 || elementHis.booking_id.indexOf("TO") != -1)) {
@@ -6383,7 +6395,7 @@ export class OrderPage {
                 }
               });
             }
-
+            se.listMyTrips[0].departChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           } else {
             se.baggageHandedReturn = result.ticketCondition.baggageHanded;
             se.luggageSignedReturn = result.ticketCondition.luggageSigned
@@ -6406,6 +6418,7 @@ export class OrderPage {
                 }
               });
             }
+            se.listMyTrips[0].returnChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }
           resolve(result);
 

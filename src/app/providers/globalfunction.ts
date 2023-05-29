@@ -18,6 +18,7 @@ import jwt_decode from 'jwt-decode';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { tourService } from './tourService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Injectable({
     providedIn: 'root'  // <- ADD THIS
@@ -79,7 +80,8 @@ export class GlobalFunction{
       private fb: Facebook,
       private fcm: FCM,
       private searchhotel: SearchHotel,
-      public tourService: tourService){
+      public tourService: tourService,
+      private safariViewController: SafariViewController){
 
     }
     
@@ -975,6 +977,9 @@ public getAppVersion() {
                       resolve(body);
                   }
                   else if(body && body.msg && body.error){
+                    resolve(body);
+                  }
+                  else if(body && body.msg && body.result){
                     resolve(body);
                   }
                   else if(body && body.msg){
@@ -4080,6 +4085,33 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     })
     
   }
+
+  async showAlertSupport(msg){
+    var se = this;
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-searchresult",
+      backdropDismiss: false,
+      buttons: [
+      {
+        text: 'Liên hệ hỗ trợ',
+        role: 'OK',
+        handler: () => {
+          window.open('https://zalo.me/3888313238733373810');
+          alert.dismiss();
+        }
+      },
+      {
+        text: 'Hủy',
+        role: 'Cancel',
+        handler: () => {
+          alert.dismiss();
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
   CreateSupportRequest(bookingCode,CEmail,hoten,phone,notetotal) {
     var options = {
       method: 'POST',
@@ -4120,6 +4152,29 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
      }
     });
   }
+  showZaloOA(url) {
+    try {
+      let se = this;
+      se.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          se.safariViewController.show({
+            url: url,
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+
+      }
+  
+    })
+    } catch (error) {
+        
+    }
+  }
+
 }
 
 export class PlaceByArea {

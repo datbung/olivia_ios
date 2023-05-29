@@ -147,19 +147,6 @@ export class OrderRequestSearchFlightPage implements OnInit {
       
       this.trip = this.activityService.objPaymentMytrip.trip;
 
-      //let objday:any = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkInDate);
-      //let objdayreturn:any = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkOutDate);
-
-      // this.title = "Đi " + this.trip.itemdepart.flightFrom +" → " + this.trip.itemdepart.flightTo;
-      // this.subtitle = " · " + this.trip.itemdepart.numberOfPax + " khách";
-      // this.titlereturn = "Về " + this.trip.itemreturn.flightFrom +" → " + this.trip.itemreturn.flightTo;
-      // this.subtitlereturn = " · " + this.trip.itemreturn.numberOfPax + " khách";
-      // this.dayDisplay = objday.dayname + ", " +moment(this.trip.checkInDate).format("DD") +  " thg " +moment(this.trip.checkInDate).format("M");
-      // this.dayReturnDisplay = objdayreturn.dayname + ", " + moment(this.trip.checkOutDate).format("DD") + " thg " +moment(this.trip.checkOutDate).format("M");
-      // this.trip.dayDisplay = this.dayDisplay;
-      // this.trip.dayReturnDisplay = this.dayReturnDisplay;
-      // this.checkInDate = this.trip.checkInDate;
-      // this.checkOutDate = this.trip.checkOutDate;
       this.checkInDate = this._flightService.itemFlightCache.checkInDate;
                 this.checkOutDate = this._flightService.itemFlightCache.checkOutDate;
                 let objday:any = this.gf.getDayOfWeek(this.checkInDate);
@@ -309,7 +296,11 @@ export class OrderRequestSearchFlightPage implements OnInit {
   select(type,item){
     var se = this;
     if(!item.allowChange){
-      this.gf.showToastWarning('Vé chưa được kiểm tra giá chênh lệch hoặc chưa hỗ trợ đổi vé. Xin quý khách vui lòng thử lại!');
+      se.gf.showToastWarning('Vé chưa được kiểm tra giá chênh lệch hoặc chưa hỗ trợ đổi vé. Xin quý khách vui lòng thử lại!');
+      return;
+    }
+    if(!se.checkChangeFlightPrice(item, type)){
+      se.gf.showToastWarning('Quý khách vui lòng chọn hạng vé cao hơn vé hiện tại.');
       return;
     }
     if(type ==1 ){
@@ -329,36 +320,22 @@ export class OrderRequestSearchFlightPage implements OnInit {
         })
        
       }else{
-        //if(se.canselect){
           se.choiceTicket(1, item);
           se.trip.roundTrip = false;
-         
           se.navCtrl.navigateForward('/orderrequestchangeflightpaymentselect');
-        //}
-        // se._flightService.itemFlightCache.hasChoiceLuggage = false;
-        // se._flightService.itemFlightCache.departLuggage = [];
-        // se._flightService.itemFlightCache.returnLuggage = [];
       }
     }else{
       
       //Nếu đi và về cùng ngày thì check thêm dk giờ về phải lớn hơn giờ đi 3h
       if(se.activityService.typeChangeFlight == 3)
       {
-        //if(se.canselect){
           se.choiceTicket(2, item);
           se.trip.roundTrip = true;
           se.navCtrl.navigateForward('/orderrequestchangeflightpaymentselect');
-        //}
       }else{
-        //se._flightService.itemFlightCache.returnFlight = se._flightService.objSearch.roundTrip ? item : null; 
-        //if(se.canselect){
           se.choiceTicket(2, item);
           se.trip.roundTrip = true;
           se.navCtrl.navigateForward('/orderrequestchangeflightpaymentselect');
-       // }
-        // se._flightService.itemFlightCache.hasChoiceLuggage = false;
-        // se._flightService.itemFlightCache.departLuggage = [];
-        // se._flightService.itemFlightCache.returnLuggage = [];
       }
       
     }
@@ -709,6 +686,10 @@ export class OrderRequestSearchFlightPage implements OnInit {
           }else{
             element.to = element.details[0].to;
           }
+
+          if(element.details[0] && element.details[0].ticketType){
+            element.ticketTypeSearch = element.details[0].ticketType;
+          }
          
 
           element.priceSummaries.forEach(e => {
@@ -894,6 +875,10 @@ export class OrderRequestSearchFlightPage implements OnInit {
             element.to = element.details[0].to;
           }
 
+          if(element.details[0] && element.details[0].ticketType){
+            element.ticketTypeSearch = element.details[0].ticketType;
+          }
+         
           let priceFlightAdult = 0;
           let priceFlightChild = 0;
           let priceFlightInfant = 0;
@@ -1060,154 +1045,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
         se.listReturnNoFilter = [...se.listReturn];
       }
 
-        if(se._flightService.objectFilter &&
-          (se._flightService.objectFilter.minprice*1 != 0
-          || se._flightService.objectFilter.maxprice*1 != 15000000
-          || se._flightService.objectFilter.departTimeRange.length >0
-          || se._flightService.objectFilter.returnTimeRange.length >0
-          || se._flightService.objectFilter.airlineSelected.length >0
-          || se._flightService.objectFilter.classSelected.length >0
-          || se._flightService.objectFilter.stopSelected.length >0
-          || se._flightService.objectFilter.facilitySelected.length >0
-          )){
-          
-          se.filterItem().then(()=>{
-
               setTimeout(()=>{
-                if((se.listDepart && se.listDepart.length == 0) || (se.listReturn && se.listReturn.length == 0)){
-      
-                }else{
-                  if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                    se.bestpricedepart = se.listDepartFilter.length >=2 ? [...se.listDepartFilter].splice(0,2) : [...se.listDepartFilter];
-                    if(se.listDepartFilter.length > 2){
-                      let listotherpricedepart = [...se.listDepartFilter].splice(2,se.listDepartFilter.length);
-                      //listotherpricedepart = se.sortFlightsByPrice(listotherpricedepart);
-                      se.sortFlightsByPrice(listotherpricedepart).then((data)=>{
-                        se.bestpricedepart = [...se.bestpricedepart, data.splice(0,1)[0]];
-                        let listotherpricedepartmustreorder = [...data];
-                        se.sortFlights("priceorder", listotherpricedepartmustreorder);
-                        se.otherpricedepart = [...listotherpricedepartmustreorder];
-                      })
-                    }else{
-                      se.otherpricedepart = [];
-                    }
-                  }
-                
-                  if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                    se.bestpricereturn = se.listReturnFilter.length >=2 ? [...se.listReturnFilter].splice(0,2) : [...se.listReturnFilter];
-                    if(se.listReturnFilter.length >2){
-                      let listotherpricereturn = [...se.listReturnFilter].splice(2,se.listReturnFilter.length);
-                      //listotherpricereturn = se.sortFlightsByPrice(listotherpricereturn);
-                      se.sortFlightsByPrice(listotherpricereturn).then((data)=>{
-                        se.bestpricereturn = [...se.bestpricereturn, data.splice(0,1)[0]];
-    
-                        let listotherpricereturnmustreorder = [...data];
-                        se.sortFlights("priceorder", listotherpricereturnmustreorder);
-    
-                        se.otherpricereturn = [...listotherpricereturnmustreorder];
-                      })
-                    }else{
-                      se.otherpricereturn = [];
-                    }
-                    
-                  }
-
-                  setTimeout(()=>{
-                    if((se.listDepartFilter && se.listDepartFilter.length >0) || (se.listDepartFilter && se.listDepartFilter.length >0))
-                    {
-                      se.loadpricedone = true;
-                    }
-                    
-                      se.zone.run(()=>{
-                        se.progressbarloading = 1;
-                        se.progressbarbuffer = 1;
-                      })
-                      
-                  },100)
-                    
-                }
-              },50)
-      
-            
-            if(se.count >=1){
-             
-              setTimeout(()=>{
-              
-                // if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                //   se.bestpricedepart = [...se.listDepartFilter].splice(0,3);
-                //   se.otherpricedepart = [...se.listDepartFilter].splice(3,se.listDepartFilter.length);
-                // }
-      
-                // if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                //   se.bestpricereturn = [...se.listReturnFilter].splice(0,3);
-                //   se.otherpricereturn = [...se.listReturnFilter].splice(3,se.listReturnFilter.length);
-                // }
-                if(se.listDepartFilter && se.listDepartFilter.length > 0) {
-                  se.bestpricedepart = se.listDepartFilter.length >=2 ? [...se.listDepartFilter].splice(0,2) : [...se.listDepartFilter];
-                  if(se.listDepartFilter.length > 2){
-                    let listotherpricedepart = [...se.listDepartFilter].splice(2,se.listDepartFilter.length);
-                    //listotherpricedepart = se.sortFlightsByPrice(listotherpricedepart);
-                    se.sortFlightsByPrice(listotherpricedepart).then((data)=>{
-                      se.bestpricedepart = [...se.bestpricedepart, data.splice(0,1)[0]];
-                      let listotherpricedepartmustreorder = [...data];
-                      se.sortFlights("priceorder", listotherpricedepartmustreorder);
-                      se.otherpricedepart = [...listotherpricedepartmustreorder];
-                    })
-                  }else{
-                    se.otherpricedepart = [];
-                  }
-                }
-              
-                if(se.listReturnFilter && se.listReturnFilter.length > 0){
-                  se.bestpricereturn = se.listReturnFilter.length >=2 ? [...se.listReturnFilter].splice(0,2) : [...se.listReturnFilter];
-                  if(se.listReturnFilter.length >2){
-                    let listotherpricereturn = [...se.listReturnFilter].splice(2,se.listReturnFilter.length);
-                    //listotherpricereturn = se.sortFlightsByPrice(listotherpricereturn);
-                    se.sortFlightsByPrice(listotherpricereturn).then((data)=>{
-                      se.bestpricereturn = [...se.bestpricereturn, listotherpricereturn.splice(0,1)[0]];
-
-                      let listotherpricereturnmustreorder = [...listotherpricereturn];
-                      se.sortFlights("priceorder", listotherpricereturnmustreorder);
-
-                      se.otherpricereturn = [...listotherpricereturnmustreorder];
-                    })
-                  }else{
-                    se.otherpricereturn = [];
-                  }
-                  
-                }
-
-                if((se.listDepartFilter && se.listDepartFilter.length >0) || (se.listDepartFilter && se.listDepartFilter.length >0))
-                    {
-                      se.loadpricedone = true;
-                      se.zone.run(()=>{
-                        se.progressbarloading = 1;
-                        se.progressbarbuffer = 1;
-                      })
-                    }
-              },150)
-              
-            }
-
-          
-          });
-        }else{
-            
-              setTimeout(()=>{
-                if((se.listDepart && se.listDepart.length == 0) || (se.listReturn && se.listReturn.length == 0)){
-      
-                }else{
-                //   if(se.listDepart && se.listDepart.length > 0) {
-                    
-                //     se.bestpricedepart = [...se.listDepart].splice(0,3);
-                //     se.otherpricedepart = [...se.listDepart].splice(3,se.listDepart.length);
-                  
-                //   }
-                //  // console.log(se.listReturnFilter);
-                //   if(se.listReturn && se.listReturn.length > 0){
-                //     se.bestpricereturn = [...se.listReturn].splice(0,3);
-                //     se.otherpricereturn = [...se.listReturn].splice(3,se.listReturn.length);
-                //   }
                 if(se.listDepart && se.listDepart.length > 0) {
                   se.bestpricedepart = se.listDepart.length >=2 ?  [...se.listDepart].splice(0,2) : [...se.listDepart];
                   if(se.listDepart.length > 2){
@@ -1253,10 +1091,9 @@ export class OrderRequestSearchFlightPage implements OnInit {
                       se.progressbarloading = 1;
                       se.progressbarbuffer = 1;
                     })
-                }
               }, 50);
          
-        if(se.count >=1){
+          if(se.count >=1){
           // se.sortFlightsByPriceOrder(se.listDepart);
           // se.sortFlightsByPriceOrder(se.listReturn);
           
@@ -1310,7 +1147,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
                       
                     }
           }
-        }
+        //}
         
      
     })
@@ -2900,7 +2737,7 @@ export class OrderRequestSearchFlightPage implements OnInit {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
           'Content-Type': 'application/json; charset=utf-8'
       };
-        let url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${type == 1 ? this.trip.itemdepart.ticketCode : this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=${type}&flightDate=${moment(item.departTime).format('YYYY-MM-DD')}&flightNumber=${item.flightNumber}&ticketClass=${item.ticketClass}&funAction=qoute&fromCode=${item.fromPlaceCode}&toCode=${item.toPlaceCode}`;
+        let url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${type == 1 ? this.trip.itemdepart.ticketCode : this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=${type}&flightDate=${moment(item.departTime).format('YYYY-MM-DD')}&flightNumber=${item.flightNumber}&ticketClass=${(item.ticketTypeSearch || item.ticketClass)}&funAction=qoute&fromCode=${item.fromPlaceCode}&toCode=${item.toPlaceCode}`;
         this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
             console.log(data);
             item.hasCheckPrice = true;
@@ -2909,7 +2746,12 @@ export class OrderRequestSearchFlightPage implements OnInit {
               item.priceDisplay = this.gf.convertNumberToString(data.priceChange) + " đ";
               item.priceChange = data.priceChange;
               item.allowChange = true;
-            }else {
+            }else if(data.data && data.data[0] && data.data[0].totalPrice){
+              item.priceDisplay = this.gf.convertNumberToString(data.data[0].totalPrice) + " đ";
+              item.priceChange = data.data[0].totalPrice;
+              item.allowChange = true;
+            }
+            else {
               item.priceDisplay = "0 đ";
               item.priceChange = 0;
               item.allowChange = false;
@@ -3186,5 +3028,9 @@ export class OrderRequestSearchFlightPage implements OnInit {
               }
             }
           }
+        }
+
+        checkChangeFlightPrice(item, type){
+          return type == 1 ? item.price >= this.trip.bookingsComboData[0].totalCost : item.price >= this.trip.bookingsComboData[1].totalCost;
         }
 }

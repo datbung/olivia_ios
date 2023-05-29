@@ -49,6 +49,13 @@
                 line-height: 1.6;
                 letter-spacing: -0.45px;
                 color: #3f3b3b;
+
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                max-width: 80%;
+                text-align: center;
+                margin-left: 10%;
             }
             .div-subtitle{
                 font-size: 14px;

@@ -65,6 +65,7 @@ export class FlightpaymentdonebankPage implements OnInit {
       this._flightService.itemFlightCache.promotionCode = "";
         this._flightService.itemFlightCache.promocode = "";
         this._flightService.itemFlightCache.discount = 0;
+       
     }
 
   ngOnInit() {

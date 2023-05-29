@@ -29,7 +29,6 @@ export class MytripService {
 
   constructor() { }
 
-  private object
 
   private loadDataMytripHistorySubject = new Subject<any>();
   publicLoadDataMytripHistorySubject(data: any) {

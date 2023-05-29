@@ -143,6 +143,7 @@ export class FlightaddservicePage implements OnInit {
             
             this.isExtenal=_flightService.itemFlightCache.isExtenal;
             //get price cathay
+            this._flightService.itemFlightCache.priceCathay =0;
             this.getpriceCathay();
             this.getCheckAirportDiChung();
                 if(this.departFlight && this.departFlight.ticketCondition){
@@ -3880,6 +3881,8 @@ getHotelCity(ids){
       if (response.statusCode == 200) {
         let result = JSON.parse(body);
         resolve(result);
+      }else {
+        resolve(false);
       }
     })
   })

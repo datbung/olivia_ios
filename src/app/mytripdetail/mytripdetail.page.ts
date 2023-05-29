@@ -560,6 +560,7 @@ export class MytripdetailPage implements OnInit {
                 se.coutDC=coutDCdepart+coutDCreturn;
                 se.totalDichung=TotalPriceGo+TotalPriceReturn;
                 se.totalVMB=se.trip.amount_after_tax-se.totalService-se.totalDichung+se.trip.promotionDiscountAmount;
+                se.trip.totalPriceVMB = se.totalVMB;
         }
        
         // xử lý case khách sạn có khuyến mãi
@@ -850,6 +851,7 @@ export class MytripdetailPage implements OnInit {
     // }
     this.activityService.objPaymentMytrip = { trip: trip };
     if (!trip.isRequestTrip && trip.isFlyBooking) {
+      this._flightService.fromOrderRequestDetailSupport = true;
       this.navCtrl.navigateForward('/orderrequestsupport');
     } else {
       this.navCtrl.navigateForward('/ordersupport/0');
@@ -1441,7 +1443,7 @@ export class MytripdetailPage implements OnInit {
                   element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
                 }
               });
-            
+            se.trip.departChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }else{
             se.baggageHandedReturn=result.ticketCondition.baggageHanded;
             se.luggageSignedReturn=result.ticketCondition.luggageSigned
@@ -1462,6 +1464,8 @@ export class MytripdetailPage implements OnInit {
                 element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
               }
             });
+
+            se.trip.returnChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }
           resolve(result);
           

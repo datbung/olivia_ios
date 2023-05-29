@@ -38,49 +38,66 @@ export class OrderRequestChangeFlightPage implements OnInit {
     public _flightService: flightService,
     public valueGlobal: ValueGlobal,
     private modalCtrl: ModalController) { 
-        console.log(this.activityService.objPaymentMytrip.trip);
         this.trip = this.activityService.objPaymentMytrip.trip;
         this.itemdepart = this.activityService.objPaymentMytrip.trip.itemdepart;
         this.itemreturn = this.activityService.objPaymentMytrip.trip.itemreturn;
-        // this.trip.adult =0;
-        // this.trip.child =0;
-        // this.trip.infant =0;
-        // this.trip.bookingsComboData[0].passengers.forEach((elementlug, index) => {
-        //   let yearold = 18;
-        //   if (elementlug.dob) {
-        //     let arr = [];
-        //     if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
-        //       arr = elementlug.dob.split('/');
-        //     }
-        //     else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
-        //       arr = elementlug.dob.split('-');
-        //     }
+        if(this.itemdepart){
+          this.itemdepart.allowChangeFlight = this.trip.departChangeDepartTime;
+          if(this.itemdepart.allowChangeFlight) {
+            this.itemdepart.allowChangeFlight = this.trip.itemdepart.checkDepartValidTime;
+            if(this.itemdepart.allowChangeFlight){
+              this.itemdepart.allowChangeFlight = !(this.itemdepart.passengers && this.itemdepart.passengers.some((p) => { return (!p.isInfant && ((p.giaTienHanhLy != '0' && p.hanhLy != '0kg') || (p.seatNumber && p.seatPrice)) )}) );
+            }
+          }
+        }
+        if(this.itemreturn){
+          this.itemreturn.allowChangeFlight = this.trip.returnChangeDepartTime;
+          if(this.itemreturn.allowChangeFlight) {
+            this.itemreturn.allowChangeFlight = this.trip.itemreturn.checkReturnValidTime;
+          }
+          if(this.itemreturn.allowChangeFlight){
+            this.itemreturn.allowChangeFlight = !(this.itemreturn.passengers && this.itemreturn.passengers.some((p) => { return (!p.isInfant && ((p.giaTienHanhLy != '0' && p.hanhLy != '0kg') || (p.seatNumber && p.seatPrice)) )}) );
+          }
+        }
+        this.trip.adult =0;
+        this.trip.child =0;
+        this.trip.infant =0;
+        this.trip.bookingsComboData[0].passengers.forEach((elementlug, index) => {
+          let yearold = 18;
+          if (elementlug.dob) {
+            let arr = [];
+            if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
+              arr = elementlug.dob.split('/');
+            }
+            else if (elementlug.dob && elementlug.dob.indexOf('-') != -1) {
+              arr = elementlug.dob.split('-');
+            }
 
-        //     if (arr.length > 0) {
-        //       let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-        //       yearold = moment(this.trip.checkInDate).diff(moment(newdob), 'years');
-        //     }
+            if (arr.length > 0) {
+              let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
+              yearold = moment(this.trip.checkInDate).diff(moment(newdob), 'years');
+            }
 
-        //     elementlug.isAdult = yearold > 12 ? true : false;
-        //     if (elementlug.isAdult) {
-        //       this.trip.adult += 1;
-        //     } else {
-        //       if (!this.trip.textChildDisplay) {
-        //         this.trip.textChildDisplay = "(";
-        //       }
-        //       if (yearold < 2) {
-        //         this.trip.infant += 1;
+            elementlug.isAdult = yearold > 12 ? true : false;
+            if (elementlug.isAdult) {
+              this.trip.adult += 1;
+            } else {
+              if (!this.trip.textChildDisplay) {
+                this.trip.textChildDisplay = "(";
+              }
+              if (yearold < 2) {
+                this.trip.infant += 1;
                
-        //       } else {
-        //         this.trip.child += 1;
-        //       }
-        //     }
+              } else {
+                this.trip.child += 1;
+              }
+            }
 
-        //   }else {
-        //     this.trip.adult += 1;
-        //   }
+          }else {
+            this.trip.adult += 1;
+          }
 
-        // });
+        });
   }
 
   ngOnInit() {
@@ -156,36 +173,50 @@ export class OrderRequestChangeFlightPage implements OnInit {
     }
     
     var options:CalendarModalOptions;
-    if(this.trip.itemreturn){
-      options  = {
-        pickMode: "range",
-        title: "Chọn ngày",
-        monthFormat: " M, YYYY",
-        weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
-        weekStart: 1,
-        closeLabel: "",
-        doneLabel: "",
-        step: 0,
-        defaultScrollTo: fromdate,
-        defaultDateRange: { from: fromdate, to: todate },
-        daysConfig: _daysConfig
-        };
-    }else{
-      options  = {
-        pickMode: "single",
-        title: "Chọn ngày",
-        monthFormat: " M, YYYY",
-        weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
-        weekStart: 1,
-        closeLabel: "",
-        doneLabel: "",
-        step: 0,
-        defaultScrollTo: fromdate,
-        defaultDate: fromdate,
-        //defaultDateRange: { from: fromdate, to: todate },
-        daysConfig: _daysConfig
-        };
-    }
+    // if(this.trip.itemreturn && this.trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1){
+    //   options  = {
+    //     pickMode: "range",
+    //     title: "Chọn ngày",
+    //     monthFormat: " M, YYYY",
+    //     weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+    //     weekStart: 1,
+    //     closeLabel: "",
+    //     doneLabel: "",
+    //     step: 0,
+    //     defaultScrollTo: fromdate,
+    //     defaultDateRange: { from: fromdate, to: todate },
+    //     daysConfig: _daysConfig
+    //     };
+    // }else{
+    //   options  = {
+    //     pickMode: "single",
+    //     title: "Chọn ngày",
+    //     monthFormat: " M, YYYY",
+    //     weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+    //     weekStart: 1,
+    //     closeLabel: "",
+    //     doneLabel: "",
+    //     step: 0,
+    //     defaultScrollTo: fromdate,
+    //     defaultDate: fromdate,
+    //     //defaultDateRange: { from: fromdate, to: todate },
+    //     daysConfig: _daysConfig
+    //     };
+    // }
+    options  = {
+      pickMode: "single",
+      title: "Chọn ngày",
+      monthFormat: " M, YYYY",
+      weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+      weekStart: 1,
+      closeLabel: "",
+      doneLabel: "",
+      step: 0,
+      defaultScrollTo: fromdate,
+      defaultDate: fromdate,
+      //defaultDateRange: { from: fromdate, to: todate },
+      daysConfig: _daysConfig
+      };
 
     let cindayofweek = this.gf.getDayOfWeek(fromdate).daynameshort;
     let cindaydisplay = moment(fromdate).format('DD');
@@ -275,7 +306,7 @@ export class OrderRequestChangeFlightPage implements OnInit {
 
     async clickedElement(e: any) {
       var obj: any = e.currentTarget;
-      if ( (this.trip.itemreturn && ($(obj.parentNode).hasClass("endSelection") || $(obj.parentNode).hasClass("startSelection"))) || (!this.trip.itemreturn && $(obj).hasClass('on-selected'))  ) {
+      if ($(obj).hasClass('on-selected')) {
         if (this.modalCtrl) {
           let fday: any;
           let tday: any;
@@ -287,40 +318,40 @@ export class OrderRequestChangeFlightPage implements OnInit {
           var objTextMonthStartDate: any;
   
           //let objsearch = this._flightService.objSearch;
-          if(this.trip.itemreturn){
-            if ($(obj.parentNode).hasClass('endSelection')) {
-              if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
-                fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
-              } else {
-                fday = $('.on-selected > p')[0].textContent;
-              }
-              if ($('.days.endSelection .days-btn.lunarcalendar > p')[0]) {
-                tday = $('.days.endSelection .days-btn.lunarcalendar > p')[0].innerText; 
-              } else {
-                //tday = $(obj)[0].textContent;
-                tday = $('.days.endSelection .days-btn > p')[0].innerText;
-              }
-              objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
-              objTextMonthEndDate = $(obj).closest('.month-box').children()[0].textContent.replace('Tháng ','');
-            } else {
-              if ($('.days-btn.lunarcalendar.on-selected > p')[0]) {
-                fday =$('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
-              }
-              else{
-                //fday = $(obj)[0].textContent;
-                fday = $(obj)[0].children[0].textContent
-              }
-              if ($('.days.endSelection .days-btn.lunarcalendar > p')[0]) {
-                tday = $('.days.endSelection .days-btn.lunarcalendar > p')[0].innerText;
-              }
-              else{
-                //tday = $('.endSelection').children('.days-btn')[0].textContent;
-                tday = $('.days.endSelection .days-btn > p')[0].innerText;
-              }
-              objTextMonthStartDate = $(obj).closest('.month-box').children()[0].textContent.replace('Tháng ','');
-              objTextMonthEndDate = $('.endSelection').closest('.month-box').children()[0].textContent.replace('Tháng ','');
-            }
-          }else{
+          // if(this.trip.itemreturn && this.trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 ){
+          //   if ($(obj.parentNode).hasClass('endSelection')) {
+          //     if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
+          //       fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+          //     } else {
+          //       fday = $('.on-selected > p')[0].textContent;
+          //     }
+          //     if ($('.days.endSelection .days-btn.lunarcalendar > p')[0]) {
+          //       tday = $('.days.endSelection .days-btn.lunarcalendar > p')[0].innerText; 
+          //     } else {
+          //       //tday = $(obj)[0].textContent;
+          //       tday = $('.days.endSelection .days-btn > p')[0].innerText;
+          //     }
+          //     objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
+          //     objTextMonthEndDate = $(obj).closest('.month-box').children()[0].textContent.replace('Tháng ','');
+          //   } else {
+          //     if ($('.days-btn.lunarcalendar.on-selected > p')[0]) {
+          //       fday =$('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+          //     }
+          //     else{
+          //       //fday = $(obj)[0].textContent;
+          //       fday = $(obj)[0].children[0].textContent
+          //     }
+          //     if ($('.days.endSelection .days-btn.lunarcalendar > p')[0]) {
+          //       tday = $('.days.endSelection .days-btn.lunarcalendar > p')[0].innerText;
+          //     }
+          //     else{
+          //       //tday = $('.endSelection').children('.days-btn')[0].textContent;
+          //       tday = $('.days.endSelection .days-btn > p')[0].innerText;
+          //     }
+          //     objTextMonthStartDate = $(obj).closest('.month-box').children()[0].textContent.replace('Tháng ','');
+          //     objTextMonthEndDate = $('.endSelection').closest('.month-box').children()[0].textContent.replace('Tháng ','');
+          //   }
+          // }else{
               if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
                 fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
               } else {
@@ -330,7 +361,7 @@ export class OrderRequestChangeFlightPage implements OnInit {
               tday = fday;
               objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
               objTextMonthEndDate = objTextMonthStartDate;
-          }
+          //}
   
           if (
             objTextMonthEndDate &&

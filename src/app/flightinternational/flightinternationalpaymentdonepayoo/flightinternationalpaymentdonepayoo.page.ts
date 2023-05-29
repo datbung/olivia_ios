@@ -21,6 +21,7 @@ export class FlightInternationalPaymentDonePayooPage implements OnInit {
   total;_email;code;stt;startdate;enddate;PeriodPaymentDate;qrimg;
   PeriodPaymentHour;BillingCode
   isDinner: any=false;checkreview
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute,public storage: Storage,public _flightService:flightService, 
     private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController,
     public valueGlobal: ValueGlobal,
@@ -38,6 +39,9 @@ export class FlightInternationalPaymentDonePayooPage implements OnInit {
       {
         this.checkreview=checkreview;
       }
+    })
+    this.storage.get('contactOption').then((option)=>{
+      this.contactOption = option;
     })
     // if(this._voucherService.selectVoucher){
     //   this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);

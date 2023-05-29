@@ -893,77 +893,6 @@
                                 </div>
                               </ion-col>
                             </ng-template>
-                             <!--  <ion-col size="8">
-                                <ion-row
-                                  *ngIf="hotelRooms.SummaryFilter && (loginuser || mealtype.IsshowpricesOTA) && !hotelroom.MSG"
-                                  class="text-room-description">
-                                  <ion-col style="padding:0">
-                                    <ion-label style="margin:0px">{{hotelRooms.SummaryFilter}}</ion-label>
-                                  </ion-col>
-    
-                                </ion-row>
-                                <ion-row *ngIf="hotelroom.MSG" class="text-room-description">
-                                  <ion-col style="padding:0">
-                                    <ion-label style="margin:0px">Giá cơ bản dành cho {{hotelroom.Rooms[0].IncludeAdults}}
-                                      người
-                                      lớn</ion-label>
-                                  </ion-col>
-                                </ion-row> -->
-                              
-                                <!-- Hiển thị default giá lớn nhất trong cùng group bữa ăn -->
-                                <!-- <ion-row *ngIf="(loginuser || mealtype.IsshowpricesOTA)">
-                                  <ion-col
-                                    [ngClass]="((loginuser || mealtype.IsshowpricesOTA) && mealtype.AvailableNo >0 && mealtype.Status=='AL')? 'text-room-price-no-bottom':'text-room-price' ">
-                                    <ion-label class="text-price">{{mealtype.PriceAvgPlusTAStr}}<span
-                                        class="text-price-unit">đ</span>
-                                      <span class="text-room-price-ota"
-                                        *ngIf="(loginuser || mealtype.IsshowpricesOTA) && mealtype.PriceAvgPlusTA != mealtype.PriceAvgPlusOTA && mealtype.PriceAvgPlusOTA > mealtype.PriceAvgPlusTA">
-                                        {{mealtype.PriceAvgPlusOTAStr}}đ</span>
-                                      <span class="text-room-price-ota"
-                                        *ngIf="(loginuser || mealtype.IsshowpricesOTA) && mealtype.PriceAvgPlusTA == mealtype.PriceAvgPlusOTA && mealtype.PriceAvgPlusOTA <= mealtype.PriceAvgPlusTA && mealtype.displayLastPriceAvgPlusOTA && mealtype.displayLastPriceAvgPlusOTAStr != mealtype.PriceAvgPlusOTAStr">
-                                        {{mealtype.displayLastPriceAvgPlusOTAStr}}đ</span>
-                                    </ion-label>
-    
-                                  </ion-col>
-    
-                                </ion-row> 
-                              </ion-col>-->
-
-                              
-                              <!-- <ion-col size="4">
-                                <ion-row *ngIf="mealtype.Status!='AL' && (loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString()" class="text-room-description">
-                                  <ion-col style="padding:0">
-                                    <ion-label class="cls-textconfirm">Xác nhận trong 60’</ion-label>
-                                  </ion-col>
-                                </ion-row>
-                                <ion-row *ngIf="mealtype.Status=='AL' && (loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG" class="text-room-description">
-                                  <ion-col style="padding:0">
-                                   
-                                    <ion-label class="cls-textconfirm"> <span><img class="img-flash" src="./assets/imgs/flash_confirm.svg">
-                                    </span>Xác nhận ngay</ion-label>
-                                  </ion-col>
-                                </ion-row>
-                                <div class="div-btnbook"
-                              *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && (mealtype.Status=='AL')&&hotelroom.RoomType!='villa'">
-                              <button
-                                (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
-                                ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
-                                phòng</button>
-                            </div>
-                            <div class="div-btnbook"
-                              *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status=='AL' &&hotelroom.RoomType=='villa'">
-                              <button
-                                (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
-                                ion-button round outline class="button btn-book-outline">Đặt {{hotelroom.TotalRoom}}
-                                villa</button>
-                            </div>
-                            <div class="div-btnbook"
-                              *ngIf="(loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG.toString() && mealtype.Status!='AL'">
-                              <button
-                                (click)="book(hotelroom.Rooms[0].RoomID,mealtype,j,hotelroom.ClassName,hotelroom.RoomType)"
-                                ion-button round outline class="button btn-book-outline">Yêu cầu đặt</button>
-                            </div>
-                              </ion-col> -->
                             </ion-row>
                           </ion-grid>
                          
@@ -1068,11 +997,6 @@
         </div>
       </div>
 
-      <!-- <div *ngIf="loadcomplete && hotelRoomClasses && hotelRoomClasses.length == 0 && textMSG"  class="div-suggest">
-        <div class="row-suggest">
-         <div ><span class="text-suggest color-red">{{textMSG}}.</span> <span  (click)="changeDate()" style="margin-left:5px" class="text-suggest color-blue text-underline">Quý khách vui lòng chọn ngày khác</span></div> 
-        </div>
-      </div> -->
       
       <div class="div-split"></div>
       <!-- End Vùng Detail Room -->

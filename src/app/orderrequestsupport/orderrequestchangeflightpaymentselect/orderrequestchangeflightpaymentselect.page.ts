@@ -54,6 +54,8 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
   departCode: any;
   returnCode: any;
   infant: any;
+  email: any;
+  hoten: string;
   constructor(private navCtrl:NavController,public _flightService: flightService
     ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel, public storage: Storage,
@@ -136,7 +138,6 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
       
     }
     this._flightService.fromOrderRequestChangeFlight = true;
-    
 
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -147,6 +148,21 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
     this.storage.get('infocus').then(infocus => {
       if (infocus) {
         this.phone = infocus.phone;
+      }
+      if (infocus.ho && infocus.ten) {
+        this.hoten = infocus.ho + ' ' + infocus.ten;
+      } else {
+        if (infocus.ho) {
+          this.hoten = infocus.ho;
+        }
+        else if (infocus.ten) {
+          this.hoten = infocus.ten;
+        }
+      }
+    })
+    this.storage.get('email').then(email => {
+      if (email) {
+        this.email = email;
       }
     })
 
@@ -303,26 +319,10 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                     let checkpay=JSON.parse(datapayment);
                     if (checkpay.ipnCall == "CALLED_OK") { 
                       se._flightService.itemFlightCache.ischeckpayment= 1;
-                      //se.hideLoading();
-                      //se.gf.hideLoading();
+                      se.hideLoading();
+                      se.gf.hideLoading();
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
-                      se.updateChangeFlight().then((success) => {
-                        se.hideLoading();
-                        se.gf.hideLoading();
-                        if(success){
-                          let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
-                            this.gf.RequestApi('POST', _url, {
-                              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                              'Content-Type': 'application/json; charset=utf-8',
-                            }, 
-                            {bookingCode: se.bookingCode}, 'orderrequestaddluggagepaymentchoosebank','UpdateTicketFlight');
-                          se.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
-                        }else{
-                          se.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
-                        }
-                      })
-                      
                     }
                     else
                     {
@@ -372,7 +372,7 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
       //datapayoo = JSON.parse(datapayoo);
       if (datapayoo.success) {
         //this._windowmomo = window.open(datapayoo.returnUrl.payUrl, '_system');
-        this.openWebpage(datapayoo.returnUrl.payUrl);
+        //this.openWebpage(datapayoo.returnUrl.payUrl);
         this.zone.run(()=>{
           this.setinterval();
         })
@@ -408,13 +408,18 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                 this.hideLoading();
               this.gf.hideLoading();
                 if(success){
-                  let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
-                            this.gf.RequestApi('POST', _url, {
-                              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                              'Content-Type': 'application/json; charset=utf-8',
-                            }, 
-                            {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentchoosebank','UpdateTicketFlight');
-                  this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                  let _url = C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateTicketFlight';
+                  this.gf.RequestApi('POST', _url, {
+                    "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                    'Content-Type': 'application/json; charset=utf-8',
+                  }, 
+                  {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentselect','UpdateTicketFlight').then((data)=>{
+                    if(data && data.result){
+                      this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                    }else{
+                      this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                    }
+                  });
                 }else{
                   this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
                 }
@@ -799,13 +804,18 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                     this.updateChangeFlight().then((success) => {
                       this.hideLoading();
                       if(success){
-                        let _url = C.urls.baseUrl.urlFlight + "gate/apiv1/UpdateTicketFlight";
-                            this.gf.RequestApi('POST', _url, {
-                              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-                              'Content-Type': 'application/json; charset=utf-8',
-                            }, 
-                            {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentchoosebank','UpdateTicketFlight');
-                        this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                        let _url = C.urls.baseUrl.urlMobile + '/api/Dashboard/UpdateTicketFlight';
+                        this.gf.RequestApi('POST', _url, {
+                          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                          'Content-Type': 'application/json; charset=utf-8',
+                        }, 
+                        {bookingCode: this.bookingCode}, 'orderrequestaddluggagepaymentselect','UpdateTicketFlight').then((data)=>{
+                          if(data.result){
+                            this.navCtrl.navigateForward('orderrequestaddluggagepaymentdone');
+                          }else{
+                            this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
+                          }
+                        });
                       }else{
                         this.showConfirm('Đã có lỗi xảy ra. Xin quý khách vui lòng liên hệ iVIVU.com để được hỗ trợ!');
                       }
@@ -876,9 +886,11 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
         let url = '';
         if(this.activityService.typeChangeFlight == 1){
           //this.
-            url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
+            url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketTypeSearch || this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
             this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
               if(data && data.success && data.priceChange){
+                resolve(true);
+              }else if(data && data.data[0] && data.data[0].totalPrice){
                 resolve(true);
               }else{
                 resolve(false);
@@ -886,33 +898,16 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
                 
             })
         }else if(this.activityService.typeChangeFlight == 2){
-            url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
+            url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketTypeSearch ||this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
             this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
               if(data && data.success && data.priceChange){
+                resolve(true);
+              }else if(data && data.data[0] && data.data[0].totalPrice){
                 resolve(true);
               }else{
                 resolve(false);
               }
             })
-        }else {
-          url = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemdepart.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=1&flightDate=${moment(this._flightService.orderRequestDepartFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestDepartFlight.flightNumber}&ticketClass=${this._flightService.orderRequestDepartFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestDepartFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestDepartFlight.toPlaceCode}`;
-          this.gf.RequestApi('GET', url, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
-            if(data && data.success && data.priceChange){
-              resolve(true);
-            }else{
-              resolve(false);
-            }
-          });
-  
-          let url1 = C.urls.baseUrl.urlFlight + `gate/apiv1/UpdateJourneysVJ?pnrCode=${this.trip.itemreturn.ticketCode}&secureKey=3b760e5dcf038878925b5613c32651dus&segment=2&flightDate=${moment(this._flightService.orderRequestReturnFlight.departTime).format('YYYY-MM-DD')}&flightNumber=${this._flightService.orderRequestReturnFlight.flightNumber}&ticketClass=${this._flightService.orderRequestReturnFlight.ticketClass}&funAction=confirm&fromCode=${this._flightService.orderRequestReturnFlight.fromPlaceCode}&toCode=${this._flightService.orderRequestReturnFlight.toPlaceCode}`;
-          this.gf.RequestApi('GET', url1, header, {}, 'orderrequestchangeflight', 'clickChangeFlight').then((data)=> {
-            if(data && data.success && data.priceChange){
-              resolve(true);
-            }else{
-              resolve(false);
-            }
-              
-          })
         }
       })
       
@@ -927,7 +922,8 @@ export class OrderRequestChangeFlightPaymentSelectPage implements OnInit {
           text: 'Xác nhận',
           role: 'OK',
           handler: () => {
-            this.navCtrl.navigateBack('/orderrequestsearchflight');
+            //this.gf.CreateSupportRequest(this.bookingCode, this.email, this.hoten, this.phone, `Yêu cầu hỗ trợ lỗi đỗi lịch trình bkg VMB ${this.bookingCode} từ ngày ${this.activityService.typeChangeFlight == 1 ? moment(this.trip.checkInDate).format('DD/MM/YYYY') : moment(this.trip.checkOutDate).format('DD/MM/YYYY')} qua ngày ${ moment(this._flightService.itemFlightCache.checkInDate).format('DD/MM/YYYY')}`);
+            this.navCtrl.navigateBack(['app/tabs/tab3']);
           }
           }
         ]

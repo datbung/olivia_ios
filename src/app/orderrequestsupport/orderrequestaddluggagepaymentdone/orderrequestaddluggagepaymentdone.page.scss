@@ -433,9 +433,15 @@
         color: #3f3b3b;
         margin-left: 8px;
     }
+    .div-hidden {
+        opacity: 0 !important;
+    }
 }
 .div-width-300 {
     width: 250%;
     justify-content: space-between;
-    margin-right: 100px;
+    margin-right: 80px;
+}
+.width-80 {
+    width: 80px;
 }

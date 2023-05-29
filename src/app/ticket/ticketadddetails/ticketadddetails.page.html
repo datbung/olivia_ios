@@ -23,7 +23,7 @@
           <ion-col size="12">
               <ion-item style="--padding-start: 0px" class="item-input-custom">
                   <ion-label class="label-name" position="stacked">Họ và tên <span *ngIf="!hoten" class='cls-error'>*</span></ion-label>
-                  <ion-input class="label-input" [(ngModel)]="hoten" type="text" (ionInput)="inputFocus($event)" (ionBlur)="inputLostFocus(null)"  (ionFocus)="inputOnFocus(null, 9)" required></ion-input>
+                  <ion-input class="label-input" [(ngModel)]="hoten" type="text" (ionInput)="inputFocus($event)" (ionBlur)="inputLostFocus(null)"  required></ion-input>
               </ion-item>
           </ion-col>
       </ion-row>
