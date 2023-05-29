@@ -724,8 +724,11 @@ export class GlobalFunction{
         if(type == 'areavn'){
           res = arrays.some(r => r.countryCode == 'VN');
         }
-        if(type == 'listlastsearch'){
+        if(type == 'listlastsearchRegion'){
           res = arrays.some(r => r.code == item.code);
+        }
+        if(type == 'listlastsearchHot'){
+          res = arrays.some(r => r.expId == item.expId);
         }
       }
       else{
@@ -1285,7 +1288,22 @@ public CheckPaymentTour(url): Promise<any>{
     });
   })
 } 
-
+public CheckPaymentTicket(url): Promise<any>{
+  return new Promise((resolve, reject) => {
+    var options = {
+      'method': 'POST',
+      'url': url,
+      'headers': {
+        apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+        apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+      }
+    };
+    request(options, function (error, response) { 
+      if (error) throw new Error(error);
+      resolve(response.body);
+    });
+  })
+} 
 public CheckpaymentFood(url): Promise<any>{
   return new Promise((resolve, reject) => {
     var options = {
@@ -1593,6 +1611,28 @@ alert.present();
      }
      return paymentMethod;
    }
+    //Các hình thức thanh toán ben ve vui chơi
+    funcpaymentMethodTicket(paymentMethod): string {
+
+      switch (paymentMethod) {
+        case "visa":
+          paymentMethod = 3
+          break;
+        case "payoo_store":
+          paymentMethod = 5
+          break;
+        case "payoo_qr":
+          paymentMethod = 6
+          break;
+        case "momo":
+          paymentMethod = 4
+          break;
+         case "bnpl":
+          paymentMethod = 12
+          break;
+      }
+      return paymentMethod;
+    }
     //thêm phần đi chung
     public getDirection(Origin_Placeid,Destination_Placeid,Time,IsDeparture): Promise<any>{
       {
@@ -3889,17 +3929,18 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     return await this.storage.get(('listLastSearchFlight'));
   }
 
-  async createListLastSearchTicketRegion(item){
+  async createListLastSearchTicketRegion(item,type){
     let listLastSearch = await this.storage.get(('listLastSearchTicketRegion'));
+    if (type==0) {
       if(listLastSearch && listLastSearch.length >0){
         if(listLastSearch.length >2){
-          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearch')){
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearchRegion')){
             listLastSearch.splice(0,1);
             listLastSearch.push(item);
           }
           
         }else{
-          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearch')){
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearchRegion')){
             listLastSearch.push(item);
           }
         }
@@ -3909,6 +3950,26 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
         listLastSearch.push(item);
         this.storage.set('listLastSearchTicketRegion', listLastSearch);
       }
+    }else{
+      if(listLastSearch && listLastSearch.length >0){
+        if(listLastSearch.length >2){
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearchHot')){
+            listLastSearch.splice(0,1);
+            listLastSearch.push(item);
+          }
+          
+        }else{
+          if(!this.checkExistsItemInArray(listLastSearch, item, 'listlastsearchHot')){
+            listLastSearch.push(item);
+          }
+        }
+        this.storage.set('listLastSearchTicketRegion', listLastSearch);
+      }else {
+        listLastSearch = [];
+        listLastSearch.push(item);
+        this.storage.set('listLastSearchTicketRegion', listLastSearch);
+      }
+    }
   }
 
   async getListLastSearchTicketRegion() {
@@ -4044,12 +4105,21 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
     request(options, function (error, response, body) {
       if (body.error == 0) {
       }
-
     })
-
-
   }
+  ticketPaymentSave(obj){
+    let objticket = {
+      paymentMethod:obj.paymentMethod,
+      bankTransfer: obj.bankTransfer
+    }
+    let urlApi = C.urls.baseUrl.urlTicket+'/api/Booking/PaymentSave/'+obj.bookingCode;
+    this.RequestApi('POST', urlApi, {}, objticket, 'ticketpage', 'PaymentSave').then((data)=>{
 
+     if (data && data.success) {
+      console.log(data);
+     }
+    });
+  }
 }
 
 export class PlaceByArea {

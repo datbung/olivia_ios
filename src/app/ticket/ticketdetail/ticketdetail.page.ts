@@ -55,6 +55,8 @@ export class TicketDetailPage {
   experiencePackages: any;
   itemSlide:any;
   ticketReviews: any;
+  isseemore: boolean = false;
+  isseemorenotes: boolean = false;
  
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -65,12 +67,12 @@ export class TicketDetailPage {
         public searchHotel: SearchHotel,
         private youtube: YoutubeVideoPlayer,
         private domSanitizer: DomSanitizer,
-        public ticketService: ticketService,) {
+        public ticketService: ticketService) {
             this.loaddata();
            
         }
   private loaddata() {
-    if (this.ticketService.itemTicketDetail) {
+
       let url = C.urls.baseUrl.urlTicket + '/api/Detail/GetExperienceDetail/' + (this.ticketService.itemTicketDetail.experienceId || 1);
       let headers = {
         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
@@ -85,6 +87,7 @@ export class TicketDetailPage {
         this.totalReview = res.data.experience.numOfReview;
 
         this.itemDetail = res.data.experience;
+        // this.ticketService.itemDetail=this.itemDetail 
         this.experiencePackages = res.data.experiencePackages;
         // this.itemDetail.experienceImages = this.itemDetail.Image.split(', ');
         this.itemDetail.experienceImages.forEach(element => {
@@ -101,8 +104,14 @@ export class TicketDetailPage {
         };
         this.gf.RequestApi('POST', url, headers, null, 'hometicketslide', 'GetExperienceSameTopic').then((data) => {
           let res = JSON.parse(data);
-          this.itemSlide = res.data;
-
+          this.itemSlide=[];
+          if (res.data) {
+            for (let i = 0; i < 3; i++) {
+              const element = res.data[i];
+              this.itemSlide.push(element);
+            }
+          }
+         
           let url = C.urls.baseUrl.urlTicket + '/api/Detail/GetExperienceReviews?experienceCode=' + this.ticketService.itemTicketDetail.experienceId;
           let headers = {
           apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
@@ -118,7 +127,7 @@ export class TicketDetailPage {
         this.loaddeparturedone = true;
 
       });
-    }
+    
   }
 
         ngOnInit() { 
@@ -275,23 +284,7 @@ export class TicketDetailPage {
         }
       }
 
-      showDepartureCalendar (itemdeparture){
-        if(!this.loaddeparturedone){
-          this.gf.showToastWarning('Đang tải dữ liệu, vui lòng chờ trong giây lát!');
-          return;
-        }
-        if(itemdeparture){
-          this.tourService.itemDepartureCalendar = itemdeparture;
-          this.tourService.hasDeparture = true;
-        }
-        if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
-          return;
-        }
-        this.tourService.itemDetail = this.itemDetail;
-       
-        this.navCtrl.navigateForward('/tourdeparturecalendar');
-      
-      }
+   
 
       async imgreview(arrimgreview, indeximgreview,CustomerName,DateStayed) {
         this.searchHotel.arrimgreview = arrimgreview;
@@ -443,9 +436,16 @@ export class TicketDetailPage {
       var se= this;
       this.ticketService.itemTicketDetail.experienceId = item.experienceId;
       se.ticketService.backPage = 'hometicket';
-      se.itemDetail = null;
+      se.itemDetail = {};
+      se.itemDetail.name = item.experienceName;
       if(this.ticketService.itemTicketDetail.experienceId){
         this.loaddata();
       }
+    }
+    seemore(){
+      this.isseemore=true;
+    }
+    seemorenotes(){
+      this.isseemorenotes=true;
     }
     }

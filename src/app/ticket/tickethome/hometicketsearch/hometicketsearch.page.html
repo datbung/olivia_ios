@@ -23,7 +23,10 @@
               <div *ngIf="!itemSearch" class="text-placeholder text-middle">
                 Bạn muốn đi đâu, chơi gì?
               </div>
-              <div *ngIf="itemSearch && itemSearch.name " class="text-middle">
+              <div *ngIf="itemSearch && itemSearch.expName" class="text-placeholder text-middle">
+                {{itemSearch.expName}}
+              </div>
+              <div *ngIf="itemSearch && itemSearch.name" class="text-middle">
                 {{ itemSearch.name }}
               </div>
               <!-- <ng-template #tourname>

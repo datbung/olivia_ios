@@ -30,6 +30,7 @@ export class TicketPaymentDonePage implements OnInit {
   checkInDisplayDC: string;
   checkOutDisplayDC: string;
   checkreview;
+  paymentDate: string;
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
     private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -48,15 +49,9 @@ export class TicketPaymentDonePage implements OnInit {
           this.checkreview = checkreview;
         }
       })
+      var ti = new Date();
+      this.paymentDate= moment(ti).add(1, 'hours').format('HH:mm, DD/MM/YYYY');
 
-      // if(ticketService.itemDetail) {
-      //   if(this.ticketService.discountPrice){
-      //     this.total = this.ticketService.discountPrice;
-      //   }else{
-      //     this.total = ticketService.totalPriceStr;
-      //   }
-      // }
-      this.total = ticketService.totalPriceStr;
   }
 
 
@@ -87,7 +82,7 @@ export class TicketPaymentDonePage implements OnInit {
 
   next() {
     this.gf.hideLoading();
-    this.tourService.itemPaymentDone.emit(4);
+    this.tourService.itemPaymentDone.emit(3);
     this.valueGlobal.backValue = "hometicket";
     //this.ticketService.BookingTourMytrip = null;
     // this._flightService.itemMenuFlightClick.emit(2);
@@ -113,5 +108,7 @@ export class TicketPaymentDonePage implements OnInit {
       });
     modal.present();
   }
-
+  goMyTrip(){
+    this.navCtrl.navigateBack(['/app/tabs/tab3']);
+  }
 }

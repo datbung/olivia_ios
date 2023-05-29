@@ -1,4 +1,4 @@
-import { Bookcombo, SearchHotel } from '../../providers/book-service';
+import { Bookcombo, SearchHotel, ValueGlobal } from '../../providers/book-service';
 
 import { Booking } from '../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
@@ -130,7 +130,7 @@ export class TicketAdddetailsPage implements OnInit {
     public tourService: tourService,
     public _voucherService: voucherService,
     private modalCtrl: ModalController,
-    public ticketService: ticketService) {
+    public ticketService: ticketService,public valueGlobal:ValueGlobal) {
     this.ischeckpayment = Roomif.ischeckpayment;
     // let tp =0;
 
@@ -261,10 +261,10 @@ export class TicketAdddetailsPage implements OnInit {
                   se.companyname = corpInfomations.legalName;
                   se.address = corpInfomations.address;
                   se.tax = corpInfomations.taxCode;
-                  // se.addressorder = corpInfomations.addressorder;
-                  // se.hotenhddt=corpInfomations.hotenhddt;
-                  // se.emailhddt=corpInfomations.emailhddt;
-                  // se.ishideNameMail=corpInfomations.ishideNameMail;
+                  se.addressorder = corpInfomations.addressorder;
+                  se.hotenhddt=corpInfomations.fullName;
+                  se.emailhddt=corpInfomations.email;
+                  se.ishideNameMail=true;
                 }
                 else {
                   se.storage.get('order').then(order => {
@@ -284,6 +284,8 @@ export class TicketAdddetailsPage implements OnInit {
                   se.point = data.point * 1000;
                   //se.price = se.point.toLocaleString();
                 }
+                se.hoten=data.fullname;
+                se.phone=data.phone;
               })
             } else {
               se.storage.get('order').then(order => {
@@ -337,11 +339,16 @@ export class TicketAdddetailsPage implements OnInit {
       this.tourService.usePointPrice = 0;
       this.edit(2);
     })
-
+    this.GetUserInfo()
   }
 
   next() {
-    this.CustomerSave();
+    this.createObjectBooking().then((checkvalid)=>{
+      if(checkvalid){
+        this.CustomerSave();
+      }
+    })
+
   }
 
   async presentToasterror() {
@@ -504,8 +511,8 @@ export class TicketAdddetailsPage implements OnInit {
     this.tourService.totalPriceBeforeDiscount = 0;
     this.tourService.discountPrice = null;
     this.tourService.usePointPrice = 0;
-    // this.navCtrl.navigateBack('tourdeparturecalendar');
-    this.navCtrl.back()
+    // this.navCtrl.back()
+      this.navCtrl.navigateBack('ticketservice');
   }
 
   async showAlertMessageOnly(msg) {
@@ -843,38 +850,158 @@ export class TicketAdddetailsPage implements OnInit {
     this.ticketService.totalPriceStr = this.totalPriceStr;
     this.navCtrl.navigateForward('/ticketpricedetail');
   }
-  CustomerSave(){
-    let objCustomer={
-      memberId: "string",
-      username: "string",
-      customerTitle: "string",
-      customerName: "string",
-      customerPhone: "string",
-      customerEmail: "string",
-      leadingTitle: "string",
-      leadingName: "string",
-      leadingPhone: "string",
-      leadingEmail: "string",
-      isInvoice: 0,
-      companyName: "string",
-      companyAddress: "string",
-      companyTaxCode: "string",
-      companyContactEmail: "string",
-      companyContactName: "string",
-      paxList: "string",
-      tourNotes: "string"
+  CustomerSave() {
+    let isInvoice=0;
+    if (this.ischeck) {
+      isInvoice=1;
     }
-    let headers=
+    let objCustomer = {
+      // memberId: this.memberid,
+      // customerName: this.hoten,
+      // customerPhone: this.phone,
+      // customerEmail: this._email,
+      // leadingName: this.hoten,
+      // leadingPhone: this.phone,
+      // leadingEmail: this._email,
+      // isInvoice: isInvoice,
+      // companyAddress: this.address,
+      // companyTaxCode: this.tax,
+      // companyContactEmail: this.emailhddt,
+      // companyContactName: this.companyname,
+      // customerTitle: "Anh",
+      // leadingTitle: "Anh"
+      companyAddress: this.address,
+      companyContactEmail: this.emailhddt,
+      companyContactName: this.hotenhddt,
+      companyName: this.companyname,
+      companyTaxCode: this.tax,
+      customerName: this.hoten,
+      customerPhone: this.phone,
+      isInvoice: isInvoice,
+      leadingName:  this.hoten,
+      leadingPhone: this.phone,
+      memberId: "",
+      paxList: "",
+      tourNotes: this.note,
+      username: ""
+    }
+    let headers =
     {
       'content-type': 'application/json'
     }
-    this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/CustomerSave/'+this.ticketService.itemTicketService.objbooking.code, headers, objCustomer, 'ticketservice', 'RecheckRateBooking').then((data: any) => {
-      if (data &&  data.success) {
+    this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/CustomerSave/' + this.ticketService.itemTicketService.objbooking.bookingCode, headers, objCustomer, 'ticketservice', 'RecheckRateBooking').then((data: any) => {
+      if (data && data.success) {
         console.log(data);
         this.ticketService.totalPriceStr = this.totalPriceStr;
         this.navCtrl.navigateForward('/ticketpaymentselect');
       }
     });
-   }
+  }
+
+  createObjectBooking(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.Roomif.notetotal = "";
+      this.gf.googleAnalytion('touradddetails', 'tour_payment_info', '');
+      if (this.hoten) {
+        this.hoten = this.hoten.trim();
+        var checktext = this.hasWhiteSpace(this.hoten);
+        if (!checktext) {
+          this.presentToastHo();
+          resolve(false);
+          return;
+        }
+      }
+      else {
+        this.presentToastHo();
+        resolve(false);
+        return;
+
+      }
+      this.Roomif.order = "";
+
+      if (!this.phonenumber(this.phone)) {
+        this.presentToastPhone();
+        resolve(false);
+        return;
+
+      }
+      //validate mail
+      if (!this.validateEmail(this._email) || !this._email || !this.gf.checkUnicodeCharactor(this._email)) {
+        this.presentToastEmail();
+        this.validemail = false;
+        resolve(false);
+        return;
+
+      }
+      this.booking.CEmail = this._email;
+      if (this.ischeck) {
+        if (this.companyname && this.address && this.tax) {
+          this.companyname = this.companyname.trim();
+          this.address = this.address.trim();
+          this.tax = this.tax.trim();
+        }
+        else {
+          this.presentToastOrder();
+          resolve(false);
+          return;
+
+        }
+
+        if (this.companyname && this.address && this.tax) {
+          this.Roomif.hoten = this.hoten;
+          this.Roomif.phone = this.phone;
+          this.Roomif.companyname = this.companyname;
+          this.Roomif.address = this.address;
+          this.Roomif.tax = this.tax;
+          this.Roomif.notetotal = this.note;
+          this.Roomif.addressorder = this._email;
+          this.Roomif.nameOrder = this.hoten;
+
+          if (!this.ishideNameMail) {
+            if (this.emailhddt && this.hotenhddt) {
+              if (!this.validateEmail(this.emailhddt) || !this.gf.checkUnicodeCharactor(this.emailhddt)) {
+                this.gf.showToastWarning('email xuất hóa đơn không hợp lệ. Vui lòng kiểm tra lại');
+                resolve(false);
+                return;
+              }
+              else {
+                this.Roomif.addressorder = this.emailhddt;
+                this.Roomif.nameOrder = this.hotenhddt;
+
+                var order1 = { companyname: this.companyname, address: this.address, tax: this.tax, addressorder: this.addressorder, ishideNameMail: this.ishideNameMail, hotenhddt: this.hotenhddt, emailhddt: this.emailhddt }
+                this.storage.set("order", order1);
+                this.Roomif.order = this.companyname + "," + this.address + "," + this.tax + "," + this.addressorder;
+                this.Roomif.notetotal = this.note;
+                this.Roomif.ischeck = this.ischeck;
+
+
+              }
+            }
+            else {
+              this.presentToastOrder();
+              resolve(false);
+              return;
+            }
+          }
+
+        } else {
+          this.presentToastOrder();
+          resolve(false);
+          return;
+        }
+      }
+      resolve(true);
+    })
+
+  }
+  goToLogin(){
+    this.storage.get('auth_token').then(auth_token => {
+      if (!auth_token) {
+        this.valueGlobal.backValue= "";
+        this.valueGlobal.logingoback = 'ticketadddetails';
+        this.navCtrl.navigateForward('/login');
+      }
+    });
+  }
 }
 

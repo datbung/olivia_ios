@@ -253,7 +253,8 @@ export class HomeTicketSlidePage implements OnInit {
   showTicketList(item){
     if(item){
       this.ticketService.itemTicketTopic = item;
-      this.navCtrl.navigateForward('/ticketlist');
+      this.ticketService.itemSearchTicket.emit(0);
+      this.navCtrl.navigateForward('/ticketlist/0');
     }
   }
 }

@@ -1,8 +1,9 @@
 <ion-header class="cls-tourdetail-header float-arrow-disabled">
     <div class="cls-shadow">
         <div class="d-flex cls-border-bottom" (click)="goback()">
-            <div class="div-width-48 m-top-12"><img class="img-back" src="./assets/imgs/ios-arrow-round-back.svg" ></div>
-            <div class="div-width-100 m-top-12 header-tourname" *ngIf="itemDetail && itemDetail.Name">{{itemDetail.Name}}</div>
+            <div class="div-width-48 m-top-12"><img class="img-back" src="./assets/imgs/ios-arrow-round-back.svg"></div>
+            <div [ngClass]="itemDetail.name.length<35 ? 'div-width-100 m-top-12 header-tourname' : 'div-width-100 m-top-12 header-tourname-1'" *ngIf="itemDetail && itemDetail.name">
+                {{itemDetail.name}}</div>
             <div class="div-width-48"></div>
         </div>
         <!-- <div class="d-flex ">
@@ -19,44 +20,49 @@
             
         </div> -->
     </div>
-    
+
 </ion-header>
 <ion-content #scrollArea (ionScroll)="scrollFunction($event)" [scrollEvents]="true">
     <div class="div-ticketdetail-content">
         <div *ngIf="itemDetail else loadsdk">
             <div class="div-image-slide" *ngIf="itemDetail.experienceImages && loadslidedone" id="content1">
                 <ion-slides (ionSlideDidChange)="slidechange()" [options]="slideOpts" #mySlider>
-                    <ion-slide *ngFor="let slide of itemDetail.experienceImages; let idximg = index" style="height: 230px" (click)="showSlideImage(idximg)" >
-                        <img *ngIf="slide.imageLink.indexOf('http') == -1" src="https:{{slide.imageLink}}" style="height: 230px;width: 100%" class="preview" alt="image" />
-                        <img *ngIf="slide.imageLink.indexOf('http') != -1" src="{{slide.imageLink}}" style="height: 230px;width: 100%" class="preview" alt="image" />
-                      </ion-slide>
+                    <ion-slide *ngFor="let slide of itemDetail.experienceImages; let idximg = index"
+                        style="height: 230px" (click)="showSlideImage(idximg)">
+                        <img *ngIf="slide.imageLink.indexOf('http') == -1" src="https:{{slide.imageLink}}"
+                            style="height: 230px;width: 100%" class="preview" alt="image" />
+                        <img *ngIf="slide.imageLink.indexOf('http') != -1" src="{{slide.imageLink}}"
+                            style="height: 230px;width: 100%" class="preview" alt="image" />
+                    </ion-slide>
                 </ion-slides>
                 <div class="div-youtube" *ngIf="itemDetail.youtubeId">
                     <img class="img-youtube" src="./assets/ic_home/videocam.svg" (click)="showFullScreen()">
-                  </div>
-                  
+                </div>
+
                 <div class="div-icon d-flex">
                     <div class="div-icon-back width-50" (click)="goback()">
                         <img class="icon-back" src="./assets/ic_tour/icon_back.svg" />
                     </div>
-                    <div class=" width-50 text-right d-flex d-flex-end">
+                    <!-- <div class=" width-50 text-right d-flex d-flex-end">
                         <div class="div-icon-share">
                             <img class="icon-back" src="./assets/ic_tour/icon_share.svg" />
                         </div>
                         <div class="div-icon-like">
                             <img class="icon-back" src="./assets/ic_tour/icon_heart.svg" />
                         </div>
-                    </div>
-                    
+                    </div> -->
+
                 </div>
-                <div class="div-total-slide" *ngIf="itemDetail.experienceImages && itemDetail.experienceImages.length >1">{{coutslide}}/{{itemDetail.experienceImages.length}}</div>
+                <div class="div-total-slide"
+                    *ngIf="itemDetail.experienceImages && itemDetail.experienceImages.length >1">
+                    {{coutslide}}/{{itemDetail.experienceImages.length}}</div>
             </div>
             <ion-skeleton-text animated style="width: 100%;height: 230px;" *ngIf="!loadslidedone"></ion-skeleton-text>
-    
-            <div class=" p-all-16" >
+
+            <div class=" p-all-16">
                 <div class="tour-name">{{itemDetail.name}}</div>
-            
-                <div class="div-badge m-top-8 d-flex" >
+
+                <div class="div-badge m-top-8 d-flex">
                     <div class="div-h-28 width-50 d-flex" *ngIf="itemDetail.avgPoint">
                         <div class="text-point p-right-8">{{itemDetail.avgPoint}}</div>
                         <div class="text-point-des">{{itemDetail.avgPointStr}}</div>
@@ -67,15 +73,17 @@
                         <div class="text-point-des" *ngIf="itemDetail.avgPoint < 5">Không tốt</div> -->
                     </div>
                     <div class="width-50">
-                        <div class="d-flex d-flex-end" *ngIf="itemDetail.numOfReview >0" (click)="scrollToTopGroupReview(1)">
+                        <div class="d-flex d-flex-end" *ngIf="itemDetail.numOfReview >0"
+                            (click)="scrollToTopGroupReview(1)">
                             <div class="text-comment p-right-24">{{itemDetail.numOfReview}} đánh giá</div>
-                            <div class="div-icon-comment"><ion-icon class="icon-comment" name="ios-arrow-round-forward"></ion-icon></div>
+                            <div class="div-icon-comment"><ion-icon class="icon-comment"
+                                    name="ios-arrow-round-forward"></ion-icon></div>
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
-        
+
                 <!-- <div class="div-split"></div>
         
                 <div class="d-flex">
@@ -86,39 +94,49 @@
                     </div>
                    
                 </div> -->
-             
-                  
+
+
                 <div class="d-flex m-top-8 div-button-sale" *ngIf="itemDetail.TopSale">
                     <button ion-button round class="btn-topsale p-right-8">Đang bán chạy</button>
                     <ion-label class="text-topsale">{{itemDetail.TopSale}} khách đặt trong 24 giờ qua</ion-label>
                 </div>
-        
+
                 <div class="div-split"></div>
                 <div class="text-headline">{{itemDetail.titleOverview}}</div>
-                <div class="text-content" [innerHTML]="itemDetail.overview"></div>
-    
+                <div [ngClass]="isseemore ? 'text-content':'text-content text-limit'" [innerHTML]="itemDetail.overview"></div>
+                <div *ngIf="!isseemore">...</div>
+                <div class="text-seemore-detail" *ngIf="!isseemore" (click)="seemore()">
+                Xem thêm 
+                </div>
                 <div class="div-split"></div>
                 <div *ngIf="experiencePackages && experiencePackages.length >0">
                     <div class="text-headservice">Loại gói dịch vụ</div>
                     <div *ngFor="let itemService of experiencePackages" class="div-item-service">
                         <div class="text-service-name m-bottom-8">{{itemService.name}}</div>
                         <div class="text-service-des m-bottom-8">{{itemService.description}}</div>
-                        <div class="text-service-detail" (click)="showTicketServiceDetail(itemService)">Chi tiết gói <span><img class="img-arrow" src="./assets/ic_ticket/arrow-down.svg" /></span></div>
+                        <div class="text-service-detail" (click)="showTicketServiceDetail(itemService)">Chi tiết gói
+                            <span><img class="img-arrow" src="./assets/ic_ticket/arrow-down.svg" /></span></div>
                         <div class="div-button-service d-flex">
                             <div *ngIf="itemService.baseRate" class="text-price">
                                 <div>{{gf.numberToCurrency(itemService.baseRate, '.')}}</div>
                                 <div class="price-sub">VND</div>
                             </div>
-                            <div class="btn-price"  (click)="showTicketServices(itemService)">Chọn</div>
+                            <div class="btn-price" (click)="showTicketServices(itemService)">Chọn</div>
                         </div>
                     </div>
                 </div>
-    
+                <div class="div-split"></div>
+                <div class="text-headline">Thông tin Dịch vụ</div>
+                <div [ngClass]="isseemorenotes ? 'text-content':'text-content text-limit-9'" [innerHTML]="itemDetail.notes"></div>
+                <div *ngIf="!isseemorenotes">...</div>
+                <div class="text-seemore-detail" *ngIf="!isseemorenotes" (click)="seemorenotes()">
+                Xem thêm 
+                </div>
                 <div *ngIf="totalReview >0 " id="divReview" class="div-review">
                     <div class="div-split"></div>
-                    <div class="text-headline" >Đánh giá của khách hàng</div>
-        
-                    <div class="d-flex div-avg-point" >
+                    <div class="text-headline">Đánh giá của khách hàng</div>
+
+                    <div class="d-flex div-avg-point">
                         <div class="div-btn-point f-20">{{AvgPoint}}</div>
                         <div class="div-text-point width-100">
                             <div class="text-comment" *ngIf="AvgPoint>9 && AvgPoint <=10">Tuyệt vời</div>
@@ -129,109 +147,119 @@
                             <div class="text-total-comment">{{totalReview}} đánh giá</div>
                         </div>
                     </div>
-        
-                    
+
+
                     <div *ngIf="ticketReviews && ticketReviews.length >0">
                         <div class="text-sub-headline m-bottom-16 ">Đánh giá gần đây</div>
-                        <div *ngFor="let review of ticketReviews; let idxreview = index" [ngClass]="idxreview >=5 ? 'div-item-review div-collapse' : 'div-item-review'">
+                        <div *ngFor="let review of ticketReviews; let idxreview = index"
+                            [ngClass]="idxreview >=5 ? 'div-item-review div-collapse' : 'div-item-review'">
                             <div class="d-flex">
                                 <div class="width-50 d-flex h-22">
                                     <div class="div-btn-point f-14">{{review.reviewPoint}}</div>
-                                    <div class="text-comment-sub v-align-center width-100" *ngIf="review.reviewPoint>9 && review.reviewPoint <=10">Xuất sắc</div>
-                                    <div class="text-comment-sub v-align-center width-100" *ngIf="review.reviewPoint>8 && review.reviewPoint <=9">Rất tốt</div>
-                                    <div class="text-comment-sub v-align-center width-100" *ngIf="review.reviewPoint>7 && review.reviewPoint <=8">Khá tốt</div>
-                                    <div class="text-comment-sub v-align-center width-100" *ngIf="review.reviewPoint>6 && review.reviewPoint <=7">Tạm được</div>
-                                    <div class="text-comment-sub v-align-center width-100" *ngIf="review.reviewPoint>5 && review.reviewPoint <=6">Không tốt</div>
+                                    <div class="text-comment-sub v-align-center width-100"
+                                        *ngIf="review.reviewPoint>9 && review.reviewPoint <=10">Xuất sắc</div>
+                                    <div class="text-comment-sub v-align-center width-100"
+                                        *ngIf="review.reviewPoint>8 && review.reviewPoint <=9">Rất tốt</div>
+                                    <div class="text-comment-sub v-align-center width-100"
+                                        *ngIf="review.reviewPoint>7 && review.reviewPoint <=8">Khá tốt</div>
+                                    <div class="text-comment-sub v-align-center width-100"
+                                        *ngIf="review.reviewPoint>6 && review.reviewPoint <=7">Tạm được</div>
+                                    <div class="text-comment-sub v-align-center width-100"
+                                        *ngIf="review.reviewPoint>5 && review.reviewPoint <=6">Không tốt</div>
                                 </div>
                                 <div class="width-60 cls-customer">
                                     {{review.customerName}} • {{review.dateStayed}}
                                 </div>
                             </div>
-                            <div *ngIf="review.images && review.images.length>0" class="innerreview" style="overflow-x: auto">
+                            <div *ngIf="review.images && review.images.length>0" class="innerreview"
+                                style="overflow-x: auto">
                                 <div *ngFor="let rv of review.images;let i = index" style="position: relative;">
-                                  <img (click)="imgreview(review.images,i,review.customerName,review.dateStayed)" class="img1"
-                                    src={{rv.imageUrl}} />
+                                    <img (click)="imgreview(review.images,i,review.customerName,review.dateStayed)"
+                                        class="img1" src={{rv.imageUrl}} />
                                 </div>
-                         
+
                             </div>
                             <div class="text-comment-description">
                                 {{review.bestFeature}}
                             </div>
                         </div>
-                        <div class="text-show-more-departure" *ngIf="(tourReviews && tourReviews.length >5) && !expanddivreview" (click)="expandReview(1)">
+                        <div class="text-show-more-departure"
+                            *ngIf="(tourReviews && tourReviews.length >5) && !expanddivreview"
+                            (click)="expandReview(1)">
                             Xem thêm <img class="img-seemoreroom" src="./assets/imgs/ic_down.svg">
-                          </div>
-                          <div class="text-show-more-departure" *ngIf="(tourReviews && tourReviews.length >5) && expanddivreview" (click)="expandReview(2)">
-                              Ẩn <img class="img-seemoreroom" src="./assets/imgs/ic_up.svg">
-                            </div>
+                        </div>
+                        <div class="text-show-more-departure"
+                            *ngIf="(tourReviews && tourReviews.length >5) && expanddivreview" (click)="expandReview(2)">
+                            Ẩn <img class="img-seemoreroom" src="./assets/imgs/ic_up.svg">
+                        </div>
                     </div>
                 </div>
-    
+
                 <div class="div-split"></div>
-                <div class="text-headline m-top-24 m-bottom-16" >Có thể bạn thích</div>
-                <div class="slide2-scroll p-0"
-                         *ngIf="itemSlide && itemSlide.length >0">
-                        <div
-                            (click)="showDetail(slide)"
-                            [ngClass]="idx == 0 ? 'cls-deal-detail position-relative' : 'cls-deal-detail m-l-16 position-relative' "
-                            *ngFor="let slide of itemSlide; let idx = index">
-                            <div class="div-wrap-deal"> 
-                                <div class="div-wrap-image">
+                <div class="text-headline m-top-24 m-bottom-16">Có thể bạn thích</div>
+                <div class="slide2-scroll p-0" *ngIf="itemSlide && itemSlide.length >0">
+                    <div (click)="showDetail(slide)"
+                        [ngClass]="idx == 0 ? 'cls-deal-detail position-relative' : 'cls-deal-detail m-l-16 position-relative' "
+                        *ngFor="let slide of itemSlide; let idx = index">
+                        <div  class="div-wrap-deal">
+                            <div class="div-wrap-image">
                                 <img class="slide2-detail img" [src]="slide.avatarLink" />
                                 <div class="float-promo" *ngIf="slide.promotionTitle">
                                     <p class="float-promo-description">
-                                    {{ slide.promotionTitle }}
+                                        {{ slide.promotionTitle }}
                                     </p>
                                 </div>
-                                </div>
-                                <div [ngClass]="itemSlide.hasTopSale ? 'float-info min-height-186' : 'float-info'">
+                            </div>
+                            <div [ngClass]="itemSlide.hasTopSale ? 'float-info min-height-186' : 'float-info'">
                                 <div class="div-hotel-name">
                                     <h2 class="hotel-name">
-                                    {{ slide.experienceName }}
+                                        {{ slide.experienceName }}
                                     </h2>
                                 </div>
-                                
-                
+
+
                                 <div class="d-flex m-top-8" *ngIf="slide.avgPoint else noAvgPoint">
                                     <div class="div-badge">
                                         <div class="text-point">{{slide.avgPoint}}</div>
-                                        <div class="text-review m-right-6" *ngIf="slide.avgPointStr">{{slide.avgPointStr}}</div>
+                                        <div class="text-review m-right-6" *ngIf="slide.avgPointStr">
+                                            {{slide.avgPointStr}}</div>
                                         <!-- <div class="text-point-des" *ngIf="slide.AvgPoint>=9 && slide.AvgPoint <10">Xuất sắc</div>
                                         <div class="text-point-des" *ngIf="slide.AvgPoint>=8 && slide.AvgPoint <9">Rất tốt</div>
                                         <div class="text-point-des" *ngIf="slide.AvgPoint>=7 && slide.AvgPoint <8">Khá tốt</div>
                                         <div class="text-point-des" *ngIf="slide.AvgPoint>5 && slide.AvgPoint <7">Tạm được</div>
                                         <div class="text-point-des" *ngIf="slide.AvgPoint <5">Không tốt</div> -->
-                                        <div class="text-service-des"  *ngIf="slide.numOfReview"> | <span >{{slide.numOfReview}} đánh giá</span></div>
+                                        <div class="text-service-des" *ngIf="slide.numOfReview"> |
+                                            <span>{{slide.numOfReview}} đánh giá</span></div>
                                     </div>
                                 </div>
                                 <ng-template #noAvgPoint>
                                     <div class="text-point-des m-h-20 m-top-8">Chưa có đánh giá</div>
                                 </ng-template>
-                
+
                                 <div class="d-flex m-top-8 div-button-sale" *ngIf="slide.TopSale">
-                                    <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24 giờ qua</ion-label>
+                                    <ion-label class="text-topsale">{{slide.TopSale}} khách đặt trong 24 giờ
+                                        qua</ion-label>
                                 </div>
 
                                 <div *ngIf="slide.shortDescription" class="m-top-16 height-63">
                                     <!-- <div *ngFor="let itemNote of slide.Notes; let idx = index;">
                                         <div class="div-item-note">{{itemNote.Description}}</div>
                                     </div> -->
-                                    <li class="div-item-note" *ngFor="let item of slide.shortDescription.split('\n')" >{{item}}</li>
+                                    <li class="div-item-note" *ngFor="let item of slide.shortDescription.split('\n')">
+                                        {{item}}</li>
                                 </div>
 
-                                <div class="text-price-topic m-top-8">{{ gf.convertNumberToString(slide.salePrice) }} VND</div>
-                                </div>
-                            </div>
-                            
-                            </div>
-                            <div *ngIf="showloadmore" class="div-loadmore">
-                            <ion-spinner
-                                name="bubbles"
-                                class="spinner-bubbles hydrated"
-                            ></ion-spinner>
+                                <div class="text-price-topic m-top-8">{{ gf.convertNumberToString(slide.salePrice) }}
+                                    VND</div>
                             </div>
                         </div>
-    
+
+                    </div>
+                    <div *ngIf="showloadmore" class="div-loadmore">
+                        <ion-spinner name="bubbles" class="spinner-bubbles hydrated"></ion-spinner>
+                    </div>
+                </div>
+
             </div>
         </div>
         <ng-template #loadsdk>
@@ -252,42 +280,51 @@
                     <ion-skeleton-text animated style="width: 60%;height: 20px;"></ion-skeleton-text>
                 </div>
                 <div class="div-split"></div>
-                <div class="text-headline"><ion-skeleton-text animated style="width: 100%;height: 40px;"></ion-skeleton-text></div>
-                <div class="text-content"><ion-skeleton-text animated style="width: 100%;height: 150px;"></ion-skeleton-text></div>
+                <div class="text-headline"><ion-skeleton-text animated
+                        style="width: 100%;height: 40px;"></ion-skeleton-text></div>
+                <div class="text-content"><ion-skeleton-text animated
+                        style="width: 100%;height: 150px;"></ion-skeleton-text></div>
                 <div class="div-split"></div>
-                <div class="text-headline"><ion-skeleton-text animated style="width: 100%;height: 40px;"></ion-skeleton-text></div>
-                <div class="text-content"><ion-skeleton-text animated style="width: 100%;height: 150px;"></ion-skeleton-text></div>
+                <div class="text-headline"><ion-skeleton-text animated
+                        style="width: 100%;height: 40px;"></ion-skeleton-text></div>
+                <div class="text-content"><ion-skeleton-text animated
+                        style="width: 100%;height: 150px;"></ion-skeleton-text></div>
                 <div class="div-split"></div>
-                <div class="text-headline"><ion-skeleton-text animated style="width: 100%;height: 40px;"></ion-skeleton-text></div>
-                <div class="text-content"><ion-skeleton-text animated style="width: 100%;height: 150px;"></ion-skeleton-text></div>
+                <div class="text-headline"><ion-skeleton-text animated
+                        style="width: 100%;height: 40px;"></ion-skeleton-text></div>
+                <div class="text-content"><ion-skeleton-text animated
+                        style="width: 100%;height: 150px;"></ion-skeleton-text></div>
             </div>
-           
+
 
 
         </ng-template>
-        
 
-        
+
+
     </div>
 </ion-content>
 <ion-footer style="background: #fff;">
-    <div class="div-tourdetail-footer d-flex'">
-    <!-- <div [ngClass]="tourService.departuresItemList && tourService.departuresItemList.length > 0 ? 'div-tourdetail-footer d-flex' : 'div-tourdetail-footer d-flex cls-no-departure' "> -->
-        <div class="width-55 div-footer-left" >
+    <div [ngClass]="experiencePackages && experiencePackages.length >0 ? 'div-tourdetail-footer d-flex' : 'div-tourdetail-footer d-flex cls-no-departure'" >
+
+        <div  class="width-55 div-footer-left">
             <div class="text-normal-footer">Giá chỉ từ</div>
-            <div *ngIf="loaddeparturedone else loadingprice" class="div-price" >
+            <div *ngIf="loaddeparturedone else loadingprice" class="div-price">
                 <!-- <span class="text-price-footer" *ngIf="(tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceAdultAvgStr)">{{tourService.itemDepartureCalendar.PriceAdultAvgStr}}</span>
                 <span class="text-price-footer" *ngIf="(!tourService.itemDepartureCalendar || !tourService.itemDepartureCalendar.PriceAdultAvgStr)">{{gf.convertNumberToString(itemDetail.AdultPrice)}}</span> -->
                 <span class="text-price-footer">{{gf.convertNumberToString(itemDetail.minBaseRate)}}</span>
-                <span class="text-price-sub">đ/khách</span></div>
+                <span *ngIf="itemDetail && itemDetail.minBaseRate" class="text-price-sub">đ/khách</span>
+            </div>
             <ng-template #loadingprice>
-                <ion-skeleton-text animated style="width: 90%;height: 30px; border-radius: 4px; margin-right: 16px"></ion-skeleton-text>
-            </ng-template> 
+                <ion-skeleton-text animated
+                    style="width: 90%;height: 30px; border-radius: 4px; margin-right: 16px"></ion-skeleton-text>
+            </ng-template>
         </div>
-        <div  class="width-45 " (click)="scrollToPrice(1)" >
+        <div class="width-45 " (click)="scrollToPrice(1)">
             <button ion-button round outline class="button btn-departure-calendar">
                 Chọn gói dịch vụ
             </button>
         </div>
+
     </div>
 </ion-footer>

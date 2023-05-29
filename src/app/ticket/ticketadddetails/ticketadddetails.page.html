@@ -16,7 +16,10 @@
   
    
     <div class='m-top-24'>
-      <ion-row >
+      <div class="div-login m-bottom-16" *ngIf="!auth_token" (click)="goToLogin()">
+        Đã có tài khoản? <span class="text-login">Đăng nhập ngay</span>
+      </div>
+      <ion-row class="m-left-5px">
           <ion-col size="12">
               <ion-item style="--padding-start: 0px" class="item-input-custom">
                   <ion-label class="label-name" position="stacked">Họ và tên <span *ngIf="!hoten" class='cls-error'>*</span></ion-label>
@@ -24,7 +27,7 @@
               </ion-item>
           </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row class="m-left-5px">
         <ion-col size="12">
           <ion-item style="--padding-start: 0px" class="item-input-custom">
             <ion-label class="label-name" position="stacked">Số điện thoại <span *ngIf="!phone" class='cls-error'>*</span></ion-label>
@@ -33,7 +36,7 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row class="m-left-5px">
         <ion-col size="12">
           <ion-item style="--padding-start: 0px" class="item-input-custom">
             <ion-label class="label-name" position="stacked">Email</ion-label>
@@ -56,13 +59,13 @@
 
       <hr class="cls-hr">
 
-      <ion-row >
+      <ion-row class="m-left-5px">
         <div class='width-100 d-flex'>
           <div class='width-100 div-align-bottom '><ion-label class="label-order">Yêu cầu xuất hóa đơn</ion-label></div>
           <div class='width-50 div-align-bottom text-right div-flex-end'><ion-toggle (ionChange)="edit(0)" [(ngModel)]="ischeck" [checked] = "ischeck" color="secondary"></ion-toggle></div>
         </div>
       </ion-row>
-      <div *ngIf="ischeck && !Roomif.ExcludeVAT && tourService.paymentType == 1">
+      <div *ngIf="ischeck">
         <div class='div-check-order'>
           <ion-checkbox (ionChange)="showNameMail($event)" [checked]="ishideNameMail" class="ion-checkbox" color="secondary"></ion-checkbox>
           <ion-label class="label-input-order m-left-8" >Dùng thông tin liên hệ làm thông tin xuất hoá đơn</ion-label>
@@ -116,15 +119,15 @@
             <div class="div-button"><ion-toggle style="margin-top: -4px;" class="toggle-promo" (ionChange)="edit(2)" [(ngModel)]="ischeckpoint"></ion-toggle></div>
         </div> -->
       
-        <div class="div-line"></div>
+        <!-- <div class="div-line"></div>
         <div (click)="showdiscount()" *ngIf="!promocode">
-          <!-- <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div> -->
+
           <div class="div-text-normal ">
             <div class="width-100 text-bold">Bạn có mã voucher? <span class="text-sub">(iVIVU Voucher, Heniken..)</span></div>
           </div>
           <div class="div-text-normal text-blue">Chọn hoặc nhập mã khuyến mãi</div>
-          <!-- <div class="div-button width-10 text-right"><img src="./assets/ic_ordersupport/next.svg"></div> -->
-        </div>
+      
+        </div> -->
         <div class="div-voucher-apply d-flex" *ngIf="promocode" (click)="showdiscount()">
           <div class="width-200">
             <span class="text-normal">Ưu đãi (</span>

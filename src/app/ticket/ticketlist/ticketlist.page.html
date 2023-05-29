@@ -49,7 +49,7 @@
             <div class="cls-row-viewtopsale d-flex" >
                 <div class="width-70 div-flex-end"><span *ngIf="slide.topSale" class="text-topsale">{{ slide.topSale }} khách đặt trong 24 giờ qua</span></div>
                 <div class=" width-45 " >
-                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
+                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice > slide.salePrice">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
                   <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.PriceAdult > slide.priceDefault && slide.priceDefault == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div> -->
                   <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.priceDefault < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div> -->
                   <div  class="text-price " *ngIf="slide.salePrice else noprice">{{ gf.convertNumberToString(slide.salePrice) }}đ</div>

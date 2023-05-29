@@ -208,6 +208,7 @@ export class LoginsmsverifyPage implements OnInit {
               se.storage.set("checkreview", 0);
             }
             se.storage.set("point", decoded.point);
+         
             se.searchhotel.rootPage ='login';
             //se.countdownRefreshToken();
             if(se.valueGlobal.backValue == 'foodaccount'){

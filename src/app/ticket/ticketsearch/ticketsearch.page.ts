@@ -111,17 +111,7 @@ export class TicketSearchPage implements OnInit{
         };
         se.gf.RequestApi('GET', url, headers, null, 'ticketsearch', 'GetBestExperiences').then((data) => {
             let res = JSON.parse(data);
-            //se.listHotRegion = res.data;
-            //console.log(res.data);
             se.listHotExperience = res.data;
-            // if(se.listHotExperience && se.listHotExperience.length >0){
-            //     se.listHotExperience.forEach((item, idx) => {
-            //         if(se.listHotRegion[idx] && se.listHotRegion[idx].AvartarLink){
-            //             item.AvartarLink = se.listHotRegion[idx].AvartarLink;
-            //         }
-                    
-            //     })
-            // }
         })
     }
     async loadHistorySearch() {
@@ -193,7 +183,9 @@ export class TicketSearchPage implements OnInit{
 
   clickItemRegion(item){
     this.ticketService.publicSearchTicketRegion(item);
-    this.gf.createListLastSearchTicketRegion(item);
+    this.gf.createListLastSearchTicketRegion(item,0);
+    this.ticketService.input = item;
+    this.ticketService.itemSearchTicket.emit(1);
     this.navCtrl.back();
   }
   clearText(){
@@ -201,7 +193,27 @@ export class TicketSearchPage implements OnInit{
   }
   itemclick(item,stt) {
     item.stt=stt;
+    if (stt==1) {
+      let itemTicket = {
+        expId:item.id,
+        expName:item.name
+      };
+      this.ticketService.publicSearchTicketRegion(itemTicket);
+      this.gf.createListLastSearchTicketRegion(itemTicket,stt);
+      this.ticketService.input = itemTicket;
+    }else{
+      this.ticketService.publicSearchTicketRegion(item);
+      this.gf.createListLastSearchTicketRegion(item,stt);
+      this.ticketService.input = item;
+    }
+
+    this.ticketService.itemSearchTicket.emit(1);
+    this.navCtrl.pop();
+  }
+  funcHotExperience(item){
     this.ticketService.input = item;
+    this.ticketService.publicSearchTicketRegion(item);
+    this.gf.createListLastSearchTicketRegion(item,1);
     this.ticketService.itemSearchTicket.emit(1);
     this.navCtrl.pop();
   }

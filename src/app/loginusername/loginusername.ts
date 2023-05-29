@@ -171,6 +171,7 @@ export class LoginusernamePage implements OnInit {
           }
           
           se.storage.set("point", decoded.point);
+
           if (se.loginData.value.ischeck) {
             se.storage.remove("password");
             se.storage.remove("emailrmb");

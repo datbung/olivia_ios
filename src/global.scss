@@ -1524,6 +1524,17 @@ height: 18px !important;
   //border: solid 1px #9fc43a;
   border: solid 1px #cccccc;
 }
+.days-btn.days-allotment-ticket {
+  width: 44px !important;
+  height: 44px !important;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 0;
+  border-radius: 6px !important;
+}
 .days-btn.div-boder-KM {
   //border: solid 1px #9fc43a;
   border: solid 1px #9fc43a !important;

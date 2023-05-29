@@ -34,6 +34,8 @@ export class ticketService{
   itemSearchDepature: any;
   input: any;
   experience: any;
+  itemDetail : any;
+  skus: any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

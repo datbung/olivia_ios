@@ -5,6 +5,8 @@ import * as request from 'requestretry';
 import { C } from './../providers/constants';
 import { GlobalFunction } from './../providers/globalfunction';
 import { ValueGlobal } from '../providers/book-service';
+import { forEach } from '@angular/router/src/utils/collection';
+import * as moment from 'moment';
 /**
  * Generated class for the CuspointsPage page.
  *
@@ -20,17 +22,21 @@ import { ValueGlobal } from '../providers/book-service';
 export class CuspointsPage implements OnInit{
   point;actionHistory;  isShowConfirm = false;
   loader:any;
+  expPointNextYear: any;
+  expPointNowYear: any;
+  currentYear: any;
+  currentNextYear: any;
   constructor(public platform: Platform,public navCtrl: NavController, public storage: Storage,public loadingCtrl: LoadingController,private modalCtrl: ModalController,
     public alertCtrl: AlertController,public zone: NgZone,private gf: GlobalFunction, public valueGlobal: ValueGlobal) {
-
+      this.presentLoading();
+      this.GetUserInfo();
     //google analytic
     gf.googleAnalytion('cuspoints','load','');
   }
 
   async presentLoading() {
     this.loader = await this.loadingCtrl.create({
-      message: "",
-      duration: 1000
+      message: ""
     });
     this.loader.present();
   }
@@ -39,16 +45,13 @@ export class CuspointsPage implements OnInit{
 
   }
   goback(){
-    //this.navCtrl.back();
-    this.modalCtrl.dismiss();
+    this.navCtrl.back();
+    // this.navCtrl.dismiss();
   }
 
   ionViewWillEnter(){
-    this.storage.get('point').then(point => {
-      this.point = point;
-    });
-    this.presentLoading();
-    this.getPoint();
+ 
+ 
   }
 
   getPoint() {
@@ -79,6 +82,31 @@ export class CuspointsPage implements OnInit{
               var item=JSON.parse(body);
               se.zone.run(()=>{
                 se.actionHistory=item.actionHistory;
+                se.actionHistory.forEach(element => {
+                  if (element.actionName=="Đặt phòng khách sạn") {
+                    element.contentNote="";
+                    var note=element.note.split('|');
+                    element.date= note[note.length-1];
+                    for (let i = 0; i < note.length -1 ; i++) {
+                      if (i==note.length -2) {
+                        element.contentNote=element.contentNote+note[i]
+                      }else{
+                        element.contentNote=element.contentNote+note[i] + '|'
+                      }
+                    }
+                  }else{
+                    element.contentNote="";
+                    var note=element.note.split('|');
+                    element.date= note[0];
+                    for (let i = 1; i < note.length ; i++) {
+                      if (i==note.length - 1) {
+                        element.contentNote=element.contentNote+note[i]
+                      }else{
+                        element.contentNote=element.contentNote+note[i] + '|'
+                      }
+                    }
+                  }
+                });
               })
               if(se.loader){
                 se.loader.dismiss();
@@ -163,17 +191,63 @@ export class CuspointsPage implements OnInit{
     ]
   });
   alert.present();
-
-  // alert.onDidDismiss().then((data)=>{
-  //   this.storage.remove('auth_token');
-  //   this.storage.remove('email');
-  //   this.storage.remove('username');
-  //   this.storage.remove('jti');
-  //   this.storage.remove('userInfoData');
-  //   this.storage.remove('userRewardData');
-  //   this.storage.remove('point');
-  //   this.point = 0;
-  //   this.navCtrl.navigateBack('/');
-  // })
   }
+  GetUserInfo() {
+    var se = this;
+    se.storage.get('auth_token').then(auth_token => {
+        if (auth_token) {
+            var text = "Bearer " + auth_token;
+            var options = {
+                method: 'GET',
+                url: C.urls.baseUrl.urlMobile + '/api/Dashboard/GetUserInfo',
+                timeout: 10000,
+                maxAttempts: 5,
+                retryDelay: 2000,
+                headers: {
+                    'cache-control': 'no-cache',
+                    'content-type': 'application/json',
+                    authorization: text
+                }
+            };
+            request(options, function (error, response, body) {
+                if (response.statusCode != 200) {
+                    var objError = {
+                        page: "roomdetailreview",
+                        func: "GetUserInfo",
+                        message: response.statusMessage,
+                        content: response.body,
+                        type: "warning",
+                        param: JSON.stringify(options)
+                    };
+                    C.writeErrorLog(objError, response);
+                }
+                if (error) {
+                    error.page = "roomdetailreview";
+                    error.func = "GetUserInfo";
+                    error.param = JSON.stringify(options);
+                    C.writeErrorLog(error, response);
+                } else if (response.statusCode == 401) {
+                    
+                } else {
+                    if (body) {
+                        var data = JSON.parse(body);
+                        se.expPointNowYear=data.expPointNowYear;
+                        if (se.expPointNowYear > 0) {
+                          var year = new Date(new Date().setFullYear(new Date().getFullYear()))
+                          se.currentYear =  "31"+"-"+"12"+"-"+moment(year).format('YYYY');
+                        }
+                        se.expPointNextYear=data.expPointNextYear;
+                        if (se.expPointNextYear > 0) {
+            
+                          var year  = new Date(new Date().setFullYear(new Date().getFullYear()+ 1))
+                          this.currentNextYear =  "31"+"-"+"12"+"-"+moment(year).format('YYYY');
+                        }
+                        se.getPoint();
+                    }
+
+                }
+            });
+        }
+    })
+}
 }

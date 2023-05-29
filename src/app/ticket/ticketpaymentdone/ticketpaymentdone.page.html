@@ -28,7 +28,7 @@
   <div *ngIf='ticketService.paymentType == 1 else paylater'>
     <div>
       <ion-label class="text" *ngIf="ticketService.itemTicketService">
-        Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="ticketService.itemTicketService.Name">{{ticketService.itemTicketService.Name}}</span>
+        Thanh toán thành công. Cảm ơn Quý khách đã sử dụng dịch vụ  <span class="text-tealish">iVIVU.com</span>
       </ion-label>
 
       <!-- <ion-label class="text" *ngIf="ticketService.BookingTourMytrip">
@@ -38,43 +38,42 @@
     <div class="p-top-12">  
       <div>
         <ion-label class="text">
-          Quý khách vui lòng kiểm tra thông tin vé vui chơi đã đặt trong <span class="text-bold">Chuyến đi của tôi</span>
+          <span *ngIf="ticketService.itemTicketService.name">Vé vào cổng: {{ticketService.itemTicketService.name}}</span> đã được  <span class="text-tealish">iVIVU</span> gửi đến email của Quý khách và được lưu trong mục <span class="text-bold">Chuyến đi của tôi</span> trên app
         </ion-label>
       </div>
-      <div>
+      <!-- <div>
         <ion-label class="text text-sub">
           Mã đặt vé vui chơi <span class="text-bold text-tealish">{{bookingCode}}</span>
         </ion-label>
-      </div>
-      
+      </div> -->
     </div>
     
 
   </div>
-
   <ng-template #paylater>
-    <div class="text">Thanh toán thành công. Cám ơn quý khách đã sử dụng dịch vụ <span class="text-tealish">iVIVU.com</span></div>
-    <!-- <div class="text p-top-12">Thông tin thanh toán đã được gửi đến email của Quý khách</div> -->
+    <div class="text">Cám ơn quý khách đã sử dụng dịch vụ iVIVU.com</div>
+    <div class="text p-top-12">Thông tin thanh toán đã được gửi đến email của Quý khách</div>
     
-    <!-- <div class="text p-top-12">
+    <div class="text p-top-12">
       <ion-label class="text" text-wrap>
         Mời quý khách thanh toán số tiền:
-        <span class="text-bold text-orange">{{total}}đ </span> trong vòng <span class="text-bold">24 tiếng</span>
-        để hoàn tất việc đặt tour
+        <span class="text-bold text-orange"> {{gf.convertNumberToString(ticketService.totalPriceNum)}}đ </span> trước <span class="text-bold text-tealish">{{paymentDate}}</span>
+        để hoàn tất việc đặt vé vui chơi
       </ion-label>
-    </div> -->
+    </div>
     <div class="p-top-12">
-      <ion-label class="text ">
-        <span class="text-bold">Vé {{ticketService.itemTicketService.Name}}</span> đã được <span class="text-tealish">iVIVU</span> gửi đến email của Quý khách và được lưu trong mục <span class="text-bold">Chuyến đi của tôi.</span> trên app
+      <ion-label class="text text-sub">
+        Mã đặt vé vui chơi: <span class="text-bold text-tealish">{{ticketService.itemTicketService.objbooking.bookingCode}}</span>
       </ion-label>
     </div>
   </ng-template>
+  
   
 </div>
 </ion-content>
 <ion-footer>
   <div class="div-button-payment-done">
-    <button ion-button round outline class="button button2">Chi tiết vé</button>
+    <button (click)="goMyTrip()" ion-button round outline class="button button2">Chi tiết vé</button>
     <button (click)="next()" ion-button round outline class="button button1 m-top-0">Đặt thêm vé khác</button>
   </div>
 </ion-footer>
