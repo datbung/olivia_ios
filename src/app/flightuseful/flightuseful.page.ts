@@ -15,10 +15,30 @@ import * as request from 'requestretry';
   styleUrls: ['./flightuseful.page.scss'],
 })
 export class FlightusefulPage {
-    //@ViewChild('divuseful') content ion
     item: any;
     listUseful: any;
     itemclick: any;
+    type: any;
+    arrLinkImage = [
+        "https://res.ivivu.com/flight/inbound/images/home/qa1.svg",
+        //"https://res.ivivu.com/flight/inbound/images/home/qa17_Covid19.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa2.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa3.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa4.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa5.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa6.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa7.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa8.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa9.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa10.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa11.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa12.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa13.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa14.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa15.svg",
+        "https://res.ivivu.com/flight/inbound/images/home/qa16.svg",
+
+    ]
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private zone: NgZone,
@@ -26,6 +46,12 @@ export class FlightusefulPage {
         public valueGlobal: ValueGlobal,
         public _flightService: flightService) { 
             this.loadDataFlightUseful();
+            setTimeout(()=>{
+                this.zone.run(()=>{
+                    this.type = $('app-flightuseful').attr('type')*1;
+                })
+            },300)
+            
         }
 
         ngOnInit(){
@@ -33,7 +59,8 @@ export class FlightusefulPage {
         }
 
         loadDataFlightUseful(){
-            let url = C.urls.baseUrl.urlFlight + "gate/apiv1/GetUsefulHome";
+            //let url = C.urls.baseUrl.urlFlight + "https://api-flight.ivivu.com/gate/apiv1/GetUsefulHome";
+            let url = "https://api-flight.ivivu.com/gate/apiv1/GetUsefulHome";
             this.gf.RequestApi("GET", url, {
                 "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
                 'Content-Type': 'application/json; charset=utf-8'
@@ -67,5 +94,9 @@ export class FlightusefulPage {
                 },10)
             }
            
+        }
+
+        showusefuldetail(){
+            this.navCtrl.navigateForward('/flightusefuldetail');
         }
 }

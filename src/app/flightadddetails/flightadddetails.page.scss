@@ -213,7 +213,7 @@
     }
     .div-icon-down{
         position: absolute;
-        right: 0;
+        right: -2px;
         bottom: 3px;
     }
 
@@ -398,6 +398,9 @@
     .m-bottom-6 {
         margin-bottom: 6px;
     }
+    .m-bottom-10 {
+        margin-bottom: 10px;
+    }
 }
 
 .d-flex-footer{
@@ -524,3 +527,61 @@
     letter-spacing: -0.34px;
     margin-top: 10px;
   }
+
+  .div-expand-airlinemember.div-expand{
+    display: block;
+    animation: showNav 500ms ease-in-out both;
+  }
+  .div-collapse {
+    transition: opacity 1s ease-out;
+    display: none;
+    opacity: 0; 
+    height: 258px;
+    overflow: hidden;
+    padding: 0;
+    animation: hideNav 500ms ease-in-out both;
+  }
+
+  @keyframes showNav {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes hideNav {
+    from {opacity: 1;}
+    to {opacity: 0;}
+  }
+  .m-top-4{
+    margin-top: 4px;
+}
+.text-airlinemember {
+    color: #f79321;
+}
+.icon-expand {
+    margin-left: 4px;
+}
+.text-normal {
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: left;
+    color: #828282;
+}
+.div-expand-airlinemember {
+    border-radius: 4px;
+    background-color: #f5f6f7;
+    padding: 8px 16px 12px;
+}
+.cls-input-membercode {
+    --background: #fff;
+    border-radius: 4px;
+    --padding-start: 8px;
+    border: solid 0.5px #bdbdbd;
+}
+.div-airline-logo {
+    height: 22px;
+    display: flex;
+    align-items: center;
+    .img-logo {
+        margin-right: 4px;
+    }
+}

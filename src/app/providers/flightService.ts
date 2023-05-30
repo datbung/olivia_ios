@@ -83,6 +83,7 @@ export class flightService{
   fromOrderRequestChangeFlight: boolean;
   requestSupportChangeFlight: boolean;
   fromOrderRequestDetailSupport: boolean;
+  typeFlightUsefulShow: number=1;
   publicItemShowMoreFlightTopDeal(data: any) {
     this.itemShowMoreFlightTopDeal.next(data);
   }

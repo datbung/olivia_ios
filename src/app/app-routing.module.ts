@@ -279,6 +279,7 @@ const routes: Routes = [
     { path: 'ticketpaymentdone', loadChildren: './ticket/ticketpaymentdone/ticketpaymentdone.module#TicketPaymentDonePageModule' },
 
     { path: 'paymentqrcode', loadChildren: './paymentqrcode/paymentqrcode.module#PaymentqrcodePageModule' },
+  { path: 'flightusefuldetail', loadChildren: './flightusefuldetail/flightusefuldetail.module#FlightUsefulDetailPageModule' },
     
 ];
 @NgModule({

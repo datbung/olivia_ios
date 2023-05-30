@@ -1,5 +1,5 @@
-import { Component,OnInit, NgZone, HostListener } from '@angular/core';
-import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController } from '@ionic/angular';
+import { Component,OnInit, NgZone, HostListener, ViewChild } from '@angular/core';
+import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController, IonContent } from '@ionic/angular';
 import { SearchHotel } from '../providers/book-service';
 import { C } from '../providers/constants';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -33,7 +33,7 @@ import { voucherService } from '../providers/voucherService';
   styleUrls: ['flightadddetails.page.scss'],
 })
 export class FlightadddetailsPage implements OnInit {
-
+  @ViewChild('scrollArea') scrollFlightAddetailsArea: IonContent;
     adults =[];
     childs = [];
     maxAgeOfChild:any = 2020;
@@ -87,6 +87,10 @@ export class FlightadddetailsPage implements OnInit {
   listPaxSuggestByMemberId = [];
   ischeckinOnl: boolean = true;
   contactOption:number;
+  departFlight: any;
+  returnFlight: any;
+  expanddivairlinemember: boolean;
+  
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -99,6 +103,12 @@ export class FlightadddetailsPage implements OnInit {
     private fb: Facebook,
     public _voucherService: voucherService) {
         if(this._flightService.itemFlightCache){
+          
+          this.departFlight = this._flightService.itemFlightCache.departFlight;
+          if(this._flightService.itemFlightCache.returnFlight){
+            this.returnFlight = this._flightService.itemFlightCache.returnFlight;
+          }
+          
           this.listcountry = this.gf.getNationList();
           this.listcountryFull = [...this.listcountry];
           this.isExtenal = this._flightService.itemFlightCache.isExtenal;
@@ -160,6 +170,9 @@ export class FlightadddetailsPage implements OnInit {
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
         this.checkinOnline();
+        this.storage.get('contactOption').then((co)=>{
+          this.contactOption = co;
+        })
     }
 
     @HostListener('keydown', ['$event'])
@@ -273,7 +286,9 @@ export class FlightadddetailsPage implements OnInit {
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
                         element.airlineMemberCode = elementcache.airlineMemberCode;
-                        element.dateofbirth = elementcache.dateofbirth;
+                        if(this._flightService.itemFlightCache.priceCathay>0){
+                          element.dateofbirth = elementcache.dateofbirth;
+                        }
                         if(se.isExtenal && se.showLotusPoint){
                           element.dateofbirth = elementcache.dateofbirth;
                           element.country = elementcache.country;
@@ -325,7 +340,9 @@ export class FlightadddetailsPage implements OnInit {
                         element.subName = elementcache.subName;
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
-                        element.dateofbirth = elementcache.dateofbirth;
+                        if(this._flightService.itemFlightCache.priceCathay>0){
+                          element.dateofbirth = elementcache.dateofbirth;
+                        }
                         if(se.isExtenal && se.showLotusPoint){
                           element.country = elementcache.country;
                           element.passport = elementcache.passport;
@@ -433,7 +450,7 @@ export class FlightadddetailsPage implements OnInit {
                            genderdisplay: element.gender == 1? 'Ông' : 'Bà', 
                            airlineMemberCode: element.airlineMemberCode&& this.showLotusPoint ? element.airlineMemberCode:'',
                            airlineCardCode: element.airlineCardCode&& this.showLotusPoint ? element.airlineCardCode: '', 
-                           dateofbirth: element.dateOfBirth ? element.dateOfBirth:'', mindob: amindob, maxdob: amaxdob, isChild: false,
+                           dateofbirth: element.dateOfBirth && (this._flightService.itemFlightCache.priceCathay>0 || this.isExtenal) ? element.dateOfBirth:'', mindob: amindob, maxdob: amaxdob, isChild: false,
                            maxepdate: maxepdate,
                            country: '',
                             passport: '', 
@@ -473,7 +490,7 @@ export class FlightadddetailsPage implements OnInit {
                             genderdisplay: element.gender == 1? 'Bé trai' : 'Bé gái', 
                             airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
                             airlineCardCode: element.airlineCardCode && this.showLotusPoint ? element.airlineCardCode: '', 
-                            dateofbirth: element.dateOfBirth ? element.dateOfBirth:'', mindob: mindob, maxdob: maxdob, isChild: true, isInfant: isInfant,
+                            dateofbirth: element.dateOfBirth && (this._flightService.itemFlightCache.priceCathay>0 || this.isExtenal) ? element.dateOfBirth:'', mindob: mindob, maxdob: maxdob, isChild: true, isInfant: isInfant,
                             country:'',
                             passport:  '', 
                             passportCountry:'', 
@@ -2986,7 +3003,8 @@ alert.present();
                     "destinationPostal": "",
                     "destinationStreet": "",
                     "passportIssueCountry": (se.showLotusPoint && se.isExtenal) ? element.passportCountry : "",
-                    "airlineMemberCode": (se.showLotusPoint && element.airlineMemberCode) ? element.airlineMemberCode : "", 
+                    "airlineMemberCode": element.departAirlineMemberCode, 
+                    "airlineMemberCodeReturn": (se._flightService.itemFlightCache.roundTrip && element.returnAirlineMemberCode ? element.returnAirlineMemberCode : ''), 
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
                     "adultIndex": index, 
@@ -3379,6 +3397,8 @@ alert.present();
                       "address": "",
                       "phoneNumber": se.sodienthoai,
                       "hasvoucher": se._flightService.itemFlightCache.promotionCode ? true : false,
+                      "memberCodeAirline": '',
+                      "contactChannel": se.contactOption ==2 ? 'mail' : 'zalo'
                     },
                     "passengers": listpassenger,
                     "userToken": "",
@@ -4122,5 +4142,39 @@ alert.present();
     }
     contactOptionClick(value){
       this.contactOption = value;
+    }
+
+    expandAirlineMember(itemAdult, index){
+      itemAdult.expanddivairlinemember = !itemAdult.expanddivairlinemember;
+      if(itemAdult.expanddivairlinemember){
+        var divCollapse = $(`.div-expand-airlinemember-${index}.div-collapse`);
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+        
+        this.scrollToTopGroupReview(1,index);
+      }else{
+        var divCollapse = $(`.div-expand-airlinemember-${index}.div-expand`);
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+        this.scrollToTopGroupReview(2,index);
+      }
+    }
+
+    scrollToTopGroupReview(value,index){
+      //scroll to top of group
+      setTimeout(()=>{
+        var objHeight =  $(`.div-expand-airlinemember-${index}`);
+        if(objHeight && objHeight.length >0){
+          var h = 0;
+          h = value == 2 ? objHeight[0].offsetTop - 200 : objHeight[0].offsetTop - 50;
+          if(this.scrollFlightAddetailsArea){
+            this.scrollFlightAddetailsArea.scrollToPoint(0,h,500);
+          }
+          
+        }
+      },100)
     }
 }

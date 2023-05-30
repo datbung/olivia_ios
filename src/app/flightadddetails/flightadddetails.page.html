@@ -15,7 +15,7 @@
         </ion-col>
     </ion-row>
 </ion-header>
-<ion-content>
+<ion-content #scrollArea>
     <div class="content-flightadddetails">
         <div *ngIf="activeStep == 1 else stepUserInfo">
             <div class="div-login m-bottom-16" *ngIf="!loginuser" (click)="goToLogin()">
@@ -41,7 +41,7 @@
                     </ion-item>
                 </div>
                 <div class="div-option-contact">
-                    <div class="text-normal m-bottom-6">Chọn kênh liên lạc và nhận vé</div>
+                    <div class="text-normal m-bottom-10">Chọn kênh liên lạc và nhận vé</div>
                     <div class="div-option">
                         <ion-radio-group name="rdgContactOption" class="list-option" [(ngModel)]="contactOption">
                             <div class="div-item-radio">
@@ -363,12 +363,57 @@
                     </div>
 
 
-                    <div *ngIf="showLotusPoint && !itemAdult.airlineMemberCode" class="text-lotus-point"
+                    <!-- <div *ngIf="showLotusPoint && !itemAdult.airlineMemberCode" class="text-lotus-point"
                         (click)="openLotusPointSave(itemAdult)">Nhập thẻ bông sen vàng <img class="img-vector"
                             src="./assets/imgs/vector.svg" /></div>
                     <div *ngIf="showLotusPoint && itemAdult.airlineMemberCode" class="text-lotus-code"
                         (click)="openLotusPointSave(itemAdult)">Thẻ bông sen vàng: {{ itemAdult.airlineMemberCode }}
+                    </div> -->
+                    <div class="d-flex m-top-16 m-bottom-8" (click)="expandAirlineMember(itemAdult,idxa)">
+                        <div class="text-airlinemember">Nhập thẻ thành viên hãng bay</div>
+                        <div class="icon-expand" *ngIf="!itemAdult.expanddivairlinemember" >
+                            <img class="img-seemoreroom" src="./assets/ic_flight/next_orange.svg">
+                          </div>
+                          <div class="icon-expand" *ngIf="itemAdult.expanddivairlinemember">
+                            <img class="img-seemoreroom" src="./assets/ic_flight/expand_orange.svg">
+                            </div>
                     </div>
+                    <div class="div-expand-airlinemember-{{idxa}} div-collapse">
+                        <div class="text-normal">Tên của chủ tài khoản khách hàng thân thiết phải giống tên của hành khách</div>
+                        <div *ngIf="departFlight" class=" m-top-8">
+                            <div class="div-airline-logo d-flex">
+                                <div class="img-logo">
+                                    <img class="logo-vj" *ngIf="departFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                                    <img *ngIf="departFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                                    <img class="logo-vna" *ngIf="departFlight.airlineCode == 'VietnamAirlines' && !departFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
+                                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.urlLogo &&!isApiDirect " [src]="departFlight.urlLogo">
+                                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.operatedByLogo &&isApiDirect " [src]="departFlight.operatedByLogo">
+                                    <img *ngIf="departFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                                </div>
+                                <div class="text-airline">{{departFlight.airline}}</div>
+                            </div>
+                            <div class="div-input-airlinemember m-top-4">
+                                <ion-input class="cls-input-membercode" type="text" [(ngModel)]="itemAdult.departAirlineMemberCode" placeholder="Nhập số hành khách thân thiết"></ion-input>
+                            </div>
+                        </div>
+                        <div *ngIf="returnFlight && departFlight.airlineCode != returnFlight.airlineCode " class=" m-top-8">
+                            <div class="div-airline-logo d-flex">
+                                <div class="img-logo">
+                                    <img class="logo-vj" *ngIf="returnFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                                    <img *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                                    <img class="logo-vna" *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && !returnFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
+                                    <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo &&!isApiDirect " [src]="returnFlight.urlLogo">
+                                    <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.operatedByLogo &&isApiDirect " [src]="returnFlight.operatedByLogo">
+                                    <img *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                                </div>
+                                <div class="text-airline">{{returnFlight.airline}}</div>
+                            </div>
+                            <div class="div-input-airlinemember m-top-4">
+                                <ion-input class="cls-input-membercode" type="text" [(ngModel)]="itemAdult.returnAirlineMemberCode" placeholder="Nhập số hành khách thân thiết"></ion-input>
+                            </div>
+                        </div>
+                    </div>
+                    
 
                     <!-- show error -->
                     <div class="div-showerror m-top-16" *ngIf="!inputtext">

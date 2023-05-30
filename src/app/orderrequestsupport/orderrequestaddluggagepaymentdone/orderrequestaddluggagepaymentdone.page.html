@@ -167,16 +167,17 @@
 
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
-                  <div class="text-time">{{ _flightService.orderRequestDepartFlight.departTimeDisplay }}</div>
+                  <div class="text-time width-80">{{ _flightService.orderRequestDepartFlight.departTimeDisplay }}</div>
                   <div class="div-icon"><img src="./assets/ic_flight/icon_flight_right.svg"></div>
-                  <div class="text-time">{{ _flightService.orderRequestDepartFlight.landingTimeDisplay }}</div>
+                  <div class="text-time width-80">{{ _flightService.orderRequestDepartFlight.landingTimeDisplay }}</div>
                 </div>
                 <div class="div-width-100 text-time text-center">{{ _flightService.orderRequestDepartFlight.flightTimeDisplay }}</div>
               </div>
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
-                  <div class="text-sub ">{{ trip.itemdepart.flightFrom }} ({{ trip.itemdepart.departCode }})</div>
-                  <div class="text-sub ">{{ trip.itemdepart.flightTo }} ({{ trip.itemdepart.arrivalCode }})</div>
+                  <div class="text-sub width-80">{{ trip.itemdepart.flightFrom }} ({{ trip.itemdepart.departCode }})</div>
+                  <div class="div-icon div-hidden"><img src="./assets/ic_flight/icon_flight_right.svg"></div>
+                  <div class="text-sub width-80">{{ trip.itemdepart.flightTo }} ({{ trip.itemdepart.arrivalCode }})</div>
                 </div>
                 <div class="div-width-100 text-sub text-center" *ngIf="!trip.hasStops">Bay thẳng</div>
                 <div class="div-width-100 text-sub text-center" *ngIf="trip.hasStops">Quá cảnh</div>
@@ -228,16 +229,17 @@
 
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
-                  <div class="text-time">{{ _flightService.orderRequestReturnFlight.departTimeDisplay }}</div>
+                  <div class="text-time width-80">{{ _flightService.orderRequestReturnFlight.departTimeDisplay }}</div>
                   <div class="div-icon"><img src="./assets/ic_flight/icon_flight_right.svg"></div>
-                  <div class="text-time">{{ _flightService.orderRequestReturnFlight.landingTimeDisplay }}</div>
+                  <div class="text-time width-80">{{ _flightService.orderRequestReturnFlight.landingTimeDisplay }}</div>
                 </div>
                 <div class="div-width-100 text-time text-center">{{ _flightService.orderRequestReturnFlight.flightTimeDisplay }}</div>
               </div>
               <div class="d-flex">
                 <div class="div-width-300 d-flex">
-                  <div class="text-sub">{{ trip.itemreturn.flightFrom }} ({{ trip.itemreturn.departCode }})</div>
-                  <div class="text-sub">{{ trip.itemreturn.flightTo }} ({{ trip.itemreturn.arrivalCode }})</div>
+                  <div class="text-sub width-80">{{ trip.itemreturn.flightFrom }} ({{ trip.itemreturn.departCode }})</div>
+                  <div class="div-icon div-hidden"><img src="./assets/ic_flight/icon_flight_right.svg"></div>
+                  <div class="text-sub width-80">{{ trip.itemreturn.flightTo }} ({{ trip.itemreturn.arrivalCode }})</div>
                 </div>
                 <div class="div-width-100 text-sub text-center" *ngIf="!trip.hasStops">Bay thẳng</div>
                 <div class="div-width-100 text-sub text-center" *ngIf="trip.hasStops">Quá cảnh</div>

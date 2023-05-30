@@ -1,5 +1,5 @@
 <div class="div-useful-content" #divuseful>
-  <div class="div-useful-title">
+  <div class="div-useful-title" *ngIf="_flightService.typeFlightUsefulShow!=2">
     <div class="title-padding">
       <ion-label class="text-title2">
       Thông tin hữu ích
@@ -12,31 +12,36 @@
       </ion-label>
     </div>
   </div>
-    
-
       <div class="item-useful">
-        <div *ngFor="let itemuseful of listUseful" class="div-background-useful">
-            <div [ngClass]="itemuseful.clicked ? 'd-flex has-clicked' : 'd-flex' " *ngIf="!itemuseful.clicked else itemhasclicked" (click)="itemClick(itemuseful)">
-                <!-- <span class="p-right-16">›  <span class="text-content">{{itemuseful.title}}</span></span> -->
-                <div class="text-content">{{itemuseful.title}}</div>
-                <div class="icon-arr"><img src="./assets/ic_flight/arr_up.svg"></div>
+        <div *ngFor="let itemuseful of listUseful; let idx = index">
+          <div *ngIf="(_flightService.typeFlightUsefulShow!=2 && idx <7) || _flightService.typeFlightUsefulShow==2" class="div-background-useful">
+            <div [ngClass]="itemuseful.clicked ? 'd-flex div-title has-clicked' : 'div-title d-flex' " *ngIf="!itemuseful.clicked  else itemhasclicked" (click)="itemClick(itemuseful)">
+              <div [ngClass]="_flightService.typeFlightUsefulShow==2 ? 'text-content f-18' : 'text-content'">{{itemuseful.title}}</div>
+              <div class="icon-arr" *ngIf="_flightService.typeFlightUsefulShow==1"><img src="./assets/ic_flight/arr_up.svg"></div>
+              <div class="icon-arr width-24" *ngIf="_flightService.typeFlightUsefulShow==2"><img src="./assets/ic_flight/expand_24.svg"></div>
             </div>
             <ng-template #itemhasclicked>
                 <div (click)="itemClick(itemuseful)" id="{{itemuseful.id}}">
-                    <!-- <div class="d-flex ">
-                       <span class="p-right-4"><img src="./assets/ic_flight/ic_down_primary.svg"></span> <span class="text-content has-clicked">{{itemuseful.title}}</span>
-                    </div> -->
-                    <div class="d-flex">
-                      <div class="text-content">{{itemuseful.title}}</div>
-                      <div class="icon-arr"><img src="./assets/ic_flight/arr_down.svg"></div>
+                    <div class="d-flex div-title">
+                      <div [ngClass]="_flightService.typeFlightUsefulShow==2 ? 'text-content f-18' : 'text-content'">{{itemuseful.title}}</div>
+                      <div [ngClass]="_flightService.typeFlightUsefulShow==2 ? 'icon-arr width-24' : 'icon-arr'"><img src="./assets/ic_flight/arr_down.svg"></div>
                     </div>
-                    <div class="div-useful-show">
+                    <div [ngClass]="_flightService.typeFlightUsefulShow==2 ? 'div-useful-detail-show' : 'div-useful-show'">
                         <div [innerHTML]="itemuseful.contents"></div>
                     </div>
+                    <div class="div-image">
+                      <img class="img-qa" [src]="arrLinkImage[idx]">
+                    </div>
                 </div>
-              
+                
             </ng-template>
+          </div>
+        </div>
+        <div class="div-showmore" (click)="showusefuldetail()" *ngIf="_flightService.typeFlightUsefulShow!=2">
+          <div class="text-showmore">Xem thêm thông tin</div>
+          <div class="icon-showmore"><img src="./assets/ic_flight/next_blue.svg"></div>
         </div>
       </div>
+
     
 </div>

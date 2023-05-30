@@ -1527,7 +1527,7 @@ export class TabsPage implements OnInit {
   loadLocation():Promise<any>{
     var se = this;
     return new Promise((resolve, reject)=>{
-      let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
+      let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace";
         var options = {
           method: 'GET',
           url: urlPath,

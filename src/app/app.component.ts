@@ -135,35 +135,35 @@ export class AppComponent {
 
   ngOnInit(){
     
-    this.foodService.itemCartChange.pipe().subscribe(data => {
-      this.zone.run(()=>{
-        this.countcart =data;
-      })
-    })
+    // this.foodService.itemCartChange.pipe().subscribe(data => {
+    //   this.zone.run(()=>{
+    //     this.countcart =data;
+    //   })
+    // })
 
-    this.foodService.itemCountFilter.pipe().subscribe(data => {
-      if(data == 1){
-        this.zone.run(()=>{
-          this.enableCountFilter = 1;
-        })
-      }else{
-        this.zone.run(()=>{
-          this.enableCountFilter = 0;
-        })
-      }
-    })
+    // this.foodService.itemCountFilter.pipe().subscribe(data => {
+    //   if(data == 1){
+    //     this.zone.run(()=>{
+    //       this.enableCountFilter = 1;
+    //     })
+    //   }else{
+    //     this.zone.run(()=>{
+    //       this.enableCountFilter = 0;
+    //     })
+    //   }
+    // })
 
-    this.foodService.itemActiveFoodTab.pipe().subscribe(data => {
-      if(data == 1){
-        this.zone.run(()=>{
-          this.allowShowCart = true;
-        })
-      }else{
-        this.zone.run(()=>{
-          this.allowShowCart = false;
-        })
-      }
-    })
+    // this.foodService.itemActiveFoodTab.pipe().subscribe(data => {
+    //   if(data == 1){
+    //     this.zone.run(()=>{
+    //       this.allowShowCart = true;
+    //     })
+    //   }else{
+    //     this.zone.run(()=>{
+    //       this.allowShowCart = false;
+    //     })
+    //   }
+    // })
   }
 
   askTrackingPermission() :Promise<any>{

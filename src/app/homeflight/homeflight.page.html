@@ -167,7 +167,7 @@
                             <div class="text-flight-datetime">{{ myflight.checkInDisplayMonth }} </div>
                         </div>
                         <div class="div-flight-inout">
-                            <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout.svg" *ngIf="myflight.roundTrip else oneway">
+                            <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout1.svg" *ngIf="myflight.roundTrip else oneway">
                             <ng-template #oneway><img class="img-flight-inout img-oneway" src="./assets/imgs/ic_arrow.svg"></ng-template>
                         </div> 
                         <div>
@@ -183,7 +183,7 @@
             <div class="title-topdeal">Giá vé nội địa tốt nhất</div>
             <div class="subtitle-topdeal m-bottom-16">Giá tốt nhất từ VietnamAirlines, Bamboo, Vietjet...</div>
         </div>
-        <div class="div-wrap-flighttopdeal div-collapse" id="divshowmoreflight" *ngIf="showDivFlightTopDeal">
+        <div [ngClass]="listflighttopdeal.length > 6 ? 'div-wrap-flighttopdeal div-collapse' : 'div-wrap-flighttopdeal'" id="divshowmoreflight" *ngIf="showDivFlightTopDeal">
             <div  *ngFor="let itemdeal of listflighttopdeal; let idx = index" (click)="select(itemdeal)">
                 <div [ngClass]="idx == listflighttopdeal.length-1? 'div-item-flight':'div-item-flight m-bottom-16'" *ngIf="itemdeal.roundTrip == (flighttype == 'twoway')">
                     <div class="div-first d-flex">
@@ -228,8 +228,8 @@
             </div>
         </div>
 
-        <div class="div-showmore-flighttopdeal" (click)="showMoreFlight(1)" *ngIf="!showmoreflight && showDivFlightTopDeal" >Xem thêm <img class="img-expand" src="./assets/ic_flight/expand_blue.svg"></div>
-        <div class="div-showmore-flighttopdeal m-top-12" (click)="showMoreFlight(2)" *ngIf="showmoreflight && showDivFlightTopDeal">Ẩn <img class="img-expand" src="./assets/ic_flight/collapse_blue.svg"></div>
+        <div class="div-showmore-flighttopdeal" (click)="showMoreFlight(1)" *ngIf="!showmoreflight && showDivFlightTopDeal && listflighttopdeal.length > 6" >Xem thêm <img class="img-expand" src="./assets/ic_flight/expand_blue.svg"></div>
+        <div class="div-showmore-flighttopdeal m-top-12" (click)="showMoreFlight(2)" *ngIf="showmoreflight && showDivFlightTopDeal && listflighttopdeal.length > 6">Ẩn <img class="img-expand" src="./assets/ic_flight/collapse_blue.svg"></div>
 
             <div class="div-flightinternational-topdeal p-top-24 m-bottom-16" *ngIf="listinternationalflighttopdeal && listinternationalflighttopdeal.length >0">
                 <div class="title-topdeal">Giá vé quốc tế tốt nhất</div>
@@ -332,7 +332,7 @@
     </div>
 
     <div class="div-useful">
-        <app-flightuseful></app-flightuseful>
+        <app-flightuseful type="1"></app-flightuseful>
     </div>
     <div class="div-award p-bottom-126">
         <div class="item-award">
