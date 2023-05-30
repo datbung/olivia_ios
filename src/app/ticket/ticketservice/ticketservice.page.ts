@@ -40,6 +40,10 @@ export class TicketServicePage implements OnInit{
   dateDisplay
   index: number;
   checkinDate:any
+  arrSkus: any;
+  reCheckToken: any;
+  indexSku: any = 0;
+  totalRate: any;
   constructor(public platform: Platform,public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events:Events,
     public gf: GlobalFunction,public modalCtrl: ModalController, private pickerController: PickerController,private storage: Storage,
     public tourService: tourService,
@@ -77,13 +81,40 @@ export class TicketServicePage implements OnInit{
           }
          
         });
-        this.dateDisplay=moment(this.itemTicketService.dailyRatePkgs[0].daily).format('DD/MM');
-        this.checkinDate=moment(this.itemTicketService.dailyRatePkgs[0].daily).format('YYYY/MM/DD');
+
         this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.itemTicketService.dailyRatePkgs[0].daily).format('DD-MM-YYYY');
-        this.itemTicketService.dailyRatePkgs[0].action=true;
+        if (this.searchhotel.ischeckDate) {
+          this.dateDisplay=moment(this.searchhotel.CheckInDate).format('DD/MM');
+          this.checkinDate=moment(this.searchhotel.CheckInDate).format('YYYY/MM/DD');
+          for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
+            const element = this.itemTicketService.dailyRatePkgs[i];
+            element.action=false;
+            if (element.daily==moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')) {
+              this.index=i;
+              element.action=true;
+            }
+          }
+        }else{
+          var datenow=new Date();
+          var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
+          var date = new Date(res);
+          var Tomorrow = moment(date).format("DD/MM");
+
+          this.dateDisplay=moment(datenow).format('DD/MM') + ' - ' + Tomorrow;
+          this.checkinDate=moment(datenow).format('YYYY/MM/DD');
+          for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
+            const element = this.itemTicketService.dailyRatePkgs[i];
+            element.action=false;
+            if (element.daily==moment(datenow).format('YYYY-MM-DD')) {
+              this.index=i;
+              element.action=true;
+            }
+          }
+        }
+      
       }
       this.index=0;
-       this.calculatePrice();
+       this.GetDailyRatePackages();
        this.GetUserInfo();
     }
   
@@ -94,11 +125,14 @@ export class TicketServicePage implements OnInit{
 
   calculatePrice() {
     let se = this;
-    let totalPrice = this.itemTicketService.dailyRatePkgs[this.index].baseRateAdult * this.searchhotel.adult + this.itemTicketService.dailyRatePkgs[this.index].baseRateChild * this.searchhotel.child  + this.itemTicketService.dailyRatePkgs[this.index].baseRateSenior * this.searchhotel.elder;
-          this.zone.run(()=>{
-            //this.pointbkg = Math.floor(totalPrice/100000).toFixed(0);
-            this.totalPrice = totalPrice;
-          })
+    if (this.itemTicketService && this.itemTicketService.skus) {
+      let totalPrice = this.itemTicketService.skus.rateAdult * this.searchhotel.adult + this.itemTicketService.skus.rateChild * this.searchhotel.child  + this.itemTicketService.skus.rateSenior * this.searchhotel.elder;
+      this.zone.run(()=>{
+        //this.pointbkg = Math.floor(totalPrice/100000).toFixed(0);
+        this.totalPrice = totalPrice;
+      })
+    }
+   
   }
 
   goback() {
@@ -107,12 +141,6 @@ export class TicketServicePage implements OnInit{
   }
 
   book(){
-    // if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
-    //   return;
-    // }
-    // if(!this.hasDeparture){
-    //   return;
-    // }
     for (let i = 0; i < this.searchhotel.arrchild.length; i++) {
       const element = this.searchhotel.arrchild[i];
       if(!element.text)
@@ -121,8 +149,8 @@ export class TicketServicePage implements OnInit{
         return;
       }
     }
-    this.GetDailyRatePackages();
-
+    this.gf.showLoading();
+    this.RecheckRateBooking()
   }
 
   addPax(type){
@@ -141,7 +169,7 @@ export class TicketServicePage implements OnInit{
     }else if (type == 3){
       this.searchhotel.elder++;
     }
-    this.calculatePrice();
+    this.GetDailyRatePackages();
   }
   removePax(type){
     // if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
@@ -156,7 +184,7 @@ export class TicketServicePage implements OnInit{
         return;
       }
       this.searchhotel.adult--;
-      this.calculatePrice();
+      this.GetDailyRatePackages();
      
     }else if (type == 2){
       if(this.searchhotel.child<=0){
@@ -165,14 +193,14 @@ export class TicketServicePage implements OnInit{
       }
       this.searchhotel.child--;
       this.searchhotel.arrchild.splice(this.searchhotel.arrchild.length - 1, 1);
-      this.calculatePrice();
+      this.GetDailyRatePackages();
     }else if (type == 3){
       if(this.searchhotel.elder<=0){
         this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
         return;
       }
       this.searchhotel.elder--;
-      this.calculatePrice();
+      this.GetDailyRatePackages();
     }
   }
   async openPickupCalendar(){
@@ -185,8 +213,14 @@ export class TicketServicePage implements OnInit{
     let Year=new Date().getFullYear();
     let Month=new Date().getMonth();
     let Day=new Date().getDate();
-    let fromdate = new Date(this.searchhotel.CheckInDate);
-    let todate = new Date(this.searchhotel.CheckOutDate);
+    let fromdate;
+    if (this.searchhotel.ischeckDate) {
+      fromdate = new Date(this.searchhotel.CheckInDate);
+    }else{
+      fromdate = new Date();
+    }
+
+    // let todate = new Date(this.searchhotel.CheckOutDate);
     let _daysConfig: DayConfig[] = [];
     if(this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length >0) {
       for (let j = 0; j < this.itemTicketService.dailyRatePkgs.length; j++) {
@@ -196,7 +230,7 @@ export class TicketServicePage implements OnInit{
         _daysConfig.push({
           date: this.itemTicketService.dailyRatePkgs[j].daily,
           disable: false,
-          cssClass: 'days-allotment',
+          cssClass: '',
           // subTitle: lunarhasdeparture && lunarhasdeparture.length >0 ? moment(lunarhasdeparture[0].date).format("DD/MM") + ': ' +lunarhasdeparture[0].name : '',
         })
       }
@@ -244,7 +278,7 @@ export class TicketServicePage implements OnInit{
         //add event close header
         $('.ticket-calendar-custom .header-img-close').click((e => this.closecalendar()));
 
-        $('.ticket-calendar-custom ion-calendar-modal').append(`<div class='div-tour-text-departure'>Ngày màu xanh lá có lịch khởi hành</div>`);
+        // $('.ticket-calendar-custom ion-calendar-modal').append(`<div class='div-tour-text-departure'>Ngày màu xanh lá có lịch khởi hành</div>`);
 
         let divmonthtitle =  $('.month-title');
         if(divmonthtitle && divmonthtitle.length >0){
@@ -281,11 +315,11 @@ export class TicketServicePage implements OnInit{
       const date = event.data;
       if (event.data) {
          se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
-           se.checkinDate=moment(event.data.from).format('YYYY/MM/DD');
-           se.searchhotel.datecin = new Date(event.data.from);
-           se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
-          
+            se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
+            se.checkinDate=moment(event.data.from).format('YYYY/MM/DD');
+            se.searchhotel.datecin = new Date(event.data.from);
+            se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
+
          })
       }
   }
@@ -340,13 +374,14 @@ export class TicketServicePage implements OnInit{
               se.dateDisplay= moment(fromdate).format('DD-MM');
               for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
                 const element = this.itemTicketService.dailyRatePkgs[i];
+                element.action=false;
                 if (element.daily==se.searchhotel.CheckInDate) {
                   this.index=i;
-                  break;
+                  element.action=true;
                 }
               }
-              // console.log(this.index);
-              this.calculatePrice();
+              this.searchhotel.ischeckDate=true;
+              se.GetDailyRatePackages();
             }
           }
         }
@@ -397,7 +432,7 @@ export class TicketServicePage implements OnInit{
       }
 
     }
-    this.calculatePrice();
+    this.GetDailyRatePackages();
   }
 
   getColumns(numColumns, numOptions, columnOptions, textchild) {
@@ -524,27 +559,47 @@ export class TicketServicePage implements OnInit{
     }
    }
    funcdate(item){
+
+    this.checkactionDate(item);
+    this.searchhotel.ischeckDate=true;
+    // this.calculatePrice();
+    this.GetDailyRatePackages();
+
+
+   }
+  checkactionDate(item) {
+    this.checkinDate=moment(item.daily).format('YYYY/MM/DD');
     this.dateDisplay=moment(item.daily).format('DD/MM');
+    this.searchhotel.CheckInDate = moment(item.daily).format('YYYY-MM-DD');
     for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
       const element = this.itemTicketService.dailyRatePkgs[i];
+      element.action = false;
+      if (element.daily == item.daily) {
+        this.index = i;
+        element.action = true;
+      }
+    }
+  }
+   funcsku(item){
+    for (let i = 0; i < this.arrSkus.length; i++) {
+      const element = this.arrSkus[i];
       element.action=false;
-      if (element.daily==item.daily) {
-        this.index=i;
+      if (element.skuId==item.skuId) {
+        this.reCheckToken=item.reCheckToken;
+        this.indexSku=i;
         element.action=true;
       }
     }
-   
-    this.calculatePrice();
-
+    this.GetDailyRatePackages();
    }
-   RecheckRateBooking(data){
+   RecheckRateBooking(){
     let object={
       adults: this.searchhotel.adult,
       childs: this.searchhotel.child,
       seniors: this.searchhotel.elder,
-      token: data.skus[0].reCheckToken,
+      token: this.reCheckToken,
       checkin: this.checkinDate,
-      totalRate: data.skus[0].totalRate
+      totalRate: this.totalPrice
     }
     let headers=
     {
@@ -552,7 +607,7 @@ export class TicketServicePage implements OnInit{
     }
     this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/RecheckRateBooking', headers, object, 'ticketservice', 'RecheckRateBooking').then((data: any) => {
       if (data && data.success) {
-        console.log(data);
+        data.data.source=6;
         this.InitBooking(data.data);
       }
     });
@@ -564,7 +619,7 @@ export class TicketServicePage implements OnInit{
       adults: this.searchhotel.adult,
       childs: this.searchhotel.child,
       seniors: this.searchhotel.elder,
-      supplier: this.ticketService.experience.supplier
+      // supplier: this.ticketService.experience.supplier
     }
     let headers=
     {
@@ -572,7 +627,15 @@ export class TicketServicePage implements OnInit{
     }
     this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/GetDailyRatePackages', headers, obj, 'ticketservice', 'GetDailyRatePackages').then((data: any) => {
       if (data && data.success) {
-        this.RecheckRateBooking(data.data);
+        // this.RecheckRateBooking(data.data);
+        this.arrSkus=data.data.skus;
+        if (this.arrSkus && this.arrSkus.length>0) {
+          this.arrSkus[this.indexSku].action=true;
+          this.reCheckToken= this.arrSkus[this.indexSku].reCheckToken;
+          this.itemTicketService.skus=this.arrSkus[this.indexSku];
+          this.calculatePrice();
+        }
+
       }else{
         alert('Lỗi request api')
       }
@@ -583,13 +646,15 @@ export class TicketServicePage implements OnInit{
     {
       'content-type': 'application/json'
     }
-    this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/InitBooking', headers, object, 'ticketservice', 'InitBooking').then((data: any) => {
+    this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/InitBooking/'+this.ticketService.itemTicketService.dailyRatePkgs[0].packageId, headers, object, 'ticketservice', 'InitBooking').then((data: any) => {
       if (data && data.success) {
         this.ticketService.itemTicketService.objbooking=data.data;
         this.ticketService.hasAllotment = this.hasAllotment;
         this.ticketService.paymentType = 1;
         this.ticketService.totalPriceNum=this.totalPrice;
         this.ticketService.indexDetail=this.index;
+        this.ticketService.skus=this.arrSkus[this.indexSku];
+        this.gf.hideLoading();
         this.navCtrl.navigateForward('/ticketadddetails');
       }
     })

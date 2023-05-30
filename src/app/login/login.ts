@@ -277,6 +277,7 @@ export class LoginPage implements OnInit{
           se.storage.set("checkreview", 0);
         }
         se.storage.set("point", decoded.point);
+
         se.fcm.getToken().then(token => {
           se.deviceToken = token;
           se.storage.set('deviceToken',token);
@@ -830,6 +831,7 @@ export class LoginPage implements OnInit{
           se.storage.set("checkreview", 0);
         }
         se.storage.set("point", decoded.point);
+
         se.fcm.getToken().then(token => {
           se.deviceToken = token;
           se.storage.set('deviceToken',token);

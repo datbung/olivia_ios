@@ -22,7 +22,6 @@
       width: 100% !important;
       
       height: calc(env(safe-area-inset-top) + 382px);
-      object-fit: cover;
       position: absolute;
       z-index: -1;
     }

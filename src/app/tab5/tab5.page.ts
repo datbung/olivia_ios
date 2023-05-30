@@ -678,7 +678,8 @@ export class Tab5Page implements OnInit {
             if (auth_token) {
                 // se.app.getActiveNav().push('CuspointsPage');
                 // this.navCtrl.navigateForward('/cuspoints');
-                this.presentModal(CuspointsPage);
+                // this.presentModal(CuspointsPage);
+                this.navCtrl.navigateForward('/cuspoints');
             } else {
                 if (se.isShowConfirm) 
                     return;
@@ -1176,6 +1177,8 @@ export class Tab5Page implements OnInit {
                             se.storage.set("username", data.fullname);
                             se.storage.set("phone", data.phone);
                             se.storage.set("point", data.point);
+                            se.storage.set("expPointNowYear", data.expPointNowYear);
+                            se.storage.set("expPointNextYear", data.expPointNextYear);
                             se.zone.run(() => { // se.loginuser = data.auth_token;
                                 se.username = data.fullname;
                             })
@@ -1285,7 +1288,8 @@ export class Tab5Page implements OnInit {
                         se.storage.set("username", data.fullname);
                         se.storage.set("phone", data.phone);
                         se.storage.set("point", data.point);
-
+                        se.storage.set("expPointNowYear", data.expPointNowYear);
+                        se.storage.set("expPointNextYear", data.expPointNextYear);
                         se.zone.run(() => { // se.loginuser = data.auth_token;
                             se.username = data.fullname;
                         })

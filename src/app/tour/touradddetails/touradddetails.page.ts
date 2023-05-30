@@ -574,10 +574,6 @@ export class TourAddDetailsPage implements OnInit {
       }
       
     })
-    
-        
-
-      
   }
   next1() {
     this.Roomif.notetotal = "";

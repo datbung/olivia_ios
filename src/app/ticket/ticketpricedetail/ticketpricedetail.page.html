@@ -12,7 +12,7 @@
 <ion-content>
   <div class="div-content div-ticket-price-content">
       <div class="div-service-name">
-          {{ticketService.itemTicketService.name}}
+         Vé vào cổng: {{ticketService.itemTicketService.name}}
       </div>
 
       <div class="d-flex m-top-12">
@@ -35,20 +35,20 @@
         <div class="text-sub">Chi tiết giá</div>
         <div *ngIf="searchhotel.adult>0" class="d-flex m-top-8">
           <div class="text-normal width-70">Người lớn</div>
-          <div  class="text-normal text-right width-30">{{searchhotel.adult}} x {{gf.convertNumberToString(ticketService.itemTicketService.dailyRatePkgs[indexDetail].baseRateAdult)}}</div> 
+          <div  class="text-normal text-right width-30">{{searchhotel.adult}} x {{gf.convertNumberToString(ticketService.skus.rateAdult)}}</div> 
         </div>
 
         <div  *ngIf="searchhotel.child>0" class="d-flex m-top-8">
-          <div class="text-normal width-70">Trẻ em</div>
-          <div class="text-normal text-right width-30">{{searchhotel.child}} x {{gf.convertNumberToString(ticketService.itemTicketService.dailyRatePkgs[indexDetail].baseRateChild)}}</div> 
+          <div class="text-normal width-70">Trẻ em <span class="text-note">(100-139cm)</span></div>
+          <div class="text-normal text-right width-30">{{searchhotel.child}} x {{gf.convertNumberToString(ticketService.skus.rateChild)}}</div> 
         </div>
         <div  *ngIf="searchhotel.elder>0" class="d-flex m-top-8" >
-          <div class="text-normal width-70">Người lớn tuổi (60+)</div>
-          <div class="text-normal text-right width-30">{{searchhotel.elder}} x {{gf.convertNumberToString(ticketService.itemTicketService.dailyRatePkgs[indexDetail].baseRateSenior)}}</div> 
+          <div class="text-normal width-70">Người lớn tuổi <span class="text-note">(60+)</span></div>
+          <div class="text-normal text-right width-30">{{searchhotel.elder}} x {{gf.convertNumberToString(ticketService.skus.rateSenior)}}</div> 
         </div>
 
         <div class="div-line m-top-16"></div>
-        <div class="text-normal m-12">Xem chi tiết <span class="text-blue">điều kiện vé</span> <span class="m-left-8 "><img class="img-arrow" src="./assets/ic_ticket/arr_link.svg" /></span></div>
+        <div class="text-normal m-12">Xem chi tiết <span (click)="goTicketinfo()" class="text-blue">điều kiện vé</span> <span class="m-left-8 "><img class="img-arrow" src="./assets/ic_ticket/arr_link.svg" /></span></div>
         <div class="div-line"></div>
 
         <div class="m-top-12 d-flex">

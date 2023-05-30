@@ -135,31 +135,29 @@ export class TicketPaymentPayooPage implements OnInit {
 
   checkPayment() {
     var se = this;
-    let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
-        se.zone.run(() => {
-          se.gf.CheckPaymentTour(url).then((res) => {
-            let checkpay = JSON.parse(res);
-            if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
-              se.gf.hideLoading();
-              if(se.safariViewController){
-                se.safariViewController.hide();
-              }
-              clearInterval(se.intervalID);
-              se._ticketService.paymentType = 1;
-              se.navCtrl.navigateForward('ticketpaymentdone');
-            }
-            else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
-            {
-              se.gf.hideLoading();
-              if(se.safariViewController){
-                se.safariViewController.hide();
-              }
-              clearInterval(se.intervalID);
-              se.gf.showAlertTourPaymentFail(checkpay.internalNote);
-            }
-          
-          })
-        })
+    let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se._ticketService.itemTicketService.objbooking.bookingCode+"";
+    this.zone.run(() => {
+      se.gf.CheckPaymentTicket(url).then((res) => {
+        let checkpay = JSON.parse(res);
+        if (checkpay.response && checkpay.response.payment_status == 5) {
+          se._ticketService.paymentType = 1;
+          if (se.safariViewController) {
+            se.safariViewController.hide();
+          }
+          clearInterval(se.intervalID);
+          //se.ticketService.paymentType = 1;
+          se.navCtrl.navigateForward('ticketpaymentdone');
+        }
+        else if (checkpay.response && checkpay.response.payment_status == 2) {
+
+          if (se.safariViewController) {
+            se.safariViewController.hide();
+          }
+          clearInterval(se.intervalID);
+          this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+        }
+      })
+    })
   }
 
   async showQuickBack(){

@@ -21,21 +21,43 @@
 
 
 <ion-content padding>
-  <label style="font-size: 16px;color: #26bed6;font-weight: 500">
+  <!-- <label style="font-size: 16px;color: #26bed6;font-weight: 500">
     Bạn đang có {{point}} điểm
-  </label>
+  </label> -->
+  <div class="div-point" *ngIf="expPointNowYear>0">
+    <div>
+     <span class="text-point-32">{{expPointNowYear}}</span> <span class="text-point-16"> điểm khả dụng</span>
+    </div>
+    <div>
+      <span class="text-date">{{expPointNowYear}} điểm sẽ hết hạn vào</span>  <span class="text-date font-weight-600"> {{currentYear}}</span> 
+    </div>
+  </div>
+  <div class="div-point" *ngIf="expPointNextYear>0">
+    <div>
+     <span class="text-point-32">{{expPointNextYear}}</span> <span class="text-point-16"> điểm khả dụng</span>
+    </div>
+    <div>
+      <span class="text-date">{{expPointNextYear}} điểm sẽ hết hạn vào</span>  <span class="text-date font-weight-600"> {{currentNextYear}}</span> 
+    </div>
+  </div>
+  <div class="text-title m-bottom-16">
+    Lịch sử điểm
+  </div>
   <div *ngFor="let item of actionHistory">
     <ion-row style="margin-left: -5px">
       <ion-col text-left size="9">
-        <label style="font-size: 14px">
-          {{item.note}}
+        <label class="text-limit-2">
+          {{item.contentNote}}
+        </label>
+        <label class="text-date">
+          {{item.date}}
         </label>
       </ion-col>
       <ion-col text-right size="3">
-        <label *ngIf="item.unitPoint>0" style="font-size: 14px;font-weight: bold;color: #26bed6;">
+        <label *ngIf="item.unitPoint>0" class="text-plus">
           +{{item.unitPoint}}
         </label>
-        <label *ngIf="item.unitPoint<0" style="font-size: 14px;font-weight: bold;color: #26bed6;">
+        <label *ngIf="item.unitPoint<0" class="text-subtraction">
           {{item.unitPoint}}
         </label>
       </ion-col>

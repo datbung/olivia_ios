@@ -42,6 +42,7 @@ export class TicketListPage implements OnInit{
   listTourCode = ['tailor-tour-ivivu','tour-nuoc-ngoai-cao-cap','cung-duong-dong-tay-bac'];
   allowclickcalendar: boolean = true;
   myCalendar: HTMLIonModalElement;
+  status: any;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
@@ -85,12 +86,18 @@ export class TicketListPage implements OnInit{
     //     this.name =itemfilter.name || itemfilter.Name;
     //   }
     // })
-    if(this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId){
-      this.loadTicketList(this.ticketService.itemTicketTopic.topicId,0);
+    this.status = this.activeRoute.snapshot.paramMap.get('stt');
+    if (this.status==0) {
+      if(this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId){
+        this.loadTicketList(this.ticketService.itemTicketTopic.topicId,0);
+      }
+    }else{
+      if(this.ticketService.itemSearchDestination && this.ticketService.itemSearchDestination.id){
+        this.loadTicketList(this.ticketService.itemSearchDestination.id,1);
+      }
     }
-    if(this.ticketService.itemSearchDestination && this.ticketService.itemSearchDestination.id){
-      this.loadTicketList(this.ticketService.itemSearchDestination.id,1);
-    }
+
+ 
   }
 
   loadTicketList(id,stt) {

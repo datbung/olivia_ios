@@ -264,7 +264,7 @@ const routes: Routes = [
     
     //Ticket
     { path: 'ticketsearch', loadChildren: './ticket/ticketsearch/ticketsearch.module#TicketSearchPageModule' },
-    { path: 'ticketlist', loadChildren: './ticket/ticketlist/ticketlist.module#TicketListPageModule' },
+    { path: 'ticketlist/:stt', loadChildren: './ticket/ticketlist/ticketlist.module#TicketListPageModule' },
     { path: 'ticketdetail', loadChildren: './ticket/ticketdetail/ticketdetail.module#TicketDetailPageModule' },
     { path: 'ticketservice', loadChildren: './ticket/ticketservice/ticketservice.module#TicketServicePageModule' },
     { path: 'ticketservicedetail', loadChildren: './ticket/ticketservicedetail/ticketservicedetail.module#TicketServiceDetailPageModule' },
@@ -273,13 +273,14 @@ const routes: Routes = [
     
     { path: 'ticketpaymentselect', loadChildren: './ticket/ticketpaymentselect/ticketpaymentselect.module#TicketPaymentSelectPageModule' },
     { path: 'ticketpaymentatm', loadChildren: './ticket/ticketpaymentatm/ticketpaymentatm.module#TicketPaymentAtmPageModule' },
-    //{ path: 'ticketpaymentbank', loadChildren: './ticket/ticketpaymentbank/ticketpaymentbank.module#ticketPaymentBankPageModule' },
-    //{ path: 'ticketpaymentatoffice', loadChildren: './ticket/ticketpaymentatoffice/ticketpaymentatoffice.module#ticketPaymentAtOfficePageModule' },
+    { path: 'ticketpaymentatoffice', loadChildren: './ticket/ticketpaymentatoffice/ticketpaymentatoffice.module#TicketPaymentAtOfficePageModule' },
     { path: 'ticketpaymentpayoo/:code/:stt', loadChildren: './ticket/ticketpaymentpayoo/ticketpaymentpayoo.module#TicketPaymentPayooPageModule' },
     { path: 'ticketpaymentdone', loadChildren: './ticket/ticketpaymentdone/ticketpaymentdone.module#TicketPaymentDonePageModule' },
 
     { path: 'paymentqrcode', loadChildren: './paymentqrcode/paymentqrcode.module#PaymentqrcodePageModule' },
   { path: 'flightusefuldetail', loadChildren: './flightusefuldetail/flightusefuldetail.module#FlightUsefulDetailPageModule' },
+    { path: 'ticketpaymentbank', loadChildren: './ticket/ticketpaymentbank/ticketpaymentbank.module#TicketpaymentbankPageModule' },
+  { path: 'ticketinfo', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
     
 ];
 @NgModule({

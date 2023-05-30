@@ -24,7 +24,7 @@
     </div>
     <div class="cls-divpayment">
     
-    <div class="text-tourname" *ngIf="ticketService.itemTicketService.name">{{ticketService.itemTicketService.name}}</div>
+    <div class="text-tourname" *ngIf="ticketService.itemTicketService.name">Vé vào cổng: {{ticketService.itemTicketService.name}}</div>
     <!-- <div class="text-tourname" *ngIf="ticketService.BookingTourMytrip && ticketService.BookingTourMytrip.hotel_name">{{ticketService.BookingTourMytrip.hotel_name}}</div> -->
     <div class="m-top-6 text-pax">{{ticketService.departureCalendarStr}}</div>
     <div class="div-split"></div>
@@ -59,9 +59,11 @@
       <div class="div-width-100 div-flex-left">
           <div class="text-pax" *ngIf="searchhotel.adult && !adult">{{searchhotel.adult}} người lớn</div>
           <div class="text-pax m-top-4 h-16" *ngIf="!adult"><span *ngIf="searchhotel.child">{{searchhotel.child}} trẻ em</span></div>
+            <div class="text-pax m-top-4 h-16" *ngIf="searchhotel.elder">{{searchhotel.elder}} người lớn tuổi</div>
 
-          <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
+          <!-- <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div>
+          <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div> -->
       </div>
       <div class="div-width-100 text-right m-bottom-16">
         <div class="text-total-price" >{{gf.convertNumberToString(ticketService.totalPriceNum)}}<span class="text-price-sub">đ</span>
@@ -75,6 +77,14 @@
   </div>
       <div class="div-split-panel"></div>
       <ion-list class="cls-list">
+        <ion-item (click)="ticketpaymentbank()" class="cls-minheight" >
+          <label class="text-list">
+            Chuyển khoản ngân hàng 
+            <!-- <span class="text-note-not-KM cls-note-not-KM">(Không áp dụng cho vé khuyến mãi)</span> -->
+          </label>
+          <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
+          
+      </ion-item>
         <ion-item *ngIf="bizTravelService.isCompany" (click)="paymentbiztravel()" class="'cls-minheight h-54">
           <label  class="text-list m-bottom-8">
             Tài khoản công ty
@@ -82,7 +92,7 @@
           <div class="text-warning-creadit" *ngIf="bizTravelService.bizAccount && (bizTravelService.bizAccount.balanceAvaiable - _flightService.itemFlightCache.totalPrice)<=0">Số dư Credit không đủ để thực hiện thanh toán</div>
           <ion-icon slot="end" name="ios-arrow-round-forward" *ngIf="bizTravelService.bizAccount && (bizTravelService.bizAccount.balanceAvaiable - _flightService.itemFlightCache.totalPrice) >0" class='m-right-20'></ion-icon>
         </ion-item>
-        
+   
         <ion-item (click)="ticketpaymentatm()" class="cls-minheight">
             <label  class="text-list">
               Thẻ ATM nội địa /Internet Banking
@@ -133,31 +143,26 @@
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-20"></ion-icon>
         </ion-item>
-
-        <ion-item  (click)="ticketbuynowpaylater()" class="cls-minheight">
-          <label class="text-list">
-            Thanh toán qua <img class="img-homecredit" src="./assets/ic_ticket/logo-home-credit.jpg">
-          </label>
-          <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-20" *ngIf="!blockPayCard"></ion-icon>
-        </ion-item>
-
-        <!-- <ion-item  (click)="ticketpaymentpayoostore()" class="cls-minheight" *ngIf="!ticketService.BookingTourMytrip">
+        <ion-item  (click)="ticketpaymentpayoostore()" class="cls-minheight" *ngIf="!ticketService.BookingTourMytrip">
           <label class="text-list">
             Trực tiếp tại cửa hàng tiện lợi <img class="img-payoo" src="https://res.ivivu.com/payment/img/payoo/payoo-logo.png">
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward"  class="m-right-20" ></ion-icon>
           
-        </ion-item> -->
-        <ion-item (click)="ticketpaymentbank()" class="cls-minheight" >
-            <label class="text-list">
-              Chuyển khoản ngân hàng
-            </label>
-            <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
-            
         </ion-item>
+        <!-- <ion-item  (click)="ticketbuynowpaylater()" class="cls-minheight">
+          <label class="text-list">
+            Thanh toán qua <img class="img-homecredit" src="./assets/ic_ticket/logo-home-credit.jpg">
+          </label>
+          <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-20" *ngIf="!blockPayCard"></ion-icon>
+        </ion-item> -->
+
+    
+    
         <ion-item (click)="ticketpaymentatoffice()" class="cls-minheight" >
           <label class="text-list">
-            Trực tiếp tại văn phòng
+            Trực tiếp tại văn phòng 
+            <!-- <span class="text-note-not-KM cls-note-not-KM">(Không áp dụng cho vé khuyến mãi)</span> -->
           </label>
           <ion-icon slot="end" item-end name="ios-arrow-round-forward" class="m-right-20" ></ion-icon>
           

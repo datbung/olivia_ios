@@ -89,7 +89,7 @@ export class TicketPaymentAtmPage implements OnInit {
       }
     });
     this.gf.showLoading();
-    this.CreateUrlOnePay(this.TokenId ? this.bankid : this.id);
+    this.createBookingUrl(this.TokenId ? this.bankid : this.id);
 
   }
   ionViewWillLeave(){
@@ -124,24 +124,35 @@ export class TicketPaymentAtmPage implements OnInit {
             else if(result.event === 'loaded') console.log('Loaded');
             else if(result.event === 'closed') {
             se.gf.hideLoading();
-            let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
-              se.gf.Checkpayment(url).then((datapayment)=>{
-                let checkpay=JSON.parse(datapayment);
-                if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
-                
-                  if(se.safariViewController){
+            let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.ticketService.itemTicketService.objbooking.bookingCode+"";
+            this.zone.run(() => {
+              se.gf.CheckPaymentTicket(url).then((res) => {
+                let checkpay = JSON.parse(res);
+                if (checkpay.response && checkpay.response.payment_status == 5) {
+                  //se.ticketService.paymentType = 1;
+                  if (se.safariViewController) {
                     se.safariViewController.hide();
                   }
                   clearInterval(se.intervalID);
                   //se.ticketService.paymentType = 1;
-                  se.navCtrl.navigateForward('tourpaymentdone');
+                  let objbookTicket={
+                    bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
+                    paymentMethod: 2
                 }
-                else
-                {
+                this.gf.ticketPaymentSave(objbookTicket);
+                  se.navCtrl.navigateForward('ticketpaymentdone');
+                }
+                else if (checkpay.response && checkpay.response.payment_status == 2) {
+      
+                  if (se.safariViewController) {
+                    se.safariViewController.hide();
+                  }
                   clearInterval(se.intervalID);
-                  se.gf.showAlertTourPaymentFail(checkpay.internalNote);
+                  this.gf.showAlertTourPaymentFail(checkpay.internalNote);
                 }
               })
+            })
+              
             }
             //clearInterval(se.intervalID);
             setTimeout(() => {
@@ -222,26 +233,10 @@ export class TicketPaymentAtmPage implements OnInit {
     }
   
   }
-  CreateUrlOnePay(bankid) {
-    var se=this;
-    let itemcache = this.ticketService;
-    // if(se.ticketService.BookingTourMytrip) {
-    //   se.bookingCode = se.ticketService.BookingTourMytrip.booking_id;
-    //   se.createBookingUrl(se.ticketService.BookingTourMytrip.amount_after_tax, bankid);
-    // } else {
-    //   se.createBookingTour().then((bookingCode) => {
-    //     if(bookingCode){
-    //       se.bookingCode = bookingCode;
-    //       se.createBookingUrl(itemcache.totalPrice, bankid);
-    //     }
-    //   })
-    // }
-    
-  }
 
-  createBookingUrl(totalPrice, bankid) {
+  createBookingUrl(bankid) {
     let se = this;
-    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
           se.gf.CreatePayoo(url).then(datapayoo => {
             if(datapayoo.success){
               se.zone.run(()=>{
@@ -337,34 +332,38 @@ export class TicketPaymentAtmPage implements OnInit {
    
   callSetInterval()
   {
+    var se = this;
     if (this.loader) {
       this.loader.dismiss();
     }
     //clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
-      let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+this.bookingCode;
+      let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.ticketService.itemTicketService.objbooking.bookingCode+"";
       this.zone.run(() => {
-        this.gf.CheckPaymentTour(url).then((res) => {
+        se.gf.CheckPaymentTicket(url).then((res) => {
           let checkpay = JSON.parse(res);
-          if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
-            this.gf.hideLoading();
-            if(this.safariViewController){
-              this.safariViewController.hide();
+          if (checkpay.response && checkpay.response.payment_status == 5) {
+            se.ticketService.paymentType = 1;
+            if (se.safariViewController) {
+              se.safariViewController.hide();
             }
-            clearInterval(this.intervalID);
-            //this.ticketService.paymentType = 1;
-            this.navCtrl.navigateForward('tourpaymentdone');
+            clearInterval(se.intervalID);
+            //se.ticketService.paymentType = 1;
+            let objbookTicket={
+              bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
+              paymentMethod: 2
           }
-          else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
-          {
-            this.gf.hideLoading();
-            if(this.safariViewController){
-              this.safariViewController.hide();
+          this.gf.ticketPaymentSave(objbookTicket);
+            se.navCtrl.navigateForward('ticketpaymentdone');
+          }
+          else if (checkpay.response && checkpay.response.payment_status == 2) {
+
+            if (se.safariViewController) {
+              se.safariViewController.hide();
             }
-            clearInterval(this.intervalID);
+            clearInterval(se.intervalID);
             this.gf.showAlertTourPaymentFail(checkpay.internalNote);
-          }    
-        
+          }
         })
       })
       

@@ -57,7 +57,7 @@ export class FlightaccountPage {
     private fcm: FCM,
     public _flightService: flightService,
     public bizTravelService: BizTravelService, private appVersion: AppVersion,
-    public _voucherService: voucherService){
+    public _voucherService: voucherService ,public flightService: flightService){
       this.point = 0;
       this.appVersion.getVersionNumber().then((version) => {
         this.zone.run(()=>{
@@ -141,8 +141,30 @@ export class FlightaccountPage {
                   }
               });
           }, 350);
-          
-         
+
+      }else if (data==1){
+        this.valueGlobal.logingoback = "";
+        this.flightService.itemTabFlightFocus.emit(1);
+          if (document.querySelector(".tabbar")) {
+            document.querySelector(".tabbar")['style'].display = 'none';
+            if(document.querySelector(".tabbar")[1]){
+              document.querySelector(".tabbar")[0]['style'].display = 'none';
+              document.querySelector(".tabbar")[1]['style'].display = 'none';
+            }
+          }
+          if(document.getElementsByClassName("homefood-footer").length >0){
+            document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+            if(document.getElementsByClassName("homefood-footer")[1]){
+              document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+            }
+           }
+  
+           if(document.getElementsByClassName("homeflight-footer").length >0){
+            document.getElementsByClassName("homeflight-footer")[0]['style'].display ='block';
+            if(document.getElementsByClassName("homeflight-footer")[1]){
+              document.getElementsByClassName("homeflight-footer")[1]['style'].display ='block';
+            }
+           }
       }
     })
 
@@ -643,8 +665,8 @@ export class FlightaccountPage {
       se.storage.get('auth_token').then(auth_token => {
         if (auth_token) {
           //se.app.getActiveNav().push('CuspointsPage');
-          //this.navCtrl.navigateForward('/cuspoints');
-          this.presentModal(CuspointsPage);
+          this.navCtrl.navigateForward('/cuspoints');
+          // this.presentModal(CuspointsPage);
         }else{
           if(se.isShowConfirm) return;
           se.showConfirmLogin("Bạn cần đăng nhập để sử dụng chức năng này.");

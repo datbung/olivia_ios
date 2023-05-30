@@ -16,10 +16,10 @@ import { SearchHotel } from 'src/app/providers/book-service';
   styleUrls: ['./ticketpricedetail.page.scss'],
 })
 export class TicketPriceDetailPage implements OnInit {
-  itemSearch: any;
-  itemTicketService: any;
+
+
   totalPriceStr: Promise<boolean>;
-  indexDetail: any;
+
  
   constructor(private navCtrl: NavController, public gf: GlobalFunction,
     private modalCtrl: ModalController,
@@ -28,11 +28,7 @@ export class TicketPriceDetailPage implements OnInit {
     private storage: Storage,
     public ticketService: ticketService,
     public searchhotel: SearchHotel) {
-      // if(ticketService.itemTicketService){
-      //   this.itemTicketService = this.ticketService.itemTicketService;
-      //   this.totalPriceStr = this.ticketService.totalPriceStr
-      // }
-      this.indexDetail=this.ticketService.indexDetail;
+
      
   }
   goback(){
@@ -41,5 +37,7 @@ export class TicketPriceDetailPage implements OnInit {
   ngOnInit(){
    
   }
- 
+  goTicketinfo(){
+    this.navCtrl.navigateForward('/ticketinfo');
+  }
 }
