@@ -272,14 +272,15 @@ const routes: Routes = [
     { path: 'ticketpricedetail', loadChildren: './ticket/ticketpricedetail/ticketpricedetail.module#TicketPriceDetailPageModule' },
     
     { path: 'ticketpaymentselect', loadChildren: './ticket/ticketpaymentselect/ticketpaymentselect.module#TicketPaymentSelectPageModule' },
-    { path: 'ticketpaymentatm', loadChildren: './ticket/ticketpaymentatm/ticketpaymentatm.module#TicketPaymentAtmPageModule' },
+    { path: 'ticketpaymentatm/:stt', loadChildren: './ticket/ticketpaymentatm/ticketpaymentatm.module#TicketPaymentAtmPageModule' },
     { path: 'ticketpaymentatoffice', loadChildren: './ticket/ticketpaymentatoffice/ticketpaymentatoffice.module#TicketPaymentAtOfficePageModule' },
     { path: 'ticketpaymentpayoo/:code/:stt', loadChildren: './ticket/ticketpaymentpayoo/ticketpaymentpayoo.module#TicketPaymentPayooPageModule' },
-    { path: 'ticketpaymentdone', loadChildren: './ticket/ticketpaymentdone/ticketpaymentdone.module#TicketPaymentDonePageModule' },
+    { path: 'ticketpaymentdone/:stt', loadChildren: './ticket/ticketpaymentdone/ticketpaymentdone.module#TicketPaymentDonePageModule' },
 
     { path: 'paymentqrcode', loadChildren: './paymentqrcode/paymentqrcode.module#PaymentqrcodePageModule' },
     { path: 'ticketpaymentbank', loadChildren: './ticket/ticketpaymentbank/ticketpaymentbank.module#TicketpaymentbankPageModule' },
-  { path: 'ticketinfo', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
+  { path: 'ticketinfo/:code', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
+  { path: 'ticketpaymentfail', loadChildren: './ticket/ticketpaymentfail/ticketpaymentfail.module#TicketpaymentfailPageModule' },
     
 ];
 @NgModule({
