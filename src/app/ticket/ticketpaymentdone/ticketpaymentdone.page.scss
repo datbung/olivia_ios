@@ -495,7 +495,7 @@
     font-weight: 300;
     font-stretch: normal;
     font-style: normal;
-    line-height: 1.5;
+    line-height: 1.4;
     letter-spacing: -0.4px;
     color: #3f3b3b;
 }
@@ -509,8 +509,19 @@
 
 .text-tealish{
     color: #26bed6 !important;
+    text-decoration-line: none;
 }
 
 .p-top-12{
     padding-top: 12px;
+}
+.div-zalo{
+    margin-left: 5px;
+    position: absolute;
+}
+.div-zalo-paylater{
+    position: absolute;
+}
+.m-left-23{
+    margin-left: 23px;
 }

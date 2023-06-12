@@ -574,6 +574,7 @@ export class TicketpaymentbankPage implements OnInit {
 
     }
     this.gf.ticketPaymentSave(objbookTicket);
+    this.activityService.ischeckPage="ticketpaymentbank";
     this.navCtrl.navigateForward('/paymentqrcode');
   }
   clearClonePage(pagename) {

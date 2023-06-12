@@ -736,6 +736,7 @@ export class RoompaymentbanknewPage implements OnInit {
                   se.gf.CreateSupportRequest(body.code,se.booking.CEmail,se.Roomif.hoten,se.Roomif.phone,se.Roomif.notetotal);
                 }
                 se.activityService.qrcodepaymentfrom = 2;//ks 
+                se.activityService.ischeckPage="roompaymentbanknew"
                 se.navCtrl.navigateForward('/paymentqrcode');
               }
               else{

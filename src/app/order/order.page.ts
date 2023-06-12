@@ -170,7 +170,10 @@ export class OrderPage {
   HotelPolicies: any;
   amount_after_tax: any;
   qrcodeurl: string;
-
+  objectDetail:any;
+  isTTV=false;
+  includePrice: any;
+  ischeckqrLink=false;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -782,6 +785,8 @@ export class OrderPage {
                 }
                 else if (element.booking_id.indexOf('VC') != -1) {
                   element.booking_type = "TICKET";//TOUR
+                  element.VVCCheckinDisplay =se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkInDate)).daynameshort + ", " +  moment(element.checkInDate).format('DD-MM-YYYY');
+                  
                 }
                 //tour
                 else if (element.booking_id && (element.booking_id.indexOf("DL") != -1 || element.booking_id.indexOf("TO") != -1)) {
@@ -876,10 +881,22 @@ export class OrderPage {
 
                   if (element.extra_guest_info) {
                     let arrpax = element.extra_guest_info.split('|');
-                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
                       element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                    } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                      element.childDisplay = "Trẻ em x"+ arrpax[1];
+                    } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
                       element.paxDisplay = arrpax[0].toString() + " người lớn";
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                    }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                      element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                      element.childDisplay = "Trẻ em x"+ arrpax[1];
+                      element.elderDisplay = "Người già x"+ arrpax[2];
+                    }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                      element.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                      element.elderDisplay = "Người già x"+ arrpax[2];
                     }
                   }
                   if (element.amount_after_tax) {
@@ -930,8 +947,7 @@ export class OrderPage {
                 se.getRatingStar(element);
 
                 
-                // if (element.booking_id=='VMB1723519') {
-                //   console.log(element.booking_json_data);
+                // if (element.booking_id=='VC0002078') {
                 //   se.listMyTrips.push(element);
                 // }
                 se.listMyTrips.push(element);
@@ -1647,10 +1663,22 @@ export class OrderPage {
                   element.paymentBefore = hours + "h" + minutes + "'";
                   if (element.extra_guest_info) {
                     let arrpax = element.extra_guest_info.split('|');
-                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
                       element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                    } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                      element.adultDisplay = "Trẻ em x"+ arrpax[1];
+                    } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
                       element.paxDisplay = arrpax[0].toString() + " người lớn";
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                    }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                      element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                      element.adultDisplay = "Trẻ em x"+ arrpax[1];
+                      element.adultDisplay = "Người già x"+ arrpax[2];
+                    }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                      element.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
+                      element.adultDisplay = "Người lớn x"+ arrpax[0];
+                      element.adultDisplay = "Người già x"+ arrpax[2];
                     }
                   }
                   if (element.amount_after_tax) {
@@ -1717,8 +1745,7 @@ export class OrderPage {
                   
                     })
                   }
-                  // if (element.booking_id=='VMB1723519') {
-                  //   console.log(element.booking_json_data);
+                  // if (element.booking_id=='VC0002078') {
                   //   se.listMyTrips.push(element);
                   // }
                   se.listMyTrips.push(element);
@@ -1766,7 +1793,7 @@ export class OrderPage {
                 element.address = element.hotelAddress;
                 element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                 se.getRatingStar(element);
-                // if (element.booking_id=='VMB1723519') {
+                // if (element.booking_id=='VC0002078') {
                 //   se.listMyTrips.push(element);
                 // }
                 se.listMyTrips.push(element);
@@ -2153,7 +2180,24 @@ export class OrderPage {
               se.listMyTrips[0].priceShow = (se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             }
           }
-
+          else if(se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].booking_type == 'TICKET'){
+            this.gf.ticketGetBookingCRM(se.listMyTrips[0].booking_id).then((data) => {
+              this.objectDetail=data;
+              let arrcd = this.objectDetail.startDate.split('-');
+              let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+              this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+              var objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
+              if(objmap && objmap.length >0){
+                this.ischeckqrLink=true;
+              }
+              this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + se.listMyTrips[0].booking_id , {}, {}, '', '').then((data) => {
+                if (data && data.success) {
+                  this.includePrice = data.data.booking.includePrice.split('|');
+                  this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
+                }
+              });
+            });
+          }
           if (se.listMyTrips && se.listMyTrips.length == 1 && !(se.listMyTrips[0].pay_method == 3 || se.listMyTrips[0].pay_method == 51 || se.listMyTrips[0].pay_method == 2)) {
             se.buildLinkQrCode(se.listMyTrips[0]);
           }
@@ -2202,6 +2246,8 @@ export class OrderPage {
                 }
                 else if (elementHis.booking_id.indexOf('VC') != -1) {
                   elementHis.booking_type = "TICKET";//TOUR
+                 
+                  elementHis.VVCCheckinDisplay =se.gf.getDayOfWeek(se.gf.getCinIsoDate(elementHis.checkInDate)).daynameshort + ", " +  moment(elementHis.checkInDate).format('DD-MM-YYYY');
                 }
                 //tour
                 else if (elementHis.booking_id && (elementHis.booking_id.indexOf("DL") != -1 || elementHis.booking_id.indexOf("TO") != -1)) {
@@ -2265,10 +2311,22 @@ export class OrderPage {
 
                   if (elementHis.extra_guest_info) {
                     let arrpax = elementHis.extra_guest_info.split('|');
-                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
                       elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                    } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                      elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
+                    } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
                       elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
+                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                    }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                      elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                      elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
+                      elementHis.elderDisplay = "Người già x"+ arrpax[2];
+                    }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                      elementHis.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
+                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                      elementHis.elderDisplay = "Người già x"+ arrpax[2];
                     }
                   }
                   if (elementHis.amount_after_tax) {
@@ -6678,6 +6736,9 @@ export class OrderPage {
     }, (error) => {
       // handle error
     });
+  }
+  ticketinfo(){
+    this.isTTV=!this.isTTV;
   }
 }
 

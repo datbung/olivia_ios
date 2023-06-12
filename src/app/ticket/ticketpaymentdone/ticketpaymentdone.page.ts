@@ -15,6 +15,7 @@ import { LaunchReview } from '@ionic-native/launch-review/ngx';
 import { ticketService } from 'src/app/providers/ticketService';
 import { voucherService } from 'src/app/providers/voucherService';
 import { tourService } from 'src/app/providers/tourService';
+import { ActivityService } from '../../providers/globalfunction';
 @Component({
   selector: 'app-ticketpaymentdone',
   templateUrl: './ticketpaymentdone.page.html',
@@ -31,6 +32,7 @@ export class TicketPaymentDonePage implements OnInit {
   checkOutDisplayDC: string;
   checkreview;
   paymentDate: string;
+  experienceName: any;
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
     private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -41,7 +43,7 @@ export class TicketPaymentDonePage implements OnInit {
     private _platform: Platform, public alertCtrl: AlertController, private launchReview: LaunchReview,
     public ticketService: ticketService,
     public tourService: tourService,
-    public _voucherService: voucherService) {
+    public _voucherService: voucherService, public activityService: ActivityService) {
       this.storage.get('checkreview').then(checkreview => {
         if (checkreview == 0) {
           this.checkreview = 0;
@@ -56,7 +58,12 @@ export class TicketPaymentDonePage implements OnInit {
 
 
   ngOnInit() {
-
+    this.stt = this.activatedRoute.snapshot.paramMap.get('stt');
+    if (this.stt==0) {
+     this.experienceName = this.ticketService.itemTicketDetail.experienceName;
+    }else{
+      this.experienceName = this.activityService.objPaymentMytrip.trip.hotel_name;
+    }
   }
 
   async ionViewWillEnter() {

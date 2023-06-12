@@ -374,6 +374,9 @@
         border-radius: 30px;
         background-color: #f4f5f6;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .div-option-time-sku-action{
         min-width: 90px;
@@ -399,4 +402,7 @@
       }
       .div-scroll{
         overflow-x: scroll;
+      }
+      .div-notprice{
+        opacity: 0.5;
       }

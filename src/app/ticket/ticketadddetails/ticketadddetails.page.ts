@@ -856,20 +856,6 @@ export class TicketAdddetailsPage implements OnInit {
       isInvoice=1;
     }
     let objCustomer = {
-      // memberId: this.memberid,
-      // customerName: this.hoten,
-      // customerPhone: this.phone,
-      // customerEmail: this._email,
-      // leadingName: this.hoten,
-      // leadingPhone: this.phone,
-      // leadingEmail: this._email,
-      // isInvoice: isInvoice,
-      // companyAddress: this.address,
-      // companyTaxCode: this.tax,
-      // companyContactEmail: this.emailhddt,
-      // companyContactName: this.companyname,
-      // customerTitle: "Anh",
-      // leadingTitle: "Anh"
       companyAddress: this.address,
       companyContactEmail: this.emailhddt,
       companyContactName: this.hotenhddt,
@@ -894,6 +880,8 @@ export class TicketAdddetailsPage implements OnInit {
         console.log(data);
         this.ticketService.totalPriceStr = this.totalPriceStr;
         this.navCtrl.navigateForward('/ticketpaymentselect');
+      }else{
+        alert(data.error);
       }
     });
   }
@@ -926,14 +914,14 @@ export class TicketAdddetailsPage implements OnInit {
 
       }
       //validate mail
-      if (!this.validateEmail(this._email) || !this._email || !this.gf.checkUnicodeCharactor(this._email)) {
-        this.presentToastEmail();
-        this.validemail = false;
-        resolve(false);
-        return;
+      // if (!this.validateEmail(this._email) || !this._email || !this.gf.checkUnicodeCharactor(this._email)) {
+      //   this.presentToastEmail();
+      //   this.validemail = false;
+      //   resolve(false);
+      //   return;
 
-      }
-      this.booking.CEmail = this._email;
+      // }
+      // this.booking.CEmail = this._email;
       if (this.ischeck) {
         if (this.companyname && this.address && this.tax) {
           this.companyname = this.companyname.trim();

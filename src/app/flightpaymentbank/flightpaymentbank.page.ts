@@ -684,6 +684,7 @@ export class FlightpaymentbankPage implements OnInit {
                   //se.navCtrl.navigateForward('flightpaymentdonebank/'+(itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
                   se.activityService.qrcodepaymentfrom = 1;
                   se._flightService.itemFlightCache.paymentType = 'banktransfer';
+                  se.activityService.ischeckPage="flightpaymentbank";
                   se.navCtrl.navigateForward('/paymentqrcode');
             }else{//hold vé thất bại về trang tìm kiếm
               se.gf.hideLoading();

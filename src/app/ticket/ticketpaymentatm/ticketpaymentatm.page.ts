@@ -36,6 +36,7 @@ export class TicketPaymentAtmPage implements OnInit {
   _inAppBrowser: any;stt;isremember=true;isdisable=false;isshowRemember=false;
   sttbooking=0;
   phone: any;
+  totalPriceNum: number;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,
     public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
@@ -50,6 +51,14 @@ export class TicketPaymentAtmPage implements OnInit {
   ngOnInit() {
     //this.bookingCode = this.ticketService.BookingTourMytrip ? this.ticketService.BookingTourMytrip.booking_id :this.ticketService.dataBookResponse.Code;
     //this.totalPrice=this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+    this.stt = this.activatedRoute.snapshot.paramMap.get('stt');
+    if (this.stt==0) {
+      this.bookingCode=this.ticketService.itemTicketService.objbooking.bookingCode;
+      this.totalPriceNum=this.ticketService.totalPriceNum
+    }else{
+      this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
+      this.totalPriceNum=this.activityService.objPaymentMytrip.trip.priceShow.toString().replace(/\./g, '').replace(/\,/g, '');
+    }
     this.storage.get('infocus').then(infocus => {
       if (infocus) {
         this.phone = infocus.phone;
@@ -124,7 +133,7 @@ export class TicketPaymentAtmPage implements OnInit {
             else if(result.event === 'loaded') console.log('Loaded');
             else if(result.event === 'closed') {
             se.gf.hideLoading();
-            let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.ticketService.itemTicketService.objbooking.bookingCode+"";
+            let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.bookingCode+"";
             this.zone.run(() => {
               se.gf.CheckPaymentTicket(url).then((res) => {
                 let checkpay = JSON.parse(res);
@@ -136,11 +145,16 @@ export class TicketPaymentAtmPage implements OnInit {
                   clearInterval(se.intervalID);
                   //se.ticketService.paymentType = 1;
                   let objbookTicket={
-                    bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
+                    bookingCode : this.bookingCode,
                     paymentMethod: 2
                 }
                 this.gf.ticketPaymentSave(objbookTicket);
-                  se.navCtrl.navigateForward('ticketpaymentdone');
+                if (this.stt==0) {
+                  se.navCtrl.navigateForward('ticketpaymentdone/0');
+                }
+                else{
+                  se.navCtrl.navigateForward('ticketpaymentdone/1');
+                }
                 }
                 else if (checkpay.response && checkpay.response.payment_status == 2) {
       
@@ -236,7 +250,7 @@ export class TicketPaymentAtmPage implements OnInit {
 
   createBookingUrl(bankid) {
     let se = this;
-    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=atm&source=app&amount=' + this.totalPriceNum + '&orderCode=' + this.bookingCode + '&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.TokenId ? se.TokenId : '') +'&rememberToken='+ '&BankId=' + bankid +(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
           se.gf.CreatePayoo(url).then(datapayoo => {
             if(datapayoo.success){
               se.zone.run(()=>{
@@ -338,7 +352,7 @@ export class TicketPaymentAtmPage implements OnInit {
     }
     //clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
-      let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.ticketService.itemTicketService.objbooking.bookingCode+"";
+      let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.bookingCode+"";
       this.zone.run(() => {
         se.gf.CheckPaymentTicket(url).then((res) => {
           let checkpay = JSON.parse(res);
@@ -350,11 +364,16 @@ export class TicketPaymentAtmPage implements OnInit {
             clearInterval(se.intervalID);
             //se.ticketService.paymentType = 1;
             let objbookTicket={
-              bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
+              bookingCode : this.bookingCode,
               paymentMethod: 2
           }
           this.gf.ticketPaymentSave(objbookTicket);
-            se.navCtrl.navigateForward('ticketpaymentdone');
+          if (this.stt==0) {
+            se.navCtrl.navigateForward('ticketpaymentdone/0');
+          }
+          else{
+            se.navCtrl.navigateForward('ticketpaymentdone/1');
+          }
           }
           else if (checkpay.response && checkpay.response.payment_status == 2) {
 

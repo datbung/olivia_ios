@@ -3924,20 +3924,23 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
-    this.zone.run(()=>{
-      this.valueGlobal.activeTab = currentIndex;
-      if(currentIndex !=2 ){
-        this.activeTab = currentIndex;
-      }
-    })
-    if ( currentIndex === 2 ) {//Combo
-        this.valueGlobal.backValue = "";
-        this.searchhotel.adult=this.adult;
-        this.searchhotel.child=this.child;
-        this.searchhotel.roomnumber= this.roomnumber;
-         this.navCtrl.navigateForward('/topdeallist');
-    }
-    else if ( currentIndex === 1 ) {//Flight
+    // this.zone.run(()=>{
+    //   this.valueGlobal.activeTab = currentIndex;
+    //   if(currentIndex !=2 ){
+    //     this.activeTab = currentIndex;
+    //   }
+    // })
+
+    // if ( currentIndex === 2 ) {//Combo
+    //     this.valueGlobal.backValue = "";
+    //     this.searchhotel.adult=this.adult;
+    //     this.searchhotel.child=this.child;
+    //     this.searchhotel.roomnumber= this.roomnumber;
+    //      this.navCtrl.navigateForward('/topdeallist');
+    // }
+    // else 
+    this.activeTab = currentIndex;
+    if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
       this._mytripservice.rootPage = "homeflight";
       this.flightService.itemTabFlightFocus.emit(1);
@@ -3965,7 +3968,7 @@ export class Tab1Page implements OnInit {
       //this.getAddress();
       
     }
-    else if (currentIndex === 3) {//Tour
+    else if (currentIndex === 2) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.ischeckFavourite='Tour';
@@ -3992,7 +3995,7 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    else if (currentIndex === 4) {//Ticket
+    else if (currentIndex === 3) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.activeTab=3;

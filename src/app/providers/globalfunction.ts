@@ -4152,6 +4152,22 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
      }
     });
   }
+  ticketGetBookingCRM(bookingCode): Promise<any>{
+    let headers = {
+      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    return new Promise((resolve, reject) => {
+      let urlApi = C.urls.baseUrl.urlMobile+'/app/CRMOldApis/GetByBookingCode?token='+bookingCode;
+      this.RequestApi('GET', urlApi, headers, {}, 'ticketpage', 'GetByBookingCode').then((data)=>{
+  
+       if (data) {
+        resolve(data);
+       }
+      });
+    })
+   
+  }
   showZaloOA(url) {
     try {
       let se = this;
@@ -4235,5 +4251,6 @@ export class ActivityService {
   bankTransfer: string;
   qrcodepaymentfrom: number;//1 - vmb; 2 -ks; 
     typeChangeFlight: any;
+    ischeckPage:any
   //abortSearch: boolean;
 }

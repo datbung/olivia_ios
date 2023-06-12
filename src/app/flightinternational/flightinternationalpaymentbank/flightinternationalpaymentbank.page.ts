@@ -622,6 +622,7 @@ export class FlightInternationalPaymentBankPage implements OnInit {
           this.activityService.totalPriceTransfer = this._flightService.itemFlightCache.totalPrice;
           this.activityService.bookingCode = this.bookingCode;
           this.activityService.qrcodepaymentfrom = 1;
+          se.activityService.ischeckPage="flightinternationalpaymentbank"
           this.navCtrl.navigateForward('/paymentqrcode');
         }else{
           se.gf.hideLoading();

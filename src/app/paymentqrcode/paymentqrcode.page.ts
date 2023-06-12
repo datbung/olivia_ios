@@ -33,6 +33,7 @@ export class PaymentqrcodePage implements OnInit {
   checkreview: number;
   _email: any;
   defaultEmail: any;
+  paymentDate: string;
 
     constructor(public platform:Platform,  public zone: NgZone,public navCtrl: NavController,public modalCtrl: ModalController,
         public searchhotel: SearchHotel,public valueGlobal:ValueGlobal,public gf: GlobalFunction,private launchReview: LaunchReview,
@@ -73,7 +74,8 @@ export class PaymentqrcodePage implements OnInit {
                     (this.activityService.qrcodepaymentfrom == 4 ? this.booking.CEmail : this.defaultEmail
                   )))))) ;
             })
-           
+            var ti = new Date();
+            this.paymentDate= moment(ti).add(1, 'hours').format('HH:mm, DD/MM/YYYY');
             // if(this.activityService.qrcodepaymentfrom ==1){
             //   this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'paymentqrcode', 'purchase', 'Flights');
             // }

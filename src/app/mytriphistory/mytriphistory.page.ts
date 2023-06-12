@@ -667,10 +667,14 @@ export class MytripHistoryPage implements OnInit {
              
               if (elementHis.extra_guest_info) {
                 let arrpax = elementHis.extra_guest_info.split('|');
-                if (arrpax && arrpax.length > 1 && arrpax[1] > 0) {
+                if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
                   elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                } else if (arrpax && arrpax.length > 1 && arrpax[1] == 0) {
+                } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
                   elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
+                }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                  elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                  elementHis.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
                 }
               }
               if (elementHis.amount_after_tax) {

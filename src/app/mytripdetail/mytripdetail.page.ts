@@ -18,6 +18,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { normalizeURL } from 'ionic-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { ticketService } from '../providers/ticketService';
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -101,11 +102,15 @@ export class MytripdetailPage implements OnInit {
   totalHotel: any;
   amount_after_tax: any;
   arrqr = [
-    {id: 1, code: '761402903955', pax: '1 người lớn'},
-    {id: 2, code: '761402905492', pax: '1 người lớn'},
-    {id: 3, code: '761402910686', pax: '1 trẻ em'},
+    {id: 1, token: '761402903955', title: '1 người lớn', qrLink:'./assets/ic_ticket/qr-code-1.png'},
+    {id: 2, token: '761402905492', title: '1 người lớn', qrLink:'./assets/ic_ticket/qr-code-1.png'},
+    {id: 3, token: '761402910686', title: '1 trẻ em',  qrLink:'./assets/ic_ticket/qr-code-1.png'},
   ];
   qrcodeurl='';
+  objectDetail:any;
+  isTTV=false;
+  includePrice: any;
+  ischeckqrLink=false;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -125,7 +130,7 @@ export class MytripdetailPage implements OnInit {
     private platform: Platform,
     private socialSharing: SocialSharing,
     private file: File,
-    private zone: NgZone,private transfer:FileTransfer) {
+    private zone: NgZone,private transfer:FileTransfer,private ticketService:ticketService) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
         // this.getmhoteldetail();
@@ -221,6 +226,23 @@ export class MytripdetailPage implements OnInit {
        
         if(this.trip.booking_type && this.trip.booking_type == "TOUR"){
             this.getBookingTourDetail(this.trip);
+        }else if (this.trip.booking_type && this.trip.booking_type == "TICKET"){
+          this.gf.ticketGetBookingCRM(this.trip.booking_id).then((data) => {
+            this.objectDetail=data;
+            let arrcd = this.objectDetail.startDate.split('-');
+            let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+            this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+            var objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
+            if(objmap && objmap.length >0){
+              this.ischeckqrLink=true;
+            }
+            this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.trip.booking_id , {}, {}, '', '').then((data) => {
+              if (data && data.success) {
+                this.includePrice = data.data.booking.includePrice.split('|');
+                this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
+              }
+            });
+          });
         }
         if(this.trip.child_ages){
           let countstring = this.trip.child_ages.match(/tuổi/g || []).length;
@@ -1658,6 +1680,9 @@ async downloadqrcode(){
 
 
     }
+  }
+  ticketinfo(){
+    this.isTTV=!this.isTTV;
   }
 
 }

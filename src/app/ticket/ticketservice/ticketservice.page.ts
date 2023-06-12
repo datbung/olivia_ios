@@ -44,56 +44,37 @@ export class TicketServicePage implements OnInit{
   reCheckToken: any;
   indexSku: any = 0;
   totalRate: any;
+  adult: number = 1;
+  child: number = 0;
+  elder: number = 0;
   constructor(public platform: Platform,public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events:Events,
     public gf: GlobalFunction,public modalCtrl: ModalController, private pickerController: PickerController,private storage: Storage,
     public tourService: tourService,
     public valueGlobal: ValueGlobal,
     public ticketService: ticketService) {
-      if(!searchhotel.adult){
-        searchhotel.adult = 2;
-      }
-      if(!searchhotel.child){
-        searchhotel.child = 0;
-      }
+      
       if(ticketService.itemTicketService){
         this.hasDeparture = true;
        
         this.loaddeparturedone = true;
         this.itemTicketService = this.ticketService.itemTicketService;
+        
       }
       else{
         this.hasDeparture = false;
       }
-      if (this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length>0) {
+
         var timestamp=new Date();
-        var DayNow=moment(timestamp).format('YYYYMMDD');
         var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
         var date = new Date(res);
         var Tomorrow = moment(date).format("YYYYMMDD");
         
-        this.itemTicketService.dailyRatePkgs.forEach(element => {
-          element.dailydisplay=moment(element.daily).format('DD/MM');
-          if (moment(element.daily).format('YYYYMMDD')==DayNow) {
-            element.dailydisplay="Hôm nay";
-          }else if (moment(element.daily).format('YYYYMMDD')==Tomorrow)
-          {
-            element.dailydisplay="Ngày mai";
-          }
-         
-        });
 
-        this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.itemTicketService.dailyRatePkgs[0].daily).format('DD-MM-YYYY');
         if (this.searchhotel.ischeckDate) {
           this.dateDisplay=moment(this.searchhotel.CheckInDate).format('DD/MM');
           this.checkinDate=moment(this.searchhotel.CheckInDate).format('YYYY/MM/DD');
-          for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-            const element = this.itemTicketService.dailyRatePkgs[i];
-            element.action=false;
-            if (element.daily==moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')) {
-              this.index=i;
-              element.action=true;
-            }
-          }
+          this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.searchhotel.CheckInDate).format('DD-MM-YYYY');
+         
         }else{
           var datenow=new Date();
           var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
@@ -102,20 +83,12 @@ export class TicketServicePage implements OnInit{
 
           this.dateDisplay=moment(datenow).format('DD/MM') + ' - ' + Tomorrow;
           this.checkinDate=moment(datenow).format('YYYY/MM/DD');
-          for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-            const element = this.itemTicketService.dailyRatePkgs[i];
-            element.action=false;
-            if (element.daily==moment(datenow).format('YYYY-MM-DD')) {
-              this.index=i;
-              element.action=true;
-            }
-          }
+          this.ticketService.itemTicketService.AllotmentDateDisplay = moment(datenow).format('DD-MM-YYYY');
+        
         }
-      
-      }
       this.index=0;
-       this.GetDailyRatePackages();
-       this.GetUserInfo();
+      this.GetDailyRatePackages();
+      this.GetUserInfo();
     }
   
   ngOnInit() {
@@ -126,28 +99,22 @@ export class TicketServicePage implements OnInit{
   calculatePrice() {
     let se = this;
     if (this.itemTicketService && this.itemTicketService.skus) {
-      let totalPrice = this.itemTicketService.skus.rateAdult * this.searchhotel.adult + this.itemTicketService.skus.rateChild * this.searchhotel.child  + this.itemTicketService.skus.rateSenior * this.searchhotel.elder;
+      // let totalPrice = this.itemTicketService.skus.rateAdult * this.searchhotel.adult + this.itemTicketService.skus.rateChild * this.searchhotel.child  + this.itemTicketService.skus.rateSenior * this.searchhotel.elder;
       this.zone.run(()=>{
         //this.pointbkg = Math.floor(totalPrice/100000).toFixed(0);
-        this.totalPrice = totalPrice;
+        this.totalPrice = this.itemTicketService.skus.totalRate;
       })
     }
    
   }
 
   goback() {
-    //this.tourService.publicScrollToDepartureDiv(1);
     this.navCtrl.pop();
   }
 
   book(){
-    for (let i = 0; i < this.searchhotel.arrchild.length; i++) {
-      const element = this.searchhotel.arrchild[i];
-      if(!element.text)
-      {
-        this.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
-        return;
-      }
+    if(this.arrSkus && this.arrSkus.length==0){
+      return;
     }
     this.gf.showLoading();
     this.RecheckRateBooking()
@@ -160,16 +127,17 @@ export class TicketServicePage implements OnInit{
     // if(!this.hasDeparture){
     //   return;
     // }
-    if(type == 1){
-      this.searchhotel.adult++;
-    }else if (type == 2){
-      this.searchhotel.child++;
-      let arr = { text: 'Trẻ em' + ' ' + this.searchhotel.child, numage: "7" }
-      this.searchhotel.arrchild.push(arr);
-    }else if (type == 3){
-      this.searchhotel.elder++;
+    if (this.arrSkus.length>0) {
+      if(type == 1){
+        this.adult++;
+      }else if (type == 2){
+        this.child++;
+      }else if (type == 3){
+        this.elder++;
+      }
+      this.GetDailyRatePackages();
     }
-    this.GetDailyRatePackages();
+
   }
   removePax(type){
     // if(!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0){
@@ -178,30 +146,44 @@ export class TicketServicePage implements OnInit{
     // if(!this.hasDeparture){
     //   return;
     // }
-    if(type == 1){
-      if(this.searchhotel.adult<=1){
-        this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
-        return;
+    if (this.arrSkus.length>0) {
+      if(type == 1){
+        if(this.adult==0){
+          this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
+          return;
+        }
+        if (this.child==0 && this.elder==0 && this.adult==1) {
+          this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
+          return;
+        }
+        this.adult--;
+        this.GetDailyRatePackages();
+       
+      }else if (type == 2){
+        if(this.child==0){
+          this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
+          return;
+        }
+        if (this.adult==0 && this.elder==0 && this.child==1) {
+          this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
+          return;
+        }
+        this.child--;
+        this.GetDailyRatePackages();
+      }else if (type == 3){
+        if(this.elder<=0){
+          this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
+          return;
+        }
+        if (this.adult==0 && this.child==0 && this.elder==1) {
+          this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
+          return;
+        }
+        this.elder--;
+        this.GetDailyRatePackages();
       }
-      this.searchhotel.adult--;
-      this.GetDailyRatePackages();
-     
-    }else if (type == 2){
-      if(this.searchhotel.child<=0){
-        this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
-        return;
-      }
-      this.searchhotel.child--;
-      this.searchhotel.arrchild.splice(this.searchhotel.arrchild.length - 1, 1);
-      this.GetDailyRatePackages();
-    }else if (type == 3){
-      if(this.searchhotel.elder<=0){
-        this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
-        return;
-      }
-      this.searchhotel.elder--;
-      this.GetDailyRatePackages();
     }
+  
   }
   async openPickupCalendar(){
     let se = this;
@@ -222,24 +204,19 @@ export class TicketServicePage implements OnInit{
 
     // let todate = new Date(this.searchhotel.CheckOutDate);
     let _daysConfig: DayConfig[] = [];
-    if(this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length >0) {
-      for (let j = 0; j < this.itemTicketService.dailyRatePkgs.length; j++) {
-        let lunarhasdeparture =  (this.valueGlobal.listlunar && this.valueGlobal.listlunar.length >0) ? this.valueGlobal.listlunar.filter((itemlunar)=>{return moment(itemlunar.date).format('YYYY-MM-DD') == this.itemTicketService.dailyRatePkgs[j].daily}) : '';
-        //console.log(this.valueGlobal.listlunar[j]);
-        //debugger
-        _daysConfig.push({
-          date: this.itemTicketService.dailyRatePkgs[j].daily,
-          disable: false,
-          cssClass: '',
-          // subTitle: lunarhasdeparture && lunarhasdeparture.length >0 ? moment(lunarhasdeparture[0].date).format("DD/MM") + ': ' +lunarhasdeparture[0].name : '',
-        })
-      }
-
-      // let minDeparture = this.itemTicketService.dailyRatePkgs[0].daily;
-      // var minmonth = moment(minDeparture).format('MM');
-      // var maxDeparture = this.itemTicketService.dailyRatePkgs[this.itemTicketService.dailyRatePkgs.length-1];
-      // var maxmonth = moment(maxDeparture).format('MM');
-    }
+    // if(this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length >0) {
+    //   for (let j = 0; j < this.itemTicketService.dailyRatePkgs.length; j++) {
+    //     let lunarhasdeparture =  (this.valueGlobal.listlunar && this.valueGlobal.listlunar.length >0) ? this.valueGlobal.listlunar.filter((itemlunar)=>{return moment(itemlunar.date).format('YYYY-MM-DD') == this.itemTicketService.dailyRatePkgs[j].daily}) : '';
+    //     //console.log(this.valueGlobal.listlunar[j]);
+    //     //debugger
+    //     _daysConfig.push({
+    //       date: this.itemTicketService.dailyRatePkgs[j].daily,
+    //       disable: false,
+    //       cssClass: '',
+    //       // subTitle: lunarhasdeparture && lunarhasdeparture.length >0 ? moment(lunarhasdeparture[0].date).format("DD/MM") + ': ' +lunarhasdeparture[0].name : '',
+    //     })
+    //   }
+    // }
 
     // for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
     //   _daysConfig.push({
@@ -372,14 +349,14 @@ export class TicketServicePage implements OnInit{
               se.checkinDate=moment(fromdate).format('YYYY/MM/DD');
               // se.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
               se.dateDisplay= moment(fromdate).format('DD-MM');
-              for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-                const element = this.itemTicketService.dailyRatePkgs[i];
-                element.action=false;
-                if (element.daily==se.searchhotel.CheckInDate) {
-                  this.index=i;
-                  element.action=true;
-                }
-              }
+              // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
+              //   const element = this.itemTicketService.dailyRatePkgs[i];
+              //   element.action=false;
+              //   if (element.daily==se.searchhotel.CheckInDate) {
+              //     this.index=i;
+              //     element.action=true;
+              //   }
+              // }
               this.searchhotel.ischeckDate=true;
               se.GetDailyRatePackages();
             }
@@ -571,14 +548,14 @@ export class TicketServicePage implements OnInit{
     this.checkinDate=moment(item.daily).format('YYYY/MM/DD');
     this.dateDisplay=moment(item.daily).format('DD/MM');
     this.searchhotel.CheckInDate = moment(item.daily).format('YYYY-MM-DD');
-    for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-      const element = this.itemTicketService.dailyRatePkgs[i];
-      element.action = false;
-      if (element.daily == item.daily) {
-        this.index = i;
-        element.action = true;
-      }
-    }
+    // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
+    //   const element = this.itemTicketService.dailyRatePkgs[i];
+    //   element.action = false;
+    //   if (element.daily == item.daily) {
+    //     this.index = i;
+    //     element.action = true;
+    //   }
+    // }
   }
    funcsku(item){
     for (let i = 0; i < this.arrSkus.length; i++) {
@@ -594,12 +571,13 @@ export class TicketServicePage implements OnInit{
    }
    RecheckRateBooking(){
     let object={
-      adults: this.searchhotel.adult,
-      childs: this.searchhotel.child,
-      seniors: this.searchhotel.elder,
+      adults: this.adult,
+      childs: this.child,
+      seniors: this.elder,
       token: this.reCheckToken,
+      tokenBooking:this.itemTicketService.skus.bookingToken,
       checkin: this.checkinDate,
-      totalRate: this.totalPrice
+      totalRate: this.itemTicketService.skus.totalRate
     }
     let headers=
     {
@@ -614,11 +592,11 @@ export class TicketServicePage implements OnInit{
    }
    GetDailyRatePackages(){
     let obj ={
-      pkgId: this.ticketService.itemTicketService.dailyRatePkgs[0].packageId,
+      pkgId: this.ticketService.itemTicketService.id,
       checkin: this.checkinDate,
-      adults: this.searchhotel.adult,
-      childs: this.searchhotel.child,
-      seniors: this.searchhotel.elder,
+      adults: this.adult,
+      childs: this.child,
+      seniors: this.elder,
       // supplier: this.ticketService.experience.supplier
     }
     let headers=
@@ -633,6 +611,10 @@ export class TicketServicePage implements OnInit{
           this.arrSkus[this.indexSku].action=true;
           this.reCheckToken= this.arrSkus[this.indexSku].reCheckToken;
           this.itemTicketService.skus=this.arrSkus[this.indexSku];
+          if (!this.itemTicketService.skus.allowAdult && this.itemTicketService.skus.allowChild) {
+            this.adult = 0;
+            this.child = 1;
+          }
           this.calculatePrice();
         }
 
@@ -646,7 +628,7 @@ export class TicketServicePage implements OnInit{
     {
       'content-type': 'application/json'
     }
-    this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/InitBooking/'+this.ticketService.itemTicketService.dailyRatePkgs[0].packageId, headers, object, 'ticketservice', 'InitBooking').then((data: any) => {
+    this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/InitBooking/'+this.ticketService.itemTicketService.id, headers, object, 'ticketservice', 'InitBooking').then((data: any) => {
       if (data && data.success) {
         this.ticketService.itemTicketService.objbooking=data.data;
         this.ticketService.hasAllotment = this.hasAllotment;
@@ -655,6 +637,9 @@ export class TicketServicePage implements OnInit{
         this.ticketService.indexDetail=this.index;
         this.ticketService.skus=this.arrSkus[this.indexSku];
         this.gf.hideLoading();
+        this.ticketService.adult=this.adult;
+        this.ticketService.child=this.child;
+        this.ticketService.elder=this.elder;
         this.navCtrl.navigateForward('/ticketadddetails');
       }
     })

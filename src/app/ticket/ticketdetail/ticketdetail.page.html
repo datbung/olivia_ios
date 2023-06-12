@@ -103,8 +103,9 @@
 
                 <div class="div-split"></div>
                 <div class="text-headline">{{itemDetail.titleOverview}}</div>
-                <div [ngClass]="isseemore ? 'text-content':'text-content text-limit'" [innerHTML]="itemDetail.overview"></div>
-                <div *ngIf="!isseemore">...</div>
+                <div class="text-content" *ngIf="!isseemore" [innerHTML]="overview"></div>
+                <div class="text-content" *ngIf="isseemore" [innerHTML]="itemDetail.overview"></div>
+                <!-- <div *ngIf="!isseemore">...</div> -->
                 <div class="text-seemore-detail" *ngIf="!isseemore" (click)="seemore()">
                 Xem thêm 
                 </div>
@@ -117,8 +118,8 @@
                         <div class="text-service-detail" (click)="showTicketServiceDetail(itemService)">Chi tiết gói
                             <span><img class="img-arrow" src="./assets/ic_ticket/arrow-down.svg" /></span></div>
                         <div class="div-button-service d-flex">
-                            <div *ngIf="itemService.baseRate" class="text-price">
-                                <div>{{gf.numberToCurrency(itemService.baseRate, '.')}}</div>
+                            <div *ngIf="itemService.minRate" class="text-price">
+                                <div>{{gf.numberToCurrency(itemService.minRate, '.')}}</div>
                                 <div class="price-sub">VND</div>
                             </div>
                             <div class="btn-price" (click)="showTicketServices(itemService)">Chọn</div>
@@ -127,8 +128,9 @@
                 </div>
                 <div class="div-split"></div>
                 <div class="text-headline">Thông tin Dịch vụ</div>
-                <div [ngClass]="isseemorenotes ? 'text-content':'text-content text-limit-9'" [innerHTML]="itemDetail.notes"></div>
-                <div *ngIf="!isseemorenotes">...</div>
+                <div class="text-content" *ngIf="!isseemorenotes" [innerHTML]="notes"></div>
+                <div class="text-content" *ngIf="isseemorenotes" [innerHTML]="itemDetail.notes"></div>
+                <!-- <div *ngIf="!isseemorenotes">...</div> -->
                 <div class="text-seemore-detail" *ngIf="!isseemorenotes" (click)="seemorenotes()">
                 Xem thêm 
                 </div>
@@ -312,8 +314,8 @@
             <div *ngIf="loaddeparturedone else loadingprice" class="div-price">
                 <!-- <span class="text-price-footer" *ngIf="(tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceAdultAvgStr)">{{tourService.itemDepartureCalendar.PriceAdultAvgStr}}</span>
                 <span class="text-price-footer" *ngIf="(!tourService.itemDepartureCalendar || !tourService.itemDepartureCalendar.PriceAdultAvgStr)">{{gf.convertNumberToString(itemDetail.AdultPrice)}}</span> -->
-                <span class="text-price-footer">{{gf.convertNumberToString(itemDetail.minBaseRate)}}</span>
-                <span *ngIf="itemDetail && itemDetail.minBaseRate" class="text-price-sub">đ/khách</span>
+                <span class="text-price-footer">{{gf.convertNumberToString(experiencePackages[0].minRate)}}</span>
+                <span *ngIf="experiencePackages[0].minRate" class="text-price-sub">đ/khách</span>
             </div>
             <ng-template #loadingprice>
                 <ion-skeleton-text animated
