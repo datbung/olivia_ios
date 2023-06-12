@@ -57,34 +57,35 @@ export class OrderRequestSupportPage implements OnInit {
             }
           }
         }
-        let trip = this.activityService.objPaymentMytrip.trip;
-        this.allowChangeFlight = trip.hotel_name.indexOf('VMB QT') == -1 && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate && trip.approve_date;
-        //check bkg chưa thanh toán
-        if(this.allowChangeFlight){
-          this.allowChangeFlight = !trip.isRoundTrip ? trip.departChangeDepartTime : (trip.departChangeDepartTime || trip.returnChangeDepartTime );
-        }
-        if(trip.itemreturn){
-          trip.itemreturn.checkReturnValidTime =true;
-        }
-        if(trip.itemdepart){
-          trip.itemdepart.checkDepartValidTime =true;
-        }
+
+        // let trip = this.activityService.objPaymentMytrip.trip;
+        // this.allowChangeFlight = trip.hotel_name.indexOf('VMB QT') == -1 && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingsComboData[0].issueTicketDate && trip.approve_date;
+        // //check bkg chưa thanh toán
+        // if(this.allowChangeFlight){
+        //   this.allowChangeFlight = !trip.isRoundTrip ? trip.departChangeDepartTime : (trip.departChangeDepartTime || trip.returnChangeDepartTime );
+        // }
+        // if(trip.itemreturn){
+        //   trip.itemreturn.checkReturnValidTime =true;
+        // }
+        // if(trip.itemdepart){
+        //   trip.itemdepart.checkDepartValidTime =true;
+        // }
         
-        if(this.allowChangeFlight){
-            if(trip.itemreturn && trip.itemreturn.airlineCode && trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidChangeFlightTime(trip.itemreturn)){
-              //this.allowChangeFlight = false;
-              trip.itemreturn.checkReturnValidTime =false;
-            }else if(trip.itemdepart && trip.itemdepart.airlineCode && trip.itemdepart.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidChangeFlightTime(trip.itemdepart)){
-              //this.allowChangeFlight = false;
-              trip.itemdepart.checkDepartValidTime =false;
-            }
-          if((trip.itemreturn && trip.itemdepart && !trip.itemdepart.checkDepartValidTime &&!trip.itemreturn.checkReturnValidTime) || (!trip.itemreturn && !trip.itemdepart.checkDepartValidTime)){
-            this.allowChangeFlight = false;
-          }
-        }
-        if(this.allowChangeFlight){
-          this.allowChangeFlight = !trip.isRoundTrip ? trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 : (trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 || trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1);
-        }
+        // if(this.allowChangeFlight){
+        //     if(trip.itemreturn && trip.itemreturn.airlineCode && trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidChangeFlightTime(trip.itemreturn)){
+        //       //this.allowChangeFlight = false;
+        //       trip.itemreturn.checkReturnValidTime =false;
+        //     }else if(trip.itemdepart && trip.itemdepart.airlineCode && trip.itemdepart.airlineName.toLowerCase().indexOf('cathay') == -1 && !this.checkValidChangeFlightTime(trip.itemdepart)){
+        //       //this.allowChangeFlight = false;
+        //       trip.itemdepart.checkDepartValidTime =false;
+        //     }
+        //   if((trip.itemreturn && trip.itemdepart && !trip.itemdepart.checkDepartValidTime &&!trip.itemreturn.checkReturnValidTime) || (!trip.itemreturn && !trip.itemdepart.checkDepartValidTime)){
+        //     this.allowChangeFlight = false;
+        //   }
+        // }
+        // if(this.allowChangeFlight){
+        //   this.allowChangeFlight = !trip.isRoundTrip ? trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 : (trip.itemdepart.airlineName.toLowerCase().indexOf('vietnam airline') == -1 || trip.itemreturn.airlineName.toLowerCase().indexOf('vietnam airline') == -1);
+        // }
         
   }
 
@@ -95,17 +96,17 @@ export class OrderRequestSupportPage implements OnInit {
       if(this._mytripservice.rootPage == "homeflight"){
         this._flightService.itemTabFlightActive.emit(true);
         setTimeout(()=>{
-          this._flightService.itemMenuFlightClick.emit(2);
+          
         },200)
         
         this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
         this._mytripservice.backfrompage= "";
       }else {
-        this._flightService.itemMenuFlightClick.emit(2);
+        
         this.navCtrl.navigateBack(['/app/tabs/tab3']);
       }
     }else{
-      this.navCtrl.back();
+      this.navCtrl.navigateBack(['/app/tabs/tab3']);
     }
   }
 

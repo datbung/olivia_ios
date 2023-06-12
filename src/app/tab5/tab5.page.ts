@@ -1487,4 +1487,7 @@ export class Tab5Page implements OnInit {
         
     }
    
+    openZaloPage() {
+        this.navCtrl.navigateForward('/userzalo');
+    }
 }

@@ -305,22 +305,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               }
             })
 
-            se._flightService.itemMenuFlightClick.pipe().subscribe(data => {
-                se.zone.run(()=>{
-                  se.flightTabActive = data;
-                  if(data == 1){
-                    $(".div-wraper-slide").removeClass("cls-disabled").addClass("cls-visible");
-                  }
-                  else {
-                    if(data == 2){
-                      se.loadUserInfo();
-                    }
-                    $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-                  }
-                })
-                
-              })
-
               se._flightService.getItemFlightReloadInfo().subscribe((data) => {
                 if(data ==1){
                     se.reloadInfoFlight();

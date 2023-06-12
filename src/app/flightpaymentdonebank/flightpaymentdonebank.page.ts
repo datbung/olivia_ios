@@ -140,7 +140,7 @@ export class FlightpaymentdonebankPage implements OnInit {
     }
 
     // setTimeout(() => {
-    //   se._flightService.itemMenuFlightClick.emit(2);
+    //   this._flightService.itemTabFlightActive.emit(1);
     //   se.next();
     // },500)
     
@@ -323,7 +323,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
                       se.gf.hideLoading();
                       se.clearItemCache();
                           
-                          se._flightService.itemMenuFlightClick.emit(2);
+                          this._flightService.itemTabFlightActive.emit(1);
                           se.next();
                     })
                     
@@ -345,7 +345,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
             
           }else{
             se.clearItemCache();
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
             se.next();
           }
         }else{
@@ -360,7 +360,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
                       se.gf.hideLoading();
                       se.clearItemCache();
                           
-                      se._flightService.itemMenuFlightClick.emit(2);
+                      this._flightService.itemTabFlightActive.emit(1);
                       se.next();
                     })
                     
@@ -378,7 +378,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
               }
             }else{
               se.clearItemCache();
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
               se.next();
             }
           })
@@ -534,6 +534,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     this._flightService.bookingSuccess = true;
     //this._flightService.itemFlightPaymentLater.push({ accountNumber: this.accountNumber,bankName: this.bankName,paymentBank: this.paymentbank, totalPrice: this.total,bookingCode: this.bookingCode, textbank: this.textbank, imgUrl: this.urlimgbank });
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemMenuFlightClick.emit(2);
     //this._flightService.itemFlightMytripRefresh.emit(true);
     try {
       this.storage.get('objectflightpaymentbank').then((data)=>{

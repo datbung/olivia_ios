@@ -1,14 +1,10 @@
-import { parse } from 'path';
-import { foodService } from './../../providers/foodService';
-import { Bookcombo, foodInfo } from './../../providers/book-service';
-import { Booking, RoomInfo, SearchHotel } from '../../providers/book-service';
-import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
-import { NavController, LoadingController, ToastController, Platform, ModalController, AlertController } from '@ionic/angular';
+
+import {  SearchHotel } from '../../providers/book-service';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { NavController, LoadingController, Platform, ModalController, AlertController } from '@ionic/angular';
 import { C } from '../../providers/constants';
-import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { ActivityService, GlobalFunction } from '../../providers/globalfunction';
-import jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
 import { flightService } from '../../providers/flightService';
 import { CustomAnimations } from '../../providers/CustomAnimations';

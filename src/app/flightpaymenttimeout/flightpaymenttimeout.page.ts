@@ -191,9 +191,7 @@ export class FlightpaymenttimeoutPage implements OnInit {
     }
     else{
       this._flightService.itemTabFlightActive.emit(true);
-        setTimeout(()=>{
-              this._flightService.itemMenuFlightClick.emit(2);
-            },200)
+        
       this.valueGlobal.backValue = "homeflight";
       this.navCtrl.navigateBack('/tabs/tab1');
     }

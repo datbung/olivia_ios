@@ -60,7 +60,7 @@
           <img src="./assets/ic_home/Tour.svg" />
           <!-- <img src="./assets/ic_home/food_disabled.svg" *ngIf="activeTab !=3"/> -->
       </div>
-      <div [ngClass]="activeTab ==2 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Tour</div>
+      <div [ngClass]="activeTab ==3 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Tour</div>
     </div>
 
     <!-- <div (click)="setActiveTab(3)" [ngClass]="activeTab ==3 ? 'div-ticket' : 'div-ticket home-deactive-tab'">
@@ -413,18 +413,31 @@
         ></ion-spinner>
       </div>
     </div>
-    <div class="title-padding  p-left-16 bg-white">
-      <ion-label class="text-title2">
-        <!-- Du lịch ngay! Vì bạn xứng đáng -->
-        Du lịch an toàn
-      </ion-label>
+    <div *ngIf="isShowSummerMood">
+      <div class="title-padding  p-left-16 bg-white">
+        <ion-label class="text-title2">
+          Hè rồi, du lịch thôi!
+        </ion-label>
+      </div>
+      <div class="sub-title p-left-16 bg-white">
+        <ion-label class="text-subtitle">
+          Thư giãn - nạp năng lượng - khám phá
+        </ion-label>
+      </div>
     </div>
-    <div class="sub-title p-left-16 bg-white">
-      <ion-label class="text-subtitle">
-        <!-- Làm việc cả năm. Đến lúc tưởng thưởng -->
-        Nâng cao sức khỏe, cân bằng cuộc sống
-      </ion-label>
+    <div *ngIf="!isShowSummerMood">
+      <div class="title-padding  p-left-16 bg-white">
+        <ion-label class="text-title2">
+          Du lịch an toàn
+        </ion-label>
+      </div>
+      <div class="sub-title p-left-16 bg-white">
+        <ion-label class="text-subtitle">
+          Nâng cao sức khỏe, cân bằng cuộc sống
+        </ion-label>
+      </div>
     </div>
+    
     <div
       class="inner2 slide3-scroll bg-white"
       style="overflow-x: scroll; margin-left: 0"

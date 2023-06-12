@@ -3800,12 +3800,6 @@ color: #e52822
     align-items: center;
 }
 
-.foodmyorder-content{
-    background: #fff;
-    margin: -30px -16px -120px -16px !important;
-    padding: 0 22px;
-    padding-top: 16px;
-}
 .div-second{
     margin-top: 12px;
     position: relative;
@@ -3829,70 +3823,6 @@ color: #e52822
 
 }
 
-
-.foodmyorder-content{
-    .text-bkgcode{
-        font-size: 12px !important;
-        line-height: 1.67;
-        letter-spacing: -0.34px !important;
-        text-align: left;
-        color: #828282 !important;
-        padding-left: 0 !important;
-        font-weight: 500 !important;
-    }
-
-    .d-flex{
-        display: flex;
-        margin: 0 !important;
-    }
-    .div-line {
-        border-bottom: solid 1px #f2f2f2;
-        position: relative;
-        top: 0;
-        border-right: 0;
-        height: 1px;
-        padding-left: 0;
-    }
-
-    .div-image-food{
-        width: 56px;
-        height: 42px;
-
-        .img-food-avatar{
-            object-fit: cover;
-            width: 56px;
-            height: 42px;
-            border-radius: 2px;
-        }
-    }
-
-    .div-food-name{
-        padding-left: 8px;
-
-        .text-food-name{
-            font-family: SFProText;
-            font-size: 16px;
-            font-weight: 600;
-            line-height: 1.5;
-            letter-spacing: -0.48px;
-            text-align: left;
-            color: #333333;
-        }
-
-        .text-food-week{
-            font-family: SFProText;
-            font-size: 14px;
-            line-height: 1.5;
-            letter-spacing: -0.4px;
-            text-align: left;
-            color: #333333;
-        }
-    }
-
-    .div-menu-name{
-        min-width: 132px;
-    }
-}
 
 .order-content{
     margin-bottom: 60px !important;
@@ -3926,17 +3856,6 @@ color: #e52822
     }
 }
 
-.foodmyorder-content
-{
-    .div-foodmyorderdetail-content{
-        padding: 0 !important;
-
-        .text-bkgcode{
-            padding-left: 4px !important;
-            padding-top: 1px !important;
-        }
-    }
-}
 
 //
 .div-text-pax{

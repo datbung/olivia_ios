@@ -21,7 +21,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { flightService } from '../../providers/flightService';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { MytripService } from '../../providers/mytrip-service.service';
-import { foodService } from '../../providers/foodService';
 import { 
   setInterval,
   clearInterval
@@ -125,7 +124,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
     listOrderActive: any;
     loaddatadone: boolean;
     memberid: string;
-    foodtextorder: any;
     showOnlyOne: any;
     detail: any;
   pageIndex: any=1;
@@ -162,7 +160,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         public activityService: ActivityService,
         public _flightService: flightService,public clipboard: Clipboard,
         public _mytripservice: MytripService,
-        public _foodService: foodService,
         private nativePageTransitions: NativePageTransitions,
         public bizTravelService: BizTravelService,
         private sanitizer: DomSanitizer,
@@ -261,7 +258,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
             se.loaddatadone = false;
             se.hasdata= false;
             se.mytripcount = 0;
-            se.foodtextorder= "";
             se.pageIndex=1;
             se.isConnected = true;
             if (se.networkProvider.isOnline()) {
@@ -300,7 +296,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         if (se.listMyTrips.length > 0) {
           se.listMyTrips = [];
           se.mytripcount = 0;
-          se.foodtextorder= "";
           se.hasloaddata = false;
           se.loaddatadone = false;
           se.hasdata= false;
@@ -2473,17 +2468,10 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
       goback() {
         
         if(this._mytripservice.rootPage == "homeflight"){
-          this._flightService.itemTabFlightActive.emit(true);
-          this._flightService.itemMenuFlightClick.emit(1);
+          this._flightService.itemTabFlightActive.emit(1);
           this.valueGlobal.backValue = "homeflight";
           this.navCtrl.navigateBack('/app/tabs/tab1');
           this._mytripservice.backfrompage= "";
-        }
-        else if(this._mytripservice.rootPage == "homefood"){
-          this._mytripservice.rootPage = "homefood";
-          this.valueGlobal.backValue = "";
-          this._foodService.menuFooterClick.emit(1);
-          this.navCtrl.navigateForward('/homefood');
         }
         else{
           this.navCtrl.navigateRoot('/');
@@ -2762,23 +2750,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         if (document.querySelector(".tabbar")) {
           document.querySelector(".tabbar")['style'].display = 'flex';
         }
-      }
-    
-      SelectFoodTab() {
-        this.activeTabTrip = 2;
-        if (document.querySelector(".tabbar")) {
-          document.querySelector(".tabbar")['style'].display = 'flex';
-        }
-        this.loadUserReviews();
-      }
-
-      SelectFoodHistoryTab(){
-        this.activeTabTrip = 4;
-        if (document.querySelector(".tabbar")) {
-          document.querySelector(".tabbar")['style'].display = 'flex';
-        }
-
-        this.loadUserReviews();
       }
     
       SelectRequestTrip() {
@@ -3905,7 +3876,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
         }
         se.mytripcount = 0;
         se.nexttripcounttext = "";
-        se.foodtextorder ="";
         se.pageIndex = 1;
         se.hasdata = false;
         se.listMyTrips =[];
@@ -4140,639 +4110,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
       }
     
     
-    executeBindDetailOrder(listorder):Promise<any>{
-        var se = this;
-        return new Promise((resolve, reject) => {
-            let count=0;
-            se.listOrderDinnerActive = [];
-            se.listOrderActive = [];
-            for (let index = 0; index < listorder.length; index++) {
-                const element = listorder[index];
-                element.listDetailCurrentWeek = [];
-                element.listDetailNextWeek = [];
-                element.listDetailHistory = [];
-                  let timediffminutes = moment(new Date()).diff(moment(element.startDate), 'minutes');
-                  let timediffhours = moment(new Date()).diff(moment(element.startDate), 'hours');
-                  let timediffdays = moment(new Date()).diff(moment(element.endDate), 'days');
-                //tạm rem
-                let maxId = Math.max(...element.fobookingDetail.map(o => o.combo.categoryId), 0);
-                let minId = Math.min(...element.fobookingDetail.map(o => o.combo.categoryId));
-                if(minId <=24 && maxId >24){
-                  element.isComplexOrder = true;
-                }
-    
-                if(element.isComplexOrder){
-                  element.detailBooking = [];
-                    element.fobookingDetail.forEach(elementbd => {
-                      if((this.listWeek[0] && this.listWeek[0].startDate && this.listWeek[0].endDate) && ((moment(elementbd.startDate).format('YYYY-MM-DD') == this.listWeek[0].startDate && moment(elementbd.endDate).format('YYYY-MM-DD') == this.listWeek[0].endDate) || 
-                      ((this.listWeek[0] && this.listWeek[0].startDate && this.listWeek[0].endDate) && moment(element.startDate).format('YYYY-MM-DD') == this.listWeek[0].startDate && moment(element.endDate).format('YYYY-MM-DD') == this.listWeek[0].endDate)) )
-                      {
-                          elementbd.iscurrentweek = true;
-                          element.hasitemcurrentweek = true;
-                      }else{
-                        if(moment(elementbd.startDate).diff(new Date(),'days') >0){
-                          elementbd.iscurrentweek = false;
-                          elementbd.isnextweek = true;
-                          element.hasitemnextweek = true;
-                        }
-                      }
-    
-                      let timediffminutes = moment(new Date()).diff(moment(elementbd.startDate), 'minutes');
-                      let timediffhours = moment(new Date()).diff(moment(elementbd.startDate), 'hours');
-                      let timediffdays = moment(new Date()).diff(moment(elementbd.endDate), 'days');
-                      let ishistory = moment(new Date()).diff(moment(elementbd.endDate), 'hours') >= 13 ? true : false;
-//                      if(element.status != 4 &&element.status != 1 && (element.status != 2 || (element.status == 2 && timediffdays <=0) )){
-                      if(element.status != 1 && (element.status != 2 || (element.status == 2 && timediffdays <=0) ) && !ishistory){
-                        if(elementbd.combo.categoryId <=24){
-                          elementbd.isDinner = false;
-                          if(elementbd.startDate && elementbd.endDate){
-                            elementbd.nameDisplay = "Gói Tuần " + moment(elementbd.startDate).format("DD/MM") + " - "+ moment(moment(elementbd.startDate).add('days',4)).format("DD/MM");
-                          }else{
-                            elementbd.nameDisplay = "Gói Tuần " + moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM");
-                          }
-                          
-      
-                          element.isOver = moment(new Date()).diff(moment(elementbd.endDate), 'hours') >= 13 ? true : false;
-                        
-                          element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 690 ? 2 : (timediffminutes <= 750 ? 3 : 4 ) ) : 1 ) : 1;
-                          element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-      
-                        }else{
-                          elementbd.isDinner = true;
-                          elementbd.nameDisplay = elementbd.combo.category.name;
-                          elementbd.weeknameDisplay = elementbd.combo.category.name;
-    
-                          if(elementbd.startDate && elementbd.endDate){
-                            elementbd.weekDisplay = "Tuần "+ moment(elementbd.startDate).format("DD/MM") + " - "+ moment(moment(elementbd.startDate).add('days',4)).format("DD/MM") + " · "+(elementbd.quantity ?  elementbd.quantity : element.quantity)+ " khẩu phần";
-                          }else{
-                            elementbd.weekDisplay = "Tuần "+ moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM") + " · "+ (elementbd.quantity ?  elementbd.quantity : element.quantity) + " khẩu phần";
-                          }
-                          
-                          
-      
-                          //element.isActive = true;
-                          element.isOver = moment(new Date()).diff(moment(elementbd.endDate), 'hours') >= 19 ? true : false;
-      
-                          element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 1140 ? 2 : (timediffminutes <= 1050 ? 3 : 4 ) ) : 1 ) : 1;
-                          element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-                        }
-      
-                        elementbd.priceDisplay = se.gf.convertNumberToString(elementbd.itemPrice);
-                        se.loadMenuOrderDetail(elementbd, element);
-                      }
-                      else{
-                        //if(element.status != 4){
-                          if(elementbd.combo.categoryId <=24){
-                            elementbd.isDinner = false;
-                            if(elementbd.startDate && elementbd.endDate){
-                              elementbd.nameDisplay = "Gói Tuần " + moment(elementbd.startDate).format("DD/MM") + " - "+ moment(moment(elementbd.startDate).add('days',4)).format("DD/MM");
-                            }else{
-                              elementbd.nameDisplay = "Gói Tuần " + moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM");
-                            }
-                            
-        
-                            element.isOver = moment(new Date()).diff(moment(elementbd.endDate), 'hours') >= 13 ? true : false;
-                          
-                            element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 690 ? 2 : (timediffminutes <= 750 ? 3 : 4 ) ) : 1 ) : 1;
-                            element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-        
-                          }else{
-                            elementbd.isDinner = true;
-                            elementbd.nameDisplay = elementbd.combo.category.name;
-                            elementbd.weeknameDisplay = elementbd.combo.category.name;
-      
-                            if(elementbd.startDate && elementbd.endDate){
-                              elementbd.weekDisplay = "Tuần "+ moment(elementbd.startDate).format("DD/MM") + " - "+ moment(moment(elementbd.startDate).add('days',4)).format("DD/MM") + " · "+(elementbd.quantity ?  elementbd.quantity : element.quantity)+ " khẩu phần";
-                            }else{
-                              elementbd.weekDisplay = "Tuần "+ moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM") + " · "+ (elementbd.quantity ?  elementbd.quantity : element.quantity) + " khẩu phần";
-                            }
-                            
-                            
-        
-                            //element.isActive = true;
-                            element.isOver = moment(new Date()).diff(moment(elementbd.endDate), 'hours') >= 19 ? true : false;
-        
-                            element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 1140 ? 2 : (timediffminutes <= 1050 ? 3 : 4 ) ) : 1 ) : 1;
-                            element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-                          }
-        
-                          elementbd.priceDisplay = se.gf.convertNumberToString(elementbd.itemPrice);
-                          se.loadMenuOrderDetailHistory(elementbd, element);
-                        //}
-                        element.isActive = false;
-                      }
-                    });
-                }else{
-                  //if(element.status != 4 &&element.status != 1 && (element.status != 2 || (element.status == 2 && timediffdays <=0) )){
-                  let ishistory = moment(new Date()).diff(moment(element.endDate), 'hours') >= 13 ? true : false;
-                  if(element.status != 1 && (element.status != 2 || (element.status == 2 && timediffdays <=0) )  && !ishistory){
-                    if(element.fobookingDetail && element.fobookingDetail.length >0){
-                        element.detailBooking = [];
-                        element.fobookingDetail.forEach(detail => {
-                          
-                          if((this.listWeek[0] && this.listWeek[0].startDate && this.listWeek[0].endDate) &&  (moment(detail.startDate).format('YYYY-MM-DD') == this.listWeek[0].startDate && moment(detail.endDate).format('YYYY-MM-DD') == this.listWeek[0].endDate) 
-                          || ((this.listWeek[0] && this.listWeek[0].startDate && this.listWeek[0].endDate) && moment(element.startDate).format('YYYY-MM-DD') == this.listWeek[0].startDate && moment(element.endDate).format('YYYY-MM-DD') == this.listWeek[0].endDate))
-                            {
-                                detail.iscurrentweek = true;
-                                element.hasitemcurrentweek = true;
-                            }else{
-                              if(moment(detail.startDate).diff(moment(new Date()),'days') >0){
-                                detail.iscurrentweek = false;
-                                detail.isnextweek = true;
-                                element.hasitemnextweek = true;
-                              }
-                            }
-                            
-                          if(detail.combo.categoryId <=24){
-                            detail.isDinner = false;
-                            //detail.nameDisplay = "Gói bữa ăn Tuần " + moment(detail.startDate).format("DD/MM") + " - "+ moment(moment(detail.startDate).add('days',4)).format("DD/MM");
-        
-                            if(detail.startDate && detail.endDate){
-                              detail.nameDisplay = "Gói Tuần " + moment(detail.startDate).format("DD/MM") + " - "+ moment(moment(detail.startDate).add('days',4)).format("DD/MM");
-                            }else{
-                              detail.nameDisplay = "Gói Tuần " + moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM");
-                            }
-    
-                            detail.isOver = moment(new Date()).diff(moment(detail.endDate), 'hours') >= 13 ? true : false;
-                          
-                            element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 690 ? 2 : (timediffminutes <= 750 ? 3 : 4 ) ) : 1 ) : 1;
-                            element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-        
-                          }else{
-                            detail.isDinner = true;
-                            detail.weeknameDisplay = detail.combo.category.name;
-                            detail.nameDisplay = detail.combo.category.name;
-                            //detail.weekDisplay = "Tuần "+ moment(detail.startDate).format("DD/MM") + " - "+ moment(moment(detail.startDate).add('days',4)).format("DD/MM") + " · "+detail.quantity + " khẩu phần";
-                            if(detail.startDate && detail.endDate){
-                              detail.weekDisplay = "Tuần "+ moment(detail.startDate).format("DD/MM") + " - "+ moment(moment(detail.startDate).add('days',4)).format("DD/MM") + " · "+(detail.quantity ?  detail.quantity : element.quantity) + " khẩu phần";
-                            }else{
-                              detail.weekDisplay = "Tuần "+ moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM") + " · "+(detail.quantity ?  detail.quantity : element.quantity) + " khẩu phần";
-                            }
-        
-                            //detail.isActive = true;
-                            element.isOver = moment(new Date()).diff(moment(element.endDate), 'hours') >= 19 ? true : false;
-        
-                            element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 1140 ? 2 : (timediffminutes <= 1050 ? 3 : 4 ) ) : 1 ) : 1;
-                            element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-                          }
-                            detail.priceDisplay = se.gf.convertNumberToString(detail.itemPrice);
-                            se.loadMenuOrderDetail(detail, element);
-                        });
-    
-                       
-                    }
-                  }
-                  else{
-                    element.isActive = false;
-                    //if(element.status != 4 && element.fobookingDetail && element.fobookingDetail.length >0){
-                    if(element.fobookingDetail && element.fobookingDetail.length >0){
-                      element.detailBooking = [];
-                      element.fobookingDetail.forEach(detail => {
-                        
-                        if((this.listWeek[0] && this.listWeek[0].startDate && this.listWeek[0].endDate) &&  (moment(detail.startDate).format('YYYY-MM-DD') == this.listWeek[0].startDate && moment(detail.endDate).format('YYYY-MM-DD') == this.listWeek[0].endDate) 
-                        || ((this.listWeek[0] && this.listWeek[0].startDate && this.listWeek[0].endDate) &&moment(element.startDate).format('YYYY-MM-DD') == this.listWeek[0].startDate && moment(element.endDate).format('YYYY-MM-DD') == this.listWeek[0].endDate))
-                          {
-                              detail.iscurrentweek = true;
-                              element.hasitemcurrentweek = true;
-                          }else{
-                            if(moment(detail.startDate).diff(moment(new Date()),'days') >0){
-                              detail.iscurrentweek = false;
-                              detail.isnextweek = true;
-                              element.hasitemnextweek = true;
-                            }
-                          }
-                          
-                        if(detail.combo.categoryId <=24){
-                          detail.isDinner = false;
-      
-                          if(detail.startDate && detail.endDate){
-                            detail.nameDisplay = "Gói Tuần " + moment(detail.startDate).format("DD/MM") + " - "+ moment(moment(detail.startDate).add('days',4)).format("DD/MM");
-                          }else{
-                            detail.nameDisplay = "Gói Tuần " + moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM");
-                          }
-    
-                          detail.isOver = moment(new Date()).diff(moment(detail.endDate), 'hours') >= 13 ? true : false;
-                        
-                          element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 690 ? 2 : (timediffminutes <= 750 ? 3 : 4 ) ) : 1 ) : 1;
-                          element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-      
-                        }else{
-                          detail.isDinner = true;
-                          detail.weeknameDisplay = detail.combo.category.name;
-                          detail.nameDisplay = detail.combo.category.name;
-                          if(detail.startDate && detail.endDate){
-                            detail.weekDisplay = "Tuần "+ moment(detail.startDate).format("DD/MM") + " - "+ moment(moment(detail.startDate).add('days',4)).format("DD/MM") + " · "+(detail.quantity ?  detail.quantity : element.quantity) + " khẩu phần";
-                          }else{
-                            detail.weekDisplay = "Tuần "+ moment(element.startDate).format("DD/MM") + " - "+ moment(moment(element.startDate).add('days',4)).format("DD/MM") + " · "+(detail.quantity ?  detail.quantity : element.quantity) + " khẩu phần";
-                          }
-      
-                          element.isOver = moment(new Date()).diff(moment(element.endDate), 'hours') >= 19 ? true : false;
-      
-                          element.statusOrder = timediffdays <= 0 ? ( timediffdays == 0 ? ( timediffminutes < 1140 ? 2 : (timediffminutes <= 1050 ? 3 : 4 ) ) : 1 ) : 1;
-                          element.allowReview = (element.statusOrder ==4 || (timediffdays >=1 && (element.status == 1 || element.status == 3) )) ? true : false;
-                        }
-                          detail.priceDisplay = se.gf.convertNumberToString(detail.itemPrice);
-                          se.loadMenuOrderDetailHistory(detail, element);
-                      });
-    
-                     
-                    }
-                  }
-                }
-                
-                
-                count++;
-            }
-            if(count == listorder.length){
-                resolve(listorder);
-                
-            }
-        })
-    }
-    
-    loadMenuOrderDetailHistory(orderdetail, order){
-      var se = this;
-    
-      let data = orderdetail.detailCombo;
-      if(data){
-        orderdetail.categoryId = orderdetail.combo.categoryId;
-          orderdetail.menu ={};
-          orderdetail.menus = [];
-          orderdetail.menus.push(data.menuId2);
-          orderdetail.menus.push(data.menuId3);
-          orderdetail.menus.push(data.menuId4);
-          orderdetail.menus.push(data.menuId5);
-          orderdetail.menus.push(data.menuId6);
-    
-          if(data.menuId2){
-            orderdetail.menu = data.menuId2;
-          }
-          if(order.statusOrder == 1){
-            if(data.menuId2){
-              orderdetail.menu = data.menuId2;
-            }
-          }else if(order.statusOrder == 2){
-            let curdate = moment(order.bookingDate);
-            let startdatemenu = moment(order.startDate);
-            if(curdate.diff(startdatemenu,'days') == 0){
-              if(data.menuId2){
-                orderdetail.menu = data.menuId2;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 1){
-              if(data.menuId3){
-                orderdetail.menu = data.menuId3;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 2){
-              if(data.menuId4){
-                orderdetail.menu = data.menuId4;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 3){
-              if(data.menuId5){
-                orderdetail.menu = data.menuId5;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 4){
-              if(data.menuId6){
-                orderdetail.menu = data.menuId6;
-              }
-            }
-            
-          }
-          
-          se.orderMenu(orderdetail.menu);
-          orderdetail.name = orderdetail.combo.category.name;
-          orderdetail.typePriceId = orderdetail.combo.category.typePriceId;
-          orderdetail.totalPriceDisplay = se.gf.convertNumberToString(orderdetail.itemPrice * orderdetail.quantity);
-          orderdetail.image = orderdetail.detailCombo.image;
-          if(orderdetail.image.indexOf('104x104') == -1){
-            let urlavatar = orderdetail.image.substring(0, orderdetail.image.length - 4);
-            let tail = orderdetail.image.substring(orderdetail.image.length - 4, orderdetail.image.length);
-            orderdetail.image = urlavatar + "-104x104" + tail;
-          }
-          let extraitem = JSON.parse(orderdetail.extra);
-          var extraText = "";
-          if(extraitem && extraitem.length >0){
-            extraText =  extraitem.map((item) => item.name).join(" · ");
-          }
-          orderdetail.extraDisplay = extraText;
-          order.detailBooking.push(orderdetail);
-          //order.isActive = true;
-          orderdetail.isDinner = orderdetail.combo.categoryId >24 ? true : false;
-          if(order.isComplexOrder){
-            
-            se.listOrderDinnerActive.push(order);
-            se.listOrderActive.push(order);
-          }else{
-            if(order.isDinner){
-              se.listOrderDinnerActive.push(order);
-            }else{
-              se.listOrderActive.push(order);
-            }
-          }
-         
-          orderdetail.weekname = "Tuần " + moment(orderdetail.startDate).format('DD/MM') + " - " + moment(orderdetail.endDate).format('DD/MM');
-          order.listDetailHistory.push(orderdetail);
-          
-      }else{
-          order.isActive = false;
-      }
-    }
-    
-    
-    loadMenuOrderDetail(orderdetail, order){
-      var se = this;
-    
-      let data = orderdetail.detailCombo;
-      if(data ){
-        orderdetail.categoryId = orderdetail.combo.categoryId;
-          orderdetail.menu ={};
-          orderdetail.menus = [];
-          orderdetail.menus.push(data.menuId2);
-          orderdetail.menus.push(data.menuId3);
-          orderdetail.menus.push(data.menuId4);
-          orderdetail.menus.push(data.menuId5);
-          orderdetail.menus.push(data.menuId6);
-    
-          if(data.menuId2){
-            orderdetail.menu = data.menuId2;
-          }
-          if(order.statusOrder == 1){
-            if(data.menuId2){
-              orderdetail.menu = data.menuId2;
-            }
-          }else if(order.statusOrder == 2){
-            let curdate = moment(order.bookingDate);
-            let startdatemenu = moment(order.startDate);
-            if(curdate.diff(startdatemenu,'days') == 0){
-              if(data.menuId2){
-                orderdetail.menu = data.menuId2;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 1){
-              if(data.menuId3){
-                orderdetail.menu = data.menuId3;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 2){
-              if(data.menuId4){
-                orderdetail.menu = data.menuId4;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 3){
-              if(data.menuId5){
-                orderdetail.menu = data.menuId5;
-              }
-            }
-            else if(curdate.diff(startdatemenu,'days') == 4){
-              if(data.menuId6){
-                orderdetail.menu = data.menuId6;
-              }
-            }
-            
-          }
-          
-          se.orderMenu(orderdetail.menu);
-          orderdetail.name = orderdetail.combo.category.name;
-          orderdetail.typePriceId = orderdetail.combo.category.typePriceId;
-          orderdetail.totalPriceDisplay = se.gf.convertNumberToString(orderdetail.itemPrice * orderdetail.quantity);
-          orderdetail.image = orderdetail.detailCombo.image;
-          if(orderdetail.image.indexOf('104x104') == -1){
-            let urlavatar = orderdetail.image.substring(0, orderdetail.image.length - 4);
-            let tail = orderdetail.image.substring(orderdetail.image.length - 4, orderdetail.image.length);
-            orderdetail.image = urlavatar + "-104x104" + tail;
-          }
-          let extraitem = JSON.parse(orderdetail.extra);
-          var extraText = "";
-          if(extraitem && extraitem.length >0){
-            extraText =  extraitem.map((item) => item.name).join(" · ");
-          }
-          orderdetail.extraDisplay = extraText;
-          order.detailBooking.push(orderdetail);
-          order.isActive = true;
-          orderdetail.isDinner = orderdetail.combo.categoryId >24 ? true : false;
-          if(order.isComplexOrder){
-            
-            se.listOrderDinnerActive.push(order);
-            se.listOrderActive.push(order);
-          }else{
-            if(order.isDinner){
-              se.listOrderDinnerActive.push(order);
-            }else{
-              se.listOrderActive.push(order);
-            }
-          }
-          if(orderdetail.iscurrentweek){
-            order.listDetailCurrentWeek.push(orderdetail);
-          }else if(orderdetail.isnextweek){
-            order.listDetailNextWeek.push(orderdetail);
-          }
-          else{
-            if(!order.isOver){
-              orderdetail.weekname = "Tuần " + moment(orderdetail.startDate).format('DD/MM') + " - " + moment(orderdetail.endDate).format('DD/MM');
-              order.listDetailHistory.push(orderdetail);
-            }else{
-              order.isActive = false;
-              orderdetail.weekname = "Tuần " + moment(orderdetail.startDate).format('DD/MM') + " - " + moment(orderdetail.endDate).format('DD/MM');
-              order.listDetailHistory.push(orderdetail);
-            }
-            
-          }
-          
-      }else{
-          order.isActive = false;
-      }
-    //  })
-    }
-    
-    orderMenu(menu){
-      this.zone.run(() => {
-        menu.listmenu = [];
-        if(menu && menu.forecipe && menu.forecipe.length>0){
-          menu.forecipe.forEach(element => {
-            if(element.type == 5){
-              menu.listmenu.push(element);
-            }
-            if(element.type == 4 || element.type == 7 || element.type ==6){
-              menu.listmenu.push(element);
-            }
-            if(element.type == 3 || element.type == 8){
-              menu.listmenu.push(element);
-            }
-          });
-        }
-        
-        }
-      )
-    }
-    
-    loadReviewMember(){
-      var se = this;
-      var options = {
-        method: 'GET',
-        url: C.urls.baseUrl.urlFood + "/api/FOReview/GetReviewByMember?memberId="+ se.memberid,
-        timeout: 10000, maxAttempts: 5, retryDelay: 2000,
-        headers:
-        {
-          token: "584f470f-7a45-4793-a136-0084fadea81c",
-        }
-      };
-      request(options, function (error, response, body) {
-        if(body){
-            var result = JSON.parse(body);
-            if(result.response){
-              let reviews = result.response;
-              se.zone.run(()=>{
-                reviews.filter((re)=>{
-                  let itemreview = se.mylistOrders.filter((or)=>{
-                   return re.bookingId == or.id
-                  })
-    
-                  if(itemreview && itemreview.length>0){
-                    itemreview.forEach(element => {
-                      element.allowReview = false;
-                    });
-                  }
-                })
-              })
-            }
-          }
-        })
-    }
-    
-      getFoodDetail(order){
-        let se = this;
-        if(!se.isConnected){
-          se.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
-          se.hasloaddata = true;
-          return;
-        }
-        let id = order.detailBooking[0].combo.categoryId;
-                if(id){
-                    let element = order.detailBooking[0];
-                    let timediffminutes = 0,timediffhours = 0, timediffdays =0;
-                    if(element.startDate){
-                      timediffminutes = moment(new Date()).diff(moment(element.startDate), 'minutes');
-                      timediffhours = moment(new Date()).diff(moment(element.startDate), 'hours');
-                      timediffdays = moment(new Date()).diff(moment(element.startDate), 'days');
-                    }else{
-                      timediffminutes = moment(new Date()).diff(moment(order.startDate), 'minutes');
-                      timediffhours = moment(new Date()).diff(moment(order.startDate), 'hours');
-                      timediffdays = moment(new Date()).diff(moment(order.startDate), 'days');
-                    }
-                    
-                  element.menu ={};
-                  if(element.detailCombo.menuId2){
-                    element.menu = element.detailCombo.menuId2;
-                  }
-    
-                  if(timediffdays == 0)//thứ 2
-                  {
-                    element.menu = element.detailCombo.menuId2;
-                    se.setOrderStatus(element, 0);
-    
-                  }else if(timediffdays == 1){
-                    if(element.detailCombo.menuId3){
-                      element.menu = element.detailCombo.menuId3;
-                      se.setOrderStatus(element, 1);
-    
-                    }
-                  }
-                  else if(timediffdays == 2){
-                    if(element.detailCombo.menuId4){
-                      element.menu = element.detailCombo.menuId4;
-                      se.setOrderStatus(element, 2);
-    
-                    }
-                  }
-                  else if(timediffdays == 3){
-                    if(element.detailCombo.menuId5){
-                      element.menu = element.detailCombo.menuId5;
-                      se.setOrderStatus(element, 3);
-    
-                    }
-                  }
-                  else if(timediffdays == 4){
-                    if(element.detailCombo.menuId6){
-                      element.menu = element.detailCombo.menuId6;
-                      se.setOrderStatus(element, 4);
-    
-                    }
-                  }else if(timediffdays >4 ){
-                    element.statusOrderDetail = 4;
-                  }
-                  else{
-                    element.statusOrderDetail = 1;
-                  }
-                  
-                  se.orderMenu(element.menu);
-                  
-                    element.typePriceId = element.combo.category.typePriceId;
-                    element.totalPriceDisplay = this.gf.convertNumberToString(element.itemPrice* element.quantity) ;
-                    let extraitem = JSON.parse(element.extra);
-                    var extraText = "";
-                    if(extraitem && extraitem.length >0){
-                      extraText =  extraitem.map((item) => item.name).join(" · ");
-                    }
-                    element.extraDisplay = extraText;
-                    //se.bookingDetails.push(element);
-                    se.detail  = element;
-                }
-      }
-    
-      setOrderStatus(element, count){
-        var se = this;
-        let curdate =  moment(element.startDate).add(count, 'days');
-        let days = moment(new Date()).diff(curdate, 'days');
-        let minutes:any = moment(new Date()).diff(moment(curdate), 'minutes');
-        if(element.isDinner){
-          element.statusOrderDetail = days <= 0 ? ( days == 0 ? ( minutes < 990 ? 2 : (minutes <= 1050 ? 3 : 4 ) ) : 1 ) : 1;
-        }else{
-          element.statusOrderDetail = days <= 0 ? ( days == 0 ? ( minutes < 690 ? 2 : (minutes <= 750 ? 3 : 4 ) ) : 1 ) : 1;
-        }
-      }
-    
-      showOrderDetail(order,orderdetail){
-        if(!this.isConnected){
-          this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
-          return;
-        }
-        this.gf.hideStatusBar();
-          this._foodService.itemOrder = order;
-          this._foodService.itemOrderDetail = orderdetail
-          //this._foodService.myorderActiveTab = this.activeTab;
-          this.navCtrl.navigateForward("/foodmyorderdetail");
-      }
-    
-      gotomenu(tabindex){
-        if(this._mytripservice.rootPage == 'homeflight'){
-          this.valueGlobal.backValue = "homeflight";
-        }else if(this._mytripservice.rootPage == 'homehotel'){
-          this.valueGlobal.backValue = "homehotel";
-        }else if(this._mytripservice.rootPage == 'homefood'){
-          this.valueGlobal.backValue = "homefood";
-        }
-        this._mytripservice.backfrompage = "order";
-        this._foodService.tabFoodIndex = tabindex;
-        this._foodService.menuFooterClick.emit(1);
-        this._foodService.itemActiveFoodTab.emit(tabindex);
-        $(".div-myorder").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".div-notify").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".div-account").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".homefoodheader").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-            $(".div-wraper-slide").removeClass("cls-disabled").addClass("cls-visible");
-            $(".div-home").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-            //khác tab food thì set chuyển về tab homefood
-            if(this._mytripservice.rootPage != "homefood"){
-              this.navCtrl.navigateForward('/homefood');
-            }
-            
-            this._mytripservice.rootPage = "homefood";
-            
-        }
-    
         getHoteldeal() {
           var se = this;
           var options = {
@@ -4808,15 +4145,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
               se.loaddatatopdeal(JSON.parse(body));
           });
         }
-    
-        showFoodReview(detail, order){
-          //Review tuần
-          if(order.isOver || order.allowReview){
-            this._foodService.itemOrderBookingDetail = detail;
-            this._foodService.itemOrderDetail = order;
-            this.navCtrl.navigateForward('/foodreviewweek');
-          }
-        }
 
         showBlog(menu){
             var se = this;
@@ -4825,7 +4153,6 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
               se.mapBlogId(menu.linkBlog).then((id)=>{
                 se.gf.hideLoading();
                 if(id){
-                  se.valueGlobal.backValue = "fooddinner";
                   se.navCtrl.navigateForward("/blog/"+id);
                 }else{
                   se.gf.showToastWarning("Không tìm thấy bài viết. Xin vui lòng quay lại sau!");
@@ -5118,28 +4445,13 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
               se.cin = moment(fromdate).format("YYYY-MM-DD");
               se.cout = moment(todate).format("YYYY-MM-DD");
 
-              //se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
-              //se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
               se.bizTravelService.checkInDate = moment(fromdate).format("YYYY-MM-DD");
               se.bizTravelService.checkOutDate = moment(todate).format("YYYY-MM-DD");
 
               se.bizTravelService.checkInDateDisplay = moment(se.bizTravelService.checkInDate).format("DD/MM/YYYY");
               se.bizTravelService.checkOutDateDisplay = moment(se.bizTravelService.checkOutDate).format("DD/MM/YYYY");
 
-              // se.datecin = new Date(se.searchhotel.CheckInDate);
-              // se.datecout = new Date(se.searchhotel.CheckOutDate);
-              // se.cindisplay = moment(se.datecin).format("DD-MM-YYYY");
-              // se.coutdisplay = moment(se.datecout).format("DD-MM-YYYY");
-
-              // se.searchhotel.datecin = new Date(se.searchhotel.CheckInDate);
-              // se.searchhotel.datecout = new Date(se.searchhotel.CheckOutDate);
-              // se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
-              // se.searchhotel.coutdisplay = moment(se.searchhotel.datecout).format("DD-MM-YYYY");
-              //se.getDayName(se.datecin, se.datecout);
-              //xử lý âm lịch
             });
-            //se.storage.set('hasChangeDate', true);
-            //se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
           }
         }
       }
@@ -5152,95 +4464,20 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
       let body = se.listMyTrips;
       se.gf.showLoading();
       se.gf.RequestApi('POST', url, {}, body, 'booking', 'exportExcel').then((data) => {
-        //var blob = new Blob([data], {type:"application/vnd.ms-excel"});
-        //var url = URL.createObjectURL(blob);
-        //var w = window.open(url);
-        //window.open(url);
-        
-         //var blob = new Blob([data], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+     
          var time = new Date().toTimeString();
          var fileName = 'bookings.xls';//if you have the fileName header available
-         //var a = document.createElement('a');
-        //  var a =$('.exportdiv')[0];
-        //  a.target = "_blank"; 
-        //  var urldata = 'data:application/octet-stream;base64,' +data;
-        //  this.sanitizer.bypassSecurityTrustResourceUrl(urldata);
-        //  a.href = urldata;
-        //  a.download = fileName;
-         //document.body.appendChild(a);
-         //let blob = se.b64toBlob(data, 'application/vnd.ms-excel');
+       
          var blob = se.b64toBlob(data, 'application/vnd.ms-excel');
           let blobUrl = URL.createObjectURL(blob);
           var a =$('.exportdiv')[0];
           a.href = blobUrl;
           a.download = fileName;
-          //window.open(blobUrl,  "_blank");
-          //window.location.href = blobUrl;
          setTimeout(()=> {
-          //a.click();
-          
-          //window.open('data:text/plain;base64,' +data,  "_blank");
-          //window.location.href = 'data:text/plain;base64,' +data;
+         
           se.gf.hideLoading();
          },500)
          
-          //let urldata =  'data:application/octet-stream;base64,' +data;
-          //var blob = new Blob([urldata], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-          //var url:any = URL.createObjectURL(urldata);
-         // window.open(urldata, "_blank");
-
-        //  this.fileOpener.open(blobUrl, 'application/vnd.ms-excel').then(() => console.log('File is opened'))
-        //  .catch(e => console.log('Error opening file', e));
-        //saveAs(blob, fileName);
-        //this.file.checkDir(this.file.dataDirectory, 'mydir').then((check)=> {
-          //if(check){
-            // this.file.writeFile(this.file.dataDirectory, fileName, blob).then((value)=>{
-            //   setTimeout(()=> {
-            //     window.open(value, "_blank");
-            //   },500)
-            // });
-            
-          //}
-        //})
-        //se.previewAnyFile.previewBase64(data,{mimeType:'application/vnd.ms-excel'});
-        // const fileTransfer: FileTransferObject = this.transfer.create();
-        
-        // fileTransfer.download(blobUrl, this.file.dataDirectory + '/'+fileName).then((entry) => {
-        //     console.log('download complete: ' + entry.toURL());
-        //   }
-        // );
-        
-
-          // if (se.platform.is('desktop') || se.platform.is('mobileweb')) {
-          //     const url = window.URL.createObjectURL(blob);
-          //     const link = window.document.createElement("a");
-          //     link.href = url;
-          //     link.setAttribute("download", fileName);
-          //     window.document.body.appendChild(link);
-          //     link.click();
-          //     link.remove();
-          //   } else {
-          //     return se.file.writeFile(
-          //       se.file.documentsDirectory + "/Download",
-          //       fileName,blob).then(()=>{
-          //         se.fileOpener.open(
-          //           se.file.documentsDirectory +  "/Download/" + fileName,
-          //         "application/vnd.ms-excel"
-          //       );
-          //       })
-          //   }
-          // })
-          // .then(() => {
-          //   var time = new Date().toTimeString();
-          //   var fileName = 'bookings.xls';
-          //     return se.fileOpener.open(
-          //       se.file.documentsDirectory +  "/Download/" + fileName,
-          //     "application/vnd.ms-excel"
-          //   );
-          // })
-          // .catch((error) => {
-          //   console.log(error);
-          // });
          
           var storageLocation = "";
 

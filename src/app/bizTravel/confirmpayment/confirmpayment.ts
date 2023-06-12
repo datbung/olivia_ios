@@ -12,7 +12,6 @@ import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { Bookcombo, RoomInfo, ValueGlobal } from 'src/app/providers/book-service';
 import { MytripService } from 'src/app/providers/mytrip-service.service';
-import { foodService } from 'src/app/providers/foodService';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
@@ -49,7 +48,6 @@ export class ConfirmPaymentPage implements OnInit {
     public activityService: ActivityService,
     public Roomif: RoomInfo,
     public _mytripservice: MytripService,
-    public _foodService: foodService,
     public valueGlobal: ValueGlobal,
     public keyboard: Keyboard) { 
         this.otpData = this.formBuilder.group({

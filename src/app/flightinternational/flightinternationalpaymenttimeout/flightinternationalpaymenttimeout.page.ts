@@ -169,10 +169,9 @@ export class FlightInternationalPaymentTimeoutPage implements OnInit {
         this.navCtrl.navigateBack('flightsearchresultinternational');
     }
     else{
+      this._flightService.itemMenuFlightClick.emit(2);
       this._flightService.itemTabFlightActive.emit(true);
-        setTimeout(()=>{
-              this._flightService.itemMenuFlightClick.emit(2);
-            },200)
+        
       this.valueGlobal.backValue = "homeflight";
       this.navCtrl.navigateBack('/tabs/tab1');
     }

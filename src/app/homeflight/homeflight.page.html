@@ -284,7 +284,7 @@
                     
                </div>
                 
-               <div class="div-wrap-flightinternationaltopdeal div-wrap-flightinternationaltopdeal_{{idx}} div-collapse h-1264" id="divshowmoreflight_{{idx}}" *ngIf="idx == listinternationalflighttopdeal.length-1">
+               <div class="div-wrap-flightinternationaltopdeal div-wrap-flightinternationaltopdeal_{{idx}} div-collapse " id="divshowmoreflight_{{idx}}" *ngIf="idx == listinternationalflighttopdeal.length-1">
                 <div  *ngFor="let itemdeal of itemgroup.list; let dx = index" >
                     <div class="div-item-flight m-bottom-16" *ngIf="itemdeal.roundTrip == (flighttype == 'twoway')" (click)="select(itemdeal)">
                         <div class="div-first d-flex">
@@ -351,20 +351,3 @@
         </div>
       </div>
 </div>
-
-<div class="div-flight-trip" *ngIf="flightTabActive == 2">
-    <!-- <app-flightmytrip></app-flightmytrip> -->
-    <app-order *ngIf="!isBizAccount else bookings"></app-order>
-    <ng-template #bookings>
-        <app-booking></app-booking>
-    </ng-template>
-    
-</div>
-
-<div class="div-flight-notify" *ngIf="flightTabActive == 3">
-    <app-flightnotify></app-flightnotify>
-  </div>
-
-  <div class="div-flight-account" *ngIf="flightTabActive == 4">
-    <app-flightaccount></app-flightaccount>
-  </div>

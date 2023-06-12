@@ -891,8 +891,6 @@ export class RoompaymentselectEanPage implements OnInit{
   setinterval()
   {
     clearInterval(this.intervalID);
-    // this.searchhotel.backPage = "foodpaymentselect";
-    // this.navCtrl.navigateBack('/app/tabs/tab1');
     this.intervalID = setInterval(() => {
       this.checkPayment();
     }, 1000 * 1);

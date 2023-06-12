@@ -1,5 +1,4 @@
-import { foodService } from './../../providers/foodService';
-import { Bookcombo, foodInfo } from './../../providers/book-service';
+import { Bookcombo } from './../../providers/book-service';
 import { Booking, RoomInfo, SearchHotel } from '../../providers/book-service';
 import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
 import { NavController, LoadingController, ToastController, Platform, AlertController } from '@ionic/angular';
@@ -9,9 +8,6 @@ import { Storage } from '@ionic/storage';
 import { ActivityService, GlobalFunction } from '../../providers/globalfunction';
 import { flightService } from '../../providers/flightService';
 import * as moment from 'moment';
-//import { PowerManagement } from '@ionic-native/power-management/ngx';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 
 @Component({

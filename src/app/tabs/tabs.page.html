@@ -6,7 +6,7 @@
       <ion-label>Trang chủ</ion-label>
     </ion-tab-button>
     <div class="div-split" ></div>
-    <ion-tab-button class="tab-button" tab="tab2" *ngIf="valueGlobal.activeTab != 3">
+    <ion-tab-button class="tab-button" tab="tab2" *ngIf="valueGlobal.activeTab ==0 || valueGlobal.activeTab ==3">
       <ion-icon class="icon-tab" name="heart"></ion-icon>
       <ion-label>Yêu thích</ion-label>
     </ion-tab-button>
@@ -27,6 +27,4 @@
       <ion-label>Tài khoản</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
-  <!-- <app-foodmenufooter></app-foodmenufooter> -->
-  <app-flightmenufooter></app-flightmenufooter>
 </ion-tabs>

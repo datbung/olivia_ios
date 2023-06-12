@@ -85,7 +85,7 @@ export class TicketPaymentDonePage implements OnInit {
     this.tourService.itemPaymentDone.emit(3);
     this.valueGlobal.backValue = "hometicket";
     //this.ticketService.BookingTourMytrip = null;
-    // this._flightService.itemMenuFlightClick.emit(2);
+    // 
     // this._flightService.bookingCodePayment = this.bookingCode;
     // this._flightService.bookingSuccess = true;
     

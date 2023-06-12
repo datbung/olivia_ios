@@ -48,6 +48,11 @@
                 <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
             </div>
 
+            <div class="text-sub-payment-info m-top-12" *ngIf="periodPaymentDisplay">Hạn thanh toán:</div>
+            <div class="d-flex m-top-2" *ngIf="periodPaymentDisplay" >
+                <div class="text-payment-info">Trước {{periodPaymentDisplay}}</div>
+            </div>
+
             <div class="text-sub-payment-info m-top-12">Nội dung:</div>
             <div class="d-flex m-top-2" *ngIf="bookingCode" (click)="copyClipboard(3)">
                 <div class="text-payment-info">{{bookingCode}}</div>
@@ -55,12 +60,20 @@
             </div>
          
         </div>
-        <div class="div-text-note m-top-16">
-            Thông tin thanh toán cũng được gửi đến email {{_email}}. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư Spam hoặc Junk Folder.
-        </div>
-        <div class="div-text-note m-top-8 m-bottom-24">
-            Xác nhận đặt vé sẽ được gửi đến email của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được email Xác nhận sau 30 phút, vui lòng gửi chứng từ thanh toán (Ủy nhiệm chi, Lệnh thanh toán) về mail support@ivivu.com để hỗ trợ xử lý.
-        </div>
+       
+        <div class="text d-flex  m-top-16" *ngIf="activityService.qrcodepaymentfrom == 1 else otherpayment">
+            <div >Xác nhận đặt vé sẽ được gửi đến <span *ngIf="contactOption==1 "> Zalo</span><span *ngIf="contactOption==2"> Email</span> của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được mã vé qua Email/Zalo, vui lòng liên hệ </div>
+                <div class="div-align-center m-right-4 " ><img class="img-zalo" src="./assets/ic_flight/logo_zalo.webp"> <a class="text-tealish text-zalo" href="https://zalo.me/3888313238733373810">iVIVU Tickets </a></div>
+                <div> để hỗ trợ xử lý.</div>
+          </div>
+          <ng-template #otherpayment>
+            <div class="div-text-note m-top-16">
+                Thông tin thanh toán cũng được gửi đến email {{_email}}. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư Spam hoặc Junk Folder.
+            </div>
+            <div class="div-text-note m-top-8 m-bottom-24">
+                Xác nhận đặt vé sẽ được gửi đến email của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được email Xác nhận sau 30 phút, vui lòng gửi chứng từ thanh toán (Ủy nhiệm chi, Lệnh thanh toán) về mail support@ivivu.com để hỗ trợ xử lý.
+            </div>
+          </ng-template>
     </div>
   
   </ion-content>

@@ -267,11 +267,7 @@
                         <div class=" div-left"><img src="./assets/ic_facility/ic_people.svg"></div>
                         <div style="font-size: 14px;">{{trip.room_count}} phòng | {{trip.totalPaxStr}}</div>
                       </div>
-                      <!-- ăn sáng -->
-                      <div *ngIf="trip.meal_plan"  class="d-flex m-top-6">
-                          <div class=" div-left"><img src="./assets/ic_hoteldetail/ic_food_b.svg"></div>
-                          <div style="font-size: 14px;">{{trip.meal_plan}}</div>
-                      </div>
+                     
                     </div>
           
                     <div *ngIf="trip.bookingOffType && trip.bookingOffType != 1">

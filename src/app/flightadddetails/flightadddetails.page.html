@@ -378,17 +378,17 @@
                             <img class="img-seemoreroom" src="./assets/ic_flight/expand_orange.svg">
                             </div>
                     </div>
-                    <div class="div-expand-airlinemember-{{idxa}} div-collapse">
+                    <div class="div-expand-airlinemember div-expand-airlinemember-{{idxa}} div-collapse">
                         <div class="text-normal">Tên của chủ tài khoản khách hàng thân thiết phải giống tên của hành khách</div>
                         <div *ngIf="departFlight" class=" m-top-8">
                             <div class="div-airline-logo d-flex">
                                 <div class="img-logo">
                                     <img class="logo-vj" *ngIf="departFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
-                                    <img *ngIf="departFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                                    <img class="img-logo" *ngIf="departFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                                     <img class="logo-vna" *ngIf="departFlight.airlineCode == 'VietnamAirlines' && !departFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
                                     <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.urlLogo &&!isApiDirect " [src]="departFlight.urlLogo">
                                     <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.operatedByLogo &&isApiDirect " [src]="departFlight.operatedByLogo">
-                                    <img *ngIf="departFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                                    <img class="img-logo" *ngIf="departFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                                 </div>
                                 <div class="text-airline">{{departFlight.airline}}</div>
                             </div>
@@ -400,11 +400,11 @@
                             <div class="div-airline-logo d-flex">
                                 <div class="img-logo">
                                     <img class="logo-vj" *ngIf="returnFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
-                                    <img *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                                    <img class="img-logo" *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                                     <img class="logo-vna" *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && !returnFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
                                     <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo &&!isApiDirect " [src]="returnFlight.urlLogo">
                                     <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.operatedByLogo &&isApiDirect " [src]="returnFlight.operatedByLogo">
-                                    <img *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                                    <img class="img-logo" *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                                 </div>
                                 <div class="text-airline">{{returnFlight.airline}}</div>
                             </div>

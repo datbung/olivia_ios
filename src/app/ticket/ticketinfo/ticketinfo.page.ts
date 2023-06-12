@@ -11,7 +11,7 @@ import { NavController } from '@ionic/angular';
 export class TicketinfoPage implements OnInit {
   includePrice: any;
 
-  constructor(private gf:GlobalFunction,private ticketService:ticketService,private navCtrl: NavController) { 
+  constructor(public gf:GlobalFunction,public ticketService:ticketService,private navCtrl: NavController) { 
     this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/'+this.ticketService.itemTicketService.objbooking.bookingId, {}, {}, '', '').then((data) => {
       if (data && data.success) {
          this.includePrice=data.data.includePrice.split('|');

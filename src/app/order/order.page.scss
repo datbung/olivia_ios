@@ -1,8 +1,4 @@
-@import "../foodmyorder/foodmyorder.page.scss";
-@import "../foodmyorderdetail/foodmyorderdetail.page.scss";
-@import "../flightmytrip/flightmytrip.page.scss";
-
-
+@import './flightmytrip.scss';
     .header-ios ion-toolbar:last-child{
         --border-width: 0;
         --padding-bottom: 0;
@@ -312,14 +308,7 @@
             .m-top-12{
                 margin-top: 12px;
             }
-            .btn-payment
-            {
-                background-color: #feedc7;
-                color: #f59233;
-                width: 100%;
-                margin: 0;
-                font-size: 17px !important;
-            }
+            
         .div-penalty, .div-rules{
             position: relative;
             min-height: 22px;
@@ -568,7 +557,7 @@
 
     .card-background-page-mytrips{
         height: 100%;
-        padding-top: calc( env(safe-area-inset-top) + 60px);
+        padding-top: calc( env(safe-area-inset-top) + 84px);
         .min-height-84{
             min-height: 84px !important;
         }
@@ -903,7 +892,7 @@
         }
         .text-offsubcode{
             font-size: 14px;
-            color: #222222;
+            color: #3f3b3b;
             text-align: left;
         }
         .label-reviews{
@@ -992,7 +981,7 @@
                 line-height: 1.67;
                 letter-spacing: -0.34px;
                 text-align: left;
-                color: #828282;
+                color: #6d6e71;
             }
 
             .div-text-price{
@@ -1395,7 +1384,7 @@
           }
           .div-button-combo-suggest{
             bottom: 8px;
-            position: relative;
+            //position: relative;
             width: 100%;
             padding: 0;
             margin: 0;
@@ -1456,6 +1445,12 @@
             .label-text-waitpayment1 {
                 font-size: 10px !important;
             }
+            .div-left-waitpayment {
+                font-size: 13px !important;
+            }
+          }
+
+          @media (min-width:340px) and (max-width: 360px) {
             .div-left-waitpayment {
                 font-size: 13px !important;
             }
@@ -2068,12 +2063,6 @@ color: #e52822
     align-items: center;
 }
 
-.foodmyorder-content{
-    background: #fff;
-    margin: -30px -16px -120px -16px !important;
-    padding: 0 22px;
-    padding-top: 16px;
-}
 .div-second{
     margin-top: 12px;
     position: relative;
@@ -2639,6 +2628,9 @@ color: #e52822
     .m-top-4 {
         margin-top: 4px;
     }
+    .m-top-14 {
+        margin-top: 14px;
+    }
     .p-left-11 {
         padding-left: 11px;
     }
@@ -3015,31 +3007,7 @@ color: #e52822
             max-width: 18px;
           }
 
-          .div-bkgno {
-
-            .text-bkg {
-                // width: 80px;
-                font-size: 14px;
-                text-align: left;
-                color: #868998;
-            }
-            .bkg-no {
-                width: 40%;
-                margin-left: 4px;
-                font-size: 16px;
-                font-weight: 600;
-                text-align: left;
-                color: var(--ion-color-tertiary);
-            }
-            .div-btn-payment {
-                width: 35%;
-                margin-top: 0;
-                text-align: right;
-                padding: 0 !important;
-            }
-
-            
-          }
+          
 
           .div-waiting-payment {
             padding: 12px 8px;
@@ -3541,8 +3509,14 @@ color: #e52822
 .div-flighttrip{
     background: #f2f2f2;
 }
+.div-flighttrip-onebkg {
+    background-color: #fff;
+}
 .div-mytrip{
     background: #f2f2f2;
+}
+.div-view-list {
+    background: #fff !important;
 }
 .m-bottom-50{
     padding-bottom: 50px;
@@ -3557,7 +3531,7 @@ color: #e52822
     background-color: #fff;
     margin-left: 16px;
     .div-price-and-policy{
-        padding: 0 5px;
+        //padding: 0 5px;
         .div-price-title{
             font-size: 12px;
             line-height: 1.67;
@@ -3648,7 +3622,10 @@ color: #e52822
             font-size: 14px;
             color: #222222;
             padding: 0;
+           
         }
+
+        
     }
 
     .min-height-84{
@@ -4596,7 +4573,7 @@ and (orientation: portrait) {
     
   }
   .div-width-10 {
-    width: 10%;
+    width: 24px;
     }
   .m-t-11{
     margin-top: -11px;
@@ -4801,3 +4778,138 @@ and (orientation: portrait) {
   .margin-16{
     margin: 0px 16px 16px;
   }
+.div-split-panel {
+    height: 8px;
+    flex-grow: 0;
+    background-color: #f5f6f7;
+    margin: 8px 0px;
+}
+.div-split-panel-VMB {
+    height: 7px;
+    background: #f2f2f2;
+    margin: 8px -8px;
+}
+.div-btn-payment{
+    //margin: 0 16px;
+    .btn-payment
+                {
+                    color: #fff;
+                    width: 100%;
+                    margin: 0;
+                    font-size: 17px !important;
+                    border-radius: 6px;
+                    background-color: #f79321;
+                }
+        }
+        .m-top-24{
+            margin-top: 24px;
+        }
+
+        .text-address-combo {
+            overflow: hidden;
+            max-height: 39px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            height: auto;
+            display: -webkit-box;
+            /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+        }
+
+        .p-8 {
+            padding: 8px;
+        }
+        .p-8-0 {
+            padding: 8px 0;
+        }
+
+        .div-bkg-off {
+
+            .text-date-sub {
+                font-size: 12px;
+                line-height: 1.67;
+                letter-spacing: -0.34px;
+                text-align: left;
+                color: #6d6e71;
+            }
+            .text-date {
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 1.5;
+                letter-spacing: -0.28px;
+                text-align: left;
+                color: #3f3b3b;
+            }
+            .div-split-panel {
+                height: 8px;
+                flex-grow: 0;
+                background-color: #f2f2f2;
+                margin: 10px -16px 12px -16px;
+            }
+            .text-pax-name {
+                font-size: 14px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: left;
+                color: #3f3b3b;
+            }
+            .text-title {
+                font-size: 16px;
+                font-weight: 600;
+                text-align: left;
+                color: #3f3b3b;
+              }
+              .text-sub-title {
+                font-size: 14px;
+                font-weight: 600;
+                text-align: left;
+                color: #3f3b3b;
+              }
+        }
+        .div-price-title{
+            font-size: 12px;
+            line-height: 1.67;
+            letter-spacing: -0.34px;
+            text-align: left;
+            color: #6d6e71;
+        }
+        .div-bkgno {
+
+            .text-bkg {
+                // width: 80px;
+                font-size: 14px;
+                text-align: left;
+                color: #868998;
+            }
+            .bkg-no {
+                width: 40%;
+                margin-left: 4px;
+                font-size: 16px;
+                font-weight: 600;
+                text-align: left;
+                color: var(--ion-color-tertiary);
+            }
+            .bkgoff-no {
+                margin-left: 4px;
+                font-size: 16px;
+                font-weight: 600;
+                text-align: left;
+                color: var(--ion-color-tertiary);
+            }
+            .div-btn-payment {
+                width: 35%;
+                margin-top: 0;
+                text-align: right;
+                padding: 0 !important;
+            }
+
+            
+          }
+          .div-split-panel-bkgoff {
+                height: 8px;
+                flex-grow: 0;
+                background-color: #f2f2f2;
+                margin: 8px -16px 8px -16px;
+          }

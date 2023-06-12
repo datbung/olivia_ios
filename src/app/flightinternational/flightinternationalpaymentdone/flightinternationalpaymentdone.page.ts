@@ -286,7 +286,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
                     se.gf.hideLoading();
                     se.clearItemCache();
                         
-                    se._flightService.itemMenuFlightClick.emit(2);
+                    se._flightService.itemTabFlightActive.emit(1);
                     se.next();
                   })
                   
@@ -305,7 +305,8 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
             }
           }else{
             se.clearItemCache();
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
+            this._flightService.itemMenuFlightClick.emit(2);
             se.next();
           }
         }else{
@@ -320,7 +321,8 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
                       se.gf.hideLoading();
                       se.clearItemCache();
                       
-                      se._flightService.itemMenuFlightClick.emit(2);
+                      this._flightService.itemTabFlightActive.emit(1);
+                      this._flightService.itemMenuFlightClick.emit(2);
                       se.next();
                     })
                   
@@ -338,7 +340,8 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
               }
             }else{
               se.clearItemCache();
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
+              this._flightService.itemMenuFlightClick.emit(2);
               se.next();
             }
           })
@@ -399,9 +402,10 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     }
     this.gf.hideLoading();
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemMenuFlightClick.emit(2);
     this.valueGlobal.backValue = "homeflight";
     //this._flightService.itemFlightMytripRefresh.emit(true);
-    this._flightService.itemMenuFlightClick.emit(2);
+    
     this._flightService.bookingCodePayment = this.bookingCode;
     this._flightService.bookingSuccess = true;
     this._voucherService.publicClearVoucherAfterPaymentDone(1);
@@ -421,7 +425,8 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     var se = this;
     se.clearItemCache();
     se._flightService.itemTabFlightActive.emit(true);
-    se._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(1);
+    this._flightService.itemMenuFlightClick.emit(2);
     se._flightService.bookingCodePayment = this.bookingCode;
     se._flightService.bookingSuccess = true;
     se.valueGlobal.backValue = "flightmytrip";

@@ -10,8 +10,6 @@ import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import { CodePush,SyncStatus,InstallMode } from '@ionic-native/code-push/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { foodService } from './providers/foodService';
-import { FoodfilterPage } from './foodfilter/foodfilter.page';
 import { OverlayEventDetail } from '@ionic/core';
 import * as moment from 'moment';
 import { LoginPage } from './login/login';
@@ -63,7 +61,6 @@ export class AppComponent {
     private codePush: CodePush,
     private alertCtrl: AlertController,
     private appVersion: AppVersion,
-    public foodService: foodService,
     private zone: NgZone,
     private toastCtrl: ToastController,
     private loadCtrl: LoadingController,private deeplinks: Deeplinks,
@@ -108,62 +105,12 @@ export class AppComponent {
     preloadArea.appendChild(document.createElement('ion-icon'));
     preloadArea.appendChild(document.createElement('ion-note'));
     preloadArea.appendChild(document.createElement('ion-skeleton-text'));
-    this.storage.get("listItemsCart").then((data)=>{
-      if(data && data.length >0){
-        data.forEach(element => {
-          if(!this.gf.checkItemInCurrentPeriod(element)){
-            this.gf.removeItemInArray(data, element);
-          }
-        });
-
-        setTimeout(()=>{
-          
-          this.zone.run(()=>{
-            this.countcart = data.length;
-            this.foodService.countcart = data.length;
-            this.hascachecart = true;
-            this.foodService.listItemsCart = [...data];
-            this.gf.setCacheCart();
-          })
-        },100)
-
-        
-      }
-    })
     
   }
 
   ngOnInit(){
     
-    // this.foodService.itemCartChange.pipe().subscribe(data => {
-    //   this.zone.run(()=>{
-    //     this.countcart =data;
-    //   })
-    // })
-
-    // this.foodService.itemCountFilter.pipe().subscribe(data => {
-    //   if(data == 1){
-    //     this.zone.run(()=>{
-    //       this.enableCountFilter = 1;
-    //     })
-    //   }else{
-    //     this.zone.run(()=>{
-    //       this.enableCountFilter = 0;
-    //     })
-    //   }
-    // })
-
-    // this.foodService.itemActiveFoodTab.pipe().subscribe(data => {
-    //   if(data == 1){
-    //     this.zone.run(()=>{
-    //       this.allowShowCart = true;
-    //     })
-    //   }else{
-    //     this.zone.run(()=>{
-    //       this.allowShowCart = false;
-    //     })
-    //   }
-    // })
+   
   }
 
   askTrackingPermission() :Promise<any>{
@@ -279,12 +226,6 @@ export class AppComponent {
           else if(objlink.path.indexOf("tour") != -1){
             this.navCtrl.navigateForward('/hometour');
           }
-          else if(objlink.path.indexOf("home-food") != -1 || objlink.path.indexOf("homefood") != -1){
-            this.navCtrl.navigateForward('/homefood');
-          }
-          else if(objlink.path.indexOf("foodpaymentdone")!= -1){
-            this.navCtrl.navigateForward(objlink.path);
-          } 
           else{
             this.navCtrl.navigateForward('/tabs/tab1');
           }
@@ -378,33 +319,6 @@ export class AppComponent {
     ]
   });
   alert.present();
-  }
-
-  async showFilter(){
-    this.gf.hideStatusBar();
-    
-    const modal: HTMLIonModalElement =
-    await this.modalCtrl.create({
-      component: FoodfilterPage,
-      componentProps: {
-        aParameter: true,
-      }
-    });
-  modal.present();
-
-  modal.onDidDismiss().then((data: OverlayEventDetail) => {
-    this.foodService.menuFooterClick.emit(1);
-  })
-  }
-
-  showCart(){
-    // if(this.foodService.listItemsCart.length ==0 && !this.hascachecart){
-    //   this.presentToastWarning('Bạn chưa có bữa trưa nào với iVIVU trong giỏ hàng');
-    //   return;
-    // }
-    this.gf.hideStatusBar();
-    this.foodService.fromPage = "homefood";
-    this.navCtrl.navigateForward('/foodbill');
   }
 
   async presentToastWarning(msg) {

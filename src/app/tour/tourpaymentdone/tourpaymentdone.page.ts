@@ -90,7 +90,7 @@ export class TourPaymentDonePage implements OnInit {
     this.tourService.itemPaymentDone.emit(3);
     this.valueGlobal.backValue = "hometour";
     this.tourService.BookingTourMytrip = null;
-    // this._flightService.itemMenuFlightClick.emit(2);
+    // 
     // this._flightService.bookingCodePayment = this.bookingCode;
     // this._flightService.bookingSuccess = true;
     

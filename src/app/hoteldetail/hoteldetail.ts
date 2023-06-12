@@ -222,6 +222,7 @@ export class HotelDetailPage implements OnInit {
   isShowPriceHotel: boolean;
   youtubeId: any;
   trustedVideoUrl: any;
+  callbackNote: any;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -1996,6 +1997,7 @@ excuteLoadHotelRoom(data){
         self.hotelMealTypes = [];
         self.hotelMealTypesHidden = [];
         self.hotelRooms = result.Hotels[0];
+        self.callbackNote = result.Hotels[0].CallbackNote ? (result.Hotels[0].CallbackNote.replace(' phút','’').replace('phút','’')) : 'Xác nhận trong 60’';
         setTimeout(()=>{
           if (result.Hotels[0].RoomClasses.length == 0) {
             self.ischeckwarn = true;
@@ -2868,15 +2870,12 @@ async bookcombo() {
       else if(this.searchhotel.rootPage == "MyTrip"){
         if(this._mytripservice.rootPage == "homeflight"){
           this._flightService.itemTabFlightActive.emit(true);
-          this._flightService.itemMenuFlightClick.emit(2);
+          
           this.valueGlobal.backValue = "homeflight";
           this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
           this._mytripservice.backfrompage= "";
         }else if(this._mytripservice.rootPage == 'homehotel'){
           this.navCtrl.navigateBack('app/tabs/tab3');
-        }
-        else{
-          this.navCtrl.navigateForward('/homefood');
         }
       }
       else if(this.searchhotel.rootPage == "combolist"){
@@ -2893,7 +2892,6 @@ async bookcombo() {
         }else{
           this.navCtrl.back();
         }
-        //this.navCtrl.navigateBack(['/app/tabs/hotellistmood/false']);
       }else{
         this.navCtrl.navigateBack('/app/tabs/tab1');
       }

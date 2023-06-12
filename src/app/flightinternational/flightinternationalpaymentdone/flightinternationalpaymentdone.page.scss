@@ -265,6 +265,7 @@
 /////////
 .d-flex{
     display: flex;
+    flex-wrap: wrap;
 }
 .m-bottom-10{
     margin-bottom: 10px;
@@ -492,10 +493,28 @@
     letter-spacing: -0.28px !important;
 }
 
+
 .text-tealish{
     color: #26bed6 !important;
 }
-
+.text-zalo {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.f-18 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.img-zalo {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+}
 .p-top-12{
     padding-top: 12px;
+}
+.m-right-4 {
+    margin-right: 4px;
 }

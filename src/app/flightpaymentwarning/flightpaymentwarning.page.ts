@@ -71,11 +71,13 @@ export class FlightpaymentwarningPage implements OnInit {
   gohome(){
     this.clearItemCache();
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemMenuFlightClick.emit(2);
     this.valueGlobal.backValue = "homeflight";
     this.navCtrl.navigateBack('/tabs/tab1');
   }
 
   goback(){
+    this._flightService.itemMenuFlightClick.emit(2);
     this.navCtrl.navigateBack('/tabs/tab1');
   }
 

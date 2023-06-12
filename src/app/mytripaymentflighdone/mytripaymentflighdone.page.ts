@@ -195,7 +195,7 @@ if(!isdepart && itemflight.isRoundTrip && itemflight.checkOutDate && itemflight.
                     se.gf.hideLoading();
                     se.clearItemCache();
                         
-                    se._flightService.itemMenuFlightClick.emit(2);
+                    this._flightService.itemTabFlightActive.emit(1);
                     se.next();
                   })
                   
@@ -214,7 +214,7 @@ if(!isdepart && itemflight.isRoundTrip && itemflight.checkOutDate && itemflight.
             }
           }else{
             se.clearItemCache();
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
             se.next();
           }
         }else{
@@ -229,7 +229,7 @@ if(!isdepart && itemflight.isRoundTrip && itemflight.checkOutDate && itemflight.
                       se.gf.hideLoading();
                       se.clearItemCache();
                       
-                      se._flightService.itemMenuFlightClick.emit(2);
+                      this._flightService.itemTabFlightActive.emit(1);
                       se.next();
                     })
                   
@@ -247,7 +247,7 @@ if(!isdepart && itemflight.isRoundTrip && itemflight.checkOutDate && itemflight.
               }
             }else{
               se.clearItemCache();
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
               se.next();
             }
           })
@@ -309,9 +309,10 @@ if(!isdepart && itemflight.isRoundTrip && itemflight.checkOutDate && itemflight.
     }
     this.gf.hideLoading();
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemMenuFlightClick.emit(2);
     this.valueGlobal.backValue = "homeflight";
     //this._flightService.itemFlightMytripRefresh.emit(true);
-    this._flightService.itemMenuFlightClick.emit(2);
+    
     this._mytripservice.orderPageState.emit(1);
     this._flightService.bookingCodePayment = this.bookingCode;
     this._flightService.bookingSuccess = true;

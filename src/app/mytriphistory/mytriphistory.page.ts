@@ -2,7 +2,6 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { LoadingController, ModalController, NavController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { NetworkProvider } from '../network-provider.service';
-import { foodService } from '../providers/foodService';
 import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
 import { UserReviewsPage } from '../userreviews/userreviews';
@@ -25,7 +24,6 @@ export class MytripHistoryPage implements OnInit {
   historytripcount: number=0;
   isConnected: boolean;
   hasloaddata: boolean = false;
-  listFoodOrders: any=[];
   selectedTab: string= "1";
   showOnlyOne: boolean;
   myloader: any;
@@ -43,7 +41,6 @@ export class MytripHistoryPage implements OnInit {
     public gf: GlobalFunction,
     private platform: Platform,
     private navCtrl: NavController,
-    public _foodService: foodService,
     private zone: NgZone,
     private storage: Storage,
     private modalCtrl: ModalController,
@@ -73,13 +70,11 @@ export class MytripHistoryPage implements OnInit {
         se.hasloaddata = true;
         se.totalHistoryTrip = se._mytripservice.totalHistoryTrip;
         se.listHistoryTrips = se._mytripservice.listHistoryTrips ? se._mytripservice.listHistoryTrips : [];
-        se.listFoodOrders = se._mytripservice.mylistOrders ? se._mytripservice.mylistOrders : [];
         se.historytripcount = se.listHistoryTrips ? se.listHistoryTrips.length : 0;
       }else{
         se.hasloaddata = false;
         se.totalHistoryTrip = 0;
         se.listHistoryTrips = [];
-        se.listFoodOrders = [];
         se.historytripcount = 0;
       }
     })
@@ -90,18 +85,6 @@ export class MytripHistoryPage implements OnInit {
     
     //se.hasloaddata = true;
     se.isConnected = true;
-    let itemf = se.listFoodOrders.filter((o) => !o.isActive);
-    if(itemf.length ==0){
-      se.nodata = true;
-    }
-    else if(itemf.length ==1){
-      se.showOnlyOne = itemf[0].detailBooking.length ==1 ? true : false;
-      se.nodata = false;
-    }
-    else{
-      se.showOnlyOne = false;
-      se.nodata = false;
-    }
   }
 
   goback(){
@@ -112,7 +95,7 @@ export class MytripHistoryPage implements OnInit {
     }else if(this._mytripservice.rootPage == "homeflight"){
       if(this._mytripservice.backfrompage == "mytripdetail"){
         this._flightService.itemTabFlightActive.emit(true);
-        this._flightService.itemMenuFlightClick.emit(2);
+        
         this.valueGlobal.backValue = "homeflight";
         this.navCtrl.navigateBack('/app/tabs/tab1');
         this._mytripservice.backfrompage= "";
@@ -120,15 +103,6 @@ export class MytripHistoryPage implements OnInit {
         this.navCtrl.back();
       }
       
-    }
-    else if(this._mytripservice.rootPage == "homefood"){
-      this._mytripservice.rootPage = "homefood";
-      this.valueGlobal.backValue = "";
-      this._foodService.menuFooterClick.emit(2);
-      this.navCtrl.navigateForward('/homefood');
-      this.storage.remove('TabHomeActive').then(()=>{
-        this.storage.set('TabHomeActive', 3);
-      })
     }
   }
 
@@ -138,10 +112,6 @@ export class MytripHistoryPage implements OnInit {
 
   SelectHotelTab(){
     this.selectedTab = "1";
-  }
-
-  SelectFoodTab(){
-    this.selectedTab = "2";
   }
 
   async feedback(trip: any) {
@@ -340,18 +310,13 @@ export class MytripHistoryPage implements OnInit {
   }
 
   gotomenu(tabindex){
-    this._foodService.tabFoodIndex = tabindex;
-    this._foodService.menuFooterClick.emit(1);
-    this._foodService.itemActiveFoodTab.emit(tabindex);
     $(".div-myorder").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
     $(".div-notify").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
     $(".div-account").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
 
-    $(".homefoodheader").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
     $(".div-wraper-slide").removeClass("cls-disabled").addClass("cls-visible");
     $(".div-home").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-    this._mytripservice.rootPage = "homefood";
-    this.navCtrl.navigateForward('/homefood');
+    
   }
 
   showtripdetail(trip){

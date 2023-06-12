@@ -508,37 +508,42 @@ export class HotelListPage implements OnInit{
   getHotelprice(isloadmore) {
     var se = this;
     var options;
+
     var form = {
+      HotelID: 0,
       RoomNumber: se.searchhotel.roomnumber ? se.searchhotel.roomnumber : 1,
+      IsLeadingPrice: 1,
       ReferenceClient: '',
       Supplier: 'IVIVU',
-      CheckInDate: se.searchhotel.CheckInDate,
-      CheckOutDate: se.searchhotel.CheckOutDate,
+      CheckInDate: moment(se.searchhotel.CheckInDate).format('YYYY-MM-DD'),
+      CheckOutDate: moment(se.searchhotel.CheckOutDate).format('YYYY-MM-DD'),
       CountryID: '',
       CityID: '',
       NationalityID: 82,
       'RoomsRequest[0][RoomIndex]': '1',
+      'RoomsRequest[0][Adults][label]': se.searchhotel.adult,
       'RoomsRequest[0][Adults][value]': se.searchhotel.adult,
+      'RoomsRequest[0][Child][label]': se.searchhotel.child,
       'RoomsRequest[0][Child][value]': se.searchhotel.child,
-      StatusMethod: '2',
-      'CityCode': se.authService.region,
-      NoCache: 'false',
-      SearchType: '2',
-      HotelIds: se.listhotels,
-      HotelIdInternal: se.listhotelIdInternal,
-      IsB2B: true,
-      IsSeri: true,
-      IsAgoda: true,
       IsPackageRate: false,
       IsPackageRateInternal: false,
+      vipCode: '',
+      IsFenced: false,
       GetVinHms: 1,
       GetSMD: 1,
-      IsLeadingPrice: 1,
-      IsFenced: false,
-      HotelID:0,
-      vipCode:'',
+      IsB2B: true,
+      IsSeri: true,
+      HotelIdInternal: se.listhotelIdInternal,
+      StatusMethod: 2,
+      CityCode: se.authService.region,
+      CountryCode: '',
       EANHotelID: 0,
-    };
+      HotelIds: se.listhotels,
+      NoCache: 'false',
+      SearchType: 2,
+      IsAgoda: true,
+      IsOccWithBed: true,
+    }
     if (this.searchhotel.arrchild) {
       for (var i = 0; i < this.searchhotel.arrchild.length; i++) {
         form["RoomsRequest[0][AgeChilds][" + i + "][value]"] = + this.searchhotel.arrchild[i].numage;
@@ -648,6 +653,10 @@ export class HotelListPage implements OnInit{
                   se.loadpricedone = true;
                   se.nodata = se.json1.length == 0;
                 //}
+                if(se.json1.length >0 && se.json1.length < 6 && se.page * 5 < se.totalData){
+                  se.page += 1;
+                  se.loaddata(se.authService, se.searchhotel, false);
+                }
                 
               },200);
             })

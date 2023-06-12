@@ -141,7 +141,7 @@ export class RoompaymentdoneeanPage implements OnInit {
   }
   next() {
     this.Roomif.priceshowtt = "";
-    
+    this._flightService.itemMenuFlightClick.emit(2);
     //google analytic
     //this.gf.googleAnalytion('payment','Purchases','hotelid:'+this.booking.code+'/cin:'+this.booking.CheckInDate+'/cout:'+this.booking.CheckOutDate+'/adults:'+this.booking.Adults+'/child:'+this.booking.Child+'/roomnumber:'+ this.booking.roomNb+ '/price:'+this.booking.cost);
     
@@ -153,7 +153,7 @@ export class RoompaymentdoneeanPage implements OnInit {
 
       this._flightService.itemTabFlightActive.emit(true);
       this.valueGlobal.backValue = "homeflight";
-      this._flightService.itemMenuFlightClick.emit(2);
+      
       this._mytripservice.orderPageState.emit(1);
     
       this.navCtrl.navigateBack('/tabs/tab1');

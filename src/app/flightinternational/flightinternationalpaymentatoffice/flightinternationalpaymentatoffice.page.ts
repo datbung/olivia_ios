@@ -27,6 +27,7 @@ export class FlightInternationalPaymentatOfficePage implements OnInit{
   allowCheckHoldTicket: boolean = true;
   bookingCode: any;
   jti: any;
+  contactOption: any;
 ; room; jsonroom;loader:any;
   constructor(public platform: Platform,public bookcombo:Bookcombo,public navCtrl: NavController, public Roomif: RoomInfo, public storage: Storage, public booking: Booking, public loadingCtrl: LoadingController,public gf: GlobalFunction, public zone: NgZone,private toastCtrl: ToastController,
     public _flightService: flightService,
@@ -40,7 +41,9 @@ export class FlightInternationalPaymentatOfficePage implements OnInit{
         this.jti = jti;
       }
     })
-
+    this.storage.get('contactOption').then((option)=>{
+      this.contactOption = option;
+    })
   }
   ngOnInit() {
   }

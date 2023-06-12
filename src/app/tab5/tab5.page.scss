@@ -8,9 +8,10 @@
     .no-margin-bottom{
         padding: 16px;
         margin-bottom: 0px;
+        margin-top: 16px;
     }
     .div-item{
-        padding-bottom: 12px;
+        padding-bottom: 20px;
     }
     .title-header{
         text-align: center;
@@ -102,6 +103,11 @@
         }
         .item-list{
             font-size:12px;
+        }
+    }
+    @media (min-width:410px) and (max-width: 440px) {
+        .no-margin-bottom{
+            margin-top: 48px !important;
         }
     }
 //////////////
@@ -305,7 +311,7 @@
     border-radius: 60px;
     height: 100%;
     
-    width: 110px;
+    width: 80px;
     margin: 0 auto;
     padding: 2px;
     border: none;
@@ -363,7 +369,6 @@
     height: 16px;
 }
 .text-right{
-    position: absolute;
     right: 16px;
 }
 .margin-left-4{
@@ -385,10 +390,12 @@
     padding-top: 28px;
 }
 .avatar{
-    height: 110px !important;
+    height: 80px !important;
     box-shadow: none !important;
     margin-top: 0px;
     margin-bottom: 0px;
+    margin: 0;
+    border-radius: 100%;
 }
 .text-KH{
     margin-top: 8px;
@@ -429,4 +436,98 @@
 .margin-left-6{
     margin-left: 6px;
 }
+.m-top-16 {
+    margin-top: 16px !important;
+}
+.m-top-4 {
+    margin-top: 4px !important;
+}
+.m-bottom-16 {
+    margin-bottom: 16px !important;
+}
+.m-top-24 {
+    margin-top: 24px !important;
+}
+.m-bottom-24 {
+    margin-bottom: 24px !important;
+}
+.d-flex {
+    display: flex;
+}
+.div-split-panel {
+    height: 8px;
+    margin: 0px -16px;
+    background-color: #f2f2f2;
+}
+.div-icon-left {
+    width: 16px;
+    margin-right: 6px;
 
+    .icon-left {
+        width: 16px;
+        height: 16px;
+        max-width: 16px;
+    }
+}
+.div-support {
+    display: flex;
+    align-items: center;
+
+    
+
+    .div-text-sp {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #26bed6;
+    }
+
+    .div-icon-arrow {
+        width: 16px;
+        text-align: right;
+    }
+}
+.div-wrap-avatar {
+    .width-80 {
+        width: 80px;
+    }
+    .m-right-12 {
+        margin-right: 12px;
+    }
+    .v-align-center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .text-normal {
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .text-account {
+        font-size: 24px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #26bed6;
+    }
+}
+.h-22 {
+    height: 22px;
+}
+.align-center {
+    align-items: center;
+}

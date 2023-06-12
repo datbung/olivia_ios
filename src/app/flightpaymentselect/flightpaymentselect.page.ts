@@ -1,15 +1,11 @@
-import { parse } from 'path';
-import { foodService } from './../providers/foodService';
-import { Bookcombo, foodInfo } from './../providers/book-service';
-import { Booking, RoomInfo, SearchHotel } from '../providers/book-service';
-import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
+import { SearchHotel } from '../providers/book-service';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController, LoadingController, ToastController, Platform, ModalController, AlertController } from '@ionic/angular';
 import { C } from '../providers/constants';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 
 import { GlobalFunction } from '../providers/globalfunction';
-import jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { flightService } from '../providers/flightService';
@@ -890,6 +886,8 @@ export class FlightPaymentSelectPage implements OnInit {
           })
   }
   flightpaymentpayooqr() {
+    //this._flightService.itemFlightCache.ischeckpayment = 1;
+    //this.navCtrl.navigateForward('flightpaymentdone/'+this.bookingCode+'/'+this.startDate+'/'+this.endDate);
     if(this.blockPayCard){
       return;
     }

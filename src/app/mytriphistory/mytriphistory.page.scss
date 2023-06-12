@@ -339,6 +339,21 @@
     }
     
   }
+  @media(min-width:340px) and (max-width:360px){
+    .div-flightto {
+        max-width: 130px;
+    }
+    }
+    @media(min-width:361px) and (max-width:375px){
+        .div-flightto {
+            max-width: 146px;
+        }
+    }
+    @media(min-width:376px) and (max-width:440px){
+        .div-flightto {
+            max-width: 178px;
+        }
+    }
 
   .foodmyorder-content{
       margin-bottom: 60px !important;

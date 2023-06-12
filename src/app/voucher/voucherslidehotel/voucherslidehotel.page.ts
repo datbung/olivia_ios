@@ -181,6 +181,18 @@ export class VoucherSlideHotelPage implements OnInit{
       return new Promise((resolve, reject) => {
           var se = this;
           if (itemVoucher.code) {
+            // var options = {
+            //   method: 'POST',
+            //   url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+            //   headers:
+            //   {
+            //     'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+            //     'cache-control': 'no-cache',
+            //     'content-type': 'application/json'
+            //   },
+            //   body: { code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: this.bookCombo.ComboId },
+            //   json: true
+            // };
             var options = {
               method: 'POST',
               url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
@@ -190,7 +202,19 @@ export class VoucherSlideHotelPage implements OnInit{
                 'cache-control': 'no-cache',
                 'content-type': 'application/json'
               },
-              body: { code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: this.bookCombo.ComboId },
+              body: { bookingCode: 'HOTEL',code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price ,comboDetailId: this.bookCombo.ComboId,
+              couponData: {
+                "hotel": {
+                  "hotelId": this.booking.HotelId,
+                  "roomName": this.booking.RoomName,
+                  "totalRoom": this.Roomif.roomnumber,
+                  "totalAdult": this.booking.Adults,
+                  "totalChild": this.booking.Child,
+                  "jsonObject": "",
+                  "checkIn": this.searchHotel.CheckInDate,
+                  "checkOut": this.searchHotel.CheckOutDate
+                }
+              } },
               json: true
             };
       

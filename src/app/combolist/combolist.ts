@@ -618,16 +618,10 @@ export class ComboListPage implements OnInit{
         this.valueGlobal.backValue = "homeflight";
           this._mytripservice.orderPageState.emit(1);
           this._flightService.itemTabFlightActive.emit(true);
-          setTimeout(()=> {
-            this._flightService.itemMenuFlightClick.emit(2);
-          },200)
           this._mytripservice.backfrompage= "";
-          this.navCtrl.navigateBack('/tabs/tab1');
+          this.navCtrl.navigateBack('app/tabs/tab1');
       }else if(this._mytripservice.rootPage == 'homehotel'){
         this.navCtrl.navigateBack('app/tabs/tab3');
-      }
-      else if(this._mytripservice.rootPage == 'homefood'){
-        this.navCtrl.navigateForward('/homefood');
       }
       else{
         this.navCtrl.back();

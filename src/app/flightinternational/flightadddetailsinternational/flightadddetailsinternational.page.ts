@@ -100,7 +100,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   listVouchersApply=[];
   strPromoCode: string = '';
   totaldiscountpromo = 0;
-  contactOption: any;
+  contactOption: any = 1;
   optionPassport:boolean=false;
   departFlight: any;
   returnFlight: any;

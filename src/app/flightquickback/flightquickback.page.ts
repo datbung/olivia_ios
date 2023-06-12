@@ -52,6 +52,7 @@ export class FlightquickbackPage implements OnInit {
 
         goToHomePage(pageIndex){
           var se = this;
+          se._flightService.itemMenuFlightClick.emit(2);
             if(pageIndex ==1){
                 se.valueGlobal.backValue = "";
                 se.searchhotel.itemTabHotel.emit(1);
@@ -62,6 +63,7 @@ export class FlightquickbackPage implements OnInit {
             else if(pageIndex ==2){
               se.valueGlobal.backValue = "homeflight";
               se._flightService.itemTabFlightActive.emit(1);
+              
               setTimeout(()=>{
                 se.navCtrl.navigateBack('/tabs/tab1');
               },100)

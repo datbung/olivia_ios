@@ -106,7 +106,7 @@ export class FlightpaymentdonepayooPage implements OnInit {
     }
 
     // setTimeout(() => {
-    //   se._flightService.itemMenuFlightClick.emit(2);
+    //   this._flightService.itemTabFlightActive.emit(1);
     //   se.next();
     // },500)
     
@@ -230,7 +230,7 @@ if(itemflight.childs && itemflight.childs.length >0){
                   se.gf.hideLoading();
                   se._flightService.itemFlightCache = {};
                       
-                  se._flightService.itemMenuFlightClick.emit(2);
+                  this._flightService.itemTabFlightActive.emit(1);
                   se.next();
                 })
                 
@@ -241,7 +241,7 @@ if(itemflight.childs && itemflight.childs.length >0){
             });
           }else{
             se._flightService.itemFlightCache = {};
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
             se.next();
           }
         }else{
@@ -255,7 +255,7 @@ if(itemflight.childs && itemflight.childs.length >0){
                     se.gf.hideLoading();
                     se._flightService.itemFlightCache = {};
                         
-                        se._flightService.itemMenuFlightClick.emit(2);
+                        this._flightService.itemTabFlightActive.emit(1);
                         se.next();
                   })
                   
@@ -265,7 +265,7 @@ if(itemflight.childs && itemflight.childs.length >0){
               });
             }else{
               se._flightService.itemFlightCache = {};
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
               se.next();
             }
           })
@@ -303,6 +303,7 @@ if(itemflight.childs && itemflight.childs.length >0){
     this.gf.hideLoading();
     this._flightService.itemFlightCache = {};
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemMenuFlightClick.emit(2);
     this.valueGlobal.backValue = "homeflight";
     if (this.checkreview==0) {
       this.showConfirm();
