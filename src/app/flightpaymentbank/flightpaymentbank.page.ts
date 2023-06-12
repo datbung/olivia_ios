@@ -1,4 +1,3 @@
-import { foodService } from './../providers/foodService';
 import { Bookcombo, SearchHotel } from './../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import {  NavController ,LoadingController,Platform, ToastController,ModalController} from '@ionic/angular';
@@ -13,9 +12,8 @@ import { flightService } from '../providers/flightService';
 import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import { Facebook } from '@ionic-native/facebook/ngx';
-import * as moment from 'moment';
 import { voucherService } from '../providers/voucherService';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({

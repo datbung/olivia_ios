@@ -12,7 +12,6 @@ import { GlobalFunction } from '../providers/globalfunction';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { foodService } from '../providers/foodService';
 import { flightService } from '../providers/flightService';
 
 @Component({
@@ -28,7 +27,6 @@ export class LoginusernamePage implements OnInit {
   appversion: string;ischeck;refreshTokenTimer
   constructor(public keyboard: Keyboard, public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, public formBuilder: FormBuilder, public authService: AuthService, public storage: Storage,
     private toastCtrl: ToastController, public zone: NgZone, public gf: GlobalFunction,public searchhotel: SearchHotel, private fcm: FCM,private appVersion: AppVersion,
-    public foodService: foodService,
     public _flightService: flightService) {
       this.loginData = this.formBuilder.group({
         emailorphone: ['', Validators.compose([Validators.required])],
@@ -189,14 +187,7 @@ export class LoginusernamePage implements OnInit {
           se.storage.remove('listtopdealdefault');
           se.gf.setParams(true,'resetBlogTrips');
           se.searchhotel.rootPage ='login';
-          //se.countdownRefreshToken();
-             //ẩn menu footer food
-             if(document.getElementsByClassName("homefood-footer").length >0){
-              document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
-            }
-            if(se.valueGlobal.backValue == 'foodaccount'){
-              se.foodService.menuFooterClick.emit(4);
-            }
+          
             if(se.valueGlobal.backValue == "flightnotify"){
               se._flightService.itemMenuFlightClick.emit(3);
             }

@@ -34,6 +34,8 @@ export class PaymentqrcodePage implements OnInit {
   _email: any;
   defaultEmail: any;
   paymentDate: string;
+  contactOption: any;
+  periodPaymentDisplay: string;
 
     constructor(public platform:Platform,  public zone: NgZone,public navCtrl: NavController,public modalCtrl: ModalController,
         public searchhotel: SearchHotel,public valueGlobal:ValueGlobal,public gf: GlobalFunction,private launchReview: LaunchReview,
@@ -95,6 +97,14 @@ export class PaymentqrcodePage implements OnInit {
     ngOnInit() {
 
     }
+    async ionViewWillEnter(){
+
+      let dataSummary = await this.gf.getSummaryBooking(this._flightService.itemFlightCache);
+      let date = dataSummary.periodPaymentDate;
+      if(date){
+        this.periodPaymentDisplay= moment(date).format("HH:mm") + " " + this.gf.getDayOfWeek(date).dayname +", "+ moment(date).format("DD") + " thg " + moment(date).format("MM");
+      }
+    }
 
 
     buildLinkQrCode() {
@@ -155,12 +165,12 @@ export class PaymentqrcodePage implements OnInit {
     if (this.checkreview == 0) {
       this.showConfirm();
     }
-      
+    this._flightService.itemMenuFlightClick.emit(2);
     this._voucherService.publicClearVoucherAfterPaymentDone(1);
     if(this.activityService.qrcodepaymentfrom == 1){//vmb
       this._flightService.itemTabFlightActive.emit(true);
       this.valueGlobal.backValue = "homeflight";
-      this._flightService.itemMenuFlightClick.emit(2);
+      
       this._flightService.bookingCodePayment = this.bookingCode;
       this._flightService.bookingSuccess = true;
       this.navCtrl.navigateBack('/tabs/tab1');
@@ -201,13 +211,14 @@ export class PaymentqrcodePage implements OnInit {
 
   gotomytrip(){
     this._voucherService.publicClearVoucherAfterPaymentDone(1);
+    this._flightService.itemMenuFlightClick.emit(2);
     if(this.activityService.qrcodepaymentfrom == 1){//vmb
       this._flightService.itemTabFlightActive.emit(true);
       this.valueGlobal.backValue = "homeflight";
-      this._flightService.itemMenuFlightClick.emit(2);
+      
       this._flightService.bookingCodePayment = this.bookingCode;
       this._flightService.bookingSuccess = true;
-      this.navCtrl.navigateBack('/tabs/tab1');
+      this.navCtrl.navigateBack(['/app/tabs/tab3']);
     }else{
       this.navCtrl.navigateBack(['/app/tabs/tab3']);
     }

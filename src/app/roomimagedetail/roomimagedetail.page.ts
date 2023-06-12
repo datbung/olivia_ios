@@ -4,7 +4,6 @@ import { NavController } from '@ionic/angular';
 import { SearchHotel } from '../providers/book-service';
 import { GlobalFunction } from '../providers/globalfunction';
 import { Storage } from '@ionic/storage';
-import { foodService } from '../providers/foodService';
 
 @Component({
   selector: 'app-roomimagedetail',
@@ -26,8 +25,7 @@ export class RoomimagedetailPage implements OnInit {
   roomdetail: any;
   constructor(private navCtrl: NavController,
     public searchhotel: SearchHotel,
-    public gf: GlobalFunction,
-    public _foodservice :foodService, public zone: NgZone) { 
+    public gf: GlobalFunction, public zone: NgZone) { 
       setTimeout(()=>{
         this.loaddatadone = true;
       },600)

@@ -63,13 +63,18 @@
       <label class="text-size-12" >Để tìm cửa hàng gần nhất, hãy <a style="color:#46a7ef" target="_blank" >xem tại đây</a></label>
     </div>
     <div class="div-split-panel"></div>
-    <div> <p class="text-payment-info" text-wrap>
+    <!-- <div> <p class="text-payment-info" text-wrap>
       Thông tin thanh toán cũng được gửi đến email <span class="text-bold">{{_email}}</span>. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư Spam hoặc Junk Folder. 
     </p>
      <p class="text-payment-info mt20" text-wrap>
       Vé điện tử được xử lý sẽ được iVIVU gửi đến email <span class="text-bold">{{_email}}</span> của quý khách trong vòng 24h tiếp theo sau khi nhận thông tin thanh toán.
     </p>
-  </div>
+  </div> -->
+    <div class="text d-flex">
+      <div>Xác nhận đặt vé sẽ được gửi đến <span *ngIf="contactOption==1"> Zalo</span><span *ngIf="contactOption==2"> Email</span> của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được mã vé qua Email/Zalo, vui lòng liên hệ </div>
+          <div class="div-align-center m-right-4 " ><img class="img-zalo" src="./assets/ic_flight/logo_zalo.webp"> <a class="text-tealish text-zalo" href="https://zalo.me/3888313238733373810">iVIVU Tickets </a></div>
+          <div> để hỗ trợ xử lý.</div>
+    </div>
   </div>
   <div *ngIf="stt=='1'&&qrimg">
     <p>

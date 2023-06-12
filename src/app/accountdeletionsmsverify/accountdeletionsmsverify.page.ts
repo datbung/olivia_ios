@@ -9,8 +9,6 @@ import { ValueGlobal } from '../providers/book-service';
 import * as request from 'requestretry';
 import { C } from './../providers/constants';
 import { FCM } from '@ionic-native/fcm/ngx';
-import jwt_decode from 'jwt-decode';
-import { foodService } from '../providers/foodService';
 import { flightService } from '../providers/flightService';
 import { BizTravelService } from '../providers/bizTravelService';
 @Component({
@@ -33,7 +31,6 @@ export class AccountDeletionSmsVerifyPage implements OnInit {
     private fcm: FCM, public zone: NgZone, public navCtrl: NavController, public keyboard: Keyboard, 
     public storage: Storage, public valueGlobal: ValueGlobal, public toastCtrl: ToastController, 
     public gf: GlobalFunction,
-    public foodService: foodService,
     public _flightService: flightService,
     public bizTravelService: BizTravelService,
     public activityService: ActivityService,

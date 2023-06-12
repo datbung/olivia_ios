@@ -202,6 +202,7 @@ export class FlightsearchresultPage implements OnInit {
       }
       else {
         this._flightService.itemTabFlightActive.emit(true);
+        this._flightService.itemMenuFlightClick.emit(2);
         this._flightService.publicItemFlightReloadInfo(1);
         this.valueGlobal.backValue = "homeflight";
         this.navCtrl.navigateBack('/tabs/tab1');

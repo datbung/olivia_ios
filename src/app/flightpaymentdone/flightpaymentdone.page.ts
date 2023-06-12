@@ -26,7 +26,8 @@ export class FlightpaymentdonePage implements OnInit {
   pacificVNA: string = "";
   pacificVNAReturn: string="";listDiChung: any = "";
   checkInDisplayDC: string;
-  checkOutDisplayDC: string;checkreview;
+  checkOutDisplayDC: string;checkreview
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute,public _flightService: flightService,public alertCtrl: AlertController, private launchReview: LaunchReview,
     private navCtrl:NavController, public searchhotel: SearchHotel,public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
@@ -59,6 +60,9 @@ export class FlightpaymentdonePage implements OnInit {
         this._flightService.itemFlightCache.promocode = "";
         this._flightService.itemFlightCache.discount = 0;
 
+        this.storage.get('contactOption').then((option)=>{
+          this.contactOption = option;
+        })
     }
 
  
@@ -295,7 +299,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
                     se.gf.hideLoading();
                     se.clearItemCache();
                         
-                    se._flightService.itemMenuFlightClick.emit(2);
+                    this._flightService.itemTabFlightActive.emit(1);
                     se.next();
                   })
                   
@@ -314,7 +318,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
             }
           }else{
             se.clearItemCache();
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
             se.next();
           }
         }else{
@@ -329,7 +333,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
                       se.gf.hideLoading();
                       se.clearItemCache();
                       
-                      se._flightService.itemMenuFlightClick.emit(2);
+                      this._flightService.itemTabFlightActive.emit(1);
                       se.next();
                     })
                   
@@ -347,7 +351,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
               }
             }else{
               se.clearItemCache();
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
               se.next();
             }
           })
@@ -382,35 +386,13 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
 
   next()
   {
-    try {
-      this.storage.get('objectflightpaymentbank').then((data)=>{
-        if(data){
-            let arrobject = JSON.parse(data);
-            if(arrobject && arrobject.length >0){
-              arrobject.push({ resNo: this.bookingCode, checkInDate: this._flightService.itemFlightCache.checkInDate, checkOutDate: this._flightService.itemFlightCache.checkOutDate, totalPrice: this.total, itemFlightCache :this._flightService.itemFlightCache });
-            }else{
-              arrobject = [];
-              arrobject.push({ resNo: this.bookingCode, checkInDate: this._flightService.itemFlightCache.checkInDate, checkOutDate: this._flightService.itemFlightCache.checkOutDate, totalPrice: this.total, itemFlightCache :this._flightService.itemFlightCache });
-            }
-  
-            this.storage.remove('objectflightpaymentbank').then(()=>{
-              this.storage.set('objectflightpaymentbank', JSON.stringify(arrobject));
-            })
-        }else{
-          let arr = [];
-          arr.push({ resNo: this.bookingCode, checkInDate: this._flightService.itemFlightCache.checkInDate, checkOutDate: this._flightService.itemFlightCache.checkOutDate, totalPrice: this.total, itemFlightCache :this._flightService.itemFlightCache });
-          this.storage.set('objectflightpaymentbank', JSON.stringify(arr));
-        }
-        
-      })
-    } catch (error) {
-      console.log('fail to set storage object')
-    }
+    
     this.gf.hideLoading();
     this._flightService.itemTabFlightActive.emit(true);
     this.valueGlobal.backValue = "homeflight";
-    //this._flightService.itemFlightMytripRefresh.emit(true);
     this._flightService.itemMenuFlightClick.emit(2);
+    //this._flightService.itemFlightMytripRefresh.emit(true);
+    
     this._flightService.bookingCodePayment = this.bookingCode;
     this._flightService.bookingSuccess = true;
     if (this.checkreview == 0) {
@@ -423,7 +405,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
     var se = this;
     se.clearItemCache();
     se._flightService.itemTabFlightActive.emit(true);
-    se._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(1);
     se._flightService.bookingCodePayment = this.bookingCode;
     se._flightService.bookingSuccess = true;
     se.valueGlobal.backValue = "flightmytrip";

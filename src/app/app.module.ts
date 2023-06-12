@@ -15,12 +15,8 @@ import { Validators, FormBuilder, FormControl,FormGroup, FormsModule,ReactiveFor
 
 
 import { Platform,IonContent } from '@ionic/angular';
-import { Component, NgZone, Input, ViewChild } from '@angular/core';
 import { NavController, NavParams, ModalController,ToastController,LoadingController } from '@ionic/angular';
-import * as request from 'requestretry';
-import * as moment from 'moment';
 
-import { DateTime } from 'ionic-angular';
 import { FirebaseAnalytics } from '@ionic-native/firebase-analytics/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule } from '@angular/common/http';
@@ -81,14 +77,8 @@ import { FlightcomboupgraderoomPageModule } from './flightcomboupgraderoom/fligh
 import { HotelRoomDetailPageModule } from './hotelroomdetail/hotelroomdetail.module';
 import { CodePush } from '@ionic-native/code-push/ngx';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
-import { FoodfilterPageModule } from './foodfilter/foodfilter.module';
-import {FoodorderPageModule} from './foodorder/foodorder.module';
-import { FoodplaceotherPageModule } from './foodplaceother/foodplaceother.module';
-import { foodInfo } from './providers/book-service';
 import { IonicImageLoader } from 'ionic-image-loader';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
-import { FoodreviewdetailPageModule } from './foodreviewdetail/foodreviewdetail.module';
-import {FoodDinnerOrderPageModule} from './fooddinnerorder/fooddinnerorder.module'
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { FlightchangeinfoPageModule} from './flightchangeinfo/flightchangeinfo.module';
@@ -121,10 +111,9 @@ import { FlightDepartureDetailInternationalPageModule } from './flightinternatio
 import { FlightInternationalSearchfilterPageModule } from './flightinternational/flightinternationalsearchfilter/flightinternationalsearchfilter.module';
 import { FlightDetailInternationalPageModule } from './flightinternational/flightdetailinternational/flightdetailinternational.module';
 import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
-import { Lunar, BlockLunarDate } from 'lunar-calendar-ts-vi';
 import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvideo.module';
 import { FlightInternationalFilterClassPageModule } from './flightinternational/flightinternationalfilterclass/flightinternationalfilterclass.module';
-//import { HTTP } from '@ionic-native/http/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -145,8 +134,6 @@ import { FlightInternationalFilterClassPageModule } from './flightinternational/
     HotelreviewsvideoPageModule,
     UserTravelHobbyPageModule,
     UserFeedBackPageModule,
-    //ExperienceDetailPageModule,
-    //ExperienceFilterPageModule,
     IonBottomDrawerModule,
     BlogPageModule,
     BlogModalPageModule,
@@ -159,11 +146,6 @@ import { FlightInternationalFilterClassPageModule } from './flightinternational/
     AdddiscountPageModule,
     FlightcomboupgraderoomPageModule,
     HotelRoomDetailPageModule,
-    FoodfilterPageModule,
-    FoodorderPageModule,
-    FoodplaceotherPageModule,
-    FoodreviewdetailPageModule,
-    FoodDinnerOrderPageModule,
     FlightsearchfilterPageModule,
     FlightpricedetailPageModule,
     FlightdetailPageModule,
@@ -235,7 +217,6 @@ import { FlightInternationalFilterClassPageModule } from './flightinternational/
     InAppReview,
     CodePush,
     Clipboard,
-    foodInfo,
     WebView,
     Deeplinks,
     BackgroundMode,

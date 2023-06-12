@@ -940,23 +940,7 @@ export class FlightSearchResultInternationalPage implements OnInit {
             }
             
           });
-          
-          // if(element.filters && element.filters.length >0){
-          //   se._flightService.listAirlinesFilter = element.filters[0].items;
-          //   debugger
-          //   if(se.listAirlinesFilterDirect && se.listAirlinesFilterDirect.length >0){
-          //     se.listAirlinesFilterDirect.forEach((a) => {
-          //       if(!se._flightService.listAirlinesFilter.some(i => i.name == a)){
-          //         let obj = {
-          //           name: a,
-          //           value: a == 'Vietnam Airlines' ? 'VN' : (a == 'VietJetAir' ? 'VJ' : 'BB')
-          //         }
-          //         se._flightService.listAirlinesFilter.push(obj);
-          //       }
-          //     })
-          //   }
-          //   console.log(se._flightService.listAirlinesFilter)
-          // }
+         
 
         });
 

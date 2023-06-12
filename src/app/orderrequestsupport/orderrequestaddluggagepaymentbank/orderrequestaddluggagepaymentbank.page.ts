@@ -1,4 +1,3 @@
-import { foodService } from './../../providers/foodService';
 import { Bookcombo } from './../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController, LoadingController, Platform, ToastController,ModalController } from '@ionic/angular';
@@ -11,7 +10,6 @@ import * as request from 'requestretry';
 import { flightService } from '../../providers/flightService';
 import { FlightquickbackPage } from '../../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../../providers/CustomAnimations';
-import * as moment from 'moment';
 @Component({
   selector: 'app-orderrequestaddluggagepaymentbank',
   templateUrl: './orderrequestaddluggagepaymentbank.page.html',

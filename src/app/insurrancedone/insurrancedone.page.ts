@@ -46,7 +46,7 @@ export class InsurrancedonePage implements OnInit {
         this._flightService.bookingSuccess = true;
         this._flightService.itemTabFlightActive.emit(true);
         setTimeout(()=> {
-          this._flightService.itemMenuFlightClick.emit(2);
+          
         },200)
 
         this.navCtrl.navigateBack('/tabs/tab1');

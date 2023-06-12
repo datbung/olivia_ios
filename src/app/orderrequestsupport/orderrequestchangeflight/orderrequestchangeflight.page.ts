@@ -173,36 +173,6 @@ export class OrderRequestChangeFlightPage implements OnInit {
     }
     
     var options:CalendarModalOptions;
-    // if(this.trip.itemreturn && this.trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1){
-    //   options  = {
-    //     pickMode: "range",
-    //     title: "Chọn ngày",
-    //     monthFormat: " M, YYYY",
-    //     weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
-    //     weekStart: 1,
-    //     closeLabel: "",
-    //     doneLabel: "",
-    //     step: 0,
-    //     defaultScrollTo: fromdate,
-    //     defaultDateRange: { from: fromdate, to: todate },
-    //     daysConfig: _daysConfig
-    //     };
-    // }else{
-    //   options  = {
-    //     pickMode: "single",
-    //     title: "Chọn ngày",
-    //     monthFormat: " M, YYYY",
-    //     weekdays: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
-    //     weekStart: 1,
-    //     closeLabel: "",
-    //     doneLabel: "",
-    //     step: 0,
-    //     defaultScrollTo: fromdate,
-    //     defaultDate: fromdate,
-    //     //defaultDateRange: { from: fromdate, to: todate },
-    //     daysConfig: _daysConfig
-    //     };
-    // }
     options  = {
       pickMode: "single",
       title: "Chọn ngày",
@@ -214,7 +184,6 @@ export class OrderRequestChangeFlightPage implements OnInit {
       step: 0,
       defaultScrollTo: fromdate,
       defaultDate: fromdate,
-      //defaultDateRange: { from: fromdate, to: todate },
       daysConfig: _daysConfig
       };
 
@@ -316,52 +285,14 @@ export class OrderRequestChangeFlightPage implements OnInit {
           var yearstartdate: any;
           var objTextMonthEndDate: any;
           var objTextMonthStartDate: any;
-  
-          //let objsearch = this._flightService.objSearch;
-          // if(this.trip.itemreturn && this.trip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 ){
-          //   if ($(obj.parentNode).hasClass('endSelection')) {
-          //     if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
-          //       fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
-          //     } else {
-          //       fday = $('.on-selected > p')[0].textContent;
-          //     }
-          //     if ($('.days.endSelection .days-btn.lunarcalendar > p')[0]) {
-          //       tday = $('.days.endSelection .days-btn.lunarcalendar > p')[0].innerText; 
-          //     } else {
-          //       //tday = $(obj)[0].textContent;
-          //       tday = $('.days.endSelection .days-btn > p')[0].innerText;
-          //     }
-          //     objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
-          //     objTextMonthEndDate = $(obj).closest('.month-box').children()[0].textContent.replace('Tháng ','');
-          //   } else {
-          //     if ($('.days-btn.lunarcalendar.on-selected > p')[0]) {
-          //       fday =$('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
-          //     }
-          //     else{
-          //       //fday = $(obj)[0].textContent;
-          //       fday = $(obj)[0].children[0].textContent
-          //     }
-          //     if ($('.days.endSelection .days-btn.lunarcalendar > p')[0]) {
-          //       tday = $('.days.endSelection .days-btn.lunarcalendar > p')[0].innerText;
-          //     }
-          //     else{
-          //       //tday = $('.endSelection').children('.days-btn')[0].textContent;
-          //       tday = $('.days.endSelection .days-btn > p')[0].innerText;
-          //     }
-          //     objTextMonthStartDate = $(obj).closest('.month-box').children()[0].textContent.replace('Tháng ','');
-          //     objTextMonthEndDate = $('.endSelection').closest('.month-box').children()[0].textContent.replace('Tháng ','');
-          //   }
-          // }else{
               if ( $('.days-btn.lunarcalendar.on-selected > p')[0]) {
                 fday= $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
               } else {
-                //fday = $('.on-selected')[0].textContent;
                 fday = $('.on-selected > p')[0].textContent;
               }
               tday = fday;
               objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ','');
               objTextMonthEndDate = objTextMonthStartDate;
-          //}
   
           if (
             objTextMonthEndDate &&

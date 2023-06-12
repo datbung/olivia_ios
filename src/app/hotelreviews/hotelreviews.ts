@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HotelreviewsimagePage } from './../hotelreviewsimage/hotelreviewsimage';
 import { SearchHotel } from '../providers/book-service';
 import { Storage } from '@ionic/storage';
-import { foodService } from '../providers/foodService';
 /**
  * Generated class for the HotelreviewsPage page.
  *
@@ -35,44 +34,14 @@ export class HotelReviewsPage implements OnInit{
   loaddatadone = false;
   fromhotel: boolean = true;
   constructor(public platform: Platform,public navCtrl: NavController,public gf: GlobalFunction,private activatedRoute: ActivatedRoute,public zone: NgZone, public searchhotel: SearchHotel, public modalCtrl: ModalController,
-    private storage: Storage,
-    public _foodservice :foodService) {
+    private storage: Storage) {
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
     // this.Name = this.activatedRoute.snapshot.paramMap.get('name');
     //Load all image reviews
     setTimeout(()=>{
       this.loaddatadone = true;
     },500)
-    if(_foodservice.objFoodReview){
-      if(_foodservice.listimagereview && _foodservice.listimagereview.length>0){
-        this.countimgrv = _foodservice.listimagereview.length;
-        this.pushAllImageReviews(_foodservice.listimagereview);
-      }
-      
-      this.numHotelReviews = _foodservice.objFoodReview.listFoodReview.length;
-      this.AvgPoint = _foodservice.objFoodReview.AvgPoint;
-      this.fromhotel = false;
-      let listreview = _foodservice.objFoodReview.listFoodReview;
-      for (let index = 0; index <  listreview.length; index++) {
-        listreview[index].DateStayed = listreview[index].reviewDate;
-        listreview[index].ReviewPoint = listreview[index].reviewPoint + listreview[index].deliveryPoint;
-        listreview[index].BestFeature = listreview[index].bestFeature;
-        listreview[index].CustomerName = listreview[index].customerName;
-        listreview[index].ReviewImages = listreview[index].foreviewImage;
-        
-        listreview[index].ReviewImages.forEach(element => {
-          element.ImageUrl = element.imageUrl;
-        });
-        if(listreview[index].DateStayed.indexOf('-') == -1){
-          listreview[index].DateStayed = moment(listreview[index].DateStayed).format('DD-MM-YYYY');
-        }
-        
-        // listreview[index].ReviewPoint = Math.round(listreview[index].ReviewPoint *100)/100;
-        listreview[index].ReviewPoint= Math.round(listreview[index].ReviewPoint *100)/100;
-        this.arrHotelReviews.push(listreview[index]);
-      }
-
-    }else{
+    
       this.storage.get('hotelimagereviews_'+this.HotelID).then((data) => {
         if(!data){
           this.loadHotelImageReviews();
@@ -107,7 +76,7 @@ export class HotelReviewsPage implements OnInit{
           this.getdata();
         }
       })
-    }
+    
       
      
     
@@ -238,10 +207,6 @@ export class HotelReviewsPage implements OnInit{
 
     seemoreimgrv()
   {
-    if(!this._foodservice.objFoodReview){
-      this.searchhotel.hotelID = this.HotelID;
-      this.searchhotel.hotelName = this.Name;
-    }
     this.navCtrl.navigateForward('/cusimgreview');
   }
 }

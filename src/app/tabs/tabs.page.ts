@@ -361,7 +361,6 @@ export class TabsPage implements OnInit {
 
     
   }
-  
     /**
      * Load thông báo của user
      */
@@ -759,26 +758,6 @@ export class TabsPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    //  let datatest = {title: 'Đặt phòng thành công!',
-    // notifyAction: 'paymentConfirm',
-    // message: 'Bạn đã thanh toán 2.100.000đ cho mã nhận phòng IVIVU755884 tại khu nghỉ dưỡng The Grand Hồ Tràm Strip Vũng Tàu. Xác nhận đặt phòng sẽ gửi đến email Quý khách.'
-    // };
-    // this.showActionSheetNoti(datatest);
-
-    //Count noti
-    // var obj={
-    //   "title":"🌟 Du Xuân Đón Tết - Đặt Ngay Kẻo Hết 🌟",
-    //   "message": "Sau một năm làm việc vất vả, đến lúc tự thưởng cho bản thân và gia đình kỳ nghỉ dịp Tết này. Truy cập ngay App iVIVU.com để xem các ưu đãi hấp dẫn.", 
-    //   "dataLink": "/hoteldetail/577390",
-    //   "created":moment().format(),
-    //   "status":0,
-    //   "id":Date.now(),
-    //   "notifyType":"product"
-   
-    // }
-    // var datanoti=[];
-    // datanoti.push(obj);
-    // this.storage.set("objnotication",datanoti);
     this.loadUserNotificationStatus();
     
     var el = document.getElementsByClassName('tab-button');
@@ -1347,25 +1326,7 @@ export class TabsPage implements OnInit {
 
     });
   }
-  // setNotification(data,notifyType){
-  //   this.storage.get("objnotication").then((datanoti)=>{
-  //     if (!datanoti) {
-  //       datanoti=[];
-  //     }
-  //     let checkNoti = datanoti.filter((item) => { return item.dataLink== data.dataLink});
-  //     if (checkNoti.length==0) {
-  //       data.created=moment().format();
-  //       data.status=0;
-  //       data.id=Date.now();
-  //       data.status=0;
-  //       data.notifyType=notifyType;
-        
-  //       datanoti.push(data);
-  //       this.storage.set("objnotication",datanoti);
-  //     }
-  
-  //   })
-  // }
+
   loadTopSale(Id) {
     let se = this;
     let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetAllBooking24h';
@@ -1527,7 +1488,7 @@ export class TabsPage implements OnInit {
   loadLocation():Promise<any>{
     var se = this;
     return new Promise((resolve, reject)=>{
-      let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
+      let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace";
         var options = {
           method: 'GET',
           url: urlPath,

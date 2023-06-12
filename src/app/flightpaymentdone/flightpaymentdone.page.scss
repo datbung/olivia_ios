@@ -43,82 +43,6 @@
         border-color: #26bed6;
         margin-top: -5px; 
     }
-    .image-card1{
-        display: initial !important;
-        width: 4%
-    }
-   
-    .toolbar-title-md {
-        text-align: center;
-        margin-right: 70px;
-      }  
-    .logocss
-    {
-        background-image: url('../../assets/imgs/icon.png')
-    }
-    .div-paymentmytrip{
-        margin-top: 15px;
-        font-size: 14px;
-        font-weight: 300;
-        line-height: 28px;
-        letter-spacing: -0.4px;
-
-        .div-split-color{
-            height: 7px;
-            background-color: #f2f2f2;
-            margin: 8px -16px;
-        }
-        .text-title{
-            font-size: 14px;
-            letter-spacing: -0.4px;
-            font-weight: 600;
-        }
-        .div-text-payment{
-            font-size: 14px;
-            line-height: 28px;
-            letter-spacing: -0.4px;
-            font-weight: 300;
-            padding-top: 4px;
-        }
-        .div-text-paymentlink{
-            font-size: 14px;
-            line-height: 28px;
-            letter-spacing: -0.4px;
-            font-weight: 300;
-            text-decoration: underline;
-        }
-
-        .text-payment-info{
-            white-space: normal !important;
-            font-size: 14px;
-            font-weight: 300;
-            letter-spacing: -0.4px;
-            line-height: 28px;
-            margin: 0;
-        }
-        .text-info{
-            font-size: 14px;
-            font-weight: 300;
-            letter-spacing: -0.4px;
-            margin: 0;
-            margin-bottom: 16px;
-        }
-        .text-link{
-            text-decoration: underline;
-            margin-bottom: 23px;
-        }
-        .text-copy{
-            padding-left: 4px;
-        }
-    }
-    .div-quick-back{
-        font-size: 32px;
-        position: absolute;
-        right: 16px;
-        color: #bdbdbd;
-        letter-spacing: -3.5px;
-        top: 0px;
-    }
 //////////////
 ::ng-deep {
     .cls-alert-showmore {
@@ -221,14 +145,8 @@
     text-transform: none;
 }
 }
-.img-trip-empty
-{
-    text-align: center;
-    margin-top: 42px;
-    margin-bottom: 25px;
-}
 .text{
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: -0.4px;
     line-height: 2;
 }
@@ -240,21 +158,21 @@
     padding: 0 16px;
 }
 .text-normal{
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
     line-height: 1.5;
     letter-spacing: -0.4px;
     color: #222222;
 }
 .text-bold{
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
     color: #222222;
     font-weight: 600;
     letter-spacing: -0.28px;
 }
 .text-see-more{
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
     letter-spacing: -0.14px;
     color: #26bed6;
@@ -477,13 +395,12 @@
 }
 
 .text{
-    font-size: 14px;
-    font-weight: 300;
+    font-size: 16px;
+    font-weight: 500;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.5;
-    letter-spacing: -0.4px;
-    color: #222222;
+    color: #3f3b3b;
 }
 
 .text-bold{
@@ -494,7 +411,35 @@
 .text-tealish{
     color: #26bed6 !important;
 }
+.text-zalo {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.f-18 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.img-zalo {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    margin-left: 4px;
+}
 
 .p-top-12{
     padding-top: 12px;
+}
+.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+.div-align-center {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+.m-right-4 {
+    margin-right: 4px;
 }

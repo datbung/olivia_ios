@@ -6,7 +6,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { Tab1Page } from './tab1.page';
-//import { HomefoodPageModule } from '../homefood/homefood.module';
 import { HomeflightPageModule } from '../homeflight/homeflight.module';
 import { HomeTourPageModule } from '../tour/hometour/hometour.module';
 import { HomeTicketPageModule } from '../ticket/tickethome/hometicket/hometicket.module';
@@ -22,7 +21,6 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    //HomefoodPageModule,
     RouterModule.forChild(routes),
     HomeflightPageModule,
     HomeTourPageModule,

@@ -443,6 +443,8 @@ export class CombocarnewPage implements OnInit {
   getHotelContractPrice(data) {
     var se = this;
     if (data) {
+      data.CheckInDate = moment(data.CheckInDate).format('YYYY-MM-DD');
+      data.CheckOutDate = moment(data.CheckOutDate).format('YYYY-MM-DD');
       data.IsPackageRateInternal = true;
       data.IsPackageRate = true;
       data.GetVinHms = 1;

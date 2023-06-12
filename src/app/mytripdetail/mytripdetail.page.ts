@@ -8,7 +8,6 @@ import { NetworkProvider } from '../network-provider.service';
 import { SearchHotel, ValueGlobal } from '../providers/book-service';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { flightService } from '../providers/flightService';
-import { foodService } from '../providers/foodService';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
 import { C } from '../providers/constants';
 import * as $ from 'jquery';
@@ -121,7 +120,6 @@ export class MytripdetailPage implements OnInit {
     private clipboard: Clipboard,
     private toastCtrl: ToastController,
     public _flightService: flightService,
-    public _foodService: foodService,
     private nativePageTransitions: NativePageTransitions,
     private routerOutlet: IonRouterOutlet,
     private actionsheetCtrl: ActionSheetController,public alertCtrl: AlertController,public loadingCtrl: LoadingController,
@@ -622,57 +620,33 @@ export class MytripdetailPage implements OnInit {
       if(this._mytripservice.rootPage == "homeflight"){
         this._flightService.itemTabFlightActive.emit(true);
         setTimeout(()=>{
-          this._flightService.itemMenuFlightClick.emit(2);
+          
         },200)
         
         this.valueGlobal.backValue = "homeflight";
         this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
         this._mytripservice.backfrompage= "";
-      }else if(this._mytripservice.rootPage == "homefood"){
-        $(".div-myorder").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".div-notify").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".div-account").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".homefoodheader").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-            $(".div-wraper-slide").removeClass("cls-disabled").addClass("cls-visible");
-            $(".div-home").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-              this._foodService.tabFoodIndex = 2;
-              this._foodService.menuFooterClick.emit(2);
-              this._foodService.itemActiveFoodTab.emit(2);
-        this.navCtrl.navigateBack('/homefood');
       }
       else{
         if(this.valueGlobal.backValue == "homeflight"){
           this._flightService.itemTabFlightActive.emit(true);
           setTimeout(()=>{
-            this._flightService.itemMenuFlightClick.emit(2);
+            
           },200)
           this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
-        }else if(this.valueGlobal.backValue == "homefood"){
-          $(".div-myorder").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".div-notify").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".div-account").removeClass("cls-tab-visible").addClass("cls-tab-disabled");
-            $(".homefoodheader").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-            $(".div-wraper-slide").removeClass("cls-disabled").addClass("cls-visible");
-            $(".div-home").removeClass("cls-tab-disabled").addClass("cls-tab-visible");
-              this._foodService.tabFoodIndex = 2;
-              this._foodService.menuFooterClick.emit(2);
-              this._foodService.itemActiveFoodTab.emit(2);
-        this.navCtrl.navigateBack('/homefood');
         }
         else{
           this.navCtrl.navigateBack('/app/tabs/tab3');
         }
         
       }
-      
-      
     }
     
     else if(this._mytripservice.rootPage == "homeflight"){
       if(this._mytripservice.backfrompage == "mytripdetail" || this._mytripservice.backfrompage == "mytripbookingdetail"){
         this._flightService.itemTabFlightActive.emit(true);
         setTimeout(()=>{
-          this._flightService.itemMenuFlightClick.emit(2);
+          
         },200)
         
         this.valueGlobal.backValue = "homeflight";
@@ -681,13 +655,6 @@ export class MytripdetailPage implements OnInit {
       }else{
         this.navCtrl.navigateBack('/app/tabs/tab3');
       }
-      
-    }
-    else if(this._mytripservice.rootPage == "homefood"){
-      this._mytripservice.rootPage = "homefood";
-      this.valueGlobal.backValue = "";
-      this._foodService.menuFooterClick.emit(2);
-      this.navCtrl.navigateForward('/homefood');
     }
     else{
       this.navCtrl.navigateBack('/app/tabs/tab3');

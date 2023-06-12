@@ -930,42 +930,6 @@ ion-toolbar{
     margin-top: calc(env(safe-area-inset-top) + 12px);
   }
 
-  .homefood-header{
-    height: 48px;
-    position: fixed;
-    //margin-top: calc(env(safe-area-inset-top) - 30px);
-    padding-top: calc(env(safe-area-inset-top) + 20px);
-
-    .img-goback{
-        height: 48px; 
-        padding: 8px;
-    }
-    .text-title
-    {
-        font-weight: 600;
-        font-size: 20px;
-        padding: 0;
-        //margin-left: 48px;
-        text-align: center  ;
-    }
-    .btn-header{
-        width: 48px;color: #4f4f4f;background-color: #fff;-webkit-box-shadow: none;box-shadow: none;
-        height: 40px;
-      }
-      .img-cart{
-        width: 20px;
-      }
-      .btn-header{
-          position: absolute;
-      }
-      .r-60{
-          right: 60px;
-      }
-      .r-4{
-          right: 4px;
-      }
-}
-
 .cls-visible{
   visibility: visible;
   transition: visibility 2s, opacity 0.5s linear;

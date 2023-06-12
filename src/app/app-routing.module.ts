@@ -101,32 +101,9 @@ const routes: Routes = [
   { path: 'installmentpayment', loadChildren: './installmentpayment/installmentpayment.module#InstallmentpaymentPageModule' },
   { path: 'installmentpaymentdone', loadChildren: './installmentpaymentdone/installmentpaymentdone.module#InstallmentpaymentdonePageModule' },
   { path: 'rules', loadChildren: './rules/rules.module#RulesPageModule' },
-  { path: 'foodcombodetail', loadChildren: './foodcombodetail/foodcombodetail.module#FoodcombodetailPageModule' },
-  { path: 'foodcombolist', loadChildren: './foodcombolist/foodcombolist.module#FoodcombolistPageModule' },
-  { path: 'foodcomboreview', loadChildren: './foodcomboreview/foodcomboreview.module#FoodcomboreviewPageModule' },
-  { path: 'foodfilter', loadChildren: './foodfilter/foodfilter.module#FoodfilterPageModule' },
-  { path: 'foodpaymentdone/:code/:startdate/:enddate', loadChildren: './foodpaymentdone/foodpaymentdone.module#FoodpaymentdonePageModule' },
-  { path: 'foodpaymentselect', loadChildren: './foodpaymentselect/foodpaymentselect.module#FoodpaymentselectPageModule' },
-  { path: 'foodadddetail', loadChildren: './foodadddetail/foodadddetail.module#FoodadddetailPageModule' },
-  { path: 'foodbill', loadChildren: './foodbill/foodbill.module#FoodbillPageModule' },
-  { path: 'foodorder', loadChildren: './foodorder/foodorder.module#FoodorderPageModule' },
-  { path: 'foodplaceother', loadChildren: './foodplaceother/foodplaceother.module#FoodplaceotherPageModule' },
-  { path: 'foodpaymentchoosebank', loadChildren: './foodpaymentchoosebank/foodpaymentchoosebank.module#FoodpaymentchoosebankPageModule' },
-  { path: 'foodpaymentbank', loadChildren: './foodpaymentbank/foodpaymentbank.module#FoodpaymentbankPageModule' },
   { path: 'userprofile', loadChildren: './userprofile/userprofile.module#UserProfilePageModule', },
   { path: 'userchangepassword', loadChildren: './userchangepassword/userchangepassword.module#UserChangePasswordPageModule', },
-  { path: 'foodinstallment', loadChildren: './foodinstallment/foodinstallment.module#FoodinstallmentPageModule' },
-  { path: 'foodinstallmentdone/:code/:startdate/:enddate', loadChildren: './foodinstallmentdone/foodinstallmentdone.module#FoodinstallmentdonePageModule' },
-  { path: 'foodmyorderdetail', loadChildren: './foodmyorderdetail/foodmyorderdetail.module#FoodMyOrderDetailPageModule' },
-  { path: 'foodreview', loadChildren: './foodreview/foodreview.module#FoodreviewPageModule' },
-  { path: 'foodreviewdetail', loadChildren: './foodreviewdetail/foodreviewdetail.module#FoodreviewdetailPageModule' },
-  { path: 'foodpaymentdonepayoo/:code/:startdate/:enddate', loadChildren: './foodpaymentdonepayoo/foodpaymentdonepayoo.module#FoodpaymentdonepayooPageModule' },
-  { path: 'foodpaymentpayoo/:code/:stt', loadChildren: './foodpaymentpayoo/foodpaymentpayoo.module#FoodpaymentpayooPageModule' },
-
-  { path: 'fooddinnerdetail', loadChildren: './fooddinnerdetail/fooddinnerdetail.module#FoodDinnerDetailPageModule' },
-  { path: 'foodreviewweek', loadChildren: './foodreviewweek/foodreviewweek.module#FoodreviewweekPageModule' },
-
-
+ 
   { path: 'flightselectpax', loadChildren: './flightselectpax/flightselectpax.module#FlightselectpaxPageModule' },
   { path: 'flightsearchresult', loadChildren: './flightsearchresult/flightsearchresult.module#FlightsearchresultPageModule' },
   { path: 'flightsearchairport', loadChildren: './flightsearchairport/flightsearchairport.module#FlightsearchairportPageModule' },
@@ -154,7 +131,6 @@ const routes: Routes = [
   { path: 'combodonebank/:code', loadChildren: './combodonebank/combodonebank.module#CombodonebankPageModule' },
   { path: 'flightcombopaymentdonebank/:stt', loadChildren: './flightcombopaymentdonebank/flightcombopaymentdonebank.module#FlightcombopaymentdonebankPageModule' },
   
-  { path: 'homefood', loadChildren: './homefood/homefood.module#HomefoodPageModule' },
   { path: 'flightcombobookingdetail', loadChildren: './flightcombobookingdetail/flightcombobookingdetail.module#FlightcombobookingdetailPageModule' },
   { path: 'flighttopdealdetail', loadChildren: './flighttopdealdetail/flighttopdealdetail.module#FlighttopdealdetailPageModule' },
 
@@ -278,10 +254,14 @@ const routes: Routes = [
     { path: 'ticketpaymentdone/:stt', loadChildren: './ticket/ticketpaymentdone/ticketpaymentdone.module#TicketPaymentDonePageModule' },
 
     { path: 'paymentqrcode', loadChildren: './paymentqrcode/paymentqrcode.module#PaymentqrcodePageModule' },
+  { path: 'flightusefuldetail', loadChildren: './flightusefuldetail/flightusefuldetail.module#FlightUsefulDetailPageModule' },
     { path: 'ticketpaymentbank', loadChildren: './ticket/ticketpaymentbank/ticketpaymentbank.module#TicketpaymentbankPageModule' },
   { path: 'ticketinfo/:code', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
   { path: 'ticketpaymentfail', loadChildren: './ticket/ticketpaymentfail/ticketpaymentfail.module#TicketpaymentfailPageModule' },
     
+  { path: 'ticketinfo', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
+  
+  { path: 'userzalo', loadChildren: './userzalo/userzalo.module#UserZaloPageModule' },
 ];
 @NgModule({
   imports:

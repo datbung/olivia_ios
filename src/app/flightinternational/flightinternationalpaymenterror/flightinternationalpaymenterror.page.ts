@@ -64,6 +64,7 @@ export class FlightInternationalPaymentErrorPage implements OnInit {
   }
 
   gohome(){
+    this._flightService.itemMenuFlightClick.emit(2);
     this._flightService.itemTabFlightActive.emit(true);
     this._flightService.itemFlightCache.promotionCode = "";
         this._flightService.itemFlightCache.promocode = "";

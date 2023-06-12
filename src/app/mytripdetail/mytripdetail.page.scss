@@ -36,13 +36,21 @@
 // .div-btn-payment {
 //     padding-bottom: 36px;
 // }
+.btn-payment {
+    border-radius: 6px !important;
+    background-color: #f79321;
+    color: #fff;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    width: 100%;
+}
 .mytrip-detail-content .card-background-page-mytrips{
-    padding-top: 8px !important;
-    margin: 8px;
-    background-color: #fff;
-    //margin-left: 16px;
+    padding: 8px !important;
+    padding-top: 16px !important;
+    margin: 0 !important;
+    //background-color: #f2f2f2 !important;
     .div-price-and-policy{
-        padding: 0 5px;
+        //padding: 0 5px;
         .div-price-title{
             font-size: 12px;
             line-height: 1.67;
@@ -62,7 +70,7 @@
     }
 
     .div-mytrip{
-
+        background-color: #fff;
         .img-avatar{
             width: 104px;
             height: 120px;
@@ -216,6 +224,7 @@
             max-width: 250px;
         }
     }
+    
 }
 
 .first-content{
@@ -480,15 +489,21 @@
     .div-flight-pax{
         padding: 0 5px;
     }
-    .div-split{
-        margin: 11px 5px 0px 5px;
-    }
+    
+    
    
     .m-top-14{
         margin-top: 14px !important;
     }
 }
-
+.div-split{
+    margin: 11px 8px 11px 0px !important;
+}
+.div-split-total {
+    margin: 11px 0px;
+    border-bottom: solid 1px #bdbdbd;
+    color: #f2f2f2;
+}
 .div-split-m5{
     border-bottom: solid 1px #bdbdbd;
     opacity: 0.5;
@@ -879,7 +894,6 @@
 }
 
 .item-room-detail{
-    height: 120px;
     padding: 16px 0px !important;
 }
 .f-18 {
@@ -964,6 +978,7 @@
     margin-top: 46px;
 }
 .div-marginpayment{
+    margin-top: -16px;
      margin-left: -16px;
     margin-right: -8px;
     margin-bottom: 12.5px;
@@ -1018,6 +1033,26 @@
  
 }
 
+.margin-16-detail{
+    margin: 11px 8px 16px;
+}
+.d-flex-later {
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-right: 16px;
+}
+.text-payment-info {
+    margin-left: -8px;
+    margin-right: -8px;
+}
 
 
-
+.text-address-combo {
+    overflow: hidden;
+    max-height: 39px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height: auto;
+    display: -webkit-box;
+    /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
+}

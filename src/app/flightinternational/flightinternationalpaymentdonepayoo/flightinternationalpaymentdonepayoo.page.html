@@ -45,12 +45,12 @@
   </div>
   <div *ngIf="stt=='0'">
     <ion-label class="text" text-wrap>
-      Thông tin thanh toán đã được gửi đến email {{_email}}.
+      Thông tin thanh toán đã được gửi đến <span *ngIf="contactOption==1">zalo</span><span *ngIf="contactOption==2">email {{_email}}</span>.
     </ion-label>
   </div>
   <div *ngIf="stt=='1'">
     <ion-label class="text" text-wrap>
-      Xác nhận đặt vé máy bay sẽ được gửi đến email của Quý khách.
+      Xác nhận đặt vé máy bay sẽ được gửi đến <span *ngIf="contactOption==1">zalo</span><span *ngIf="contactOption==2">email</span> của Quý khách.
     </ion-label>
   </div>
   <div *ngIf="stt=='0'&&BillingCode">

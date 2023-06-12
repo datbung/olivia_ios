@@ -300,6 +300,7 @@
   {
     width: 50px;
     vertical-align: middle;
+    margin-left: 6px;
   }
   .img-momo{
     width: 32px;
@@ -558,4 +559,10 @@
           top: 5px;
           padding: 6px;
           margin-left: 8px;
+}
+.text-bnpl-discount{
+  bottom: 0 !important;
+}
+.h-56 {
+  --min-height: 56px !important;
 }

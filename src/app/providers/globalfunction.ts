@@ -9,7 +9,6 @@ import { ValueGlobal,SearchHotel } from './book-service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { File as IonicFileService, FileEntry, IFile } from '@ionic-native/file/ngx';
 import { NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
-import { foodService } from './foodService';
 import * as moment from 'moment';
 import { flightService } from './flightService';
 import * as clone from 'clone';
@@ -74,7 +73,6 @@ export class GlobalFunction{
       public valueGlobal: ValueGlobal,
       public appVersion: AppVersion,
       private ionicFileService: IonicFileService,
-      public _foodService: foodService,
       public loadCtrl: LoadingController,
       public _flightService: flightService,
       private fb: Facebook,
@@ -256,29 +254,32 @@ export class GlobalFunction{
       })
     }
     else if(category == 'Tours'){
-      this.gaSetScreenName('/du-lich/'+itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''));
-      this.googleAnalytionCustom(viewAction, {
-        currency: "VND",
-            value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
-            shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
-            payment_type: paymentType ? this.getGAPaymentType(paymentType) : '',
-            items: [
-                {
-                    item_id: itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''),
-                    item_name: itemcache.gaTourDetail.Name,
-                    discount: itemcache.gaDiscountPromo || 0,
-                    index: 0,
-                    item_brand: "iVIVU.com",
-                    item_category: 'Tours',
-                    item_category2: itemcache.itemDeparture ? itemcache.itemDeparture.Name : 'Hồ Chí Minh',
-                    item_category3: '',
-                    item_category4: itemcache.gaTourDetail.TourType ||'',
-                    item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
-                    quantity: this.searchhotel.adult +(this.searchhotel.child || 0)
-                }
-            ]
-      })
+      if(itemcache && itemcache.gaTourDetail && itemcache.gaTourDetail.TourDetailUrl){
+        this.gaSetScreenName('/du-lich/'+itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''));
+        this.googleAnalytionCustom(viewAction, {
+          currency: "VND",
+              value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
+              shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
+              payment_type: paymentType ? this.getGAPaymentType(paymentType) : '',
+              items: [
+                  {
+                      item_id: itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''),
+                      item_name: itemcache.gaTourDetail.Name,
+                      discount: itemcache.gaDiscountPromo || 0,
+                      index: 0,
+                      item_brand: "iVIVU.com",
+                      item_category: 'Tours',
+                      item_category2: itemcache.itemDeparture ? itemcache.itemDeparture.Name : 'Hồ Chí Minh',
+                      item_category3: '',
+                      item_category4: itemcache.gaTourDetail.TourType ||'',
+                      item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
+                      price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
+                      quantity: this.searchhotel.adult +(this.searchhotel.child || 0)
+                  }
+              ]
+        })
+      }
+      
     }
             
   }
@@ -1170,62 +1171,6 @@ public getAppVersion() {
       el[0].classList.remove('float-statusbar-enabled');
       el[0].classList.add('float-statusbar-disabled');
   }
-//Tạo booking food
-public CreateBooking(objbook): Promise<any>{
-  return new Promise((resolve, reject) => {
-    var options = {
-      'method': 'POST',
-      'url': C.urls.baseUrl.urlFood+'/api/FOBooking/CreateBooking',
-      'headers': {
-        'Content-Type': 'application/json',
-        'token': '584f470f-7a45-4793-a136-0084fadea81c'
-      },
-      body: JSON.stringify(objbook)
-    
-    };
-    request(options, function (error, response) { 
-      if (error) throw new Error(error);
-      resolve(response.body);
-    });
-  })
-  
-}
- //Gửi yêu cầu food
- public sendRequest(objbook): Promise<any>{
-  return new Promise((resolve, reject) => {
-    var options = {
-      'method': 'POST',
-      'url': C.urls.baseUrl.urlERPFood+'api/erp/Email/getEmail_Request',
-      'headers': {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(objbook)
-    
-    };
-    request(options, function (error, response) { 
-      if (error) throw new Error(error);
-      resolve(response.body);
-    });
-  })
-  
-}
-public Updatefoodpaytype(bookingCode,paymentMethod): Promise<any>{
-  return new Promise((resolve, reject) => {
-    var options = {
-      'method': 'GET',
-      'url': C.urls.baseUrl.urlContracting+'/update-food-paytype?token=3b760e5dcf038878925b5613c32615ea3&bookingCode='+bookingCode+'&paymentMethod='+paymentMethod+'',
-      'headers': {
-      }
-    };
-    request(options, function (error, response) { 
-      if (error) throw new Error(error);
-      resolve(true);
-    });
-    
-  })
-  
-  
-}
 
 async checkAllowPayment(bookingCode): Promise<any>{
   let url =C.urls.baseUrl.urlFlight+"/gate/apiv1/checkAllowPayment/"+bookingCode;
@@ -1301,20 +1246,6 @@ public CheckPaymentTicket(url): Promise<any>{
       'headers': {
         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
         apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-      }
-    };
-    request(options, function (error, response) { 
-      if (error) throw new Error(error);
-      resolve(response.body);
-    });
-  })
-} 
-public CheckpaymentFood(url): Promise<any>{
-  return new Promise((resolve, reject) => {
-    var options = {
-      'method': 'GET',
-      'url': url,
-      'headers': {
       }
     };
     request(options, function (error, response) { 
@@ -2205,112 +2136,6 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
     return ip;
   }
 
-  checkItemInCurrentPeriod(item):Promise<any>{
-    var se = this;
-    var curdate = moment(new Date());
-    return new Promise((resolve, reject) => {
-      this.getCurrentPeriod().then((period)=>{
-        //Khác giai đoạn menu hoặc ngày đặt qua ngày thứ 7 thì xóa cache giỏ hàng
-        if( (moment(item.focomboPeriod.startDate).format('YYYY-MM-DD') != moment(period.periodStartDateNextWeek).format('YYYY-MM-DD') && moment(item.focomboPeriod.startDate).diff(moment(period.periodStartDate), 'minutes') != 0 &&  moment(item.focomboPeriod.endDate).diff(moment(period.periodEndDate), 'minutes') != 0)
-        || curdate.diff(moment(item.focomboPeriod.endDate)) >=0){
-          resolve(false);
-        }else{
-          resolve(true);
-        }
-      })
-    })
-  }
-
-  checkData(data): Promise<any>{
-    return new Promise((resolve, reject) => {
-      var i =0;
-      data.forEach(element => {
-        this.checkItemInCurrentPeriod(element).then((check)=>{
-          if(!check){
-            this.removeItemInArray(data, element);
-          }
-          if(i == data.length-1){
-            resolve(data);
-          }
-          i++;
-        })
-       
-        
-      })
-
-      
-    })
-  }
-
-  getCurrentPeriod(): Promise<any>{
-    return new Promise((resolve, reject)=>{
-      if(!this._foodService.periodStartDate && !this._foodService.periodEndDate){
-        let newdate = moment(new Date()).format('YYYY-MM-DD');
-        let url = C.urls.baseUrl.urlFood +"/api/FODetail/GetDetailByCategoryId?id=16&date="+newdate;
-         this.RequestApi("GET", url, {}, {}, "HomeFood", "LoadCategoryHome").then((data)=>{
-          if(data && data.focomboPeriod){
-            this._foodService.periodStartDate = moment(data.focomboPeriod.startDate).add(-7,'days').format('YYYY-MM-DD');
-            this._foodService.periodEndDate = moment(data.focomboPeriod.endDate).add(-7,'days').format('YYYY-MM-DD');
-            this._foodService.periodStartDateNextWeek = moment(data.focomboPeriod.startDate).format('YYYY-MM-DD');
-            this._foodService.periodEndDateNextWeek = moment(data.focomboPeriod.endDate).format('YYYY-MM-DD');
-            resolve({ periodStartDate: moment(data.focomboPeriod.startDate).add(-7,'days').format('YYYY-MM-DD'), periodEndDate: moment(data.focomboPeriod.endDate).add(-7,'days').format('YYYY-MM-DD'), periodStartDateNextWeek: moment(data.focomboPeriod.startDate).format('YYYY-MM-DD'), periodEndDateNextWeek: moment(data.focomboPeriod.endDate).format('YYYY-MM-DD') });
-          }else{
-            let d = moment(new Date()).format('dddd');
-            let fd = moment(new Date()).format('YYYY-MM-DD');
-            let ed = moment(new Date()).add(4, 'days').format('YYYY-MM-DD');
-            switch (d) {
-              case "Tuesday":
-                fd = moment(new Date()).add(-1, 'days').format('YYYY-MM-DD');
-                ed = moment(new Date()).add(3, 'days').format('YYYY-MM-DD');
-                break;
-              case "Wednesday":
-                fd = moment(new Date()).add(-2, 'days').format('YYYY-MM-DD');
-                ed = moment(new Date()).add(2, 'days').format('YYYY-MM-DD');
-                break;
-              case "Thursday":
-                fd = moment(new Date()).add(-3, 'days').format('YYYY-MM-DD');
-                ed = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
-                break;
-              case "Friday":
-                fd = moment(new Date()).add(-4, 'days').format('YYYY-MM-DD');
-                ed = moment(new Date()).add(0, 'days').format('YYYY-MM-DD');
-                break;
-              case "Saturday":
-                fd = moment(new Date()).add(-5, 'days').format('YYYY-MM-DD');
-                ed = moment(new Date()).add(-1, 'days').format('YYYY-MM-DD');
-                break;
-              case "Sunday":
-                fd = moment(new Date()).add(-6, 'days').format('YYYY-MM-DD');
-                ed = moment(new Date()).add(-2, 'days').format('YYYY-MM-DD');
-                break;
-            }
-              this._foodService.periodStartDate = fd;
-              this._foodService.periodEndDate = ed;
-              this._foodService.periodStartDateNextWeek = moment(fd).add(7, 'days').format('YYYY-MM-DD');
-              this._foodService.periodEndDateNextWeek = moment(ed).add(7, 'days').format('YYYY-MM-DD');
-            resolve({periodStartDate: fd, periodEndDate: ed, periodStartDateNextWeek: moment(fd).add(7,'days').format('YYYY-MM-DD'), periodEndDateNextWeek: moment(ed).add(7,'days').format('YYYY-MM-DD')})
-          }
-         })
-      }else{
-        resolve ({ periodStartDate: this._foodService.periodStartDate, periodEndDate: this._foodService.periodEndDate, periodStartDateNextWeek: moment(this._foodService.periodStartDateNextWeek), periodEndDateNextWeek: moment(this._foodService.periodEndDateNextWeek) });
-      }
-    })
-    
-   
-  }
-
-  setCacheCart(){
-    this.storage.get("listItemsCart").then((data)=>{
-      if(data){
-        this.storage.remove("listItemsCart").then(()=>{
-          this.storage.set("listItemsCart", this._foodService.listItemsCart);
-        })
-      }else{
-        this.storage.set("listItemsCart", this._foodService.listItemsCart);
-      }
-    })
-  }
-
   async showLoadingwithtimeout(){
     this.loader = this.loadCtrl.create({
        message: "",
@@ -2873,7 +2698,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         handler: () => {
           se._flightService.itemTabFlightActive.emit(true);
           se.valueGlobal.backValue = "homeflight";
-          se._flightService.itemMenuFlightClick.emit(2);
+          this._flightService.itemTabFlightActive.emit(1);
           se.navCtrl.navigateBack('/tabs/tab1');
         }
       }
@@ -2897,7 +2722,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         handler: () => {
           this._flightService.itemTabFlightActive.emit(true);
           this.valueGlobal.backValue = 'homeflight';
-          this._flightService.itemMenuFlightClick.emit(2);
+          
           this.navCtrl.navigateBack('/tabs/tab1');
         }
       }

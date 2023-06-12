@@ -1,5 +1,5 @@
-import { Component,OnInit, NgZone, HostListener } from '@angular/core';
-import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController } from '@ionic/angular';
+import { Component,OnInit, NgZone, HostListener, ViewChild } from '@angular/core';
+import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController, IonContent } from '@ionic/angular';
 import { SearchHotel } from '../providers/book-service';
 import { C } from '../providers/constants';
 import { GlobalFunction } from '../providers/globalfunction';
@@ -33,7 +33,7 @@ import { voucherService } from '../providers/voucherService';
   styleUrls: ['flightadddetails.page.scss'],
 })
 export class FlightadddetailsPage implements OnInit {
-
+  @ViewChild('scrollArea') scrollFlightAddetailsArea: IonContent;
     adults =[];
     childs = [];
     maxAgeOfChild:any = 2020;
@@ -86,6 +86,11 @@ export class FlightadddetailsPage implements OnInit {
   hidepaxhint: any;
   listPaxSuggestByMemberId = [];
   ischeckinOnl: boolean = true;
+  contactOption:number;
+  departFlight: any;
+  returnFlight: any;
+  expanddivairlinemember: boolean;
+  
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -98,6 +103,12 @@ export class FlightadddetailsPage implements OnInit {
     private fb: Facebook,
     public _voucherService: voucherService) {
         if(this._flightService.itemFlightCache){
+          
+          this.departFlight = this._flightService.itemFlightCache.departFlight;
+          if(this._flightService.itemFlightCache.returnFlight){
+            this.returnFlight = this._flightService.itemFlightCache.returnFlight;
+          }
+          
           this.listcountry = this.gf.getNationList();
           this.listcountryFull = [...this.listcountry];
           this.isExtenal = this._flightService.itemFlightCache.isExtenal;
@@ -113,7 +124,7 @@ export class FlightadddetailsPage implements OnInit {
             let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
             let departdate = moment(this._flightService.itemFlightCache.checkOutDate);
             for (let index = 0; index < this._flightService.itemFlightCache.adult; index++) {
-                this.adults.push({id: index+1, name: '', subName: '', gender: 1, genderdisplay: '', airlineMemberCode: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate,
+                this.adults.push({id: index+1, name: '', subName: '', gender: 1, genderdisplay: '', airlineMemberCode: '',airlineMemberCodeReturn: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate,
                                   errorName: false});
             }
             if(this._flightService.itemFlightCache.child >0){
@@ -159,6 +170,9 @@ export class FlightadddetailsPage implements OnInit {
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
         this.checkinOnline();
+        this.storage.get('contactOption').then((co)=>{
+          this.contactOption = co;
+        })
     }
 
     @HostListener('keydown', ['$event'])
@@ -271,7 +285,7 @@ export class FlightadddetailsPage implements OnInit {
                         element.subName = elementcache.subName;
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
-                        element.airlineMemberCode = elementcache.airlineMemberCode;
+                        //element.airlineMemberCode = elementcache.airlineMemberCode;
                         if(this._flightService.itemFlightCache.priceCathay>0){
                           element.dateofbirth = elementcache.dateofbirth;
                         }
@@ -434,7 +448,7 @@ export class FlightadddetailsPage implements OnInit {
                           if(checkAdult){
                            let item= {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
                            genderdisplay: element.gender == 1? 'Ông' : 'Bà', 
-                           airlineMemberCode: element.airlineMemberCode&& this.showLotusPoint ? element.airlineMemberCode:'',
+                           airlineMemberCode: '',
                            airlineCardCode: element.airlineCardCode&& this.showLotusPoint ? element.airlineCardCode: '', 
                            dateofbirth: element.dateOfBirth && (this._flightService.itemFlightCache.priceCathay>0 || this.isExtenal) ? element.dateOfBirth:'', mindob: amindob, maxdob: amaxdob, isChild: false,
                            maxepdate: maxepdate,
@@ -446,7 +460,7 @@ export class FlightadddetailsPage implements OnInit {
                           if(se.isExtenal ){
                             item= {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
                             genderdisplay: element.gender == 1? 'Ông' : 'Bà', 
-                            airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
+                            airlineMemberCode: '',
                             airlineCardCode: element.airlineCardCode && this.showLotusPoint ? element.airlineCardCode: '', 
                             dateofbirth: element.dateOfBirth ? element.dateOfBirth:'', mindob: amindob, maxdob: amaxdob, isChild: false,
                             maxepdate: maxepdate,
@@ -474,7 +488,7 @@ export class FlightadddetailsPage implements OnInit {
                             }
                             let itemchild = {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
                             genderdisplay: element.gender == 1? 'Bé trai' : 'Bé gái', 
-                            airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
+                            airlineMemberCode: '',
                             airlineCardCode: element.airlineCardCode && this.showLotusPoint ? element.airlineCardCode: '', 
                             dateofbirth: element.dateOfBirth && (this._flightService.itemFlightCache.priceCathay>0 || this.isExtenal) ? element.dateOfBirth:'', mindob: mindob, maxdob: maxdob, isChild: true, isInfant: isInfant,
                             country:'',
@@ -486,7 +500,7 @@ export class FlightadddetailsPage implements OnInit {
                               if(se.isExtenal){
                                 itemchild = {id: index+1, name: element.fullName, subName: '', gender: element.gender ?element.gender: 1, 
                                 genderdisplay: element.gender == 1? 'Bé trai' : 'Bé gái', 
-                                airlineMemberCode: element.airlineMemberCode && this.showLotusPoint ? element.airlineMemberCode:'',
+                                airlineMemberCode: '',
                                 airlineCardCode: element.airlineCardCode && this.showLotusPoint ? element.airlineCardCode: '', 
                                 dateofbirth: element.dateOfBirth ? element.dateOfBirth:'', mindob: mindob, maxdob: maxdob, isChild: true, isInfant: isInfant,
                                 country: element.nationality ? element.nationality:'',
@@ -1471,6 +1485,12 @@ export class FlightadddetailsPage implements OnInit {
                   return;
                 }
 
+                if(!se.contactOption){
+                  se.gf.showToastWarning('Chưa chọn kênh liên lạc và nhận vé. Vui lòng kiểm tra lại');
+                  return;
+                }
+
+                if(se.contactOption == 2){
                   if(!se.email){
                     //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
                     return;
@@ -1480,6 +1500,7 @@ export class FlightadddetailsPage implements OnInit {
                       se.emailinvalid = true;
                       return;
                   }
+                }
                 
 
                 if (se.ischeck) {
@@ -1531,6 +1552,7 @@ export class FlightadddetailsPage implements OnInit {
                   }
                 }
                 se.storage.set('email', se.email);
+                se.storage.set('contactOption', se.contactOption);
 
                   se._flightService.itemFlightCache.phone = se.sodienthoai;
                   se._flightService.itemFlightCache.email = se.email;
@@ -2661,6 +2683,7 @@ alert.present();
                 ho1 = objhoten1.firstname;
                 ten1 = objhoten1.lastname;
                 //hành lý
+                //pdanh 30-05-2023: truyền thêm netprice all case fixbug hành lý
                 let objAncilary =[],objAncilaryReturn =[] ;
                 let departluggageweight = 0, returnluggageweight = 0;
                 if(departluggage && departluggage.length >0){
@@ -2673,7 +2696,7 @@ alert.present();
                                 Type: "Baggage", 
                                 Value: departluggage[0].weight,
                                 price: departluggage[0].amount,
-                                netPrice: departluggage[0].amount,
+                                netPrice: departluggage[0].netPrice,
                                 flightNumber: data.departFlight.flightNumber
                               }
                             }
@@ -2697,7 +2720,7 @@ alert.present();
                                 Key: departluggage[0].purchaseKey,
                                 Value: departluggage[0].weight,
                                 price: departluggage[0].amount,
-                                netPrice: departluggage[0].amount,
+                                netPrice: departluggage[0].netPrice,
                                 flightNumber: data.departFlight.flightNumber
                               }
                           }
@@ -2731,7 +2754,7 @@ alert.present();
                             Type: "Baggage", 
                             Value: dl1.weight,
                             price: dl1.amount,
-                            netPrice: dl1.amount,
+                            netPrice: dl1.netPrice,
                             flightNumber: data.departFlight.flightNumber
                           }
                         }
@@ -2756,7 +2779,7 @@ alert.present();
                             Key: dl1.purchaseKey,
                             Value: dl1.weight,
                             price: dl1.amount,
-                            netPrice: dl1.amount,
+                            netPrice: dl1.netPrice,
                             flightNumber: data.departFlight.flightNumber
                           }
                         }
@@ -2778,7 +2801,7 @@ alert.present();
                           Type: "Baggage", 
                           Value: returnluggage[0].weight,
                           price: returnluggage[0].amount,
-                          netPrice: returnluggage[0].amount,
+                          netPrice: returnluggage[0].netPrice,
                           flightNumber: data.returnFlight.flightNumber
                         }
                       }
@@ -2803,7 +2826,7 @@ alert.present();
                           Key: returnluggage[0].purchaseKey,
                           Value: returnluggage[0].weight,
                           price: returnluggage[0].amount,
-                          netPrice: returnluggage[0].amount,
+                          netPrice: returnluggage[0].netPrice,
                           flightNumber: data.returnFlight.flightNumber
                         }
                       }
@@ -2834,7 +2857,7 @@ alert.present();
                             Type: "Baggage", 
                             Value: rl1.weight,
                             price: rl1.amount,
-                            netPrice: rl1.amount,
+                            netPrice: rl1.netPrice,
                             flightNumber: data.returnFlight.flightNumber
                           }
                         }
@@ -2859,7 +2882,7 @@ alert.present();
                             Key: rl1.purchaseKey,
                             Value: rl1.weight,
                             price: rl1.amount,
-                            netPrice: rl1.amount,
+                            netPrice: rl1.netPrice,
                             flightNumber: data.returnFlight.flightNumber
                           }
                         }
@@ -2981,7 +3004,8 @@ alert.present();
                     "destinationPostal": "",
                     "destinationStreet": "",
                     "passportIssueCountry": (se.showLotusPoint && se.isExtenal) ? element.passportCountry : "",
-                    "airlineMemberCode": (se.showLotusPoint && element.airlineMemberCode) ? element.airlineMemberCode : "", 
+                    "airlineMemberCode": element.departAirlineMemberCode, 
+                    "airlineMemberCodeReturn": (se._flightService.itemFlightCache.roundTrip && element.returnAirlineMemberCode ? element.returnAirlineMemberCode : ''), 
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
                     "adultIndex": index, 
@@ -2991,6 +3015,7 @@ alert.present();
               }
   
               //trẻ em 
+              //pdanh 30-05-2023: truyền thêm netprice all case fixbug hành lý
               let adultIndex = 0;
               for (let index = 0; index < se.childs.length; index++) {
                 const element = se.childs[index];
@@ -3013,6 +3038,7 @@ alert.present();
                                     Type: "Baggage", 
                                     Value: departluggage[0].weight,
                                     price: departluggage[0].amount,
+                                    netPrice:departluggage[0].netPrice,
                                     flightNumber: data.departFlight.flightNumber
                                   }
                                   
@@ -3037,6 +3063,7 @@ alert.present();
                                     Key: departluggage[0].purchaseKey,
                                     Value: departluggage[0].weight,
                                     price: departluggage[0].amount,
+                                    netPrice:departluggage[0].netPrice,
                                     flightNumber: data.departFlight.flightNumber
                                   }
                               }
@@ -3070,6 +3097,7 @@ alert.present();
                                 Type: "Baggage", 
                                 Value: dlc.weight,
                                 price: dlc.amount,
+                                netPrice:dlc.netPrice,
                                 flightNumber: data.departFlight.flightNumber
                               }
                             }
@@ -3093,6 +3121,7 @@ alert.present();
                                 Key: dlc.purchaseKey,
                                 Value: dlc.weight,
                                 price: dlc.amount,
+                                netPrice:dlc.netPrice,
                                 flightNumber: data.departFlight.flightNumber
                               }
                             }
@@ -3114,6 +3143,7 @@ alert.present();
                               Type: "Baggage", 
                               Value: returnluggage[0].weight,
                               price: returnluggage[0].amount,
+                              netPrice: returnluggage[0].netPrice,
                               flightNumber: data.returnFlight.flightNumber
                             }
                           }
@@ -3138,6 +3168,7 @@ alert.present();
                               Key: returnluggage[0].purchaseKey,
                               Value: returnluggage[0].weight,
                               price: returnluggage[0].amount,
+                              netPrice: returnluggage[0].netPrice,
                               flightNumber: data.returnFlight.flightNumber
                             }
                           }
@@ -3168,6 +3199,7 @@ alert.present();
                                 Type: "Baggage", 
                                 Value: rlc.weight,
                                 price: rlc.amount,
+                                netPrice:rlc.netPrice,
                                 flightNumber: data.returnFlight.flightNumber
                               }
                             }
@@ -3192,6 +3224,7 @@ alert.present();
                                 Key: rlc.purchaseKey,
                                 Value: rlc.weight,
                                 price: rlc.amount,
+                                netPrice:rlc.netPrice,
                                 flightNumber: data.returnFlight.flightNumber
                               }
                             }
@@ -3374,6 +3407,8 @@ alert.present();
                       "address": "",
                       "phoneNumber": se.sodienthoai,
                       "hasvoucher": se._flightService.itemFlightCache.promotionCode ? true : false,
+                      "memberCodeAirline": '',
+                      "contactChannel": se.contactOption ==2 ? 'mail' : 'zalo'
                     },
                     "passengers": listpassenger,
                     "userToken": "",
@@ -3535,6 +3570,7 @@ alert.present();
                   item.genderdisplay = '';
                   item.name = '';
                   item.airlineMemberCode ='';
+                  item.airlineMemberCodeReturn ='';
                   item.errorGender = true;
                   item.errorName = true;
                   item.dateofbirth = '';
@@ -3758,7 +3794,7 @@ alert.present();
                 se.currentSelectPax.errorGender = false;
                 se.currentSelectPax.errorInfo = false;
                 se.currentSelectPax.textErrorInfo ='';
-                se.currentSelectPax.airlineMemberCode = paxhint.airlineMemberCode ? paxhint.airlineMemberCode : se.currentSelectPax.airlineMemberCode;
+                //se.currentSelectPax.airlineMemberCode = paxhint.airlineMemberCode ? paxhint.airlineMemberCode : se.currentSelectPax.airlineMemberCode;
 
                 if(paxhint.dateofbirth){
                   se.currentSelectPax.dateofbirth = paxhint.dateofbirth ? paxhint.dateofbirth : se.currentSelectPax.dateofbirth;
@@ -4114,5 +4150,42 @@ alert.present();
       if (diffminutes <= 210) {
         this.ischeckinOnl=false;
       }
+    }
+    contactOptionClick(value){
+      this.contactOption = value;
+    }
+
+    expandAirlineMember(itemAdult, index){
+      itemAdult.expanddivairlinemember = !itemAdult.expanddivairlinemember;
+      if(itemAdult.expanddivairlinemember){
+        var divCollapse = $(`.div-expand-airlinemember-${index}.div-collapse`);
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+        
+        this.scrollToTopGroupReview(1,index);
+      }else{
+        var divCollapse = $(`.div-expand-airlinemember-${index}.div-expand`);
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+        this.scrollToTopGroupReview(2,index);
+      }
+    }
+
+    scrollToTopGroupReview(value,index){
+      //scroll to top of group
+      setTimeout(()=>{
+        var objHeight =  $(`.div-expand-airlinemember-${index}`);
+        if(objHeight && objHeight.length >0){
+          var h = 0;
+          h = value == 2 ? objHeight[0].offsetTop - 200 : objHeight[0].offsetTop - 50;
+          if(this.scrollFlightAddetailsArea){
+            this.scrollFlightAddetailsArea.scrollToPoint(0,h,500);
+          }
+          
+        }
+      },100)
     }
 }

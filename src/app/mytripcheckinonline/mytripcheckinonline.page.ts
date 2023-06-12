@@ -48,9 +48,7 @@ import { MytripService } from "../providers/mytrip-service.service";
           
           if(this._mytripservice.rootPage == "homeflight"){
             this._flightService.itemTabFlightActive.emit(true);
-            setTimeout(()=>{
-              this._flightService.itemMenuFlightClick.emit(2);
-            },200)
+            
             
             this.valueGlobal.backValue = "homeflight";
             this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
@@ -60,7 +58,7 @@ import { MytripService } from "../providers/mytrip-service.service";
             if(this.valueGlobal.backValue == "homeflight"){
               this._flightService.itemTabFlightActive.emit(true);
               setTimeout(()=>{
-                this._flightService.itemMenuFlightClick.emit(2);
+                
               },200)
               this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
             }
@@ -76,9 +74,7 @@ import { MytripService } from "../providers/mytrip-service.service";
         else if(this._mytripservice.rootPage == "homeflight"){
           if(this._mytripservice.backfrompage == "mytripdetail" || this._mytripservice.backfrompage == "mytripbookingdetail"){
             this._flightService.itemTabFlightActive.emit(true);
-            setTimeout(()=>{
-              this._flightService.itemMenuFlightClick.emit(2);
-            },200)
+            
             
             this.valueGlobal.backValue = "homeflight";
             this.navCtrl.navigateBack('/tabs/tab1', {animated: true});

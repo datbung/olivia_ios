@@ -33,12 +33,22 @@
     
                 <div class="div-sub-title m-bottom-6">Xách tay</div>
 
-                <div *ngIf="(departConditionInfo && departConditionInfo.baggageHanded && departConditionInfo.baggageHanded.length <10) || (returnConditionInfo && returnConditionInfo.baggageHanded && returnConditionInfo.baggageHanded.length <10)" class="d-flex">
+                <div *ngIf="!isApiDirect && ((departConditionInfo && departConditionInfo.baggageHanded && departConditionInfo.baggageHanded.length <10) || (returnConditionInfo && returnConditionInfo.baggageHanded && returnConditionInfo.baggageHanded.length <10))" class="d-flex">
                    
                     <div class="text-desc m-bottom-6 p-right-4" *ngIf="(departConditionInfo && departConditionInfo.baggageHanded && departConditionInfo.baggageHanded.length <10) else havenotdepartluggage">Chiều đi: <span class="text-bold">{{ departConditionInfo.baggageHanded }}/1 khách.</span></div>
                    
 
                     <div *ngIf="(returnConditionInfo && returnConditionInfo.baggageHanded && returnConditionInfo.baggageHanded.length <10) else havenotreturnluggage">
+                        <div class="text-desc">Chiều về: <span class="text-bold">{{ returnConditionInfo.baggageHanded }}/1 khách.</span></div>
+                    </div>
+                   
+                </div>
+
+                <div *ngIf="isApiDirect && ((departConditionInfo && departConditionInfo.baggageHanded && departConditionInfo.baggageHanded.length >0) || (returnConditionInfo && returnConditionInfo.baggageHanded && returnConditionInfo.baggageHanded.length >0))" class="d-flex">
+                   
+                    <div class="text-desc m-bottom-6 p-right-4" *ngIf="(departConditionInfo && departConditionInfo.baggageHanded && departConditionInfo.baggageHanded.length >0) else havenotdepartluggage">Chiều đi: <span class="text-bold">{{ departConditionInfo.baggageHanded }}/1 khách.</span></div>
+
+                    <div *ngIf="(returnConditionInfo && returnConditionInfo.baggageHanded && returnConditionInfo.baggageHanded.length >0) else havenotreturnluggage">
                         <div class="text-desc">Chiều về: <span class="text-bold">{{ returnConditionInfo.baggageHanded }}/1 khách.</span></div>
                     </div>
                    
@@ -51,23 +61,45 @@
                     <div class="div-width-100 text-change" *ngIf="!showbuttonluggage" (click)="buyLuggage()">Thay đổi</div>
                     
                 </div>
-                
+
+                 <!-- case apidirect có HLKG -->
+                 <div class="m-top-8" *ngIf="isApiDirect">
+                    <div class="d-flex">
+                        <div *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && !hasdepartluggage) else nodepartlugsign"  class="div-width-100">
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }}<span class="text-bold" *ngIf="departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.indexOf('kg') == -1"> kg</span>/1 khách.</span></div>
+                        </div>
+                        <div *ngIf="!(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0) && !hasdepartluggage && showbuttonluggage"  class="div-width-100">
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">Không có.</span></div>
+                        </div>
+
+                        <div *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && roundtrip && !hasreturnluggage) else noreturnlugsign" class="div-width-100">
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }}<span class="text-bold" *ngIf="returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.indexOf('kg') == -1"> kg</span>/1 khách.</span></div>
+                        </div>
+                        <div *ngIf="!(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0) && !hasreturnluggage && showbuttonluggage && roundtrip" class="div-width-100">
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">Không có.</span></div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <div class="div-desc" *ngIf="(showbuttonluggage &&  !( (departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4) || (returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4))) else departluggageinclude">
                     Mua ngay, tiết kiệm đến 40% so với mua tại quầy
                 </div>
                 <div class="d-flex">
                     <ng-template #departluggageinclude >
                         <div class="d-flex">
-                            <div *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 && !hasdepartluggage) else nodepartlugsign"  class="div-width-100">
-                                <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                            <div *ngIf="!isApiDirect &&(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 && !hasdepartluggage) else nodepartlugsign"  class="div-width-100">
+                                <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }} kg/1 khách.</span></div>
                             </div>
-                            <div *ngIf="!(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4) && !hasdepartluggage && showbuttonluggage"  class="div-width-100">
+                            <div *ngIf="!isApiDirect &&!(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4) && !hasdepartluggage && showbuttonluggage"  class="div-width-100">
                                 <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">Không có.</span></div>
                             </div>
 
                             <div [ngClass]="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4) ?  'div-width-100 ' : 'div-width-100'" *ngIf="!showbuttonluggage && (departLuggage && departLuggage.length >0) && hasdepartluggage">
                                 <div class="text-desc m-bottom-6">Chiều đi</div>
-                                <div class="div-desc" *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 && hasdepartluggage)"><span class="text-bold">{{ departConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                                <div class="div-desc" *ngIf="!isApiDirect &&(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 && hasdepartluggage)"><span class="text-bold">{{ departConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                                <div class="div-desc" *ngIf="isApiDirect && (departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && hasdepartluggage)"><span class="text-bold">{{ departConditionInfo.luggageSigned }} 
+                                    <span class="text-bold" *ngIf="departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.indexOf('kg') == -1">kg</span>/1 khách.</span></div>
                                 <div *ngFor="let itemlug of departLuggage">
                                     <div *ngIf="itemlug.quantity >0" class="div-desc">
                                         {{ itemlug.quantity}} x <span class="text-bold">{{itemlug.weight}} kg</span>
@@ -75,16 +107,17 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && roundtrip && !hasreturnluggage) else noreturnlugsign" class="div-width-100">
-                                <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                            <div *ngIf="!isApiDirect &&(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && roundtrip && !hasreturnluggage) else noreturnlugsign" class="div-width-100">
+                                <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg/1 khách.</span></div>
                             </div>
-                            <div *ngIf="!(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4) && !hasreturnluggage && showbuttonluggage && roundtrip" class="div-width-100">
+                            <div *ngIf="!isApiDirect &&!(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4) && !hasreturnluggage && showbuttonluggage && roundtrip" class="div-width-100">
                                 <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">Không có.</span></div>
                             </div>
 
                             <div [ngClass]="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4)? 'div-width-100 ' : 'div-width-100'" *ngIf="!showbuttonluggage && (returnLuggage && returnLuggage.length >0) && hasreturnluggage && roundtrip">
                                 <div class="text-desc m-bottom-6">Chiều về</div>
-                                <div class="div-desc" *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && hasreturnluggage)"><span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                                <div class="div-desc" *ngIf="!isApiDirect &&(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && hasreturnluggage)"><span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg/1 khách.</span></div>
+                                <div class="div-desc" *ngIf="isApiDirect && (returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && hasreturnluggage)"><span class="text-bold">{{ returnConditionInfo.luggageSigned }}<span class="text-bold" *ngIf="returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.indexOf('kg') == -1"> kg</span>/1 khách.</span></div>
                                 <div *ngFor="let itemlug of returnLuggage">
                                     <div *ngIf="itemlug.quantity >0"  class="div-desc">
                                         {{ itemlug.quantity}} x <span class="text-bold">{{itemlug.weight}} kg</span>
@@ -107,24 +140,69 @@
               
             </div>
 
-            <div *ngIf="((departConditionInfo &&departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 ) || (returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4) )&& !(departLuggage && departLuggage.length >0) && !(returnLuggage && returnLuggage.length >0)">
+            <div *ngIf="!isApiDirect &&((departConditionInfo &&departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 ) || (returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4) )&& !(departLuggage && departLuggage.length >0) && !(returnLuggage && returnLuggage.length >0)">
                 <div class="div-sub-title m-top-16 m-bottom-6">
                     <div class="div-width-100">Ký gửi</div>
                 </div>
                  <div class="d-flex m-top-6">
                         <div *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4) else nodepartlugsign">
-                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }} kg/1 khách.</span></div>
                         </div>
                         <div *ngIf="!(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4) && !hasdepartluggage">
                             <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">Không có.</span></div>
                         </div>
 
                         <div *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && roundtrip) else noreturnlugsign">
-                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg</span>/1 khách.</div>
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg/1 khách.</span></div>
                         </div>
                         <div *ngIf="!(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4) && !hasreturnluggage && roundtrip">
                             <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">Không có.</span></div>
                         </div>
+                </div>
+
+                <!-- case apidirect có HLKG -->
+                <div class="m-top-8" *ngIf="isApiDirect">
+                    <div class="d-flex">
+                        <div *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && !hasdepartluggage) else nodepartlugsign"  class="div-width-100">
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }}<span class="text-bold" *ngIf="departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.indexOf('kg') == -1"> kg</span>/1 khách.</span> </div>
+                        </div>
+                        <div *ngIf="!(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0) && !hasdepartluggage && showbuttonluggage"  class="div-width-100">
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">Không có.</span></div>
+                        </div>
+
+                        <div *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && roundtrip && !hasreturnluggage) else noreturnlugsign" class="div-width-100">
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }} <span class="text-bold" *ngIf="returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.indexOf('kg') == -1"> kg</span>/1 khách.</span></div>
+                        </div>
+                        <div *ngIf="!(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0) && !hasreturnluggage && showbuttonluggage && roundtrip" class="div-width-100">
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">Không có.</span></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isApiDirect && ((departConditionInfo &&departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 ) || (returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0) )&& !(departLuggage && departLuggage.length >0) && !(returnLuggage && returnLuggage.length >0)">
+                <div class="div-sub-title m-top-16 m-bottom-6">
+                    <div class="div-width-100">Ký gửi</div>
+                </div>
+                <!-- case apidirect có HLKG -->
+                <div class="m-top-8">
+                    <div class="d-flex">
+                        <div *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && !hasdepartluggage) else nodepartlugsign"  class="div-width-100">
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">{{ departConditionInfo.luggageSigned }} <span class="text-bold" *ngIf="departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.indexOf('kg') == -1">kg</span>/1 khách.</span></div>
+                        </div>
+                        <div *ngIf="!(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0) && !hasdepartluggage && showbuttonluggage"  class="div-width-100">
+                            <div class="text-desc m-bottom-6 p-right-4">Chiều đi: <span class="text-bold">Không có.</span></div>
+                        </div>
+
+                        <div *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && roundtrip && !hasreturnluggage) else noreturnlugsign" class="div-width-100">
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">{{ returnConditionInfo.luggageSigned }} <span class="text-bold" *ngIf="returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.indexOf('kg') == -1">kg</span>/1 khách.</span></div>
+                        </div>
+                        <div *ngIf="!(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0) && !hasreturnluggage && showbuttonluggage && roundtrip" class="div-width-100">
+                            <div class="text-desc m-bottom-6">Chiều về: <span class="text-bold">Không có.</span></div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
             
@@ -279,7 +357,7 @@
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần. Yêu cầu bồi thường trực tuyến nhanh chóng tức thời <u  class="text-seen" (click)="noteCathay()">Xem quy định</u> 
                 </div>
                 <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
-                    Mua liền tay - Trúng ngay Voucher <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
+                    Đón hè rực rỡ - Quà tặng hết cỡ <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
                 </div>
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>
@@ -303,7 +381,7 @@
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần. Yêu cầu bồi thường trực tuyến nhanh chóng tức thời <u (click)="noteCathay()" class="text-seen">Xem quy định</u> 
                 </div>
                 <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
-                    Mua liền tay - Trúng ngay Voucher <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
+                    Đón hè rực rỡ - Quà tặng hết cỡ <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
                 </div>
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>
@@ -407,7 +485,7 @@
                     <img *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
                     <img class="logo-vna" *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && !returnFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
                     <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo && !isApiDirect" [src]="returnFlight.urlLogo">
-                    <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.operatedByLogo && isApiDirect " [src]="returnFlight.operatedByLogo">
+                    <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.operatedByLogo && isApiDirect " [src]="returnFlight.operatedByLogo">
                     <img *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
                 </div>
                 <div class="div-airline-name">

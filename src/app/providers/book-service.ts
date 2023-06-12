@@ -454,11 +454,6 @@ export class DeviceLocation {
     regioncode: any = '';
   regionName: string;
   };
-  export class foodInfo {
-    extraOther: Array<string>;
-    extraWater: Array<string>;
-    extraDinner: any;
-}
 
 export class itemLocal {
   name: string;

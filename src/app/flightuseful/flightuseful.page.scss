@@ -7,8 +7,16 @@
 .p-right-4{
     padding-right: 4px;
 }
+.f-18 {
+    font-size: 18px !important;
+}
+.width-24 {
+    width: 24px !important;
+}
 .div-useful-content{
-   
+    .cls-bg-detail {
+        background-color: #f5f7fa !important;
+    }
         .item-useful{
             border-radius: 4px;
             margin-top: 12px;
@@ -19,14 +27,13 @@
                 font-weight: 500;
                 line-height: 1.4;
                 color: #3f3b3b;
-                width: 96%;
+                width: 100%;
+                margin-right: 8px;
             }
 
             .div-background-useful {
-                background: #fff;
-                padding: 8px;
+                background: #f2f2f2;
                 margin-bottom: 8px;
-                border-radius: 4px;
             }
             .icon-arr {
                 display: flex;
@@ -37,18 +44,40 @@
             .bg-white {
                 background-color: #fff;
             }
+            .div-title {
+                padding: 12px 16px;
+                border-radius: 4px;
+                background-color: #f5f7fa;
+            }
+            .div-image {
+                margin-top: 26px;
+                text-align: center;
+
+                .img-qa {
+                    max-width: 280px;
+                    max-height: 192px;
+                    object-fit: cover;
+                }
+            }
         }
     
         .div-useful-show{
-            border-radius: 4px;
-            background-color: #fff;
-            padding: 8px;
+            padding: 8px 16px;
             margin-top: 11px;
 
             font-size: 16px;
             font-weight: 300;
             line-height: 2;
-            color: #333333;
+            color: #3f3b3b;
+        }
+        .div-useful-detail-show{
+            padding: 8px 16px;
+            margin-top: 11px;
+
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 2;
+            color: #3f3b3b;
         }
     
     .title-padding{
@@ -57,18 +86,18 @@
       }
   
       .sub-title{
-        font-size: 12px;
-        font-weight: 300;
+        font-size: 14px;
+        font-weight: 500;
         letter-spacing: -0.34px;
-        color: #333333;
+        color: #3f3b3b;
       }
 
     .text-title2
     {
         font-weight: 600;
-        font-size: 18px;
+        font-size: 20px;
         line-height: 1.5;
-        color: #222222;
+        color: #3f3b3b;
     }
 
     .has-clicked{
@@ -82,4 +111,28 @@
 
 .div-useful-title.cls-topdeal-float .title-padding{
     padding-top: 0px !important;
+  }
+
+  .div-showmore {
+    height: 24px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .text-showmore {
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #2f80ed;
+        margin-right: 2px;
+        text-decoration: underline;
+    } 
+    .icon-showmore {
+        height: 24px;
+    }
   }

@@ -857,7 +857,7 @@
                                   *ngIf="mealtype.Status!='AL' && (loginuser || mealtype.IsshowpricesOTA) && !hotelroom.MSG && !mealtype.MSG"
                                   class="text-room-description">
                                   <ion-col style="padding:0">
-                                    <ion-label class="cls-textconfirm">Xác nhận trong 60’</ion-label>
+                                    <ion-label class="cls-textconfirm">{{callbackNote}}</ion-label>
                                   </ion-col>
                                 </ion-row>
                                 <ion-row

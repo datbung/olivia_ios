@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { SearchHotel, ValueGlobal } from '../providers/book-service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { foodService } from '../providers/foodService';
 import { flightService } from '../providers/flightService';
 import { SignInWithApple, AppleSignInResponse, AppleSignInErrorResponse, ASAuthorizationAppleIDRequest } from '@ionic-native/sign-in-with-apple/ngx';
 import { ConfirmemailPage } from '../confirmemail/confirmemail.page';
@@ -40,9 +39,8 @@ export class LoginPage implements OnInit{
   constructor(
     public navCtrl: NavController, public authService: AuthService, public platform: Platform, private fb: Facebook, private storage: Storage,
     private fcm: FCM,public searchhotel: SearchHotel,private appVersion: AppVersion,public valueGlobal: ValueGlobal,
-    private googlePlus: GooglePlus, private alertCtrl: AlertController, private toastCtrl: ToastController, 
+    private alertCtrl: AlertController, private toastCtrl: ToastController, 
     public loadingCtrl: LoadingController, public gf: GlobalFunction,
-    public foodService: foodService,
     public _flightService: flightService,
     private signInWithApple: SignInWithApple,
     private modalCtrl: ModalController,
@@ -287,11 +285,6 @@ export class LoginPage implements OnInit{
           }
        });
        se.searchhotel.rootPage ='login';
-       //se.countdownRefreshToken();
-       if(se.valueGlobal.backValue == 'foodaccount'){
-        se.valueGlobal.logingoback = "";
-        se.foodService.menuFooterClick.emit(4);
-      }
       if(se.valueGlobal.backValue == "flightaccount"){
         se.valueGlobal.logingoback = "";
         se._flightService.itemMenuFlightClick.emit(4);
@@ -841,11 +834,6 @@ export class LoginPage implements OnInit{
           }
        });
        se.searchhotel.rootPage ='login';
-       //se.countdownRefreshToken();
-       if(se.valueGlobal.backValue == 'foodaccount'){
-        se.valueGlobal.logingoback = "";
-        se.foodService.menuFooterClick.emit(4);
-      }
       if(se.valueGlobal.backValue == "flightaccount"){
         se.valueGlobal.logingoback = "";
         se._flightService.itemMenuFlightClick.emit(4);

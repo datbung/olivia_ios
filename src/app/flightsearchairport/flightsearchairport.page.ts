@@ -103,7 +103,7 @@ export class FlightsearchairportPage implements OnInit {
     loadLocation(){
         var se = this;
         //let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace?token=3b760e5dcf038878925b5613c32615ea3ds";
-        let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
+        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace";
           var options = {
             method: 'GET',
             url: urlPath,

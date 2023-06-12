@@ -213,7 +213,7 @@
                           </div> -->
                         </div>
                         <div class="div-flight-inout">
-                            <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout.svg" *ngIf="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) else oneway">
+                            <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout1.svg" *ngIf="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) else oneway">
                             <ng-template #oneway><img class="img-flight-inout img-oneway" src="../assets/imgs/ic_arrow.svg"></ng-template>
                         </div> 
                         <div [ngClass]="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ) ? 'min-width-100 cls-text-overflow' : 'min-width-100 cls-text-overflow mt-30'">

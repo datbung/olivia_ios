@@ -325,7 +325,7 @@ export class MytripBookingDetailPage implements OnInit{
     if(this._mytripservice.backroute){
         if(this._mytripservice.rootPage == "homeflight"){
           this._flightService.itemTabFlightActive.emit(true);
-          this._flightService.itemMenuFlightClick.emit(2);
+          
           this.valueGlobal.backValue = "homeflight";
           this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
           this._mytripservice.backfrompage= "";

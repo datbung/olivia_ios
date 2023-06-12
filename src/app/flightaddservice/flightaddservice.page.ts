@@ -78,7 +78,7 @@ export class FlightaddservicePage implements OnInit {
   alert: any;
   isExtenal: any;
   ischeckShowDC=0;
-  dateShowCathay = '2022-09-30';
+  dateShowCathay = '2023-09-02';
   isShowPromoCathay: boolean = false;
   itemVoucher: any;
   checkEmptyHotelCity: boolean;
@@ -104,6 +104,8 @@ export class FlightaddservicePage implements OnInit {
     private safariViewController: SafariViewController,
     public _voucherService: voucherService) { 
         if(this._flightService.itemFlightCache){
+          this._flightService.itemFlightCache.departAirlineMemberCode = '';
+          this._flightService.itemFlightCache.returnAirlineMemberCode = '';
             this.roundtrip = this._flightService.itemFlightCache.roundTrip;
             this.adult = this._flightService.itemFlightCache.adult;
             this.child = this._flightService.itemFlightCache.child*1 + (this._flightService.itemFlightCache.infant ? this._flightService.itemFlightCache.infant : 0)*1;
@@ -1030,17 +1032,22 @@ export class FlightaddservicePage implements OnInit {
 
     getSeatMap(id){
         var se = this;
-        let departairlines = se._flightService.itemFlightCache.departFlight.airline.replace(' ','');
-        let returnairlines = se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.airline.replace(' ','') : "";
-        if(departairlines == returnairlines || !se._flightService.objSearch.roundTrip){
-            let urlSeatMap = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+departairlines;
-            se.getSeatMaps(urlSeatMap, departairlines, 3);
+        if((se._flightService.itemFlightCache.departFlight && se._flightService.itemFlightCache.departFlight.stops) || (se._flightService.itemFlightCache.returnFlight && se._flightService.itemFlightCache.returnFlight.stops)){
+          se.allowchoiceseat = false;
         }else{
-            let urlSeatMapDepart = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+departairlines;
-            se.getSeatMaps(urlSeatMapDepart, departairlines, 1);
-            let urlSeatMapReturn = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+returnairlines;
-            se.getSeatMaps(urlSeatMapReturn, returnairlines, 2);
+          let departairlines = se._flightService.itemFlightCache.departFlight.airline.replace(' ','');
+          let returnairlines = se._flightService.itemFlightCache.returnFlight ? se._flightService.itemFlightCache.returnFlight.airline.replace(' ','') : "";
+          if(departairlines == returnairlines || !se._flightService.objSearch.roundTrip){
+              let urlSeatMap = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+departairlines;
+              se.getSeatMaps(urlSeatMap, departairlines, 3);
+          }else{
+              let urlSeatMapDepart = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+departairlines;
+              se.getSeatMaps(urlSeatMapDepart, departairlines, 1);
+              let urlSeatMapReturn = C.urls.baseUrl.urlFlight + "gate/apiv1/GetSeatMaps?reservationId="+id+"&airline="+returnairlines;
+              se.getSeatMaps(urlSeatMapReturn, returnairlines, 2);
+          }
         }
+       
         
     }
 
@@ -3812,7 +3819,7 @@ openLinkPromoCathay() {
     .then((available: boolean) => {
         if (available) {
           this.safariViewController.show({
-            url: 'https://www.ivivu.com/blog/2022/06/mua-bao-hiem-cathay-o-ivivu-trung-ngay-voucher-du-lich-xin/',
+            url: 'https://rd.zapps.vn/detail/3888313238733373810?id=0089ad8733c2da9c83d3&pageId=3888313238733373810',
             hidden: false,
             animated: false,
             transition: 'curl',

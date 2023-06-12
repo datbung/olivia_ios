@@ -185,7 +185,7 @@ export class VoucherSlideFlightComboPage implements OnInit{
                 'cache-control': 'no-cache',
                 'content-type': 'application/json'
               },
-              body: { code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: this.bookCombo.ComboId },
+              body: {bookingCode: 'FLIGHTCOMBO' ,code: itemVoucher.code, totalAmount: itemVoucher.rewardsItem.price, comboDetailId: this.bookCombo.ComboId },
               json: true
             };
       

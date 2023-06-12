@@ -114,14 +114,14 @@ export class OrderRequestAddluggagePaymentDonePage implements OnInit {
     
     this._flightService.itemTabFlightActive.emit(true);
     this.valueGlobal.backValue = 'homeflight';
-    this._flightService.itemMenuFlightClick.emit(2);
+    
     this.navCtrl.navigateBack('app/tabs/tab1');
   }
 
   async showBooking() {
     var se = this;
     se._flightService.itemTabFlightActive.emit(true);
-    se._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(1);
     se._flightService.bookingCodePayment = this.bookingCode;
     se._flightService.bookingSuccess = true;
     se.valueGlobal.backValue = "flightmytrip";

@@ -640,8 +640,6 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   }
   setinterval() {
     clearInterval(this.intervalID);
-    // this.searchhotel.backPage = "foodpaymentselect";
-    // this.navCtrl.navigateBack('/app/tabs/tab1');
     this.intervalID = setInterval(() => {
       this.checkPayment(0);
     }, 1000 * 1);
@@ -653,11 +651,6 @@ export class FlightcombopaymentPage implements OnInit { listfly; priceshow; Name
   roompaymentpayoolive() {
     this.searchhotel.paymentType = 'payoo';
     this.postapibook('payoo_store');
-    // if (!this.ischeckTransaction) {
-    //   this.postapibook('payoo_store');
-    // } else {
-    //   this.NoTransaction('payoo_store');
-    // }
   }
   roompaymentpayooqr() {
     this.searchhotel.paymentType = 'payoo';

@@ -24,8 +24,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
     styleUrls: ['./homeflight.page.scss'],
   })
   export class HomeflightPage {
-    
-
     cindisplay = '25-05-2020';
     coutdisplay = '27-05-2020';
     cinthu = "Thứ 3";
@@ -98,7 +96,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
           // this.content = content;
           // this.app = app;
-
+          
           this.gettopSale();
           this.gf.getAllPlaceByArea().then((data) => {
             //console.log(data);
@@ -307,22 +305,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               }
             })
 
-            se._flightService.itemMenuFlightClick.pipe().subscribe(data => {
-                se.zone.run(()=>{
-                  se.flightTabActive = data;
-                  if(data == 1){
-                    $(".div-wraper-slide").removeClass("cls-disabled").addClass("cls-visible");
-                  }
-                  else {
-                    if(data == 2){
-                      se.loadUserInfo();
-                    }
-                    $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-                  }
-                })
-                
-              })
-
               se._flightService.getItemFlightReloadInfo().subscribe((data) => {
                 if(data ==1){
                     se.reloadInfoFlight();
@@ -404,7 +386,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
         loadLocation(){
           var se = this;
-          let urlPath = C.urls.baseUrl.urlFlightInt + "api/FlightSearch/GetAllPlace";
+          let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/AllPlace";
             var options = {
               method: 'GET',
               url: urlPath,
@@ -424,10 +406,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                 throw new Error(error)
               };
               let result = JSON.parse(body);
-              if(result && result.data && result.data.length >0){
+              if(result && result.length >0){
                 //result = result.filter((item) =>{ return item.country == "Việt Nam"});
-                se.storage.set("listAirport", result.data);
-                se._flightService.listAirport = result.data;
+                se.storage.set("listAirport", result);
+                se._flightService.listAirport = result;
               }
           })
       }
@@ -1459,7 +1441,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             se.storage.set("itemFlightCache", JSON.stringify(se._flightService.itemFlightCache));
           }
         })
-      
         if(se._flightService.listAirport && se._flightService.listAirport.length >0){
           let placeFrom = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == se.departCode});
           let placeTo = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == se.returnCode});

@@ -1,4 +1,4 @@
-import { GlobalFunction } from './../../providers/globalfunction';
+import { ActivityService, GlobalFunction } from './../../providers/globalfunction';
 import { NavController, Platform ,ModalController} from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Component, NgZone, OnInit } from '@angular/core';
@@ -24,6 +24,7 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
   intervalID: any;
   allowCheck: any = true;
   allowCheckHoldTicket: boolean = true;_email
+  contactOption: any;
   constructor(private navCtrl:NavController, public gf: GlobalFunction,
     private activatedRoute: ActivatedRoute,private _flightService: flightService,private safariViewController: SafariViewController,
     private backgroundmode: BackgroundMode,
@@ -31,7 +32,8 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
     private storage: Storage,
     private _platform: Platform,
     private _calendar: Calendar,
-    private zone: NgZone) { 
+    private zone: NgZone,
+    public activityService: ActivityService) { 
 
       this.platform.ready().then(()=>{
         this.backgroundmode.on('activate').subscribe(()=>{
@@ -40,7 +42,9 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
         })
         this.backgroundmode.enable();
       })
-
+      this.storage.get('contactOption').then((option)=>{
+        this.contactOption = option;
+      })
       // this.getSummaryBooking(this._flightService.itemFlightCache).then((databkg:any) => {
       //   this._flightService.itemFlightCache.dataSummaryBooking = databkg;
       // })    
@@ -71,9 +75,25 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
 
       }, 60000 * 9.1);
     }
-    this.total=this._flightService.itemFlightInternational.fare.price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-    this.textHours = moment(this._flightService.itemFlightCache.periodPaymentDate).format("HH:mm");
-    this.PeriodPaymentDate = this._flightService.itemFlightCache.periodPaymentDate ? this.gf.getDayOfWeek(this._flightService.itemFlightCache.periodPaymentDate).dayname + ", " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("DD") + " thg " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("MM") : "";
+    if(this._flightService.itemFlightInternational && this._flightService.itemFlightInternational.fare){
+      this.total=this._flightService.itemFlightInternational.fare.price.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+      this.textHours = moment(this._flightService.itemFlightCache.periodPaymentDate).format("HH:mm");
+      this.PeriodPaymentDate = this._flightService.itemFlightCache.periodPaymentDate ? this.gf.getDayOfWeek(this._flightService.itemFlightCache.periodPaymentDate).dayname + ", " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("DD") + " thg " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("MM") : "";
+    }else{
+      if(this.activityService.objPaymentMytrip.promotionDiscountAmount && this.activityService.objPaymentMytrip.amount_after_tax){
+        this.total = this.activityService.objPaymentMytrip.amount_after_tax;
+        if(this.activityService.objPaymentMytrip.paid_amount && this.activityService.objPaymentMytrip.paid_amount >0){
+          this.total = this.activityService.objPaymentMytrip.amount_after_tax - this.activityService.objPaymentMytrip.paid_amount;
+        }
+      }else{
+        this.total = this.activityService.objPaymentMytrip.amount_after_tax;
+      }
+      
+      this.textHours = moment(this.activityService.objPaymentMytrip.delivery_payment_date).format("HH:mm");
+      this.PeriodPaymentDate = this.activityService.objPaymentMytrip.delivery_payment_date ? this.gf.getDayOfWeek(this.activityService.objPaymentMytrip.delivery_payment_date).dayname + ", " + moment(this.activityService.objPaymentMytrip.delivery_payment_date).format("DD") + " thg " + moment(this.activityService.objPaymentMytrip.delivery_payment_date).format("MM") : "";
+    }
+    
+    
   }
   goback()
   {
@@ -90,6 +110,7 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
       se.gf.hideLoading();
       se.clearItemCache();
       se._flightService.itemTabFlightActive.emit(true);
+      this._flightService.itemMenuFlightClick.emit(2);
       se.valueGlobal.backValue = "homeflight";
       //se._flightService.itemFlightMytripRefresh.emit(true);
       se._flightService.bookingCodePayment = se.bookingCode;
@@ -282,7 +303,7 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
     }
 
     // setTimeout(() => {
-    //   se._flightService.itemMenuFlightClick.emit(2);
+    //   this._flightService.itemTabFlightActive.emit(1);
     //   se.next();
     // },500)
     
@@ -391,7 +412,8 @@ if(itemflight.childs && itemflight.childs.length >0){
                   se.gf.hideLoading();
                   se._flightService.itemFlightCache = {};
                       
-                      se._flightService.itemMenuFlightClick.emit(2);
+                      this._flightService.itemTabFlightActive.emit(1);
+                      this._flightService.itemMenuFlightClick.emit(2);
                       se.next();
                 })
                 
@@ -402,7 +424,8 @@ if(itemflight.childs && itemflight.childs.length >0){
             });
           }else{
             se._flightService.itemFlightCache = {};
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
+            this._flightService.itemMenuFlightClick.emit(2);
             se.next();
           }
         }else{
@@ -416,7 +439,8 @@ if(itemflight.childs && itemflight.childs.length >0){
                     se.gf.hideLoading();
                     se._flightService.itemFlightCache = {};
                         
-                        se._flightService.itemMenuFlightClick.emit(2);
+                        this._flightService.itemTabFlightActive.emit(1);
+                        this._flightService.itemMenuFlightClick.emit(2);
                         se.next();
                   })
                   
@@ -426,7 +450,8 @@ if(itemflight.childs && itemflight.childs.length >0){
               });
             }else{
               se._flightService.itemFlightCache = {};
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
+              this._flightService.itemMenuFlightClick.emit(2);
               se.next();
             }
           })

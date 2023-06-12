@@ -1,5 +1,5 @@
-import { Component,OnInit, NgZone, HostListener } from '@angular/core';
-import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController } from '@ionic/angular';
+import { Component,OnInit, NgZone, HostListener, ViewChild } from '@angular/core';
+import { NavController,Platform, ModalController, ActionSheetController, PickerController,AlertController, IonContent } from '@ionic/angular';
 import { SearchHotel } from '../../providers/book-service';
 import { C } from '../../providers/constants';
 import { ActivityService, GlobalFunction } from '../../providers/globalfunction';
@@ -37,7 +37,7 @@ import { HTMLIonOverlayElement } from '@ionic/core';
   styleUrls: ['flightadddetailsinternational.page.scss'],
 })
 export class FlightAdddetailsInternationalPage implements OnInit {
-
+  @ViewChild('scrollArea') scrollFlightAddetailsArea: IonContent;
     adults =[];
     childs = [];
     maxAgeOfChild:any = 2020;
@@ -100,7 +100,10 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   listVouchersApply=[];
   strPromoCode: string = '';
   totaldiscountpromo = 0;
+  contactOption: any = 1;
   optionPassport:boolean=false;
+  departFlight: any;
+  returnFlight: any;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -114,6 +117,11 @@ export class FlightAdddetailsInternationalPage implements OnInit {
     public activityService: ActivityService,
     public _voucherService: voucherService,) {
         if(this._flightService.itemFlightCache){
+          this.departFlight = this._flightService.itemFlightInternational.departFlights.filter((id)=>{return id.ischeck})[0];
+          if(this._flightService.itemFlightInternational.returnFlights && this._flightService.itemFlightInternational.returnFlights.length >0){
+            this.returnFlight = this._flightService.itemFlightInternational.returnFlights.filter((ir)=>{return ir.ischeck})[0];
+          }
+          
           this.getSummaryBooking();
           this.listcountry = this.gf.getNationList();
           this.listcountryFull = [...this.listcountry];
@@ -172,6 +180,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             , 'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': 'VND'  }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
          
             this.storage.get('optionPassport').then((op)=>{this.optionPassport = op});
+            this.storage.get('contactOption').then((co)=>{
+              this.contactOption = co;
+            })
         }
     }
 
@@ -1579,6 +1590,11 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   return;
                 }
 
+                if(!se.contactOption){
+                  se.gf.showToastWarning('Chưa chọn kênh liên lạc và nhận vé. Vui lòng kiểm tra lại');
+                  return;
+                }
+                if(se.contactOption == 2){
                   if(!se.email){
                       //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
                       return;
@@ -1588,6 +1604,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                       se.emailinvalid = true;
                       return;
                   }
+                }
 
                 if (se.ischeck) {
                   if (se.companyname && se.address && se.tax) {
@@ -1638,6 +1655,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   }
                 }
                 se.storage.set('email', se.email);
+                se.storage.set('contactOption', se.contactOption);
                   se._flightService.itemFlightCache.phone = se.sodienthoai;
                   se._flightService.itemFlightCache.email = se.email;
                   se._flightService.itemFlightCache.hoten = se.hoten;
@@ -3009,7 +3027,8 @@ alert.present();
                     "destinationPostal": "",
                     "destinationStreet": "",
                     "passportIssueCountry": (se.optionPassport) ? element.passportCountry : "",
-                    "airlineMemberCode": (element.airlineMemberCode) ? element.airlineMemberCode : "", 
+                    "airlineMemberCode": element.departAirlineMemberCode, 
+                    "airlineMemberCodeReturn": (se._flightService.itemFlightCache.roundTrip && element.returnAirlineMemberCode ? element.returnAirlineMemberCode : ''),
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
                     "adultIndex": index, 
@@ -3391,6 +3410,7 @@ alert.present();
                       "address": "",
                       "phoneNumber": se.sodienthoai,
                       "hasvoucher": se._flightService.itemFlightInternational.promotionCode ? true : false,
+                      "contactChannel": se.contactOption ==2 ? 'mail' : 'zalo'
                     },
                     "passengers": listpassenger,
                     "userToken": "",
@@ -4382,5 +4402,42 @@ alert.present();
     }
     togglecheckinonline(event){ 
       this._flightService.itemFlightCache.isCheckinOnline=event.detail.checked
+    }
+
+    expandAirlineMember(itemAdult, index){
+      itemAdult.expanddivairlinemember = !itemAdult.expanddivairlinemember;
+      if(itemAdult.expanddivairlinemember){
+        var divCollapse = $(`.div-expand-airlinemember-${index}.div-collapse`);
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-collapse').addClass('div-expand');
+        }
+        
+        this.scrollToTopGroupReview(1,index);
+      }else{
+        var divCollapse = $(`.div-expand-airlinemember-${index}.div-expand`);
+        if(divCollapse && divCollapse.length >0){
+          divCollapse.removeClass('div-expand').addClass('div-collapse');
+        }
+
+        this.scrollToTopGroupReview(2,index);
+      }
+    }
+
+    scrollToTopGroupReview(value,index){
+      //scroll to top of group
+      setTimeout(()=>{
+        var objHeight =  $(`.div-expand-airlinemember-${index}`);
+        if(objHeight && objHeight.length >0){
+          var h = 0;
+          h = value == 2 ? objHeight[0].offsetTop - 200 : objHeight[0].offsetTop - 50;
+          if(this.scrollFlightAddetailsArea){
+            this.scrollFlightAddetailsArea.scrollToPoint(0,h,500);
+          }
+          
+        }
+      },100)
+    }
+    contactOptionClick(value){
+      this.contactOption = value;
     }
 }

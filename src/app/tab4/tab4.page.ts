@@ -84,6 +84,7 @@ export class Tab4Page implements OnInit{
     if(document.querySelector(".tabbar")){
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
+    debugger
       se.loadUserNotificationStatus();
 
     

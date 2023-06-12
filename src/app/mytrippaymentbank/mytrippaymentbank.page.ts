@@ -604,7 +604,7 @@ export class MytrippaymentbankPage implements OnInit {
     if(this._mytripservice.isFlightPaymentBank){
       this._flightService.itemTabFlightActive.emit(true);
       this.valueGlobal.backValue = "homeflight";
-      this._flightService.itemMenuFlightClick.emit(2);
+      
     }
     this._flightService.bookingCodePayment = this.bookingCode;
     this._flightService.bookingSuccess = true;

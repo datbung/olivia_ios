@@ -20,7 +20,8 @@ export class FlightpaymentdonepayooPage implements OnInit {
   event;
   total;_email;code;stt;startdate;enddate;PeriodPaymentDate;qrimg;
   PeriodPaymentHour;BillingCode
-  isDinner: any=false;checkreview;
+  isDinner: any=false;checkreview
+  contactOption: any;
   constructor(private activatedRoute: ActivatedRoute,public storage: Storage,public _flightService:flightService, 
     private navCtrl:NavController, public searchhotel: SearchHotel, private zone: NgZone,private safariViewController: SafariViewController,
     public valueGlobal: ValueGlobal,
@@ -47,6 +48,9 @@ export class FlightpaymentdonepayooPage implements OnInit {
     this._flightService.itemFlightCache.promotionCode = "";
         this._flightService.itemFlightCache.promocode = "";
         this._flightService.itemFlightCache.discount = 0;
+        this.storage.get('contactOption').then((option)=>{
+          this.contactOption = option;
+        })
   }
 
   ngOnInit() {
@@ -102,7 +106,7 @@ export class FlightpaymentdonepayooPage implements OnInit {
     }
 
     // setTimeout(() => {
-    //   se._flightService.itemMenuFlightClick.emit(2);
+    //   this._flightService.itemTabFlightActive.emit(1);
     //   se.next();
     // },500)
     
@@ -226,7 +230,7 @@ if(itemflight.childs && itemflight.childs.length >0){
                   se.gf.hideLoading();
                   se._flightService.itemFlightCache = {};
                       
-                  se._flightService.itemMenuFlightClick.emit(2);
+                  this._flightService.itemTabFlightActive.emit(1);
                   se.next();
                 })
                 
@@ -237,7 +241,7 @@ if(itemflight.childs && itemflight.childs.length >0){
             });
           }else{
             se._flightService.itemFlightCache = {};
-            se._flightService.itemMenuFlightClick.emit(2);
+            this._flightService.itemTabFlightActive.emit(1);
             se.next();
           }
         }else{
@@ -251,7 +255,7 @@ if(itemflight.childs && itemflight.childs.length >0){
                     se.gf.hideLoading();
                     se._flightService.itemFlightCache = {};
                         
-                        se._flightService.itemMenuFlightClick.emit(2);
+                        this._flightService.itemTabFlightActive.emit(1);
                         se.next();
                   })
                   
@@ -261,7 +265,7 @@ if(itemflight.childs && itemflight.childs.length >0){
               });
             }else{
               se._flightService.itemFlightCache = {};
-              se._flightService.itemMenuFlightClick.emit(2);
+              this._flightService.itemTabFlightActive.emit(1);
               se.next();
             }
           })
@@ -299,6 +303,7 @@ if(itemflight.childs && itemflight.childs.length >0){
     this.gf.hideLoading();
     this._flightService.itemFlightCache = {};
     this._flightService.itemTabFlightActive.emit(true);
+    this._flightService.itemMenuFlightClick.emit(2);
     this.valueGlobal.backValue = "homeflight";
     if (this.checkreview==0) {
       this.showConfirm();
