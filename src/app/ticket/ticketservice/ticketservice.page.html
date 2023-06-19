@@ -20,7 +20,7 @@
         <div [ngClass]="itemTicketService ? 'm-top-30' : 'm-top-30 cls-no-departure' ">
             <div class="div-item-departure-date d-flex">
                 <div class="width-62 text-label">
-                    Chọn ngày thăm quan:
+                    Chọn ngày tham quan:
                 </div>
                 <div class="width-45 d-flex div-item-time" (click)="openPickupCalendar()">
                     <div class="v-align-center m-r-8"><img src="./assets/ic_ticket/ic_calendar.svg"></div>
@@ -34,23 +34,24 @@
             </div>
             <div class="d-flex margin-left-16 div-scroll">
               
-              <div (click)="funcdate(item)" class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngFor="let item of itemTicketService.dailyRatePkgs">
+              <!-- <div (click)="funcdate(item)" class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngFor="let item of itemTicketService.dailyRatePkgs">
                 {{item.dailydisplay}}
-              </div>
+              </div> -->
             </div>
-            <div *ngIf="arrSkus && arrSkus.length>0">
-              <div class="d-flex margin-left-16 div-scroll">
+            <div  *ngIf="arrSkus && arrSkus.length>0">
+              <div *ngIf="arrSkus && arrSkus.length>1" class="d-flex margin-left-16 div-scroll">
               
                 <div (click)="funcsku(item)" class="div-option-time-sku" [ngClass]="item.action ? 'div-option-time-sku-action': 'div-option-time-sku'" *ngFor="let item of arrSkus">
                   {{item.skuName}}
                 </div>
               </div>
-              <div class="div-item-departure-date d-flex">
+              <div class="div-item-departure-date d-flex  margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowAdult">
                 <div class="width-35">
                     Người lớn
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdult">x {{gf.convertNumberToString(itemTicketService.skus.rateAdult)}}</span>
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdult">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -60,19 +61,20 @@
   
                 <div class="width-45 d-flex div-item-pax">
                     <div class="div-item-left f-32" (click)="removePax(1)">-</div>
-                    <div class="div-item-center">{{searchhotel.adult}}</div>
+                    <div class="div-item-center">{{adult}}</div>
                     <div class="div-item-right f-24" (click)="addPax(1)">+</div>
                 </div>
               </div>
   
-              <div class="div-item-departure-date d-flex margin-top-12">
+              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowChild">
                 <div class="width-35">
                   <div>Trẻ em</div>
-                  <div class="text-sub">Cao 100-139cm</div>
+                  <div class="text-sub">Cao 100-140cm</div>
                     
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChild">x {{gf.convertNumberToString(itemTicketService.skus.rateChild)}}</span>
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChild">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -81,7 +83,7 @@
                </ng-template>
                 <div class="width-45 d-flex div-item-pax">
                     <div class="div-item-left f-32" (click)="removePax(2)">-</div>
-                    <div class="div-item-center">{{searchhotel.child}}</div>
+                    <div class="div-item-center">{{child}}</div>
                     <div class="div-item-right f-24" (click)="addPax(2)">+</div>
                 </div>
               </div>
@@ -102,13 +104,14 @@
               
               </div> -->
   
-              <div class="div-item-departure-date d-flex margin-top-12">
+              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowSenior">
                 <div class="width-35">
                     <div>Người lớn tuổi</div>
                     <div class="text-sub">Trên 60+</div>
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSenior">x {{gf.convertNumberToString(itemTicketService.skus.rateSenior )}}</span>
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSenior">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
@@ -117,12 +120,63 @@
                </ng-template>
                 <div class="width-45 d-flex div-item-pax">
                     <div class="div-item-left f-32" (click)="removePax(3)">-</div>
-                    <div class="div-item-center">{{searchhotel.elder}}</div>
+                    <div class="div-item-center">{{elder}}</div>
                     <div class="div-item-right f-24" (click)="addPax(3)">+</div>
                 </div>
               </div>
             </div>
+            <div  *ngIf="arrSkus && arrSkus.length==0" class="div-notprice">
+              
+              <div class="div-item-departure-date d-flex  margin-top-12">
+                <div class="width-35">
+                    Người lớn
+                </div>
+                <div class="text-price width-25 margin-right-8">
+                 <span>0</span>
+                </div>
           
+  
+                <div class="width-45 d-flex div-item-pax">
+                    <div class="div-item-left f-32" >-</div>
+                    <div class="div-item-center">{{adult}}</div>
+                    <div class="div-item-right f-24">+</div>
+                </div>
+              </div>
+  
+              <div class="div-item-departure-date d-flex margin-top-12">
+                <div class="width-35">
+                  <div>Trẻ em</div>
+                  <div class="text-sub">Cao 100-140cm</div>
+                    
+                </div>
+                <div class="text-price width-25 margin-right-8">
+                  <span>0</span>
+                </div>
+            
+                <div class="width-45 d-flex div-item-pax">
+                    <div class="div-item-left f-32">-</div>
+                    <div class="div-item-center">{{child}}</div>
+                    <div class="div-item-right f-24">+</div>
+                </div>
+              </div>
+            
+  
+              <div class="div-item-departure-date d-flex margin-top-12">
+                <div class="width-35">
+                    <div>Người lớn tuổi</div>
+                    <div class="text-sub">Trên 60+</div>
+                </div>
+                <div class="text-price width-25 margin-right-8">
+                  <span>0</span>
+                </div>
+        
+                <div class="width-45 d-flex div-item-pax">
+                    <div class="div-item-left f-32">-</div>
+                    <div class="div-item-center">{{elder}}</div>
+                    <div class="div-item-right f-24">+</div>
+                </div>
+              </div>
+            </div>
 
             <div *ngIf="arrSkus && arrSkus.length>0">
               <div class="d-flex div-total m-top-26" *ngIf="itemTicketService.Note">
@@ -132,7 +186,7 @@
 
               <div [ngClass]="itemTicketService.Note ? 'd-flex div-total': 'd-flex div-total m-top-26'">
                 <div class="width-40 text-normal m-top-8">Tổng cộng</div>
-                <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPrice">{{gf.convertNumberToString(totalPrice)}}</span><span>đ</span></div>
+                <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPrice">{{gf.convertNumberToString(itemTicketService.skus.totalRate)}}</span><span>đ</span></div>
               </div>
 
               <!-- <div class="div-point" *ngIf="point || pointbkg">
@@ -165,15 +219,15 @@
   </ion-content>
   <ion-footer class="bg-white">
     <div class="div-tourdeparturecalendar-footer d-flex">
-      <div [ngClass]="hasDeparture ? 'width-100' : 'width-100 cls-no-departure' " *ngIf="hasAllotment" (click)="book()">
+      <div [ngClass]="arrSkus && arrSkus.length>0? 'width-100' : 'width-100 cls-no-departure' "  (click)="book()">
           <button ion-button round outline class="button btn-book">
               Đặt ngay
           </button>
       </div>
-      <div [ngClass]="hasDeparture ? 'width-100' : 'width-100 cls-no-departure' " *ngIf="!hasAllotment " (click)="requestBook()">
+      <!-- <div [ngClass]="hasDeparture ? 'width-100' : 'width-100 cls-no-departure' " *ngIf="arrSkus && arrSkus.length==0 " (click)="requestBook()">
         <button ion-button round outline [ngClass]="itemTicketService ? 'button btn-book' : 'button btn-book cls-no-departure'">
             Yêu cầu đặt
         </button>
-    </div>
+    </div> -->
   </div>
   </ion-footer>

@@ -19,6 +19,7 @@ export class TicketPriceDetailPage implements OnInit {
 
 
   totalPriceStr: Promise<boolean>;
+  avatarLink: any;
 
  
   constructor(private navCtrl: NavController, public gf: GlobalFunction,
@@ -28,7 +29,11 @@ export class TicketPriceDetailPage implements OnInit {
     private storage: Storage,
     public ticketService: ticketService,
     public searchhotel: SearchHotel) {
-
+    if (this.ticketService.itemTicketDetail.avatarLink) {
+      this.avatarLink=this.ticketService.itemTicketDetail.avatarLink;
+    }else{
+      this.avatarLink=this.ticketService.itemTicketDetail.expAvatar;
+    }
      
   }
   goback(){
@@ -38,6 +43,6 @@ export class TicketPriceDetailPage implements OnInit {
    
   }
   goTicketinfo(){
-    this.navCtrl.navigateForward('/ticketinfo');
+    this.navCtrl.navigateForward('ticketinfo/'+this.ticketService.itemTicketService.objbooking.bookingCode);
   }
 }

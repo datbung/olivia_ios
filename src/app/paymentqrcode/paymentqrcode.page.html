@@ -41,18 +41,16 @@
                 <div class="text-payment-info">Công ty cổ phần IVIVU.COM</div>
                 <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
             </div>
-
+           
             <div class="text-sub-payment-info m-top-12">Số tiền:</div>
             <div class="d-flex m-top-2" *ngIf="totalPrice" (click)="copyClipboard(4)">
                 <div class="text-payment-info">{{gf.convertNumberToString(totalPrice) }} VND</div>
                 <div class="m-l-6 btn-copy"><img class="img-copy" src="./assets/imgs/copy.svg"></div>
             </div>
-
-            <div class="text-sub-payment-info m-top-12" *ngIf="periodPaymentDisplay">Hạn thanh toán:</div>
-            <div class="d-flex m-top-2" *ngIf="periodPaymentDisplay" >
-                <div class="text-payment-info">Trước {{periodPaymentDisplay}}</div>
+            <div class="text-sub-payment-info m-top-12">Hạn thanh toán đến:</div>
+            <div class="d-flex m-top-2" *ngIf="totalPrice">
+                <div class="text-payment-info">{{paymentDate}}</div>
             </div>
-
             <div class="text-sub-payment-info m-top-12">Nội dung:</div>
             <div class="d-flex m-top-2" *ngIf="bookingCode" (click)="copyClipboard(3)">
                 <div class="text-payment-info">{{bookingCode}}</div>
@@ -60,20 +58,20 @@
             </div>
          
         </div>
-       
-        <div class="text d-flex  m-top-16" *ngIf="activityService.qrcodepaymentfrom == 1 else otherpayment">
-            <div >Xác nhận đặt vé sẽ được gửi đến <span *ngIf="contactOption==1 "> Zalo</span><span *ngIf="contactOption==2"> Email</span> của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được mã vé qua Email/Zalo, vui lòng liên hệ </div>
-                <div class="div-align-center m-right-4 " ><img class="img-zalo" src="./assets/ic_flight/logo_zalo.webp"> <a class="text-tealish text-zalo" href="https://zalo.me/3888313238733373810">iVIVU Tickets </a></div>
-                <div> để hỗ trợ xử lý.</div>
-          </div>
-          <ng-template #otherpayment>
+        <div *ngIf="activityService.ischeckPage!='ticketpaymentbank'">
             <div class="div-text-note m-top-16">
                 Thông tin thanh toán cũng được gửi đến email {{_email}}. Nếu không tìm thấy vui lòng kiểm tra trong hộp thư Spam hoặc Junk Folder.
             </div>
             <div class="div-text-note m-top-8 m-bottom-24">
                 Xác nhận đặt vé sẽ được gửi đến email của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được email Xác nhận sau 30 phút, vui lòng gửi chứng từ thanh toán (Ủy nhiệm chi, Lệnh thanh toán) về mail support@ivivu.com để hỗ trợ xử lý.
             </div>
-          </ng-template>
+        </div>
+        <div *ngIf="activityService.ischeckPage=='ticketpaymentbank'">
+            <div class="text">Xác nhận đặt vé sẽ được gửi đến Zalo của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được mã vé qua SMS/Zalo, vui lòng liên hệ    <span>
+                <img class="div-zalo-paylater" src="./assets/ic_ticket/logo-zalo.png">
+               <a class="text-tealish text-bold m-left-23" href="https://zalo.me/3888313238733373810">iVIVU Tickets</a>
+              </span> để hỗ trợ xử lý.</div>
+        </div>
     </div>
   
   </ion-content>

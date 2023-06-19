@@ -36,6 +36,9 @@ export class ticketService{
   experience: any;
   itemDetail : any;
   skus: any;
+  adult : any;
+  child : any;
+  elder : any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

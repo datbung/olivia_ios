@@ -83,7 +83,7 @@
                             </ion-label>
                           </div>
                           <!-- check in, checkout -->
-                          <ion-row class="row-height-listtrip p-top-4" >
+                          <ion-row  *ngIf="trip.booking_type != 'TICKET'"  class="row-height-listtrip p-top-4" >
                             <ion-col size="1" class="col-address">
                               <img style="height:12px" src="./assets/imgs/ic_date.svg">
                               
@@ -92,18 +92,27 @@
                               {{trip.checkInDisplay}} → {{trip.checkOutDisplay}}
                             </ion-col>
                           </ion-row>
-                          <!-- pax -->
-                        <!-- <ion-row class="row-height-listtrip" *ngIf="trip.totalPaxStr">
-                          <ion-col size="1" class="col-address">
-                            <img style="height:12px" src="./assets/imgs/ic_people.svg">
-                            
-                          </ion-col>
-                          <ion-col  class="col-address">
-                            {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
-                          </ion-col>
-                        </ion-row> -->
+                          <ion-row *ngIf="trip.booking_type == 'TICKET'" class="row-height-listtrip p-top-4" >
+                            <ion-col size="1" class="col-address">
+                              <img class="h-15" src="./assets/imgs/ic_date.svg">
+                              
+                            </ion-col>
+                            <ion-col class="col-address" >
+                              {{trip.VVCCheckinDisplay}}
+                            </ion-col>
+                          </ion-row>
+                          <ion-row class="row-height-listtrip p-top-4" *ngIf="trip.booking_type == 'TICKET'">
+                            <ion-col size="1" class="col-address">
+                              <img class="h-15" src="./assets/ic_ticket/ticket.svg">
+                            </ion-col>
+                          
+                            <ion-col  class="col-ticket-name">
+                              {{trip.combo_name}}
+                            </ion-col>
+                          </ion-row>
+               
                           <!-- Loại giường -->
-                        <ion-row class="row-height-listtrip"  *ngIf="trip.room_name">
+                        <ion-row class="row-height-listtrip"  *ngIf="trip.room_name && trip.booking_type!='TICKET'">
                               <ion-col size="1"  class="col-address">
                                 <img style="height:12px" src="./assets/ic_facility/ic_bed.svg">
                               </ion-col>
@@ -125,13 +134,25 @@
                       <div class="div-line-new-1">
 
                       </div>
-                      <div *ngIf="trip.totalPaxStr" class="d-flex div-people">
+                      <div *ngIf="trip.totalPaxStr && trip.booking_type != 'TICKET' " class="d-flex div-people">
                         <div>
                           <img src="./assets/imgs/ic_people.svg">
                           
                         </div>
                         <div class="mt4">
                           {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
+                        </div>
+                        <div  *ngIf="trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
+                          <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">
+                        </div>
+                      </div>
+                      <div *ngIf="trip.totalPaxStr && trip.booking_type == 'TICKET' " class="d-flex div-people">
+                        <div>
+                          <img src="./assets/imgs/ic_people.svg">
+                          
+                        </div>
+                        <div class="mt4">
+                          {{trip.paxDisplay}} <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                         </div>
                         <div  *ngIf="trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
                           <img  class="cls-icon-img-detail"  src="./assets/imgs/ic_arrow_grey.svg">

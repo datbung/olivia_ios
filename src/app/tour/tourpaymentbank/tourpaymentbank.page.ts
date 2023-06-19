@@ -596,6 +596,7 @@ export class TourPaymentBankPage implements OnInit {
                       this.activityService.totalPriceTransfer = data.Response.Total;
                       this.activityService.bookingCode = data.Response.BookingCode;
                       this.activityService.qrcodepaymentfrom = 3;
+                      this.activityService.ischeckPage="tourpaymentbank"
                       this.navCtrl.navigateForward('/paymentqrcode');
                     }
                   });

@@ -48,27 +48,27 @@
       <div [ngClass]="activeTab ==1 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Vé máy bay</div>
     </div>
 
-    <div (click)="setActiveTab(2)" [ngClass]="activeTab ==2 ? 'div-combo' : 'div-combo home-deactive-tab'">
+    <!-- <div (click)="setActiveTab(2)" [ngClass]="activeTab ==2 ? 'div-combo' : 'div-combo home-deactive-tab'">
       <div class="div-icon-home text-center">
           <img src="./assets/ic_home/combo_enable.svg" />
       </div>
       <div [ngClass]="activeTab ==2 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Combo</div>
-    </div>
+    </div> -->
 
-    <div (click)="setActiveTab(3)" [ngClass]="activeTab ==3 ? 'div-food' : 'div-food home-deactive-tab'">
+    <div (click)="setActiveTab(2)" [ngClass]="activeTab ==2 ? 'div-food' : 'div-food home-deactive-tab'">
       <div class="div-icon-home text-center">
           <img src="./assets/ic_home/Tour.svg" />
           <!-- <img src="./assets/ic_home/food_disabled.svg" *ngIf="activeTab !=3"/> -->
       </div>
-      <div [ngClass]="activeTab ==3 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Tour</div>
+      <div [ngClass]="activeTab ==2 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Tour</div>
     </div>
 
-    <!-- <div (click)="setActiveTab(3)" [ngClass]="activeTab ==3 ? 'div-ticket' : 'div-ticket home-deactive-tab'">
+    <div (click)="setActiveTab(3)" [ngClass]="activeTab ==3 ? 'div-ticket' : 'div-ticket home-deactive-tab'">
       <div class="div-icon-home text-center">
           <img src="./assets/ic_ticket/theme_park.svg" />
       </div>
       <div [ngClass]="activeTab ==3 ? 'div-text-home text-center home-active-tab' : 'div-text-home text-center ' ">Vé vui chơi</div>
-    </div> -->
+    </div>
   </div>
   <ion-slides (ionSlideDidChange)="slidechange()" #myHomeSlider class="home-slider" >
     <ion-slide class="slide-hotel">
@@ -1022,13 +1022,13 @@
   <app-homeflight ></app-homeflight>
 </div>
 
-<div [ngClass]="activeTab ==3 ? 'div-wraper-combo cls-visible' :  'div-wraper-combo cls-disabled'" style="height: auto;">
+<div [ngClass]="activeTab ==2 ? 'div-wraper-combo cls-visible' :  'div-wraper-combo cls-disabled'" style="height: auto;">
   <app-hometour></app-hometour>
 </div>
 
-<!-- <div [ngClass]="activeTab ==3 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
+<div [ngClass]="activeTab ==3 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
   <app-hometicket></app-hometicket>
-</div> -->
+</div>
 
 
   <div

@@ -24,48 +24,30 @@
     <img class="img-empty" src="./assets/empty/imgdone.svg">
 </div>
 <div style="margin-top: 5px">
- 
   <div *ngIf='ticketService.paymentType == 1 else paylater'>
     <div>
-      <ion-label class="text" *ngIf="ticketService.itemTicketService">
-        Thanh toán thành công. Cảm ơn Quý khách đã sử dụng dịch vụ  <span class="text-tealish">iVIVU.com</span>
-      </ion-label>
-
-      <!-- <ion-label class="text" *ngIf="ticketService.BookingTourMytrip">
-        Cảm ơn Quý khách đã đặt và thanh toán thành công <span class="text-bold" *ngIf="ticketService.BookingTourMytrip && ticketService.BookingTourMytrip.hotel_name">{{ticketService.BookingTourMytrip.hotel_name}}</span>
-      </ion-label> -->
-    </div>
-    <div class="p-top-12">  
-      <div>
-        <ion-label class="text">
-          <span *ngIf="ticketService.itemTicketService.name">Vé vào cổng: {{ticketService.itemTicketService.name}}</span> đã được  <span class="text-tealish">iVIVU</span> gửi đến email của Quý khách và được lưu trong mục <span class="text-bold">Chuyến đi của tôi</span> trên app
-        </ion-label>
+      <div class="text">
+        Cảm ơn Quý khách đã sử dụng dịch vụ iVIVU.com. Mã vé vào cổng<span class="text-bold"> {{experienceName}}</span>  sẽ được gửi đến SMS/Zalo của Quý khách.
+         
       </div>
-      <!-- <div>
-        <ion-label class="text text-sub">
-          Mã đặt vé vui chơi <span class="text-bold text-tealish">{{bookingCode}}</span>
-        </ion-label>
-      </div> -->
+      <div class="text">
+        Để được hỗ trợ xử lý thêm, vui lòng kết nối
+        
+      </div>
+      <div (click)="openZalo()"> 
+         <img class="div-zalo-paylater" src="./assets/ic_ticket/logo-zalo.png">
+         <a class="text-tealish text-bold m-left-23" href="https://zalo.me/3888313238733373810">iVIVU Tickets</a>
+      </div>
     </div>
     
 
   </div>
   <ng-template #paylater>
-    <div class="text">Cám ơn quý khách đã sử dụng dịch vụ iVIVU.com</div>
-    <div class="text p-top-12">Thông tin thanh toán đã được gửi đến email của Quý khách</div>
-    
-    <div class="text p-top-12">
-      <ion-label class="text" text-wrap>
-        Mời quý khách thanh toán số tiền:
-        <span class="text-bold text-orange"> {{gf.convertNumberToString(ticketService.totalPriceNum)}}đ </span> trước <span class="text-bold text-tealish">{{paymentDate}}</span>
-        để hoàn tất việc đặt vé vui chơi
-      </ion-label>
-    </div>
-    <div class="p-top-12">
-      <ion-label class="text text-sub">
-        Mã đặt vé vui chơi: <span class="text-bold text-tealish">{{ticketService.itemTicketService.objbooking.bookingCode}}</span>
-      </ion-label>
-    </div>
+    <div class="text">Xác nhận đặt vé sẽ được gửi đến Zalo của Quý khách sau khi iVIVU.com nhận được tiền thanh toán. Nếu Quý khách không nhận được mã vé qua SMS/Zalo, vui lòng liên hệ    <span> 
+      <img class="div-zalo-paylater" src="./assets/ic_ticket/logo-zalo.png">
+      <a class="text-tealish text-bold m-left-23" href="https://zalo.me/3888313238733373810">iVIVU Tickets</a>
+    </span> để hỗ trợ xử lý.</div>
+
   </ng-template>
   
   

@@ -62,7 +62,7 @@ export class TicketPaymentPayooPage implements OnInit {
     if(this._ticketService.discountPrice){
       this.total = this._ticketService.discountPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     }else{
-      this.total = this._ticketService.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+      this.total = this._ticketService.totalPriceNum.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     }
   }
   goback() {
@@ -76,7 +76,14 @@ export class TicketPaymentPayooPage implements OnInit {
     var se = this;
     if (se.stt == 0) {
       this._ticketService.paymentType = -1;
-      this.navCtrl.navigateForward('/ticketpaymentdone');
+      var paymentMethod=se.gf.funcpaymentMethodTicket('payoo_store');
+      let objbookTicket={
+        bookingCode : se._ticketService.itemTicketService.objbooking.bookingCode,
+        paymentMethod: paymentMethod,
+        bankTransfer:""
+      }
+      se.gf.ticketPaymentSave(objbookTicket);
+      this.navCtrl.navigateForward('/ticketpaymentdone/0');
       //se.navCtrl.navigateBack('/app/tabs/tab1');
     }
     else {
@@ -91,32 +98,41 @@ export class TicketPaymentPayooPage implements OnInit {
     var se = this;
     se.gf.showLoading();
     clearInterval(this.intervalID);
+    let url = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se._ticketService.itemTicketService.objbooking.bookingCode+"";
     se.intervalID = setInterval(() => {
-        let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+se.bookingCode;
-        se.zone.run(() => {
-          se.gf.Checkpayment(url).then((res) => {
-            let checkpay = JSON.parse(res);
-            if (checkpay.Response && checkpay.Response.PaymentStatus == 3) { 
-              se.gf.hideLoading();
-              if(se.safariViewController){
-                se.safariViewController.hide();
-              }
-              clearInterval(se.intervalID);
-              se._ticketService.paymentType = 1;
-              se.navCtrl.navigateForward('ticketpaymentdone');
-            }
-            else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
-            {
-              se.gf.hideLoading();
-              if(se.safariViewController){
-                se.safariViewController.hide();
-              }
-              clearInterval(se.intervalID);
-              se.gf.showAlertTourPaymentFail(checkpay.internalNote);
-            }    
-          
-          })
-        })
+      se.gf.CheckPaymentTicket(url).then((res) => {
+        let checkpay = JSON.parse(res);
+        if (checkpay.response && checkpay.response.payment_status == 5) {
+          //se.ticketService.paymentType = 1;
+          if (se.safariViewController) {
+            se.safariViewController.hide();
+          }
+          clearInterval(se.intervalID);
+          se.gf.hideLoading();
+          if(se.safariViewController){
+            se.safariViewController.hide();
+          }
+          clearInterval(se.intervalID);
+          se._ticketService.paymentType = 1;
+          var paymentMethod=se.gf.funcpaymentMethodTicket('payoo_qr');
+          let objbookTicket={
+            bookingCode : se._ticketService.itemTicketService.objbooking.bookingCode,
+            paymentMethod: paymentMethod
+          }
+          se.gf.ticketPaymentSave(objbookTicket);
+          se.navCtrl.navigateForward('ticketpaymentdone/0');
+
+        }
+        else if (checkpay.response && checkpay.response.payment_status == 2) {
+
+          if (se.safariViewController) {
+            se.safariViewController.hide();
+          }
+          clearInterval(se.intervalID);
+          se.navCtrl.navigateForward('ticketpaymentfail');
+        }
+      })
+    
       
     }, 2000 * 1);
 
@@ -146,7 +162,7 @@ export class TicketPaymentPayooPage implements OnInit {
           }
           clearInterval(se.intervalID);
           //se.ticketService.paymentType = 1;
-          se.navCtrl.navigateForward('ticketpaymentdone');
+          se.navCtrl.navigateForward('ticketpaymentdone/0');
         }
         else if (checkpay.response && checkpay.response.payment_status == 2) {
 
@@ -154,7 +170,7 @@ export class TicketPaymentPayooPage implements OnInit {
             se.safariViewController.hide();
           }
           clearInterval(se.intervalID);
-          this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+          se.navCtrl.navigateForward('ticketpaymentfail');
         }
       })
     })

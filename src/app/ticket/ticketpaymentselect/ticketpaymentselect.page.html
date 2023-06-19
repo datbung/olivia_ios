@@ -57,9 +57,9 @@
 
     <div class="d-flex ">
       <div class="div-width-100 div-flex-left">
-          <div class="text-pax" *ngIf="searchhotel.adult && !adult">{{searchhotel.adult}} người lớn</div>
-          <div class="text-pax m-top-4 h-16" *ngIf="!adult"><span *ngIf="searchhotel.child">{{searchhotel.child}} trẻ em</span></div>
-            <div class="text-pax m-top-4 h-16" *ngIf="searchhotel.elder">{{searchhotel.elder}} người lớn tuổi</div>
+          <div class="text-pax" *ngIf="ticketService.adult">{{ticketService.adult}} người lớn</div>
+          <div class="text-pax m-top-4 h-16" ><span *ngIf="ticketService.child">{{ticketService.child}} trẻ em</span></div>
+            <div class="text-pax m-top-4 h-16" *ngIf="ticketService.elder">{{ticketService.elder}} người lớn tuổi</div>
 
           <!-- <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div>

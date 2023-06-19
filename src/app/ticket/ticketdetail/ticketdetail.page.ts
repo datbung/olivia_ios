@@ -57,6 +57,8 @@ export class TicketDetailPage {
   ticketReviews: any;
   isseemore: boolean = false;
   isseemorenotes: boolean = false;
+  overview: any;
+  notes: any;
  
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -80,14 +82,33 @@ export class TicketDetailPage {
       };
       this.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'getAllExperiences').then((data) => {
         let res = JSON.parse(data);
-        console.log(res.data);
         this.ticketService.experience = res.data.experience;
         this.loadslidedone = true;
         this.AvgPoint = res.data.experience.avgPoint;
         this.totalReview = res.data.experience.numOfReview;
 
         this.itemDetail = res.data.experience;
-        // this.ticketService.itemDetail=this.itemDetail 
+        if (this.itemDetail.overview.length >= 1e3) {
+          let $ =this.itemDetail.overview.trim().substr(0, 1e3).split(" ");
+          $.pop(),
+          $ = $.join(" ") + '...',
+          this.overview  = $;
+        }
+        else{
+          this.overview=this.itemDetail.overview;
+        }
+        if (this.itemDetail.notes)
+        if (this.itemDetail.notes.length >= 2610) {
+            let qn = this.itemDetail.notes.trim().substr(0, 2610).split(" ");
+            var $;
+            qn.pop(),
+            qn = qn.join(" "),
+            $ = this.isIncludeUnclosedElement(qn) ? ($ = qn.trim().substr(0, qn.lastIndexOf("<")).split(" ")).join(" ") + ' ...' : qn + ' ...',
+            this.notes = $
+        }else{
+          this.notes =this.itemDetail.notes
+        }
+      
         this.experiencePackages = res.data.experiencePackages;
         // this.itemDetail.experienceImages = this.itemDetail.Image.split(', ');
         this.itemDetail.experienceImages.forEach(element => {
@@ -129,7 +150,9 @@ export class TicketDetailPage {
       });
     
   }
-
+  isIncludeUnclosedElement($) {
+    return !($.lastIndexOf("<") < $.lastIndexOf(">"))
+  }
         ngOnInit() { 
           this.tourService.getObservableScrollToDepartureDiv().subscribe((data) => {
             if(data){

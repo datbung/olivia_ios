@@ -574,6 +574,7 @@ export class CombocarbankPage implements OnInit {
             se.activityService.totalPriceTransfer = se.bookCombo.totalprice;
             se.activityService.bookingCode = obj.Code;
             se.activityService.qrcodepaymentfrom = 5;
+            se.activityService.ischeckPage="combobank"
             se.navCtrl.navigateForward('/paymentqrcode');
           }
           else

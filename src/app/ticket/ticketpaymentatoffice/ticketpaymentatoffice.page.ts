@@ -44,19 +44,18 @@ export class TicketPaymentAtOfficePage implements OnInit{
       this.gf.hideLoading();
   }
   next() {
-    var se = this;
     this.ticketService.paymentType = -1;
     let objbookTicket={
       bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
       paymentMethod: 8
   }
   this.gf.ticketPaymentSave(objbookTicket);
-    this.navCtrl.navigateForward('/ticketpaymentdone');
+    this.navCtrl.navigateForward('/ticketpaymentdone/0');
   }
 
   check() {
     if (this.ischeck) {
-      this.isenabled = false;
+      this.isenabled = false; 
     } else {
       this.isenabled = true;
     }

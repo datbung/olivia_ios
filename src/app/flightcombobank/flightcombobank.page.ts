@@ -637,6 +637,7 @@ export class FlightcombobankPage implements OnInit {
                       this.activityService.totalPriceTransfer = this.bookCombo.totalprice;
                       this.activityService.bookingCode = this.bookCombo.bookingcode;
                       this.activityService.qrcodepaymentfrom = 4;
+                      se.activityService.ischeckPage="flightcombobank"
                       this.navCtrl.navigateForward('/paymentqrcode');
           }
           else {

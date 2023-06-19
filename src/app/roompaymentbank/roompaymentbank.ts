@@ -612,6 +612,7 @@ export class RoompaymentbankPage implements OnInit{
                 var stt=body.bookingStatus;
                 se.clearClonePage('page-roompaymentdone');
                 se.loader.dismiss();
+                se.activityService.ischeckPage="roompaymentbank"
                 se.navCtrl.navigateForward('/paymentqrcode');
               }
               else{
@@ -703,6 +704,7 @@ export class RoompaymentbankPage implements OnInit{
         url='https://ebanking.scb.com.vn/?module=login';
       }
       se.activityService.objPaymentMytrip.urlPayment = url;
+      se.activityService.ischeckPage="roompaymentbank"
       se.navCtrl.navigateForward('/paymentqrcode');
     }
     

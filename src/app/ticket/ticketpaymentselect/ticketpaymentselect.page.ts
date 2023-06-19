@@ -159,7 +159,7 @@ export class TicketPaymentSelectPage implements OnInit {
                     }
                     se.gf.ticketPaymentSave(objbookTicket);
                     //se.ticketService.paymentType = 1;
-                    se.navCtrl.navigateForward('ticketpaymentdone');
+                    se.navCtrl.navigateForward('ticketpaymentdone/0');
                   }
                   else if (checkpay.response && checkpay.response.payment_status == 2) {
 
@@ -167,7 +167,8 @@ export class TicketPaymentSelectPage implements OnInit {
                       se.safariViewController.hide();
                     }
                     clearInterval(se.intervalID);
-                    this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+                    se.navCtrl.navigateForward('ticketpaymentfail');
+                    // this.gf.showAlertTourPaymentFail(checkpay.internalNote);
                   }
                 })
               }
@@ -219,7 +220,7 @@ export class TicketPaymentSelectPage implements OnInit {
                       paymentMethod: paymentMethod
                     }
                     se.gf.ticketPaymentSave(objbookTicket);
-                    se.navCtrl.navigateForward('ticketpaymentdone');
+                    se.navCtrl.navigateForward('ticketpaymentdone/0');
                   }
                   else if (checkpay.response && checkpay.response.payment_status == 2) {
 
@@ -227,7 +228,8 @@ export class TicketPaymentSelectPage implements OnInit {
                       se.safariViewController.hide();
                     }
                     clearInterval(se.intervalID);
-                    this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+                    se.navCtrl.navigateForward('ticketpaymentfail');
+                    // this.gf.showAlertTourPaymentFail(checkpay.internalNote);
                   }
                 })
               }
@@ -283,7 +285,7 @@ export class TicketPaymentSelectPage implements OnInit {
               paymentMethod: paymentMethod
             }
             se.gf.ticketPaymentSave(objbookTicket);
-            se.navCtrl.navigateForward('ticketpaymentdone');
+            se.navCtrl.navigateForward('ticketpaymentdone/0');
           }
           else if (checkpay.response && checkpay.response.payment_status == 2) {
 
@@ -291,7 +293,8 @@ export class TicketPaymentSelectPage implements OnInit {
               se.safariViewController.hide();
             }
             clearInterval(se.intervalID);
-            this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+            se.navCtrl.navigateForward('ticketpaymentfail');
+            // this.gf.showAlertTourPaymentFail(checkpay.internalNote);
           }
         })
       })
@@ -393,8 +396,9 @@ export class TicketPaymentSelectPage implements OnInit {
 
       }
       else {
+        se.gf.hideLoading();
         se.showAlertPaymentError();
-        se.hideLoading();
+  
       }
     })
   }
@@ -418,38 +422,24 @@ export class TicketPaymentSelectPage implements OnInit {
   }
 
   ticketpaymentpayoostore() {
+    this.gf.showLoading();
     let se = this;
+    var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti + '&TokenId=' + (se.tokenid ? se.tokenid : '') + '&rememberToken=' + (se.isremember ? se.isremember : 'false') + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight&version=2';
+    this.gf.CreatePayoo(url).then(datapayoo => {
+      this.gf.hideLoading();
+      if (datapayoo.success) {
+        this.ticketService.BillingCode = datapayoo.payooStoreData.BillingCode;
+        this.ticketService.periodPaymentDate = datapayoo.payooStoreData.periodPayment;
+      
 
-    // let itemcache = this.ticketService;
-    // var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + itemcache.totalPrice + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode + '&buyerPhone=' + this.phone + '&memberId=' + this.jti + '&version=2';
-    // this.gf.CreatePayoo(url).then(datapayoo => {
-    //   this.gf.hideLoading();
-    //   this.hideLoading();
-    //   if (datapayoo.success) {
-    //     //this.ticketService.BillingCode = datapayoo.payooStoreData.BillingCode;
-    //     //this.ticketService.periodPaymentDate = datapayoo.payooStoreData.periodPayment;
-    //     if (this.loader) {
-    //       this.loader.dismiss();
-    //     }
-
-    //     // this.navCtrl.navigateForward('ticketpaymentpayoo/' + this.bookingCode + '/0');
-    //   }
-    //   else {
-    //     this.gf.hideLoading();
-    //     this.showAlertPaymentError();
-    //     this.hideLoading();
-    //   }
-    // })
-    this.ticketService.paymentType = -1;
-    var paymentMethod=se.gf.funcpaymentMethodTicket('payoo_store');
-    let objbookTicket={
-      bookingCode : se.ticketService.itemTicketService.objbooking.bookingCode,
-      paymentMethod: paymentMethod,
-      bankTransfer:""
-    }
-    se.gf.ticketPaymentSave(objbookTicket);
-    this.navCtrl.navigateForward('/ticketpaymentdone');
-
+        this.navCtrl.navigateForward('ticketpaymentpayoo/' + this.ticketService.itemTicketService.objbooking.bookingCode + '/0');
+      }
+      else {
+        this.gf.hideLoading();
+        this.showAlertPaymentError();
+        this.hideLoading();
+      }
+    })
 
   }
 
@@ -499,16 +489,22 @@ export class TicketPaymentSelectPage implements OnInit {
 
 
   ticketpaymentpayooqr() {
-    // this.createBookingUrl('payoo');
-    var se = this
-    this.ticketService.paymentType = -1;
-    var paymentMethod=se.gf.funcpaymentMethodTicket('payoo_qr');
-    let objbookTicket={
-      bookingCode : se.ticketService.itemTicketService.objbooking.bookingCode,
-      paymentMethod: paymentMethod
-    }
-    se.gf.ticketPaymentSave(objbookTicket);
-    this.navCtrl.navigateForward('/ticketpaymentdone');
+    let se = this;
+    se.gf.showLoading();
+    let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode +'&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
+          se.gf.CreatePayoo(url).then(datapayoo => {
+            se.gf.hideLoading();
+            se.hideLoading();
+            if (datapayoo.success) {
+              se.ticketService.qrimg = datapayoo.payooQrData.QRCodeUrl;
+              se.navCtrl.navigateForward('ticketpaymentpayoo/' + this.ticketService.itemTicketService.objbooking.bookingCode + '/1');
+            }else{
+              se.gf.hideLoading();
+              se.hideLoading();
+              se.showAlertPaymentError();
+            }
+          })
+
   }
   ticketbuynowpaylater() {
     this.createBookingUrl('bnpl');
@@ -521,7 +517,7 @@ export class TicketPaymentSelectPage implements OnInit {
     clearInterval(this.intervalID);
     //this.ticketService.paymentType = 1;
     //this.navCtrl.navigateForward('ticketpaymentatm');
-    this.navCtrl.navigateForward('ticketpaymentatm');
+    this.navCtrl.navigateForward('ticketpaymentatm/0');
   }
   ticketpaymentvisa() {
     this.createBookingUrl('visa');

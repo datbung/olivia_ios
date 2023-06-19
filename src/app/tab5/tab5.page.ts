@@ -1370,7 +1370,7 @@ export class Tab5Page implements OnInit {
                  // alert('Chúng tôi đã nhận được yêu cầu của bạn. Vui lòng kiểm tra hộp thư '+data.email+' để hoàn tất việc xóa tài khoản của bạn');
                  se.navCtrl.navigateForward('accountdeletion');
                 } else if (data.status==2) {
-                  alert('Tài khoản của quý khách đang có booking sắp đi. Vui lòng thử lại sau');
+                  alert('Tính năng hiện tại chưa sử dụng được vì quý khách đang có đơn hàng chưa hoàn thành');
                 }else if(data.status==-2){
                   alert('Tài khoản của quý khách không tồn tại');
                 }else if(data.status==-1){

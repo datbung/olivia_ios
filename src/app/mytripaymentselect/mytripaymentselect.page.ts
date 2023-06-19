@@ -12,6 +12,7 @@ import { RoomInfo } from '../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import { MytripService } from '../providers/mytrip-service.service';
 import { BizTravelService } from '../providers/bizTravelService';
+import { ticketService } from 'src/app/providers/ticketService';
 @Component({
   selector: 'app-mytripaymentselect',
   templateUrl: './mytripaymentselect.page.html',
@@ -28,9 +29,12 @@ export class MytripaymentselectPage implements OnInit {
 ;ischeckvisa = false;cus_phone="";isdisable=false;stt
   constructor(public navCtrl: NavController,  public activatedRoute: ActivatedRoute, public activityService: ActivityService, public loadingCtrl: LoadingController,public storage: Storage,public gf: GlobalFunction,private safariViewController: SafariViewController,public Roomif: RoomInfo, public _mytripservice: MytripService,
     public bizTravelService: BizTravelService,
-    private zone: NgZone) { 
-    this.Avatar=this.activityService.objPaymentMytrip.trip.avatar;
-    this.Avatar = (this.Avatar.toLocaleString().trim().indexOf("http") != -1) ? this.Avatar : 'https:' + this.Avatar;
+    private zone: NgZone,public ticketService: ticketService) { 
+      if (this.activityService.objPaymentMytrip.trip.avatar) {
+        this.Avatar=this.activityService.objPaymentMytrip.trip.avatar;
+        this.Avatar = (this.Avatar.toLocaleString().trim().indexOf("http") != -1) ? this.Avatar : 'https:' + this.Avatar;
+      }
+ 
     this.Name=this.activityService.objPaymentMytrip.trip.hotel_name;
     this.Address=this.activityService.objPaymentMytrip.trip.address;
     this.cin=moment(this.activityService.objPaymentMytrip.trip.checkInDate).format('DD-MM-YYYY');
@@ -108,7 +112,13 @@ export class MytripaymentselectPage implements OnInit {
       var paymentTime = moment(temptime).format('YYYYMMDDHHmmss');
       var paymentDate = moment(data.booking.DeliveryPaymentDate).format('YYYYMMDDHHmmss');
       if (paymentTime < paymentDate) {
-        this.navCtrl.navigateForward("/roomchoosebank/1");
+        if (this.activityService.objPaymentMytrip.trip.booking_type != 'TICKET') {
+          this.navCtrl.navigateForward("/roomchoosebank/1");
+        }else{
+          this.navCtrl.navigateForward("ticketpaymentatm/1");
+        }
+
+      
       }
       else{
         this.goMytrip();
@@ -130,8 +140,15 @@ export class MytripaymentselectPage implements OnInit {
   roompaymentbank(){
     this.navCtrl.navigateForward("/mytrippaymentbank");
   }
-  openWebpage(url: string) {
+  openWebpage(url: string,paymentType) {
     var se=this;
+    se.zone.run(() => {
+      setTimeout(() => {
+        let urlcheck = C.urls.baseUrl.urlMobile + "/app/CRMOldApis/getBookingDetailByCode?bookingCode="+se.bookingCode+"";
+        se.callSetInterval(urlcheck,paymentType);
+      }, 5000)
+
+    })
     this.safariViewController.isAvailable()
   .then((available: boolean) => {
       if (available) {
@@ -153,9 +170,7 @@ export class MytripaymentselectPage implements OnInit {
                }
             }
             clearInterval(se.intervalID);
-            this.intervalID = setInterval(() => {
-              this.checkPayment();
-            }, 1000 * 1);
+            this.callSetInterval( url, paymentType);
             setTimeout(() => {
               clearInterval(this.intervalID);
             }, 60000 * 15);
@@ -169,6 +184,47 @@ export class MytripaymentselectPage implements OnInit {
     }
   );
   }
+  private callSetInterval( url: string, paymentType: any) {
+    var se= this
+    if(se.loader){
+      se.loader.dismiss();
+    }
+    this.intervalID = setInterval(() => {
+      if (se.activityService.objPaymentMytrip.trip.booking_type != 'TICKET') {
+        this.checkPayment();
+      } else {
+        se.gf.CheckPaymentTicket(url).then((res) => {
+          let checkpay = JSON.parse(res);
+          if (checkpay.response && checkpay.response.payment_status == 5) {
+            //se.ticketService.paymentType = 1;
+            if (se.safariViewController) {
+              se.safariViewController.hide();
+            }
+            clearInterval(se.intervalID);
+            var paymentMethod = se.gf.funcpaymentMethodTicket(paymentType);
+            let objbookTicket = {
+              bookingCode: se.bookingCode,
+              paymentMethod: paymentMethod
+            };
+            se.gf.ticketPaymentSave(objbookTicket);
+            //se.ticketService.paymentType = 1;
+            se.navCtrl.navigateForward('ticketpaymentdone/1');
+          }
+          else if (checkpay.response && checkpay.response.payment_status == 2) {
+
+            if (se.safariViewController) {
+              se.safariViewController.hide();
+            }
+            clearInterval(se.intervalID);
+            se.navCtrl.navigateForward('ticketpaymentfail');
+            // this.gf.showAlertTourPaymentFail(checkpay.internalNote);
+          }
+        });
+      }
+
+    }, 1000 * 1);
+  }
+
   setinterval()
   {
     clearInterval(this.intervalID);
@@ -329,7 +385,7 @@ export class MytripaymentselectPage implements OnInit {
           dataBuildLink = JSON.parse(dataBuildLink);
           if (dataBuildLink.success) {
             if (paymentType=='visa' || paymentType=='bnpl') {
-              se.openWebpage(dataBuildLink.returnUrl);
+              se.openWebpage(dataBuildLink.returnUrl,paymentType);
             }
             else if(paymentType=='payoo_qr'){
               if (dataBuildLink.success) {

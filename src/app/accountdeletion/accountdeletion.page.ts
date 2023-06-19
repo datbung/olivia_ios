@@ -66,26 +66,37 @@ export class AccountDeletionPage implements OnInit {
         text: 'Có',
         role: 'OK',
         handler: () => {
+   
           se.storage.get('jti').then((memberid) => {
             if(memberid){
-              var options1 = {
-                method: 'GET',
-                url: C.urls.baseUrl.urlMobile +'/api/Dashboard/DeleteMemberUser?userId='+ memberid,
-                headers:
-                {
-                  'content-type': 'application/json'
+              var options1 ;
+              se.storage.get('auth_token').then(auth_token => {
+                if (auth_token) {
+                  var text = "Bearer " + auth_token;
+                  options1  = {
+                    method: 'GET',
+                    url: C.urls.baseUrl.urlMobile +'/api/Dashboard/DeleteMemberUser?userId='+ memberid,
+                    headers:
+                    {
+                      'cache-control': 'no-cache',
+                      'content-type': 'application/json',
+                      authorization: text
+                    }
+                  };
+                  request(options1, function (error, response, body) {
+                    if (error) throw new Error(error);
+                    se.storage.get('objAppid').then(objAppid => {
+                      //Invalidate the tokens and associated user authorizations for a user when they are no longer associated with your app.
+                      se.postRevokeTokens(objAppid)
+                     })
+                    // se.valueGlobal.refreshUserToken.emit(1);
+                    // se.activityService.itemRefreshDeletionAccount.emit(1);
+                    se.navCtrl.navigateForward('accountdeletiondone');
+                    })
                 }
-              };
-              request(options1, function (error, response, body) {
-                if (error) throw new Error(error);
-                se.storage.get('objAppid').then(objAppid => {
-                  //Invalidate the tokens and associated user authorizations for a user when they are no longer associated with your app.
-                  se.postRevokeTokens(objAppid)
-                 })
-                // se.valueGlobal.refreshUserToken.emit(1);
-                // se.activityService.itemRefreshDeletionAccount.emit(1);
-                se.navCtrl.navigateForward('accountdeletiondone');
-                })
+              })
+           
+             
             }
           })
         }
