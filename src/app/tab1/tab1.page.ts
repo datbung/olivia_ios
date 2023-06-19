@@ -168,8 +168,6 @@ export class Tab1Page implements OnInit {
   allowShowCalendarFirstTime: any = true;
   arrHistory = [];
   topSale: any;
-  summerDateEnd = '2023-09-01';
-  isShowSummerMood: boolean;
   constructor(
     
     public navCtrl: NavController,
@@ -208,7 +206,7 @@ export class Tab1Page implements OnInit {
     //this.splashScreen.hide();
     //this.gf.refreshToken();
     //bizTravelService.isCompany = true;
-    this.isShowSummerMood = moment(this.summerDateEnd).diff(moment(moment(new Date()).format('YYYY-MM-DD'))) >= 0;
+
     this.storage.get('jti').then((memberid) => {
       this.storage.get('deviceToken').then((devicetoken) => {
         if(devicetoken){
@@ -1133,11 +1131,11 @@ export class Tab1Page implements OnInit {
     se.storage.get('listtopmoods').then((data)=>{
       if(data){
         se.loadMoods(data);
-        setTimeout(() => {
-          se.zone.run(()=>{
-            se.getmood();
-          })
-        }, 60000);
+        // setTimeout(() => {
+        //   se.zone.run(()=>{
+        //     se.getmood();
+        //   })
+        // }, 30000);
       }else{
         se.getmood();
       }
@@ -1350,11 +1348,11 @@ export class Tab1Page implements OnInit {
     se.storage.get('listtopregions').then(data => {
       if(data){
         se.loadRegions(data);
-        setTimeout(() => {
-          se.zone.run(()=>{
-            se.getRegions();
-          })
-        }, 30000);
+        // setTimeout(() => {
+        //   se.zone.run(()=>{
+        //     se.getRegions();
+        //   })
+        // }, 30000);
       }else{
         se.getRegions();
       }
@@ -1364,9 +1362,9 @@ export class Tab1Page implements OnInit {
     se.storage.get('listtopregioninternational').then(data => {
       if(data){
         se.loadRegionsInternational(data);
-        setTimeout(() => {
-          se.getRegionsInternational();
-        }, 30000);
+        // setTimeout(() => {
+        //   se.getRegionsInternational();
+        // }, 30000);
       }else{
         se.getRegionsInternational();
       }
@@ -2826,14 +2824,48 @@ export class Tab1Page implements OnInit {
       );
       return;
     }
+    // this.fcmNative.getToken().then(token => {
+    //   this.storage.get('checktoken').then(checktoken => {
+    //     if (!checktoken) {
+    //       //PDANH 19/07/2019: Push memberid & devicetoken
+    //         this.gf.pushTokenAndMemberID("", token, this.appversion);
+    //       }
+    //   })
    
+    // });
+    //this.getShowNotice();
     this.valueGlobal.logingoback = '/app/tabs/tab1';
-    if(this.valueGlobal.backValue =="homeflight"){
+    if (this.searchhotel.backPage=='foodpaymentdonepage'||this.searchhotel.backPage=='foodplaceotherpage'
+    ||this.searchhotel.backPage=='foodpaymentchoosebank'||this.searchhotel.backPage=='foodpaymentselect'||this.searchhotel.backPage=='foodinstallmentdone' || this.valueGlobal.backValue =="homefood") {
+      // if(this.foodService.firstload ==0){
+      //   setTimeout(()=>{
+      //     this.activeTab=3;
+      //     //this.setActiveTab(3);
+      //     this.foodService.firstload +=1;
+      //     this.valueGlobal.backValue = "";
+      //   },700)
+      // }else{
+      //   setTimeout(()=>{
+      //     this.activeTab=3;
+      //     //this.setActiveTab(3);
+      //     this.valueGlobal.backValue = "";
+      //   },100)
+      // }
+      
+    }
+    else if(this.valueGlobal.backValue =="homeflight"){
       this.hideStatusBar();
         setTimeout(()=>{
           this.activeTab=1;
           this.setActiveTab(1);
           this.valueGlobal.backValue = "";
+        },100)
+    }else if( this.valueGlobal.backValue == "flightmytrip"){
+        setTimeout(()=>{
+          this.activeTab=1;
+          this.setActiveTab(1);
+          this.flightService.itemMenuFlightClick.emit(2);
+          $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
         },100)
     }
     else{
@@ -2843,14 +2875,13 @@ export class Tab1Page implements OnInit {
       }
       if(this.valueGlobal.activeTab ==3){
         this.setActiveTab(3);
-      }else if(this.valueGlobal.activeTab ==1){
-        this.setActiveTab(1);
       }else{
         this.setActiveTab(0);
       }
       
     }
     
+    //$(".homefood-header").removeClass("cls-visible").addClass("cls-disabled");
     this.searchhotel.backPage = "";
 
   }
@@ -2896,18 +2927,20 @@ export class Tab1Page implements OnInit {
   }
   itemSelectedmood(item) {
     this.valueGlobal.logingoback='/hotellistmood/' + item.id + '/' + item.title;
+    //this.presentLoadingnavi();
     var id1 = { id: item.id, title: item.title };
+    //this.searchhotel.CheckInDate = this.cin;
+    //this.searchhotel.CheckOutDate = this.cout;
     this.searchhotel.child = this.child;
     this.searchhotel.adult = this.adult;
     this.searchhotel.roomnumber = this.roomnumber;
-    if(item.name == "Team X"){
-      this.openWebpage('https://www.ivivu.com/teamx');
-    }else{
-      setTimeout(()=>{
-        this.navCtrl.navigateForward("/hotellistmood/" + item.id + "/" + item.title);
-      },10)
-    }
-    
+    //this.navCtrl.navigateForward('hotellistmood/'+item.id+'/'+item.title);
+    setTimeout(()=>{
+      // this.navCtrl.navigateForward(
+      //   "/app/tabs/hotellistmood/" + item.id + "/" + item.title
+      // );
+      this.navCtrl.navigateForward("/hotellistmood/" + item.id + "/" + item.title);
+    },10)
     this.hideStatusBar();
     //google analytic
     this.gf.googleAnalytion("hotellistmood", "Search", item.title);
@@ -3620,6 +3653,7 @@ export class Tab1Page implements OnInit {
   }
   doRefresh(event){
     if(this.activeTab ==3){
+      //this.foodService.menuFooterClick.emit(1);
       event.target.complete();
       return;
     }
@@ -3875,6 +3909,10 @@ export class Tab1Page implements OnInit {
     this.activeTab = 1;
     this.tabhome = "hotel";
   }
+  clickfood(){
+    this.activeTab = 2;
+    this.tabhome = "food";
+  }
 
   slidechange(){
     //debugger
@@ -3886,33 +3924,52 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
-    // this.zone.run(()=>{
-    //   this.valueGlobal.activeTab = currentIndex;
-    //   if(currentIndex !=2 ){
-    //     this.activeTab = currentIndex;
-    //   }
-    // })
-
-    // if ( currentIndex === 2 ) {//Combo
-    //     this.valueGlobal.backValue = "";
-    //     this.searchhotel.adult=this.adult;
-    //     this.searchhotel.child=this.child;
-    //     this.searchhotel.roomnumber= this.roomnumber;
-    //      this.navCtrl.navigateForward('/topdeallist');
-    // }
-    // else 
-    this.activeTab = currentIndex;
-    if ( currentIndex === 1 ) {//Flight
+    this.zone.run(()=>{
+      this.valueGlobal.activeTab = currentIndex;
+      if(currentIndex !=2 ){
+        this.activeTab = currentIndex;
+      }
+    })
+    if ( currentIndex === 2 ) {//Combo
+        this.valueGlobal.backValue = "";
+        this.searchhotel.adult=this.adult;
+        this.searchhotel.child=this.child;
+        this.searchhotel.roomnumber= this.roomnumber;
+         this.navCtrl.navigateForward('/topdeallist');
+    }
+    else if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
       this._mytripservice.rootPage = "homeflight";
       this.flightService.itemTabFlightFocus.emit(1);
-        
+        if (document.querySelector(".tabbar")) {
+          document.querySelector(".tabbar")['style'].display = 'none';
+          if(document.querySelector(".tabbar")[1]){
+            document.querySelector(".tabbar")[0]['style'].display = 'none';
+            document.querySelector(".tabbar")[1]['style'].display = 'none';
+          }
+        }
+        if(document.getElementsByClassName("homefood-footer").length >0){
+          document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+          if(document.getElementsByClassName("homefood-footer")[1]){
+            document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+          }
+         }
+
+         if(document.getElementsByClassName("homeflight-footer").length >0){
+          document.getElementsByClassName("homeflight-footer")[0]['style'].display ='block';
+          if(document.getElementsByClassName("homeflight-footer")[1]){
+            document.getElementsByClassName("homeflight-footer")[1]['style'].display ='block';
+          }
+         }
+     
+      //this.getAddress();
+      
     }
-    else if (currentIndex === 2) {//Tour
+    else if (currentIndex === 3) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.ischeckFavourite='Tour';
-      this.valueGlobal.activeTab=3;
+      this.valueGlobal.activeTab=2;
       $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
       if (document.querySelector(".tabbar")) {
       document.querySelector(".tabbar")['style'].display = 'flex';
@@ -3922,6 +3979,12 @@ export class Tab1Page implements OnInit {
       }
       }
   
+      if(document.getElementsByClassName("homefood-footer").length >0){
+        document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+        if(document.getElementsByClassName("homefood-footer")[1]){
+          document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+        }
+       }
        if(document.getElementsByClassName("homeflight-footer").length >0){
         document.getElementsByClassName("homeflight-footer")[0]['style'].display ='none';
         if(document.getElementsByClassName("homeflight-footer")[1]){
@@ -3929,7 +3992,7 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    else if (currentIndex === 3) {//Ticket
+    else if (currentIndex === 4) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.activeTab=3;
@@ -3948,22 +4011,28 @@ export class Tab1Page implements OnInit {
     else{
       this._mytripservice.rootPage = "homehotel";
       this.valueGlobal.ischeckFavourite='Hotel';
-      this.valueGlobal.activeTab=0;
+      this.valueGlobal.activeTab=1;
       $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
-      if (document.querySelector(".tabbar")) {
-      document.querySelector(".tabbar")['style'].display = 'flex';
-      if(document.querySelector(".tabbar")[1]){
-        document.querySelector(".tabbar")[0]['style'].display = 'flex';
-        document.querySelector(".tabbar")[1]['style'].display = 'flex';
-      }
-      }
+    if (document.querySelector(".tabbar")) {
+    document.querySelector(".tabbar")['style'].display = 'flex';
+    if(document.querySelector(".tabbar")[1]){
+      document.querySelector(".tabbar")[0]['style'].display = 'flex';
+      document.querySelector(".tabbar")[1]['style'].display = 'flex';
+    }
+    }
 
-      if(document.getElementsByClassName("homeflight-footer").length >0){
-        document.getElementsByClassName("homeflight-footer")[0]['style'].display ='none';
-        if(document.getElementsByClassName("homeflight-footer")[1]){
-          document.getElementsByClassName("homeflight-footer")[1]['style'].display ='none';
-        }
+    if(document.getElementsByClassName("homefood-footer").length >0){
+      document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+      if(document.getElementsByClassName("homefood-footer")[1]){
+        document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
       }
+     }
+     if(document.getElementsByClassName("homeflight-footer").length >0){
+      document.getElementsByClassName("homeflight-footer")[0]['style'].display ='none';
+      if(document.getElementsByClassName("homeflight-footer")[1]){
+        document.getElementsByClassName("homeflight-footer")[1]['style'].display ='none';
+      }
+    }
 
      this.valueGlobal.backValue = "";
      this.loaddata();
