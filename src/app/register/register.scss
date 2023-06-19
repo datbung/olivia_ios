@@ -7,6 +7,18 @@
         top: 15px !important;
         margin: 0 auto !important;
      }
+     .m-top-logo {
+      text-align: center;
+      margin-top: calc(env(safe-area-inset-top) - 30px);
+     }
+.div-relative {
+  
+  .img-close{
+		margin-top: env(safe-area-inset-top);
+		height: 40px;
+		margin-left: 8px;
+	  }
+}
      .center {
       padding: 57px 0 0 0;
       text-align: center;
@@ -34,6 +46,7 @@
       color: #ffffff;
       width: 48px;
       height: 48px;
+      z-index: 1;
     }
     .text-color
     {

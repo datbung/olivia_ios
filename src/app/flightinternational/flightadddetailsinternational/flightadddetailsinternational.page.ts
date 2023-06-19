@@ -100,7 +100,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   listVouchersApply=[];
   strPromoCode: string = '';
   totaldiscountpromo = 0;
-  contactOption: any = 1;
+  contactOption: any = 'mail';
   optionPassport:boolean=false;
   departFlight: any;
   returnFlight: any;
@@ -116,6 +116,15 @@ export class FlightAdddetailsInternationalPage implements OnInit {
     private fb: Facebook,
     public activityService: ActivityService,
     public _voucherService: voucherService,) {
+      this.platform.resume.subscribe(async()=>{
+        if(!this._flightService.itemFlightCache){
+          this._flightService.itemTabFlightActive.emit(true);
+          this.valueGlobal.backValue = "homeflight";
+          this._flightService.itemMenuFlightClick.emit(2);
+          this.navCtrl.navigateBack('/tabs/tab1');
+        }
+        
+      })
         if(this._flightService.itemFlightCache){
           this.departFlight = this._flightService.itemFlightInternational.departFlights.filter((id)=>{return id.ischeck})[0];
           if(this._flightService.itemFlightInternational.returnFlights && this._flightService.itemFlightInternational.returnFlights.length >0){
@@ -138,7 +147,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
             let departdate = moment(this._flightService.itemFlightCache.checkOutDate);
             for (let index = 0; index < this._flightService.itemFlightCache.adult; index++) {
-                this.adults.push({id: index+1, name: '', subName: '', gender: 1, genderdisplay: '', airlineMemberCode: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',countryName: '',passport: '', passportCountry: '',passportCountryName: '', passportExpireDate: '', maxepdate: maxepdate,
+                this.adults.push({id: index+1, name: '', subName: '', gender: null, genderdisplay: '', airlineMemberCode: '', dateofbirth: '', mindob: amindob, maxdob: amaxdob, isChild: false,country: '',countryName: '',passport: '', passportCountry: '',passportCountryName: '', passportExpireDate: '', maxepdate: maxepdate,
                                   errorName: false});
             }
             if(this._flightService.itemFlightCache.child >0){
@@ -148,7 +157,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 maxdob = moment( moment(moment(departdate).add(-2, 'years')).add(-1,'days') ).format('YYYY-MM-DD');//trên 2 tuổi
                 mindob = moment(moment(departdate).add(-12, 'years').add(1, 'days')).format('YYYY-MM-DD');//dưới 12 tuổi
                   for (let index = 0; index < this._flightService.itemFlightCache.child; index++) {
-                      this.childs.push({id: index+1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: false, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',countryName: '',passport: '', passportCountry: '',passportCountryName: '', passportExpireDate: '', maxepdate: maxepdate});
+                      this.childs.push({id: index+1, name: '', subName: '', dateofbirth: '', gender: null, genderdisplay: '', isInfant: false, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',countryName: '',passport: '', passportCountry: '',passportCountryName: '', passportExpireDate: '', maxepdate: maxepdate});
                   }
               })
               
@@ -179,13 +188,21 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             'departing_departure_date': se._flightService.itemFlightCache.checkInDate ,'returning_departure_date ': se._flightService.itemFlightCache.checkOutDate,'num_adults': se._flightService.itemFlightCache.adult,'num_children': se._flightService.itemFlightCache.child ? se._flightService.itemFlightCache.child : 0,'num_infants': se._flightService.itemFlightCache.infant ? se._flightService.itemFlightCache.infant : 0
             , 'value': (se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToDouble(se._flightService.itemFlightCache.totalPrice) : 0) , 'currency': 'VND'  }, se._flightService.itemFlightCache.totalPrice ? se.gf.convertNumberToFloat(se._flightService.itemFlightCache.totalPrice) : 0);
          
-            this.storage.get('optionPassport').then((op)=>{this.optionPassport = op});
-            this.storage.get('contactOption').then((co)=>{
-              this.contactOption = co;
-            })
+            
         }
     }
-
+    
+    ionViewDidEnter(){
+      this.storage.get('contactOption').then((co)=>{
+        this.zone.run(()=>{
+            if(co){
+              this.contactOption = co;
+            }else{
+                this.contactOption = 'mail';
+            }
+        })
+      })
+    }
     getSummaryBooking() {
       let url = C.urls.baseUrl.urlFlightInt + `api/bookings/${this._flightService.itemFlightCache.dataBookingInternational.id}/summary?${new Date().getTime()}`;
       this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
@@ -207,58 +224,8 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         if(se.childs && se.childs.length >0){
                           itempax = [...itempax, ...se.childs];
                         }
-                        // se.checkValidSubName(elementAdult.name).then((check)=>{
-                        //   if(!check){
-                        //     elementAdult.errorSubName = true;
-                        //     elementAdult.textErrorSubName = "Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!";
-                        //     resolve(false);
-                        //   }
-                        // })
-                        se.checkDuplicateItem(itempax).then((itemcheck) => {
-                          if(itemcheck && itemcheck.length >0){
-                            se._flightService.itemFlightCache.duplicateItem = itemcheck;
-                            //show cảnh báo trùng
-                            se.showAlertDuplicateName();
-                            return;
-                          }
-                          else{
-                            se.checkValidName(itempax).then((itemcheckname) => {
-                              if(itemcheckname){
-                                se.showAlertInvalidName(itemcheckname);
-                                return;
-                              }else{
-                                se.checkValidFirstNameAndSubName(itempax).then((itemname) => {
-                                  if(itemname){
-                                    se.showAlertInvalidFirtNameAndLastName(itemname);
-                                    return;
-                                  }else{
-                                    se.checkValidDuplicateFirstNameAndSubName(itempax).then((itemdup) => {
-                                        if(itemdup){
-                                            se.showAlertDuplicateFirtNameAndLastName(itemdup);
-                                            return;
-                                        }else{
-                                          se.checkInValidSubNameBeforeNextStep(itempax).then((iteminvalid)=>{
-                                            if(!iteminvalid){
-                                              //se.gonextstep();
-                                              se.gotopaymentpage();
-                                            }else{
-                                              se.showAlertInvalidSubName(iteminvalid);
-                                              return;
-                                            }
-                                          })
-                                        
-                                        }
-                                    })
-                                  }
-                                })
-                                 
-                              }
-                            })
-                            
-                          }
-                            
-                          
-                        })
+
+                        se.gotopaymentpage();
                       }else{
                             se._keyboard.hide();
                             se.inputtext = false;
@@ -334,15 +301,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               }
             })
 
-            // this._voucherService.getVoucherRefreshList().subscribe(async (check)=> {
-            //   if(check){
-            //     this.strPromoCode = '';
-            //     this.totaldiscountpromo = 0;
-            //     this.buildStringPromoCode();
-            //     this.totalPriceAll();
-            //   }
-            // })
-
+         
             this._voucherService.getObservable().subscribe((itemVoucher)=> {
               if(itemVoucher){
                 if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
@@ -428,6 +387,23 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                           element.passportCountry = elementcache.passportCountry;
                           element.passportCountryName = elementcache.passportCountryName;
                           element.passportExpireDate = elementcache.passportExpireDate;
+                       }
+                       if(elementcache.expanddivairlinemember){
+                        if(elementcache.expanddivairlinemember){
+                          var divCollapse = $(`.div-expand-airlinemember-${index}.div-collapse`);
+                          if(divCollapse && divCollapse.length >0){
+                            divCollapse.removeClass('div-collapse').addClass('div-expand');
+                          }
+                          
+                          this.scrollToTopGroupReview(1,index);
+                        }else{
+                          var divCollapse = $(`.div-expand-airlinemember-${index}.div-expand`);
+                          if(divCollapse && divCollapse.length >0){
+                            divCollapse.removeClass('div-expand').addClass('div-collapse');
+                          }
+                  
+                          this.scrollToTopGroupReview(2,index);
+                        }
                        }
 
                        if(element.gender){
@@ -547,9 +523,10 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             let itema = se.adults[0];
             if(!itema.name){
               itema.name =  se.hoten ? se.hoten : ( se.email ? se.email : '');
-              if(se.gender){
-                itema.gender = (se.gender == 1 || se.gender.toLowerCase().indexOf('Ông') !=-1 || se.gender.toLowerCase().indexOf('Nam')!=-1 || se.gender.toLowerCase().indexOf('m') !=-1) ? 1 : 2;
-                itema.genderdisplay = (se.gender == 1 || se.gender.toLowerCase().indexOf('ông') != -1 || se.gender.toLowerCase().indexOf('nam') != -1 || se.gender.toLowerCase().indexOf('m') !=-1) ? 'Ông' : 'Bà';
+              if(se.gender|| itema.gender){
+                let gender = se.gender || itema.gender;
+                itema.gender = (gender == 1 || gender.toLowerCase().indexOf('Ông') !=-1 || gender.toLowerCase().indexOf('Nam')!=-1 || gender.toLowerCase().indexOf('m') !=-1) ? 1 : 2;
+                itema.genderdisplay = (gender == 1 || gender.toLowerCase().indexOf('ông') != -1 || gender.toLowerCase().indexOf('nam') != -1 || gender.toLowerCase().indexOf('m') !=-1) ? 'Ông' : 'Bà';
               }
               
             }
@@ -731,9 +708,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               }
               
              
-              setTimeout(()=>{
-                se.setAdultProperty();
-              },200)
+              // setTimeout(()=>{
+              //   se.setAdultProperty();
+              // },200)
              
 
               se.storage.get('auth_token').then(auth_token => {
@@ -807,6 +784,11 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                           }
                         })
                       }
+
+                      if(data.gender){
+                        se.gender = data.gender;
+                      }
+                      se.setAdultProperty();
                     })
                   }else{
                     se.storage.get('orderflight').then(order => {
@@ -947,47 +929,31 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   if(!elementAdult.genderdisplay && !elementAdult.name){
                     elementAdult.errorInfo = !elementAdult.errorInfo;
                     elementAdult.textErrorInfo = "Vui lòng nhập thông tin Người lớn "+(index+1);
+                    se.gf.showToastWarning("Vui lòng nhập thông tin Người lớn "+(index+1));
                     resolve(false);
                   }
 
                   if(!elementAdult.genderdisplay){
                       elementAdult.errorGender = !elementAdult.errorGender;
                       elementAdult.textErrorGender = "Vui lòng nhập danh xưng Người lớn "+(index+1);
+                      se.gf.showToastWarning("Vui lòng nhập danh xưng Người lớn "+(index+1));
                       resolve(false);
                   }
                   
                   else if(!elementAdult.name){
                       elementAdult.errorName = !elementAdult.errorName;
-                      elementAdult.textErrorName = "Vui lòng nhập họ tên Người lớn "+(index+1);
+                      //elementAdult.textErrorName = "Vui lòng nhập họ tên Người lớn "+(index+1);
+                      se.gf.showToastWarning("Vui lòng nhập họ tên Người lớn "+(index+1));
                       resolve(false);
                   }
                   
                   else if(elementAdult.name){
-                    // se.checkValidSubName(elementAdult.name).then((check)=>{
-                    //   if(!check){
-                    //     elementAdult.errorSubName = true;
-                    //     elementAdult.textErrorSubName = "Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!";
-                    //     resolve(false);
-                    //   }
-                    // })
 
-                    //var checktext = se.hasWhiteSpace(elementAdult.name.trim());
-                    if (!se.hasWhiteSpace(elementAdult.name.trim()) || !se.validateNameNotContainNumber(elementAdult.name.trim()) || !se.validateNameNotContainExceptionChar(elementAdult.name.trim())) {
-                      elementAdult.errorName = !elementAdult.errorName;
-                      elementAdult.textErrorName = "Họ và tên Người lớn "+(index+1)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                      resolve(false);
-                    }
-
-                    // if(!se.validateNameNotContainNumber(elementAdult.name)){
-                    //   elementAdult.errorName = !elementAdult.errorName;
-                    //   elementAdult.textErrorName = "Vui lòng nhập Họ tên Người lớn "+(index+1)+" không chứa ký tự số";
-                    //   resolve(false);
-                    // }
-
-                    else if(se.optionPassport){
+                  if(se.optionPassport){
                       if(!elementAdult.dateofbirth){
                         elementAdult.errorDateofbirth = true;
                         elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
+                        se.gf.showToastWarning("Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id));
                         resolve(false);
                       }
                       else if(elementAdult.dateofbirth){
@@ -995,34 +961,40 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         if(diffdate < 144){
                           elementAdult.errorDateofbirth = true;
                           elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi";
+                          se.gf.showToastWarning("Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi");
                           resolve(false);
                         }
                         
                         else if(!elementAdult.country){
                           elementAdult.errorCountry = true;
                           elementAdult.textErrorCountry = "Vui lòng nhập quốc tịch Người lớn "+(elementAdult.id);
+                          se.gf.showToastWarning("Vui lòng nhập quốc tịch Người lớn "+(elementAdult.id));
                           resolve(false);
                         }
                         else if(!elementAdult.passport){
                           elementAdult.errorPassport = true;
                           elementAdult.textErrorPassport = "Vui lòng nhập hộ chiếu Người lớn "+(elementAdult.id);
+                          se.gf.showToastWarning("Vui lòng nhập hộ chiếu Người lớn "+(elementAdult.id));
                           resolve(false);
                         }
                         else if(elementAdult.passport){
                           if(!se.validatePassport(elementAdult.passport)){
                             elementAdult.errorPassport = true;
                             elementAdult.textErrorPassport = "Vui lòng nhập hộ chiếu Người lớn không chứa ký tự đặc biệt";
+                            se.gf.showToastWarning("Vui lòng nhập hộ chiếu Người lớn không chứa ký tự đặc biệt");
                             resolve(false);
                           }
                           
                           else if(!elementAdult.passportCountryName){
                             elementAdult.errorPassportCountry = true;
                             elementAdult.textErrorPassportCountry = "Vui lòng nhập quốc gia cấp Người lớn "+(elementAdult.id);
+                            se.gf.showToastWarning("Vui lòng nhập quốc gia cấp Người lớn "+(elementAdult.id));
                             resolve(false);
                           }
                           else if(!elementAdult.passportExpireDate){
                             elementAdult.errorPassportExpireDate = true;
                             elementAdult.textErrorPassportExpireDate = "Vui lòng nhập ngày hết hạn Người lớn "+(elementAdult.id);
+                            se.gf.showToastWarning("Vui lòng nhập ngày hết hạn Người lớn "+(elementAdult.id));
                             resolve(false);
                           }
                           else if(elementAdult.passportExpireDate){
@@ -1031,6 +1003,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             if(diffdate < 0){
                               elementAdult.errorPassportExpireDate = true;
                               elementAdult.textErrorPassportExpireDate = "Hộ chiếu Người lớn "+(elementAdult.id)+" đã hết hạn";
+                              se.gf.showToastWarning("Hộ chiếu Người lớn "+(elementAdult.id)+" đã hết hạn");
                               resolve(false);
                             }
                             
@@ -1082,26 +1055,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         resolve(false);
                       }
                       else if(elementChild.name){
-                        // se.checkValidSubName(elementChild.name).then((check)=>{
-                        //   if(!check){
-                        //     elementChild.errorSubName = true;
-                        //     elementChild.textErrorSubName = "Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!";
-                        //     resolve(false);
-                        //   }
-                        // })
-
-                        // var checktext = se.hasWhiteSpace(elementChild.name.trim());
-                        // if (!checktext) {
-                        //   resolve(false);
-                        // }
-
-                        // if(!elementChild.isInfant && !se.validateNameNotContainNumber(elementChild.name)){
-                        //   resolve(false);
-                        // }
-                        if (!se.hasWhiteSpace(elementChild.name.trim()) || !se.validateNameNotContainNumber(elementChild.name.trim()) || !se.validateNameNotContainExceptionChar(elementChild.name.trim())) {
-                          resolve(false);
-                        }
-
+                      
                         if(!elementChild.dateofbirth){
                           resolve(false);
                         }
@@ -1126,17 +1080,6 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                     else if(!elementChild.name){
                         resolve(false);
                         return;
-                    }
-                    else if(elementChild.name){
-                      var checktext = se.hasWhiteSpace(elementChild.name.trim());
-                      if (!checktext || !se.validateNameNotContainNumber(elementChild.name) || !se.validateNameNotContainExceptionChar(elementChild.name)) {
-                        resolve(false);
-                      }
-
-                      // //Check tên có chứa số
-                      // if(elementChild.isInfant && !se.validateNameNotContainNumber(elementChild.name)){
-                      //   resolve(false);
-                      // }
                     }
                     if(!elementChild.dateofbirth){
                       resolve(false);
@@ -1223,33 +1166,30 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         if(!elementAdult.genderdisplay && !elementAdult.name){
                           elementAdult.errorInfo = !elementAdult.errorInfo;
                           elementAdult.textErrorInfo = "Vui lòng nhập thông tin Người lớn "+(index+1);
+                          se.gf.showToastWarning("Vui lòng nhập thông tin Người lớn "+(index+1));
                           return;
                         }
 
                         if(!elementAdult.genderdisplay){
                             elementAdult.errorGender = !elementAdult.errorGender;
                             elementAdult.textErrorGender = "Vui lòng nhập danh xưng Người lớn "+(index+1);
+                            se.gf.showToastWarning("Vui lòng nhập danh xưng Người lớn "+(index+1));
                             return;
                         }
                         
                         else if(!elementAdult.name){
                             elementAdult.errorName = !elementAdult.errorName;
                             elementAdult.textErrorName = "Vui lòng nhập họ tên Người lớn "+(index+1);
+                            se.gf.showToastWarning("Vui lòng nhập họ tên Người lớn "+(index+1));
                             return;
                         }
                         
                         else if(elementAdult.name){
-                        
-                          if (!se.hasWhiteSpace(elementAdult.name.trim()) || !se.validateNameNotContainNumber(elementAdult.name.trim()) || !se.validateNameNotContainExceptionChar(elementAdult.name.trim())) {
-                            elementAdult.errorName = !elementAdult.errorName;
-                            elementAdult.textErrorName = "Họ và tên Người lớn "+(index+1)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                            return;
-                          }
-                         
-                          else if(se.optionPassport){
+                        if(se.optionPassport){
                             if(!elementAdult.dateofbirth){
                               elementAdult.errorDateofbirth = true;
                               elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
+                              se.gf.showToastWarning("Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id));
                               return;
                             }
                             else if(elementAdult.dateofbirth){
@@ -1257,34 +1197,40 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                               if(diffdate < 144){
                                 elementAdult.errorDateofbirth = true;
                                 elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi";
+                                se.gf.showToastWarning("Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi");
                                 return;
                               }
                               
                               else if(!elementAdult.country){
                                 elementAdult.errorCountry = true;
                                 elementAdult.textErrorCountry = "Vui lòng nhập quốc tịch Người lớn "+(elementAdult.id);
+                                se.gf.showToastWarning("Vui lòng nhập quốc tịch Người lớn "+(elementAdult.id));
                                 return;
                               }
                               else if(!elementAdult.passport){
                                 elementAdult.errorPassport = true;
                                 elementAdult.textErrorPassport = "Vui lòng nhập hộ chiếu Người lớn "+(elementAdult.id);
+                                se.gf.showToastWarning("Vui lòng nhập hộ chiếu Người lớn "+(elementAdult.id));
                                 return;
                               }
                               else if(elementAdult.passport){
                                 if(!se.validatePassport(elementAdult.passport)){
                                   elementAdult.errorPassport = true;
                                   elementAdult.textErrorPassport = "Vui lòng nhập hộ chiếu Người lớn không chứa ký tự đặc biệt";
+                                  se.gf.showToastWarning("Vui lòng nhập hộ chiếu Người lớn không chứa ký tự đặc biệt");
                                   return;
                                 }
                                 
                                 else if(!elementAdult.passportCountryName){
                                   elementAdult.errorPassportCountry = true;
                                   elementAdult.textErrorPassportCountry = "Vui lòng nhập quốc gia cấp Người lớn "+(elementAdult.id);
+                                  se.gf.showToastWarning("Vui lòng nhập quốc gia cấp Người lớn "+(elementAdult.id));
                                   return;
                                 }
                                 else if(!elementAdult.passportExpireDate){
                                   elementAdult.errorPassportExpireDate = true;
                                   elementAdult.textErrorPassportExpireDate = "Vui lòng nhập ngày hết hạn Người lớn "+(elementAdult.id);
+                                  se.gf.showToastWarning("Vui lòng nhập ngày hết hạn Người lớn "+(elementAdult.id));
                                   return;
                                 }
                                 else if(elementAdult.passportExpireDate){
@@ -1293,6 +1239,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                   if(diffdate < 0){
                                     elementAdult.errorPassportExpireDate = true;
                                     elementAdult.textErrorPassportExpireDate = "Hộ chiếu Người lớn "+(elementAdult.id)+" đã hết hạn";
+                                    se.gf.showToastWarning("Hộ chiếu Người lớn "+(elementAdult.id)+" đã hết hạn");
                                     return;
                                   }
                                   
@@ -1302,23 +1249,25 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             }
                             
                           }
-                          else if(se._flightService.itemFlightCache.priceCathay>0&&!se.optionPassport){
-                            if(!elementAdult.dateofbirth){
-                              elementAdult.errorDateofbirth = true;
-                              elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
-                              return;
-                            }
-                            else{
-                              let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
-                              let dateofbirth = moment(elementAdult.dateofbirth).format('YYYY-MM-DD');
-                              let diffdate = moment(returndate).diff(dateofbirth, 'months');
-                              if(diffdate < 144){
-                                elementAdult.errorDateofbirth = true;
-                                elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi";
-                                return;
-                              }
-                            }
-                          }
+                          // else if(se._flightService.itemFlightCache.priceCathay>0&&!se.optionPassport){
+                          //   if(!elementAdult.dateofbirth){
+                          //     elementAdult.errorDateofbirth = true;
+                          //     elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id);
+                          //     se.gf.showToastWarning("Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id));
+                          //     return;
+                          //   }
+                          //   else{
+                          //     let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                          //     let dateofbirth = moment(elementAdult.dateofbirth).format('YYYY-MM-DD');
+                          //     let diffdate = moment(returndate).diff(dateofbirth, 'months');
+                          //     if(diffdate < 144){
+                          //       elementAdult.errorDateofbirth = true;
+                          //       elementAdult.textErrorDateofbirth = "Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi";
+                          //       se.gf.showToastWarning("Vui lòng nhập ngày sinh Người lớn "+(elementAdult.id)+" trên 12 tuổi");
+                          //       return;
+                          //     }
+                          //   }
+                          // }
                         }
                         
                         
@@ -1352,6 +1301,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         if(!elementChild.genderdisplay && !elementChild.name){
                           elementChild.errorInfo = !elementChild.errorInfo;
                           elementChild.textErrorInfo = "Vui lòng nhập thông tin "+ (!elementChild.isInfant ? "Trẻ em" : "Em bé")+" "+(!elementChild.isInfant ? elementChild.id : elementChild.iddisplay);
+                          se.gf.showToastWarning("Vui lòng nhập thông tin "+ (!elementChild.isInfant ? "Trẻ em" : "Em bé")+" "+(!elementChild.isInfant ? elementChild.id : elementChild.iddisplay));
                           return;
                         }
 
@@ -1360,6 +1310,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                               //se.gf.showToastWarning("Danh xưng Trẻ em "+(elementChild.id)+" không được để trống. Vui lòng kiểm tra lại!");
                               elementChild.errorGender = true;
                               elementChild.textErrorGender = "Vui lòng nhập danh xưng Trẻ em "+(elementChild.id);
+                              se.gf.showToastWarning("Vui lòng nhập danh xưng Trẻ em "+(elementChild.id));
                               return;
                             }
         
@@ -1367,12 +1318,14 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                 //se.gf.showToastWarning("Họ tên Trẻ em "+(elementChild.id)+" không được để trống. Vui lòng kiểm tra lại!");
                                 elementChild.errorName = true;
                                 elementChild.textErrorName = "Vui lòng nhập họ tên Trẻ em "+(elementChild.id);
+                                se.gf.showToastWarning("Vui lòng nhập họ tên Trẻ em "+(elementChild.id));
                                 return;
                             }
                             else if(elementChild.name){
                               if (!se.hasWhiteSpace(elementChild.name.trim()) || !se.validateNameNotContainNumber(elementChild.name.trim()) || !se.validateNameNotContainExceptionChar(elementChild.name.trim())) {
                                 elementChild.errorName = !elementChild.errorName;
                                 elementChild.textErrorName = "Họ và tên Trẻ em "+elementChild.id+" không hợp lệ. Vui lòng kiểm tra lại!";
+                                se.gf.showToastWarning("Họ và tên Trẻ em "+elementChild.id+" không hợp lệ. Vui lòng kiểm tra lại!");
                                 return;
                               }
                             
@@ -1381,6 +1334,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                 //se.gf.showToastWarning("Ngày sinh Trẻ em "+(elementChild.id)+" không được để trống. Vui lòng kiểm tra lại!");
                                 elementChild.errorDateofbirth = true;
                                 elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id);
+                                se.gf.showToastWarning("Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id));
                                 return;
                               }
                               let returndatestring = moment(returndate).format('DD-MM-YYYY');
@@ -1390,6 +1344,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                 //se.gf.showToastWarning("Ngày sinh trẻ em "+(elementChild.id)+" phải lớn hơn hoặc bằng 2 tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                                 elementChild.errorDateofbirth = true;
                                 elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring;
+                                se.gf.showToastWarning("Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring);
                                   return;
                               }
                               //Check độ tuổi trẻ em <12
@@ -1397,6 +1352,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                 //se.gf.showToastWarning("Ngày sinh trẻ em "+(elementChild.id)+" không được lớn hơn 12 tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                                 elementChild.errorDateofbirth = true;
                                 elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring;
+                                se.gf.showToastWarning("Vui lòng nhập ngày sinh Trẻ em "+(elementChild.id) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring);
                                   return;
                               }
                               
@@ -1408,6 +1364,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             //se.gf.showToastWarning("Danh xưng Em bé "+(idx)+" không được để trống. Vui lòng kiểm tra lại!");
                               elementChild.errorGender = true;
                               elementChild.textErrorGender = "Vui lòng nhập danh xưng Em bé "+idx;
+                              se.gf.showToastWarning("Vui lòng nhập danh xưng Em bé "+idx);
                             return;
                           }
       
@@ -1415,12 +1372,14 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                               //se.gf.showToastWarning("Họ tên Em bé "+(idx)+" không được để trống. Vui lòng kiểm tra lại!");
                                 elementChild.errorName = true;
                                 elementChild.textErrorName = "Vui lòng nhập họ tên Em bé "+idx;
+                                se.gf.showToastWarning("Vui lòng nhập họ tên Em bé "+idx);
                               return;
                           }
                           else if(elementChild.name){
                             if (!se.hasWhiteSpace(elementChild.name.trim()) || !se.validateNameNotContainNumber(elementChild.name.trim()) || !se.validateNameNotContainExceptionChar(elementChild.name.trim())) {
                               elementChild.errorName = !elementChild.errorName;
                               elementChild.textErrorName = "Họ và tên Em bé "+idx+" không hợp lệ. Vui lòng kiểm tra lại!";
+                              se.gf.showToastWarning("Họ và tên Em bé "+idx+" không hợp lệ. Vui lòng kiểm tra lại!");
                               return;
                             }
                            
@@ -1429,6 +1388,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             //se.gf.showToastWarning("Ngày sinh Trẻ em "+(idx)+" không được để trống. Vui lòng kiểm tra lại!");
                             elementChild.errorDateofbirth = true;
                             elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+idx;
+                            se.gf.showToastWarning("Vui lòng nhập ngày sinh Em bé "+idx);
                             return;
                           }
                           //Check độ tuổi của em bé <14 ngày
@@ -1436,6 +1396,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             //se.gf.showToastWarning("Ngày sinh Em bé "+(idx)+" phải lớn hơn 14 ngày tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                               elementChild.errorDateofbirth = true;
                               elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ idx +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring;
+                              se.gf.showToastWarning("Vui lòng nhập ngày sinh Em bé "+ idx +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring);
                               return;
                           }
                           //Check độ tuổi của em bé <2
@@ -1443,6 +1404,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             //se.gf.showToastWarning("Ngày sinh Em bé "+(idx)+" không được lớn hơn 2 tuổi so với ngày khởi hành "+departdatestring+". Vui lòng kiểm tra lại!");
                               elementChild.errorDateofbirth = true;
                                 elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ idx +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring;
+                                se.gf.showToastWarning("Vui lòng nhập ngày sinh Em bé "+ idx +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring);
                               return;
                           }
                           
@@ -1454,35 +1416,36 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             //se.gf.showToastWarning("Ngày sinh "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" không được để trống. Vui lòng kiểm tra lại!");
                             elementChild.errorDateofbirth = true;
                             elementChild.textErrorDateofbirth = "Vui lòng nhập ngày sinh "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay);
+                            se.gf.showToastWarning("Vui lòng nhập ngày sinh "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay));
                             return;
                           }
                           else if(!elementChild.country){
-                            //se.gf.showToastWarning("Quốc tịch "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay) +" không được để trống. Vui lòng kiểm tra lại!");
+                            se.gf.showToastWarning("Vui lòng nhập quốc tịch "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay));
                             elementChild.errorCountry = true;
                             elementChild.textErrorCountry = "Vui lòng nhập quốc tịch "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay);
                             return;
                           }
                           else if(!elementChild.passport){
-                            //se.gf.showToastWarning("Hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" không được để trống. Vui lòng kiểm tra lại!");
+                            se.gf.showToastWarning("Vui lòng nhập hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay));
                             elementChild.errorPassport = true;
                             elementChild.textErrorPassport = "Vui lòng nhập hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay);
                             return;
                           }
                           else if(elementChild.passport){
                             if(!se.validatePassport(elementChild.passport)){
-                              //se.gf.showToastWarning("Hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" không hợp lệ. Vui lòng kiểm tra lại!");
+                              se.gf.showToastWarning("Vui lòng nhập hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay) + " không chứa ký tự đặc biệt");
                               elementChild.errorPassport = true;
                               elementChild.textErrorPassport = "Vui lòng nhập hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay) + " không chứa ký tự đặc biệt";
                               return;
                             }
                             else if(!elementChild.passportCountryName){
-                              //se.gf.showToastWarning("Quốc gia cấp "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" không được để trống. Vui lòng kiểm tra lại!");
+                              se.gf.showToastWarning("Vui lòng nhập quốc gia cấp "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay));
                               elementChild.errorPassportCountry = true;
                               elementChild.textErrorPassportCountry = "Vui lòng nhập quốc gia cấp "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay);
                               return;
                             }
                             else if(!elementChild.passportExpireDate){
-                              //se.gf.showToastWarning("Ngày hết hạn "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" không được để trống. Vui lòng kiểm tra lại!");
+                              se.gf.showToastWarning("Vui lòng nhập ngày hết hạn "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay));
                               elementChild.errorPassportExpireDate = true;
                               elementChild.textErrorPassportExpireDate = "Vui lòng nhập ngày hết hạn "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay);
                               return;
@@ -1490,7 +1453,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             else if(elementChild.passportExpireDate){
                               let diffdate = moment(moment(elementChild.passportExpireDate).format('YYYY-MM-DD')).diff(moment(returndate).format('YYYY-MM-DD'), 'days');
                               if(diffdate < 0){
-                                //se.gf.showToastWarning("Hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay)+" đã hết hạn. Vui lòng kiểm tra lại!");
+                                se.gf.showToastWarning("Hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay) + " đã hết hạn");
                                 elementChild.errorPassportExpireDate = true;
                                 elementChild.textErrorPassportExpireDate = "Hộ chiếu "+ (!elementChild.isInfant ? "Trẻ em " : "Em bé ")+(!elementChild.isInfant ?  elementChild.id : elementChild.iddisplay) + " đã hết hạn";
                                 return;
@@ -1510,51 +1473,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 }
 
 
-                se.checkDuplicateItem(itempax).then((itemcheck) => {
-                  if(itemcheck && itemcheck.length >0){
-                    se._flightService.itemFlightCache.duplicateItem = itemcheck;
-                    //show cảnh báo trùng
-                    se.showAlertDuplicateName();
-                    return;
-                  }
-                  else{
-                    se.checkValidName(itempax).then((itemcheckname) => {
-                      if(itemcheckname){
-                        se.showAlertInvalidName(itemcheckname);
-                        return;
-                      }else{
-                        se.checkValidFirstNameAndSubName(itempax).then((itemname) => {
-                          if(itemname){
-                            se.showAlertInvalidFirtNameAndLastName(itemname);
-                            return;
-                          }else{
-                            se.checkValidDuplicateFirstNameAndSubName(itempax).then((itemdup) => {
-                                if(itemdup){
-                                    se.showAlertDuplicateFirtNameAndLastName(itemdup);
-                                    return;
-                                }else{
-                                  se.checkInValidSubNameBeforeNextStep(itempax).then((iteminvalid)=>{
-                                    if(!iteminvalid){
-                                      
-                                      se.gotopaymentpage();
-                                    }else{
-                                      se.showAlertInvalidSubName(iteminvalid);
-                                      return;
-                                    }
-                                  })
-                                
-                                }
-                            })
-                          }
-                        })
-                      }
-                    })
-                    
-                  }
-                    
-                  
-                })
-                
+                se.gotopaymentpage();
             }else{
               se.emailinvalid = false;
               se.hoteninvalid = false;
@@ -1562,30 +1481,16 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               se.hasinput= true;
 
                 if(!se.hoten){
-                    //se.gf.showToastWarning("Họ tên không được để trống. Vui lòng kiểm tra lại!");
+                    se.gf.showToastWarning("Họ tên không được để trống. Vui lòng kiểm tra lại!");
                     return;
-                }
-                else if(se.hoten){
-                  var checktext = se.hasWhiteSpace(se.hoten.trim());
-                  if (!checktext || !se.validateNameNotContainNumber(se.hoten) || !se.validateNameNotContainExceptionChar(se.hoten)) {
-                    //se.gf.showToastWarning("Họ tên không hợp lệ. Vui lòng kiểm tra lại!");
-                    se.hoteninvalid = true;
-                    return;
-                  }
-
-                  // if(!se.validateNameNotContainNumber(se.hoten)){
-                  //   //se.gf.showToastWarning("Họ tên không được chứa ký tự số. Vui lòng kiểm tra lại!");
-                  //   se.hoteninvalid = true;
-                  //   return;
-                  // }
                 }
 
                 if(!se.sodienthoai){
-                    //se.gf.showToastWarning("Số điện thoại không được để trống. Vui lòng kiểm tra lại!");
+                    se.gf.showToastWarning("Số điện thoại không được để trống. Vui lòng kiểm tra lại!");
                     return;
                 }
                 else if(se.sodienthoai && se.gf.checkPhoneInValidFormat(se.sodienthoai)){
-                  //se.gf.showToastWarning("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+                  se.gf.showToastWarning("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
                   se.sodienthoaiinvalid = true;
                   return;
                 }
@@ -1594,13 +1499,13 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                   se.gf.showToastWarning('Chưa chọn kênh liên lạc và nhận vé. Vui lòng kiểm tra lại');
                   return;
                 }
-                if(se.contactOption == 2){
+                if(se.contactOption == 'mail'){
                   if(!se.email){
-                      //se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
+                      se.gf.showToastWarning("Email không được để trống. Vui lòng kiểm tra lại!");
                       return;
                   }
                   else if(se.email && (!se.validateEmail(se.email) || !se.gf.checkUnicodeCharactor(se.email) || se.gf.checkEmailInvalidFormat(se.email)) ){
-                      //se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
+                      se.gf.showToastWarning("email không hợp lệ. Vui lòng kiểm tra lại!");
                       se.emailinvalid = true;
                       return;
                   }
@@ -1620,7 +1525,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         }
                       }
                       else{
-                        alert("Xin vui lòng nhập đầy đủ thông tin xuất hóa đơn");
+                        se.gf.showToastWarning("Xin vui lòng nhập đầy đủ thông tin xuất hóa đơn");
                         return;
                       }
                     } 
@@ -1710,14 +1615,14 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               se.hoteninvalid = false;
             }
             
-            se.checkValidSubName(se.hoten).then((check) =>{
-              if(!check){
-                se.subnameinvalid = true;
-              }
-              else{
-                se.subnameinvalid = false;
-              }
-            })
+            // se.checkValidSubName(se.hoten).then((check) =>{
+            //   if(!check){
+            //     se.subnameinvalid = true;
+            //   }
+            //   else{
+            //     se.subnameinvalid = false;
+            //   }
+            // })
           }
           if(type == 2){
             if(se.gf.checkPhoneInValidFormat(se.sodienthoai)){
@@ -1779,45 +1684,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 }
                 
                 else if(inputcheck.name){
-                  // if (!se.hasWhiteSpace(elementChild.name.trim()) || !se.validateNameNotContainNumber(elementChild.name.trim()) || !se.validateNameNotContainExceptionChar(elementChild.name.trim())) {
-                  //   elementChild.errorName = !elementChild.errorName;
-                  //   elementChild.textErrorName = "Họ và tên Người lớn "+(index+1)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                  //   return;
-                  // }
-                  //var checktext = se.hasWhiteSpace(inputcheck.name.trim());
-                  if (!se.hasWhiteSpace(inputcheck.name.trim()) || !se.validateNameNotContainNumber(inputcheck.name.trim()) || !se.validateNameNotContainExceptionChar(inputcheck.name.trim())) {
-                    inputcheck.errorName = true;
-                    inputcheck.textErrorName = "Họ và tên Người lớn "+(inputcheck.id)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                    return;
-                  }
-                  else{
-                    inputcheck.errorName = false;
-                    inputcheck.textErrorName = "";
-
-                    inputcheck.errorInfo = false;
-                    inputcheck.textErrorInfo ="";
-                  }
-
-                  // if(!se.validateNameNotContainNumber(inputcheck.name)){
-                  //   inputcheck.errorName = true;
-                  //   inputcheck.textErrorName = "Vui lòng nhập Họ tên Người lớn "+(inputcheck.id)+" không chứa ký tự số";
-                  //     return;
-                  // }else{
-                  //   inputcheck.errorName = false;
-                  //   inputcheck.textErrorName = "";
-
-                  //   inputcheck.errorInfo = false;
-                  //   inputcheck.textErrorInfo ="";
-                  // }
-                  se.checkValidSubName(inputcheck.name).then((datacheck) => {
-                    if(!datacheck){
-                      inputcheck.errorSubName = true;
-                      inputcheck.textErrorSubName = "Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!";
-                    }else{
-                      inputcheck.errorSubName = false;
-                      inputcheck.textErrorSubName = "";
-                    }
-                  })
+                  inputcheck.errorName = false;
                 }
               }
              
@@ -1945,104 +1812,8 @@ export class FlightAdddetailsInternationalPage implements OnInit {
               }
               
               else if(inputcheck.name){
-                if (!se.hasWhiteSpace(inputcheck.name.trim()) || !se.validateNameNotContainNumber(inputcheck.name.trim()) || !se.validateNameNotContainExceptionChar(inputcheck.name.trim())) {
-                  inputcheck.errorName = true;
-                  inputcheck.textErrorName = "Họ và tên "+ (!inputcheck.isInfant ? "Trẻ em " : "Em bé ") + (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                  return;
-                }
-                else{
-                  inputcheck.errorName = false;
-                  inputcheck.textErrorName = "";
-
-                  inputcheck.errorInfo = false;
-                  inputcheck.textErrorInfo ="";
-                }
-                // var checktext = se.hasWhiteSpace(inputcheck.name.trim());
-                // if (!checktext) {
-                //   inputcheck.errorName = true;
-                //   inputcheck.textErrorName = "Họ và tên "+ (!inputcheck.isInfant ? "Trẻ em " : "Em bé ") + (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay)+" không hợp lệ. Vui lòng kiểm tra lại!";
-                //   return;
-                // }
-                // else{
-                //   inputcheck.errorName = false;
-                //   inputcheck.textErrorName = "";
-                // }
-
-                // if(!se.validateNameNotContainNumber(inputcheck.name)){
-                //   inputcheck.errorName = true;
-                //   inputcheck.textErrorName = "Vui lòng nhập Họ tên "+ (!inputcheck.isInfant ? "Trẻ em" : "Em bé") +(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay)+" không chứa ký tự số";
-                //     return;
-                // }else{
-                //   inputcheck.errorName = false;
-                //   inputcheck.textErrorName = "";
-                // }
-
-                se.checkValidSubName(inputcheck.name).then((datacheck) => {
-                  if(!datacheck){
-                    inputcheck.errorSubName = true;
-                    inputcheck.textErrorSubName = "Không nằm trong danh sách họ phổ biến. Vui lòng kiểm tra lại!";
-                  }else{
-                    inputcheck.errorSubName = false;
-                    inputcheck.textErrorSubName = "";
-                  }
-                })
-              }
-            }
-
-            if(type == 3){
-              if(!inputcheck.dateofbirth){
-                inputcheck.errorDateofbirth = true;
-                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh "+ (!inputcheck.isInfant ? "Trẻ em" : "Em bé") +" "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay);
-                return;
-              }
-              else{
-                inputcheck.errorDateofbirth = false;
-                inputcheck.textErrorDateofbirth = "";
-              }
-
-              if(inputcheck.dateofbirth){
-                let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
-                let returndatestring = moment(returndate).format('DD-MM-YYYY');
-                            //Check độ tuổi trẻ em > 2
-                            if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') < 24){
-                              inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                              inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring;
-                                return;
-                            }else{
-                              inputcheck.errorDateofbirth = false;
-                              inputcheck.textErrorDateofbirth = "";
-                            }
-                            //Check độ tuổi trẻ em <12
-                            if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') >= 144){
-                              inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                              inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Trẻ em "+(!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring;
-                                return;
-                            }
-                            else{
-                              inputcheck.errorDateofbirth = false;
-                              inputcheck.textErrorDateofbirth = "";
-                            }
-
-                            //Check độ tuổi của em bé <14 ngày
-                            if(inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'days') < 14){
-                                inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring;
-                                return;
-                            }
-                            else{
-                              inputcheck.errorDateofbirth = false;
-                              inputcheck.textErrorDateofbirth = "";
-                            }
-                            //Check độ tuổi của em bé <2
-                            if(inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth), 'months') >= 24){
-                                inputcheck.errorDateofbirth = !inputcheck.errorDateofbirth;
-                                  inputcheck.textErrorDateofbirth = "Vui lòng nhập ngày sinh Em bé "+ (!inputcheck.isInfant ? inputcheck.id : inputcheck.iddisplay) +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring;
-                                return;
-                            }
-                            else{
-                              inputcheck.errorDateofbirth = false;
-                              inputcheck.textErrorDateofbirth = "";
-                            }
+                inputcheck.errorName = false;
+                
               }
             }
 
@@ -2182,7 +1953,22 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   var se = this;
   se.inputtext = false;
   se.activeStep = 2;
-
+  setTimeout(()=>{
+    if(se.adults && se.adults.length >0){
+      for (let index = 0; index < se.adults.length; index++) {
+        let elementcache = se.adults[index];
+        if(elementcache.expanddivairlinemember){
+          var divCollapse = $(`.div-expand-airlinemember-${index}.div-collapse`);
+          if(divCollapse && divCollapse.length >0){
+            divCollapse.removeClass('div-collapse').addClass('div-expand');
+          }
+          $('.div-checkbox ion-checkbox')[index].checked = true;
+          this.scrollToTopGroupReview(1,index);
+        }
+      }
+    }
+  },50)
+  
                     
 }
   async showAlertDuplicateName(){
@@ -3027,8 +2813,8 @@ alert.present();
                     "destinationPostal": "",
                     "destinationStreet": "",
                     "passportIssueCountry": (se.optionPassport) ? element.passportCountry : "",
-                    "airlineMemberCode": element.departAirlineMemberCode, 
-                    "airlineMemberCodeReturn": (se._flightService.itemFlightCache.roundTrip && element.returnAirlineMemberCode ? element.returnAirlineMemberCode : ''),
+                    "airlineMemberCode": element.departAirlineMemberCode && element.expanddivairlinemember ? element.departAirlineMemberCode :'', 
+                    "airlineMemberCodeReturn": (se._flightService.itemFlightCache.roundTrip && element.returnAirlineMemberCode && element.expanddivairlinemember? element.returnAirlineMemberCode : ''),
                     "departMealPlan": "", 
                     "returnMealPlan": "",  
                     "adultIndex": index, 
@@ -3410,7 +3196,7 @@ alert.present();
                       "address": "",
                       "phoneNumber": se.sodienthoai,
                       "hasvoucher": se._flightService.itemFlightInternational.promotionCode ? true : false,
-                      "contactChannel": se.contactOption ==2 ? 'mail' : 'zalo'
+                      "contactChannel": se.contactOption == 'mail' ? 'mail' : 'zalo'
                     },
                     "passengers": listpassenger,
                     "userToken": "",
@@ -4437,7 +4223,12 @@ alert.present();
         }
       },100)
     }
-    contactOptionClick(value){
-      this.contactOption = value;
+    contactOptionClick(event){
+      this.contactOption = event.currentTarget.value;
+    }
+    copyInfoContact(item){
+      item.name = this.hoten;
+      item.errorName = false;
+      item.errorInfo = false;
     }
 }

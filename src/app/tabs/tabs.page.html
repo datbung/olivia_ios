@@ -19,7 +19,7 @@
     <ion-tab-button class="tab-button" tab="tab4">
       <ion-icon class="icon-tab" name="text"></ion-icon>
       <ion-label>Thông báo</ion-label>
-      <ion-badge *ngIf="valueGlobal.countNotifi" color="danger">{{valueGlobal.countNotifi}}</ion-badge>
+      <ion-badge *ngIf="valueGlobal.countNotifi && valueGlobal.countNotifi >0" color="danger">{{valueGlobal.countNotifi}}</ion-badge>
     </ion-tab-button>
     <div class="div-split"></div>
     <ion-tab-button class="tab-button" tab="tab5">

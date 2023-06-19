@@ -232,16 +232,17 @@ export class CuspointsPage implements OnInit{
                     if (body) {
                         var data = JSON.parse(body);
                         se.expPointNowYear=data.expPointNowYear;
-                        if (se.expPointNowYear > 0) {
-                          var year = new Date(new Date().setFullYear(new Date().getFullYear()))
-                          se.currentYear =  "31"+"-"+"12"+"-"+moment(year).format('YYYY');
-                        }
-                        se.expPointNextYear=data.expPointNextYear;
-                        if (se.expPointNextYear > 0) {
-            
-                          var year  = new Date(new Date().setFullYear(new Date().getFullYear()+ 1))
-                          this.currentNextYear =  "31"+"-"+"12"+"-"+moment(year).format('YYYY');
-                        }
+                          if (se.expPointNowYear > 0) {
+                            var year = new Date(new Date().setFullYear(new Date().getFullYear()))
+                            se.currentYear =  "31"+"-"+"12"+"-"+moment(year).format('YYYY');
+                          }
+                          se.expPointNextYear=data.expPointNextYear;
+                          if (se.expPointNextYear > 0) {
+              
+                            var yearnew = moment(year).add(1, 'year').format('YYYY');
+                            se.currentNextYear =  "31"+"-"+"12"+"-"+yearnew;
+
+                          }
                         se.getPoint();
                     }
 

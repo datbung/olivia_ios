@@ -1035,8 +1035,8 @@ export class TabsPage implements OnInit {
                           }
                         })
                         
-                        se.zone.run(()=>{
-                       
+                        se.zone.run(async ()=>{
+                          let timeCheckAll = await se.storage.get('timeCheckAll');
                           data.forEach(element =>{
                             if (element.memberId=='alluser') {
                               element.status=0;
@@ -1046,10 +1046,18 @@ export class TabsPage implements OnInit {
                                     }
                               }
                             }
+                            if(timeCheckAll){
+                              element.hascheckall = moment(timeCheckAll).diff(element.created, 'second') >0;
+                            }
                           })
-                          let countNoti = data.filter(item=>{ return item.status == 0 }).length;
+                          
+                         
+                          let countNoti = data.filter(item=>{ return item.status == 0 && !item.hascheckall }).length;
                           if(se.valueGlobal.updatedLastestVersion){
                             countNoti ++;
+                          }
+                          if(countNoti <0){
+                            countNoti =0;
                           }
                           se.valueGlobal.countNotifi = countNoti;
                           se.countmessage = se.valueGlobal.countNotifi;

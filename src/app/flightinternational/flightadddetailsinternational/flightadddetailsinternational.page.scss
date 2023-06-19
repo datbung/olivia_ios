@@ -23,16 +23,17 @@
     }
 
     .div-sub-title{
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
         line-height: 17px;
     }
 
     .div-left{
-        width: 100%;
+        width: 50%;
         margin-right: 16px;
         border-bottom: solid 0.2px #cdcdcd;
         position: relative;
+        height: 24px;
     }
     .div-notice {
         background-color: #f2f2f2;
@@ -50,7 +51,6 @@
     
     .sub-label{
         font-size: 14px;
-        font-weight: 300;
         color: #828282;
     }
     .f-12{
@@ -217,10 +217,10 @@
         margin-bottom: -8px;
     }
     .text-gender{
-        font-size: 16px;
+        margin-top: 4px;
+        font-size: 18px;
         font-weight: 500;
         letter-spacing: -0.34px;
-        margin-top: 38px;
     }
     .text-bold{
         font-weight: 600 !important;
@@ -257,9 +257,9 @@
     .cls-iondatetime{
         padding: 0;
         line-height: 28px;
-        font-size: 14px;
+        font-size: 18px;
         margin-top: 4px;
-        border-bottom: solid 0.2px #cdcdcd;
+        //border-bottom: solid 0.2px #cdcdcd;
         padding-top: 16px;margin-top: -16px;
     }
 
@@ -311,41 +311,59 @@
     }
 }
 .cls-error{
-    color: #e52822 !important;
-    font-size: 14px;
+    color: #f79321 !important;
+    font-size: 16px;
 
     // ion-label, .text-gender {
-    //     color: #e52822 !important;
+    //     color: #f79321 !important;
     // }
 
     ion-input{
-        color: #e52822 !important;
+        color: #f79321 !important;
     }
 
     ion-datetime{
-        color: #e52822 !important;
+        color: #f79321 !important;
     }
 
     ion-searchbar{
-        color: #e52822 !important;
+        color: #f79321 !important;
     }
     ion-item {
-        --border-color: #e52822 !important;
+        --border-color: #f79321 !important;
     }
     
     .cls-input-custom{
-        border-bottom: 0.2px solid #e52822;
+        border-bottom: 0.2px solid #f79321;
     }
-
-    .cls-iondatetime, .cls-datetofbirth, .border-bottom{
-        border-bottom: 0.2px solid #e52822 !important;
+    .cls-input-name {
+        margin-top: 4px;
+        border-bottom: 0.2px solid rgb(205, 205, 205);
+    }
+    .cls-datetofbirth, .border-bottom{
+        border-bottom: 0.2px solid #f79321 !important;
     }
 }
 .border-bottom.cls-error{
-    border-bottom: 0.2px solid #e52822 !important;
+    border-bottom: 0.2px solid #f79321 !important;
 }
 .div-left.cls-error{
-    border-bottom: 0.2px solid #e52822 !important;
+    border-bottom: 0.2px solid #f79321 !important;
+}
+.div-left{
+    border-bottom: 0.2px solid rgb(205, 205, 205);
+}
+.div-right {
+    border-bottom: 0.2px solid rgb(205, 205, 205);
+}
+.div-right.cls-error{
+    border-bottom: 0.2px solid #f79321 !important;
+}
+.cls-error .cls-input-name {
+    border-bottom: none !important;
+}
+.div-right.cls-error{
+    border-bottom: 0.2px solid #f79321 !important;
 }
 
 .div-showerror{
@@ -495,7 +513,11 @@
         line-height: 28px;
         font-size: 16px !important;
     }
-
+    .cls-input-name .native-input.sc-ion-input-ios{
+        padding: 0;
+        line-height: 28px;
+        font-size: 18px;
+    }
     .text-bold .sc-ion-action-sheet-md{
         font-weight: 600 !important;
     }
@@ -761,7 +783,8 @@
             margin-top: 4px;
         }
         .text-airlinemember {
-            color: #f79321;
+            font-size: 16px;
+            color: #3f3b3b;
         }
         .icon-expand {
             margin-left: 4px;
@@ -770,7 +793,7 @@
             font-size: 14px;
             line-height: 1.4;
             text-align: left;
-            color: #828282;
+            color: #3f3b3b;
         }
         .div-expand-airlinemember {
             border-radius: 4px;
@@ -781,7 +804,8 @@
             --background: #fff;
             border-radius: 4px;
             --padding-start: 8px;
-            border: solid 0.5px #bdbdbd;
+            border: solid 0.5px #828282;
+            font-size: 14px;
         }
         .div-airline-logo {
             height: 22px;
@@ -796,4 +820,39 @@
                 height: 24px;
                 object-fit: scale-down;margin-bottom: -2px;
             }
+        }
+
+        .p-top-16{
+            padding-top: 16px;
+        }
+        .div-checkbox {
+            margin-right: 6px;
+        }
+        .v-align-center {
+            align-items: center;
+        }
+        .m-left-4 {
+            margin-left: 4px;
+        }
+        .text-note-passport {
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.2;
+            letter-spacing: -0.04px;
+            text-align: left;
+            color: #828282;
+        }
+        .m-top-6 {
+            margin-top: 6px;
+        }
+        .text-note-airlinemember {
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: left;
+            color: #828282;
+        }
+        .div-width-50 {
+            width: 50%;
         }

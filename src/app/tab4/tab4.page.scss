@@ -4,6 +4,32 @@
   font-size: 18px;
   font-weight: bold;
 }
+.fix-header {
+  position: fixed;
+}
+.btn-checkall {
+  position: absolute;
+            top: 0px;
+            right: 0px;
+            padding: 14px;
+            padding-right: 16px;
+}
+.row-header {
+  height: 56px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  .title-header {
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+  }
+}
     .toolbar-title-md {
         text-align: center;
         margin-right: 70px;
@@ -77,12 +103,17 @@ ng-deep{
     white-space: normal;
   }
 }
+.div-notify-content {
+  background-color: #ffffff;
+  padding-top: calc( env(safe-area-inset-top) + 54px);
+}
 .div-scroll{
   overflow-x: scroll;
   margin-left: 16px;
   margin-top: 16px;
   overflow-y: hidden;
   margin-bottom: 24px;
+  
 }
 .btn-typeMessenger-action{
   border-radius: 30px;

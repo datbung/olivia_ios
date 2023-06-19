@@ -84,34 +84,8 @@ export class Tab4Page implements OnInit{
     if(document.querySelector(".tabbar")){
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
-    debugger
       se.loadUserNotificationStatus();
 
-    
-    //19/07/2019: Load thông tin notification
-    //this.loadUserNotification();
-    // se.storage.get('auth_token').then(auth_token => {
-    //   if (auth_token) {
-    //     se.storage.get('listUserNotification').then((data)=> {
-    //       if(data){
-    //        se.loadDataNotify(data);
-    //       }else{
-    //         se.loadUserNotification();
-    //       }
-    //     })
-    //   }else{
-    //     se.items = [];
-    //     se.loaddatadone = true;
-    //   }
-    // })
-    
-    // se.storage.get('listUserNotification').then((data)=> {
-    //   if(data){
-    //     se.loadDataNotify(data);
-    //   }else{
-       
-    //   }
-    // })
   }
   loadUserNotificationStatus() {
     var se = this;
@@ -298,8 +272,9 @@ export class Tab4Page implements OnInit{
       
   }
 
-  loadDataNotify(data,stt){
+  async loadDataNotify(data,stt){
     var se = this;
+    let timeCheckAll = await se.storage.get('timeCheckAll');
     se.zone.run(()=>{
       if (!stt) {
         data.forEach(element =>{
@@ -325,6 +300,11 @@ export class Tab4Page implements OnInit{
                   element.status=1
                 }
               }
+            }
+
+            //pdanh 13-06-2023: check thêm nếu có đã từng check xem tất cả thì thêm thuộc tính để ẩn những bkg có cretedate trước thời điểm checkall
+            if(timeCheckAll){
+              element.hascheckall = moment(timeCheckAll).diff(element.created, 'second') >0;
             }
            
           
@@ -363,7 +343,10 @@ export class Tab4Page implements OnInit{
                 }
               }
             }
-           
+             //pdanh 13-06-2023: check thêm nếu có đã từng check xem tất cả thì thêm thuộc tính để ẩn những bkg có cretedate trước thời điểm checkall
+             if(timeCheckAll){
+              element.hascheckall = moment(timeCheckAll).diff(element.created, 'second') >0;
+            }
           
             if(se.itembookings.length >0){
               if(!se.gf.checkExistsItemInArray(se.itembookings,element,'trip')){
@@ -465,8 +448,11 @@ export class Tab4Page implements OnInit{
             element.status = 1;
             
             //update status xuống db
-            se.valueGlobal.countNotifi--;
-            se.fcm.setBadge(se.valueGlobal.countNotifi);
+            if(se.valueGlobal.countNotifi && se.valueGlobal.countNotifi >0){
+              se.valueGlobal.countNotifi--;
+              se.fcm.setBadge(se.valueGlobal.countNotifi);
+            }
+            
             if (element.memberId=='alluser') {
               se.callUpdateStatusProduct(element);
             }else{
@@ -1043,6 +1029,29 @@ export class Tab4Page implements OnInit{
     modal.onDidDismiss().then((data: OverlayEventDetail) => {
       // se.navCtrl.back();
 
+    })
+  }
+
+  checkAll(){
+    let timeCheckAll = new Date();
+    this.storage.set('timeCheckAll',timeCheckAll);
+    this.zone.run(()=>{
+      this.items.forEach((element)=>{
+        //pdanh 13-06-2023: check thêm nếu có đã từng check xem tất cả thì thêm thuộc tính để ẩn những bkg có cretedate trước thời điểm checkall
+        if(timeCheckAll){
+          element.hascheckall = moment(timeCheckAll).diff(element.created, 'second') >0;
+        }
+      })
+
+      this.itembookings.forEach((elementb)=>{
+        //pdanh 13-06-2023: check thêm nếu có đã từng check xem tất cả thì thêm thuộc tính để ẩn những bkg có cretedate trước thời điểm checkall
+        if(timeCheckAll){
+          elementb.hascheckall = moment(timeCheckAll).diff(elementb.created, 'second') >0;
+        }
+      })
+
+      this.valueGlobal.countNotifi = 0;
+      this.fcm.setBadge(this.valueGlobal.countNotifi);
     })
   }
 }

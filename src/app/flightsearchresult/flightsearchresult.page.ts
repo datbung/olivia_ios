@@ -910,7 +910,6 @@ export class FlightsearchresultPage implements OnInit {
                 });
                 
               }
-             
               if (!result.stop && !se.stoprequest && type=='depart' && se.allowSearch) {
               
                 obj.source = result.sources;
@@ -922,8 +921,15 @@ export class FlightsearchresultPage implements OnInit {
                 },1000)
                 obj.countretry++;
               }
+              else if(!se._flightService.itemFlightCache.roundTrip && result.stop && type=='depart' && result.data && result.data.length == 0){
+                se.loadpricedone = true;
+                      se.zone.run(()=>{
+                        se.progressbarloading = 1;
+                        se.progressbarbuffer = 1;
+                      })
+              }
   
-              else if (!result.stop && !se.stoprequest && type=='return' && se.allowSearchReturn) {
+              else if (se._flightService.itemFlightCache.roundTrip && !result.stop && !se.stoprequest && type=='return' && se.allowSearchReturn) {
                 obj.source = result.sources;
                 setTimeout(()=>{
                   se.zone.run(()=>{
@@ -995,9 +1001,13 @@ export class FlightsearchresultPage implements OnInit {
         se.listReturnConditions = [];
         se.stoprequest = false;
           se.loadFlightCacheDataByAirline({...obj}, 'depart');
-          setTimeout(()=>{
-            se.loadFlightCacheDataByAirline({...obj}, 'return');
-          },1000)
+            if(se._flightService.itemFlightCache.roundTrip){
+                setTimeout(()=>{
+                  se.loadFlightCacheDataByAirline({...obj}, 'return');
+              },1000);
+            }
+            
+         
           
       }
     })
