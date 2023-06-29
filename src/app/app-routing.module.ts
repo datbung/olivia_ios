@@ -133,6 +133,9 @@ const routes: Routes = [
   
   { path: 'flightcombobookingdetail', loadChildren: './flightcombobookingdetail/flightcombobookingdetail.module#FlightcombobookingdetailPageModule' },
   { path: 'flighttopdealdetail', loadChildren: './flighttopdealdetail/flighttopdealdetail.module#FlighttopdealdetailPageModule' },
+  { path: 'flighttopplan', loadChildren: './flighttopplan/flighttopplan.module#FlighttopplanPageModule' },
+  { path: 'flighttopreview', loadChildren: './flighttopreview/flighttopreview.module#FlightTopReviewPageModule' },
+  { path: 'flighttopreviewlist', loadChildren: './flighttopreviewlist/flighttopreviewlist.module#FlightTopReviewListPageModule' },
 
   { path: 'flightpaymenttimeout/:stt', loadChildren: './flightpaymenttimeout/flightpaymenttimeout.module#FlightpaymenttimeoutPageModule' },
   { path: 'flightcomboaddluggage', loadChildren: './flightcomboaddluggage/flightcomboaddluggage.module#FlightcomboaddluggagePageModule' },

@@ -311,42 +311,43 @@ export class TabsPage implements OnInit {
           }
         })
 
-        this.fcmNative.onNotification().subscribe( (data:any)=>{
-          if(data.wasTapped){
-            this.showNotification(data);
-            //update lại trạng thái bkg
-            this.loadNotificationAndUpdateState(data.BookingCode);
-          } else {
-            //console.log("Received in foreground");
-            this.zone.run(()=>{
-              this.countmessage++;
-              this.valueGlobal.countNotifi++;
-              this.badge.set(this.countmessage);
-            })
-            this.showActionSheetNoti(data);
-          };
+        // this.fcmNative.onNotification().subscribe( (data:any)=>{
+        //   if(data.wasTapped && !this.valueGlobal.wasTappedNoti){
+        //     this.showNotification(data);
+        //     this.valueGlobal.wasTappedNoti = true;
+        //     //update lại trạng thái bkg
+        //     this.loadNotificationAndUpdateState(data.BookingCode);
+        //   } else {
+        //     //console.log("Received in foreground");
+        //     this.zone.run(()=>{
+        //       this.countmessage++;
+        //       this.valueGlobal.countNotifi++;
+        //       this.badge.set(this.countmessage);
+        //     })
+        //     this.showActionSheetNoti(data);
+        //   };
 
-          // this.fcmNative.getToken().then(token => {
-          //   this.storage.get('checktoken').then(checktoken => {
-          //     if (!checktoken) {
-          //       this.storage.set('checktoken',"1");
-          //       //PDANH 19/07/2019: Push memberid & devicetoken
-          //         this.gf.pushTokenAndMemberID("", token, this.appversion);
-          //       }
-          //   })
+        //   // this.fcmNative.getToken().then(token => {
+        //   //   this.storage.get('checktoken').then(checktoken => {
+        //   //     if (!checktoken) {
+        //   //       this.storage.set('checktoken',"1");
+        //   //       //PDANH 19/07/2019: Push memberid & devicetoken
+        //   //         this.gf.pushTokenAndMemberID("", token, this.appversion);
+        //   //       }
+        //   //   })
          
-          // });
-          // this.fcmNative.onTokenRefresh().subscribe(token =>{
-          //   //PDANH 19/07/2019: Push memberid & devicetoken
-          //   this.storage.get('auth_token').then(auth_token =>{
-          //     if(token){
-          //       this.storage.set('deviceToken',token);
-          //       this.gf.pushTokenAndMemberID(auth_token, token, this.appversion);
-          //     }
-          //   })
+        //   // });
+        //   // this.fcmNative.onTokenRefresh().subscribe(token =>{
+        //   //   //PDANH 19/07/2019: Push memberid & devicetoken
+        //   //   this.storage.get('auth_token').then(auth_token =>{
+        //   //     if(token){
+        //   //       this.storage.set('deviceToken',token);
+        //   //       this.gf.pushTokenAndMemberID(auth_token, token, this.appversion);
+        //   //     }
+        //   //   })
             
-          // })
-        })
+        //   // })
+        // })
 
         
 
@@ -767,12 +768,14 @@ export class TabsPage implements OnInit {
 
       setTimeout(()=>{
         this.fcmNative.onNotification().subscribe( (data:any)=>{
-          if(data.wasTapped){
+          if(data.wasTapped&& !this.valueGlobal.wasTappedNoti){
+            this.valueGlobal.wasTappedNoti = true;
             this.showNotification(data);
             //update lại trạng thái bkg
             this.loadNotificationAndUpdateState(data.BookingCode);
           } else {
             //console.log("Received in foreground");
+            this.valueGlobal.wasTappedNoti = false;
             this.zone.run(()=>{
               this.countmessage++;
               this.valueGlobal.countNotifi++;

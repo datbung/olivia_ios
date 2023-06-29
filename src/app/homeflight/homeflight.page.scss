@@ -104,6 +104,17 @@
         z-index: 1;
         position: absolute;
         width: 100%;
+
+        .div-point {
+          width: 40px;
+          padding: 1px 8px;
+          border-radius: 4px;
+          background-color: #9fc43a;
+          color: #fff;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+        }
       }
       .f-14{
         font-size: 14px;
@@ -192,7 +203,7 @@
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 17px;
+                  font-size: 16px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;
@@ -398,13 +409,14 @@
               width: 12px;
               height: 10px;
               position: relative;
+              margin-top: 4px;
 
               .img-flight-inout{
                 width: 32px;
-                height: 32px;
+                //height: 32px;
                 position: absolute;
                 left: 0;
-                top: -8px;
+                top: 2px;
               }
             }
         }
@@ -427,13 +439,13 @@
         margin-top: 4px;
       }
 
-      .div-topdeal{
+      .div-topdeal, .div-plan, .div-hotdeal{
         padding-left: 16px;
         background: #f2f2f2;
       }
       /////////////
 
-      .div-topdeal-flight{
+      .div-topdeal-flight, .div-hotdeal{
         padding: 0 16px;
         background: #f2f2f2;
         padding-bottom: 1px;
@@ -477,13 +489,19 @@
   
               .div-logo{
                   height: 30px;
-  
+                  display: flex;
+                  align-items: center;
+                  justify-content: flex-end;
+                  
                   .img-logo{
-                      height: 30px;
+                      max-height: 30px;
                   }
 
                   .logo-vna{
-                      height: 16px;
+                    position: absolute;
+                    top: 0;
+                    width: 50px;
+                    height: 16px !important;
                   }
           
               }
@@ -582,10 +600,11 @@
               width: 16px;
               height: 10px;
               position: relative;
+              margin-top: 10px;
 
         .img-flight-inout{
           width: 32px;
-          height: 32px;
+          //height: 32px;
           position: absolute;
           left: 0;
           top: -2px;
@@ -609,6 +628,22 @@
         //margin-left: 8px;
         top: -5px;
       }
+      .text-left {
+        text-align: left;
+      }
+      .div-wrap-slide {
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+
+        .div-wrap-itemdeal {
+          display: flex;
+          margin-right: 16px;
+          overflow-x: scroll;
+          flex-direction: column;
+        }
+      }
+      
 }
 
 //////media
@@ -631,10 +666,58 @@
     .text-flight-datetime {
       font-size: 13px !important;
     }
+    .label-home-hotel {
+      font-size: 14px !important;
+    }
+    .div-point {
+      font-size: 14px !important;
+    }
+    
+  }
+  @media(min-width:350px) and (max-width:375px){
+    .label-home-hotel {
+      font-size: 14px !important;
+    }
+    .div-point {
+      font-size: 14px !important;
+    }
+    
+  }
+
+  @media screen and (max-width:360px) {
+    .div-wrap-itemdeal {
+      min-width: 318px !important;
+    }
+  }
+  @media (min-width:375px) and (max-width:375px) {
+    .div-wrap-itemdeal {
+      min-width: 343px !important;
+    }
+  }
+  @media (min-width:390px) and (max-width:390px) {
+    .div-wrap-itemdeal {
+      min-width: 358px !important;
+    }
+  }
+  @media (min-width:410px) and (max-width:412px) {
+    .div-wrap-itemdeal {
+      min-width: 380px !important;
+    }
+  }
+  @media (min-width:414px) and (max-width:414px) {
+    .div-wrap-itemdeal {
+      min-width: 382px !important;
+    }
+  }
+  @media (min-width:420px) and (max-width:430px) {
+    .div-wrap-itemdeal {
+      min-width: 398px !important;
+    }
   }
 
   .div-useful{
-    padding: 0 16px;
+    //padding: 0 16px;
+    padding-left: 16px;
     background: #f2f2f2;
     padding-bottom: 16px;
   }
@@ -747,4 +830,42 @@
   }
   .h-1264 {
     height: 1264px !important;
+  }
+  .div-wrap-dot {
+    display: flex;
+    justify-content: center;
+    .div-dot {
+      background-color: #f2f2f2;
+      margin-top: 16px;
+      margin-right: 8px;
+      width: 12px;
+      height: 12px;
+      background: #dedfe3;
+      border-radius: 12px;
+    }
+    .div-dot.selected {
+      background: #ffffff !important;
+    }
+  }
+  
+  ////////
+  .slider {
+    width: 100%;
+    height: 410px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .slide.active {
+    opacity: 1;
   }

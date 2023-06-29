@@ -2233,6 +2233,8 @@ export class RoomadddetailsEanPage implements OnInit {
         }
       });
     }
-
+    setFocusInput(){
+        document.getElementById('ipNote').scrollIntoView({  block: 'center' });
+      }
 }
 

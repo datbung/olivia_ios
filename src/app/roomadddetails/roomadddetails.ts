@@ -1295,4 +1295,8 @@ async showChangeEmail(input){
               }
             }
           }
+
+          setFocusInput(){
+            document.getElementById('ipNote').scrollIntoView({  block: 'center' });
+          }
 }

@@ -440,7 +440,7 @@
         <div class="float-info bottom-18">
           <p class="text-titledes f-20 p-bottom-2" [innerHTML]="slide.title"></p>
           <p class="cls-subtitle">
-            {{ slide.shortDescription }} - {{ slide.totalHotel }} Khách sạn
+            {{ slide.shortDescription }} <span *ngIf="slide.totalHotel">- {{ slide.totalHotel }} Khách sạn</span>
           </p>
         </div>
         <div class="grad2"></div>

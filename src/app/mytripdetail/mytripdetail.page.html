@@ -3451,7 +3451,7 @@
       <div class="text-info-2 font-weight-500">
         Liên hệ hỗ trợ
       </div>
-      <div (click)="nextSupport(trip)" *ngIf="trip.booking_type != 'TICKET'">
+      <div (click)="nextSupport(trip)" *ngIf="trip.booking_type != 'TICKET'" class="position-absolute">
         <img src="./assets/imgs/ic_expand.svg" />
       </div>
       <a *ngIf="trip.booking_type == 'TICKET'"  href="https://zalo.me/3888313238733373810" class="position-absolute">

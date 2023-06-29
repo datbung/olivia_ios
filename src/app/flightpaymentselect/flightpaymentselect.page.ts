@@ -844,9 +844,10 @@ export class FlightPaymentSelectPage implements OnInit {
       return;
     }
     this._flightService.itemFlightCache.paymentType = 'payoo';
+    this.presentLoading();
     this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
       if(check){
-          this.presentLoading();
+          //this.presentLoading();
           this.gf.updatePaymentMethod(this._flightService.itemFlightCache, 5, "","").then(datatype => {
             if (datatype && datatype.isHoldSuccess) {
               

@@ -13,17 +13,44 @@
 .width-24 {
     width: 24px !important;
 }
+.m-left-8 {
+    margin-left: 8px;
+}
 .div-useful-content{
     .cls-bg-detail {
         background-color: #f5f7fa !important;
     }
         .item-useful{
             border-radius: 4px;
-            margin-top: 12px;
+            margin-top: 4px;
             //margin-bottom: 68px;
 
+            .div-headline {
+                display: flex;
+                align-items: flex-end;
+
+                .div-icon {
+                    width: 32px;
+                    height: 32px;
+                }
+                .div-text {
+                    font-size: 20px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: #3f3b3b;
+                }
+            }
+
+            .div-wrap-itemuseful {
+                display: flex;
+                overflow-x: scroll;
+            }
             .text-content{
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: 500;
                 line-height: 1.4;
                 color: #3f3b3b;
@@ -34,6 +61,9 @@
             .div-background-useful {
                 background: #f2f2f2;
                 margin-bottom: 8px;
+
+                width: 296px;
+                margin-right: 12px;
             }
             .icon-arr {
                 display: flex;
@@ -45,9 +75,9 @@
                 background-color: #fff;
             }
             .div-title {
-                padding: 12px 16px;
+                padding: 16px 12px;
                 border-radius: 4px;
-                background-color: #f5f7fa;
+                background-color: #ffffff;
             }
             .div-image {
                 margin-top: 26px;
@@ -59,6 +89,16 @@
                     object-fit: cover;
                 }
             }
+            .div-border-selected {
+                border: solid 2px #26bed6;
+                background-color: #fff;
+                border-radius: 4px;
+            }
+
+            .div-border-selected .text-content {
+                font-size: 18px !important;
+                color: #26bed6 !important;
+            }
         }
     
         .div-useful-show{
@@ -69,6 +109,7 @@
             font-weight: 300;
             line-height: 2;
             color: #3f3b3b;
+            margin-left: -16px;
         }
         .div-useful-detail-show{
             padding: 8px 16px;
@@ -108,7 +149,9 @@
     
 }
 
-
+.p-top-30 {
+    padding-top: 30px;
+}
 .div-useful-title.cls-topdeal-float .title-padding{
     padding-top: 0px !important;
   }
@@ -134,5 +177,21 @@
     } 
     .icon-showmore {
         height: 24px;
+    }
+  }
+
+  @media(min-width:350px) and (max-width:360px){
+    .div-useful-show{ 
+      width: 350px !important;
+    }
+  }
+  @media(min-width:375px) and (max-width:375px){
+    .div-useful-show{ 
+      width: 375px !important;
+    }
+  }
+  @media(min-width: 410px) and (max-width:414px){
+    .div-useful-show{ 
+      width: 410px !important;
     }
   }

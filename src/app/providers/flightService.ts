@@ -84,6 +84,7 @@ export class flightService{
   requestSupportChangeFlight: boolean;
   fromOrderRequestDetailSupport: boolean;
   typeFlightUsefulShow: number=1;
+  flighttype: string;
   publicItemShowMoreFlightTopDeal(data: any) {
     this.itemShowMoreFlightTopDeal.next(data);
   }
@@ -117,7 +118,6 @@ export class flightService{
   getOrderRequestSearchFlightFilter(): Subject<any> {
     return this.ItemOrderRequestSearchFlightFilterSubject;
   }
-  
   
     
   

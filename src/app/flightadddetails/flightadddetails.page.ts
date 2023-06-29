@@ -82,11 +82,11 @@ export class FlightadddetailsPage implements OnInit {
   hasinput: boolean = false;
   subnameinvalid: boolean;
   ishiddingpaxhint: boolean;
-  ishideNameMail=true;hotenhddt;emailhddt;addressorder;
+  ishideNameMail=false;hotenhddt;emailhddt;addressorder;
   hidepaxhint: any;
   listPaxSuggestByMemberId = [];
   ischeckinOnl: boolean = true;
-  contactOption:any= 'mail';
+  contactOption:any= 'zalo';
   departFlight: any;
   returnFlight: any;
   expanddivairlinemember: boolean;
@@ -188,8 +188,9 @@ export class FlightadddetailsPage implements OnInit {
             if(co){
               this.contactOption = co;
             }else{
-                this.contactOption = 'mail';
+                this.contactOption = 'zalo';
             }
+            
         })
       })
     }
@@ -553,6 +554,9 @@ export class FlightadddetailsPage implements OnInit {
                 se.storage.get('email').then(email => {
                   if(email){
                     se.email = email;
+                    if(!se.ishideNameMail){
+                      se.emailhddt = email;
+                    }
                   }
                 })
               }
@@ -627,6 +631,7 @@ export class FlightadddetailsPage implements OnInit {
                             se._flightService.itemFlightCache.address = order.address;
                             se._flightService.itemFlightCache.tax = order.tax;
                             se.ischeck = true;
+                            se.ishideNameMail = se.contactOption == 'zalo';
                           } else {
                             se.ischeck = false;
                             se._flightService.itemFlightCache.companyname = '';
@@ -655,6 +660,7 @@ export class FlightadddetailsPage implements OnInit {
                         se._flightService.itemFlightCache.address = order.address;
                         se._flightService.itemFlightCache.tax = order.tax;
                         se.ischeck = true;
+                        se.ishideNameMail = se.contactOption == 'zalo';
                       } else {
                         se.ischeck = false;
                         se._flightService.itemFlightCache.companyname = '';
@@ -3887,7 +3893,11 @@ alert.present();
       }
     }
     contactOptionClick(event){
-      this.contactOption = event.currentTarget.value;
+      this.zone.run(()=>{
+        this.contactOption = event.currentTarget.value;
+        this.ishideNameMail = this.contactOption == 'mail';
+      })
+      
     }
 
     expandAirlineMember(itemAdult, index){

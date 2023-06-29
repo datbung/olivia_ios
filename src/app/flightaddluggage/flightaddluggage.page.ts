@@ -108,7 +108,7 @@ export class FlightaddluggagePage implements OnInit {
       
       if(this.departLuggage && this.departLuggage.length>0){
         this.departLuggage.forEach(element => {
-          element.priceshow = "x "+ this.gf.convertNumberToString(element.amount) +"đ";
+          element.priceshow = "x "+ (this.gf.convertNumberToString(element.amount)||0) +"đ";
           if(!element.quantity){
             element.quantity = 0;
           }else{
@@ -129,7 +129,7 @@ export class FlightaddluggagePage implements OnInit {
         //     this.tabluggage = 2;
         // }
         this.returnLuggage.forEach(element => {
-          element.priceshow = "x "+ this.gf.convertNumberToString(element.amount) +"đ";
+          element.priceshow = "x "+ (this.gf.convertNumberToString(element.amount)||0) +"đ";
           if(!element.quantity){
             element.quantity = 0;
           }else{
@@ -146,7 +146,7 @@ export class FlightaddluggagePage implements OnInit {
       }
 
       if(this.totalprice >0){
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) + "đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
       }
       
       
@@ -200,7 +200,7 @@ export class FlightaddluggagePage implements OnInit {
         
         this.totalprice = this.departLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
         this.totalprice += this.returnLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) + "đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
 
       }else{
         if(this._flightService.itemFlightCache.infant){
@@ -229,7 +229,7 @@ export class FlightaddluggagePage implements OnInit {
         }
         this.totalprice = this.departLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
         this.totalprice += this.returnLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) +"đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) +"đ";
       }
     })
     

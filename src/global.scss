@@ -576,7 +576,7 @@ ion-toolbar{
     }
     ion-title{
         font-size:18px !important;
-        // padding-top: env(safe-area-inset-top);
+        padding-top: env(safe-area-inset-top);
     }
 
     ion-header ion-toolbar:first-child {

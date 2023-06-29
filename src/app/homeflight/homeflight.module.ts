@@ -10,6 +10,8 @@ import { FlighttopdealPageModule } from '../flighttopdeal/flighttopdeal.module';
 import { FlightusefulPageModule } from '../flightuseful/flightuseful.module';
 import { OrderPageModule } from '../order/order.module';
 import { BookingPageModule } from '../bizTravel/booking/booking.module';
+import { FlighttopplanPageModule } from '../flighttopplan/flighttopplan.module';
+import { FlightTopReviewPageModule } from '../flighttopreview/flighttopreview.module';
 
 @NgModule({
   imports: [
@@ -19,7 +21,9 @@ import { BookingPageModule } from '../bizTravel/booking/booking.module';
     FlighttopdealPageModule,
     FlightusefulPageModule,
     OrderPageModule,
-    BookingPageModule
+    BookingPageModule,
+    FlighttopplanPageModule,
+    FlightTopReviewPageModule,
   ],
   declarations: [HomeflightPage],
   exports: [HomeflightPage],
