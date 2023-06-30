@@ -303,7 +303,6 @@ export class SearchHotel {
   RatingValue: number;
   keysearchhoteldetail: string;
   keySearchHotelDetail: string;
-  ischeckDate: any;
 }
 export class child {
     text: string;
