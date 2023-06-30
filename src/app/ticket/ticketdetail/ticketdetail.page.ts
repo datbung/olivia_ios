@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { NavController, ModalController, ToastController, IonSlides, IonContent } from '@ionic/angular';
+import { NavController, ModalController, ToastController, IonSlides, IonContent,LoadingController } from '@ionic/angular';
 import { GlobalFunction } from '../../providers/globalfunction';
 import $ from 'jquery';
 import { C } from '../../providers/constants';
@@ -14,6 +14,8 @@ import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HotelreviewsvideoPage } from 'src/app/hotelreviewsvideo/hotelreviewsvideo';
 import { ticketService } from '../../providers/ticketService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+
 
 @Component({
   selector: 'app-ticketdetail',
@@ -59,6 +61,8 @@ export class TicketDetailPage {
   isseemorenotes: boolean = false;
   overview: any;
   notes: any;
+  ishowMap: boolean = false;
+  linkGoogleMap: any;
  
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
@@ -68,8 +72,8 @@ export class TicketDetailPage {
         public tourService: tourService,
         public searchHotel: SearchHotel,
         private youtube: YoutubeVideoPlayer,
-        private domSanitizer: DomSanitizer,
-        public ticketService: ticketService) {
+        private sanitizer: DomSanitizer,
+        public ticketService: ticketService,public loadingCtrl: LoadingController,private safariViewController:SafariViewController) {
             this.loaddata();
            
         }
@@ -85,9 +89,14 @@ export class TicketDetailPage {
         this.ticketService.experience = res.data.experience;
         this.loadslidedone = true;
         this.AvgPoint = res.data.experience.avgPoint;
+        if(this.AvgPoint && (this.AvgPoint == 10  || this.AvgPoint == 6  || this.AvgPoint == 9  || this.AvgPoint == 8  || this.AvgPoint == 7)){
+          this.AvgPoint = this.AvgPoint + ".0";
+        }
         this.totalReview = res.data.experience.numOfReview;
-
+    
         this.itemDetail = res.data.experience;
+        let link = "https://maps.google.com/maps?q=" + this.itemDetail.name + "&hl=es;z=16&amp&output=embed";
+        this.linkGoogleMap = this.sanitizer.bypassSecurityTrustResourceUrl(link);
         if (this.itemDetail.overview.length >= 1e3) {
           let $ =this.itemDetail.overview.trim().substr(0, 1e3).split(" ");
           $.pop(),
@@ -129,11 +138,17 @@ export class TicketDetailPage {
           if (res.data) {
             for (let i = 0; i < 3; i++) {
               const element = res.data[i];
+       
+
+                if(element.avgPoint && (element.avgPoint == 10  || element.avgPoint == 6  || element.avgPoint == 9  || element.avgPoint == 8  || element.avgPoint == 7)){
+                  element.avgPoint = element.avgPoint + ".0";
+                }
+              
               this.itemSlide.push(element);
             }
           }
          
-          let url = C.urls.baseUrl.urlTicket + '/api/Detail/GetExperienceReviews?experienceCode=' + this.ticketService.itemTicketDetail.experienceId;
+          let url = C.urls.baseUrl.urlTicket + '/api/Detail/GetExperienceReviews?experienceCode=' + this.ticketService.itemTicketDetail.experienceId+'&pageSize=10&pageindex=1';
           let headers = {
           apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
           apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -141,7 +156,9 @@ export class TicketDetailPage {
          this.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'GetExperienceSameTopic').then((data) => {
           let res = JSON.parse(data);
           this.ticketReviews = res.data.reviews;
-
+          this.ticketReviews =  this.ticketReviews.map((item) => {
+            return { ...item, reviewDateDisplay: moment(this.ticketReviews.reviewDate).format('DD-MM-YYYY') }
+          });
         });
 
         });
@@ -471,4 +488,49 @@ export class TicketDetailPage {
     seemorenotes(){
       this.isseemorenotes=true;
     }
+    openmap(){
+      this.ishowMap=!this.ishowMap;
+      if (this.ishowMap) {
+        this.presentLoadingRelated();
+      }
+     
     }
+    async presentLoadingRelated() {
+      var loader = await this.loadingCtrl.create({
+        message: "",
+        duration: 3000
+      });
+      loader.present();
+    }
+    openWebpage(url: string) {
+      var se=this;
+      this.safariViewController.isAvailable()
+    .then((available: boolean) => {
+        if (available) {
+          this.safariViewController.show({
+            url: this.linkGoogleMap,
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#23BFD8'
+          })
+          .subscribe((result: any) => {
+              if(result.event === 'opened') console.log('Opened');
+              else if(result.event === 'loaded') console.log('Loaded');
+              else if(result.event === 'closed') 
+              {
+                
+              }
+             
+            },
+            (error: any) => console.error(error)
+          );
+    
+        } else {
+          // use fallback browser, example InAppBrowser
+        }
+      }
+    );
+    }
+  }

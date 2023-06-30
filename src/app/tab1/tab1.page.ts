@@ -3924,28 +3924,37 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
-    this.zone.run(()=>{
-      this.valueGlobal.activeTab = currentIndex;
-      if(currentIndex !=2 ){
-        this.activeTab = currentIndex;
-      }
-    })
-    if ( currentIndex === 2 ) {//Combo
-      this.valueGlobal.activeTab = 2;
-        this.valueGlobal.backValue = "";
-        this.searchhotel.adult=this.adult;
-        this.searchhotel.child=this.child;
-        this.searchhotel.roomnumber= this.roomnumber;
-         this.navCtrl.navigateForward('/topdeallist');
-    }
-    else if ( currentIndex === 1 ) {//Flight
-      this.valueGlobal.activeTab = 1;
+ 
+    this.activeTab = currentIndex;
+    if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
       this._mytripservice.rootPage = "homeflight";
       this.flightService.itemTabFlightFocus.emit(1);
-       
+        if (document.querySelector(".tabbar")) {
+          document.querySelector(".tabbar")['style'].display = 'none';
+          if(document.querySelector(".tabbar")[1]){
+            document.querySelector(".tabbar")[0]['style'].display = 'none';
+            document.querySelector(".tabbar")[1]['style'].display = 'none';
+          }
+        }
+        if(document.getElementsByClassName("homefood-footer").length >0){
+          document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+          if(document.getElementsByClassName("homefood-footer")[1]){
+            document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+          }
+         }
+
+         if(document.getElementsByClassName("homeflight-footer").length >0){
+          document.getElementsByClassName("homeflight-footer")[0]['style'].display ='block';
+          if(document.getElementsByClassName("homeflight-footer")[1]){
+            document.getElementsByClassName("homeflight-footer")[1]['style'].display ='block';
+          }
+         }
+     
+      //this.getAddress();
+      
     }
-    else if (currentIndex === 3) {//Tour
+    else if (currentIndex === 2) {//Tour
       this._mytripservice.rootPage = "hometour";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.ischeckFavourite='Tour';
@@ -3959,12 +3968,34 @@ export class Tab1Page implements OnInit {
       }
       }
   
+      if(document.getElementsByClassName("homefood-footer").length >0){
+        document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+        if(document.getElementsByClassName("homefood-footer")[1]){
+          document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+        }
+       }
+       if(document.getElementsByClassName("homeflight-footer").length >0){
+        document.getElementsByClassName("homeflight-footer")[0]['style'].display ='none';
+        if(document.getElementsByClassName("homeflight-footer")[1]){
+          document.getElementsByClassName("homeflight-footer")[1]['style'].display ='none';
+        }
+      }
     }
-    else if (currentIndex === 4) {//Ticket
+    else if (currentIndex === 3) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.activeTab=3;
-      
+      // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
+      // if (document.querySelector(".tabbar")) {
+      // document.querySelector(".tabbar")['style'].display = 'flex';
+      // if(document.querySelector(".tabbar")[1]){
+      //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
+      //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
+      // }
+      // }
+      // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+      // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+      // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
     }
     else{
       this._mytripservice.rootPage = "homehotel";
@@ -3977,6 +4008,19 @@ export class Tab1Page implements OnInit {
       document.querySelector(".tabbar")[0]['style'].display = 'flex';
       document.querySelector(".tabbar")[1]['style'].display = 'flex';
     }
+    }
+
+    if(document.getElementsByClassName("homefood-footer").length >0){
+      document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+      if(document.getElementsByClassName("homefood-footer")[1]){
+        document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+      }
+     }
+     if(document.getElementsByClassName("homeflight-footer").length >0){
+      document.getElementsByClassName("homeflight-footer")[0]['style'].display ='none';
+      if(document.getElementsByClassName("homeflight-footer")[1]){
+        document.getElementsByClassName("homeflight-footer")[1]['style'].display ='none';
+      }
     }
 
      this.valueGlobal.backValue = "";
