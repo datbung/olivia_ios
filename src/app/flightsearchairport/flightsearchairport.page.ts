@@ -123,11 +123,11 @@ export class FlightsearchairportPage implements OnInit {
               throw new Error(error)
             };
             let result = JSON.parse(body);
-            if(result && result.data && result.data.length >0){
+            if(result && result.length >0){
               //result = result.filter((item) =>{ return item.country == "Việt Nam" && item.code != 'FDF'});
                 se.zone.run(()=>{
-                    se.items = [...result.data];
-                    se.itemsfull = [...result.data];
+                    se.items = [...result];
+                    se.itemsfull = [...result];
                     //se.itemsfull.sort((a,b)=>{ return (a.count - b.count)*-1 });
                     se.items.forEach(element => {
                       element.show = true;

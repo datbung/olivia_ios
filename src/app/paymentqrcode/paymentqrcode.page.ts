@@ -59,6 +59,9 @@ export class PaymentqrcodePage implements OnInit {
             this.totalPrice = activityService.totalPriceTransfer;
             this.bookingCode = activityService.bookingCode;
             this.buildLinkQrCode();
+            this.storage.get('contactOption').then((option)=>{
+              this.contactOption = option;
+            })
             this.storage.get('checkreview').then(checkreview => {
               if (checkreview==0) {
                 this.checkreview=0;

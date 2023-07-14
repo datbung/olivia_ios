@@ -99,8 +99,6 @@
                     
                     
                 </div>
-
-                <div *ngIf="ischeck">
                     <div *ngIf="ischeck">
                         <div class="m-bottom-12">
                           <ion-item style="padding-inline-start: 0;padding-inline-end: 0;--padding-start: 0">
@@ -120,11 +118,11 @@
                             <ion-input class="cls-input-custom" [(ngModel)]="tax" type="text" required></ion-input>
                           </ion-item>
                         </div>
-                        <div style="margin-left: 5px">
+                        <div style="margin-left: 5px" *ngIf="contactOption=='mail'">
                             <ion-checkbox (ionChange)="showNameMail($event)" style="width: 20px; height: 20px" [checked]="ishideNameMail"  color="secondary"></ion-checkbox>
                             <ion-label class="label-input" style="margin: 0px 10px;">Dùng họ tên & email của người đặt dịch vụ để xuất hoá đơn</ion-label>
                           </div>
-                          <div *ngIf="!ishideNameMail">
+                          <div *ngIf="!ishideNameMail || contactOption=='zalo'">
                             <ion-col size="12">
                               <ion-item style="--padding-start: 0px">
                                 <ion-label class="sub-label m-bottom-6" position="stacked">Họ tên</ion-label>
@@ -139,7 +137,6 @@
                             </ion-col>
                           </div>
                     </div>
-                  </div>
             </div>
             <!-- <div class="div-line"></div>
             <div class="div-vat d-flex div-checkin-online-1">

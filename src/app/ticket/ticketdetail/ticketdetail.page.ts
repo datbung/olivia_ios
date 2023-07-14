@@ -331,6 +331,7 @@ export class TicketDetailPage {
         this.searchHotel.indexreviewimg = indeximgreview;
         this.searchHotel.cusnamereview = CustomerName;
         this.searchHotel.datereview = DateStayed;
+        this.searchHotel.openFromTopReviewList = false;
         const modal: HTMLIonModalElement =
           await this.modalCtrl.create({
             component: HotelreviewsimagePage,
@@ -443,6 +444,7 @@ export class TicketDetailPage {
         this.searchHotel.cusnamereview = '';
         this.searchHotel.datereview = '';
         this.searchHotel.tourDetailName = this.itemDetail.name;
+        this.searchHotel.openFromTopReviewList = false;
         const modal: HTMLIonModalElement =
           await this.modalCtrl.create({
             component: HotelreviewsimagePage,

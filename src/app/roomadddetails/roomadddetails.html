@@ -73,9 +73,9 @@
 </div>
     <ion-row>
         <ion-col size="12">
-          <ion-item style="--padding-start: 0px;margin-left: -5px;">
+          <ion-item style="--padding-start: 0px;margin-left: -5px;" id="ipNote">
             <ion-label class="cls-label" position="stacked">Yêu cầu khác</ion-label>
-            <ion-input class="label-input" [(ngModel)]="note"></ion-input>
+            <ion-input class="label-input" [(ngModel)]="note" (ionFocus)="setFocusInput()"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>

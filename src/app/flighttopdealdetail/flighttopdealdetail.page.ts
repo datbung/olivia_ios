@@ -27,6 +27,8 @@ export class FlighttopdealdetailPage implements OnInit {
         public _flightService: flightService) { 
             if(this._flightService.itemFlightTopDeal){
                 this.item = this._flightService.itemFlightTopDeal;
+                this.item.content = this.item.content.replace('target="_blank"','');
+                this.item.content = this.item.content.replace('target="_blank"','');
             }
         }
 
@@ -42,5 +44,8 @@ export class FlighttopdealdetailPage implements OnInit {
         book(){
             this._flightService.itemHomeFlightScrollTop.emit(1);
             this.navCtrl.back();
+        }
+
+        showLink(item) {
         }
 }

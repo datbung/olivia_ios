@@ -223,6 +223,7 @@ export class HotelDetailPage implements OnInit {
   youtubeId: any;
   trustedVideoUrl: any;
   callbackNote: any;
+  checkOutOfRangeCombo: boolean=true;
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
     public booking: Booking, public storage: Storage, public authService: AuthService, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, public valueGlobal: ValueGlobal, private socialSharing: SocialSharing,
@@ -1684,6 +1685,7 @@ export class HotelDetailPage implements OnInit {
                 se.flashSaleEndDate = moment(dateEnd).format('DD.MM.YYYY');
               }
             }
+            
             if(se.fc && (item.availableTo || se.comboDetail.endDate)){
               var diffday = 1;
               if(se.comboDetail && se.comboDetail.endDate){
@@ -1694,7 +1696,15 @@ export class HotelDetailPage implements OnInit {
                 se.comboDetailEndDate = d;
                 se.allowbookcombofc = moment(se.searchhotel.CheckOutDate).diff(moment(d),'days') > 1 ? false : true;
                 se.allowbookcombofx = moment(se.searchhotel.CheckOutDate).diff(moment(d),'days') > 1 ? false : true;
+                
+                se.checkOutOfRangeCombo = moment(se.searchhotel.CheckOutDate).diff(moment(d),'days') > 1 ? false : true;
               }
+            }
+            if(se.fcbcar && (item.availableTo || se.comboDetail.endDate)){
+              let arr = se.comboDetail.endDate.split('-');
+              let newdate = new Date(arr[2],arr[1] -1,arr[0]);
+              let d = moment(newdate).format('YYYY-MM-DD');
+              se.checkOutOfRangeCombo = moment(se.searchhotel.CheckOutDate).diff(moment(d),'days') > 1 ? false : true;
             }
             if(se.fcbcar && se.comboDetail){
               se.bookCombo.ComboRoomPrice = se.comboDetail.comboDetail.totalPriceSale;
@@ -1781,6 +1791,12 @@ export class HotelDetailPage implements OnInit {
           else{
             se.allowbookcombofc = false;
             se.allowbookcombofx = false;
+
+            if(obj && obj.endDate)
+            var arr = obj.endDate.split('-');
+                var newdate = new Date(arr[2],arr[1] -1,arr[0]);
+                var d = moment(newdate).format('YYYY-MM-DD');
+                se.checkOutOfRangeCombo = moment(se.searchhotel.CheckOutDate).diff(moment(d),'days') > 1 ? false : true;
           }
           if (itemList) {
             itemList.forEach(item => {
@@ -3784,6 +3800,10 @@ async bookcombo() {
         }
         else if(value==4)
         {
+          if(this.fcbcar && !this.checkOutOfRangeCombo){
+            this.gf.showAlertMessageOnly(`Combo Chỉ áp dụng đến ngày ${this.comboDetail.endDate}. Quý khách vui lòng chọn ngày khởi hành trong giai đoạn Combo hoặc liên hệ với chúng tôi qua hotline 19001870 để được tư vấn thêm.`)
+            return;
+          }
           this.searchhotel.roomnumber=this.searchhotel.roomnumber ? this.searchhotel.roomnumber : this.room;
           this.valueGlobal.checksendcb=false;
           const modal: HTMLIonModalElement =
@@ -3964,36 +3984,7 @@ async bookcombo() {
             this.bookCombo.ComboRoomPrice = this.comboDetail.comboDetail.totalPriceSale;
             this.bookCombo.objComboDetail = this.comboDetail;
             self.router.navigateByUrl('/combocarnew');
-          //   var options = {
-          //     method: 'GET',
-          //     url: C.urls.baseUrl.urlContracting + '/api/toolsapi/CheckAllotment',
-          //     qs:
-          //     {
-          //       token: '3b760e5dcf038878925b5613c32615ea3',
-          //       hotelcode: this.booking.HotelId,
-          //       roomcode: this.bookCombo.ComboDetail.comboDetail.roomId,
-          //       checkin: this.booking.CheckInDate,
-          //       checkout: this.booking.CheckOutDate,
-          //       totalroom: this.room
-          //     },
-          //     headers:
-          //       {}
-          //   };
-          //   request(options, function (error, response, body) {
-          //     var rs = JSON.parse(body);
-          //     if (rs.Msg == "AL") {
-          //       self.Roomif.payment = rs.Msg;
-          //       self.Roomif.ischeckpayment = true;
-          //     } else if (rs.Msg == "RQ") {
-          //       self.Roomif.payment = rs.Msg;
-          //       self.Roomif.ischeckpayment = false;
-          //     }
-          //     self.GetUserInfo();
-          //     self.navCtrl.navigateForward('/combocarnew');
-    
-          //   });
-          // } else {
-          //   self.navCtrl.navigateForward('/combocarnew');
+          
           }
         }
         else if (value == 5) {
@@ -4014,13 +4005,7 @@ async bookcombo() {
               }
             }
           }
-          // for (let i = 0; i < this.arrroom[0].MealTypeRates.length; i++) {
-          //   var Meal=this.arrroom[0].MealTypeRates[i];
-          //   if (Meal.IsFlashSale == true && (Meal.Supplier == 'Internal' || Meal.Supplier == 'VINPEARL'|| Meal.Supplier == 'B2B') && Meal.PromotionNote != '') {
-          //     this.indexmeal=i;
-          //     break;
-          //   }
-          // }
+         
           var date1 = new Date(self.cin);
           var date2 = new Date(self.cout);
           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -4130,6 +4115,10 @@ async bookcombo() {
   }
 
   async sendRequestCombo(){
+    if(this.fc && !this.checkOutOfRangeCombo){
+      this.gf.showAlertMessageOnly(`Combo Chỉ áp dụng đến ngày ${this.comboDetail.endDate}. Quý khách vui lòng chọn ngày khởi hành trong giai đoạn Combo hoặc liên hệ với chúng tôi qua hotline 19001870 để được tư vấn thêm.`)
+      return;
+    }
     this.bookCombo.Address = this.Address;
     this.bookCombo.ComboId = this.comboid?this.comboid:null;
       this.bookCombo.isFlightCombo = true;
@@ -4692,6 +4681,7 @@ async bookcombo() {
     this.searchhotel.indexreviewimg = indeximgreview;
     this.searchhotel.cusnamereview = CustomerName;
     this.searchhotel.datereview = DateStayed;
+    this.searchhotel.openFromTopReviewList = false;
     const modal: HTMLIonModalElement =
       await this.modalCtrl.create({
         component: HotelreviewsimagePage,
@@ -5043,6 +5033,7 @@ async bookcombo() {
     this.searchhotel.cusnamereview = '';
     this.searchhotel.datereview = '';
     this.searchhotel.tourDetailName = '';
+    this.searchhotel.openFromTopReviewList = false;
     const modal: HTMLIonModalElement =
       await this.modalCtrl.create({
         component: HotelreviewsimagePage,

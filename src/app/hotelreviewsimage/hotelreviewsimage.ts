@@ -21,6 +21,7 @@ export class HotelreviewsimagePage  {
   captionImg: any;
   hotelName: any;
   tourName: any;
+  reviewName:any;
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, public searchhotel: SearchHotel,public zone:NgZone) {
   }
   goback() {
@@ -31,11 +32,15 @@ export class HotelreviewsimagePage  {
     this.datereview=this.searchhotel.datereview;
     this.hotelName = this.searchhotel.hotelName;
     this.tourName = this.searchhotel.tourDetailName;
+    this.reviewName = this.searchhotel.reviewName;
+
     setTimeout(() => {
       this.arrimgreview = this.searchhotel.arrimgreview;
       if(this.searchhotel.indexreviewimg){
         this.slider.slideTo(this.searchhotel.indexreviewimg);
-        this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
+        if(this.arrimgreview[this.searchhotel.indexreviewimg] && this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg){
+          this.captionImg = this.arrimgreview[this.searchhotel.indexreviewimg].CaptionImg;
+        }
       }
       
       this.lengthslide=this.arrimgreview.length;
@@ -48,7 +53,7 @@ export class HotelreviewsimagePage  {
   }
   nextslide()
   {
-    if (this.countslide<this.arrimgreview.length) {
+    if (this.countslide<this.arrimgreview.length-1) {
       this.countslide++;
       this.slider.slideTo(this.countslide);
     }
@@ -73,7 +78,10 @@ export class HotelreviewsimagePage  {
   ionSlideTransitionStart() {
     this.slider.getActiveIndex().then(index => {
       this.countslide = index;
-      this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
+      if(this.arrimgreview[this.countslide] && this.arrimgreview[this.countslide].CaptionImg){
+        this.captionImg = this.arrimgreview[this.countslide].CaptionImg;
+      }
+      
     });
   }
 }

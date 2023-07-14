@@ -16,29 +16,36 @@ import * as request from 'requestretry';
 })
 export class FlightusefulPage {
     item: any;
-    listUseful: any;
+    listUseful: any=[];
     itemclick: any;
     type: any;
     arrLinkImage = [
-        "https://res.ivivu.com/flight/inbound/images/home/qa1.svg",
-        //"https://res.ivivu.com/flight/inbound/images/home/qa17_Covid19.svg",
         "https://res.ivivu.com/flight/inbound/images/home/qa2.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa3.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa4.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa5.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa6.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa7.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa8.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa9.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa10.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa11.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa12.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa13.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa14.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa15.svg",
-        "https://res.ivivu.com/flight/inbound/images/home/qa16.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa4.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa12.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa13.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa14.svg",
+       "https://res.ivivu.com/images/home/qa17_Covid19.svg",
 
+       "https://res.ivivu.com/flight/inbound/images/home/qa8.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa9.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa10.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa15.svg",
+
+       "https://res.ivivu.com/flight/inbound/images/home/qa1.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa11.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa5.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa6.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa16.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa3.svg",
+       "https://res.ivivu.com/flight/inbound/images/home/qa7.svg"
     ]
+    listUseful1: any=[];
+    listUseful2: any=[];
+    listData: any[];
+    listIdProcedure = [6,8,16,17,18,19];
+    listIdPassport = [12,13,14,20];
+    listIdNote = [5,15,9,10,21,7,11];
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private zone: NgZone,
@@ -66,22 +73,42 @@ export class FlightusefulPage {
                 'Content-Type': 'application/json; charset=utf-8'
                 }, {}, "homeflight", "GetUsefulHome").then((data) =>{
                   if(data){
-                        this.listUseful = data;                      
+                    data.forEach(element => {
+                        if(this.listIdProcedure.indexOf(element.id) != -1){
+                            this.listUseful.push(element);
+                        }
+                        else if(this.listIdPassport.indexOf(element.id) != -1){
+                            this.listUseful1.push(element);
+                        }
+                        else if(this.listIdNote.indexOf(element.id) != -1){
+                            this.listUseful2.push(element);
+                        }
+                    });
+                        
+                        this.listData = [];
+                        this.listData.push({name: 'Thủ tục', data: this.listUseful});
+                        this.listData.push({name: 'Giấy tờ & Hành lý', data: this.listUseful1});
+                        this.listData.push({name: 'Lưu ý', data: this.listUseful2});
                   }
                 })
         }
 
         itemClick(item){
+           
             if(this.itemclick && this.itemclick.id == item.id){
                 this.itemclick = item;
             }else{
                 this.itemclick = item;
 
-                for (let index = 0; index < this.listUseful.length; index++) {
-                    const element = this.listUseful[index];
-                    element.clicked = false;
-                }
-
+                // for (let index = 0; index < this.listUseful.length; index++) {
+                //     const element = this.listUseful[index];
+                //     element.clicked = false;
+                // }
+                this.listData.forEach((itemlist)=>{
+                    itemlist.data.forEach(element => {
+                        element.clicked = false;
+                    });
+                })
                 
             }
             
@@ -90,8 +117,13 @@ export class FlightusefulPage {
             }else{
                 item.clicked = true;
                 setTimeout(()=>{
-                    this._flightService.itemUseFulClick.emit(parseInt($("#"+item.id)[0].offsetTop) - 70);
+                    this._flightService.itemUseFulClick.emit(parseInt($("#"+item.id)[0].offsetTop   )- 100);
+                    
                 },10)
+
+                setTimeout(()=> {
+                    document.getElementById(item.id).scrollIntoView({  block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+                },300)
             }
            
         }

@@ -266,7 +266,7 @@ export class FlightaddseatPage implements OnInit {
         item.quantity++;
         this.totalquantity++;
         this.totalprice += item.quantity * item.amount;
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) + "đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
         if(isdepart){
           this.totaldepartquantity++;
           this.quantitydisplay = this.totaldepartquantity + " kiện";
@@ -286,7 +286,7 @@ export class FlightaddseatPage implements OnInit {
       if (item.quantity >= 1) {
         
         this.totalprice -= item.quantity * item.amount;
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) +"đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) +"đ";
         if(isdepart){
           this.totaldepartquantity--;
           this.quantitydisplay = this.totaldepartquantity >0 ? (this.totaldepartquantity + " kiện") : "Chưa chọn";
@@ -372,12 +372,12 @@ export class FlightaddseatPage implements OnInit {
               if(tabindex ==1){
                 this.departSeatTemp.push(seat);
                   this.totalprice += seat.amount;
-                  this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) +"đ";
+                  this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice) ||0) +"đ";
                   this.departSeatChoice.push(seat);
               }else{
                 this.returnSeatTemp.push(seat);
                   this.totalreturnprice += seat.amount;
-                  this.totalreturnpricedisplay = this.gf.convertNumberToString(this.totalreturnprice) +"đ";
+                  this.totalreturnpricedisplay = (this.gf.convertNumberToString(this.totalreturnprice) ||0) +"đ";
                   this.returnSeatChoice.push(seat);
               }
             }
@@ -414,12 +414,12 @@ export class FlightaddseatPage implements OnInit {
             if(tabindex ==1){
                this.listSeatRollback.push(seat);
                 this.totalprice -= seat.amount;
-                this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) +"đ";
+                this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) +"đ";
                 this.gf.removeItemInArrayByName(this.departSeatChoice, seat);
             }else{
                this.listReturnSeatRollback.push(seat);
                 this.totalreturnprice -= seat.amount;
-                this.totalreturnpricedisplay = this.gf.convertNumberToString(this.totalreturnprice) +"đ";
+                this.totalreturnpricedisplay = (this.gf.convertNumberToString(this.totalreturnprice)||0) +"đ";
                 this.gf.removeItemInArrayByName(this.returnSeatChoice, seat);
             }
           }

@@ -1,5 +1,5 @@
 <ion-content>
-    <div class="border-bottom" style="margin-top: env(safe-area-inset-top)">
+    <div class="border-bottom" style="margin-top: calc(env(safe-area-inset-top) + 16px)">
         <ion-row>
           <ion-col style="text-align: center;height: 48px;">
             <div style="align-self: center">
@@ -19,8 +19,14 @@
                 {{datereview}}
               </ion-label>
             </div>
-            <div *ngIf="!cusnamereview && !datereview && !tourName" class="div-hotel-name">{{hotelName}}</div>
-            <div *ngIf="!cusnamereview && !datereview && tourName" class="div-tour-name">{{tourName}}</div>
+            <div *ngIf="!searchhotel.openFromTopReviewList">
+              <div *ngIf="!cusnamereview && !datereview && !tourName" class="div-hotel-name">{{hotelName}}</div>
+              <div *ngIf="!cusnamereview && !datereview && tourName" class="div-tour-name">{{tourName}}</div>
+            </div>
+            <div *ngIf="searchhotel.openFromTopReviewList">
+              <div *ngIf="!cusnamereview && !datereview" class="div-tour-name">{{reviewName}}</div>
+            </div>
+
           </ion-col>
         </ion-row>
       </div>

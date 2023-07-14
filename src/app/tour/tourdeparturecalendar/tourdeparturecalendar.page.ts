@@ -702,7 +702,7 @@ export class TourDepartureCalendarPage implements OnInit {
               se.zone.run(() => {
 
                 if (data.point) {
-                  se.point = data.point * 1000;
+                  se.point = data.point;
                 }
               })
             }

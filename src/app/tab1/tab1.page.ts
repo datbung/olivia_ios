@@ -1535,6 +1535,11 @@ export class Tab1Page implements OnInit {
         listmoods[i].avatar = 'https:' + listmoods[i].avatar;
       }
     }
+    let itemmap = se.slideMood.some((m) => m.name == 'voucher');
+    if(!itemmap){
+      se.slideMood.push({name: 'voucher' , avatar: 'https://cdn1.ivivu.com/images/general/dangcap1.png', title: 'Gift Voucher',shortDescription: 'Nâng tầm chuyến du lịch của công ty và đội nhóm của bạn!' });
+    }
+    
     se.slmood = se.slideMood.length;
   }
   clickks() {
@@ -2939,7 +2944,15 @@ export class Tab1Page implements OnInit {
       // this.navCtrl.navigateForward(
       //   "/app/tabs/hotellistmood/" + item.id + "/" + item.title
       // );
-      this.navCtrl.navigateForward("/hotellistmood/" + item.id + "/" + item.title);
+      if(item.name == 'Team X'){
+        this.openLinkWeb('https://www.ivivu.com/teamx');
+      }else if(item.name == 'voucher'){
+        this.openLinkWeb('https://www.ivivu.com/voucher-du-lich');
+      }
+      else{
+        this.navCtrl.navigateForward("/hotellistmood/" + item.id + "/" + item.title);
+      }
+      
     },10)
     this.hideStatusBar();
     //google analytic
@@ -3591,7 +3604,7 @@ export class Tab1Page implements OnInit {
           let el1 = $('.div-flightinternational-topdeal');
           if(el && el.length >0){
             if(event.detail.scrollTop >= 1200 ){
-              if(elinter && elinter.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop - 250){
+              if(elinter && elinter.length >0 && event.detail.scrollTop < ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999 ) - 250){
                // setTimeout(()=>{
                   if(el.length >0 && el[0] && !el[0].classList.contains("cls-topdeal-float")){
                     el[0].classList.add('cls-topdeal-float');
@@ -3605,14 +3618,14 @@ export class Tab1Page implements OnInit {
                 
                   //el[0].classList.remove('cls-topdeal-float');
                   //setTimeout(()=>{
-                    if(el1 && el1.length >0 && event.detail.scrollTop >= $('.div-group-name')[0].offsetTop - 220 ){
+                    if(el1 && el1.length >0 && event.detail.scrollTop >= ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999) - 220 ){
                     
                         if(el1.length >0 && el1[0] && !el1[0].classList.contains("cls-topdeal-float")){
                           el1[0].classList.add('cls-topdeal-float');
                         }
                       
                     }
-                    else if(el1 && el1[0] && el1.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop -120){
+                    else if(el1 && el1[0] && el1.length >0 && event.detail.scrollTop < ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999) -120){
                       el1[0].classList.remove('cls-topdeal-float');
                     }
                 //},100)
@@ -3628,11 +3641,11 @@ export class Tab1Page implements OnInit {
             }
 
           }else{
-            if(el1 && el1.length >0 && event.detail.scrollTop >= $('.div-group-name')[0].offsetTop - 120){
+            if(el1 && el1.length >0 && event.detail.scrollTop >= ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999) - 120){
               if(el1.length >0 && el1[0] && !el1[0].classList.contains("cls-topdeal-float")){
                 el1[0].classList.add('cls-topdeal-float');
               }
-            }if(el1 && el1.length >0 && event.detail.scrollTop < $('.div-group-name')[0].offsetTop - 100){
+            }if(el1 && el1.length >0 && event.detail.scrollTop < ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999) - 100){
               el1[0].classList.remove('cls-topdeal-float');
             }
           }
@@ -4151,6 +4164,37 @@ export class Tab1Page implements OnInit {
     setTimeout(()=>{
       document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center'  });
     },100)
+  }
+
+  openLinkWeb(url: string) {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: url,
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
+
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
   }
 }
 

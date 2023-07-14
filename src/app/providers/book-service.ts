@@ -144,6 +144,8 @@ export class ValueGlobal {
   listhistory: any;
   ischeckFavourite : any
   notifyAction: string;
+    flightAvgPoint: any;
+  wasTappedNoti: boolean;
 }
 export class SearchHotel {
   paymentType: string='';
@@ -303,6 +305,12 @@ export class SearchHotel {
   RatingValue: number;
   keysearchhoteldetail: string;
   keySearchHotelDetail: string;
+  ischeckDate: any;
+  allowbookcombofc: boolean;
+  allowbookcombofx: boolean;
+  comboType: string;
+  reviewName: any;
+  openFromTopReviewList: boolean;
 }
 export class child {
     text: string;

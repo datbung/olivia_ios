@@ -12,6 +12,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { ValueGlobal } from './../providers/book-service';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 @Component({
   selector: 'app-register',
   templateUrl: 'register.html',
@@ -29,7 +30,7 @@ export class RegisterPage implements OnInit {
     public navCtrl: NavController,
     public menuCtrl: MenuController,
     public formBuilder: FormBuilder,  public platform: Platform, private toastCtrl: ToastController, public storage: Storage, public gf: GlobalFunction, public zone: NgZone
-    , private appVersion: AppVersion, public valueGlobal: ValueGlobal
+    , private appVersion: AppVersion, public valueGlobal: ValueGlobal, private safariViewController: SafariViewController
     , private fcm: FCM) {
 
     this.regData = this.formBuilder.group({
@@ -287,5 +288,35 @@ export class RegisterPage implements OnInit {
       return false;
     }
   }
+  
+  showCondition() {
+    this.safariViewController.isAvailable()
+  .then((available: boolean) => {
+      if (available) {
+        this.safariViewController.show({
+          url: 'https://www.ivivu.com/dieu-kien-dieu-khoan',
+          hidden: false,
+          animated: false,
+          transition: 'curl',
+          enterReaderModeIfAvailable: true,
+          tintColor: '#23BFD8'
+        })
+        .subscribe((result: any) => {
+            if(result.event === 'opened') console.log('Opened');
+            else if(result.event === 'loaded') console.log('Loaded');
+            else if(result.event === 'closed') 
+            {
+              
+            }
+        
+          },
+          (error: any) => console.error(error)
+        );
 
+      } else {
+        // use fallback browser, example InAppBrowser
+      }
+    }
+  );
+  }
 }

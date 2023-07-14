@@ -86,7 +86,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   hasinput: boolean = false;
   subnameinvalid: boolean;
   ishiddingpaxhint: boolean;
-  ishideNameMail=true;hotenhddt;emailhddt;addressorder;
+  ishideNameMail=false;hotenhddt;emailhddt;addressorder;
   hidepaxhint: any;
   listPaxSuggestByMemberId = [];
   promocode: string;
@@ -100,7 +100,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   listVouchersApply=[];
   strPromoCode: string = '';
   totaldiscountpromo = 0;
-  contactOption: any = 'mail';
+  contactOption: any = 'zalo';
   optionPassport:boolean=false;
   departFlight: any;
   returnFlight: any;
@@ -198,8 +198,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
             if(co){
               this.contactOption = co;
             }else{
-                this.contactOption = 'mail';
+                this.contactOption = 'zalo';
             }
+            
         })
       })
     }
@@ -703,6 +704,9 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                 se.storage.get('email').then(email => {
                   if(email){
                     se.email = email;
+                    if(!se.ishideNameMail){
+                      se.emailhddt = email;
+                    }
                   }
                 })
               }
@@ -776,6 +780,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                             se._flightService.itemFlightCache.address = order.address;
                             se._flightService.itemFlightCache.tax = order.tax;
                             se.ischeck = true;
+                            se.ishideNameMail = se.contactOption == 'zalo';
                           } else {
                             se.ischeck = false;
                             se._flightService.itemFlightCache.companyname = '';
@@ -804,6 +809,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         se._flightService.itemFlightCache.address = order.address;
                         se._flightService.itemFlightCache.tax = order.tax;
                         se.ischeck = true;
+                        se.ishideNameMail = se.contactOption == 'zalo';
                       } else {
                         se.ischeck = false;
                         se._flightService.itemFlightCache.companyname = '';
@@ -4224,7 +4230,10 @@ alert.present();
       },100)
     }
     contactOptionClick(event){
-      this.contactOption = event.currentTarget.value;
+      this.zone.run(()=>{
+        this.contactOption = event.currentTarget.value;
+        this.ishideNameMail = this.contactOption == 'mail';
+      })
     }
     copyInfoContact(item){
       item.name = this.hoten;

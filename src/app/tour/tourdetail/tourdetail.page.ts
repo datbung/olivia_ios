@@ -509,6 +509,7 @@ export class TourDetailPage {
         this.searchHotel.indexreviewimg = indeximgreview;
         this.searchHotel.cusnamereview = CustomerName;
         this.searchHotel.datereview = DateStayed;
+        this.searchHotel.openFromTopReviewList = false;
         const modal: HTMLIonModalElement =
           await this.modalCtrl.create({
             component: HotelreviewsimagePage,
@@ -608,6 +609,7 @@ export class TourDetailPage {
         this.searchHotel.cusnamereview = '';
         this.searchHotel.datereview = '';
         this.searchHotel.tourDetailName = this.itemDetail.Name;
+        this.searchHotel.openFromTopReviewList = false;
         const modal: HTMLIonModalElement =
           await this.modalCtrl.create({
             component: HotelreviewsimagePage,

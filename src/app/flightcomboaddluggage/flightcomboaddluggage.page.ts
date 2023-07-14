@@ -55,7 +55,7 @@ export class FlightcomboaddluggagePage implements OnInit {
     this.returnLuggage= this.objectFlight.airLineLuggageReturn;
     if(this.departLuggage && this.departLuggage.length>0){
       this.departLuggage.forEach(element => {
-        element.priceshow = "x "+ this.gf.convertNumberToString(element.Amount) +"đ";
+        element.priceshow = "x "+ (this.gf.convertNumberToString(element.Amount)||0) +"đ";
         if(!element.quantity){
           element.quantity = 0;
         }else{
@@ -73,7 +73,7 @@ export class FlightcomboaddluggagePage implements OnInit {
 
     if(this.returnLuggage && this.returnLuggage.length>0){
       this.returnLuggage.forEach(element => {
-        element.priceshow = "x "+ this.gf.convertNumberToString(element.Amount) +"đ";
+        element.priceshow = "x "+ (this.gf.convertNumberToString(element.Amount)||0) +"đ";
         if(!element.quantity){
           element.quantity = 0;
         }else{
@@ -91,7 +91,7 @@ export class FlightcomboaddluggagePage implements OnInit {
     this.departConditionInfo=this.bookCombo.departConditionInfo;
     this.returnConditionInfo=this.bookCombo.returnConditionInfo;
     if(this.totalprice >0){
-      this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) + "đ";
+      this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
     }
   }
 
@@ -142,7 +142,7 @@ export class FlightcomboaddluggagePage implements OnInit {
         
         this.totalprice = this.departLuggage.reduce((total,b)=>{ return total + (b.quantity * b.Amount); }, 0);
         this.totalprice += this.returnLuggage.reduce((total,b)=>{ return total + (b.quantity * b.Amount); }, 0);
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) + "đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
 
       }else{
         if(this.objectFlight.FlightBooking.infant){
@@ -170,7 +170,7 @@ export class FlightcomboaddluggagePage implements OnInit {
         }
         this.totalprice = this.departLuggage.reduce((total,b)=>{ return total + (b.quantity * b.Amount); }, 0);
         this.totalprice += this.returnLuggage.reduce((total,b)=>{ return total + (b.quantity * b.Amount); }, 0);
-        this.totalpricedisplay = this.gf.convertNumberToString(this.totalprice) +"đ";
+        this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) +"đ";
       }
     })
     
