@@ -3,6 +3,7 @@ import { ToastController, NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 var request = require("request");
 import { C } from '../providers/constants';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-forgotpass',
@@ -10,8 +11,15 @@ import { C } from '../providers/constants';
   styleUrls: ['./forgotpass.page.scss'],
 })
 export class ForgotpassPage implements OnInit {
-  phoneoremail
-  constructor(private toastCtrl: ToastController, public navCtrl: NavController, public valueGlobal: ValueGlobal) { }
+  phoneoremail='';
+  captcha:any=null;
+  public forgotpassData: FormGroup;
+  constructor(private toastCtrl: ToastController, public navCtrl: NavController, public valueGlobal: ValueGlobal, public formBuilder: FormBuilder,) { 
+   this.forgotpassData = this.formBuilder.group({
+      //captcha: [null, Validators.compose([Validators.required])],
+      phoneoremail: ['', Validators.compose([Validators.required])],
+    });
+  }
   ngOnInit() {
   }
   goback() {

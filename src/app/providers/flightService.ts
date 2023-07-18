@@ -85,6 +85,7 @@ export class flightService{
   fromOrderRequestDetailSupport: boolean;
   typeFlightUsefulShow: number=1;
   flighttype: string;
+  itemReview: any;
   publicItemShowMoreFlightTopDeal(data: any) {
     this.itemShowMoreFlightTopDeal.next(data);
   }

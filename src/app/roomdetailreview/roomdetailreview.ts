@@ -48,7 +48,6 @@ export class RoomdetailreviewPage implements OnInit {
     public _voucherService: voucherService
     ) {
 
-    
       this.ischeckpayment=Roomif.ischeckpayment;
       this.Avatar = Roomif.imgHotel;
       this.Name = booking.HotelName;
@@ -62,7 +61,7 @@ export class RoomdetailreviewPage implements OnInit {
       this.roomtype = Roomif.roomtype;
       this.indexme = booking.indexmealtype;
       this.indexroom = booking.indexroom;
-      this.jsonroom = Roomif.jsonroom;
+      this.jsonroom = {...Roomif.jsonroom};
       this.room = Roomif.arrroom;
       var chuoicin = this.cin.split('-');
       var chuoicout = this.cout.split('-');
@@ -246,9 +245,15 @@ export class RoomdetailreviewPage implements OnInit {
     if (this.ischeckbtnpromo) {
       this.Roomif.promocode= this.promocode;
       this.Roomif.priceshow = this.Pricepointshow;
+      this._voucherService.hotelPromoCode = this.promocode;
+      this._voucherService.hotelTotalDiscount = this.totaldiscountpromo;
+
     }
     else if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
       this.Roomif.promocode= this._voucherService.selectVoucher.code;
+      this.Roomif.priceshow = this.Pricepointshow;
+    }
+    else if(this._voucherService.hotelPromoCode && this._voucherService.hotelTotalDiscount){
       this.Roomif.priceshow = this.Pricepointshow;
     }
     else
@@ -624,12 +629,12 @@ export class RoomdetailreviewPage implements OnInit {
             if (se.ischeck) {
               total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
             }
-            se.discountpromo= json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
-            se.Pricepointshow = total -  se.discountpromo;
+            let _discount= json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+            se.Pricepointshow = total -  _discount;
 
             se.strPromoCode = se.promocode;
-            se.totaldiscountpromo = total - se.discountpromo;
-            se.Roomif.discountpromo = se.discountpromo;
+            se.totaldiscountpromo = _discount;
+            se.Roomif.discountpromo = _discount;
             se.edit();
 
             if (se.Pricepointshow>0) {
@@ -734,6 +739,9 @@ export class RoomdetailreviewPage implements OnInit {
           this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
         }
        
+        this._voucherService.hotelPromoCode = this.strPromoCode;
+        this._voucherService.hotelTotalDiscount = this.totaldiscountpromo;
+        this.ischeckpromo = true;
         this.edit();
       }else if (data.data) {//case voucher km
         let vc = data.data;

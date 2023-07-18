@@ -65,8 +65,8 @@
         padding: 16px 16px 24px;
         border-radius: 6px;
         background-color: #fff;
-        margin-right: 8px;
-        min-width: 274px;
+        margin-right: 16px;
+        min-width: 340px;
 
         .div-avatar {
           width: 32px;
@@ -110,7 +110,7 @@
           color: #3f3b3b;
 
           overflow: hidden;
-          max-width: 242px;
+          max-width: 308px;
           max-height: 68px;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
@@ -138,4 +138,25 @@
       text-align: center;
       color: #003c71;
     }
+
+    .div-see-review {
+      font-size: 16px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.4;
+      letter-spacing: normal;
+      text-align: right;
+      color: #26bed6;
+    }
+}
+
+@media(min-width:350px) and (max-width:375px){
+  .div-wrap-review-item {
+      min-width: 296px !important;
+  }
+
+  .div-text {
+    max-width: 264px !important;
+  }
 }

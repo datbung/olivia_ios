@@ -952,7 +952,6 @@ export class FlightComboAddDetailsPage implements OnInit {
 
     if (this.bookcombo.ischeckbtnpromo) {
       this.objectFlight.HotelBooking.TotalPrices = Number(this.bookcombo.totalPriceBeforeApplyVoucher);
-      //Number(this.objectFlight.HotelBooking.TotalPrices) + Number(this.bookcombo.discountpromo);
     }
     this.objectFlight.HotelBooking.TotalPrices = Number(this.objectFlight.HotelBooking.TotalPrices).toFixed(0);
     var arrPassengers = []

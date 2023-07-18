@@ -837,7 +837,7 @@ export class GlobalFunction{
             C.writeErrorLog(error,response);
         }else if(body){
           se.storage.set('checktoken',"1");
-          var obj = JSON.parse(body);
+          //var obj = JSON.parse(body);
   
         }
     })   
@@ -2698,7 +2698,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         handler: () => {
           se._flightService.itemTabFlightActive.emit(true);
           se.valueGlobal.backValue = "homeflight";
-          this._flightService.itemTabFlightActive.emit(1);
+          se._flightService.itemMenuFlightClick.emit(2);
           se.navCtrl.navigateBack('/tabs/tab1');
         }
       }
@@ -2721,6 +2721,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         role: 'OK',
         handler: () => {
           this._flightService.itemTabFlightActive.emit(true);
+          this._flightService.itemMenuFlightClick.emit(2);
           this.valueGlobal.backValue = 'homeflight';
           
           this.navCtrl.navigateBack('/tabs/tab1');
@@ -2734,6 +2735,8 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   goToSearchFlight(){
     this._flightService.itemFlightCache.step = 2;
     this._flightService.itemChangeTicketFlight.emit(1);
+    this._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(true);
     //this.navCtrl.navigateBack('/flightsearchresult');
     if(this._flightService.itemFlightCache.isApiDirect){
       this.navCtrl.navigateBack('/flightsearchresultinternational');
@@ -2745,6 +2748,8 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   goToSearchFlightInternational(){
     this._flightService.itemFlightCache.step = 2;
     this._flightService.itemChangeTicketFlight.emit(1);
+    this._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(true);
     this.navCtrl.navigateBack('/flightsearchresultinternational');
   }
 
@@ -3491,26 +3496,23 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
   setCacheSearch(objSearch,stt): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storage.get('arrHistory').then((data) => {
-        var co=0;
-        var objkey=objSearch.id+"_"+objSearch.CheckInDate+"_"+objSearch.CheckOutDate+"_"+objSearch.adult+"_"+objSearch.child;
-        if(data ){
+        var objkey=objSearch.id;
+        if(data){
           for (let i = 0; i < data.length; i++) {
             const element = data[i];
             if (objkey==element.objkey) {
-              // data.splice(i, 1);
-              co=1;
+              data.splice(i, 1);
             }
           }
         }
-        if(co==0){
+    
           this.searchhotel.objRecent=objSearch;
-
           if( !objSearch.imageUrl){
             if(objSearch.isType==0 ){
-              this.getHoteldetail(objSearch.id).then((obj) => {
-                if(obj){
-                  objSearch.imageUrl=obj;
-                }
+              //this.getHoteldetail(objSearch.id).then((obj) => {
+                // if(obj){
+                //   objSearch.imageUrl=obj;
+                // }
                 if(data && data.length>2){
                   data.splice(0, 1);
                   objSearch.objkey=objkey;
@@ -3525,7 +3527,7 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
                   data.push(objSearch);
                   this.storage.set('arrHistory', data);
                 }
-              })
+              //})
             }else{
               this.storage.get('listtopregions').then(dataregion => {
                 if(dataregion){
@@ -3569,14 +3571,29 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
               this.storage.set('arrHistory', data);
             }
           }
-        }
-       
-       
+
         resolve(true);
       })
      
     })
    
+  }
+
+  bindDataHistory(data,objSearch,objkey) {
+    if(data && data.length>2){
+      data.splice(0, 1);
+      objSearch.objkey=objkey;
+      data.push(objSearch) 
+      this.storage.set('arrHistory', data);
+      
+    }else{
+      if(!data){
+        data=[];
+      }
+      objSearch.objkey=objkey;
+      data.push(objSearch);
+      this.storage.set('arrHistory', data);
+    }
   }
   getHoteldetail(id): Promise<any> {
     return new Promise((resolve, reject) => {

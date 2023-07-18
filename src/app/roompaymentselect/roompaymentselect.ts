@@ -59,7 +59,7 @@ export class RoompaymentselectPage implements OnInit{
     this.roomtype = Roomif.roomtype;
     this.indexme = booking.indexmealtype;
     this.indexroom = booking.indexroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.room = Roomif.arrroom;
     var chuoicin = this.cin.split('-');
     var chuoicout = this.cout.split('-');
@@ -83,7 +83,6 @@ export class RoompaymentselectPage implements OnInit{
     if (this.textage) {
       this.textage = "(" + this.textage + ")";
     }
-    
     if (Roomif.priceshow) {
       this.priceshow=Roomif.priceshow;
     }
@@ -92,6 +91,7 @@ export class RoompaymentselectPage implements OnInit{
       this.priceshow=this.PriceAvgPlusTAStr;
     }
     this.totalPrice = this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+    this.searchhotel.totalPrice = this.totalPrice;
     this.searchhotel.backPage="roompaymentselect";
     this.searchhotel.rootPage="roompaymentselect";
     this.checkpayment=Roomif.payment;
@@ -401,6 +401,7 @@ export class RoompaymentselectPage implements OnInit{
     se.gf.checkroomInternal(this.booking.HotelId, this.Roomif.RoomId, this.booking.CheckInDate, this.booking.CheckOutDate, this.Roomif.roomnumber).then(data => {
       se.ischeckroom=data;
       var totalPrice=se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+     
       se.searchhotel.totalPrice = totalPrice;
       se.searchhotel.paymentType = paymentType;
       se.gf.logEventFirebase(paymentType,this.searchhotel, 'roompaymentselect', 'add_payment_info', 'Hotels');
@@ -744,9 +745,9 @@ export class RoompaymentselectPage implements OnInit{
 
   paymentbiztravel(){
     let totalprice = this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
-    if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
-      totalprice = totalprice - this._voucherService.selectVoucher.rewardsItem.price;
-    }
+    // if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+    //   totalprice = totalprice - this._voucherService.selectVoucher.rewardsItem.price;
+    // }
     if(this.bizTravelService.bizAccount.balanceAvaiable - totalprice <=0){
       return;
     }

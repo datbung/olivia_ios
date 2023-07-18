@@ -242,7 +242,7 @@
       </ion-row>
     <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
     <app-voucherslidehotel></app-voucherslidehotel>
-        <div *ngIf="!ischeckbtnpromo">
+        <div *ngIf="!ischeckbtnpromo && !strPromoCode">
             <ion-row>
                 <ion-col size="5" style="padding: 0;">
                   <div>
@@ -264,7 +264,7 @@
               </ion-row>
         </div>
       
-        <div *ngIf="ischeckbtnpromo" >
+        <div *ngIf="ischeckbtnpromo || strPromoCode" >
             <ion-row>
               <ion-col size="5" style="padding: 0;">
                 <div>

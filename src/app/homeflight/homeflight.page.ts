@@ -1555,8 +1555,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
       switchDepart(){
         var se = this;
-        let dc:any = document.getElementsByClassName('div-departcode')[0];
-        let rc:any = document.getElementsByClassName('div-returncode')[0];
+        //let dc:any = document.getElementsByClassName('div-departcode')[0];
+        //let rc:any = document.getElementsByClassName('div-returncode')[0];
        
         // $('.div-departcode').removeClass('switch-visible').addClass('switch-disable');
         // $('.div-returncode').removeClass('switch-disable').addClass('switch-visible');
@@ -1565,23 +1565,26 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
         let tempdepartcode = se.returnCode;
         let tempdepartairport = se.returnAirport;
 
-        se.returnCity = se.departCity;
-        se.returnCode = se.departCode;
-        se.returnAirport = se.departAirport;
+        se.zone.run(()=>{
+       
+          se.returnCity = se.departCity;
+          se.returnCode = se.departCode;
+          se.returnAirport = se.departAirport;
+        
+          se._flightService.itemFlightCache.returnCity = se.returnCity;
+          se._flightService.itemFlightCache.returnCode = se.returnCode;
+          se._flightService.itemFlightCache.returnAirport = se.returnAirport;
+
+          se.departCity = tempdepartcity;
+          se.departCode = tempdepartcode;
+          se.departAirport = tempdepartairport;
+
+          se._flightService.itemFlightCache.departCity = se.departCity;
+          se._flightService.itemFlightCache.departCode = se.departCode;
+          se._flightService.itemFlightCache.departAirport = se.departAirport;
+            
+        })
       
-        se._flightService.itemFlightCache.returnCity = se.returnCity;
-        se._flightService.itemFlightCache.returnCode = se.returnCode;
-        se._flightService.itemFlightCache.returnAirport = se.returnAirport;
-
-        se.departCity = tempdepartcity;
-        se.departCode = tempdepartcode;
-        se.departAirport = tempdepartairport;
-
-        se._flightService.itemFlightCache.departCity = se.departCity;
-        se._flightService.itemFlightCache.departCode = se.departCode;
-        se._flightService.itemFlightCache.departAirport = se.departAirport;
-        // $('.div-departcode').removeClass('switch-disable').addClass('switch-visible');
-        // $('.div-returncode').removeClass('switch-visible').addClass('switch-disable');
       }
 
       loadflighttopdeal(){
@@ -2608,5 +2611,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
          
         }
 
+        scrollToDivReview(){
+          
+          setTimeout(()=> {
+            document.getElementById('divReviews').scrollIntoView({  block: 'center', inline: 'nearest', behavior: 'smooth' });
+          },300)
+        }
 
   }

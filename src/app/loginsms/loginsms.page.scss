@@ -3,8 +3,8 @@
     font-weight: bold
 }
 .textv{
-    font-size: 14px;
-    color: #333333
+    font-size: 16px;
+    color: #3f3b3b;
 }
 .btn-save-phone{
     border-color: #f79221;
@@ -12,8 +12,14 @@
     background: #f79221;
     width: 98%;
     height: 48px;
-    text-transform: none;
-    font-size: 17px;
-    font-weight: normal;
-    margin-left: 4px;
+    font-size: 18px !important;
+    border-radius: 4p !important;
+}
+.cls-inputphone {
+    --padding-top: 0;
+    --padding-bottom: 0;
+}
+.cls-label {
+    font-size: 16px;
+    color: #828282;
 }

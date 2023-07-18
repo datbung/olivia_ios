@@ -101,7 +101,7 @@ export class RoomadddetailsPage implements OnInit {
     })
     this.note = Roomif.notetotal;
     this.room = this.Roomif.arrroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.ischeckpoint = this.Roomif.ischeckpoint;
     if (this.ischeckpoint == true || this.Roomif.promocode)  {
       if (this.Roomif.priceshow == "0") {

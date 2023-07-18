@@ -63,7 +63,7 @@ export class FlightquickbackPage implements OnInit {
             else if(pageIndex ==2){
               se.valueGlobal.backValue = "homeflight";
               se._flightService.itemTabFlightActive.emit(1);
-              
+              this._flightService.itemMenuFlightClick.emit(2);
               setTimeout(()=>{
                 se.navCtrl.navigateBack('/tabs/tab1');
               },100)

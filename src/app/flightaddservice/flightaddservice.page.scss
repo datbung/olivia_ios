@@ -397,6 +397,9 @@
         margin-top: 16px;
         font-size: 14px;
   }
+  .text-right {
+    text-align: right;
+  }
   .div-promotion-active{
     padding-bottom: 16px;
     padding-top: 16px;
@@ -411,9 +414,7 @@
         .m-width-280{
             min-width: 280px;
           }
-          .text-right {
-            text-align: right;
-          }
+          
           .width-10 {
             width: 10% !important;
           }
@@ -573,7 +574,10 @@
     color: #00c1de;
 }
 .text-seen{
-    color: #f58220;
+    color: #2f80ed;
+    text-decoration: underline;
+    text-decoration-thickness: 0.5px;
+    font-size: 14px;
   }
   .font-weight-600{
     font-weight: 600 !important;
@@ -596,4 +600,7 @@
 }
 .a-items-center {
     align-items: center;
+}
+.div-width-20 {
+    width: 20%;
 }

@@ -46,7 +46,7 @@
         <div class="m-top-24 text-header">Đánh giá gần đây</div>
         <div class="div-line m-top-10 m-bottom-16"></div>
         <div class="div-content-review m-top-24">
-          <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview; let idx = index">
+          <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview; let idx = index" [id]="slide.reviewId">
             <div class="d-flex">
                 <div class="div-avatar">
                   <img class="slide2 img" src="./assets/ic_flight/user_pic.jpg" />

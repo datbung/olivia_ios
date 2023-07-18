@@ -52,7 +52,7 @@ export class RoompaymentselectEanPage implements OnInit{
     this.roomtype = Roomif.roomtype;
     this.indexme = booking.indexmealtype;
     this.indexroom = booking.indexroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.room = Roomif.arrroom;
     var chuoicin = this.cin.split('-');
     var chuoicout = this.cout.split('-');
@@ -84,6 +84,7 @@ export class RoompaymentselectEanPage implements OnInit{
       this.priceshow = this.PriceAvgPlusTAStr;
     }
     this.totalPrice = this.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
+    this.searchhotel.totalPrice = this.totalPrice;
     this.searchhotel.backPage="roompaymentselect-ean";
     this.searchhotel.rootPage="roompaymentselect-ean";
     this.storage.get('auth_token').then(auth_token => {
@@ -542,9 +543,12 @@ export class RoompaymentselectEanPage implements OnInit{
           this.Roomif.bookingCode = databook.code;
           if (this.roomtype.Supplier == 'HBED') {
             var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
-            if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
-              totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
-            }
+            // if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+            //   totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+            // }
+            // if(se._voucherService.hotelPromoCode&& !se.Roomif.promocode){
+            //   totalPrice = totalPrice - se._voucherService.hotelTotalDiscount;
+            // }
             // var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + totalPrice + '&orderCode=' + databook.code + '&buyerPhone=' + this.Roomif.phone + '&callbackUrl=' + C.urls.baseUrl.urlPayment + '/Home/BlankapBlankDeepLinkpNew';
             var url="";
             if (paymentType=='visa') {
@@ -601,9 +605,9 @@ export class RoompaymentselectEanPage implements OnInit{
           || se.roomtype.Supplier == "SMD" || se.Roomif.roomtype.Supplier == 'SERI' || se.Roomif.roomtype.Supplier == 'AGD'
           ){
             var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
-            if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
-              totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
-            }
+            // if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+            //   totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+            // }
                 var url="";
                 if (paymentType=='visa') {
                   url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
@@ -657,9 +661,9 @@ export class RoompaymentselectEanPage implements OnInit{
             se.gf.checkroomEAN(se.bookingCode).then(data => {
               if (data == '0') {
                 var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
-                if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
-                  totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
-                }
+                // if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+                //   totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+                // }
                 var url="";
                 if (paymentType=='visa') {
                   url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=visa&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +this.Roomif.phone + '&memberId=' + se.jti + '&TokenId='+se.tokenid+'&rememberToken='+se.isremember+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
@@ -1039,9 +1043,9 @@ export class RoompaymentselectEanPage implements OnInit{
               se.bookingCode = databook.code;
               se.Roomif.bookingCode = databook.code;
               var totalPrice = se.priceshow.toString().replace(/\./g, '').replace(/\,/g, '');
-              if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
-                totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
-              }
+              // if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+              //   totalPrice = totalPrice - se._voucherService.selectVoucher.rewardsItem.price;
+              // }
               url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=companycredit&source=app&amount=' + totalPrice + '&orderCode=' + se.bookingCode + '&buyerPhone=' +se.Roomif.phone + '&memberId=' + se.jti +'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink';
               
               se.gf.CreateUrl(url).then(dataBuildLink => {

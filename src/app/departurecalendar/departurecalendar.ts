@@ -401,7 +401,7 @@ export class DepartureCalendarPage {
           }
         }
       }
-      this.searchhotel.changeInfoHotelList.emit(1);
+      this.searchhotel.publicChangeInfoHotelList(1);
       this.modalCtrl.dismiss();
     }
   }

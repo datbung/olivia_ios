@@ -90,16 +90,8 @@ export class RoompaymentdonePage implements OnInit {
     
     
     this.ishide = true;
-
-    // this.total = booking.cost;
-    if (Roomif.priceshow) {
-      this.priceshow = Roomif.priceshow;
-    }
-    else {
-      this.priceshow = booking.cost;
-    }
-    Roomif.priceshow = "";
-    this.room = Roomif.arrroom;
+      this.priceshow = this.searchhotel.totalPrice;
+    this.room = this.Roomif.arrroom;
     this.nameroom = this.room[0].ClassName;
     //google analytic
     this.GetUserInfo();
@@ -125,6 +117,7 @@ export class RoompaymentdonePage implements OnInit {
     //google analytic
     //this.gf.googleAnalytion('payment','Purchases','hotelid:'+this.booking.code+'|'+this.booking.CheckInDate+'|'+this.booking.CheckOutDate+'/adults:'+this.booking.Adults+'/child:'+this.booking.Child+'/roomnumber:'+ this.booking.roomNb+ '/price:'+this.booking.cost);
     // this.showConfirm();
+    this.Roomif.priceshow = "";
     if (this.checkreview==0) {
        this.showConfirm();
     }

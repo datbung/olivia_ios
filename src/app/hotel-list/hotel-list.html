@@ -25,8 +25,8 @@
             <div *ngIf="!ischeckAL && msg.MinPriceOTAStr" class="row-item-hotellist">
               <div class="col-img-hotellist">
                   <img  class="img-radius" [src]="msg.Avatar" style="position:relative" (click)="itemSelected(msg)">
-                  <div *ngIf="msg.PromotionDescriptionSubstring" class="transbox_0">
-                      {{msg.PromotionDescriptionSubstring}}
+                  <div *ngIf="msg.DealType" class="transbox_0">
+                      {{msg.DealType}}
                     </div>
               </div>
               <div class="col-description-hotellist">
@@ -96,7 +96,7 @@
                         <div *ngIf="loginuser || msg.IsShowPrice == 1" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? '' : ''">
                               <div style="font-weight: bold" class="d-flex">
-                                <div *ngIf="msg.DealPrice" class="text-combo"  class="p-top-dealtype">
+                                <!-- <div *ngIf="msg.DealPrice" class="text-combo"  class="p-top-dealtype">
                                   <img src="./assets/ic_combo_orange.svg">
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
                                 </div>
@@ -104,18 +104,18 @@
                                 <div *ngIf="!msg.DealPrice && !msg.MinPriceOTAStr" class="text-combo" class="p-top-dealtype">
                                   <img src="./assets/ic_combo_orange.svg">
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
-                                </div>
-                                <div *ngIf="!msg.DealPrice && msg.MinPriceOTAStr" class="p-top-minprice">
+                                </div> -->
+                                <div *ngIf=" msg.MinPriceOTAStr" class="p-top-minprice">
                                   <label >{{msg.RoomNameSubString}}</label> 
                                 </div>
                                
-                                <div  *ngIf="msg.DealPrice" class="price text-right div-width-100 h-28">
+                                <!-- <div  *ngIf="msg.DealPrice" class="price text-right div-width-100 h-28">
                                   <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{gf.numberToCurrency(msg.DealPrice, '.')}}<span class="sub-dealprice">đ</span></label>
+                                </div> -->
+                                <div  *ngIf=" msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right div-width-100 h-28">
+                                  <label *ngIf=" msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }}<span class="sub-minprice">đ</span></label>
                                 </div>
-                                <div  *ngIf="!msg.DealPrice && msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right div-width-100 h-28">
-                                  <label *ngIf="!msg.DealPrice && msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }}<span class="sub-minprice">đ</span></label>
-                                </div>
-                                <div  *ngIf="!msg.DealPrice && msg.HasCheckPrice && !msg.MinPriceOTAStr" class="have-not-dealprice">
+                                <div  *ngIf=" msg.HasCheckPrice && !msg.MinPriceOTAStr" class="have-not-dealprice">
                                   <label *ngIf="msg.HasCheckPrice && !msg.DealPrice" class="label-dealprice">Giá ưu đãi</label>
                                 </div>
                               </div>
@@ -170,8 +170,8 @@
                   <div *ngIf="!msg.Liked" class="img-heart" (click)="likeItem(msg.HotelId)">
                     <img src="./assets/imgs/heart-empty.svg" class="cls-img-content" >
                   </div>
-                  <div *ngIf="msg.PromotionDescriptionSubstring" class="transbox_0">
-                      {{msg.PromotionDescriptionSubstring}}
+                  <div *ngIf="msg.DealType" class="transbox_0">
+                      {{msg.DealType}}
                     </div>
               </div>
               <!-- right content region -->
@@ -281,7 +281,7 @@
                         <div *ngIf="loginuser || msg.IsShowPrice == 1" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? '' : ''">
                               <div style="font-weight: bold" class="d-flex">
-                                <div *ngIf="msg.DealPrice" class="text-combo"  class="p-top-dealtype">
+                                <!-- <div *ngIf="msg.DealPrice" class="text-combo"  class="p-top-dealtype">
                                   <img src="./assets/ic_combo_orange.svg">
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
                                 </div>
@@ -289,18 +289,18 @@
                                 <div *ngIf="!msg.DealPrice && !msg.MinPriceOTAStr" class="text-combo" class="p-top-dealtype">
                                   <img src="./assets/ic_combo_orange.svg">
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
-                                </div>
-                                <div *ngIf="!msg.DealPrice && msg.MinPriceOTAStr" class="p-top-minprice">
+                                </div> -->
+                                <div *ngIf=" msg.MinPriceOTAStr" class="p-top-minprice">
                                   <label >{{msg.RoomNameSubString}}</label> 
                                 </div>
-                               
+<!--                                
                                 <div  *ngIf="msg.DealPrice" class="price text-right div-width-100 h-28">
                                   <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{gf.numberToCurrency(msg.DealPrice, '.')}}<span class="sub-dealprice">đ</span></label>
+                                </div> -->
+                                <div  *ngIf=" msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right div-width-100 h-28">
+                                  <label *ngIf=" msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }}<span class="sub-minprice">đ</span></label>
                                 </div>
-                                <div  *ngIf="!msg.DealPrice && msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right div-width-100 h-28">
-                                  <label *ngIf="!msg.DealPrice && msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }}<span class="sub-minprice">đ</span></label>
-                                </div>
-                                <div  *ngIf="!msg.DealPrice && msg.HasCheckPrice && !msg.MinPriceOTAStr" class="have-not-dealprice">
+                                <div  *ngIf=" msg.HasCheckPrice && !msg.MinPriceOTAStr" class="have-not-dealprice">
                                   <label *ngIf="msg.HasCheckPrice && !msg.DealPrice" class="label-dealprice">Giá ưu đãi</label>
                                 </div>
                               </div>

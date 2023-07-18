@@ -177,7 +177,7 @@ export class CombocarnewPage implements OnInit {
     this.children = booking.Child;
     this.totalChild = booking.Child;
     this.roomtype = Roomif.roomtype;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.room = Roomif.arrroom;
     var chuoicin = this.cin.split('-');
     var chuoicout = this.cout.split('-');
@@ -2364,7 +2364,7 @@ export class CombocarnewPage implements OnInit {
               se.modalCtrl.dismiss();
             }, 100)
 
-            se.searchhotel.changeInfoHotelList.emit(1);
+            se.searchhotel.publicChangeInfoHotelList(1);
           }
         }
       }

@@ -526,12 +526,12 @@
                                 
                                 <div class="d-flex" *ngIf="trip.departTicketInfo.ticketCondition && trip.departTicketInfo.ticketCondition.baggageHanded">
                                   <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/work_outline.svg" ></div>
-                                  <div class="text-normal">Hành lý xách tay: {{trip.departTicketInfo.ticketCondition.baggageHanded}}</div>
+                                  <div class="text-normal">Hành lý xách tay: {{trip.departTicketInfoCRM &&trip.departTicketInfoCRM.BaggageHanded ? trip.departTicketInfoCRM.BaggageHanded : trip.departTicketInfo.ticketCondition.baggageHanded}}</div>
                                 </div>
                       
                                 <div class="d-flex" *ngIf="trip.departTicketInfo.ticketCondition && trip.departTicketInfo.ticketCondition.luggageSigned">
                                   <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/work_outline.svg" ></div>
-                                  <div class="text-normal">Hành lý ký gửi: {{trip.departTicketInfo.ticketCondition.luggageSigned}}</div>
+                                  <div class="text-normal">Hành lý ký gửi: {{trip.departTicketInfoCRM && trip.departTicketInfoCRM.LuggageSigned ? trip.departTicketInfoCRM.LuggageSigned : trip.departTicketInfo.ticketCondition.luggageSigned}}</div>
                                 </div>
               
                                 <div class="d-flex" *ngIf="trip.departTicketInfo.addon && trip.departTicketInfo.addon.bonusMiles">
@@ -604,12 +604,12 @@
                             
                             <div class="d-flex" *ngIf="trip.returnTicketInfo.ticketCondition && trip.returnTicketInfo.ticketCondition.baggageHanded">
                               <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/work_outline.svg" ></div>
-                              <div class="text-normal">Hành lý xách tay: {{trip.returnTicketInfo.ticketCondition.baggageHanded}}</div>
+                              <div class="text-normal">Hành lý xách tay: {{trip.returnTicketInfoCRM && trip.returnTicketInfoCRM.BaggageHanded ? trip.returnTicketInfoCRM.BaggageHanded : trip.returnTicketInfo.ticketCondition.baggageHanded}}</div>
                             </div>
                   
                             <div class="d-flex" *ngIf="trip.returnTicketInfo.ticketCondition && trip.returnTicketInfo.ticketCondition.luggageSigned">
                               <div class="div-icon"><img class="icon-info" src="./assets/ic_flight_international/work_outline.svg" ></div>
-                              <div class="text-normal">Hành lý ký gửi: {{trip.returnTicketInfo.ticketCondition.luggageSigned}}</div>
+                              <div class="text-normal">Hành lý ký gửi: {{trip.returnTicketInfoCRM && trip.returnTicketInfoCRM.LuggageSigned ? trip.returnTicketInfoCRM.LuggageSigned : trip.returnTicketInfo.ticketCondition.luggageSigned}}</div>
                             </div>
           
                             <div class="d-flex" *ngIf="trip.returnTicketInfo.addon && trip.returnTicketInfo.addon.bonusMiles">
@@ -676,7 +676,8 @@
                               <img *ngIf=" policy.name.toLowerCase().indexOf('miễn phí') !=-1"class="icon-info" src="./assets/ic_flight_international/check.svg">
                               <img *ngIf=" policy.name.toLowerCase().indexOf('không') !=-1"class="icon-info" src="./assets/ic_flight_international/disturb.svg">
                             </div>
-                            <div class="text-normal">{{policy.name}}</div>
+                            <div class="text-normal" *ngIf="policy.typePolicy==1">{{(trip.departTicketInfoCRM && trip.departTicketInfoCRM.ChangeDepartTime? 'Chính sách đổi chiều đi: '+trip.departTicketInfoCRM.ChangeDepartTime : policy.name)}}</div>
+                            <div class="text-normal" *ngIf="policy.typePolicy==2">{{(trip.departTicketInfoCRM && trip.departTicketInfoCRM.TicketRefund? 'Chính sách hủy chiều đi: '+trip.departTicketInfoCRM.TicketRefund : policy.name)}}</div>
                           </div>
                          
                         </div>
@@ -693,7 +694,8 @@
                               <img *ngIf=" policy.name.toLowerCase().indexOf('miễn phí') !=-1"class="icon-info" src="./assets/ic_flight_international/check.svg">
                               <img *ngIf=" policy.name.toLowerCase().indexOf('không') !=-1"class="icon-info" src="./assets/ic_flight_international/disturb.svg">
                             </div>
-                            <div class="text-normal">{{policy.name}}</div>
+                            <div class="text-normal" *ngIf="policy.typePolicy==1">{{(trip.returnTicketInfoCRM && trip.returnTicketInfoCRM.ChangeDepartTime ? 'Chính sách đổi chiều về: '+trip.returnTicketInfoCRM.ChangeDepartTime : policy.name)}}</div>
+                            <div class="text-normal" *ngIf="policy.typePolicy==2">{{(trip.returnTicketInfoCRM && trip.returnTicketInfoCRM.TicketRefund ? 'Chính sách hủy chiều về: '+trip.returnTicketInfoCRM.TicketRefund : policy.name)}}</div>
                           </div>
                          
                         </div>
@@ -1105,7 +1107,7 @@
                             <!-- <div class="pax-type ">{{pax.gender}}</div> -->
                         </div>
                         
-                          <div class="d-flex m-top-13 h-26">
+                          <div class="d-flex m-top-13 h-26" *ngIf="!pax.isInfant">
                             <div class="text-name-airport witdh-80 align-self-end ">
                               {{ trip.bookingsComboData[0].departCode }} - {{ trip.bookingsComboData[0].arrivalCode }}
                             </div>
@@ -1127,7 +1129,7 @@
                             </div>
                           
                           </div>
-                          <div class="d-flex m-top-13  h-26" *ngIf=" trip.bookingsComboData[1].airlineCode && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ">
+                          <div class="d-flex m-top-13  h-26" *ngIf=" trip.bookingsComboData[1].airlineCode && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && !pax.isInfant">
                             <div class="text-name-airport witdh-80 align-self-end ">
                               {{ trip.bookingsComboData[1].departCode }} - {{ trip.bookingsComboData[1].arrivalCode }}
                             </div>
@@ -1139,7 +1141,7 @@
                               <img  src="./assets/imgs/ic_airdrop.svg"/>
                               <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{trip.bookingsComboData[1].passengers[idx].hanhLyshow}} kg</div>
                             </div>
-                            <div *ngIf="!trip.bookingsComboData[1].passengers[idx].hanhLyshow||trip.bookingsComboData[1].passengers[idx].hanhLyshow=='0'" class="d-flex m-left-4">
+                            <div *ngIf="(!trip.bookingsComboData[1].passengers[idx].hanhLyshow||trip.bookingsComboData[1].passengers[idx].hanhLyshow=='0')" class="d-flex m-left-4">
                               <img  src="./assets/imgs/ic_airdrop.svg"/>
                               <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">không có</div>
                             </div>
@@ -1883,7 +1885,7 @@
                                 </div>
                             </div>
                                   <div class="div-cathay r8">
-                                    <span (click)="showActionSheetInsurrance(trip, item, false)" class="text-cathay" *ngIf="!item.claimed else hadclaimed" > <img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>  <img class="img-cathay" src="./assets/imgs/vector.svg">Yêu cầu bảo hiểm</span>
+                                    <span (click)="showActionSheetInsurrance(trip, item, false)" class="text-cathay" *ngIf="!item.claimed else hadclaimed" > <img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>  <img class="img-cathay" src="./assets/imgs/vector.svg">Yêu cầu bảo hiểm</span>
                                     <ng-template #hadclaimed><img class="img-hadclaimed-fly" src="./assets/imgs/icon_action_done.svg"><label>Đã yêu cầu</label></ng-template>
                                   </div>
                           </div>
@@ -1902,7 +1904,7 @@
                                       </div>
                                   </div>
                                         <div class="div-cathay r8">
-                                          <span (click)="showActionSheetInsurrance(trip, itemchild, true)" class="text-cathay" *ngIf="!itemchild.claimed else hadclaimed" > <img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>  <img class="img-cathay" src="./assets/imgs/vector.svg">Yêu cầu bảo hiểm</span>
+                                          <span (click)="showActionSheetInsurrance(trip, itemchild, true)" class="text-cathay" *ngIf="!itemchild.claimed else hadclaimed" > <img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>  <img class="img-cathay" src="./assets/imgs/vector.svg">Yêu cầu bảo hiểm</span>
                                           <ng-template #hadclaimed><img class="img-hadclaimed-fly" src="./assets/imgs/icon_action_done.svg"><label>Đã yêu cầu</label></ng-template>
                                         </div>
                                 </div>
@@ -2273,7 +2275,7 @@
                                         </div>
                                     <div  class="div-cathay" *ngIf="pax.IsCathay">
                                     
-                                        <span (click)="requestCathay(pax.name,trip,pax.gender)" class="text-cathay" *ngIf="!pax.claimed else hadclaimed" > <img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm </span>
+                                        <span (click)="requestCathay(pax.name,trip,pax.gender)" class="text-cathay" *ngIf="!pax.claimed else hadclaimed" > <img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm </span>
                                         <ng-template  #hadclaimed><img class="img-hadclaimed-fly" src="./assets/imgs/icon_action_done.svg"><label>Đã yêu cầu</label></ng-template>
                                     </div>
                 
@@ -2286,7 +2288,7 @@
                                     <!-- <div class="pax-type ">{{pax.gender}}</div> -->
                                 </div>
                                 
-                                    <div class="d-flex m-top-13  h-26">
+                                  <div class="d-flex m-top-13  h-26" *ngIf="!pax.isInfant">
                                     <div class="text-name-airport witdh-80 align-self-end ">
                                         {{ trip.itemdepart.departCode }} - {{ trip.itemdepart.arrivalCode }}
                                     </div>
@@ -2298,7 +2300,7 @@
                                         <img  src="./assets/imgs/ic_airdrop.svg"/>
                                         <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{pax.hanhLyshow}} kg</div>
                                     </div>
-                                    <div *ngIf="!pax.hanhLyshow||pax.hanhLyshow=='0'" class="d-flex m-left-4">
+                                    <div *ngIf="(!pax.hanhLyshow||pax.hanhLyshow=='0')" class="d-flex m-left-4">
                                         <img  src="./assets/imgs/ic_airdrop.svg"/>
                                         <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">không có</div>
                                     </div>
@@ -2308,7 +2310,7 @@
                                     </div>
                                     
                                     </div>
-                                    <div class="d-flex m-top-13  h-26" *ngIf="trip.textReturn && trip.bookingsComboData[1].airlineCode && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 ">
+                                    <div class="d-flex m-top-13  h-26" *ngIf="trip.textReturn && trip.bookingsComboData[1].airlineCode && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && !pax.isInfant">
                                     <div class="text-name-airport witdh-80 align-self-end ">
                                         {{ trip.itemdepart.arrivalCode }} - {{ trip.itemdepart.departCode }}
                                     </div>
@@ -2316,11 +2318,12 @@
                                         <img  src="./assets/imgs/ic_handbag.svg"/>
                                         <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedReturn}}</div>
                                     </div>
+                                  
                                     <div *ngIf="trip.bookingsComboData[1].passengers[idx].hanhLyshow && trip.bookingsComboData[1].passengers[idx].hanhLyshow!='0'" class="d-flex m-left-4">
                                         <img  src="./assets/imgs/ic_airdrop.svg"/>
                                         <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{trip.bookingsComboData[1].passengers[idx].hanhLyshow}} kg</div>
                                     </div>
-                                    <div *ngIf="!trip.bookingsComboData[1].passengers[idx].hanhLyshow||trip.bookingsComboData[1].passengers[idx].hanhLyshow=='0'" class="d-flex m-left-4">
+                                    <div *ngIf="(!trip.bookingsComboData[1].passengers[idx].hanhLyshow||trip.bookingsComboData[1].passengers[idx].hanhLyshow=='0')" class="d-flex m-left-4">
                                         <img  src="./assets/imgs/ic_airdrop.svg"/>
                                         <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">không có</div>
                                     </div>
@@ -2999,7 +3002,7 @@
             </div>
             <div class="div-gird m-top-8">
             
-                <div class="d-flex">
+              <div class="d-flex" *ngIf="!_departTicketInfoCRM">
                 <div class="div-icon" *ngIf="((departConditionInfo && (!departConditionInfo.ticketCondition.ticketRefund || departConditionInfo.ticketCondition.ticketRefund.indexOf('Không') != -1)) || !departConditionInfo ) else departIconRefund">
                     <img class="img-info" src="./assets/imgs/ic_info.svg">
                 </div>
@@ -3013,8 +3016,25 @@
                 <ng-template #returnrefund>
                     <div class="text-info m-left-4" >Hoàn hủy có phí</div>
                 </ng-template>
-            </div>
-            <div class="d-flex m-top-2">
+              </div>
+              <!-- Update duoi CRM -->
+              <div class="d-flex" *ngIf="_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions">
+                <div class="div-icon" *ngIf="((_departTicketInfoCRM && (!_departTicketInfoCRM.ticketConditions.TicketRefund || _departTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_departTicketInfoCRM ) else departIconRefund">
+                    <img class="img-info" src="./assets/imgs/ic_info.svg">
+                </div>
+                <ng-template #departIconRefund>
+                    <div class="div-icon">
+                        <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                    </div>
+                </ng-template>
+        
+                <div class="text-info m-left-4" *ngIf="( (_departTicketInfoCRM && (!_departTicketInfoCRM.ticketConditions.TicketRefund || _departTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_departTicketInfoCRM ) else returnrefund">Không hoàn huỷ</div>
+                <ng-template #returnrefund>
+                    <div class="text-info m-left-4" >Hoàn hủy có phí</div>
+                </ng-template>
+              </div>
+
+            <div class="d-flex m-top-2" *ngIf="!_departTicketInfoCRM">
                 <div class="div-icon" *ngIf="((departConditionInfo && departConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !departConditionInfo ) else departIconChangeDepartTime">
                     <img src="./assets/imgs/ic_info.svg">
                 </div>
@@ -3027,7 +3047,22 @@
                 <ng-template #departChangeDepartTime>
                     <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
                 </ng-template>
-            </div>
+              </div>
+
+              <div class="d-flex m-top-2" *ngIf="_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions">
+                <div class="div-icon" *ngIf="((_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1) || !_departTicketInfoCRM ) else departIconChangeDepartTime">
+                    <img src="./assets/imgs/ic_info.svg">
+                </div>
+                <ng-template #departIconChangeDepartTime>
+                    <div class="div-icon">
+                        <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                    </div>
+                </ng-template>
+                <div class="text-info m-left-4" *ngIf="((_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1 ) || !_departTicketInfoCRM ) else departChangeDepartTime">Không đổi lịch bay</div>
+                <ng-template #departChangeDepartTime>
+                    <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
+                </ng-template>
+              </div>
             </div>
             </div>
             <!-- điều kiện vé chiều về nếu có-->
@@ -3062,7 +3097,7 @@
                 - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedReturn}}</span>
                 </div>
                 <div class="text-info" *ngIf="luggageSignedReturn">
-                - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedReturn}}kg</span>
+                - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedReturn}}<span *ngIf="luggageSignedReturn.indexOf('kg') ==-1">kg</span></span>
                 </div>
                 <div class="text-info" *ngIf="!luggageSignedReturn">
                 - Hành lý ký gửi: <span class="font-weight-600">0kg</span>
@@ -3070,7 +3105,7 @@
             </div>
             <div class="div-gird m-top-8">
             
-                <div class="d-flex">
+              <div class="d-flex" *ngIf="!_returnTicketInfoCRM">
                 <div class="div-icon" *ngIf="((returnConditionInfo && (!returnConditionInfo.ticketCondition.ticketRefund || returnConditionInfo.ticketCondition.ticketRefund.indexOf('Không') != -1)) || !returnConditionInfo ) else departIconRefund">
                     <img class="img-info" src="./assets/imgs/ic_info.svg">
                 </div>
@@ -3084,9 +3119,41 @@
                 <ng-template #returnrefund>
                     <div class="text-info m-left-4" >Hoàn hủy có phí</div>
                 </ng-template>
-            </div>
-            <div class="d-flex m-top-2">
-                <div class="div-icon" *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !returnConditionInfo ) else returnIconChangeDepartTime">
+              </div>
+              <!-- update duoi CRM -->
+              <div class="d-flex" *ngIf="_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions">
+                <div class="div-icon" *ngIf="((_returnTicketInfoCRM && (!_returnTicketInfoCRM.ticketConditions.TicketRefund || _returnTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_returnTicketInfoCRM ) else departIconRefund">
+                    <img class="img-info" src="./assets/imgs/ic_info.svg">
+                </div>
+                <ng-template #departIconRefund>
+                    <div class="div-icon">
+                        <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                    </div>
+                </ng-template>
+        
+                <div class="text-info m-left-4" *ngIf="( (_returnTicketInfoCRM && (!_returnTicketInfoCRM.ticketConditions.TicketRefund || _returnTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_returnTicketInfoCRM ) else returnrefund">Không hoàn huỷ</div>
+                <ng-template #returnrefund>
+                    <div class="text-info m-left-4" >Hoàn hủy có phí</div>
+                </ng-template>
+              </div>
+
+              <div class="d-flex m-top-2" *ngIf="!_returnTicketInfoCRM">
+                  <div class="div-icon" *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !returnConditionInfo ) else returnIconChangeDepartTime">
+                      <img src="./assets/imgs/ic_info.svg">
+                  </div>
+                  <ng-template #returnIconChangeDepartTime>
+                      <div class="div-icon">
+                          <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                      </div>
+                  </ng-template>
+                  <div class="text-info m-left-4 " *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1 ) || !returnConditionInfo ) else returnChangeDepartTime">Không đổi lịch bay</div>
+                  <ng-template #returnChangeDepartTime>
+                      <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
+                  </ng-template>
+              </div>
+              <!-- update duoi CRM -->
+              <div class="d-flex m-top-2" *ngIf="_returnTicketInfoCRM&& _returnTicketInfoCRM.ticketConditions">
+                <div class="div-icon" *ngIf="((_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1) || !_returnTicketInfoCRM ) else returnIconChangeDepartTime">
                     <img src="./assets/imgs/ic_info.svg">
                 </div>
                 <ng-template #returnIconChangeDepartTime>
@@ -3094,11 +3161,11 @@
                         <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
                     </div>
                 </ng-template>
-                <div class="text-info m-left-4 " *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1 ) || !returnConditionInfo ) else returnChangeDepartTime">Không đổi lịch bay</div>
+                <div class="text-info m-left-4 " *ngIf="((_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1 ) || !_returnTicketInfoCRM ) else returnChangeDepartTime">Không đổi lịch bay</div>
                 <ng-template #returnChangeDepartTime>
                     <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
                 </ng-template>
-            </div>
+              </div>
             </div>
                         
                         </div>
@@ -3130,7 +3197,7 @@
                       </div>
                     </div>
                       <!-- điều kiện vé -->
-                    <div *ngIf="isdkv">
+              <div *ngIf="isdkv">
                       <!-- điều kiện vé chiều đi -->
                     <div class="d-flex m-top-6">
                       <div class="div-width-200 d-flex">
@@ -3156,9 +3223,9 @@
                         </div>
                       </div>
               
-                </div>
+                    </div>
               
-                <div class="d-flex" margin-left-3>
+              <div class="d-flex" margin-left-3>
                   <div class="div-gird m-top-8 witdh-50">
                     <div class="text-info">
                       - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedDepart}}</span>
@@ -3172,7 +3239,7 @@
                   </div>
                   <div class="div-gird m-top-8">
                 
-                    <div class="d-flex">
+                    <div class="d-flex" *ngIf="!_departTicketInfoCRM">
                       <div class="div-icon" *ngIf="((departConditionInfo && (!departConditionInfo.ticketCondition.ticketRefund || departConditionInfo.ticketCondition.ticketRefund.indexOf('Không') != -1)) || !departConditionInfo ) else departIconRefund">
                           <img class="img-info" src="./assets/imgs/ic_info.svg">
                       </div>
@@ -3186,9 +3253,41 @@
                       <ng-template #returnrefund>
                           <div class="text-info m-left-4" >Hoàn hủy có phí</div>
                       </ng-template>
-                  </div>
-                  <div class="d-flex m-top-2">
-                      <div class="div-icon" *ngIf="((departConditionInfo && departConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !departConditionInfo ) else departIconChangeDepartTime">
+                    </div>
+                    <!-- Update duoi CRM -->
+                    <div class="d-flex" *ngIf="_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions">
+                      <div class="div-icon" *ngIf="((_departTicketInfoCRM && (!_departTicketInfoCRM.ticketConditions.TicketRefund || _departTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_departTicketInfoCRM ) else departIconRefund">
+                          <img class="img-info" src="./assets/imgs/ic_info.svg">
+                      </div>
+                      <ng-template #departIconRefund>
+                          <div class="div-icon">
+                              <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                          </div>
+                      </ng-template>
+              
+                      <div class="text-info m-left-4" *ngIf="( (_departTicketInfoCRM && (!_departTicketInfoCRM.ticketConditions.TicketRefund || _departTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_departTicketInfoCRM ) else returnrefund">Không hoàn huỷ</div>
+                      <ng-template #returnrefund>
+                          <div class="text-info m-left-4" >Hoàn hủy có phí</div>
+                      </ng-template>
+                    </div>
+                    
+                    <div class="d-flex m-top-2" *ngIf="!_departTicketInfoCRM">
+                        <div class="div-icon" *ngIf="((departConditionInfo && departConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !departConditionInfo ) else departIconChangeDepartTime">
+                          <img src="./assets/imgs/ic_info.svg">
+                        </div>
+                        <ng-template #departIconChangeDepartTime>
+                            <div class="div-icon">
+                                <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                            </div>
+                        </ng-template>
+                        <div class="text-info m-left-4" *ngIf="((departConditionInfo && departConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1 ) || !departConditionInfo ) else departChangeDepartTime">Không đổi lịch bay</div>
+                        <ng-template #departChangeDepartTime>
+                            <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
+                        </ng-template>
+                    </div>
+                    <!-- Update duoi CRM -->
+                    <div class="d-flex m-top-2" *ngIf="_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions">
+                      <div class="div-icon" *ngIf="((_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1) || !_departTicketInfoCRM ) else departIconChangeDepartTime">
                         <img src="./assets/imgs/ic_info.svg">
                       </div>
                       <ng-template #departIconChangeDepartTime>
@@ -3196,13 +3295,13 @@
                               <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
                           </div>
                       </ng-template>
-                      <div class="text-info m-left-4" *ngIf="((departConditionInfo && departConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1 ) || !departConditionInfo ) else departChangeDepartTime">Không đổi lịch bay</div>
+                      <div class="text-info m-left-4" *ngIf="((_departTicketInfoCRM && _departTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1 ) || !_departTicketInfoCRM ) else departChangeDepartTime">Không đổi lịch bay</div>
                       <ng-template #departChangeDepartTime>
                           <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
                       </ng-template>
                   </div>
                   </div>
-                </div>
+              </div>
                 <!-- điều kiện vé chiều về nếu có-->
                 <div *ngIf="trip.bookingsComboData[1]" class="d-flex m-top-6">
                   <div class="div-width-200 d-flex">
@@ -3235,7 +3334,7 @@
                       - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedReturn}}</span>
                     </div>
                     <div class="text-info" *ngIf="luggageSignedDepart">
-                      - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedReturn}}kg</span>
+                      - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedReturn}}<span *ngIf="luggageSignedReturn.indexOf('kg') ==-1">kg</span></span>
                     </div>
                     <div class="text-info" *ngIf="!luggageSignedDepart">
                       - Hành lý ký gửi: <span class="font-weight-600">0kg</span>
@@ -3243,7 +3342,7 @@
                   </div>
                   <div class="div-gird m-top-8">
                 
-                    <div class="d-flex">
+                    <div class="d-flex" *ngIf="!_returnTicketInfoCRM">
                       <div class="div-icon" *ngIf="((returnConditionInfo && (!returnConditionInfo.ticketCondition.ticketRefund || returnConditionInfo.ticketCondition.ticketRefund.indexOf('Không') != -1)) || !returnConditionInfo ) else departIconRefund">
                           <img class="img-info" src="./assets/imgs/ic_info.svg">
                       </div>
@@ -3257,9 +3356,42 @@
                       <ng-template #returnrefund>
                           <div class="text-info m-left-4" >Hoàn hủy có phí</div>
                       </ng-template>
-                  </div>
-                  <div class="d-flex m-top-2">
-                      <div class="div-icon" *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !returnConditionInfo ) else returnIconChangeDepartTime">
+                    </div>
+                    <!-- update duoi CRM -->
+                    <div class="d-flex" *ngIf="_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions">
+                      <div class="div-icon" *ngIf="((_returnTicketInfoCRM && (!_returnTicketInfoCRM.ticketConditions.TicketRefund || _returnTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_returnTicketInfoCRM ) else departIconRefund">
+                          <img class="img-info" src="./assets/imgs/ic_info.svg">
+                      </div>
+                      <ng-template #departIconRefund>
+                          <div class="div-icon">
+                              <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                          </div>
+                      </ng-template>
+              
+                      <div class="text-info m-left-4" *ngIf="( (_returnTicketInfoCRM && (!_returnTicketInfoCRM.ticketConditions.TicketRefund || _returnTicketInfoCRM.ticketConditions.TicketRefund.indexOf('Không') != -1)) || !_returnTicketInfoCRM ) else returnrefund">Không hoàn huỷ</div>
+                      <ng-template #returnrefund>
+                          <div class="text-info m-left-4" >Hoàn hủy có phí</div>
+                      </ng-template>
+                    </div>
+
+                    <div class="d-flex m-top-2" *ngIf="!_returnTicketInfoCRM">
+                        <div class="div-icon" *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1) || !returnConditionInfo ) else returnIconChangeDepartTime">
+                          <img src="./assets/imgs/ic_info.svg">
+                        </div>
+                        <ng-template #returnIconChangeDepartTime>
+                            <div class="div-icon">
+                                <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
+                            </div>
+                        </ng-template>
+                        <div class="text-info m-left-4 " *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1 ) || !returnConditionInfo ) else returnChangeDepartTime">Không đổi lịch bay</div>
+                        <ng-template #returnChangeDepartTime>
+                            <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Update duoi CRM -->
+                    <div class="d-flex m-top-2" *ngIf="_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions">
+                      <div class="div-icon" *ngIf="((_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1) || !_returnTicketInfoCRM ) else returnIconC">
                         <img src="./assets/imgs/ic_info.svg">
                       </div>
                       <ng-template #returnIconChangeDepartTime>
@@ -3267,15 +3399,16 @@
                               <img class="img-info" src="./assets/imgs/ic_check_mytrip.svg">
                           </div>
                       </ng-template>
-                      <div class="text-info m-left-4 " *ngIf="((returnConditionInfo && returnConditionInfo.ticketCondition.changeDepartTime.indexOf('Không') != -1 ) || !returnConditionInfo ) else returnChangeDepartTime">Không đổi lịch bay</div>
+                      <div class="text-info m-left-4 " *ngIf="((_returnTicketInfoCRM && _returnTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1 ) || !_returnTicketInfoCRM ) else returnChangeDepartTime">Không đổi lịch bay</div>
                       <ng-template #returnChangeDepartTime>
                           <div class="text-info m-left-4" >Đổi lịch bay có phí</div>
                       </ng-template>
-                  </div>
+                    </div>
+
                   </div>
                             
-                            </div>
-                          </div>
+                </div>
+              </div>
                           <div  class="div-panel-1px"></div>
                           <div *ngIf="trip.booking_type != 'COMBO_FLIGHT' && trip.booking_type != 'COMBO_VXR'" class="d-flex">
                             <div  class="text-info-2">
@@ -3527,7 +3660,7 @@
                           <div class="mt4">
                             {{trip.totalPaxStr}} 
                             <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
-                            <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
+                            <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span>
                           </div>
                           <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5" class="p-absolute-16">
                             <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
@@ -3688,11 +3821,11 @@
                   </div>  
                   <div class="div-line-new-1 margin-0-16"></div>
                         <!-- Thông tin phòng -->
-                        <div *ngIf="trip.booking_type == 'CB_FLY_HOTEL'" class="margin-8-16 d-flex">
+                        <div *ngIf="trip.booking_type == 'CB_FLY_HOTEL'" class="margin-8-16 m-right-16 d-flex">
                           <div >
                             <div class="d-flex m-top-3">
                               <div class=" div-left"><img src="./assets/ic_facility/ic_people.svg"></div>
-                              <div style="font-size: 14px;">{{trip.room_count}} phòng | {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{ trip.textChildDisplay }}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span></div>
+                              <div style="font-size: 14px;">{{trip.room_count}} phòng | {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{ trip.textChildDisplay }}</span> <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/>Yêu cầu bảo hiểm</span></div>
                             </div>
                           </div>
                           <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
@@ -3706,7 +3839,7 @@
                             
                           </div>
                           <div class="mt4">
-                            {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
+                            {{trip.totalPaxStr}} <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span> <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                           </div>
                           <div *ngIf="(trip.payment_status == 0 && trip.delivery_payment_date_display) || trip.payment_status == 1 || trip.payment_status == 5"  class="p-absolute-16">
                             <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
@@ -3793,7 +3926,7 @@
                                 {{trip.totalPaxStr}} 
                                 <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
                                 <span *ngIf="trip.childAgesDisplay">{{trip.childAgesDisplay}}</span>
-                                <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://beta-member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
+                                <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                               </ion-col>
                               <ion-col size="1" class="col-img-tour">
                                 <img class='img-arrow-tour' src="./assets/ic_tour/arrow_tour_mytrip.svg">

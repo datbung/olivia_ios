@@ -63,7 +63,7 @@ export class RoompaymentdoneeanPage implements OnInit {
       this._voucherService.publicClearVoucherAfterPaymentDone(1);
     this.ischeckpayment = Roomif.ischeckpayment;
     this.Roomif.ischeckpoint = false;
-    Roomif.priceshow = "";
+    
     this.ishide = true;
     this.storage.get('checkreview').then(checkreview => {
       if (checkreview==0) {
@@ -78,8 +78,7 @@ export class RoompaymentdoneeanPage implements OnInit {
  
     this.GetUserInfo();
     
-
-    
+    this.priceshow = this.searchhotel.totalPrice;
   }
 
   ionViewWillEnter(){
@@ -141,6 +140,7 @@ export class RoompaymentdoneeanPage implements OnInit {
   }
   next() {
     this.Roomif.priceshowtt = "";
+    this.Roomif.priceshow = "";
     this._flightService.itemMenuFlightClick.emit(2);
     //google analytic
     //this.gf.googleAnalytion('payment','Purchases','hotelid:'+this.booking.code+'/cin:'+this.booking.CheckInDate+'/cout:'+this.booking.CheckOutDate+'/adults:'+this.booking.Adults+'/child:'+this.booking.Child+'/roomnumber:'+ this.booking.roomNb+ '/price:'+this.booking.cost);

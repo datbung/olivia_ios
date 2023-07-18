@@ -39,7 +39,7 @@ export class FlightTopReviewPage {
         }
 
         loadDataFlightTopReviews(){
-            let url = C.urls.baseUrl.urlFlight + "gate/apiv1/GetReviewFlights?pageIndex=1&pageSize=6";
+            let url = C.urls.baseUrl.urlFlight + "gate/apiv1/GetReviewFlights?pageIndex=1&pageSize=20";
             this.gf.RequestApi("GET", url, {
                 "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
                 'Content-Type': 'application/json; charset=utf-8'
@@ -51,14 +51,18 @@ export class FlightTopReviewPage {
                       });
 
                     this.valueGlobal.flightAvgPoint = data.avgPoint.toFixed(1);
+                    this.valueGlobal.flightNumOfReview = data.total;
                     this.avgPoint = data.avgPoint.toFixed(1);
                     this.numOfReview = data.total;
-                    this.listflighttopreview = data.reviews;
+                    this.listflighttopreview = data.reviews.splice(0,6);
                   }
                 })
         }
 
-        showReviewList(){
+        showReviewList(slide){
+          if(slide && slide.replyMessage){
+            this._flightService.itemReview = slide;
+          }
             this.navCtrl.navigateForward('/flighttopreviewlist');
         }
 }

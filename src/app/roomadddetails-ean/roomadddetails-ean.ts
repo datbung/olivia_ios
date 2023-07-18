@@ -75,7 +75,7 @@ export class RoomadddetailsEanPage implements OnInit {
         this.roomnumber = Roomif.roomnumber;
         this.note = Roomif.notetotal;
         this.room = this.Roomif.arrroom;
-        this.jsonroom = Roomif.jsonroom;
+        this.jsonroom = {...Roomif.jsonroom};
         this.ischeckpoint = this.Roomif.ischeckpoint;
         this.storage.get('email').then(email => {
             if (email) {

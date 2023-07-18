@@ -1,11 +1,17 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { ForgotpassPage } from './forgotpass.page';
+
+
+// import {
+//   RecaptchaModule,
+//   RecaptchaFormsModule,
+// } from 'ng-recaptcha';
 
 const routes: Routes = [
   {
@@ -14,13 +20,18 @@ const routes: Routes = [
   }
 ];
 
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    ReactiveFormsModule,
+    //RecaptchaModule,
+   // RecaptchaFormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ForgotpassPage]
+  declarations: [ForgotpassPage],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class ForgotpassPageModule {}

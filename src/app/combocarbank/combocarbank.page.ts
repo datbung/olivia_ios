@@ -59,7 +59,7 @@ export class CombocarbankPage implements OnInit {
     this.accountNumber = "007 1000 895 230";
     this.text = "Ngân hàng Thương Mại Cổ Phần Ngoại Thương Việt Nam (VCB)<br>Chi nhánh Tp. Hồ Chí Minh<br>Số TK: <b>007 1000 895 230</b><br>Chủ TK: <b>Công ty Cổ Phần IVIVU.COM</b></li>";
     this.room = Roomif.arrroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.storage.get('email').then(e => {
       if (e !== null) {
         this.email = e;

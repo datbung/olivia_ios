@@ -49,6 +49,7 @@ export class FlightTopReviewListPage implements OnInit {
         }
 
         close(){
+          this._flightService.itemReview = '';
           this._flightService.typeFlightUsefulShow = 1;
             this.navCtrl.back();
         }
@@ -78,6 +79,11 @@ export class FlightTopReviewListPage implements OnInit {
                   }
 
                   this.numOfReviewRemain = this.numOfReview - this.listflighttopreview.length;
+                  if(this._flightService.itemReview){
+                    setTimeout(()=>{
+                      document.getElementById(this._flightService.itemReview.reviewId).scrollIntoView({  block: 'center', behavior: 'smooth' });
+                    },300)
+                  }
                   this.gf.hideLoading();
                 }
               })

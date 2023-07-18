@@ -19,7 +19,7 @@
       </div>
 
       <div class="div-content-review m-top-24">
-        <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview" (click)="showReviewList()">
+        <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview" (click)="showReviewList(slide)">
           <div class="d-flex">
               <div class="div-avatar">
                 <img class="slide2 img" src="./assets/ic_flight/user_pic.jpg" />
@@ -30,11 +30,12 @@
               </div>
           </div>
           <div class="m-top-14 div-text" *ngIf="slide.bestFeature">{{slide.bestFeature}}</div>
+          <div class="div-see-review"  *ngIf="slide.replyMessage">Xem phản hồi</div>
         </div>
 
        
       </div>
-      <div class="div-see-more m-top-16" (click)="showReviewList()">
+      <div class="div-see-more m-top-16" (click)="showReviewList('')">
         Hiển thị {{numOfReview}} nhận xét
       </div>
 </div>

@@ -223,7 +223,7 @@ export class FlightComboReviewsPage implements OnInit{
       }
       this.totalChild = booking.Child;
       this.roomtype = Roomif.roomtype;
-      this.jsonroom = Roomif.jsonroom;
+      this.jsonroom = {...Roomif.jsonroom};
       this.room = Roomif.arrroom;
       var chuoicin = this.cin.split('-');
       var chuoicout = this.cout.split('-');
@@ -1249,10 +1249,19 @@ export class FlightComboReviewsPage implements OnInit{
           }
         });
         se.sort('priceorder', se.listReturn);
-        se.checkvalue(se.listReturn, 1);
-        se.currentReturnFlight = se.returnfi;
+        setTimeout(()=>{
+          se.checkvalue(se.listReturn, 1).then((check)=>{
+            if(check){
+              se.currentReturnFlight = se.returnfi;
+              se.loadFlightData(se.departfi, se.returnfi);
+              se.edit();
+            }
+          });
+        },100)
+        
+        
       }
-      se.loadFlightData(se.departfi, se.returnfi);
+      
     })
     //tạm rem
     // if (se.listDepart.length == 0 || se.listReturn.length == 0) {
@@ -1261,37 +1270,48 @@ export class FlightComboReviewsPage implements OnInit{
   }
 
   //Hàm check VMB giá thấp nhất trong khung giờ chấp nhận được
-  checkvalue(list, stt) {
-    var Hour; var Minute; var kq;
-    var good = [];
-    var medium = [];
-    var other = [];
-    if (stt == 0) {
-      for (let i = 0; i < list.length; i++) {
-        // var dateTime = new Date(list.flights[i].departTime);
-        // Hour = moment(dateTime).format("HH");
-        // Minute = moment(dateTime).format("mm");
-        let ar_time = list[i].departTime.toString().split('T')[1];
-        Hour = ar_time.toString().split(':')[0];
-        Minute = ar_time.toString().split(':')[1];
-        kq = Hour * 60 + Number(Minute);
-        list[i].rangeTime = kq;
-
-        if (kq >= 360 && kq <= 960) {
-          if (kq >= 480 && kq <= 660) {
-            good.push(list[i]);
+  checkvalue(list, stt) :Promise<any>{
+    return new Promise((resolve,reject) => {
+      var Hour; var Minute; var kq;
+      var good = [];
+      var medium = [];
+      var other = [];
+      if (stt == 0) {
+        for (let i = 0; i < list.length; i++) {
+          // var dateTime = new Date(list.flights[i].departTime);
+          // Hour = moment(dateTime).format("HH");
+          // Minute = moment(dateTime).format("mm");
+          let ar_time = list[i].departTime.toString().split('T')[1];
+          Hour = ar_time.toString().split(':')[0];
+          Minute = ar_time.toString().split(':')[1];
+          kq = Hour * 60 + Number(Minute);
+          list[i].rangeTime = kq;
+  
+          if (kq >= 360 && kq <= 960) {
+            if (kq >= 480 && kq <= 660) {
+              good.push(list[i]);
+            }
+            else {
+              medium.push(list[i]);
+            }
           }
           else {
-            medium.push(list[i]);
+            other.push(list[i]);
           }
         }
-        else {
-          other.push(list[i]);
-        }
-      }
-      if (medium && medium.length > 0 && good && good.length > 0) {
-        if (good[0].priceorder <= medium[0].priceorder) {
-          this.departfi = good;
+        if (medium && medium.length > 0 && good && good.length > 0) {
+          if (good[0].priceorder <= medium[0].priceorder) {
+            this.departfi = good;
+          } else {
+            if (medium.length > 0) {
+              this.departfi = medium;
+            } else {
+              if (good.length > 0) {
+                this.departfi = good;
+              }
+  
+            }
+          }
         } else {
           if (medium.length > 0) {
             this.departfi = medium;
@@ -1299,60 +1319,54 @@ export class FlightComboReviewsPage implements OnInit{
             if (good.length > 0) {
               this.departfi = good;
             }
-
+  
           }
         }
-      } else {
-        if (medium.length > 0) {
-          this.departfi = medium;
-        } else {
-          if (good.length > 0) {
-            this.departfi = good;
-          }
-
+  
+  
+        if (this.departfi && this.departfi.length == 0) {
+          this.departfi = other;
         }
-      }
-
-
-      if (this.departfi && this.departfi.length == 0) {
-        this.departfi = other;
-      }
-    }
-    else {
-      for (let i = 0; i < list.length; i++) {
-        // var dateTime = new Date(list.flights[i].departTime);
-        // Hour = moment(dateTime).format("HH");
-        // Minute = moment(dateTime).format("mm");
-        let ar_time = list[i].departTime.toString().split('T')[1];
-        Hour = ar_time.toString().split(':')[0];
-        Minute = ar_time.toString().split(':')[1];
-        kq = Hour * 60 + Number(Minute);
-
-        if (kq >= 600 && kq < 1440) {
-          if (kq >= 840 && kq <= 1020) {
-            good.push(list[i]);
-          }
-          else {
-            medium.push(list[i]);
-          }
-        }
-        else {
-          other.push(list[i]);
-        }
-      }
-      if (medium.length > 0) {
-        this.returnfi = medium;
+        resolve(true);
       }
       else {
-        if (good.length > 0) {
-          this.returnfi = good;
+        for (let i = 0; i < list.length; i++) {
+          // var dateTime = new Date(list.flights[i].departTime);
+          // Hour = moment(dateTime).format("HH");
+          // Minute = moment(dateTime).format("mm");
+          let ar_time = list[i].departTime.toString().split('T')[1];
+          Hour = ar_time.toString().split(':')[0];
+          Minute = ar_time.toString().split(':')[1];
+          kq = Hour * 60 + Number(Minute);
+  
+          if (kq >= 600 && kq < 1440) {
+            if (kq >= 840 && kq <= 1020) {
+              good.push(list[i]);
+            }
+            else {
+              medium.push(list[i]);
+            }
+          }
+          else {
+            other.push(list[i]);
+          }
         }
-
+        if (medium.length > 0) {
+          this.returnfi = medium;
+        }
+        else {
+          if (good.length > 0) {
+            this.returnfi = good;
+          }
+  
+        }
+        if (this.returnfi.length == 0) {
+          this.returnfi = other;
+        }
+        resolve(true);
       }
-      if (this.returnfi.length == 0) {
-        this.returnfi = other;
-      }
-    }
+    })
+    
 
   }
 
@@ -1692,6 +1706,7 @@ export class FlightComboReviewsPage implements OnInit{
     var pointprice = 0;
     var total = this.TotalPrice;
     this.valueGlobal.backValue = '';
+    this.edit();
     if (this.ischeck) {
       pointprice = this.point;
       if (this.ischeckpoint) {
@@ -1737,6 +1752,7 @@ export class FlightComboReviewsPage implements OnInit{
     //   //total = this.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
     // }
     total = Number(total).toFixed(0);
+    this.bookCombo.totalprice = total;
     var officestr = "";
     if (this.bookCombo.ComboDetail.departureCode) {
       officestr = this.bookCombo.ComboDetail.departureCode == "SGN" ? "HCM" : (this.bookCombo.ComboDetail.departureCode == "HAN" ? "HN" : (this.bookCombo.ComboDetail.departureCode == "VCA" ? "CT" : ""));
@@ -2471,7 +2487,11 @@ export class FlightComboReviewsPage implements OnInit{
           }
           this.Pricepointshow = this.Pricepointshow.toLocaleString();
         }
-        else {
+        else{
+          if(this.strPromoCode){
+            let tempprice = this.TotalPrice;
+            this.Pricepointshow = tempprice - this.totaldiscountpromo;
+          }
           this.PriceAvgPlusTAStr = this.TotalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
           this.bookCombo.totalprice = this.TotalPrice;
         }
@@ -2833,6 +2853,10 @@ export class FlightComboReviewsPage implements OnInit{
     this.ischecktext=3
   }
   async showdiscount(){
+    if (!this.loadflightpricedone) {
+      this.presentToastwarming('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
+      return;
+    }
     if (!this.ischeck) {
       $('.div-point').removeClass('div-disabled');
     this.valueGlobal.PriceAvgPlusTAStr=this.PriceAvgPlusTAStr;
@@ -2868,6 +2892,7 @@ export class FlightComboReviewsPage implements OnInit{
           this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
         }
        
+        this.buildStringPromoCode();
         this.edit();
       }else if (data.data) {//case voucher km
         let vc = data.data;
@@ -3206,7 +3231,7 @@ export class FlightComboReviewsPage implements OnInit{
             setTimeout(() => {
               se.modalCtrl.dismiss();
             }, 100)
-            se.searchhotel.changeInfoHotelList.emit(1);
+            se.searchhotel.publicChangeInfoHotelList(1);
           }
         }
       }

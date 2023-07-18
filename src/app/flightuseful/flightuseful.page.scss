@@ -62,8 +62,8 @@
                 background: #f2f2f2;
                 margin-bottom: 8px;
 
-                width: 296px;
-                margin-right: 12px;
+                width: 340px;
+                margin-right: 16px;
             }
             .icon-arr {
                 display: flex;
@@ -78,6 +78,7 @@
                 padding: 16px 12px;
                 border-radius: 4px;
                 background-color: #ffffff;
+                min-height: 82px;
             }
             .div-image {
                 margin-top: 26px;
@@ -146,7 +147,29 @@
         color: #003c71 !important;
     }
 
+    .div-slide-useful {
+        display: flex;
+        overflow-x: scroll;
+
+        .div-wrap-useful-new {
+
+            .div-wrap-itemuseful-new {
+                display: flex;
+                flex-direction: column;
+                width: 340px;
+                margin-right: 16px;
+            }
+        }
+    }
     
+}
+@media(min-width:350px) and (max-width:375px){
+    .div-background-useful {
+        width: 296px !important;
+    }
+    .div-wrap-itemuseful-new {
+        width: 296px !important;
+    }
 }
 
 .p-top-30 {

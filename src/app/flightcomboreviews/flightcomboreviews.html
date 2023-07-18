@@ -286,7 +286,7 @@
       
     <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
     <app-voucherslideflightcombo *ngIf="loadflightpricedone"></app-voucherslideflightcombo>
-    <div *ngIf="ischeck||ischeckbtnpromo&& loadflightpricedone" >
+    <div *ngIf="(ischeck||ischeckbtnpromo)&& loadflightpricedone" >
         <ion-row>
           <ion-col size="5.8" style="padding: 0;">
             <div>

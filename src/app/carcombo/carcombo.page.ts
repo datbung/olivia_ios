@@ -142,7 +142,7 @@ export class CarComboPage implements OnInit {
     this.children = booking.Child;
     this.totalChild = booking.Child;
     this.roomtype = Roomif.roomtype;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.room = Roomif.arrroom;
     var chuoicin = this.cin.split('-');
     var chuoicout = this.cout.split('-');

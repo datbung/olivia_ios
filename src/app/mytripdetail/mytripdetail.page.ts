@@ -110,6 +110,10 @@ export class MytripdetailPage implements OnInit {
   isTTV=false;
   includePrice: any;
   ischeckqrLink=false;
+  departTicketInfoCRM: any;
+  returnTicketInfoCRM: any;
+  _departTicketInfoCRM: any;
+  _returnTicketInfoCRM: any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -134,55 +138,79 @@ export class MytripdetailPage implements OnInit {
         // this.getmhoteldetail();
         if(this.trip.isBookingVMBQT){
           this.getSummaryBooking();
+           //pdanh 12-07-2023: Sửa lỗi sync thông tin, điều kiện vé update dưới CRM
+            //Nếu có cập nhật từ CRM thì ưu tiên show thông tin update dưới CRM( 'ticketConditions' trong object 'bookingJsonDataParse')
+            if(this.trip.bookingJsonDataParse[0] && this.trip.bookingJsonDataParse[0].ticketConditions){
+              this.departTicketInfoCRM = this.trip.bookingJsonDataParse[0].ticketConditions;
+            }
+            if(this.trip.bookingJsonDataParse[1] && this.trip.bookingJsonDataParse[1].ticketConditions){
+              this.returnTicketInfoCRM = this.trip.bookingJsonDataParse[1].ticketConditions;
+            }
         }
+        //console.log(this.trip.bookingsComboData[0].passengers);
         if(this.trip.off_hotel_paypolicy && this.trip.off_hotel_paypolicy.indexOf('\r\n')){
          let arrpolicy = this.trip.off_hotel_paypolicy.split('\r\n');
          arrpolicy.forEach(element => {
             if(element && element.toLowerCase().indexOf('đổi chiều đi') != -1){
               this.hasdepartpolicy = true;
-              this.listpolicy.push({type: 1, name: element.replace('-',''), isdepart: true});
+              this.listpolicy.push({type: 1, name: element.replace('-',''), isdepart: true, typePolicy:1});
             }else if(element && element.toLowerCase().indexOf('đổi chiều về') != -1){
               this.hasreturnpolicy = true;
-              this.listpolicy.push({type: 1, name: element.replace('-',''), isdepart: false});
+              this.listpolicy.push({type: 1, name: element.replace('-',''), isdepart: false, typePolicy:1});
             }
             else if(element && element.toLowerCase().indexOf('hủy chiều đi') != -1){
               this.hasdepartpolicy = true;
-              this.listpolicy.push({type: 2, name: element.replace('-',''), isdepart: true});
+              this.listpolicy.push({type: 2, name: element.replace('-',''), isdepart: true, typePolicy:2});
             }else if(element && element.toLowerCase().indexOf('hủy chiều về') != -1){
               this.hasreturnpolicy = true;
-              this.listpolicy.push({type: 2, name: element.replace('-',''), isdepart: false});
+              this.listpolicy.push({type: 2, name: element.replace('-',''), isdepart: false, typePolicy:2});
             }
           });
         }
         if(this.trip.booking_json_data){
-          console.log(JSON.parse(this.trip.booking_json_data));
-          let curdate = new Date()
-          let _timezone = curdate.getTimezoneOffset();
+          //console.log(JSON.parse(this.trip.booking_json_data));
+          let offsetDate = new Date(this.trip.checkInDate)
+          let _timezone = offsetDate.getTimezoneOffset();
           this.bookingjson = JSON.parse(this.trip.booking_json_data);
           if(this.bookingjson && this.bookingjson.length >0){
-            this.bookingjson.forEach(elementbkg => {
+            this.bookingjson.forEach((elementbkg,idx) => {
               if(elementbkg && elementbkg.Transits){
                 this.totalCost += elementbkg.TotalCost*1;
                 
                 for (let index = 0; index < elementbkg.Transits.length; index++) {
                   const element = elementbkg.Transits[index];
                   let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
-                  if(_timezone != -420){
-                    element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('HH:mm');
-                    element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('HH:mm');
-  
-                    element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('MM');
-                    element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('MM');
-                    cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + Math.abs(_timezone)*60000 + 25200000)).format('YYYY-MM-DD');
+                  
+                  if(this.trip.bookingJsonDataParse && this.trip.bookingJsonDataParse[idx] && this.trip.bookingJsonDataParse[idx].transits[index] && this.trip.bookingJsonDataParse[idx].transits[index].departTimeParse){
+                    element.DepartTimeDisplay = moment(this.trip.bookingJsonDataParse[idx].transits[index].departTimeParse).format('HH:mm');
+                    let _d = this.trip.bookingJsonDataParse[idx].transits[index].departTimeParse;
+                    element.DepartDayDisplay = moment(_d).format('DD')+ "Thg " + moment(_d).format('MM');
+                    if(element.LandingTime){
+                      element.LandingTimeDisplay = moment(this.trip.bookingJsonDataParse[idx].transits[index].landingTimeParse).format('HH:mm');
+                      let _dr = this.trip.bookingJsonDataParse[idx].transits[index].landingTimeParse;
+                      element.LandingDayDisplay = moment(_dr).format('DD')+ "Thg " + moment(_dr).format('MM');
+                    }
+                    cin = moment(_d).format('YYYY-MM-DD');
+                  }else if(_timezone != -420){
+                      //console.log(moment.utc(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('HH:mm'));
+                      element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('HH:mm');
+                      element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('HH:mm');
+    
+                      element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('MM');
+                      element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('MM');
+                      cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1 + _timezone*60000 + 25200000)).format('YYYY-MM-DD');
 
-                  }else{
-                    element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                    element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-  
-                    element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-                    element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
-                    
-                  }
+                    }else{
+                      element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+                      element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
+    
+                      element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+                      element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('DD')+ "Thg " +moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('MM');
+                      
+                    }
+                  
+                  
+                 
                   
                   element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                   element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
@@ -1413,18 +1441,18 @@ export class MytripdetailPage implements OnInit {
         if (response.statusCode == 200) {
           let result = JSON.parse(body);
           if (stt==0) {
-            se.baggageHandedDepart=result.ticketCondition.baggageHanded;
-            se.luggageSignedDepart=result.ticketCondition.luggageSigned;
+            se.baggageHandedDepart= se.trip.bookingJsonDataParse[0] && se.trip.bookingJsonDataParse[0].ticketConditions && se.trip.bookingJsonDataParse[0].ticketConditions.BaggageHanded ? se.trip.bookingJsonDataParse[0].ticketConditions.BaggageHanded : result.ticketCondition.baggageHanded;
+            se.luggageSignedDepart= se.trip.bookingJsonDataParse[0] && se.trip.bookingJsonDataParse[0].ticketConditions && se.trip.bookingJsonDataParse[0].ticketConditions.LuggageSigned ? se.trip.bookingJsonDataParse[0].ticketConditions.LuggageSigned : result.ticketCondition.luggageSigned;
             se.departConditionInfo=result;
               se.trip.bookingsComboData[0].passengers.forEach(element => {
                 element.hanhLyshow="";
-                if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+                if (element.hanhLy && se.luggageSignedDepart) {
+                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(se.luggageSignedDepart.toString().replace('kg', ''));
                 }else{
                   if (element.hanhLy){
                     element.hanhLyshow=element.hanhLy;
                   }else{
-                    element.hanhLyshow=result.ticketCondition.luggageSigned;
+                    element.hanhLyshow=se.luggageSignedDepart;
                   }
                  
                 }
@@ -1432,20 +1460,21 @@ export class MytripdetailPage implements OnInit {
                   element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
                 }
               });
+              se._departTicketInfoCRM = se.trip.bookingJsonDataParse[0] && se.trip.bookingJsonDataParse[0].ticketConditions ? se.trip.bookingJsonDataParse[0] : null;
             se.trip.departChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }else{
-            se.baggageHandedReturn=result.ticketCondition.baggageHanded;
-            se.luggageSignedReturn=result.ticketCondition.luggageSigned
+            se.baggageHandedReturn=se.trip.bookingJsonDataParse[1] && se.trip.bookingJsonDataParse[1].ticketConditions && se.trip.bookingJsonDataParse[1].ticketConditions.BaggageHanded ? se.trip.bookingJsonDataParse[1].ticketConditions.BaggageHanded : result.ticketCondition.baggageHanded;
+            se.luggageSignedReturn=se.trip.bookingJsonDataParse[1] && se.trip.bookingJsonDataParse[1].ticketConditions && se.trip.bookingJsonDataParse[1].ticketConditions.LuggageSigned ? se.trip.bookingJsonDataParse[1].ticketConditions.LuggageSigned : result.ticketCondition.luggageSigned; ;
             se.returnConditionInfo=result;
             se.trip.bookingsComboData[1].passengers.forEach(element => {
               element.hanhLyshow="";
-              if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(result.ticketCondition.luggageSigned);
+              if (element.hanhLy && se.luggageSignedReturn) {
+                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(se.luggageSignedReturn.toString().replace('kg', ''));
               }else{
                 if (element.hanhLy){
                   element.hanhLyshow=element.hanhLy;
                 }else{
-                  element.hanhLyshow=result.ticketCondition.luggageSigned;
+                  element.hanhLyshow=se.luggageSignedReturn;
                 }
                
               }
@@ -1453,7 +1482,7 @@ export class MytripdetailPage implements OnInit {
                 element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
               }
             });
-
+            se._returnTicketInfoCRM = se.trip.bookingJsonDataParse[1] && se.trip.bookingJsonDataParse[1].ticketConditions ? se.trip.bookingJsonDataParse[1] : null;
             se.trip.returnChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }
           resolve(result);

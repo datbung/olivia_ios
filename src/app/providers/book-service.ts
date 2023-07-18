@@ -146,6 +146,7 @@ export class ValueGlobal {
   notifyAction: string;
     flightAvgPoint: any;
   wasTappedNoti: boolean;
+  flightNumOfReview: any;
 }
 export class SearchHotel {
   paymentType: string='';
@@ -282,7 +283,14 @@ export class SearchHotel {
   listHotelCityRoomUpgrade: any;
   fromPage: string;
   changeInfoFromPage: string ='';
-  changeInfoHotelList = new EventEmitter();
+  //changeInfoHotelList = new EventEmitter();
+  changeInfoHotelList= new Subject<any>();
+  publicChangeInfoHotelList(data: any) {
+    this.changeInfoHotelList.next(data);
+  }
+  getChangeInfoHotelList(): Subject<any> {
+    return this.changeInfoHotelList;
+  }
   hasSortHotelList: string | boolean;
   itemSearchHotelHome = new EventEmitter();
   hasShowCalendarFirstTime :boolean;
@@ -311,6 +319,7 @@ export class SearchHotel {
   comboType: string;
   reviewName: any;
   openFromTopReviewList: boolean;
+  keySearchHotelList: string='';
 }
 export class child {
     text: string;

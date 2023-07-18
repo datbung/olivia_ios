@@ -1,5 +1,4 @@
 platform :ios, '7.0'
 target 'iVIVU.com' do
 	pod 'GoogleMaps', '~> 2.7.0'
-	pod 'XCDYouTubeKit', '~> 2.7'
 end

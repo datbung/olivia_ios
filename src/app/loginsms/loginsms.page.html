@@ -16,23 +16,18 @@
 </ion-header>
 
 <ion-content padding>
-  <div style="text-align: center">
+  <div class=" m-top-8">
     <label class="textv">
-      Vui lòng nhập số điện thoại bạn đã đăng ký với
+      Vui lòng nhập số điện thoại bạn đã đăng ký với iVIVU.com
     </label>
   </div>
-  <div class="textv" style="text-align: center">
-    <label>
-      iVIVU.com
-    </label>
+  <div class="m-top-8">
+    <ion-item style="--padding-start: 0px">
+      <ion-label class="cls-label" position="stacked">Số điện thoại</ion-label>
+      <ion-input class="cls-inputphone" #ipphone [(ngModel)]="phone" maxlength=10 type="tel" required></ion-input>
+    </ion-item>
   </div>
-  <ion-row>
-    <ion-col size="12">
-      <ion-item style="--padding-start: 0px">
-        <ion-label style="color: #828282;font-size: 12px" position="floating">Số điện thoại</ion-label>
-        <ion-input #ipphone [(ngModel)]="phone" maxlength=10 type="tel" required></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
+     
+   
   <div style="margin-top: 24px"><button ion-button round outline class="button btn-save-phone" (click)="next()">Tiếp tục</button></div>
 </ion-content>

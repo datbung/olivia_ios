@@ -22,9 +22,9 @@ import { flightService } from '../providers/flightService';
 
 export class LoginusernamePage implements OnInit {
   public loginData: FormGroup;
-  @ViewChild('user') input;checkreview;emailorphone='';password=''
+  @ViewChild('user') input;checkreview;emailorphone='';password='';
   deviceToken: any;
-  appversion: string;ischeck;refreshTokenTimer
+  appversion: string;ischeck;refreshTokenTimer;
   constructor(public keyboard: Keyboard, public platform: Platform, public valueGlobal: ValueGlobal, public navCtrl: NavController, public formBuilder: FormBuilder, public authService: AuthService, public storage: Storage,
     private toastCtrl: ToastController, public zone: NgZone, public gf: GlobalFunction,public searchhotel: SearchHotel, private fcm: FCM,private appVersion: AppVersion,
     public _flightService: flightService) {

@@ -115,7 +115,7 @@ export class ComboadddetailsPage implements OnInit {
     })
     this.note = Roomif.notetotal;
     this.room = this.Roomif.arrroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.ischeckpoint = this.Roomif.ischeckpoint;
     if (this.ischeckpoint == true) {
       if (this.listcars.HotelBooking.TotalPrices == "0") {

@@ -25,6 +25,7 @@ export class PopupinfobkgPage implements OnInit {
   _daysConfig: DayConfig[] = [];
   nightCount: any=0;
   allowclickcalendar: boolean = true;
+  changedate: boolean;
   constructor(public modalCtrl: ModalController, public zone: NgZone,public searchhotel:SearchHotel,public valueGlobal:ValueGlobal,public navCtrl:NavController,
     public gf: GlobalFunction,
     private storage: Storage, private toastCtrl: ToastController) {
@@ -33,6 +34,7 @@ export class PopupinfobkgPage implements OnInit {
 
   }
   ionViewWillEnter() {
+    this.allowclickcalendar = true;
     if(this.valueGlobal.listlunar){
       for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
         this._daysConfig.push({
@@ -82,8 +84,9 @@ export class PopupinfobkgPage implements OnInit {
     this.nightCount = moment(this.datecout).diff( moment(this.datecin), 'days');
     this.bindlunar();
   }
-  closeModal()
+  async closeModal()
   {
+    this.valueGlobal.notRefreshDetail = !this.changedate; 
     this.navCtrl.back();
   }
   closecalendar(){
@@ -229,6 +232,7 @@ export class PopupinfobkgPage implements OnInit {
     var obj: any = e.currentTarget;
     if ($(obj.parentNode).hasClass('endSelection') || $(obj.parentNode).hasClass('startSelection')) {
       if (this.modalCtrl) {
+        this.changedate = true;
         let fday: any;
         let tday: any;
         var monthenddate: any;
@@ -322,7 +326,7 @@ export class PopupinfobkgPage implements OnInit {
   }
   search()
   {
-    this.searchhotel.changeInfoHotelList.emit(1);
+    this.searchhotel.publicChangeInfoHotelList(1);
     this.navCtrl.back();
   }
   bindlunar() {

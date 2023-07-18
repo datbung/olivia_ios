@@ -6,57 +6,48 @@
       </ion-label>
     </div>
 
-    <!-- <div class="sub-title">
-      <ion-label class="text-subtitle">
-        Có một hành trình hơn cả mong đợi
-      </ion-label>
-    </div> -->
   </div>
       <div class="item-useful">
-        <div class="div-wrap-useful m-top-8" *ngFor="let listItemUseful of listData; let idxhead=index">
-            <div class="div-headline d-flex">
-              <div class="div-icon">
-                <img class="img-head" src="./assets/ic_flight/dashboard.svg" *ngIf="idxhead==0">
-                <img class="img-head" src="./assets/ic_flight/suitcase-alt.svg" *ngIf="idxhead==1">
-                <img class="img-head" src="./assets/ic_flight/file.svg" *ngIf="idxhead==2">
-              </div>
-              <div class="div-text m-left-8">{{listItemUseful.name}}</div>
-            </div>
-            <div class="div-wrap-itemuseful m-top-12">
-              <div *ngFor="let itemuseful of listItemUseful.data; let idx = index">
-                <div class="div-background-useful" id="{{itemuseful.id}}">
+        <div class="div-slide-useful">
+          <div class="div-wrap-useful-new m-top-8" *ngFor="let listItemNewUseful of listNewData; let idxhead=index">
+            <div class="div-wrap-itemuseful-new m-top-12">
+              <div *ngFor="let itemuseful of listItemNewUseful.data; let idx = index">
+                <div class="div-background-useful" id="{{itemuseful.id}}" *ngIf="itemuseful">
                   <div [ngClass]="itemuseful.clicked ? 'd-flex div-title has-clicked div-border-selected' : 'div-title d-flex' "  (click)="itemClick(itemuseful)">
-                    <div class="text-content">{{itemuseful.title}}</div>
+                    <div class="text-content" *ngIf="itemuseful.title">{{itemuseful.title}}</div>
                   </div>
                   
                 </div>
               </div>
               
             </div>
-            
-            <div *ngFor="let itemuseful of listItemUseful.data; let idx = index">
-              <div *ngIf="itemuseful.clicked">
+
+            <!-- <div *ngFor="let itemuseful of listItemNewUseful.data; let idx = index">
+              <div *ngIf="itemuseful && itemuseful.clicked">
                 <div >
-                    <div [ngClass]="_flightService.typeFlightUsefulShow==2 ? 'div-useful-detail-show' : 'div-useful-show'">
+                    <div class="div-useful-show">
                         <div [innerHTML]="itemuseful.contents"></div>
                         <div class="div-image">
-                          <img class="img-qa" [src]="arrLinkImage[idx]" *ngIf="idxhead==0">
-                          <img class="img-qa" [src]="arrLinkImage[idx+6]" *ngIf="idxhead==1">
-                          <img class="img-qa" [src]="arrLinkImage[idx+10]" *ngIf="idxhead==2">
+                          <img class="img-qa" [src]="itemuseful.imageLink">
                         </div>
                     </div>
                     
                 </div>
                 
               </div>
-            </div>
+            </div> -->
+          </div>
+        </div>
 
+        <div *ngIf="itemclick">
+          <div class="div-useful-show">
+            <div [innerHTML]="itemclick.contents"></div>
+            <div class="div-image">
+              <img class="img-qa" [src]="itemclick.imageLink">
+            </div>
+         </div>
         </div>
         
-        <!-- <div class="div-showmore" (click)="showusefuldetail()" *ngIf="_flightService.typeFlightUsefulShow!=2">
-          <div class="text-showmore">Xem thêm thông tin</div>
-          <div class="icon-showmore"><img src="./assets/ic_flight/next_blue.svg"></div>
-        </div> -->
       </div>
 
     
