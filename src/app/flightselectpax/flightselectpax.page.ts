@@ -241,7 +241,7 @@ export class FlightselectpaxPage implements OnInit {
         this._flightService.itemFlightChangePax.emit(1);
         
         if(this.valueGlobal.backValue == "flightchangeinfo"){
-          this.modalCtrl.dismiss();
+          this.modalCtrl.dismiss(1);
         }else{
             this.navCtrl.back();
         }

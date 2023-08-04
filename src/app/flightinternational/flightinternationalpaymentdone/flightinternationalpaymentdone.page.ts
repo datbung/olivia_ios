@@ -74,6 +74,11 @@ export class FlightInternationalPaymentDone implements OnInit {
     let dataSummary = await this.gf.getSummaryBooking(this._flightService.itemFlightCache);
     console.log(dataSummary);
     let date = dataSummary.periodPaymentDate;
+    if(dataSummary && dataSummary.totalPrice){
+      setTimeout(()=>{
+        this.total = dataSummary.totalPrice;
+      },300)
+    }
     if(date){
       this.text= moment(date).format("HH:mm") + " " + this.gf.getDayOfWeek(date).dayname +", "+ moment(date).format("DD") + " thg " + moment(date).format("MM");
     }

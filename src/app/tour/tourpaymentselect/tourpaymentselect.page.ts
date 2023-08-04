@@ -219,7 +219,7 @@ export class TourPaymentSelectPage implements OnInit {
                   }
                   clearInterval(se.intervalID);
                   se.tourService.paymentType = 1;
-                  se.navCtrl.navigateForward('tourpaymentdone');
+                  se.navCtrl.navigateForward('/tourpaymentdone');
                 }
                 else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
                 {
@@ -275,7 +275,7 @@ export class TourPaymentSelectPage implements OnInit {
                     }
                     clearInterval(se.intervalID);
                     se.tourService.paymentType = 1;
-                    se.navCtrl.navigateForward('tourpaymentdone');
+                    se.navCtrl.navigateForward('/tourpaymentdone');
                   }
                   else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
                   {
@@ -338,7 +338,7 @@ export class TourPaymentSelectPage implements OnInit {
               }
               clearInterval(this.intervalID);
               this.tourService.paymentType = 1;
-              this.navCtrl.navigateForward('tourpaymentdone');
+              this.navCtrl.navigateForward('/tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
             {

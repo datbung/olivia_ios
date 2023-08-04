@@ -288,15 +288,6 @@ export class RoomdetailreviewPage implements OnInit {
  
   }
   ionViewWillEnter() {
-  //   if (this.Roomif.promocode && this.Roomif.bookingCode) {
-  //      alert("Mã giảm giá "+this.Roomif.promocode+" đã được dùng cho booking "+this.Roomif.bookingCode+".Xin vui lòng thao tác lại booking!");
-  //      this.Roomif.promocode="";
-  //      this.Roomif.bookingCode="";
-  //   }
-  //   if (this.Roomif.point && this.Roomif.bookingCode) {
-  //     alert("Điểm tích luỹ "+this.Roomif.point+" đã được dùng cho booking "+this.Roomif.bookingCode+".Xin vui lòng thao tác lại booking!");
-  //     this.Roomif.bookingCode="";
-  //  }
   if(this.valueGlobal.backValue != 'roompaymentbreakdown'){
     if(this.itemVoucherHotel){
       this._voucherService.rollbackSelectedVoucher.emit(this.itemVoucherHotel);
@@ -759,18 +750,9 @@ export class RoomdetailreviewPage implements OnInit {
             }
           })
         }
+      }else{
+        this.ischeckbtnpromo = false;
       }
-      // if (data.data) {
-      //   this.zone.run(() => {
-      //     if (data.data.promocode) {
-      //       $('.div-point').addClass('div-disabled');
-      //       this.promocode=data.data.promocode;
-      //       this.textpromotion=data.data.promocode;
-      //       this.promofunc();
-      //     }
-      //   })
-        
-      // }
     })
     //}
   }
@@ -806,6 +788,7 @@ export class RoomdetailreviewPage implements OnInit {
     this.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(this.arrroomFS[0].HotelRoomHBedReservationRequest);
     this.Roomif.arrroom = this.arrroomFS;
     this.Roomif.imgRoom = this.arrroomFS[0].Rooms[0].ImagesMaxWidth320;
+    this.Roomif.objMealType = dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index];
     
   }
   nextShuttlebus(){

@@ -5,7 +5,7 @@ import { C } from '../providers/constants';
 import * as $ from 'jquery';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { ValueGlobal,SearchHotel } from './book-service';
+import { ValueGlobal,SearchHotel, RoomInfo, Bookcombo } from './book-service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { File as IonicFileService, FileEntry, IFile } from '@ionic-native/file/ngx';
 import { NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
@@ -79,7 +79,9 @@ export class GlobalFunction{
       private fcm: FCM,
       private searchhotel: SearchHotel,
       public tourService: tourService,
-      private safariViewController: SafariViewController){
+      private safariViewController: SafariViewController,
+      public roomInfo: RoomInfo,
+      public bookcombo: Bookcombo){
 
     }
     
@@ -170,8 +172,12 @@ export class GlobalFunction{
 
   public logEventFirebase(paymentType, itemcache, screenName, viewAction, category){
     if(category == 'Flights'){
+      let _bkgCode = this._flightService.itemFlightCache.bookingCode;
+     
       this.gaSetScreenName("/ve-may-bay/"+itemcache.departCode+"-di-"+itemcache.returnCode);
       this.googleAnalytionCustom(viewAction, { 
+        
+      transaction_id: viewAction=='purchase'? _bkgCode :'',
       items: itemcache.roundTrip ? [
       {
         item_id: "Ve-may-bay-"+itemcache.departCode+"-di-"+itemcache.returnCode,
@@ -230,6 +236,7 @@ export class GlobalFunction{
         this.gaSetScreenName(itemcache.gaHotelDetail.Url);
       }
       this.googleAnalytionCustom(viewAction, {
+        transaction_id: viewAction=='purchase'?(this.roomInfo.bookingCode || this.bookcombo.bookingcode || '') :'',
         currency: "VND",
             value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : 0,
             shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
@@ -257,6 +264,7 @@ export class GlobalFunction{
       if(itemcache && itemcache.gaTourDetail && itemcache.gaTourDetail.TourDetailUrl){
         this.gaSetScreenName('/du-lich/'+itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''));
         this.googleAnalytionCustom(viewAction, {
+          transaction_id: viewAction=='purchase'?this.tourService.tourBookingCode :'',
           currency: "VND",
               value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
               shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
@@ -274,7 +282,8 @@ export class GlobalFunction{
                       item_category4: itemcache.gaTourDetail.TourType ||'',
                       item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
                       price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
-                      quantity: this.searchhotel.adult +(this.searchhotel.child || 0)
+                      quantity: this.searchhotel.adult +(this.searchhotel.child || 0),
+
                   }
               ]
         })
@@ -727,7 +736,7 @@ export class GlobalFunction{
         if(type == 'areavn'){
           res = arrays.some(r => r.countryCode == 'VN');
         }
-        if(type == 'listlastsearchRegion'){
+        if(type == 'listlastsearchRegion' || type=='listlastsearch'){
           res = arrays.some(r => r.code == item.code);
         }
         if(type == 'listlastsearchHot'){
@@ -3509,10 +3518,10 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
           this.searchhotel.objRecent=objSearch;
           if( !objSearch.imageUrl){
             if(objSearch.isType==0 ){
-              //this.getHoteldetail(objSearch.id).then((obj) => {
-                // if(obj){
-                //   objSearch.imageUrl=obj;
-                // }
+              this.getHoteldetail(objSearch.id).then((obj) => {
+                if(obj){
+                  objSearch.imageUrl=obj;
+                }
                 if(data && data.length>2){
                   data.splice(0, 1);
                   objSearch.objkey=objkey;
@@ -3527,7 +3536,7 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
                   data.push(objSearch);
                   this.storage.set('arrHistory', data);
                 }
-              //})
+              })
             }else{
               this.storage.get('listtopregions').then(dataregion => {
                 if(dataregion){

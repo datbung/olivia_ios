@@ -85,11 +85,13 @@ export class FlightadddetailsPage implements OnInit {
   ishideNameMail=false;hotenhddt;emailhddt;addressorder;
   hidepaxhint: any;
   listPaxSuggestByMemberId = [];
-  ischeckinOnl: boolean = true;
+  allowCheckinOnline: boolean = true;
   contactOption:any= 'zalo';
   departFlight: any;
   returnFlight: any;
   expanddivairlinemember: boolean;
+  textCheckinOnline: string;
+  isInternal: boolean;
   
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
@@ -113,6 +115,7 @@ export class FlightadddetailsPage implements OnInit {
       })
         if(this._flightService.itemFlightCache){
           
+          this.isInternal = this._flightService.itemFlightCache.fromCountryCode == 'VN' && this._flightService.itemFlightCache.toCountryCode == 'VN';
           this.departFlight = this._flightService.itemFlightCache.departFlight;
           if(this._flightService.itemFlightCache.returnFlight){
             this.returnFlight = this._flightService.itemFlightCache.returnFlight;
@@ -178,8 +181,30 @@ export class FlightadddetailsPage implements OnInit {
             //se.gf.gaSetScreenName('flightadddetails');
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
-        this.checkinOnline();
+        this.checkAllowCheckinOnline();
         
+    }
+    //pdanh 02-08-2023: Thêm rule valid checkin online
+    checkAllowCheckinOnline(){
+      let _time = moment(this._flightService.itemFlightCache.departFlight.departTime).diff(new Date(), 'minutes');
+       //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
+       //Nếu _time > 24 tiếng => cho phép chọn checkin online
+       this.zone.run(() => {
+        if(_time > 24*60){
+          this.allowCheckinOnline = true;
+          this.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
+        }
+        //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
+        else if(24*60 > _time && _time > 4*60){
+          this.allowCheckinOnline = false;
+          this.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
+        }
+        //Nếu _time <= 4: Ẩn nút YC Checkin online
+        else if(_time <=4*60){
+          this.allowCheckinOnline = false;
+          this.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+        }
+      })
     }
 
     ionViewDidEnter(){
@@ -1102,7 +1127,7 @@ export class FlightadddetailsPage implements OnInit {
                         elementChild.textErrorInfo ='';
 
                         let departdatenew = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                        let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                        let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
 
                         if(!elementChild.genderdisplay && !elementChild.name){
                           elementChild.errorInfo = !elementChild.errorInfo;
@@ -1625,7 +1650,7 @@ export class FlightadddetailsPage implements OnInit {
               }
 
               if(inputcheck.dateofbirth){
-                let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
                 let returndatestring = moment(returndate).format('DD-MM-YYYY');
                             //Check độ tuổi trẻ em > 2
                             if(!inputcheck.isInfant && moment(returndate).diff(moment(inputcheck.dateofbirth).format('YYYY-MM-DD'), 'months') < 24){
@@ -3885,13 +3910,6 @@ alert.present();
       this._flightService.itemFlightCache.isCheckinOnline=event.detail.checked
     }
 
-    checkinOnline() {
-      var dep = moment(this._flightService.itemFlightCache.departFlight.departTime, "YYYYMMDD HH:mm")
-      let diffminutes = moment(dep).diff(new Date(), 'minutes');
-      if (diffminutes <= 210) {
-        this.ischeckinOnl=false;
-      }
-    }
     contactOptionClick(event){
       this.zone.run(()=>{
         this.contactOption = event.currentTarget.value;

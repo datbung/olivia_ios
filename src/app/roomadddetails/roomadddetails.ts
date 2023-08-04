@@ -533,6 +533,7 @@ export class RoomadddetailsPage implements OnInit {
           body:
           {
             RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
+            //RoomClassObj: se.booking.ListRoomClassObject,
             CName: se.Roomif.hoten,
             CEmail: se._email,
             CPhone: se.Roomif.phone,

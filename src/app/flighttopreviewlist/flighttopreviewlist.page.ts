@@ -63,7 +63,9 @@ export class FlightTopReviewListPage implements OnInit {
                 if(data && data.reviews){
                     data.reviews.forEach(element => {
                       element.reviewDateDisplay = moment(element.reviewDate).format("DD/MM/YYYY");
-                      
+                      if(element.replyDate){
+                        element.replyDateDisplay = moment(element.replyDate).format("DD/MM/YYYY");
+                      }
                     });
                     // this.zone.run(() => data.reviews.sort(function (a, b) {
                     //   return a.bestFeature ? -1 : (b.bestFeature ? -1 : 1);

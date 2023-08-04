@@ -139,10 +139,15 @@
 
     .div-logo{
         width: 40px;
-        height: 34px;
+        position: relative;
 
         .logo-vna{
             height: 11px !important;
+        }
+
+        .logo-vj {
+            position: absolute;
+            top: -24px;
         }
     }
     .img-detail{
@@ -158,17 +163,17 @@
         margin-top: 4px;
     }
     .div-airline-name{
-        padding-left: 14px;
-        width: 188px;
+        padding-left: 6px;
+        //width: 188px;
 
         .text-airline{
             line-height: 17px;
             font-size: 14px;
             font-weight: 100;
             color: #222222;
-            margin-bottom: 4px;
+            //margin-bottom: 4px;
 
-            max-width: 170px;
+            max-width: 140px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -321,6 +326,97 @@
                   
             }
         }
+        .d-flex-end {
+            display: flex;
+            align-items: flex-end;
+        }
+        .div-item-flight {
+            margin: -16px -16px 0 -16px;
+            padding: 16px;
+            background-color: #f2f2f2;
+
+            .div-space-between {
+                justify-content: space-between;
+            }
+
+                .div-wrap-item-flight {
+                padding: 8px 8px 11px;
+                border-radius: 4px;
+                box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15);
+                background-color: #fff;
+
+                .div-direction {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    margin: 0 6px 12px 0;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    background-color: #26bed6;
+                    color: #ffffff;
+                    font-size: 14px;
+                }
+
+                .div-city {
+                    font-size: 16px;
+                    font-weight: 600;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.4;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: #3f3b3b;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    max-width: 180px;
+                }
+
+                .div-show-detail {
+                    font-size: 14px;
+                    text-align: right;
+                    color: #2f80ed;
+                    line-height: 22px;
+                }
+
+                .div-text-normal {
+                    font-size: 14px;
+                    line-height: 1.4;
+                    text-align: left;
+                    color: #3f3b3b;
+                }
+
+                .div-departure-time {
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 1.4;
+                    text-align: left;
+                    color: #3f3b3b;
+                    display: flex;
+                    justify-content: space-between;
+
+                }
+
+                .div-align-center {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .div-text-sub {
+                    font-size: 14px;
+                    line-height: 1.4;
+                    text-align: right;
+                    color: #828282;
+                }
+                .div-width-icon {
+                    width: 12px;
+                    height: 12px;
+                }
+            }
+        }
+        
 
 }
 
@@ -574,11 +670,10 @@
     color: #00c1de;
 }
 .text-seen{
-    color: #2f80ed;
-    text-decoration: underline;
-    text-decoration-thickness: 0.5px;
-    font-size: 14px;
-  }
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+}
   .font-weight-600{
     font-weight: 600 !important;
 }
@@ -604,3 +699,19 @@
 .div-width-20 {
     width: 20%;
 }
+
+@media (min-width: 410px) and (max-width: 480px) {
+   .div-city {
+    max-width: 228px !important;
+   }
+}
+@media (min-width: 390px) and (max-width: 409px) {
+    .div-city {
+     max-width: 210px !important;
+    }
+ }
+ @media (min-width: 375px) and (max-width: 389px) {
+    .div-city {
+     max-width: 190px !important;
+    }
+ }

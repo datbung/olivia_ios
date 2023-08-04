@@ -520,6 +520,8 @@ export class OrderPage {
         var options = {
           method: 'GET',
           url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
+          //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&memberid=17c3fd5b-a372-41dd-936b-69beac9aa933&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
+          
           headers:
           {
             'accept': 'application/json',
@@ -1108,8 +1110,9 @@ export class OrderPage {
                     }
                     // console.log(JSON.parse(element.booking_json_data));
                   }
-                  if (element.hotel_name.indexOf("VMB QT") != -1 || (element.bookingjson && element.bookingjson[0] && element.bookingjson[0].Supplier3rd == "Travelport") || element.hotel_id == "F000002") {
-
+                  if (element.hotel_name.indexOf("VMB QT") != -1  || element.hotel_id == "F000002") {
+                    element.isBookingVMBQT = true;
+                    element.allowCheckinOnline = false;
                     if (element.booking_json_data) {
                     
                       // element.bookingjson = JSON.parse(element.booking_json_data);
@@ -1117,10 +1120,9 @@ export class OrderPage {
                         element.totalCost = 0;
                         let _timezone = new Date(element.checkInDate).getTimezoneOffset();
                         element.bookingjson.forEach((elementbkg,idx) => {
-                          if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
-                            element.isBookingVMBQT = true;
+                          if (elementbkg.Supplier3rd){
+                            element.isTravelPort = true;
                           }
-
                           if (elementbkg && elementbkg.Transits) {
                             element.totalCost += elementbkg.TotalCost * 1;
 
@@ -1180,7 +1182,9 @@ export class OrderPage {
 
                           }
                         });
-
+                        if(element.payment_fee){ 
+                          this.totalCost = this.totalCost - element.payment_fee;
+                        }
                       }
                       element.flightRoundTripStr = 'Vé máy bay ' + (element.bookingjson.length > 1 ? 'khứ hồi' : 'một chiều');
                       if (element.totalPaxStr) {
@@ -1714,15 +1718,36 @@ export class OrderPage {
                   let temp = element.bookingsComboData[0].departureDate.split("/");
                   let daytemp=temp[2]+ temp[1] + temp[0];
                   var dep = moment(daytemp+ " " + element.bookingsComboData[0].departureTime, "YYYYMMDD HH:mm")
-                  let diffminutes = moment(dep).diff(new Date(), 'minutes');
-                  if (diffminutes <= 210) {
-                    this.zone.run(() => {
-                      element.bookingjson[0].RequestCheckin=0;
-                      element.ischeckinOnl=true;
+                  let _time = moment(dep).diff(new Date(), 'minutes');
+                  // if (diffminutes <= 210) {
+                  //   this.zone.run(() => {
+                  //     element.bookingjson[0].RequestCheckin=0;
+                  //     element.ischeckinOnl=true;
                   
-                    })
-                  }
+                  //   })
+                  // }
+                  //pdanh 02-08-2023: Thêm valid checkin online
+                   //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
+                   //Nếu _time > 24 tiếng => cho phép chọn checkin online
+                   this.zone.run(() => {
+                    if(_time > 24*60){
+                      element.ischeckinOnl = false;
+                      element.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
+                    }
+                    //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
+                    else if(24*60 > _time && _time > 4*60){
+                      element.ischeckinOnl = true;
+                      element.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
+                    }
+                    //Nếu _time <= 4: Ẩn nút YC Checkin online
+                    else if(_time <=4*60){
+                      element.ischeckinOnl = true;
+                      element.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+                    }
+                  })
+
                  if(element.isBookingVMBQT && element.bookingJsonDataParse && element.bookingJsonDataParse.length >0){
+                  element.ischeckinOnl = false;
                   let d = element.bookingJsonDataParse[0].departureDateParse;
                   let dr = element.bookingJsonDataParse.length ==1 ? element.bookingJsonDataParse[0].arrivalDateParse : element.bookingJsonDataParse[element.bookingJsonDataParse.length-1].departureDateParse;
                   element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format('DD-MM-YYYY');
@@ -2101,13 +2126,17 @@ export class OrderPage {
             se.coutDC = coutDCdepart + coutDCreturn;
             se.totalDichung = TotalPriceGo + TotalPriceReturn;
             se.totalVMB = se.listMyTrips[0].amount_after_tax - se.totalService - se.totalDichung + se.listMyTrips[0].promotionDiscountAmount;
-
+            if(se.listMyTrips[0].payment_fee){
+              se.totalVMB = se.totalVMB - se.listMyTrips[0].payment_fee;
+            }
           }
           if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
             se.amount_after_tax = se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount;
           } else {
             se.amount_after_tax = se.listMyTrips[0].amount_after_tax
           }
+
+         
         } else {
           se.hasdata = false;
         }
@@ -2136,8 +2165,11 @@ export class OrderPage {
           }
 
           else if (se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].isBookingVMBQT) {
-            se.getSummaryBooking(se.listMyTrips[0]);
-            if (se.listMyTrips[0].off_hotel_paypolicy && se.listMyTrips[0].off_hotel_paypolicy.indexOf('\r\n')) {
+            if(se.listMyTrips[0].isTravelPort){
+              se.getSummaryBooking(se.listMyTrips[0]);
+            }
+            
+            if (se.listMyTrips[0].bookingJsonDataParse && se.listMyTrips[0].bookingJsonDataParse.length >0) {
               let arrpolicy = se.listMyTrips[0].off_hotel_paypolicy.split('\r\n');
               se.listMyTrips[0].listpolicy = [];
               arrpolicy.forEach(element => {
@@ -2156,11 +2188,29 @@ export class OrderPage {
                   se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: false, typePolicy:2 });
                 }
               });
+              // se.listMyTrips[0].listpolicy = [];
+              // if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].cancelPolicy){
+              //   se.listMyTrips[0].hasdepartpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 2, name: se.listMyTrips[0].bookingJsonDataParse[0].cancelPolicy, isdepart: true, typePolicy:2});//1- đổi vé; 2- hủy vé 
+              // }
+              // if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].changePolicy){
+              //   se.listMyTrips[0].hasdepartpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 1, name: se.listMyTrips[0].bookingJsonDataParse[0].changePolicy, isdepart: true, typePolicy:1});
+              // }
+              // if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].cancelPolicy){
+              //   se.listMyTrips[0].hasreturnpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 2, name: se.listMyTrips[0].bookingJsonDataParse[1].cancelPolicy, isdepart: false, typePolicy:2});//1- đổi vé; 2- hủy vé 
+              // }
+              // if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].changePolicy){
+              //   se.listMyTrips[0].hasdepartpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 1, name: se.listMyTrips[0].bookingJsonDataParse[1].changePolicy, isdepart: false, typePolicy:1});
+              // }
             }
+           
+
             if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
               se.listMyTrips[0].priceShow = (se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
             }
-
             //pdanh 12-07-2023: Sửa lỗi sync thông tin, điều kiện vé update dưới CRM
             //Nếu có cập nhật từ CRM thì ưu tiên show thông tin update dưới CRM( 'ticketConditions' trong object 'bookingJsonDataParse')
             if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions){
@@ -2581,17 +2631,16 @@ export class OrderPage {
                 }
                 if (elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1 || elementHis.booking_type == "CB_FLY_HOTEL") {
                   elementHis.isFlyBooking = true;
-                  if (elementHis.hotel_name.indexOf("VMB QT") != -1 || (elementHis.bookingjson && elementHis.bookingjson[0] && elementHis.bookingjson[0].Supplier3rd == "Travelport") || elementHis.hotel_id == "F000002") {
-                    //elementHis.isBookingVMBQT = true;
+                  if (elementHis.hotel_name.indexOf("VMB QT") != -1  || elementHis.hotel_id == "F000002") {
+                    elementHis.isBookingVMBQT = true;
                     if (elementHis.booking_json_data) {
                       // console.log(JSON.parse(elementHis.booking_json_data));
                       elementHis.bookingjson = JSON.parse(elementHis.booking_json_data);
                       if (elementHis.bookingjson && elementHis.bookingjson.length > 0) {
                         elementHis.bookingjson.forEach(elementbkg => {
-                          if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
-                            elementHis.isBookingVMBQT = true;
+                          if (elementbkg.Supplier3rd){
+                            elementHis.isTravelPort = true;
                           }
-
                           if (elementbkg && elementbkg.Transits) {
                             elementHis.totalCost += elementbkg.TotalCost * 1;
                            
@@ -2641,7 +2690,7 @@ export class OrderPage {
 
                           }
                         });
-
+                      
                       }
                       elementHis.flightRoundTripStr = 'Vé máy bay ' + (elementHis.bookingjson.length > 1 ? 'khứ hồi' : 'một chiều');
                       if (elementHis.totalPaxStr) {
@@ -5089,6 +5138,7 @@ export class OrderPage {
       se.hasloaddata = true;
       return;
     }
+    se._mytripservice.backroute = "order";
     se.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
     this.activityService.objPaymentMytrip.trip.priceShow = se.amount_after_tax;
     if (trip.booking_type == 'COMBO_FLIGHT') {
@@ -5108,7 +5158,7 @@ export class OrderPage {
       }
 
     }
-    else if (trip.isBookingVMBQT) {
+    else if (trip.isBookingVMBQT&& trip.isTravelPort) {
       se._flightService.itemFlightInternational = null;
       se.activityService.objPaymentMytrip = trip;
       this.gf.showLoading();
@@ -5553,7 +5603,7 @@ export class OrderPage {
 
   getDetailTicket(item, trip, isdepart) {
     let se = this;
-    let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType}&airbusCode=${item.aircraft}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(trip.bookingDate).format('YYYY-MM-DD')}`;
+    let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType||''}&airbusCode=${item.aircraft||''}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(trip.bookingDate).format('YYYY-MM-DD')}`;
     this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
       if (data) {
         se.zone.run(() => {
@@ -5631,17 +5681,20 @@ export class OrderPage {
         var ticketClass = se.listMyTrips[0].bookingsComboData[0].ticketClass;
         var departDate = se.listMyTrips[0].bookingsComboData[0].departTime;
         var flightNumber = se.listMyTrips[0].bookingsComboData[0].flightNumner;
+        var fromplace = se.listMyTrips[0].bookingJsonDataParse[0].departCode;
+        var toplace = se.listMyTrips[0].bookingJsonDataParse[0].arrivalCode;
       } else {
         var airlineCode = this.getairlineCode(stt);
         var ticketClass = se.listMyTrips[0].bookingsComboData[1].ticketClass;
         var departDate = se.listMyTrips[0].bookingsComboData[1].departTime;
         var flightNumber = se.listMyTrips[0].bookingsComboData[1].flightNumner;
-
+        var fromplace = se.listMyTrips[0].bookingJsonDataParse[1].departCode;
+        var toplace = se.listMyTrips[0].bookingJsonDataParse[1].arrivalCode;
       }
 
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode=" + airlineCode + "&ticketType=" + ticketClass + "&flightNumber=" + flightNumber + "&departDate=" + departDate + "&bookingDate=" + moment(this.listMyTrips[0].bookingDate).format('YYYY-MM-DD'),
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode=" + airlineCode + "&ticketType=" + ticketClass + "&flightNumber=" + flightNumber + "&departDate=" + departDate + "&bookingDate=" + moment(this.listMyTrips[0].bookingDate).format('YYYY-MM-DD')+`&fromPlace=${fromplace}&toPlace=${toplace}`,
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
 
@@ -5672,7 +5725,7 @@ export class OrderPage {
               se.listMyTrips[0].bookingsComboData[0].passengers.forEach(element => {
                 element.hanhLyshow = "";
                 if (element.hanhLy && se.luggageSignedDepart) {
-                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kg', '')) + Number(se.luggageSignedDepart.toString().replace('kg', ''));
+                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kgs', '').replace('kg', '')) + Number(se.luggageSignedDepart.toString().replace('kgs', '').replace('kg', ''));
                 } else {
                   if (element.hanhLy) {
                     element.hanhLyshow = element.hanhLy;
@@ -5682,11 +5735,11 @@ export class OrderPage {
 
                 }
                 if (element.hanhLyshow) {
-                  element.hanhLyshow = element.hanhLyshow.toString().replace('kg', '');
+                  element.hanhLyshow = element.hanhLyshow.toString().replace('kgs', '').replace('kg', '');
                 }
               });
             }
-            se._departTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[0];
+            se._departTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions ? se.listMyTrips[0].bookingJsonDataParse[0] : null;
             // let _departChangeDepartTimeCRM = !((_departTicketInfoCRM && (!_departTicketInfoCRM.ticketConditions.ChangeDepartTime || _departTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1)) || !_departTicketInfoCRM );
             se.listMyTrips[0].departChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           } else {
@@ -5698,7 +5751,7 @@ export class OrderPage {
               se.listMyTrips[0].bookingsComboData[1].passengers.forEach(element => {
                 element.hanhLyshow = "";
                 if (element.hanhLy && se.luggageSignedReturn) {
-                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kg', '')) + Number(se.luggageSignedReturn.toString().replace('kg', ''));
+                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kgs', '').replace('kg', '')) + Number(se.luggageSignedReturn.toString().replace('kgs', '').replace('kg', ''));
                 } else {
                   if (element.hanhLy) {
                     element.hanhLyshow = element.hanhLy;
@@ -5708,11 +5761,11 @@ export class OrderPage {
 
                 }
                 if (element.hanhLyshow) {
-                  element.hanhLyshow = element.hanhLyshow.toString().replace('kg', '');
+                  element.hanhLyshow = element.hanhLyshow.toString().replace('kgs', '').replace('kg', '');
                 }
               });
             }
-            se._returnTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[1] ? se.listMyTrips[0].bookingJsonDataParse[1] : null;
+            se._returnTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[1]&& se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions ? se.listMyTrips[0].bookingJsonDataParse[1] : null;
             // let _returnChangeDepartTimeCRM = !((_returnTicketInfoCRM && (!_returnTicketInfoCRM.ticketConditions.ChangeDepartTime || _returnTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1)) || !_returnTicketInfoCRM );
             se.listMyTrips[0].returnChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }

@@ -1206,7 +1206,6 @@ export class CombocarnewPage implements OnInit {
       else {
         priceseatret = (self.pricereturn * self.totalAdult) + self.diff_feeret;
       }
-
       self.PriceAvgPlusTAStr = self.PriceAvgPlusTA + priceseatdep + priceseatret + (self.surchargedepd + self.surchargedept + self.surchargeretd + self.surchargerett) * self.totalAdult;
       self.total = self.PriceAvgPlusTAStr;
       self.PriceAvgPlusTAStr = self.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -1464,7 +1463,6 @@ export class CombocarnewPage implements OnInit {
         else {
           priceseatret = (self.pricereturn * self.totalAdult) + self.diff_feeret;
         }
-
         self.PriceAvgPlusTAStr = self.PriceAvgPlusTA + priceseatdep + priceseatret + (self.surchargedepd + self.surchargedept + self.surchargeretd + self.surchargerett) * self.totalAdult;
         self.total = self.PriceAvgPlusTAStr;
         self.PriceAvgPlusTAStr = self.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");

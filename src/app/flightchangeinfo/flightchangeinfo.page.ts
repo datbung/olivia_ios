@@ -107,6 +107,10 @@ export class FlightchangeinfoPage implements OnInit {
                     this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
                     this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
   
+                    if(this._flightService.objSearch){
+                      this._flightService.objSearch.departAirport = this.departAirport;
+                      this._flightService.objSearch.returnAirport = this.returnAirport;
+                    }
   
                     this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
                     this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
@@ -150,6 +154,11 @@ export class FlightchangeinfoPage implements OnInit {
   
                     this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
                     this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
+
+                    if(this._flightService.objSearch){
+                      this._flightService.objSearch.departAirport = this.departAirport;
+                      this._flightService.objSearch.returnAirport = this.returnAirport;
+                    }
                   }
                   
                  this.isInternationalFlight = this._flightService.itemFlightCache.isInternationalFlight;
@@ -177,8 +186,8 @@ export class FlightchangeinfoPage implements OnInit {
           this._flightService.classSelectedName = '';
           this.classSelectedName='';
 
-          this.search();
-            //this.modalCtrl.dismiss();
+          //this.search();
+            this.modalCtrl.dismiss();
         }
 
         search(){
@@ -202,14 +211,15 @@ export class FlightchangeinfoPage implements OnInit {
                 titleReturn: se.returnCity +" → " + se.departCity,
                 dayReturnDisplay: se.coutthu + ", " +moment(se.cout).format("DD") + " thg " + moment(se.cout).format("M") ,
                 subtitleReturn : " · " + (se.adult + se.child + (se.infant ? se.infant : 0)) + " khách"+ " · " + (se.flighttype=="twoway" ? ' Khứ hồi' : ' Một chiều'),
-                // itemSameCity: se.itemSameCity,
-                // itemDepartSameCity: se.itemDepartSameCity,
-                // itemReturnSameCity: se.itemReturnSameCity,
+      
                 departCity: se.departCity,
                 returnCity: se.returnCity,
                 roundTrip : (se.flighttype=="twoway") ? true : false,
                 timeDepartPriority: se.timedepartpriorityconfig,
                 timeReturnPriority: se.timereturnpriorityconfig,
+                
+                returnAirport: se.returnAirport,
+                departAirport: se.departAirport,
             }
     
             se._flightService.itemFlightCache.roundTrip = (se.flighttype=="twoway") ? true : false;
@@ -267,8 +277,15 @@ export class FlightchangeinfoPage implements OnInit {
               }
             })
           }
+          
+            if(!se._flightService.objSearch){
+              se._flightService.objSearch = {};
+            }
+            se._flightService.objSearch.departDate = moment(se.cin).format('YYYY-MM-DD');
+            se._flightService.objSearch.returnDate = moment(se.cout).format('YYYY-MM-DD');
             
-            se.modalCtrl.dismiss(this._flightService.classSelected != -1 ? 2 : true);
+
+            se.modalCtrl.dismiss(se._flightService.classSelected != -1 ? 2 : true);
         }
 
         getDayName(datecin, datecout) {
@@ -359,11 +376,11 @@ export class FlightchangeinfoPage implements OnInit {
               
               $('.sc-ion-modal-ios-h.modal-flight-change-info').addClass('twoway');
             }
-            if(!this._flightService.objSearch){
-              this._flightService.objSearch = {};
-            }
-            this._flightService.objSearch.departDate = this.cin;
-            this._flightService.objSearch.returnDate = this.cout;
+            // if(!this._flightService.objSearch){
+            //   this._flightService.objSearch = {};
+            // }
+            // this._flightService.objSearch.departDate = this.cin;
+            // this._flightService.objSearch.returnDate = this.cout;
 
             this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
             this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
@@ -495,8 +512,16 @@ export class FlightchangeinfoPage implements OnInit {
               modal.onDidDismiss().then((data: OverlayEventDetail) => {
                     if(data && data.data){
         
+                    }else if(!data.data || data.role=='backdrop'){
+                      this.rollbackObjectSearch();
                     }
                   })
+      }
+
+      rollbackObjectSearch(){
+        let se = this;
+        let obj = se._flightService.objSearch;
+        //debugger
       }
         /**
    * Hàm bắt sự kiện click chọn ngày trên lịch bằng jquery
@@ -593,7 +618,7 @@ export class FlightchangeinfoPage implements OnInit {
           }
           if (fromdate && todate && allowseach) {
             setTimeout(() => {
-              se.modalCtrl.dismiss();
+              se.modalCtrl.dismiss(1);
             }, 300);
 
             se.cin = moment(fromdate).format("YYYY-MM-DD");
@@ -609,11 +634,11 @@ export class FlightchangeinfoPage implements OnInit {
               se.checkInDisplayMonth = se.getDayOfWeek(se.cin).dayname +", " + moment(se.cin).format("DD") + " thg " + moment(se.cin).format("MM");
               se.checkOutDisplayMonth = se.getDayOfWeek(se.cout).dayname +", " + moment(se.cout).format("DD") + " thg " + moment(se.cout).format("MM");
 
-              if(!se._flightService.objSearch){
-                se._flightService.objSearch = {};
-              }
-              se._flightService.objSearch.departDate = se.cin;
-              se._flightService.objSearch.returnDate = se.cout;
+              // if(!se._flightService.objSearch){
+              //   se._flightService.objSearch = {};
+              // }
+              //se._flightService.objSearch.departDate = se.cin;
+              //se._flightService.objSearch.returnDate = se.cout;
               se._flightService.itemFlightCache.checkInDate = se.cin;
               se._flightService.itemFlightCache.checkOutDate = se.cout;
               se.getDayName(se.cin, se.cout);
@@ -1118,22 +1143,35 @@ export class FlightchangeinfoPage implements OnInit {
     }
 
     reloadInfo(){
-        if(this._flightService.objSearch.departDate){
-            this.cin = this.gf.getCinIsoDate(this._flightService.objSearch.departDate);
-        }else{
-            this.cin = this.gf.getCinIsoDate(new Date());
-        }
-        if(this._flightService.objSearch.returnDate){
-            this.cout = this._flightService.objSearch.returnDate;
-        }else{
-            this.cout = moment(this.gf.getCinIsoDate(new Date())).add(1,'days');
-        }
+      // if(this._flightService.objSearch.departDate == this._flightService.objSearch.returnDate 
+      //   && this.flighttype == 'twoway'
+      //   ){
+      //     this.cin = this.gf.getCinIsoDate(this._flightService.itemFlightCache.checkInDate);
+      //     if(this._flightService.itemFlightCache.checkOutDate && this._flightService.itemFlightCache.checkInDate != this._flightService.itemFlightCache.checkOutDate){
+      //       this.cout = this.gf.getCinIsoDate(this._flightService.itemFlightCache.checkOutDate);
+      //     }else{
+      //       this.cout = moment(this.gf.getCinIsoDate(this._flightService.itemFlightCache.checkInDate)).add(2,'days');
+      //     }
+      // }else{
+      //   if(this._flightService.objSearch.departDate){
+      //     this.cin = this.gf.getCinIsoDate(this._flightService.objSearch.departDate);
+      //   }else{
+      //       this.cin = this.gf.getCinIsoDate(new Date());
+      //   }
+      //   if(this._flightService.objSearch.returnDate){
+      //       this.cout = this._flightService.objSearch.returnDate;
+      //   }else{
+      //       this.cout = moment(this.gf.getCinIsoDate(new Date())).add(1,'days');
+      //   }
+      // }
+       
         if(this._flightService.itemFlightCache.adult){
             this.adult = this._flightService.itemFlightCache.adult;
         }
         if(this._flightService.itemFlightCache.arrchild){
           this.arrchild = this._flightService.itemFlightCache.arrchild;
         }
+       
           
         if(this._flightService.itemFlightCache.child){
           //this.infant=0;

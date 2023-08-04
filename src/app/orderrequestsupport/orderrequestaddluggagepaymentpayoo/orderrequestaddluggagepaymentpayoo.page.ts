@@ -104,6 +104,7 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
         } else {//hold vé thất bại về trang tìm kiếm
           se.gf.hideLoading();
           clearInterval(se.intervalID);
+          se.rollBackObjectRequestAddLuggage();
           se.gf.showAlertPaymentFail();
 
         }
@@ -242,6 +243,7 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
         se.gf.hideLoading();
         clearInterval(se.intervalID);
         //se.navCtrl.navigateForward('/flightpaymenterror');
+        se.rollBackObjectRequestAddLuggage();
         se.gf.showAlertPaymentFail();
       }
       else if(rs.ipnCall == "CALLED_TIMEOUT" && rs.errorCode == '253')//case timeout
@@ -257,6 +259,7 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
                     clearInterval(se.intervalID);
                     se._flightService.paymentError = rs;
                     //se.navCtrl.navigateForward('/flightpaymenttimeout');
+                    se.rollBackObjectRequestAddLuggage();
                     se.gf.showAlertPaymentFail();
                   }
         else{
@@ -294,6 +297,7 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
       {
         se.gf.hideLoading();
         clearInterval(se.intervalID);
+        se.rollBackObjectRequestAddLuggage();
         se.gf.showAlertPaymentFail();
       }
       else if(checkpay.ipnCall == "CALLED_TIMEOUT" && checkpay.errorCode == '253')//case timeout
@@ -301,6 +305,7 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
         se.gf.hideLoading();
         clearInterval(se.intervalID);
         se._flightService.paymentError = checkpay;
+        se.rollBackObjectRequestAddLuggage();
         se.gf.showAlertPaymentFail();
       }
       else if(checkpay.ipnCall == "CALLED_FAIL" && checkpay.errorCode != '99')//hủy
@@ -308,6 +313,7 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
                     se.gf.hideLoading();
                     clearInterval(se.intervalID);
                     se._flightService.paymentError = checkpay;
+                    se.rollBackObjectRequestAddLuggage();
                     se.gf.showAlertPaymentFail();
                   }
     })
@@ -427,5 +433,64 @@ export class OrderRequestAddluggagePaymentPayooPage implements OnInit {
       }
     })
     
+  }
+
+  rollBackObjectRequestAddLuggage(){
+    if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage.items  && this.activityService.objRequestAddLuggage.objectDepartLuggage.items.length >0){
+      let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+      let  headers = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+      let body = this.activityService.objRequestAddLuggage.objectDepartLuggage;
+      body.isDelete = true;
+      this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data) => {
+        if(data && data == "success"){
+
+          if(this.activityService.objRequestAddLuggage.listPassReturn && this.activityService.objRequestAddLuggage.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+            let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+            let  headers = {
+              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+              'Content-Type': 'application/json; charset=utf-8',
+            };
+            let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+            body.isDelete = true;
+            this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
+              if(data1 && data1 == "success"){
+                this.gf.hideLoading();
+              }else{
+                this.gf.hideLoading();
+                this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+              }
+            })
+          }else{
+            this.gf.hideLoading();
+          }
+        } else{
+          this.gf.hideLoading();
+          this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+        }
+        
+      })
+    }
+    else if(this.activityService.objRequestAddLuggage.listPassReturn && this.activityService.objRequestAddLuggage.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+      let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+      let  headers = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+      let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+      body.isDelete = true;
+      this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
+        if(data1 && data1 == "success"){
+          this.gf.hideLoading();
+        } else{
+          this.gf.hideLoading();
+          this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+        }
+      })
+    }else{
+      this.gf.hideLoading();
+    }
   }
 }

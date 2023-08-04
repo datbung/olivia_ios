@@ -164,10 +164,10 @@
                                     <div class="text-allotment-dayname">{{itemdeparture.DayDisplay}}</div>
                                 </div>
                                 <div class="width-25 d-flex ">
-                                    <div [ngClass]="(itemdeparture.IsMinPrice || itemdeparture.Status) ? 'width-100 text-price cls-red text-right' : 'width-100 text-price text-right' ">{{itemdeparture.PriceAdultAvgStr}} VNĐ</div>
+                                    <div [ngClass]="(itemdeparture.IsMinPrice) ? 'width-100 text-price cls-green text-right' : (itemdeparture.IsMaxPrice ? 'width-100 text-price text-right cls-red' : 'width-100 text-price text-right') ">{{itemdeparture.PriceAdultAvgStr}} VNĐ</div>
                                 </div>
                                <div class="d-width-40 d-flex v-align-items">
-                                    <div [ngClass]="(itemdeparture.IsMinPrice || itemdeparture.Status) ? 'width-100 text-price cls-red text-right text-allotment-display' : 'width-100 text-price text-right text-allotment-display' ">{{itemdeparture.AllotmentDisplay}}</div>
+                                    <div [ngClass]="(itemdeparture.IsMinPrice) ? 'width-100 text-price cls-green text-right text-allotment-display' : (itemdeparture.IsMaxPrice ? 'width-100 text-price text-right text-allotment-display cls-red' : 'width-100 text-price text-right text-allotment-display') ">{{itemdeparture.AllotmentDisplay}}</div>
                                     <div class="div-flex-end">
                                         <img class="img-next" src="./assets/ic_tour/ic_next.svg" />
                                     </div>

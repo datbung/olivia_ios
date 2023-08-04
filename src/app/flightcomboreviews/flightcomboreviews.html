@@ -255,7 +255,7 @@
     <hr class="cls-hr">
   </div>
     <div *ngIf="point>0 && PriceAvgPlusTAStr&& loadflightpricedone" class="div-voucher">
-      <div class="div-flex">
+      <div class="div-flex"  *ngIf="statusRoom != 'RQ'">
           <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ivvpoint_tealish.svg"/></div>
           <div class="div-text-center">
             <div class="width-150">Sử dụng iVIVU point</div>
@@ -265,14 +265,14 @@
       </div>
 
       <div class="div-line"></div>
-      <div class="div-flex" (click)="showdiscount()">
+      <div class="div-flex" *ngIf="statusRoom=='AL'" (click)="showdiscount()">
         <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
         <div class="div-text-center ">
           <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
         </div>
         <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
       </div>
-      <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+      <div class="div-voucher-apply" *ngIf="strPromoCode  && statusRoom=='AL'" (click)="showdiscount()">
         <div class="width-250 div-overflow">
           <span class="text-normal">Ưu đãi (<span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span><span class="text-normal">)</span> </span>
         </div>
@@ -285,8 +285,8 @@
       </ion-row>
       
     <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
-    <app-voucherslideflightcombo *ngIf="loadflightpricedone"></app-voucherslideflightcombo>
-    <div *ngIf="(ischeck||ischeckbtnpromo)&& loadflightpricedone" >
+    <app-voucherslideflightcombo *ngIf="loadflightpricedone  && statusRoom=='AL'"></app-voucherslideflightcombo>
+    <div *ngIf="(ischeck||ischeckbtnpromo||strPromoCode)&& loadflightpricedone" >
         <ion-row>
           <ion-col size="5.8" style="padding: 0;">
             <div>
@@ -309,7 +309,7 @@
           </ion-col>
         </ion-row>
       </div>
-      <div *ngIf="!ischeck&&!ischeckbtnpromo" >
+      <div *ngIf="!ischeck&&!ischeckbtnpromo &&!strPromoCode" >
           <ion-row>
             <ion-col size="5.8" style="padding: 0;">
               <div>
@@ -334,14 +334,14 @@
     <div *ngIf="(point<=0||!point)&&PriceAvgPlusTAStr&&loadflightpricedone">
         <div>
             
-                  <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode">
+                  <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode && statusRoom != 'RQ'">
                     <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
                     <div class="div-text-center">
                       <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
                     </div>
                     <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
                   </div>
-                  <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+                  <div class="div-voucher-apply" *ngIf="strPromoCode  && statusRoom != 'RQ'" (click)="showdiscount()">
                     <div class="width-250 div-overflow">
                       <span class="text-normal">Ưu đãi (<span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span><span class="text-normal">)</span></span>
                     </div>
@@ -352,8 +352,8 @@
                     <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
                   </ion-row>
           </div>
-          <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
-          <app-voucherslideflightcombo></app-voucherslideflightcombo>
+          <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher && statusRoom != 'RQ'">
+          <app-voucherslideflightcombo *ngIf="statusRoom != 'RQ'"></app-voucherslideflightcombo>
           <div *ngIf="!ischeckbtnpromo">
               <ion-row>
                   <ion-col size="5.8" style="padding: 0;">
@@ -385,7 +385,7 @@
                 </ion-row>
           </div>
          
-          <div *ngIf="ischeckbtnpromo" >
+          <div *ngIf="(ischeckbtnpromo || strPromoCode) && !ischeck" >
               <ion-row>
                 <ion-col size="5.8" style="padding: 0;">
                   <div>

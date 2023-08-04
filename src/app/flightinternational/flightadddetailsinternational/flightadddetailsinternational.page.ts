@@ -1240,7 +1240,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                   return;
                                 }
                                 else if(elementAdult.passportExpireDate){
-                                  let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                                  let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
                                   let diffdate = moment(moment(elementAdult.passportExpireDate).format('YYYY-MM-DD')).diff(moment(returndate), 'days');
                                   if(diffdate < 0){
                                     elementAdult.errorPassportExpireDate = true;
@@ -1302,7 +1302,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         elementChild.textErrorInfo ='';
 
                         let departdatenew = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                        let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                        let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
 
                         if(!elementChild.genderdisplay && !elementChild.name){
                           elementChild.errorInfo = !elementChild.errorInfo;

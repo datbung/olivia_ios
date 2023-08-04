@@ -1105,7 +1105,7 @@ export class TourAddDetailsPage implements OnInit {
                 apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
               };
               //se.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking', headers, body, 'touradddetails', 'CheckAllotmentPreBooking').then((data)=>{
-                se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child :0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}`, headers, body, 'touradddetails', 'GetMercuriusTourPrice').then((data)=>{
+                se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child :0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}&version=v2`, headers, body, 'touradddetails', 'GetMercuriusTourPrice').then((data)=>{
                   resolve(data);
                })
             })

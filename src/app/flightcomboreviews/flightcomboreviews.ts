@@ -2911,16 +2911,9 @@ export class FlightComboReviewsPage implements OnInit{
           })
         }
       }
-      // if (data.data) {
-      //   this.zone.run(() => {
-      //     if (data.data.promocode) {
-      //       $('.div-point').addClass('div-disabled');
-      //       this.promocode=data.data.promocode;
-      //       this.textpromotion=data.data.promocode;
-      //       this.promofunc();
-      //     }
-      //   })
-      // }
+      else{
+        this.ischeckbtnpromo = false;
+      }
     })
     }
   }

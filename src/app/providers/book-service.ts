@@ -35,6 +35,7 @@ export class Booking {
   Avatar: any;
   RegionId: any;
   Address: any;
+  ListRoomClassObject: any;
 }
 export class RoomInfo {
     Address: string;
@@ -95,6 +96,7 @@ export class RoomInfo {
     RoomClass: any;
     DescriptionTaxFee:any
   discountpromo: any;
+  statusAllotment: any;
 }
 export class ValueGlobal {
     checksendcb:boolean;

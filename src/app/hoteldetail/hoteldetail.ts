@@ -2192,7 +2192,7 @@ excuteLoadHotelRoom(data){
         },100)
         se.booking.OriginalRoomClass = result.Hotels[0].RoomClasses;
         se.zone.run(()=> result.Hotels[0].RoomClasses.sort(function (a, b) {
-            return a.Supplier == 'Internal' && b.Supplier != 'Internal' ? -1 : 1;
+            return a.PercentPaxRoom > b.PercentPaxRoom ? -2 : a.MealTypeRates[0].PriceAvgPlusTotalTA < b.MealTypeRates[0].PriceAvgPlusTotalTA ? -1 : 1;
         }));
         setTimeout(()=>{
         result.Hotels[0].RoomClasses.forEach((element, index) => {
@@ -2721,7 +2721,8 @@ excuteLoadHotelRoom(data){
     this.arrroom = [];
     for (let i = 0; i < self.hotelRoomClasses.length; i++) {
       //Api mới trả về số phòng theo mealtype => bỏ rule check số phòng theo api trả về = cấu hình phòng lúc search
-      if (id == self.hotelRoomClasses[i].Rooms[0].RoomID){
+      //pdanh 27-07-2023: Bổ xung map thêm theo mealtypeid
+      if (id == self.hotelRoomClasses[i].Rooms[0].RoomID && self.hotelRoomClasses[i].MealTypeRates.some(r => r.guidId == MealTypeRates.guidId)){
         this.arrroom.push(self.hotelRoomClasses[i]);
           this.indexroom = i;
           break;
@@ -2757,6 +2758,7 @@ excuteLoadHotelRoom(data){
           this.Roomif.roomnumber = MealTypeRates.TotalRoom,
           this.Roomif.roomtype = MealTypeRates,
           this.Roomif.jsonroom = {...this.jsonroom2.Hotels[0]},
+
           this.Roomif.imgHotel = this.imgHotel;
           this.Roomif.objMealType = MealTypeRates;
           this.Roomif.HotelRoomHBedReservationRequest=this.arrroom[0].HotelRoomHBedReservationRequest ? JSON.stringify(this.arrroom[0].HotelRoomHBedReservationRequest) : '';
@@ -4107,6 +4109,7 @@ async bookcombo() {
             // this.Roomif.roomnumber = objMealTypeRates[0].TotalRoom;
             this.Roomif.roomtype = this.comboDetail.mealTypeName;
             this.Roomif.jsonroom = {...this.jsonroom2.Hotels[0]};
+           
             this.Roomif.imgHotel = this.imgHotel;
             this.Roomif.arrrbed = [];
             //this.Roomif.imgRoom = this.arrroom ? this.arrroom[0].Rooms[0].ImagesMaxWidth320 : '';
@@ -4177,6 +4180,7 @@ async bookcombo() {
             self.Roomif.roomnumber = MealTypeRates.TotalRoom,
             self.Roomif.roomtype = MealTypeRates,
             self.Roomif.jsonroom = {...self.jsonroom2.Hotels[0]},
+           
             self.Roomif.imgHotel = self.imgHotel;
           self.Roomif.objMealType = MealTypeRates;
           self.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(self.arrroomFS[0].HotelRoomHBedReservationRequest);
@@ -4490,6 +4494,7 @@ async bookcombo() {
             self.Roomif.roomnumber = objMealTypeRates[0].TotalRoom,
             self.Roomif.roomtype = self.comboDetail.mealTypeName,
             self.Roomif.jsonroom = {...self.jsonroom2.Hotels[0]},
+            
             self.Roomif.imgHotel = self.imgHotel;
             self.Roomif.arrrbed = [];
             self.Roomif.imgRoom = self.arrroom[0].Rooms[0].ImagesMaxWidth320;
@@ -5070,6 +5075,7 @@ async bookcombo() {
     se.Roomif.roomnumber = MealTypeRates.TotalRoom,
     se.Roomif.roomtype = MealTypeRates,
     se.Roomif.jsonroom = {...se.jsonroom2.Hotels[0]},
+   
     se.Roomif.imgHotel = se.imgHotel;
     se.Roomif.objMealType = MealTypeRates;
     se.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(se.arrroom[0].HotelRoomHBedReservationRequest);

@@ -37,6 +37,8 @@ export class MytripaymentflightselectPage implements OnInit {
   isremember=true;isdisable=false;cus_phone;stt
   totalPrice: any;
   ischeckedDK=true;
+  dataServiceFee = [];
+  dataSF: any;
   constructor(public activityService: ActivityService,public gf: GlobalFunction,private navCtrl:NavController,public storage: Storage,public loadingCtrl: LoadingController,private _flightService: flightService,
     private safariViewController: SafariViewController,private zone: NgZone, public activatedRoute: ActivatedRoute,
     public _mytripService: MytripService,
@@ -104,6 +106,39 @@ export class MytripaymentflightselectPage implements OnInit {
             this.bizTravelService.isCompany = false;
           }
         });
+
+        if(this.activityService.objPaymentMytrip.trip.booking_type != "CB_FLY_HOTEL"){
+          //pdanh 20-07-2023: call api tính phí dịch vụ
+          let url = `${C.urls.baseUrl.urlMobile}/api/Data/getaddonpaymentfee?applyFor=vmb&totalPrice=${this.totalPrice}`;
+          this.gf.RequestApi('GET', url, {}, {}, 'flightpaymentselect', 'getaddonpaymentfee').then((data)=>{
+            if(data){
+              this.dataServiceFee = data.filter(d => {return d.applyFor == 'vmb'});
+              console.log(this.dataServiceFee);
+              let atmsf = this.dataServiceFee.filter(d => {return d.levelService == 'atm'});
+              let vssf = this.dataServiceFee.filter(d => {return d.levelService == 'visa'});
+              let jcbsf = this.dataServiceFee.filter(d => {return d.levelService == 'jcb'});
+              let amexsf = this.dataServiceFee.filter(d => {return d.levelService == 'amex'});
+              let alepaysf = this.dataServiceFee.filter(d => {return d.levelService == 'alepay'});
+              let momosf = this.dataServiceFee.filter(d => {return d.levelService == 'momo'});
+              let bnplsf = this.dataServiceFee.filter(d => {return d.levelService == 'bnpl'});
+              let payoo_qrsf = this.dataServiceFee.filter(d => {return d.levelService == 'payoo_qr'});
+              let payoo_storesf = this.dataServiceFee.filter(d => {return d.levelService == 'payoo_store'});
+        
+              this.dataSF = this.dataServiceFee && this.dataServiceFee.length >0 ? {} : null;
+              this.dataSF.atmSF = atmsf && atmsf.length >0 ? atmsf[0] : null;
+              this.dataSF.vsSF = vssf && vssf.length >0 ? vssf[0] : null;
+              this.dataSF.jcbSF = jcbsf && jcbsf.length >0 ? jcbsf[0] : null;
+              this.dataSF.amexSF = amexsf && amexsf.length >0 ? amexsf[0] : null;
+              this.dataSF.alepaySF = alepaysf && alepaysf.length >0 ? alepaysf[0] : null;
+              this.dataSF.momosSF = momosf && momosf.length >0 ? momosf[0] : null;
+              this.dataSF.bnplSF = bnplsf && bnplsf.length >0 ? bnplsf[0] : null;
+              this.dataSF.payoo_qrSF = payoo_qrsf && payoo_qrsf.length >0 ? payoo_qrsf[0] : null;
+              this.dataSF.payoo_storesSF = payoo_storesf && payoo_storesf.length >0 ? payoo_storesf[0] : null;
+            }
+          
+          })
+        }
+        
   }
 
   async loadCheckPayment(){
@@ -484,24 +519,12 @@ export class MytripaymentflightselectPage implements OnInit {
     }
   }
   goback(){
-    if (this._flightService.tabFlightIndex == 2) {
-      if (this._mytripService.listcount==1) {
-        this.navCtrl.back();
-      }
-      else{
-        this._mytripService.backfrompage = "mytripdetail"
-        this.navCtrl.navigateForward('mytripdetail', {animated: true});
-      }
-    
-
-    }else{
-      if (this._mytripService.listcount==1) {
+    if (this._mytripService.backroute == "order") {
         this.navCtrl.navigateForward(['/app/tabs/tab3']);
       }
       else{
         this.navCtrl.navigateForward('mytripdetail', {animated: true});
       }
-    }
   
   }
 

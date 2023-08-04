@@ -18,6 +18,7 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { Observable } from 'rxjs';
 import { hotelListService } from '../providers/hotelListService';
 import { shareReplay } from 'rxjs/operators';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-hotel-list',
@@ -72,6 +73,7 @@ export class HotelListPage implements OnInit{
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
     public activeRoute : ActivatedRoute,
+    private socialSharing: SocialSharing,
     private fcm: FCM,
     private nativePageTransitions: NativePageTransitions,
     public activityService: ActivityService,
@@ -1829,5 +1831,11 @@ export class HotelListPage implements OnInit{
       }
     });
   }
-  
+  share(item) {
+    this.socialSharing.share(null, null, null, "https://www.ivivu.com/" +item.HotelLink).then(() => {
+      // Success!
+    }).catch(() => {
+      // Error!
+    });
+  }
 }

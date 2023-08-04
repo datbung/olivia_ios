@@ -286,6 +286,7 @@ export class RequestCombo1Page implements OnInit{
         }else{
           var data = JSON.parse(body);
           if(data.success){
+            se.bookCombo.bookingcode = data.id;
             se.searchhotel.paymentType = 'On request';
               //se.gf.googleAnalytionCustom('purchase',{items: [{ item_category:'requestcombo' , item_name: se.bookCombo.HotelCode, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.bookCombo.ComboDetail ? se.bookCombo.ComboDetail.arrivalCode : '' }], value: se.gf.convertNumberToDouble(se.bookCombo.ComboRoomPrice) ,currency: "VND"});
               se.gf.logEventFirebase('On request',se.searchhotel, 'requestcombo', 'purchase', 'Combo');

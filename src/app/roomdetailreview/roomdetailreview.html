@@ -149,14 +149,14 @@
       </div>
     
       <div class="div-line"></div>
-      <div class="div-flex" (click)="showdiscount()" *ngIf="!strPromoCode">
+      <div class="div-flex" (click)="showdiscount()" *ngIf="!strPromoCode && Roomif.objMealType.Status != 'RQ'">
         <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
         <div class="div-text-center ">
           <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
         </div>
         <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
       </div>
-      <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+      <div class="div-voucher-apply" *ngIf="strPromoCode && Roomif.objMealType.Status != 'RQ'" (click)="showdiscount()">
         <div class="width-250 div-overflow">
           <!-- <span class="text-normal">Ưu đãi (</span>
           <span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span>
@@ -174,8 +174,8 @@
       </div> -->
 
       <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
-      <app-voucherslidehotel></app-voucherslidehotel>
-        <div *ngIf="ischeck||ischeckbtnpromo" >
+      <app-voucherslidehotel  *ngIf="Roomif.objMealType.Status == 'AL'"></app-voucherslidehotel>
+        <div *ngIf="(ischeck||ischeckbtnpromo || strPromoCode)" >
           <ion-row>
             <ion-col size="5" style="padding: 0;">
               <div>
@@ -196,7 +196,7 @@
             </ion-col>
           </ion-row>
         </div>
-        <div *ngIf="!ischeck&&!ischeckbtnpromo" >
+        <div *ngIf="!ischeck&&!ischeckbtnpromo&& !strPromoCode" >
             <ion-row>
               <ion-col size="5" style="padding: 0;">
                 <div>
@@ -216,14 +216,14 @@
           </div>
       </div>
       <div *ngIf="point<=0||!point">
-      <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode">
+      <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode && Roomif.objMealType.Status != 'RQ'">
         <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
         <div class="div-text-center">
           <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
         </div>
         <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
       </div>
-      <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+      <div class="div-voucher-apply" *ngIf="strPromoCode && Roomif.objMealType.Status != 'RQ'" (click)="showdiscount()">
         <!-- <div class="width-200">
           <span class="text-normal">Ưu đãi (</span>
           <span class="text-code" *ngIf="promocode">{{promocode}}</span>
@@ -240,8 +240,8 @@
         <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
         <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
       </ion-row>
-    <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
-    <app-voucherslidehotel></app-voucherslidehotel>
+    <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher  && Roomif.objMealType.Status != 'RQ'">
+    <app-voucherslidehotel  *ngIf="Roomif.objMealType.Status == 'AL'"></app-voucherslidehotel>
         <div *ngIf="!ischeckbtnpromo && !strPromoCode">
             <ion-row>
                 <ion-col size="5" style="padding: 0;">

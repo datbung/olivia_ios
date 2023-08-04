@@ -49,6 +49,8 @@ export class FlightPaymentSelectPage implements OnInit {
   ischeckedDK=true;
   totalPrice: number;
   allowApplyVoucher: boolean=true;
+  dataServiceFee = [];
+  dataSF: any;
   constructor(private navCtrl:NavController,public _flightService: flightService
     ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel,private safariViewController: SafariViewController, public storage: Storage,
@@ -64,6 +66,7 @@ export class FlightPaymentSelectPage implements OnInit {
     if(this._flightService.itemFlightCache){
       this.showline = this._flightService.itemFlightCache.roundTrip ? true : false;
       this.bookingCode =  this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
+      this._flightService.itemFlightCache.bookingCode = this.bookingCode;
       this.startDate = moment(this._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
       this.endDate = moment(this._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
       if(this._flightService.itemFlightCache.pnr){
@@ -142,6 +145,37 @@ export class FlightPaymentSelectPage implements OnInit {
       })
       
     })
+    if(!this._flightService.itemFlightCache.objHotelCitySelected){
+      //pdanh 20-07-2023: call api tính phí dịch vụ
+      let url = `${C.urls.baseUrl.urlMobile}/api/Data/getaddonpaymentfee?applyFor=vmb&totalPrice=${this.totalPrice}`;
+      this.gf.RequestApi('GET', url, {}, {}, 'flightpaymentselect', 'getaddonpaymentfee').then((data)=>{
+        if(data){
+          this.dataServiceFee = data.filter(d => {return d.applyFor == 'vmb'});
+          console.log(this.dataServiceFee);
+          let atmsf = this.dataServiceFee.filter(d => {return d.levelService == 'atm'});
+          let vssf = this.dataServiceFee.filter(d => {return d.levelService == 'visa'});
+          let jcbsf = this.dataServiceFee.filter(d => {return d.levelService == 'jcb'});
+          let amexsf = this.dataServiceFee.filter(d => {return d.levelService == 'amex'});
+          let alepaysf = this.dataServiceFee.filter(d => {return d.levelService == 'alepay'});
+          let momosf = this.dataServiceFee.filter(d => {return d.levelService == 'momo'});
+          let bnplsf = this.dataServiceFee.filter(d => {return d.levelService == 'bnpl'});
+          let payoo_qrsf = this.dataServiceFee.filter(d => {return d.levelService == 'payoo_qr'});
+          let payoo_storesf = this.dataServiceFee.filter(d => {return d.levelService == 'payoo_store'});
+
+          this.dataSF = this.dataServiceFee && this.dataServiceFee.length >0 ? {} : null;
+          this.dataSF.atmSF = atmsf && atmsf.length >0 ? atmsf[0] : null;
+          this.dataSF.vsSF = vssf && vssf.length >0 ? vssf[0] : null;
+          this.dataSF.jcbSF = jcbsf && jcbsf.length >0 ? jcbsf[0] : null;
+          this.dataSF.amexSF = amexsf && amexsf.length >0 ? amexsf[0] : null;
+          this.dataSF.alepaySF = alepaysf && alepaysf.length >0 ? alepaysf[0] : null;
+          this.dataSF.momosSF = momosf && momosf.length >0 ? momosf[0] : null;
+          this.dataSF.bnplSF = bnplsf && bnplsf.length >0 ? bnplsf[0] : null;
+          this.dataSF.payoo_qrSF = payoo_qrsf && payoo_qrsf.length >0 ? payoo_qrsf[0] : null;
+          this.dataSF.payoo_storesSF = payoo_storesf && payoo_storesf.length >0 ? payoo_storesf[0] : null;
+        }
+      })
+    }
+    
 
     C.writePaymentLog("flight", "paymentselect", "purchase", this.bookingCode);
   }

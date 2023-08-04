@@ -36,6 +36,9 @@ export class TourDepartureCalendarPage implements OnInit {
   pointbkg = '';
   loaddeparturedone: boolean = false;
   calendarDeparture: any;
+  listCalendarPrice = [];
+  AllotmentAvaiable: any;
+  statusAllotment: any;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events: Events,
     public gf: GlobalFunction, public modalCtrl: ModalController, private pickerController: PickerController, private storage: Storage,
     public tourService: tourService,
@@ -57,7 +60,7 @@ export class TourDepartureCalendarPage implements OnInit {
     this.calendarDeparture=tourService.calendarDeparture;
     this.calculatePrice(0);
     this.GetUserInfo();
-
+    
   }
   // loadCalendarDeparture() {
   //   var se = this;
@@ -83,7 +86,7 @@ export class TourDepartureCalendarPage implements OnInit {
 
   }
 
-  checkTourAllotment(_date): Promise<any> {
+  checkTourAllotment(_date, rebuildListCalendarPrice): Promise<any> {
     var se = this;
     return new Promise((resolve, reject) => {
       let body = {
@@ -98,7 +101,7 @@ export class TourDepartureCalendarPage implements OnInit {
         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
         apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
       };
-      se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile + `/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(_date).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child : 0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c => c.numage).join(',') : ""}`, headers, body, 'tourdeparturecalendar', 'GetMercuriusTourPrice').then((data) => {
+      se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile + `/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(_date).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child : 0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c => c.numage).join(',') : ""}&version=${rebuildListCalendarPrice ? 'v2' : 'v3'}`, headers, body, 'tourdeparturecalendar', 'GetMercuriusTourPrice').then((data) => {
         if (data.Status != 'Error' && data.Response.Status != 'ER' && data.Response.Status != 'False') {
           this.itemDepartureCalendar = data.Response.TourRate;
 
@@ -111,11 +114,20 @@ export class TourDepartureCalendarPage implements OnInit {
             }
             this.hasAllotment = this.itemDepartureCalendar.Status == 'AL';
             this.tourService.hasAllotment = this.itemDepartureCalendar.Status == 'AL';
+            this.AllotmentAvaiable = this.itemDepartureCalendar.AvaiableNo;
+            this.statusAllotment = this.itemDepartureCalendar.Status;
           
+            if(rebuildListCalendarPrice){
+              let _listCalendarPrice = data.Response.StrListDepartures.split(',');
+              let _dayselect =moment(_date).format('YYYY-MM-DD');
+              this.buildListCalendarPrice(_listCalendarPrice, _dayselect);
+            }
+            
           })
 
           resolve(true);
         } else {
+          this.listCalendarPrice = [];
           this.MsgError = data.Response.MSG;
           this.zone.run(() => {
             this.hasAllotment = false;
@@ -129,12 +141,53 @@ export class TourDepartureCalendarPage implements OnInit {
 
   }
 
+  buildListCalendarPrice(_listCalendarPrice, _dayselect){
+    this.listCalendarPrice = [];
+    if(_listCalendarPrice && _listCalendarPrice.length >0){
+      let idx= _listCalendarPrice.findIndex(i => i==_dayselect);
+      if(idx ==0){//ngày đang check đứng đầu mảng => lấy 3 item đầu
+        if(_listCalendarPrice.length >2){
+          this.listCalendarPrice = _listCalendarPrice.splice(0,3);
+        }else{
+          this.listCalendarPrice = _listCalendarPrice;
+        }
+        
+      }else if(idx == _listCalendarPrice.length-1){//ngày đang check đứng cuối mảng => lấy 3 item cuối
+        let arrlen = _listCalendarPrice.length;
+        if(_listCalendarPrice.length >2){
+          this.listCalendarPrice = _listCalendarPrice.splice(arrlen-3,arrlen-1);
+        }else{
+          this.listCalendarPrice = _listCalendarPrice;
+        }
+      }else {
+        if(_listCalendarPrice.length >2){
+          this.listCalendarPrice.push(_listCalendarPrice[idx-1]);
+          this.listCalendarPrice.push(_listCalendarPrice[idx]);
+          this.listCalendarPrice.push(_listCalendarPrice[idx+1]);
+        }else{
+          this.listCalendarPrice = _listCalendarPrice;
+        }
+      }
+      this.listCalendarPrice = this.getFullDayInfo(this.listCalendarPrice, _dayselect);
+      console.log(this.listCalendarPrice);
+      //this.listCalendarPrice = this.listCalendarPrice.splice(0,2);
+    }
+  }
+
+  getFullDayInfo(list, dayselect){
+    if(list && list.length >0){
+      list = list.map(i => ({name: `${this.gf.getDayOfWeek(i).daynameshort}, ${moment(i).format('DD-MM')}`, date: i, selected: i == dayselect ? true : false}));
+    }
+    return list;
+  }
+
+
   calculatePrice(isShowWarning) {
     let se = this;
     if (this.itemDepartureCalendar) {
       let _date = this.itemDepartureCalendar.DepartureDate || this.itemDepartureCalendar.AllotmentDate;
       se.searchhotel.CheckInDate = moment(_date).format('YYYY-MM-DD');
-      this.checkTourAllotment(_date).then((check) => {
+      this.checkTourAllotment(_date, true).then((check) => {
         if (check) {
           this.tourService.itemDepartureCalendar = this.itemDepartureCalendar;
           let totalPrice = this.itemDepartureCalendar.TotalRate;
@@ -348,7 +401,7 @@ export class TourDepartureCalendarPage implements OnInit {
       se.allowclickcalendar = true;
       $(".days-btn").click(e => this.clickedElement(e));
 
-      $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/imgs/icon_back.svg' ></div>");
+      $('.tour-calendar-custom ion-calendar-modal ion-toolbar ion-buttons[slot=start]').append("<div class='div-close' (click)='closecalendar()'> <img class='header-img-close' src='./assets/ic_tour/back.webp' ></div>");
 
 
       //add event close header
@@ -396,34 +449,27 @@ export class TourDepartureCalendarPage implements OnInit {
             if (objday && objday.length > 0) {
               let totalprice;
               totalprice = objday[0].PriceAdultAvg >= 100000000 ? (objday[0].PriceAdultAvg / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].PriceAdultAvg >= 10000000 ? (((objday[0].PriceAdultAvg / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].PriceAdultAvg / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].PriceAdultAvg / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].PriceAdultAvg > 0 ? (objday[0].PriceAdultAvg / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
-              // if (objday[0].PriceAdultAvg > 10000000 && objday[0].PriceAdultAvg  < 100000000) {
-              //     // totalprice =  se.gf.convertNumberToString(objday[0].PriceAdultAvg)
-              //     // totalprice = totalprice.substring(0, 4);
-              //     totalprice = Math.round((objday[0].PriceAdultAvg / 1000000));
-              //     totalprice = totalprice + "tr";
-              //     // console.log(totalprice);
-              // } else if (objday[0].PriceAdultAvg >= 100000000) {
-              //     // totalprice = se.gf.convertNumberToString(objday[0].PriceAdultAvg)
-              //     // totalprice = totalprice.substring(0, 3);
-              //     totalprice = Math.round((objday[0].PriceAdultAvg / 1000000));
-              //     totalprice = totalprice + "tr";
-              // } else {
-              //   totalprice = (objday[0].PriceAdultAvg) / 1000 >= 1000 ? se.gf.convertNumberToString(Math.round(objday[0].PriceAdultAvg / 1000)) : Math.round((objday[0].PriceAdultAvg / 1000));
-              //   totalprice = totalprice + "k";
-              // }
+             
 
               if (objday[0].PriceAdultAvg == minPrice) {
-                $(elementday.children[0]).append(`<span class='price-calendar-text-tour-green'>${totalprice}</span>`);
-                $('.price-calendar-text-tour-green').parent().addClass('div-boder-KM');
+                $(elementday.children[0]).append(`<span class='price-calendar-text-tour-green '>${totalprice}</span>`);
+                $('.price-calendar-text-tour-green').parent().addClass(`div-boder-KM ${!objday[0].AvaiableNo && objday[0].Status == 'SS' ? ' no-allotment' : ''}`);
               } else if (objday[0].PriceAdultAvg == maxPrice) {
                 $(elementday.children[0]).append(`<span class='price-calendar-text-tour-red'>${totalprice}</span>`);
-                $('.price-calendar-text-tour-red').parent().addClass('div-boder-red');
+                $('.price-calendar-text-tour-red').parent().addClass(`div-boder-red ${!objday[0].AvaiableNo && objday[0].Status == 'SS' ? ' no-allotment' : ''}`);
 
               } else {
                 if (elementday.children[0]) {
                   $(elementday.children[0]).append(`<span class='price-calendar-text-tour'>${totalprice}</span>`);
+                  if(!objday[0].AvaiableNo && objday[0].Status == 'SS'){
+                    $(elementday.children[0]).addClass(' no-allotment');
+                  }
+                  
                 } else {
                   $(elementday).append(`<span class='price-calendar-text-tour'>${totalprice}</span>`);
+                  if(!objday[0].AvaiableNo && objday[0].Status == 'SS'){
+                    $(elementday).addClass(' no-allotment');
+                  }
                 }
 
               }
@@ -504,8 +550,8 @@ export class TourDepartureCalendarPage implements OnInit {
             setTimeout(() => {
               se.modalCtrl.dismiss();
             }, 300);
-
-            se.checkTourAllotment(fromdate).then((check) => {
+            se.loaddeparturedone = false;
+            se.checkTourAllotment(fromdate, true).then((check) => {
               se.loaddeparturedone = true;
               if (check) {
                 let totalPrice = se.itemDepartureCalendar.TotalRate;
@@ -629,6 +675,10 @@ export class TourDepartureCalendarPage implements OnInit {
     if (!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0) {
       return;
     }
+    if(this.statusAllotment=='SS'){
+      return;
+    }
+    
     for (let i = 0; i < se.searchhotel.arrchild.length; i++) {
       const element = se.searchhotel.arrchild[i];
       if (!element.text) {
@@ -712,4 +762,54 @@ export class TourDepartureCalendarPage implements OnInit {
       }
     })
   }
+
+  changeItemDeparturePrice(item){
+    let se = this;
+    se.listCalendarPrice.forEach((item) => {item.selected = false});
+    setTimeout(()=>{
+      item.selected = true;
+    },10)
+    se.loaddeparturedone = false;
+    se.checkTourAllotment(item.date, false).then((check) => {
+      se.loaddeparturedone = true;
+      if (check) {
+        let totalPrice = se.itemDepartureCalendar.TotalRate;
+        se.zone.run(() => {
+          se.searchhotel.CheckInDate = moment(item.date).format("YYYY-MM-DD");
+          se.searchhotel.cindisplay = moment(item.date).format("DD-MM-YYYY");
+          se.searchhotel.CheckOutDate = moment(item.date).format("YYYY-MM-DD");
+
+          se.totalPriceStr = se.gf.convertNumberToString(totalPrice);
+          se.tourService.totalPrice = totalPrice;
+          se.tourService.totalPriceStr = se.totalPriceStr;
+          se.itemDepartureCalendar.AllotmentDateDisplay = moment(item.date).format('DD-MM-YYYY');
+          let itemmap = se.tourService.departuresItemList.filter(i => i.DepartureDate == moment(item.date).format('YYYY-MM-DD'));
+          if (itemmap && itemmap.length > 0) {
+            se.tourService.itemDepartureCalendar = itemmap[0];
+            se.tourService.hasDeparture = true;
+            se.tourService.DepartureDate = itemmap[0].DepartureDate;
+
+            se.tourService.itemDepartureCalendar.PriceChildAvg = se.itemDepartureCalendar.RateChildAvg;
+            se.tourService.itemDepartureCalendar.RateChildAvg = se.itemDepartureCalendar.RateChildAvg;
+            if (se.itemDepartureCalendar.RateChildAvg) {
+              se.tourService.itemDepartureCalendar.PriceChildAvgStr = se.gf.convertNumberToString(se.itemDepartureCalendar.RateChildAvg.toFixed(0));
+            }
+
+            se.tourService.itemDepartureCalendar.TotalRate = se.itemDepartureCalendar.TotalRate;
+
+          }
+        })
+      }
+      else {
+        se.itemDepartureCalendar.AllotmentDateDisplay = moment(item.date).format('DD-MM-YYYY');
+        se.tourService.DepartureDate = moment(item.date).format('YYYY-MM-DD');
+        se.tourService.itemDepartureCalendar.AllotmentDateDisplay = moment(item.date).format('DD-MM-YYYY');
+        se.gf.showAlertMessageOnly(se.MsgError);
+
+      }
+
+
+    })
+  }
+
 }

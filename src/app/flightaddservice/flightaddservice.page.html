@@ -19,8 +19,101 @@
 
   <ion-content class="flight-add-service-content">
     <div class="p-16">
+        <div class="div-item-flight">
+            <div *ngIf="departFlight" class="div-wrap-item-flight">
+                <div class="d-flex div-space-between">
+                    <div class="d-flex">
+                        <div class="div-direction">Chiều đi</div>
+                        <div class="div-city">{{departdisplay}} → {{returndisplay}}</div>
+                    </div>
+                    
+                    <div class="div-show-detail"  (click)="showFlightDetail(departFlight, true)">Chi tiết</div>
+                </div>
+                
+                <div class="d-flex">
+                    <div class="div-text-normal div-width-150">{{departDateDisplay}}</div>
+                    <div class="div-departure-time div-width-100 d-flex">
+                        <div class="div-align-center">{{departtime_depart}}</div>
+                        <div class="div-align-center"><img class="div-width-icon" src="./assets/ic_flight/arrow_icon.webp"></div>
+                        <div class="div-align-center">{{landingtime_depart}}</div>
+                    </div>
+                </div>
+
+                <div class="d-flex-end div-space-between m-top-4">
+                    <div class="d-flex-end">
+                        <div class="div-logo">
+                            <img class="logo-vj" *ngIf="departFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                            <img *ngIf="departFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                            <img class="logo-vna" *ngIf="departFlight.airlineCode == 'VietnamAirlines' && !departFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
+                            <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.urlLogo &&!isApiDirect " [src]="departFlight.urlLogo">
+                            <img class="img-logo" *ngIf="departFlight.operatedBy && departFlight.operatedByLogo &&isApiDirect " [src]="departFlight.operatedByLogo">
+                            <img *ngIf="departFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                        </div>
+                        <div class="div-airline-name">
+                            <div class="text-airline">{{departFlight.airline}}</div>
+                            <!-- <div class="text-sub-airline">
+                                <div *ngIf="!departFlight.stops else overstop">{{ departFlight.ticketType }} - Bay thẳng</div>
+                                <ng-template #overstop>Chặng dừng</ng-template>
+                            </div>
+        
+                            <div *ngIf="departFlight.operatedBy" class="text-operatedBy">{{departFlight.operatedBy}}</div> -->
+                        </div>
+                    </div>
+                    
+                    <div class="div-text-sub">
+                        {{departlocationdisplay}}
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="returnFlight" class="div-wrap-item-flight m-top-12">
+                <div class="d-flex div-space-between">
+                    <div class="d-flex">
+                        <div class="div-direction">Chiều về</div>
+                        <div class="div-city">{{returndisplay}} → {{departdisplay}}</div>
+                    </div>
+                    
+                    <div class="div-show-detail" (click)="showFlightDetail(returnFlight, false)">Chi tiết</div>
+                </div>
+                
+                <div class="d-flex">
+                    <div class="div-text-normal div-width-150">{{returnDateDisplay}}</div>
+                    <div class="div-departure-time div-width-100 d-flex">
+                        <div class="div-align-center">{{departtime_return}}</div>
+                        <div class="div-align-center"><img class="div-width-icon" src="./assets/ic_flight/arrow_icon.webp"></div>
+                        <div class="div-align-center">{{landingtime_return}}</div>
+                    </div>
+                </div>
+
+                <div class="d-flex-end  div-space-between m-top-4">
+                    <div class="d-flex-end">
+                        <div class="div-logo">
+                            <img class="logo-vj" *ngIf="returnFlight.airlineCode == 'VietJetAir'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                            <img *ngIf="returnFlight.airlineCode == 'JetStar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                            <img class="logo-vna" *ngIf="returnFlight.airlineCode == 'VietnamAirlines' && !returnFlight.operatedBy"src="./assets/ic_airticket/logo_vna.png">
+                            <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.urlLogo &&!isApiDirect " [src]="returnFlight.urlLogo">
+                            <img class="img-logo" *ngIf="returnFlight.operatedBy && returnFlight.operatedByLogo &&isApiDirect " [src]="returnFlight.operatedByLogo">
+                            <img *ngIf="returnFlight.airlineCode == 'BambooAirways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                        </div>
+                        <div class="div-airline-name">
+                            <div class="text-airline">{{returnFlight.airline}}</div>
+                            <!-- <div class="text-sub-airline">
+                                <div *ngIf="!returnFlight.stops else overstop">{{ returnFlight.ticketType }} - Bay thẳng</div>
+                                <ng-template #overstop>Chặng dừng</ng-template>
+                            </div>
+        
+                            <div *ngIf="returnFlight.operatedBy" class="text-operatedBy">{{returnFlight.operatedBy}}</div> -->
+                        </div>
+                    </div>
+                   
+                    <div class="div-text-sub">
+                        {{returnlocationdisplay}}
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Chọn hành lý -->
-        <div class="div-item-service div-luggage" *ngIf="(departLuggage && departLuggage.length >0) || (returnLuggage && returnLuggage.length >0) || (departConditionInfo && departConditionInfo.baggageHanded ) || (returnConditionInfo && returnConditionInfo.baggageHanded ) ">
+        <div class="div-item-service div-luggage m-top-16" *ngIf="(departLuggage && departLuggage.length >0) || (returnLuggage && returnLuggage.length >0) || (departConditionInfo && departConditionInfo.baggageHanded ) || (returnConditionInfo && returnConditionInfo.baggageHanded ) ">
 
             <div class="d-flex m-bottom-6">
                 <div class="div-icon p-right-12">
@@ -348,16 +441,17 @@
         <div *ngIf="returnFlight">
             <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !returnFlight.stops && !isApiDirect" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
-                    <div class="div-icon p-right-12">
+                    <div class="div-icon 2">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
                     </div>
-                    <div (click)="showinfoCathay()" class="div-title div-width-100">Bảo hiểm trễ chuyến</div>
+                    <div (click)="showinfoCathay()" class="div-title">Bảo hiểm trễ chuyến</div>
                     <!-- <div class="div-present div-width-20 text-right"><img class="img-present" src="./assets/ic_flight/present.svg"></div> -->
+                    <div class="text-seen" (click)="noteCathay()"><img src="./assets/ic_flight/info.svg"></div>
                   </div>
                 <div  class="div-desc ">
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần.
                 </div>
-                <div class="text-seen" (click)="noteCathay()">Xem quy định</div>
+                
                 <!-- <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
                     Đón hè rực rỡ - Quà tặng hết cỡ <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
                 </div> -->
@@ -374,15 +468,18 @@
         <div *ngIf="!returnFlight">
             <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !isApiDirect" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
-                    <div class="div-icon p-right-12">
+                    <div class="div-icon ">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
                     </div>
-                    <div (click)="showinfoCathay()" class="div-title div-width-100">Bảo hiểm trễ chuyến</div>
+                    <div (click)="showinfoCathay()" class="div-title">Bảo hiểm trễ chuyến</div>
+                    <div class="text-seen" (click)="noteCathay()">
+                        <img src="./assets/ic_flight/info.svg">
+                      </div>
                   </div>
                   <div  class="div-desc ">
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần.
                     </div>
-                  <div class="text-seen" (click)="noteCathay()">Xem quy định</div>
+                 
                 <!-- <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
                     Đón hè rực rỡ - Quà tặng hết cỡ <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
                 </div> -->
@@ -399,7 +496,7 @@
       
         <div class="div-split" *ngIf="(departLuggage && departLuggage.length >0) || (returnLuggage && returnLuggage.length >0) || ((!listdepartseatselected && !listreturnseatselected) && allowchoiceseat) || (departConditionInfo && departConditionInfo.baggageHanded ) || (returnConditionInfo && returnConditionInfo.baggageHanded )"></div>
 
-        <div class="div-flight-info">
+        <!-- <div class="div-flight-info">
             <div class="flight-depart-return div-sub-title">
                 {{departdisplay}} <span class="div-flight-inout">
                     <img class="img-flight-inout" src="./assets/ic_flight/ic_flight_inout.svg" *ngIf="roundtrip else oneway">
@@ -548,7 +645,7 @@
                 
             </div>
         </div>
-       
+        -->
          <div  class="div-promotion-active">
             
               <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode">
@@ -572,7 +669,7 @@
               </ion-row>
               <app-voucherslide></app-voucherslide>
          </div>
-        <div class="div-condition d-flex" (click)="showCondition()" *ngIf="!isApiDirect">
+        <!-- <div class="div-condition d-flex" (click)="showCondition()" *ngIf="!isApiDirect">
             <div class="div-width-100">Chi tiết điều kiện vé</div>
             <div class="div-width-100 text-right">
                 <img class="img-arrow" src="./assets/imgs/ic_arrow.svg">
@@ -583,7 +680,7 @@
             <div class="m-right-8">Chi tiết điều kiện vé</div>
             <div class="div-text-tealish m-right-8" (click)="showFlightInfo(true)">{{departCodeDisplay}} - {{returnCodeDisplay}}</div>
             <div class="div-text-tealish" *ngIf="roundtrip"  (click)="showFlightInfo(false)">| {{returnCodeDisplay}} - {{departCodeDisplay}}</div>
-        </div>
+        </div> -->
     </div>
   </ion-content>
 

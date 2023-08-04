@@ -319,7 +319,7 @@
         <div *ngIf="(listMyTrips && listMyTrips.length ==1) else divshowlisttrip">
           
                   <!-- bkg VMBQT -->
-            <div class="div-VMBQT div-flybooking" *ngIf="trip.isBookingVMBQT else otherbooking" >
+            <div class="div-VMBQT div-flybooking" *ngIf="(trip.isBookingVMBQT && trip.isTravelPort) else otherbooking" >
                <div [ngClass]="!trip.bookingsComboData[0].issueTicketDate?'div-bkgno d-flex align-center':'div-bkgno d-flex'">
                   <div class="text-bkg">Mã booking: </div>
                   <div class="bkg-no">{{trip.booking_id}}</div>
@@ -426,6 +426,14 @@
                     </div>
                     <div class="div-width-100">
                       <div class="text-normal text-align-right">{{gf.convertNumberToString(trip.totalCost)}} VND</div>
+                    </div>
+                  </div>
+                  <div class="d-flex m-top-8" *ngIf="trip.payment_fee">
+                    <div class="text-info">
+                      Phí tiện ích
+                    </div>
+                    <div class="position-absolute text-info">
+                      {{gf.convertNumberToString(trip.payment_fee)}} VND
                     </div>
                   </div>
                   <div class="div-line-total"></div>
@@ -730,18 +738,18 @@
                       </div>
                       <div class="div-line-total"></div>
 
-                      <div *ngIf="trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl" class="d-flex h-36" >
+                      <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT) && (trip.payment_status == 1 || trip.payment_status == 5)" class="d-flex h-36" >
                         <div class="div-width-250 v-align-center">
                             <div class="text-title font-weight-500">Yêu cầu Checkin-Online</div>
                         </div>
                         <div class="div-width-50 v-align-center">
                             <div  class="div-flex-end">
-                              <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
+                              <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                             </div>
                         </div>
                       </div>
-                      <div *ngIf="trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingjson[0].RequestCheckin==1 && !trip.hadCheckinOnline" class="text-note margin-16-one">
-                        * Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến 
+                      <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT) && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.hadCheckinOnline && trip.textCheckinOnline" class="text-note margin-16-one">
+                        {{trip.textCheckinOnline}} 
                     </div>
                        <!-- Checkin online -->
                <!-- <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div> -->
@@ -1113,7 +1121,7 @@
                             </div>
                             <div class="d-flex m-left-4">
                               <img style="width:24px;height:24px" src="./assets/imgs/ic_handbag.svg"/>
-                              <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedDepart}}</div>
+                              <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{baggageHandedDepart}}</div>
                             </div>
                             <div *ngIf="pax.hanhLyshow && pax.hanhLyshow!='0'" class="d-flex m-left-4">
                               <img  src="./assets/imgs/ic_airdrop.svg"/>
@@ -1135,7 +1143,7 @@
                             </div>
                             <div class="d-flex m-left-4">
                               <img  src="./assets/imgs/ic_handbag.svg"/>
-                              <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedReturn}}</div>
+                              <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{baggageHandedReturn}}</div>
                             </div>
                             <div *ngIf="trip.bookingsComboData[1].passengers[idx].hanhLyshow && trip.bookingsComboData[1].passengers[idx].hanhLyshow!='0'" class="d-flex m-left-4">
                               <img  src="./assets/imgs/ic_airdrop.svg"/>
@@ -2294,7 +2302,7 @@
                                     </div>
                                     <div class="d-flex m-left-4 m-top-13-5">
                                         <img  src="./assets/imgs/ic_handbag.svg"/>
-                                        <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedDepart}}</div>
+                                        <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{baggageHandedDepart}}</div>
                                     </div>
                                     <div *ngIf="pax.hanhLyshow && pax.hanhLyshow!='0'" class="d-flex m-left-4">
                                         <img  src="./assets/imgs/ic_airdrop.svg"/>
@@ -2316,7 +2324,7 @@
                                     </div>
                                     <div class="d-flex m-left-4 m-top-13-5">
                                         <img  src="./assets/imgs/ic_handbag.svg"/>
-                                        <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">{{baggageHandedReturn}}</div>
+                                        <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">{{baggageHandedReturn}}</div>
                                     </div>
                                   
                                     <div *ngIf="trip.bookingsComboData[1].passengers[idx].hanhLyshow && trip.bookingsComboData[1].passengers[idx].hanhLyshow!='0'" class="d-flex m-left-4">
@@ -2765,6 +2773,14 @@
                                       {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
                                     </div>
                                   </div>
+                                  <div class="d-flex m-top-8" *ngIf="trip.payment_fee">
+                                    <div class="text-info">
+                                      Phí tiện ích
+                                    </div>
+                                    <div class="position-absolute text-info">
+                                      {{gf.convertNumberToString(trip.payment_fee)}} VND
+                                    </div>
+                                  </div>
                                   <div class="div-split"></div>
                                   <div class="d-flex m-top-8">
                                   <div class="text-info d-flex">
@@ -2994,7 +3010,7 @@
                 - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedDepart}}</span>
                 </div>
                 <div class="text-info" *ngIf="luggageSignedDepart">
-                - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}kg</span>
+                - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}<span *ngIf="luggageSignedDepart.indexOf('kg')==-1">kg</span></span>
                 </div>
                 <div class="text-info" *ngIf="!luggageSignedDepart">
                 - Hành lý ký gửi: <span class="font-weight-600">0kg</span>
@@ -3231,7 +3247,7 @@
                       - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedDepart}}</span>
                     </div>
                     <div class="text-info" *ngIf="luggageSignedDepart">
-                      - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}kg</span>
+                      - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}<span *ngIf="luggageSignedDepart.indexOf('kg')==-1">kg</span></span>
                     </div>
                     <div class="text-info" *ngIf="!luggageSignedDepart">
                       - Hành lý ký gửi: <span class="font-weight-600">0kg</span>
@@ -3464,16 +3480,16 @@
                       </div>
                     </div>
                     <div  class="div-panel-1px" *ngIf="trip.booking_type != 'TOUR'"></div>
-                    <div  class="d-flex m-l-16 div-checkin-online-2" *ngIf="trip.booking_type != 'TOUR' && !trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5)  && !trip.ischeckinOnl">
+                    <div  class="d-flex m-l-16 div-checkin-online-2" *ngIf="trip.booking_type != 'TOUR' && !trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)">
                       <div class="text-info-2 font-weight-500">
                         Yêu cầu Checkin-Online
                       </div>
                       <div  class="position-absolute">
-                        <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
+                        <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                       </div>
                     </div>
-                    <div *ngIf="trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingjson[0].RequestCheckin==1 && !trip.hadCheckinOnline" class="text-note margin-16">
-                       * Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến 
+                    <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)&& !trip.hadCheckinOnline && trip.textCheckinOnline" class="text-note margin-16">
+                      {{trip.textCheckinOnline}} 
                   </div>
                      <!-- Checkin online -->
                <!-- <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div> -->
@@ -3715,11 +3731,11 @@
                       <div class="text-flight-title div-width-600 d-flex">
                           <div *ngIf="trip.bookingsComboData && trip.bookingsComboData[0]" class="min-width-100 cls-text-overflow">
                             <div class="div-logo div-width-100">
-                              <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'vietjetair'" src="./assets/ic_airticket/ic_vietjet_b.png">
-                              <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'jetstar'" src="./assets/ic_airticket/ic_jetstar_b.png">
-                              <img class="img-logo logo_vna" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'vietnamairlines'"src="./assets/ic_airticket/logo_vna.png">
-                              <img class="img-logo" *ngIf="!trip.isBookingVMBQT &&  trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
-                              <img class="img-logo " *ngIf=" trip.isBookingVMBQT && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[0]" [src]="trip.bookingjson[0].Transits[0].Logo">
+                              <img class="img-logo" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'vietjetair'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                              <img class="img-logo" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'jetstar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                              <img class="img-logo logo_vna" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'vietnamairlines'"src="./assets/ic_airticket/logo_vna.png">
+                              <img class="img-logo" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) &&  trip.bookingsComboData[0].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                              <img class="img-logo " *ngIf=" (trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[0]" [src]="trip.bookingjson[0].Transits[0].Logo">
 
                               <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumner && !trip.bookingsComboData[0].flightNumberNew">{{trip.bookingsComboData[0].flightNumner}}</span>
                               <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[0].flightNumberNew">{{trip.bookingsComboData[0].flightNumberNew}}</span>
@@ -3737,11 +3753,11 @@
                           </div> 
                           <div [ngClass]="(trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1) ? 'min-width-100 cls-text-overflow' : 'min-width-100 cls-text-overflow mt-30'">
                             <div class="div-logo div-width-100" *ngIf=" trip.bookingsComboData && trip.bookingsComboData.length >1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(trip.bookingsComboData[1].trip_Code) == -1 && trip.bookingsComboData[1].airlineName && trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1">
-                              <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'vietjetair'" src="./assets/ic_airticket/ic_vietjet_b.png">
-                              <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'jetstar'" src="./assets/ic_airticket/ic_jetstar_b.png">
-                              <img class="img-logo logo_vna" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'vietnamairlines'"src="./assets/ic_airticket/logo_vna.png">
-                              <img class="img-logo" *ngIf="!trip.isBookingVMBQT && trip.bookingsComboData[1] &&  trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
-                              <img class="img-logo " *ngIf=" trip.isBookingVMBQT && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[1]" [src]="trip.bookingjson[0].Transits[1].Logo">
+                              <img class="img-logo" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'vietjetair'" src="./assets/ic_airticket/ic_vietjet_b.png">
+                              <img class="img-logo" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'jetstar'" src="./assets/ic_airticket/ic_jetstar_b.png">
+                              <img class="img-logo logo_vna" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[1] && trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'vietnamairlines'"src="./assets/ic_airticket/logo_vna.png">
+                              <img class="img-logo" *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingsComboData[1] &&  trip.bookingsComboData[1].airlineName.trim().replace(' ','').toLowerCase() == 'bambooairways'" src="./assets/ic_airticket/ic_bamboo_b.png">
+                              <img class="img-logo " *ngIf=" (trip.isBookingVMBQT && trip.isTravelPort) && trip.bookingjson && trip.bookingjson.length>0 && trip.bookingjson[0].Transits && trip.bookingjson[0].Transits[1]" [src]="trip.bookingjson[0].Transits[1].Logo">
 
                               <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumner && !trip.bookingsComboData[1].flightNumberNew">{{trip.bookingsComboData[1].flightNumner}}</span>
                               <span class="text-code-fly p-left-8 m-top-6 p-absolute" *ngIf="trip.bookingsComboData[1].flightNumberNew ">{{trip.bookingsComboData[1].flightNumberNew}}</span>
@@ -3757,71 +3773,71 @@
                       </div>
                     </div>
     
-                  <!-- Hotel City -->
-                  <div *ngIf="trip.booking_type == 'CB_FLY_HOTEL'" class="div-hotel-city">
-                    <div class="div-split" style="margin-bottom:8px"></div>
-                    <div>
-              
-                      <div class="item-room p-top-0">
-                          <div class="div-wrapimg">
-                              <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar" src="https:{{trip.avatar}}"> -->
-                              <div *ngIf="trip.avatar else noavatar">
-                                <img  class="img-avatar" src="{{trip.avatar}}">
-                                <!-- <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}"> -->
-                              </div>
-                              <ng-template #noavatar>
-                                <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
-                              </ng-template>
-                            </div>
-                            <div class="col-mytrip-text-description">
-                              <div class="text-left">
-                                  <div class="div-first"  >
-                                    <div *ngIf="trip.hotel_name">
-                                      <ion-label style=" -webkit-box-orient: vertical" class="label-comboname f-bold p-top-0 div-name-hotel">{{trip.hotel_name}}
-                                        <!-- <span class="trip-star" *ngIf="trip.RatingStar"><img *ngIf="trip.RatingStar!=0" src={{trip.RatingStar}}></span> -->
-                                      </ion-label>
-                                    </div>
-                                      <ion-row >
-                                        <ion-col size="1"  class="col-address">
-                                          <img style="height:12px" src="./assets/ic_mytripbooking/calendar.svg">
-                                        </ion-col>
-                                        <ion-col class="col-address">
-                                          <div class="d-flex">
-                                            <div class="col-address">{{trip.checkInDisplayShort}}</div>
-                                            <div class="img-arrow"> → </div>
-                                            
-                                            <div class="col-address">{{trip.checkOutDisplayShort}}</div>
-                                          </div>
-                                        </ion-col>
-                                      </ion-row>
-    
-                                      <ion-row class="m-top-8">
-                                        <ion-col size="1"  class="col-address">
-                                          <img style="height:12px" src="./assets/ic_hoteldetail/ic_bed.svg">
-                                        </ion-col>
-                                        <ion-col class="col-address">
-                                          <label class="col-address">{{trip.room_name}}</label> x <span class="col-address">{{trip.room_count}}</span>
-                                        </ion-col>
-                                      </ion-row>
-    
-                                      <ion-row class="m-top-8" *ngIf="trip.meal_plan">
-                                        <ion-col size="1"  class="col-address">
-                                          <img style="height:12px" src="./assets/ic_hoteldetail/ic_food_b.svg">
-                                        </ion-col>
-                                        <ion-col class="col-address">
-                                          <label class="col-address">{{trip.meal_plan}}</label>
-                                        </ion-col>
-                                      </ion-row>
-                                    
-                                    </div>
-                              </div>
-                            </div>
-                      </div>
-                    </div>
-                  </div>  
-                  <div class="div-line-new-1 margin-0-16"></div>
+                      <!-- Hotel City -->
+                      <div *ngIf="trip.booking_type == 'CB_FLY_HOTEL'" class="div-hotel-city">
+                        <div class="div-split" style="margin-bottom:8px"></div>
+                        <div>
+                  
+                          <div class="item-room p-top-0">
+                              <div class="div-wrapimg">
+                                  <!-- <img *ngIf="trip.avatar else noavatar" class="img-avatar" src="https:{{trip.avatar}}"> -->
+                                  <div *ngIf="trip.avatar else noavatar">
+                                    <img  class="img-avatar" src="{{trip.avatar}}">
+                                    <!-- <img *ngIf="trip.avatar.indexOf('i.travelapi.com') != -1" class="img-avatar" src="{{trip.avatar}}"> -->
+                                  </div>
+                                  <ng-template #noavatar>
+                                    <img class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
+                                  </ng-template>
+                                </div>
+                                <div class="col-mytrip-text-description">
+                                  <div class="text-left">
+                                      <div class="div-first"  >
+                                        <div *ngIf="trip.hotel_name">
+                                          <ion-label style=" -webkit-box-orient: vertical" class="label-comboname f-bold p-top-0 div-name-hotel">{{trip.hotel_name}}
+                                            <!-- <span class="trip-star" *ngIf="trip.RatingStar"><img *ngIf="trip.RatingStar!=0" src={{trip.RatingStar}}></span> -->
+                                          </ion-label>
+                                        </div>
+                                          <ion-row >
+                                            <ion-col size="1"  class="col-address">
+                                              <img style="height:12px" src="./assets/ic_mytripbooking/calendar.svg">
+                                            </ion-col>
+                                            <ion-col class="col-address">
+                                              <div class="d-flex">
+                                                <div class="col-address">{{trip.checkInDisplayShort}}</div>
+                                                <div class="img-arrow"> → </div>
+                                                
+                                                <div class="col-address">{{trip.checkOutDisplayShort}}</div>
+                                              </div>
+                                            </ion-col>
+                                          </ion-row>
+        
+                                          <ion-row class="m-top-8">
+                                            <ion-col size="1"  class="col-address">
+                                              <img style="height:12px" src="./assets/ic_hoteldetail/ic_bed.svg">
+                                            </ion-col>
+                                            <ion-col class="col-address">
+                                              <label class="col-address">{{trip.room_name}}</label> x <span class="col-address">{{trip.room_count}}</span>
+                                            </ion-col>
+                                          </ion-row>
+        
+                                          <ion-row class="m-top-8" *ngIf="trip.meal_plan">
+                                            <ion-col size="1"  class="col-address">
+                                              <img style="height:12px" src="./assets/ic_hoteldetail/ic_food_b.svg">
+                                            </ion-col>
+                                            <ion-col class="col-address">
+                                              <label class="col-address">{{trip.meal_plan}}</label>
+                                            </ion-col>
+                                          </ion-row>
+                                        
+                                        </div>
+                                  </div>
+                                </div>
+                          </div>
+                        </div>
+                      </div>  
+                      <div class="div-line-new-1 margin-0-16"></div>
                         <!-- Thông tin phòng -->
-                        <div *ngIf="trip.booking_type == 'CB_FLY_HOTEL'" class="margin-8-16 m-right-16 d-flex">
+                        <div *ngIf="trip.booking_type == 'CB_FLY_HOTEL'" class="margin-8-16 m-left-16 m-right-16 d-flex">
                           <div >
                             <div class="d-flex m-top-3">
                               <div class=" div-left"><img src="./assets/ic_facility/ic_people.svg"></div>
@@ -3845,23 +3861,23 @@
                             <img  class="cls-icon-img-detail"  src="./assets/ic_mytripbooking/ico_arrow.svg">
                           </div>
                         </div>
-            <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="div-line-new-1 margin-0-16"></div>
+                        <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="div-line-new-1 margin-0-16"></div>
 
-           
-            <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="d-flex div-big-waitpayment padding-8-16">
-              <div>
-              
-                <div class="div-right-waitpayment">
-                  {{gf.numberToCurrency(trip.amount_after_tax-trip.paid_amount, '.')}}<span style="font-size: 16px">đ</span>
-                </div>
-                <div class="div-left-waitpayment">
-                  Thanh toán trước <span style="font-weight: bold">{{trip.deliveryPaymentDisplay}}</span>
-                </div>
-              </div>
-              <div (click)="showtripdetail(trip)" class="p-absolute-16 m-top-3">
-                  <button ion-button round outline class="btn-waitpayment">Thanh toán</button>
-              </div>
-            </div>
+                      
+                        <div *ngIf="trip.payment_status == 0 && trip.deliveryPaymentDisplay && trip.priceShow" class="d-flex div-big-waitpayment padding-8-16">
+                          <div>
+                          
+                            <div class="div-right-waitpayment">
+                              {{gf.numberToCurrency(trip.amount_after_tax-trip.paid_amount, '.')}}<span style="font-size: 16px">đ</span>
+                            </div>
+                            <div class="div-left-waitpayment">
+                              Thanh toán trước <span style="font-weight: bold">{{trip.deliveryPaymentDisplay}}</span>
+                            </div>
+                          </div>
+                          <div (click)="showtripdetail(trip)" class="p-absolute-16 m-top-3">
+                              <button ion-button round outline class="btn-waitpayment">Thanh toán</button>
+                          </div>
+                        </div>
                   </ng-template>
 
                   
@@ -3926,7 +3942,7 @@
                                 {{trip.totalPaxStr}} 
                                 <span *ngIf="trip.textChildDisplay">{{trip.textChildDisplay}}</span>
                                 <span *ngIf="trip.childAgesDisplay">{{trip.childAgesDisplay}}</span>
-                                <span class="p-l-4" *ngIf="trip.hasCathay"><img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
+                                <span class="p-l-4" *ngIf="trip.hasCathay && !trip.isBookingVMBQT"><img src="https://member.ivivu.com/assets/img/dashboard_trips/cathay.png"/></span>
                               </ion-col>
                               <ion-col size="1" class="col-img-tour">
                                 <img class='img-arrow-tour' src="./assets/ic_tour/arrow_tour_mytrip.svg">
@@ -3996,14 +4012,14 @@
               
               </ion-item-group>
               <!-- <div class="div-split-listtrip"></div> -->
-              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl"  class="div-line-new-1 m-0-16"></div>
-              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl"  class="d-flex div-checkin-online-1">
+              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"  class="div-line-new-1 m-0-16"></div>
+              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5) "  class="d-flex div-checkin-online-1">
                
                 <div class="div-text-checkin-online">Yêu cầu Checkin-Online</div>
-                <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
+                <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
               </div>
-              <div *ngIf="trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingjson[0].RequestCheckin==1 && !trip.hadCheckinOnline"  class="text-note margin-16">
-                * Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến 
+              <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)  && !trip.hadCheckinOnline && trip.textCheckinOnline"  class="text-note margin-16">
+                {{trip.textCheckinOnline}} 
             </div>
           
                <!-- Checkin online -->

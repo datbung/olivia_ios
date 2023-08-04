@@ -391,7 +391,7 @@
     }
 
       .div-content-yourflight{
-        height: 59px;
+        height: 80px;
         opacity: 0.9;
         border-radius: 4px;
         background: #fff;
@@ -436,7 +436,7 @@
         font-weight: 300;
         line-height: 1.5;
         letter-spacing: -0.69px;
-        color: #000000;
+        color: #3f3b3b;
         margin-top: 4px;
       }
 
@@ -884,4 +884,11 @@
   }
   .d-flex-end {
     justify-content: flex-end;
+  }
+  .div-text-pax {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: -0.69px;
+    color: #3f3b3b;
   }

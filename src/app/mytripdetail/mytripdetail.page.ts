@@ -136,8 +136,8 @@ export class MytripdetailPage implements OnInit {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
         // this.getmhoteldetail();
-        if(this.trip.isBookingVMBQT){
-          this.getSummaryBooking();
+        if(this.trip.isBookingVMBQT && this.trip.isTravelPort){
+          this.getSummaryBooking(this.trip);
            //pdanh 12-07-2023: Sửa lỗi sync thông tin, điều kiện vé update dưới CRM
             //Nếu có cập nhật từ CRM thì ưu tiên show thông tin update dưới CRM( 'ticketConditions' trong object 'bookingJsonDataParse')
             if(this.trip.bookingJsonDataParse[0] && this.trip.bookingJsonDataParse[0].ticketConditions){
@@ -283,10 +283,12 @@ export class MytripdetailPage implements OnInit {
           this.getDetailTicketFromDat(0).then((data) => {
             if (this.trip.textReturn && this.trip.bookingsComboData[1].airlineCode && this.trip.bookingsComboData[1].airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(this.trip.bookingsComboData[1].trip_Code) == -1) {
               this.getDetailTicketFromDat(1).then((data) => {
+                this.loadsummarydone = true;
                 this.loadDetailInfo();
-                this.getmhoteldetail();
+                //this.getmhoteldetail();
               })
             }else{
+              this.loadsummarydone = true;
               this.loadDetailInfo();
             }
           })
@@ -608,6 +610,9 @@ export class MytripdetailPage implements OnInit {
                 se.coutDC=coutDCdepart+coutDCreturn;
                 se.totalDichung=TotalPriceGo+TotalPriceReturn;
                 se.totalVMB=se.trip.amount_after_tax-se.totalService-se.totalDichung+se.trip.promotionDiscountAmount;
+                if(se.trip.payment_fee){
+                  se.totalVMB = se.totalVMB - se.trip.payment_fee;
+                }
                 se.trip.totalPriceVMB = se.totalVMB;
         }
        
@@ -619,10 +624,8 @@ export class MytripdetailPage implements OnInit {
         if (se.trip.paid_amount && se.trip.paid_amount>0) {
           se.amount_after_tax=se.trip.amount_after_tax-se.trip.paid_amount;
         }else{
-          se.amount_after_tax=se.trip.amount_after_tax
+          se.amount_after_tax=se.trip.amount_after_tax;
         }
-
-        
   }
 
   ngOnInit() {
@@ -753,6 +756,7 @@ export class MytripdetailPage implements OnInit {
 
   paymentselect(trip,stt) {
     var se = this;
+    this._mytripservice.backroute = '';
     se.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se._mytripservice.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
     this.activityService.objPaymentMytrip.trip.priceShow=se.amount_after_tax;
     if (trip.booking_type == 'COMBO_FLIGHT') {
@@ -772,7 +776,7 @@ export class MytripdetailPage implements OnInit {
       }
    
     } 
-    else if(trip.isBookingVMBQT){
+    else if(trip.isBookingVMBQT && trip.isTravelPort){
       se._flightService.itemFlightInternational = null;
       se.activityService.objPaymentMytrip = trip;
       this.gf.showLoading();
@@ -1292,7 +1296,7 @@ export class MytripdetailPage implements OnInit {
     );
   }
 
-  getSummaryBooking() {
+  getSummaryBooking(trip) {
     let url = C.urls.baseUrl.urlFlightInt + `api/bookings/${this.trip.booking_id}/summary?${new Date().getTime()}`;
     this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
       if(data.data){
@@ -1300,8 +1304,7 @@ export class MytripdetailPage implements OnInit {
           this.dataSummaryBooking = data.data;
          
         })
-        //this.loadsummarydone = true;
-        console.log(data.data);
+        this.loadsummarydone = true;
         if(this.dataSummaryBooking.departFlightData){
           this.getDetailTicket(this.dataSummaryBooking.departFlightData, 1);
         }
@@ -1322,7 +1325,7 @@ export class MytripdetailPage implements OnInit {
       }else{
         this.loadingreturndetailticket = true;
       }
-      let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType}&airbusCode=${item.aircraft}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(this.trip.bookingDate).format('YYYY-MM-DD')}`;
+      let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType||''}&airbusCode=${item.aircraft||''}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(this.trip.bookingDate).format('YYYY-MM-DD')}`;
       this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
         if(data){
           
@@ -1408,16 +1411,20 @@ export class MytripdetailPage implements OnInit {
         var ticketClass=this.trip.bookingsComboData[0].ticketClass;
         var departDate=this.trip.bookingsComboData[0].departureTime;
         var flightNumber=this.trip.bookingsComboData[0].flightNumner;
+        var fromplace = this.trip.bookingJsonDataParse[0].departCode;
+        var toplace = this.trip.bookingJsonDataParse[0].arrivalCode;
       }else{
         var airlineCode=this.getairlineCode(stt);
         var ticketClass=this.trip.bookingsComboData[1].ticketClass;
         var departDate=this.trip.bookingsComboData[1].departureTime;
         var flightNumber=this.trip.bookingsComboData[1].flightNumner;
+        var fromplace = this.trip.bookingJsonDataParse[1].departCode;
+        var toplace = this.trip.bookingJsonDataParse[1].arrivalCode;
       }
   
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass+"&flightNumber="+flightNumber+"&departDate="+departDate+"&bookingDate="+moment(this.trip.bookingDate).format('YYYY-MM-DD'),
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode="+airlineCode +"&ticketType="+ticketClass+"&flightNumber="+flightNumber+"&departDate="+departDate+"&bookingDate="+moment(this.trip.bookingDate).format('YYYY-MM-DD')+`&fromPlace=${fromplace}&toPlace=${toplace}`,
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
          
@@ -1447,7 +1454,7 @@ export class MytripdetailPage implements OnInit {
               se.trip.bookingsComboData[0].passengers.forEach(element => {
                 element.hanhLyshow="";
                 if (element.hanhLy && se.luggageSignedDepart) {
-                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(se.luggageSignedDepart.toString().replace('kg', ''));
+                  element.hanhLyshow=Number(element.hanhLy.toString().replace('kgs', '').replace('kg', ''))+Number(se.luggageSignedDepart.toString().replace('kgs', '').replace('kg', ''));
                 }else{
                   if (element.hanhLy){
                     element.hanhLyshow=element.hanhLy;
@@ -1457,7 +1464,7 @@ export class MytripdetailPage implements OnInit {
                  
                 }
                 if (element.hanhLyshow) {
-                  element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                  element.hanhLyshow=element.hanhLyshow.toString().replace('kgs', '').replace('kg', '');
                 }
               });
               se._departTicketInfoCRM = se.trip.bookingJsonDataParse[0] && se.trip.bookingJsonDataParse[0].ticketConditions ? se.trip.bookingJsonDataParse[0] : null;
@@ -1469,7 +1476,7 @@ export class MytripdetailPage implements OnInit {
             se.trip.bookingsComboData[1].passengers.forEach(element => {
               element.hanhLyshow="";
               if (element.hanhLy && se.luggageSignedReturn) {
-                element.hanhLyshow=Number(element.hanhLy.toString().replace('kg', ''))+Number(se.luggageSignedReturn.toString().replace('kg', ''));
+                element.hanhLyshow=Number(element.hanhLy.toString().replace('kgs', '').replace('kg', ''))+Number(se.luggageSignedReturn.toString().replace('kgs', '').replace('kg', ''));
               }else{
                 if (element.hanhLy){
                   element.hanhLyshow=element.hanhLy;
@@ -1479,7 +1486,7 @@ export class MytripdetailPage implements OnInit {
                
               }
               if (element.hanhLyshow) {
-                element.hanhLyshow=element.hanhLyshow.toString().replace('kg', '');
+                element.hanhLyshow=element.hanhLyshow.toString().replace('kgs', '').replace('kg', '');
               }
             });
             se._returnTicketInfoCRM = se.trip.bookingJsonDataParse[1] && se.trip.bookingJsonDataParse[1].ticketConditions ? se.trip.bookingJsonDataParse[1] : null;

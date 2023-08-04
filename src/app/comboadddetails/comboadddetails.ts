@@ -285,6 +285,7 @@ export class ComboadddetailsPage implements OnInit {
           else {
             se.navCtrl.navigateForward('/combodone/' + obj.Code);
           }
+          se.Bookcombo.bookingcode = obj.Code;
         }
       });
     })

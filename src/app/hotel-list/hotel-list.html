@@ -26,7 +26,8 @@
               <div class="col-img-hotellist">
                   <img  class="img-radius" [src]="msg.Avatar" style="position:relative" (click)="itemSelected(msg)">
                   <div *ngIf="msg.DealType" class="transbox_0">
-                      {{msg.DealType}}
+                      
+                      <div class="div-transbox-text">{{msg.DealType}}</div>
                     </div>
               </div>
               <div class="col-description-hotellist">
@@ -71,6 +72,8 @@
                             </div>
                         </div>
                         <div *ngIf="msg.AvgPoint <=0" class="div-width-100"></div>
+                        <div class="img-sharehd" (click)="share(msg)"><img style="padding-top:10px;width: 18px"
+                          src="./assets/imgs/ic_share_black.svg"></div>
                           <div *ngIf="msg.Liked" class="div-heart m-top-5" (click)="unlikeItem(msg.HotelId)">
                             <img src="./assets/imgs/heart-red.svg" class="cls-img-content" >
                           </div>
@@ -80,22 +83,22 @@
                         </div>
                         
                     </div>
-                    <div class="div-flex-wrap m-top-8">
+                    <div class="div-flex-wrap m-top-12">
                       <div *ngFor="let itemstyle of msg.StyleTag; let idx = index" [ngClass]="(msg.StyleTag.length >=2 && ((msg.StyleTag[0].ID == 1 && msg.StyleTag[1].ID == 5) || (msg.StyleTag[0].ID == 5 && msg.StyleTag[1].ID == 1))) ? 'm-width-49' : ''">
                           <div *ngIf="idx < 2" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
                       </div>
-                      
-                    </div>
-                    <div class="div-flex-wrap">
                       <div *ngFor="let itemstyle of msg.Facilities; let idx = index">
-                          <div *ngIf="idx < 2 && itemstyle.Name" [ngClass]="itemstyle.Name.length < 15? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
+                        <div *ngIf="idx < 2 && itemstyle.Name" [ngClass]="itemstyle.Name.length < 15? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
                       </div>
-                      
+                    
                     </div>
+                    <!-- <div class="div-flex-wrap">
+                     
+                    </div> -->
                     <div [ngClass]="( (msg.StyleTag && msg.StyleTag.length >0)  || (msg.Facilities && msg.Facilities.length >0)) ? 'last-row m-top-2' :  'last-row m-top-12'">
                         <div *ngIf="loginuser || msg.IsShowPrice == 1" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? '' : ''">
-                              <div style="font-weight: bold" class="d-flex">
+                              <div class="d-flex">
                                 <!-- <div *ngIf="msg.DealPrice" class="text-combo"  class="p-top-dealtype">
                                   <img src="./assets/ic_combo_orange.svg">
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
@@ -109,10 +112,10 @@
                                   <label >{{msg.RoomNameSubString}}</label> 
                                 </div>
                                
-                                <!-- <div  *ngIf="msg.DealPrice" class="price text-right div-width-100 h-28">
+                                <!-- <div  *ngIf="msg.DealPrice" class="price text-right h-28">
                                   <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{gf.numberToCurrency(msg.DealPrice, '.')}}<span class="sub-dealprice">đ</span></label>
                                 </div> -->
-                                <div  *ngIf=" msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right div-width-100 h-28">
+                                <div  *ngIf=" msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right h-28">
                                   <label *ngIf=" msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }}<span class="sub-minprice">đ</span></label>
                                 </div>
                                 <div  *ngIf=" msg.HasCheckPrice && !msg.MinPriceOTAStr" class="have-not-dealprice">
@@ -126,7 +129,7 @@
                                 <div *ngIf="msg.RoomNameSubString" class="text-nameroom" class="p-top-minprice">
                                   <label >{{msg.RoomNameSubString}}</label>
                                 </div>
-                                <div class="price text-right div-width-100 h-28">
+                                <div class="price text-right h-28">
                                   <div>
                                       <label *ngIf="msg.HasCheckPrice && msg.MinPriceOTAStr" class="label-minprice">{{msg.MinPriceOTAStr}}<span class="sub-minprice">đ</span></label>
                                       <label *ngIf="msg.HasCheckPrice && !msg.MinPriceOTAStr" class="label-minprice">Hết phòng</label>
@@ -163,7 +166,8 @@
                 <!-- <ion-thumbnail> -->
                   <img  class="img-radius" src={{msg.Avatar}} style="position:relative" (click)="itemSelected(msg)">
                 <!-- </ion-thumbnail> -->
-                  
+                <div class="img-sharehd" (click)="share(msg)"><img style="padding-top:10px;width: 18px"
+                  src="./assets/imgs/ic_share_black.svg"></div>
                   <div *ngIf="msg.Liked" class="img-heart" (click)="unlikeItem(msg.HotelId)">
                     <img src="./assets/imgs/heart-red.svg" class="cls-img-content" >
                   </div>
@@ -171,7 +175,8 @@
                     <img src="./assets/imgs/heart-empty.svg" class="cls-img-content" >
                   </div>
                   <div *ngIf="msg.DealType" class="transbox_0">
-                      {{msg.DealType}}
+                    <div class="div-transbox-text">{{msg.DealType}}</div>
+                      
                     </div>
               </div>
               <!-- right content region -->
@@ -217,6 +222,8 @@
                         
                       </div>
                       <div *ngIf="msg.AvgPoint <=0" class="div-width-100"></div>
+                      <div class="img-sharehd" (click)="share(msg)"><img style="padding-top:10px;width: 18px"
+                        src="./assets/imgs/ic_share_black.svg"></div>
                       <div *ngIf="msg.Liked" class="div-heart m-top-5" (click)="unlikeItem(msg.HotelId)">
                         <img src="./assets/imgs/heart-red.svg" class="cls-img-content" >
                       </div>
@@ -265,22 +272,22 @@
                         </ion-row>
                     </div>
                   </div> -->
-                    <div class="div-flex-wrap m-top-8">
+                    <div class="div-flex-wrap m-top-12">
                       <div *ngFor="let itemstyle of msg.StyleTag; let idx = index" [ngClass]="(msg.StyleTag.length >=2 && ((msg.StyleTag[0].ID == 1 && msg.StyleTag[1].ID == 5) || (msg.StyleTag[0].ID == 5 && msg.StyleTag[1].ID == 1))) ? 'm-width-49' : ''">
                           <div *ngIf="idx < 2" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style ' : 'sp-item-style-1 '">{{itemstyle.Name}}</div>
                       </div>
-                      
-                    </div>
-                    <div class="div-flex-wrap">
                       <div *ngFor="let itemstyle of msg.Facilities; let idx = index" >
-                          <div *ngIf="idx < 2 && itemstyle.Name" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
-                      </div>
-                      
+                        <div *ngIf="idx < 2 && itemstyle.Name" [ngClass]="itemstyle.Name.length < 15 ? 'sp-item-style' : 'sp-item-style-1'">{{itemstyle.Name}}</div>
                     </div>
+                    </div>
+                    <!-- <div class="div-flex-wrap">
+                     
+                      
+                    </div> -->
                     <div [ngClass]="( (msg.StyleTag && msg.StyleTag.length >0)  || (msg.Facilities && msg.Facilities.length >0)) ? 'last-row m-top-2' :  'last-row m-top-12'">
                         <div *ngIf="loginuser || msg.IsShowPrice == 1" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? '' : ''">
-                              <div style="font-weight: bold" class="d-flex">
+                              <div class="d-flex">
                                 <!-- <div *ngIf="msg.DealPrice" class="text-combo"  class="p-top-dealtype">
                                   <img src="./assets/ic_combo_orange.svg">
                                   <label class="cls-lineheight">{{msg.DealType}}</label>
@@ -294,10 +301,10 @@
                                   <label >{{msg.RoomNameSubString}}</label> 
                                 </div>
 <!--                                
-                                <div  *ngIf="msg.DealPrice" class="price text-right div-width-100 h-28">
+                                <div  *ngIf="msg.DealPrice" class="price text-right h-28">
                                   <label *ngIf="msg.DealPrice!=0 && msg.HasCheckPrice" class="label-dealprice">{{gf.numberToCurrency(msg.DealPrice, '.')}}<span class="sub-dealprice">đ</span></label>
                                 </div> -->
-                                <div  *ngIf=" msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right div-width-100 h-28">
+                                <div  *ngIf=" msg.HasCheckPrice && msg.MinPriceOTAStr" class="price text-right h-28">
                                   <label *ngIf=" msg.MinPriceOTAStr && msg.HasCheckPrice" class="label-minprice">{{ msg.MinPriceOTAStr }}<span class="sub-minprice">đ</span></label>
                                 </div>
                                 <div  *ngIf=" msg.HasCheckPrice && !msg.MinPriceOTAStr" class="have-not-dealprice">
@@ -311,7 +318,7 @@
                                 <div class="text-nameroom" text-left class="p-top-minprice">
                                   <label >{{msg.RoomNameSubString}}</label>
                                 </div>
-                                <div class="price text-right div-width-100 h-28">
+                                <div class="price text-right h-28">
                                   <div>
                                       <label *ngIf="msg.HasCheckPrice && msg.MinPriceOTAStr" class="label-minprice">{{msg.MinPriceOTAStr}}<span class="sub-minprice">đ</span></label>
                                       <label *ngIf="msg.HasCheckPrice && !msg.MinPriceOTAStr" class="label-minprice">Hết phòng</label>

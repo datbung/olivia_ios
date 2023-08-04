@@ -311,7 +311,12 @@
   font-size: 16px;
 }
 
-
+.div-transbox-text{
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    color: #fff;
+}
   .transbox_0 { 
     position: absolute;
     background-color: #e52822;
@@ -320,10 +325,11 @@
     white-space: normal;
     top: 16px;
     padding: 4px 12px 3px 4px;
-    color: #fff;
+    max-width: 100%;
     left: -4px;
+    
   }
-  .transbox_0:after {
+  .transbox_0::before {
     content: " ";
     position: absolute;
     left: 0px;
@@ -433,7 +439,8 @@
     bottom: 0;
     right: 0;
     letter-spacing: -0.51px;
-    font-size:20px;
+    font-size:24px;
+    line-height: 18px;
   }
   .sub-minprice {
     color: #26bed6;
@@ -465,8 +472,10 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     color: #3f3b3b;
-    width: 100%;
-    text-align: left;
+    width: 100%;    
+    text-align: right;
+    margin-right: 6px;
+    padding-bottom: 4px;
   }
   .p-top-8{
     top:8px;
@@ -595,12 +604,11 @@
     }
     .sp-item-style{
       padding: 8px 4px;
-      border: solid 0.5px #26bed6;
       font-size: 14px;
-      color: #26bed6;
-      background: #ffffff;
+      color: #828282;
+      background: #f5f6f7;
       margin-right: 8px;
-      border-radius: 2px;
+      border-radius: 6px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -608,12 +616,11 @@
     }
     .sp-item-style-1{
       padding: 8px 4px;
-      border: solid 0.5px #26bed6;
       font-size: 14px;
-      color: #26bed6;
-      background: #ffffff;
+      color: #828282;
+      background: #f5f6f7;
       margin-right: 8px;
-      border-radius: 2px;
+      border-radius: 6px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -707,4 +714,11 @@
 }
 .m-top-12 {
   margin-top: 12px;
+}
+.cls-badge {
+  border-radius: 6px;
+  background-color: #9fc43a;
+}
+.img-sharehd {
+  margin-right: 16px;
 }

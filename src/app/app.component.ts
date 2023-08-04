@@ -185,16 +185,28 @@ export class AppComponent {
         
       }
 
-      this.codePush.notifyApplicationReady().then(()=>{
-        this.codePush.checkForUpdate().then((data)=>{
-          if(data){
-            this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
-
-            });
-             this.valueGlobal.updatedLastestVersion = true;
-          }
+      try {
+        this.codePush.notifyApplicationReady().then(()=>{
+          this.codePush.checkForUpdate().then((data)=>{
+            if(data){
+              this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
+  
+              });
+               this.valueGlobal.updatedLastestVersion = true;
+            }
+          })
         })
-      })
+      } catch (error) {
+        let objError = {
+          page: 'appcomponent',
+          func: 'autoupdate',
+          message: 'error',
+          content: error,
+          type: "error",
+        };
+        C.writeErrorLog(objError,error);
+      }
+      
 
       this.deeplinks.routeWithNavController(this.navCtrl, {
         '/login': LoginPage

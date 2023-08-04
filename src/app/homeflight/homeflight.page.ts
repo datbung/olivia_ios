@@ -203,6 +203,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
                 this.myflight.checkInDisplayMonth = this.getDayOfWeek(_cin).dayname +", " + moment(_cin).format("DD") + " thg " + moment(_cin).format("MM");
                 this.myflight.checkOutDisplayMonth = this.getDayOfWeek(_cout).dayname +", " + moment(_cout).format("DD") + " thg " + moment(_cout).format("MM");
+                this.myflight.paxDisplay = ((data.adult ? `${data.adult} người lớn`: '') + (data.child ? `, ${data.child} trẻ em`: '') + (data.infant ? `, ${data.infant} em bé` : '') );
 
                 this.checkInDisplayMonth = this.getDayOfWeek(_cin).dayname +", " + moment(_cin).format("DD") + " thg " + moment(_cin).format("MM");
                 this.checkOutDisplayMonth = this.getDayOfWeek(_cout).dayname +", " + moment(_cout).format("DD") + " thg " + moment(_cout).format("MM");
@@ -489,7 +490,103 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
         }
 
         reloadInfoFlight(){
-          if(this._flightService.itemFlightCache){
+          if(this._flightService.objSearch){
+            if(this._flightService.objSearch.departDate){
+              this.cin = this._flightService.objSearch.departDate;
+            }else{
+              if(this._flightService.objSearch.checkInDisplayMonth){
+                let _checkInDisplayMonth = this._flightService.objSearch.checkInDisplayMonth.replace(' tháng ',', ').replace(', ','-');
+                _checkInDisplayMonth = _checkInDisplayMonth.replace(', ','-');
+                _checkInDisplayMonth = _checkInDisplayMonth.replace(', ','-');
+                let _darrday:any = _checkInDisplayMonth.split('-');
+                let _d =new Date(Date.UTC(_darrday[2], _darrday[1] -1, _darrday[0], 0, 0, 0)), final = (_d.getTime() + Math.abs((_d.getTimezoneOffset()))*2 );
+                this.cin  = new Date(final).toISOString().replace('Z','');
+                this._flightService.objSearch.departDate = this.cin;
+              }else{
+                this.cin = this.gf.getCinIsoDate(moment(new Date()).add(7,'days'));
+              }
+              
+            }
+            if(this._flightService.objSearch.returnDate){
+                this.cout = this.gf.getCinIsoDate(this._flightService.objSearch.returnDate);
+            }else{
+                this.cout = moment(this.gf.getCinIsoDate(new Date())).add(9,'days');
+            }
+            this.cinthu = this.getDayOfWeek(this.cin).dayname;
+            this.coutthu = this.getDayOfWeek(this.cout).dayname;
+
+            this.cindisplay = moment(this.cin).format("DD-MM-YYYY");
+            this.coutdisplay = moment(this.cout).format("DD-MM-YYYY");
+
+            this.cindisplaymonth = moment(this.cin).format("DD") + " tháng " + moment(this.cin).format("MM") + ", " + moment(this.cin).format("YYYY");
+            this.coutdisplaymonth = moment(this.cout).format("DD") + " tháng " + moment(this.cout).format("MM") + ", " + moment(this.cout).format("YYYY");
+
+            this.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
+            this.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+            
+            if(this._flightService.objSearch){
+              this.departCity = this._flightService.objSearch.departCity;
+              this.returnCity = this._flightService.objSearch.returnCity;
+              this.departCode = this._flightService.objSearch.departCode;
+              this.returnCode = this._flightService.objSearch.arrivalCode;
+              this.departAirport = this.getAirpot(this.departCode);
+              this.returnAirport = this.getAirpot(this.returnCode);
+
+              if(this._flightService.objSearch && this._flightService.objSearch.adult){
+                this.adult = this._flightService.objSearch.adult;
+              }
+              if(this._flightService.objSearch && this._flightService.objSearch.arrchild){
+                this.arrchild = this._flightService.objSearch.arrchild;
+              }
+                
+              if(this._flightService.objSearch && this._flightService.objSearch.child && this._flightService.objSearch.arrchild){
+                //this.infant=0;
+                  this.child = this._flightService.objSearch.child;
+                  if (this._flightService.objSearch.arrchild) {
+                      for (let i = 0; i < this._flightService.objSearch.arrchild.length; i++) {
+                          let itemchild:any = this._flightService.objSearch.arrchild[i];
+                        if(itemchild.numage >=12){
+                          if(this.child >1){
+                              this.child--;
+                              this.adult++;
+                          }else{
+                              this.child = 0;
+                              this.adult++;
+                          }
+                          
+                        }
+                      
+                      }
+                    }
+              }
+              else if(this._flightService.objSearch && this._flightService.objSearch.child){
+                this.child = this._flightService.objSearch.child;
+              }
+              else{
+                this.child =0;
+              }
+              if(this._flightService.objSearch && this._flightService.objSearch.child==0 && this._flightService.objSearch.arrchild && this._flightService.objSearch.arrchild.length==0 ){
+                this._flightService.objSearch.infant=0;
+              }
+              this.infant = this._flightService.objSearch.infant ? this._flightService.objSearch.infant : 0;
+
+              this._flightService.itemFlightCache.adult = this.adult;
+              this._flightService.itemFlightCache.child = this.child;
+              this._flightService.itemFlightCache.infant = this.infant ? this.infant : 0;
+              this._flightService.itemFlightCache.pax = this.adult + (this.child ? this.child :0)+ (this.infant ? this.infant : 0);
+              this._flightService.itemFlightCache.arrchild = this.arrchild;
+              
+              this.myflight.departCity = this._flightService.objSearch.departCity;
+              this.myflight.returnCity = this._flightService.objSearch.returnCity;
+              this.myflight.checkInDisplayMonth = this.getDayOfWeek(this.cin).dayname +", " + moment(this.cin).format("DD") + " thg " + moment(this.cin).format("MM");
+              this.myflight.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
+              this.myflight.roundTrip = this._flightService.objSearch.roundTrip;
+              this.myflight.isExtenal = this._flightService.objSearch.isExtenal;
+              this.myflight.paxDisplay = ((this._flightService.objSearch.adult ? `${this._flightService.objSearch.adult} người lớn`: '') + (this._flightService.objSearch.child ? `, ${this._flightService.objSearch.child} trẻ em`: '') + (this._flightService.objSearch.infant ? `, ${this._flightService.objSearch.infant} em bé` : '') );
+              this.flighttype = this._flightService.objSearch.roundTrip ? 'twoway' : 'oneway';
+            }
+          }
+          else if(this._flightService.itemFlightCache){
             if(this._flightService.itemFlightCache.checkInDate){
               this.cin = this._flightService.itemFlightCache.checkInDate;
             }else{
@@ -536,6 +633,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               this.myflight.checkOutDisplayMonth = this.getDayOfWeek(this.cout).dayname +", " + moment(this.cout).format("DD") + " thg " + moment(this.cout).format("MM");
               this.myflight.roundTrip = this._flightService.itemFlightCache.roundTrip;
               this.myflight.isExtenal = this._flightService.itemFlightCache.isExtenal;
+              this.myflight.paxDisplay = ((this._flightService.itemFlightCache.adult ? `${this._flightService.itemFlightCache.adult} người lớn`: '') + (this._flightService.itemFlightCache.child ? `, ${this._flightService.itemFlightCache.child} trẻ em`: '') + (this._flightService.itemFlightCache.infant ? `, ${this._flightService.itemFlightCache.infant} em bé` : '') );
               this.flighttype = this._flightService.itemFlightCache.roundTrip ? 'twoway' : 'oneway';
             }
             
@@ -1496,18 +1594,21 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           let placeFrom = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == se.departCode});
           let placeTo = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == se.returnCode});
           if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
-            
+         
             se._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
-            se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
-            se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
-            if(se._flightService.itemFlightCache.isInternationalFlight){
-              se.navCtrl.navigateForward("/flightsearchresultinternational");
-            }else{
-                se._flightService.itemFlightCache.isInternationalFlight = false;
-                se._flightService.itemFlightCache.isExtenalDepart = false;
-                se._flightService.itemFlightCache.isExtenalReturn = false;
-                se.navCtrl.navigateForward("/flightsearchresult");
-            }
+                  se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+                  se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+                  se._flightService.itemFlightCache.fromCountryCode = placeFrom[0].countryCode;
+                  se._flightService.itemFlightCache.toCountryCode = placeTo[0].countryCode;
+
+                  if(se._flightService.itemFlightCache.isInternationalFlight){
+                    se.navCtrl.navigateForward("/flightsearchresultinternational");
+                  }else{
+                      se._flightService.itemFlightCache.isInternationalFlight = false;
+                      se._flightService.itemFlightCache.isExtenalDepart = false;
+                      se._flightService.itemFlightCache.isExtenalReturn = false;
+                      se.navCtrl.navigateForward("/flightsearchresult");
+                  }
             
           }else {
             se._flightService.itemFlightCache.isInternationalFlight = false;
@@ -1521,6 +1622,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           se._flightService.itemFlightCache.isExtenalReturn = false;
           se.navCtrl.navigateForward("/flightsearchresult");
         }
+        
        
       }
 
@@ -1540,6 +1642,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             }
             se._flightService.itemFlightCache= data;
             se._flightService.objSearch = data.objSearch;
+            se.myflight.paxDisplay = ((data.objSearch.adult ? `${data.objSearch.adult} người lớn`: '') + (data.objSearch.child ? `, ${data.objSearch.child} trẻ em`: '') + (data.objSearch.infant ? `, ${data.objSearch.infant} em bé` : '') );
+            se._flightService.itemFlightCache.adult = se._flightService.objSearch.adult;
+            se._flightService.itemFlightCache.child = se._flightService.objSearch.child;
+            se._flightService.itemFlightCache.infant = se._flightService.objSearch.infant;
+            se._flightService.itemFlightCache.arrchild = se._flightService.objSearch.arrchild;
             if(se._flightService.itemFlightCache.isInternationalFlight){
               se.navCtrl.navigateForward("/flightsearchresultinternational");
             } else {
@@ -2054,6 +2161,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               se._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
               se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
               se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+              se._flightService.itemFlightCache.fromCountryCode = placeFrom[0].countryCode;
+                  se._flightService.itemFlightCache.toCountryCode = placeTo[0].countryCode;
+
               if(se._flightService.itemFlightCache.isInternationalFlight){
                 se.navCtrl.navigateForward("/flightsearchresultinternational");
               }else{
@@ -2590,18 +2700,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
         selectDot(idx,list){
           
           this.sliderInboundTab.slideTo(idx);
-          // if(list && list.length >0){
-          //   list.forEach(element => {
-          //     element.selected = false;
-          //   });
-          //   list[idx].selected = true;
-          // }
-          // this.tabInbound = idx+1;
-          // this.tabInbound =idx;
-          // let id = this.flighttype == 'oneway' ? 'item-slide-oneway-'+idx : 'item-slide-roundtrip-'+idx;
-          // setTimeout(()=> {
-          //   document.getElementById(id).scrollIntoView({  block: 'nearest', inline: 'nearest', behavior: 'smooth' });
-          // },300)
         }
 
         selectDotOutbound(itemchange, index, indextab){

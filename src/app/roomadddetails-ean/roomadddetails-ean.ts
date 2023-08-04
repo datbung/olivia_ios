@@ -1527,6 +1527,7 @@ export class RoomadddetailsEanPage implements OnInit {
             },
             body: {
                 RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
+                //RoomClassObj: se.booking.ListRoomClassObject,
                 CName: se.Roomif.hoten.trim(),
                 CEmail: se._email,
                 CPhone: se.Roomif.phone,
@@ -1847,6 +1848,7 @@ export class RoomadddetailsEanPage implements OnInit {
             },
             body: {
                 RoomClassObj: se.jsonroom.RoomClasses[0].ListObjRoomClass,
+                //RoomClassObj: se.booking.ListRoomClassObject,
                 CName: se.Roomif.hoten.trim(),
                 CEmail: se.booking.CEmail,
                 CPhone: se.Roomif.phone,

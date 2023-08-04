@@ -55,6 +55,7 @@ export class TourDetailPage {
   itemlike=false;
   TourIDLike: string;
   dataListLike: any;
+  isChangeItemHeader: any;
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -146,24 +147,27 @@ export class TourDetailPage {
                             if(data2 && data2.Status == 'Success'){
                             let lstDepartures = JSON.parse(data2.Response);
                             this.tourService.calendarDeparture=JSON.parse(data2.Response);
-                            //console.log(lstDepartures);
+                            //console.log('list calendar departure')
+                            //console.log(this.tourService.calendarDeparture);
                             this.listDepartureDate=[];
                             lstDepartures.forEach(element => {
                               let _item = {
                                 AllotmentDateStr: `${moment(element.AllotmentDate).format('DD/MM/YYYY')}`,
                                 PriceAdultAvgStr: this.gf.convertNumberToString(element.PriceAdultAvg),
                                 PriceChildAvgStr: element.PriceChildAvg ? this.gf.convertNumberToString(element.PriceChildAvg) : 0,
-                                IsMinPrice: Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) == element.PriceAdultAvg && Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) != Math.max(...lstDepartures.map(o => o.PriceAdultAvg)),
+                                IsMinPrice: Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) == element.PriceAdultAvg && (Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) != Math.max(...lstDepartures.map(o => o.PriceAdultAvg))|| Math.min(...lstDepartures.map(o => o.PriceAdultAvg)) == Math.max(...lstDepartures.map(o => o.PriceAdultAvg))),
+                                IsMaxPrice: Math.max(...lstDepartures.map(o => o.PriceAdultAvg)) == element.PriceAdultAvg && Math.max(...lstDepartures.map(o => o.PriceAdultAvg)) == Math.max(...lstDepartures.map(o => o.PriceAdultAvg)) && Math.max(...lstDepartures.map(o => o.PriceAdultAvg)) != Math.min(...lstDepartures.map(o => o.PriceAdultAvg)),
                                 AllotmentDateDisplay: moment(element.AllotmentDate).format('DD-MM-YYYY'),
                                 PriceAdultAvg: element.PriceAdultAvg,
                                 PriceChildAvg: element.PriceChildAvg || 0,
                                 DepartureDate: moment(element.AllotmentDate).format('YYYY-MM-DD'),
                                 DayDisplay: this.gf.getDayOfWeek(element.AllotmentDate).dayname,
-                                AllotmentDisplay: element.Status == 'RQ' ? 'Liên hệ' : `Còn ${element.AllotmentNo} chỗ`,
+                                AllotmentDisplay: element.Status == 'RQ' ? 'Liên hệ' : (element.AllotmentNo > 0 ? `Còn ${element.AllotmentNo} chỗ` : 'Đã hết chỗ'),
                                 Status: element.Status == 'AL' ? true : false
                               }
                               this.listDepartureDate.push(_item);
                             });
+                            console.log(this.listDepartureDate);
                             this.tourService.departures = [];
                             this.tourService.departures = this.listDepartureDate.map(o => o.DepartureDate);
                             this.tourService.departuresItemList = this.listDepartureDate;
@@ -367,7 +371,10 @@ export class TourDetailPage {
               elheader[1].classList.add('float-arrow-enabled');
               elheader[1].classList.remove('float-arrow-disabled');
             }
-            document.getElementById('header1').scrollIntoView({  block: 'center'  });
+            if(!this.isChangeItemHeader){
+              document.getElementById('header1').scrollIntoView({  block: 'center'  });
+            }
+            
           }
           else {
             elheader[0].classList.add('float-arrow-disabled');
@@ -381,61 +388,83 @@ export class TourDetailPage {
           if ($('#content2') && $('#content2').length >0 && event.detail.currentY >= $('#content2')[0].offsetTop - 120) {
             $($('.item-tour-header')[1]).siblings().removeClass('item-header-actived');
             $($('.item-tour-header')[1]).addClass('item-header-actived');
-            document.getElementById('header2').scrollIntoView({  block: 'center'  });
+            if(!this.isChangeItemHeader){
+              document.getElementById('header2').scrollIntoView({  block: 'center'  });
+            }
 
             if ($('#content3') && $('#content3').length >0&& event.detail.currentY >= $('#content3')[0].offsetTop - 120) {
               $($('.item-tour-header')[2]).siblings().removeClass('item-header-actived');
               $($('.item-tour-header')[2]).addClass('item-header-actived');
-              document.getElementById('header3').scrollIntoView({  block: 'center'  });
+              if(!this.isChangeItemHeader){
+                document.getElementById('header3').scrollIntoView({  block: 'center'  });
+              }
             }else if ($('#content3') && $('#content3').length >0 && $('#content2').length >0 && event.detail.currentY < $('#content3')[0].offsetTop - 120 && event.detail.currentY > $('#content2')[0].offsetTop - 120){
               $($('.item-tour-header')[1]).siblings().removeClass('item-header-actived');
               $($('.item-tour-header')[1]).addClass('item-header-actived');
-              document.getElementById('header2').scrollIntoView({  block: 'center'  });
+              if(!this.isChangeItemHeader){
+                document.getElementById('header2').scrollIntoView({  block: 'center'  });
+              }
             }
 
               if ($('#content4') && $('#content4').length >0&& event.detail.currentY >= $('#content4')[0].offsetTop - 120) {
                 $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[3]).addClass('item-header-actived');
-                document.getElementById('header4').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header4').scrollIntoView({  block: 'center'  });
+                }
               }else if ($('#content4') && $('#content4').length >0 && $('#content3').length >0 && event.detail.currentY < $('#content4')[0].offsetTop - 120 && event.detail.currentY > $('#content3')[0].offsetTop - 120){
                 $($('.item-tour-header')[2]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[2]).addClass('item-header-actived');
-                document.getElementById('header3').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header3').scrollIntoView({  block: 'center'  });
+                }
               }
     
               if ($('#content5') && $('#content5').length >0&& event.detail.currentY >= $('#content5')[0].offsetTop - 120) {
                 $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[4]).addClass('item-header-actived');
-                document.getElementById('header5').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header5').scrollIntoView({  block: 'center'  });
+                }
               }else if ($('#content5') && $('#content5').length >0 && $('#content4').length >0 && event.detail.currentY < $('#content5')[0].offsetTop - 120 && event.detail.currentY > $('#content4')[0].offsetTop - 120){
                 $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[3]).addClass('item-header-actived');
-                document.getElementById('header4').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header4').scrollIntoView({  block: 'center'  });
+                }
               }
     
               if ($('#content6') && $('#content6').length >0&& event.detail.currentY >= $('#content6')[0].offsetTop - 120) {
                 $($('.item-tour-header')[5]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[5]).addClass('item-header-actived');
-                document.getElementById('header6').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header6').scrollIntoView({  block: 'center'  });
+                }
               }else if ($('#content6') && $('#content6').length >0 && $('#content5').length >0&& event.detail.currentY < $('#content6')[0].offsetTop - 120 && event.detail.currentY > $('#content5')[0].offsetTop - 120){
                 $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[4]).addClass('item-header-actived');
-                document.getElementById('header5').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header5').scrollIntoView({  block: 'center'  });
+                }
               }
 
               if ($('#divReview') && $('#divReview').length >0&& event.detail.currentY >= $('#divReview')[0].offsetTop - 120) {
                 $($('.item-tour-header')[6]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[6]).addClass('item-header-actived');
-                document.getElementById('header7').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header7').scrollIntoView({  block: 'center'  });
+                }
               }else if ($('#divReview') && $('#divReview').length >0 && $('#content6').length >0&& event.detail.currentY < $('#divReview')[0].offsetTop - 120 && event.detail.currentY > $('#content6')[0].offsetTop - 120){
                 $($('.item-tour-header')[5]).siblings().removeClass('item-header-actived');
                 $($('.item-tour-header')[5]).addClass('item-header-actived');
-                document.getElementById('header6').scrollIntoView({  block: 'center'  });
+                if(!this.isChangeItemHeader){
+                  document.getElementById('header6').scrollIntoView({  block: 'center'  });
+                }
               }
 
           }else {
-            $($('.item-tour-header')[0]).siblings().removeClass('item-header-actived');
-            $($('.item-tour-header')[0]).addClass('item-header-actived');
+              $($('.item-tour-header')[0]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[0]).addClass('item-header-actived');
           }
 
           
@@ -461,7 +490,14 @@ export class TourDetailPage {
                 $('#header'+index).animate({'scrollLeft': $('#header'+index).position().left + 220}, 500);
                 //this.scrollYArea.scrollToPoint(0, $('#content'+index).position().top +50, 350);
                 if($('#content'+index) && $('#content'+index).length >0){
-                  document.getElementById('content'+index).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+                  this.isChangeItemHeader = true;
+                  setTimeout(()=>{
+                    document.getElementById('content'+index).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+                  },300)
+                  
+                  setTimeout(()=>{
+                    this.isChangeItemHeader = false;
+                  },2000)
                 }
                 
               }else{
@@ -499,7 +535,6 @@ export class TourDetailPage {
           return;
         }
         this.tourService.itemDetail = this.itemDetail;
-       
         this.navCtrl.navigateForward('/tourdeparturecalendar');
       
       }

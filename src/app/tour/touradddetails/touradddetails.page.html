@@ -159,19 +159,19 @@
         </div>
 
         <ion-row style="margin-left: -5px">
-          <ion-col size="12">
+          <ion-col size="12" class="no-padding">
             <ion-item style="--padding-start: 0px">
               <ion-label class="label-input-order" position="floating">Tên công ty</ion-label>
               <ion-input class="label-input" [(ngModel)]="companyname" type="text" required></ion-input>
             </ion-item>
           </ion-col>
-          <ion-col size="12">
+          <ion-col size="12" class="no-padding">
             <ion-item style="--padding-start: 0px">
               <ion-label class="label-input-order" position="floating">Địa chỉ</ion-label>
               <ion-input class="label-input" [(ngModel)]="address" type="text" required></ion-input>
             </ion-item>
           </ion-col>
-          <ion-col size="12">
+          <ion-col size="12" class="no-padding">
             <ion-item style="--padding-start: 0px">
               <ion-label class="label-input-order" position="floating">Mã số thuế</ion-label>
               <ion-input class="label-input" [(ngModel)]="tax" type="text" required></ion-input>
@@ -180,13 +180,13 @@
         </ion-row>
         
         <div *ngIf="!ishideNameMail">
-          <ion-col size="12">
+          <ion-col size="12" class="no-padding">
             <ion-item style="--padding-start: 0px">
               <ion-label class="cls-label" position="floating">Họ tên</ion-label>
               <ion-input class="label-input" [(ngModel)]="hotenhddt" type="text" required></ion-input>
             </ion-item>
           </ion-col>
-          <ion-col size="12">
+          <ion-col size="12" class="no-padding">
             <ion-item style="--padding-start: 0px">
               <ion-label class="cls-label" position="floating">Email nhận hóa đơn</ion-label>
               <ion-input class="label-input" [(ngModel)]="emailhddt" type="text" required></ion-input>

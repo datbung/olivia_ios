@@ -38,7 +38,7 @@
       </div>
       <div *ngIf="trip.booking_type != 'TOUR' else bookingtourdetail">
         <!-- bkg VMBQT -->
-        <div *ngIf="trip.isBookingVMBQT else otherbooking">
+        <div *ngIf="(trip.isBookingVMBQT && trip.isTravelPort) else otherbooking">
           <div class="d-flex">
             <div class="flight-info">
               <div class="div-datetime">{{cindisplay}}</div>
@@ -463,7 +463,7 @@
                       </div>
                       <div class="d-flex m-left-4">
                         <img class="m-top-7" src="./assets/imgs/ic_handbag.svg" />
-                        <div class="text-info font-weight-500 m-left-4 witdh-40">{{baggageHandedDepart}}</div>
+                        <div class="text-info font-weight-500 m-left-4 witdh-70">{{baggageHandedDepart}}</div>
                       </div>
                       <div *ngIf="luggageSignedDepart" class="d-flex m-left-4">
                         <img class="m-top-7" src="./assets/imgs/ic_airdrop.svg" />
@@ -491,7 +491,7 @@
 
                       <div class="d-flex m-left-4">
                         <img class="m-top-7" src="./assets/imgs/ic_handbag.svg" />
-                        <div class="text-info font-weight-500 m-left-4 witdh-40">{{baggageHandedReturn}}</div>
+                        <div class="text-info font-weight-500 m-left-4 witdh-70">{{baggageHandedReturn}}</div>
                       </div>
                       <div
                         *ngIf="trip.bookingsComboData[1].passengers[idx].hanhLyshow && trip.bookingsComboData[1].passengers[idx].hanhLyshow!='0'"
@@ -1223,10 +1223,10 @@
 
     </div>
     <!-- Booking Flight -->
-    <div [ngClass]="!trip.isBookingVMBQT ? 'div-flighttrip m-l-8' : 'div-flighttrip'"
+    <div [ngClass]="!(trip.isBookingVMBQT && trip.isTravelPort) ? 'div-flighttrip m-l-8' : 'div-flighttrip'"
       *ngIf="!trip.isRequestTrip && trip.isFlyBooking">
       <!-- bkg VMBQT -->
-      <div class="div-VMBQT div-flybooking div-detail-booking" *ngIf="trip.isBookingVMBQT else otherbooking">
+      <div class="div-VMBQT div-flybooking div-detail-booking" *ngIf="(trip.isBookingVMBQT && trip.isTravelPort) else otherbooking">
 
         <div class="div-waiting-payment"
           *ngIf="!(trip.payment_status == 1 || trip.payment_status == 5) && trip.delivery_payment_date_display">
@@ -1330,6 +1330,14 @@
               <div class="text-normal text-align-right">{{gf.convertNumberToString(totalCost)}} VND</div>
             </div>
           </div>
+          <div class="d-flex m-top-8" *ngIf="trip.payment_fee">
+            <div class="text-info">
+              Phí tiện ích
+            </div>
+            <div class="position-absolute text-info">
+              {{gf.convertNumberToString(trip.payment_fee)}} VND
+            </div>
+          </div>
           <div class="div-line-total"></div>
           <div class="d-flex m-top-8"
             *ngIf="trip.promotionDiscountAmount&&trip.promotionDiscountAmount>0 && trip.ivivu_point>0">
@@ -1357,6 +1365,7 @@
               {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
             </div>
           </div>
+          
 
           <div class="d-flex m-top-8">
             <div class="div-width-150">
@@ -1732,21 +1741,21 @@
               </div>
             </div>
             <div
-              *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl"
+              *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5) "
               class="div-line-total"></div>
             <div
-              *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl"
+              *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5) "
               class="d-flex div-checkin-online-detail padding-bottom-20">
 
               <div class="div-text-checkin-online font-weight-500">Yêu cầu Checkin-Online</div>
-              <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1"
+              <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1|| trip.ischeckinOnl"
                   (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
               </div>
             </div>
             <div
-              *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingjson[0].RequestCheckin==1"
+              *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT) && (trip.payment_status == 1 || trip.payment_status == 5)"
               class="text-note margin-16-detail">
-              * Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến
+              {{trip.textCheckinOnline}}
             </div>
 
             <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="div-line-total"></div>
@@ -2259,7 +2268,7 @@
                         </div>
                         <div class="d-flex m-left-4 m-top-13-5">
                           <img src="./assets/imgs/ic_handbag.svg" />
-                          <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">
+                          <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">
                             {{baggageHandedDepart}}</div>
                         </div>
                           <div *ngIf="pax.hanhLyshow && pax.hanhLyshow!='0'" class="d-flex m-left-4">
@@ -2285,7 +2294,7 @@
                         </div>
                         <div class="d-flex m-left-4 m-top-13-5">
                           <img src="./assets/imgs/ic_handbag.svg" />
-                          <div class="text-info font-weight-500 m-left-4 witdh-40 align-self-end ">
+                          <div class="text-info font-weight-500 m-left-4 witdh-70 align-self-end ">
                             {{baggageHandedReturn}}</div>
                         </div>
                         <div
@@ -2813,6 +2822,14 @@
                       {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
                     </div>
                   </div>
+                  <div class="d-flex m-top-8" *ngIf="trip.payment_fee">
+                    <div class="text-info">
+                      Phí tiện ích
+                    </div>
+                    <div class="position-absolute text-info">
+                      {{gf.convertNumberToString(trip.payment_fee)}} VND
+                    </div>
+                  </div>
                   <div class="div-split"></div>
                   <div class="d-flex m-top-8">
                     <div class="text-info d-flex">
@@ -2855,12 +2872,12 @@
     </div>
 
     <div
-      *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)">
+      *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) &&trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)">
       <div class="div-split-panel"></div>
       <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
     </div>
     <div class=""
-      *ngIf="!trip.isBookingVMBQT &&trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)">
+      *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) &&trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)">
       <div class="div-split-panel"></div>
       <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
         <div class="div-payment-combo-flight">
@@ -3092,7 +3109,7 @@
                 - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedDepart}}</span>
               </div>
               <div class="text-info" *ngIf="luggageSignedDepart">
-                - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}kg</span>
+                - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}<span *ngIf="luggageSignedDepart.indexOf('kg') ==-1">kg</span></span>
               </div>
               <div class="text-info" *ngIf="!luggageSignedDepart">
                 - Hành lý ký gửi: <span class="font-weight-600">0kg</span>
@@ -3335,7 +3352,7 @@
       </div>
     </div>
     <!-- case VMB -->
-    <div class="mt16  m-l-8" *ngIf="!trip.isRequestTrip && trip.isFlyBooking && !trip.isBookingVMBQT">
+    <div class="mt16  m-l-8" *ngIf="!trip.isRequestTrip && trip.isFlyBooking && !(trip.isBookingVMBQT && trip.isTravelPort)">
       <div (click)="dkv()" class="d-flex">
         <div class="text-info-2 font-weight-500">
           Điều kiện vé
@@ -3383,7 +3400,7 @@
               - Hành lý xách tay: <span class="font-weight-600">{{baggageHandedDepart}}</span>
             </div>
             <div class="text-info" *ngIf="luggageSignedDepart">
-              - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}kg</span>
+              - Hành lý ký gửi: <span class="font-weight-600">{{luggageSignedDepart}}<span *ngIf="luggageSignedDepart.indexOf('kg') ==-1">kg</span></span>
             </div>
             <div class="text-info" *ngIf="!luggageSignedDepart">
               - Hành lý ký gửi: <span class="font-weight-600">0kg</span>
@@ -3586,12 +3603,12 @@
       <div class="div-panel-1px"></div>
     </div>
 
-    <div  class="d-flex m-l-8  m-top-16 padding-bottom-20"
-      *ngIf="!trip.isBookingVMBQT && trip.booking_type != 'TOUR' ">
+    <div  class="d-flex m-l-8  m-top-16 padding-bottom-20"  (click)="nextSupport(trip)"
+      *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.booking_type != 'TOUR' ">
       <div class="text-info-2 font-weight-500">
         Liên hệ hỗ trợ
       </div>
-      <div (click)="nextSupport(trip)" *ngIf="trip.booking_type != 'TICKET'" class="position-absolute">
+      <div *ngIf="trip.booking_type != 'TICKET'" class="position-absolute">
         <img src="./assets/imgs/ic_expand.svg" />
       </div>
       <a *ngIf="trip.booking_type == 'TICKET'"  href="https://zalo.me/3888313238733373810" class="position-absolute">
@@ -3599,20 +3616,20 @@
       </a>
     </div>
     <div
-      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl"
+      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"
       class="div-panel-1px"></div>
     <div
-      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.ischeckinOnl"
+      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"
       class="d-flex div-checkin-online-detail padding-bottom-20">
 
       <div class="div-text-checkin-online font-weight-500">Yêu cầu Checkin-Online</div>
-      <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1"
+      <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1|| trip.ischeckinOnl"
           (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
     </div>
     <div
-      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !trip.isBookingVMBQT && (trip.payment_status == 1 || trip.payment_status == 5) && trip.bookingjson[0].RequestCheckin==1"
+      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"
       class="text-note margin-16-detail padding-bottom-20">
-      * Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến
+      {{trip.textCheckinOnline}}
     </div>
     <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="div-panel-1px"></div>
     <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline"
