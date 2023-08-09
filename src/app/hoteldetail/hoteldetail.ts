@@ -2096,44 +2096,6 @@ async getdataroom() {
     }
     self.formParam = form;
   
-    // if(se.activityService.HotelSearchReqContract && key == se.activityService.HotelSearchReqContract.id ){
-    //   let result = se.activityService.HotelSearchReqContract.value;
-    //   se.excuteLoadHotelRoom(result);
-    // }else{
-    //   options = {
-    //     method: 'POST',
-    //     url: C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2',
-    //     timeout: 10000, maxAttempts: 3, retryDelay: 10000,
-    //     headers:
-    //       {},
-    //     form
-    //   };
-    //   request(options, function (error, response, body) {
-    //     if (response.statusCode != 200) {
-    //       var objError = {
-    //         page: "hoteldetail",
-    //         func: "getdataroom",
-    //         message: response.statusMessage,
-    //         content: response.body,
-    //         type: "warning",
-    //         param: JSON.stringify(options)
-    //       };
-    //       C.writeErrorLog(objError,response);
-    //       se.loadcomplete = true;
-    //       se.loadpricecombodone = true;
-    //     }
-    //     if (error) {
-    //       error.page = "hoteldetail";
-    //       error.func = "getdataroom";
-    //       error.param = JSON.stringify(options);
-    //       C.writeErrorLog(error,response);
-    //       se.loadcomplete = true;
-    //       se.loadpricecombodone = true;
-    //     };
-    //       var result = JSON.parse(body);
-    //       se.excuteLoadHotelRoom(result);
-    //   })
-    // }
     let body = `CheckInDate=${moment(se.cin).format('YYYY-MM-DD')}&CheckOutDate=${moment(se.cout).format('YYYY-MM-DD')}&CityID=''&CountryID=''`
       +`&HotelID=${se.HotelID}&IsLeadingPrice=1&IsPackageRate=false&NationalityID=82&ReferenceClient=''&RoomNumber=${se.room}&RoomsRequest[0].RoomIndex=1`
       +`&Supplier='IVIVU'&dataKey=''&RoomsRequest[0][Adults][value]=${se.adults ? se.adults : "2"}&RoomsRequest[0][Child][value]=${se.child ? se.child : "0"}&IsFenced=${se.loginuser && se.isShowPrice ? true : false}`
@@ -2144,18 +2106,25 @@ async getdataroom() {
           body += `&RoomsRequest[0][AgeChilds][${i}][value]=${se.searchhotel.arrchild[i].numage}`;
         }
       }
-      //this.formParam = form;
-      //this.formParam = body;
       let strUrl = C.urls.baseUrl.urlContracting + '/api/contracting/HotelSearchReqContractAppV2';
       let headers = {'content-type' : 'application/x-www-form-urlencoded', accept: '*/*'};
-      this._hotelDetailContractPrice =  this._hotelDetailService.loadHotelDetailContractPrice(strUrl, headers, body).pipe(shareReplay());
-      this._hotelDetailContractPrice.subscribe(data => {
-        se.activityService.HotelSearchReqContract = { id: key, value: {...data}, formParam: form};
-        setTimeout(()=>{
-          se.activityService.HotelSearchReqContract = null;
-        }, 1000 * 60 * 5)
-        se.excuteLoadHotelRoom(data);
-      })
+      try {
+        this._hotelDetailContractPrice =  this._hotelDetailService.loadHotelDetailContractPrice(strUrl, headers, body).pipe(shareReplay());
+        this._hotelDetailContractPrice.subscribe(data => {
+          if(data){
+            se.activityService.HotelSearchReqContract = { id: key, value: {...data}, formParam: form};
+            setTimeout(()=>{
+              se.activityService.HotelSearchReqContract = null;
+            }, 1000 * 60 * 5)
+            se.excuteLoadHotelRoom(data);
+          }else{
+            se.activityService.HotelSearchReqContract = null;
+          }
+        })
+      } catch (error) {
+        se.activityService.HotelSearchReqContract = null;
+      }
+      
   }
   
 }

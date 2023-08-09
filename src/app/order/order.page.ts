@@ -1719,35 +1719,34 @@ export class OrderPage {
                   let daytemp=temp[2]+ temp[1] + temp[0];
                   var dep = moment(daytemp+ " " + element.bookingsComboData[0].departureTime, "YYYYMMDD HH:mm")
                   let _time = moment(dep).diff(new Date(), 'minutes');
-                  // if (diffminutes <= 210) {
-                  //   this.zone.run(() => {
-                  //     element.bookingjson[0].RequestCheckin=0;
-                  //     element.ischeckinOnl=true;
-                  
-                  //   })
-                  // }
+               
                   //pdanh 02-08-2023: Thêm valid checkin online
+                  //pdanh 07-08-2023: Sửa lại lấy từ thông tin load api
                    //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
                    //Nếu _time > 24 tiếng => cho phép chọn checkin online
                    this.zone.run(() => {
-                    if(_time > 24*60){
-                      element.ischeckinOnl = false;
-                      element.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
-                    }
-                    //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
-                    else if(24*60 > _time && _time > 4*60){
-                      element.ischeckinOnl = true;
-                      element.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
-                    }
-                    //Nếu _time <= 4: Ẩn nút YC Checkin online
-                    else if(_time <=4*60){
-                      element.ischeckinOnl = true;
-                      element.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+                    // if(_time > 24*60){
+                    //   element.ischeckinOnl = false;
+                    //   element.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
+                    // }
+                    // //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
+                    // else if(24*60 > _time && _time > 4*60){
+                    //   element.ischeckinOnl = true;
+                    //   element.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
+                    // }
+                    // //Nếu _time <= 4: Ẩn nút YC Checkin online
+                    // else if(_time <=4*60){
+                    //   element.ischeckinOnl = true;
+                    //   element.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+                    // }
+                    if(element.allowRequestCheckinOnline){
+                      element.ischeckinOnl = !element.allowRequestCheckinOnline.allowCheckin;
+                      element.textCheckinOnline = element.allowRequestCheckinOnline.note;
                     }
                   })
 
                  if(element.isBookingVMBQT && element.bookingJsonDataParse && element.bookingJsonDataParse.length >0){
-                  element.ischeckinOnl = false;
+                  //element.ischeckinOnl = false;
                   let d = element.bookingJsonDataParse[0].departureDateParse;
                   let dr = element.bookingJsonDataParse.length ==1 ? element.bookingJsonDataParse[0].arrivalDateParse : element.bookingJsonDataParse[element.bookingJsonDataParse.length-1].departureDateParse;
                   element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format('DD-MM-YYYY');
@@ -2241,7 +2240,8 @@ export class OrderPage {
           if (se.listMyTrips && se.listMyTrips.length == 1 && !(se.listMyTrips[0].pay_method == 3 || se.listMyTrips[0].pay_method == 51 || se.listMyTrips[0].pay_method == 2)) {
             se.buildLinkQrCode(se.listMyTrips[0]);
           }
-
+          console.log('rq xxxxx')
+          console.log(se.listMyTrips[0].bookingjson[0].RequestCheckin)
           se.zone.run(() => {
             se.hasloaddata = true;
             se.hasdata = true;

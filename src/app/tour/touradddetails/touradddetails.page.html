@@ -213,7 +213,7 @@
   </div>
   <div class="div-touradddetail-footer d-flex">
     <div class="width-60 div-footer-left" *ngIf="tourService.hasAllotment">
-        <div class="text-normal-footer"><span *ngIf="searchhotel.adult">{{searchhotel.adult}} người lớn</span><span *ngIf="searchhotel.child">, {{searchhotel.child}} trẻ em</span><span *ngIf="ischeck && tourService.paymentType == 1"> (+VAT)</span></div>
+        <div class="text-normal-footer"><span *ngIf="tourService.adult">{{tourService.adult}} người lớn</span><span *ngIf="tourService.child">, {{tourService.child}} trẻ em</span><span *ngIf="ischeck && tourService.paymentType == 1"> (+VAT)</span></div>
         <div *ngIf="!tourService.discountPrice && !ischeckpoint && !tourService.promocode"><span class="text-price-footer">{{totalPriceStr}}</span><span class="text-price-sub">đ</span></div>
         <div *ngIf="tourService.discountPrice >=0 && (tourService.promocode || (ischeckpoint && point >0) )">
           <div class="text-price-strike-footer" *ngIf="tourService.totalPriceBeforeDiscount"><span >{{gf.convertNumberToString(tourService.totalPriceBeforeDiscount)}}đ</span></div>

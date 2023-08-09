@@ -23,7 +23,7 @@ export class FlightTopReviewListPage implements OnInit {
   numOfReview: any;
   listflighttopreview: any=[];
   page: any=1;
-  pageSize: any=20;
+  pageSize: any=102;
   numOfReviewRemain: number;
   listImages=[];
   
@@ -53,46 +53,54 @@ export class FlightTopReviewListPage implements OnInit {
           this._flightService.typeFlightUsefulShow = 1;
             this.navCtrl.back();
         }
+
+        executeLoadData(data){
+          if(data && data.reviews){
+              data.reviews.forEach(element => {
+                element.reviewDateDisplay = moment(element.reviewDate).format("DD/MM/YYYY");
+                if(element.replyDate){
+                  element.replyDateDisplay = moment(element.replyDate).format("DD/MM/YYYY");
+                }
+              });
+
+            this.valueGlobal.flightAvgPoint = data.avgPoint.toFixed(1).replace(/\./g,',');
+            this.avgPoint = data.avgPoint.toFixed(1).replace(/\./g,',');
+            this.numOfReview = this.gf.convertNumberToString(data.total);
+            if(this.listflighttopreview && this.listflighttopreview.length ==0){
+              this.listflighttopreview = data.reviews;
+            }else{
+              this.listflighttopreview = [...this.listflighttopreview,...data.reviews];
+            }
+
+            this.numOfReviewRemain = this.numOfReview - this.listflighttopreview.length;
+            if(this._flightService.itemReview){
+              setTimeout(()=>{
+                document.getElementById(this._flightService.itemReview.reviewId).scrollIntoView({  block: 'center', behavior: 'smooth' });
+              },300)
+            }
+            this.gf.hideLoading();
+          }
+        }
         
         loadDataFlightTopReviews(){
-          let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetReviewFlights?pageIndex=${this.page}&pageSize=${this.pageSize}`;
-          this.gf.RequestApi("GET", url, {
-              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
-              'Content-Type': 'application/json; charset=utf-8'
-              }, {}, "homeflight", "GetSlideHome").then((data) =>{
-                if(data && data.reviews){
-                    data.reviews.forEach(element => {
-                      element.reviewDateDisplay = moment(element.reviewDate).format("DD/MM/YYYY");
-                      if(element.replyDate){
-                        element.replyDateDisplay = moment(element.replyDate).format("DD/MM/YYYY");
-                      }
-                    });
-                    // this.zone.run(() => data.reviews.sort(function (a, b) {
-                    //   return a.bestFeature ? -1 : (b.bestFeature ? -1 : 1);
-                    // }))
-
-                  this.valueGlobal.flightAvgPoint = data.avgPoint.toFixed(1);
-                  this.avgPoint = data.avgPoint.toFixed(1);
-                  this.numOfReview = data.total;
-                  if(this.listflighttopreview && this.listflighttopreview.length ==0){
-                    this.listflighttopreview = data.reviews;
-                  }else{
-                    this.listflighttopreview = [...this.listflighttopreview,...data.reviews];
-                  }
-
-                  this.numOfReviewRemain = this.numOfReview - this.listflighttopreview.length;
-                  if(this._flightService.itemReview){
-                    setTimeout(()=>{
-                      document.getElementById(this._flightService.itemReview.reviewId).scrollIntoView({  block: 'center', behavior: 'smooth' });
-                    },300)
-                  }
-                  this.gf.hideLoading();
-                }
-              })
+          if(this._flightService.listTopReviews){
+            let data = this._flightService.listTopReviews;
+            this.page = this._flightService.listTopReviews.reviews.length/102 || 1;
+            this.executeLoadData(data);
+          }else{
+            let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetReviewFlights?pageIndex=${this.page}&pageSize=${this.pageSize}&nocache=true`;
+            this.gf.RequestApi("GET", url, {
+                "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                'Content-Type': 'application/json; charset=utf-8'
+                }, {}, "homeflight", "GetSlideHome").then((data) =>{
+                  this.executeLoadData(data);
+                })
+          }
+          
       }
 
       loadImageTopReviews(){
-        let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetReviewFlights?pageIndex=${this.page}&pageSize=1000`;
+        let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetReviewFlights?pageIndex=1&pageSize=1000`;
         this.gf.RequestApi("GET", url, {
             "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
             'Content-Type': 'application/json; charset=utf-8'
@@ -114,10 +122,19 @@ export class FlightTopReviewListPage implements OnInit {
               }
             })
     }
+    loadMoreDataFlightTopReviews() {
+      let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetReviewFlights?pageIndex=${this.page}&pageSize=${this.pageSize}&nocache=true`;
+      this.gf.RequestApi("GET", url, {
+          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+          'Content-Type': 'application/json; charset=utf-8'
+          }, {}, "homeflight", "GetSlideHome").then((data) =>{
+            this.executeLoadData(data);
+          })
+    }
       showMoreReview(){
         this.page +=1;
         this.gf.showLoading();
-        this.loadDataFlightTopReviews();
+        this.loadMoreDataFlightTopReviews();
       }
 
       async imgreview(arrimgreview, indeximgreview,CustomerName,DateStayed,type) {

@@ -738,17 +738,17 @@
                       </div>
                       <div class="div-line-total"></div>
 
-                      <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT) && (trip.payment_status == 1 || trip.payment_status == 5)" class="d-flex h-36" >
+                      <div *ngIf="trip.bookingjson && (trip.payment_status == 1 || trip.payment_status == 5)" class="d-flex h-36" >
                         <div class="div-width-250 v-align-center">
                             <div class="text-title font-weight-500">Yêu cầu Checkin-Online</div>
                         </div>
                         <div class="div-width-50 v-align-center">
                             <div  class="div-flex-end">
-                              <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" checked="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
+                              <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                             </div>
                         </div>
                       </div>
-                      <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT) && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.hadCheckinOnline && trip.textCheckinOnline" class="text-note margin-16-one">
+                      <div *ngIf="trip.bookingjson && (trip.payment_status == 1 || trip.payment_status == 5) && !trip.hadCheckinOnline && trip.textCheckinOnline" class="text-note">
                         {{trip.textCheckinOnline}} 
                     </div>
                        <!-- Checkin online -->
@@ -3480,7 +3480,7 @@
                       </div>
                     </div>
                     <div  class="div-panel-1px" *ngIf="trip.booking_type != 'TOUR'"></div>
-                    <div  class="d-flex m-l-16 div-checkin-online-2" *ngIf="trip.booking_type != 'TOUR' && !trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)">
+                    <div  class="d-flex m-l-16 div-checkin-online-2" *ngIf="trip.booking_type != 'TOUR' && !trip.hadCheckinOnline && trip.bookingjson  && (trip.payment_status == 1 || trip.payment_status == 5)">
                       <div class="text-info-2 font-weight-500">
                         Yêu cầu Checkin-Online
                       </div>
@@ -3488,7 +3488,7 @@
                         <ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle>
                       </div>
                     </div>
-                    <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)&& !trip.hadCheckinOnline && trip.textCheckinOnline" class="text-note margin-16">
+                    <div *ngIf="trip.bookingjson  && (trip.payment_status == 1 || trip.payment_status == 5)&& !trip.hadCheckinOnline && trip.textCheckinOnline" class="text-note margin-16">
                       {{trip.textCheckinOnline}} 
                   </div>
                      <!-- Checkin online -->
@@ -4012,13 +4012,13 @@
               
               </ion-item-group>
               <!-- <div class="div-split-listtrip"></div> -->
-              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"  class="div-line-new-1 m-0-16"></div>
-              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5) "  class="d-flex div-checkin-online-1">
+              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson  && (trip.payment_status == 1 || trip.payment_status == 5)"  class="div-line-new-1 m-0-16"></div>
+              <div *ngIf="!trip.hadCheckinOnline && trip.bookingjson  && (trip.payment_status == 1 || trip.payment_status == 5) "  class="d-flex div-checkin-online-1">
                
                 <div class="div-text-checkin-online">Yêu cầu Checkin-Online</div>
                 <div class="cls-toggle"><ion-toggle [disabled]="trip.bookingjson[0].RequestCheckin==1 || trip.ischeckinOnl" (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
               </div>
-              <div *ngIf="trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)  && !trip.hadCheckinOnline && trip.textCheckinOnline"  class="text-note margin-16">
+              <div *ngIf="trip.bookingjson  && (trip.payment_status == 1 || trip.payment_status == 5)  && !trip.hadCheckinOnline && trip.textCheckinOnline"  class="text-note margin-16">
                 {{trip.textCheckinOnline}} 
             </div>
           

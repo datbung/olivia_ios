@@ -208,6 +208,14 @@ export class FlightaddservicePage implements OnInit {
               }else{
                 this.loadHotelCityDone = true;
               }
+
+              if(dataBooking && dataBooking.allowRequestCheckinOnline){
+                this._flightService.itemFlightCache.allowCheckinOnline = dataBooking.allowRequestCheckinOnline.allowCheckin;
+                this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline.note;
+              }else{
+                this._flightService.itemFlightCache.allowCheckinOnline = false;
+                this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline && dataBooking.allowRequestCheckinOnline.note ? dataBooking.allowRequestCheckinOnline.note : '';
+              }
               this.gf.hideLoading();
             })    
 

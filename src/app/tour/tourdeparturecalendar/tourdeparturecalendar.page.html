@@ -52,7 +52,7 @@
 
               <div class="width-40 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(1)">-</div>
-                  <div class="div-item-center">{{searchhotel.adult}}</div>
+                  <div class="div-item-center">{{tourService.adult}}</div>
                   <div class="div-item-right f-32" (click)="addPax(1)">+</div>
               </div>
             </div>
@@ -63,7 +63,6 @@
               </div>
               <div class="text-price width-42" *ngIf="loaddeparturedone else loadingsk">
                 <span *ngIf="tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceChildAvgStr ">x {{tourService.itemDepartureCalendar.PriceChildAvgStr}}</span>
-                <!-- <span *ngIf="tourService.itemDepartureCalendar && !tourService.itemDepartureCalendar.PriceChildAvgStr">x 0</span> -->
               </div>
               <ng-template #loadingsk>
                 <div class="text-price width-42">
@@ -72,24 +71,27 @@
              </ng-template>
               <div class="width-40 d-flex div-item-pax">
                   <div class="div-item-left f-32" (click)="removePax(2)">-</div>
-                  <div class="div-item-center">{{searchhotel.child}}</div>
+                  <div class="div-item-center">{{tourService.child}}</div>
                   <div class="div-item-right f-32" (click)="addPax(2)">+</div>
               </div>
             </div>
-            <div class="p-top-20">
-              <label class="text-child-age" *ngIf="searchhotel.arrchild && searchhotel.arrchild.length >0">
-                  Tuổi trẻ em
-                </label>
-                <div *ngFor="let msg of searchhotel.arrchild; let idx = index" class="p-top-20">
-                  <div (click)="selectAge(msg.text)"  class="div-age no-border-bottom">
-                    <ion-label class="text-child">{{msg.text}}</ion-label>
-                    <div class="div-text-age">
-                      <ion-label class="selected-age p-right-8" *ngIf="msg.numage">{{msg.numage}}</ion-label>
-                      <ion-label class="selected-age p-right-8" *ngIf="msg.numage ==0">{{infant}}</ion-label>
-                      <img class="img-down" src="./assets/imgs/ic_down.svg"></div>
+            <div class="p-top-4">
+                <div [ngClass]="[3,6,9,12,15].indexOf(tourService.arrchild.length) != -1 ? 'div-wrap-child-age div-space-between' : 'div-wrap-child-age'" *ngIf="tourService.arrchild && tourService.arrchild.length >0">
+                  <div *ngFor="let msg of tourService.arrchild; let idx = index" [ngClass]=" [2,5,7,10,13].indexOf(idx) == -1 ?' m-right-8' : '' ">
+                    <div class="text-child-age">Tuổi trẻ em {{idx+1}}</div>
+                    <div (click)="selectAge(msg.text)" class="div-item-child-age no-border-bottom">
+                      <div class="selected-age" *ngIf="msg.numage">
+                        {{msg.numage}}
+                      </div>
+                      <div class="selected-age" *ngIf="msg.numage==0">{{infant}}</div>
+                      <div class="div-icon">
+                        <img class="img-down" src="./assets/ic_tour/chevron-down-grey.webp">
+                      </div>
+                    </div>
+              
                   </div>
-            
                 </div>
+                
             
             </div>
             <div *ngIf="hasDeparture">
@@ -99,10 +101,7 @@
                 <div class="width-60 text-tealish text-right"><span class="text-surcharge" *ngIf="itemDepartureCalendar.RateSurchargeAdult">+{{gf.convertNumberToString(itemDepartureCalendar.RateSurchargeAdult)}}</span><span>đ</span></div>
               </div>
 
-              <div [ngClass]="itemDepartureCalendar.Note ? 'd-flex div-total': 'd-flex div-total m-top-26'">
-                <div class="width-40 text-normal m-top-8">Tổng cộng</div>
-                <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPriceStr">{{totalPriceStr}}</span><span>đ</span></div>
-              </div>
+            
 
               <div class="div-point" *ngIf="point || pointbkg">
                 <span *ngIf="point">Bạn có {{ point }} điểm. </span>
@@ -142,7 +141,10 @@
               </ng-template>
             </div>
            
-            
+            <div [ngClass]="itemDepartureCalendar.Note ? 'd-flex div-total': 'd-flex div-total m-top-8'">
+              <div class="width-40 text-normal m-top-8">Tổng cộng</div>
+              <div class="width-60 text-right text-total-price"><span class="text-total" *ngIf="totalPriceStr">{{totalPriceStr}}</span><span>đ</span></div>
+            </div>
            
            
         </div>

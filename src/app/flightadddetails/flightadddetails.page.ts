@@ -181,30 +181,49 @@ export class FlightadddetailsPage implements OnInit {
             //se.gf.gaSetScreenName('flightadddetails');
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
-        this.checkAllowCheckinOnline();
+        this.zone.run(() => {
+          if(this._flightService.itemFlightCache.allowCheckinOnline){
+            this.allowCheckinOnline = this._flightService.itemFlightCache.allowCheckinOnline;
+            this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline;
+          }else{
+            this.allowCheckinOnline = false;
+            this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline||'';
+          }
+          
+        })
         
     }
     //pdanh 02-08-2023: Thêm rule valid checkin online
     checkAllowCheckinOnline(){
-      let _time = moment(this._flightService.itemFlightCache.departFlight.departTime).diff(new Date(), 'minutes');
-       //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
-       //Nếu _time > 24 tiếng => cho phép chọn checkin online
-       this.zone.run(() => {
-        if(_time > 24*60){
-          this.allowCheckinOnline = true;
-          this.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
-        }
-        //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
-        else if(24*60 > _time && _time > 4*60){
-          this.allowCheckinOnline = false;
-          this.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
-        }
-        //Nếu _time <= 4: Ẩn nút YC Checkin online
-        else if(_time <=4*60){
-          this.allowCheckinOnline = false;
-          this.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+      debugger
+      this.gf.getSummaryBooking(this._flightService.itemFlightCache).then((data)=>{
+        if(data && data.allowRequestCheckinOnline){
+          console.log(data);
+          this.zone.run(() => {
+            this.allowCheckinOnline = data.allowCheckin;
+            this.textCheckinOnline = data.allowRequestCheckinOnline.note;
+          })
         }
       })
+      // let _time = moment(this._flightService.itemFlightCache.departFlight.departTime).diff(new Date(), 'minutes');
+      //  //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
+      //  //Nếu _time > 24 tiếng => cho phép chọn checkin online
+      //  this.zone.run(() => {
+      //   if(_time > 24*60){
+      //     this.allowCheckinOnline = true;
+      //     this.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
+      //   }
+      //   //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
+      //   else if(24*60 > _time && _time > 4*60){
+      //     this.allowCheckinOnline = false;
+      //     this.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
+      //   }
+      //   //Nếu _time <= 4: Ẩn nút YC Checkin online
+      //   else if(_time <=4*60){
+      //     this.allowCheckinOnline = false;
+      //     this.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+      //   }
+      // })
     }
 
     ionViewDidEnter(){

@@ -2609,7 +2609,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               (error.param = JSON.stringify(options)), C.writeErrorLog(error,response);
             }
             var res=JSON.parse(body);
-            se.topSale=res.total;
+            se.topSale=se.gf.convertNumberToString(res.total);
             console.log(JSON.parse(body));
           });
         }

@@ -18,9 +18,10 @@
         <div  *ngIf="numOfReview"> | <span class="text-comment">{{numOfReview}} đánh giá</span></div>
       </div>
 
-      <div class="div-content-review m-top-24">
-        <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview" (click)="showReviewList(slide)">
-          <div class="d-flex">
+      <div class="div-content-review m-top-24" (scroll)="onScrollReviews($event)">
+        <div class="div-wrap-review-group" *ngFor="let slidegroup of listflighttopreviewgroup">
+          <div *ngFor="let slide of slidegroup.listflighttopreview" class="div-wrap-review-item"  (click)="showReviewList(slide)">
+            <div class="d-flex">
               <div class="div-avatar">
                 <img class="slide2 img" src="./assets/ic_flight/user_pic.jpg" />
               </div>
@@ -28,11 +29,13 @@
                 <div class="div-name">{{slide.customerName}}</div>
                 <div class="div-date">{{slide.reviewDateDisplay}}</div>
               </div>
+            </div>
+            <div class="m-top-14 div-text" *ngIf="slide.bestFeature">{{slide.bestFeature}}</div>
+            <div class="div-see-review"  *ngIf="slide.replyMessage">Xem phản hồi</div>
           </div>
-          <div class="m-top-14 div-text" *ngIf="slide.bestFeature">{{slide.bestFeature}}</div>
-          <div class="div-see-review"  *ngIf="slide.replyMessage">Xem phản hồi</div>
         </div>
 
+      
        
       </div>
       <div class="div-see-more m-top-16" (click)="showReviewList('')">

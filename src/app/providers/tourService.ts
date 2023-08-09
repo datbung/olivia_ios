@@ -29,6 +29,13 @@ export class tourService{
   gaTourDetail: any;
   gaPaymentType: string;
   calendarDeparture: any;
+  checkInDate: any;
+  datecin: any;
+  cindisplay: string;
+  cinthu: string;
+  adult: any;
+  child: any;
+  arrchild: any=[];
   
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);

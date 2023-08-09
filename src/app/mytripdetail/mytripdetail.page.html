@@ -3616,10 +3616,10 @@
       </a>
     </div>
     <div
-      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"
+      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && (trip.payment_status == 1 || trip.payment_status == 5)"
       class="div-panel-1px"></div>
     <div
-      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"
+      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && (trip.payment_status == 1 || trip.payment_status == 5)"
       class="d-flex div-checkin-online-detail padding-bottom-20">
 
       <div class="div-text-checkin-online font-weight-500">Yêu cầu Checkin-Online</div>
@@ -3627,7 +3627,7 @@
           (ionChange)="checkinOnline(trip)" [checked]="trip.bookingjson[0].RequestCheckin==1"></ion-toggle></div>
     </div>
     <div
-      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && !(trip.isBookingVMBQT ) && (trip.payment_status == 1 || trip.payment_status == 5)"
+      *ngIf="!trip.hadCheckinOnline && trip.bookingjson && (trip.payment_status == 1 || trip.payment_status == 5)"
       class="text-note margin-16-detail padding-bottom-20">
       {{trip.textCheckinOnline}}
     </div>

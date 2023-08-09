@@ -1,5 +1,5 @@
 import { Bookcombo, ValueGlobal } from './../../providers/book-service';
-import { Booking, RoomInfo, SearchHotel } from '../../providers/book-service';
+import { Booking, RoomInfo } from '../../providers/book-service';
 import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
 import { NavController, LoadingController, ToastController, Platform,AlertController } from '@ionic/angular';
 import { C } from '../../providers/constants';
@@ -37,7 +37,7 @@ export class TourPaymentAtmPage implements OnInit {
   sttbooking=0;
   phone: any;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,
-    public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
+    public Roomif: RoomInfo, public storage: Storage, public zone: NgZone,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
     private activatedRoute: ActivatedRoute,public activityService: ActivityService,public alertCtrl: AlertController,
     public valueGlobal: ValueGlobal,

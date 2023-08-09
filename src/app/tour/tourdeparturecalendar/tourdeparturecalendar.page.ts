@@ -1,4 +1,4 @@
-import { SearchHotel, ValueGlobal } from '../../providers/book-service';
+import { ValueGlobal } from '../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController, Events, Platform, ModalController, PickerController } from '@ionic/angular';
 import * as request from 'request';
@@ -39,15 +39,15 @@ export class TourDepartureCalendarPage implements OnInit {
   listCalendarPrice = [];
   AllotmentAvaiable: any;
   statusAllotment: any;
-  constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events: Events,
+  constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, private http: HttpClientModule, public events: Events,
     public gf: GlobalFunction, public modalCtrl: ModalController, private pickerController: PickerController, private storage: Storage,
     public tourService: tourService,
     public valueGlobal: ValueGlobal) {
-    if (!searchhotel.adult) {
-      searchhotel.adult = 2;
+    if (!tourService.adult) {
+      tourService.adult = 2;
     }
-    if (!searchhotel.child) {
-      searchhotel.child = 0;
+    if (!tourService.child) {
+      tourService.child = 0;
     }
     if (tourService.itemDepartureCalendar) {
       this.hasDeparture = true;
@@ -62,26 +62,7 @@ export class TourDepartureCalendarPage implements OnInit {
     this.GetUserInfo();
     
   }
-  // loadCalendarDeparture() {
-  //   var se = this;
-  //   let body = '{"Tourid":"' + this.tourService.tourDetailId + '","DepartureTime":"' + this.StrListDepartures + '"}'
-  //   var options = {
-  //     method: 'POST',
-  //     url: C.urls.baseUrl.urlGet + '/du-lich/Ajax/loadCalendarDeparture',
-  //     headers: {
-  //       'Content-Type': 'text/plain'
-  //     },
-  //     body
-  //   };
-  //   request(options, function (error, response) {
-  //     if (error) throw new Error(error);
-  //     se.calendarDeparture = JSON.parse(response.body);
-  //     se.calendarDeparture = JSON.parse(se.calendarDeparture);
-
-  //   });
-
-  // }
-
+ 
   ngOnInit() {
 
   }
@@ -92,16 +73,16 @@ export class TourDepartureCalendarPage implements OnInit {
       let body = {
         "TourId": se.tourService.tourDetailId,
         "date": moment(_date).format('YYYY-MM-DD'),
-        "adult": se.searchhotel.adult,
-        "child": se.searchhotel.child ? se.searchhotel.child : 0,
-        "childAges": se.searchhotel.child ? se.searchhotel.arrchild.map(c => c.numage).join(',') : ""
+        "adult": se.tourService.adult,
+        "child": se.tourService.child ? se.tourService.child : 0,
+        "childAges": se.tourService.child ? se.tourService.arrchild.map(c => c.numage).join(',') : ""
       };
       //let urlApi = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking';
       let headers = {
         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
         apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
       };
-      se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile + `/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(_date).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child : 0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c => c.numage).join(',') : ""}&version=${rebuildListCalendarPrice ? 'v2' : 'v3'}`, headers, body, 'tourdeparturecalendar', 'GetMercuriusTourPrice').then((data) => {
+      se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile + `/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(_date).format('YYYY-MM-DD')}&adult=${se.tourService.adult}&child=${se.tourService.child ? se.tourService.child : 0}&childAges=${se.tourService.child ? se.tourService.arrchild.map(c => c.numage).join(',') : ""}&version=${rebuildListCalendarPrice ? 'v2' : 'v3'}`, headers, body, 'tourdeparturecalendar', 'GetMercuriusTourPrice').then((data) => {
         if (data.Status != 'Error' && data.Response.Status != 'ER' && data.Response.Status != 'False') {
           this.itemDepartureCalendar = data.Response.TourRate;
 
@@ -186,7 +167,7 @@ export class TourDepartureCalendarPage implements OnInit {
     let se = this;
     if (this.itemDepartureCalendar) {
       let _date = this.itemDepartureCalendar.DepartureDate || this.itemDepartureCalendar.AllotmentDate;
-      se.searchhotel.CheckInDate = moment(_date).format('YYYY-MM-DD');
+      this.tourService.checkInDate = moment(_date).format('YYYY-MM-DD');
       this.checkTourAllotment(_date, true).then((check) => {
         if (check) {
           this.tourService.itemDepartureCalendar = this.itemDepartureCalendar;
@@ -221,7 +202,7 @@ export class TourDepartureCalendarPage implements OnInit {
 
           })
         } else if (this.tourService.itemDepartureCalendar) {
-          let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg || 0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg || 0) * this.searchhotel.child || 0)
+          let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg || 0)) * this.tourService.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg || 0) * this.tourService.child || 0)
           this.zone.run(() => {
             this.pointbkg = Math.floor(totalPrice / 100000).toFixed(0);
             this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
@@ -246,7 +227,7 @@ export class TourDepartureCalendarPage implements OnInit {
       });
     } else {
       if (this.tourService.itemDepartureCalendar) {
-        let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg || 0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg || 0) * this.searchhotel.child || 0)
+        let totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg || 0)) * this.tourService.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg || 0) * this.tourService.child || 0)
         this.zone.run(() => {
           this.pointbkg = Math.floor(totalPrice / 100000).toFixed(0);
           this.totalPriceStr = this.gf.convertNumberToString(totalPrice);
@@ -278,8 +259,8 @@ export class TourDepartureCalendarPage implements OnInit {
     if (!this.hasDeparture) {
       return;
     }
-    for (let i = 0; i < this.searchhotel.arrchild.length; i++) {
-      const element = this.searchhotel.arrchild[i];
+    for (let i = 0; i < this.tourService.arrchild.length; i++) {
+      const element = this.tourService.arrchild[i];
       if (!element.text) {
         this.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
         return;
@@ -298,11 +279,11 @@ export class TourDepartureCalendarPage implements OnInit {
       return;
     }
     if (type == 1) {
-      this.searchhotel.adult++;
+      this.tourService.adult++;
     } else {
-      this.searchhotel.child++;
-      let arr = { text: 'Trẻ em' + ' ' + this.searchhotel.child, numage: "7" }
-      this.searchhotel.arrchild.push(arr);
+      this.tourService.child++;
+      let arr = { text: 'Trẻ em' + ' ' + this.tourService.child, numage: "7" }
+      this.tourService.arrchild.push(arr);
     }
     this.calculatePrice(1);
   }
@@ -314,20 +295,20 @@ export class TourDepartureCalendarPage implements OnInit {
       return;
     }
     if (type == 1) {
-      if (this.searchhotel.adult <= 1) {
+      if (this.tourService.adult <= 1) {
         this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
         return;
       }
-      this.searchhotel.adult--;
+      this.tourService.adult--;
       this.calculatePrice(1);
 
     } else {
-      if (this.searchhotel.child <= 0) {
+      if (this.tourService.child <= 0) {
         this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
         return;
       }
-      this.searchhotel.child--;
-      this.searchhotel.arrchild.splice(this.searchhotel.arrchild.length - 1, 1);
+      this.tourService.child--;
+      this.tourService.arrchild.splice(this.tourService.arrchild.length - 1, 1);
       this.calculatePrice(1);
     }
   }
@@ -346,8 +327,8 @@ export class TourDepartureCalendarPage implements OnInit {
     let Year = new Date().getFullYear();
     let Month = new Date().getMonth();
     let Day = new Date().getDate();
-    let fromdate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
-    let todate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
+    let fromdate = new Date(this.gf.getCinIsoDate(this.tourService.checkInDate));
+    //let todate = new Date(this.gf.getCinIsoDate(this.tourService.CheckOutDate));
     let _daysConfig: DayConfig[] = [];
     if (this.tourService.departures && this.tourService.departures.length > 0) {
       for (let j = 0; j < this.tourService.departures.length; j++) {
@@ -500,9 +481,9 @@ export class TourDepartureCalendarPage implements OnInit {
     const date = event.data;
     if (event.data) {
       se.zone.run(() => {
-        se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
-        se.searchhotel.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
-        se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
+        se.tourService.checkInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
+        se.tourService.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
+        se.tourService.cindisplay = moment(se.gf.getCinIsoDate(se.tourService.datecin)).format("DD-MM-YYYY");
       })
     }
   }
@@ -556,9 +537,9 @@ export class TourDepartureCalendarPage implements OnInit {
               if (check) {
                 let totalPrice = se.itemDepartureCalendar.TotalRate;
                 se.zone.run(() => {
-                  se.searchhotel.CheckInDate = moment(fromdate).format("YYYY-MM-DD");
-                  se.searchhotel.cindisplay = moment(fromdate).format("DD-MM-YYYY");
-                  se.searchhotel.CheckOutDate = moment(todate).format("YYYY-MM-DD");
+                  se.tourService.checkInDate = moment(fromdate).format("YYYY-MM-DD");
+                  se.tourService.cindisplay = moment(fromdate).format("DD-MM-YYYY");
+                  //se.tourService.CheckOutDate = moment(todate).format("YYYY-MM-DD");
 
                   se.totalPriceStr = se.gf.convertNumberToString(totalPrice);
                   se.tourService.totalPrice = totalPrice;
@@ -634,9 +615,9 @@ export class TourDepartureCalendarPage implements OnInit {
   }
 
   selectclick(event, text) {
-    for (let i = 0; i < this.searchhotel.arrchild.length; i++) {
-      if (this.searchhotel.arrchild[i].text == text) {
-        this.searchhotel.arrchild[i].numage = (event == "<1" ? 0 : event);
+    for (let i = 0; i < this.tourService.arrchild.length; i++) {
+      if (this.tourService.arrchild[i].text == text) {
+        this.tourService.arrchild[i].numage = (event == "<1" ? 0 : event);
         break;
       }
 
@@ -679,8 +660,8 @@ export class TourDepartureCalendarPage implements OnInit {
       return;
     }
     
-    for (let i = 0; i < se.searchhotel.arrchild.length; i++) {
-      const element = se.searchhotel.arrchild[i];
+    for (let i = 0; i < se.tourService.arrchild.length; i++) {
+      const element = se.tourService.arrchild[i];
       if (!element.text) {
         se.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
         return;
@@ -695,8 +676,8 @@ export class TourDepartureCalendarPage implements OnInit {
     if (!this.tourService.departuresItemList || this.tourService.departuresItemList.length == 0) {
       return;
     }
-    for (let i = 0; i < se.searchhotel.arrchild.length; i++) {
-      const element = se.searchhotel.arrchild[i];
+    for (let i = 0; i < se.tourService.arrchild.length; i++) {
+      const element = se.tourService.arrchild[i];
       if (!element.text) {
         se.gf.showAlertMessageOnly('Vui lòng chọn tuổi trẻ em');
         return;
@@ -775,9 +756,8 @@ export class TourDepartureCalendarPage implements OnInit {
       if (check) {
         let totalPrice = se.itemDepartureCalendar.TotalRate;
         se.zone.run(() => {
-          se.searchhotel.CheckInDate = moment(item.date).format("YYYY-MM-DD");
-          se.searchhotel.cindisplay = moment(item.date).format("DD-MM-YYYY");
-          se.searchhotel.CheckOutDate = moment(item.date).format("YYYY-MM-DD");
+          se.tourService.checkInDate = moment(item.date).format("YYYY-MM-DD");
+          se.tourService.cindisplay = moment(item.date).format("DD-MM-YYYY");
 
           se.totalPriceStr = se.gf.convertNumberToString(totalPrice);
           se.tourService.totalPrice = totalPrice;

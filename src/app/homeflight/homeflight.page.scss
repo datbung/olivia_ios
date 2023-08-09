@@ -115,7 +115,14 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
+          .img-star {
+            margin: 0 2px;
+          }
         }
+      }
+      .m-right-8 {
+        margin-right: 8px;
       }
       .f-14{
         font-size: 14px;
@@ -666,9 +673,9 @@
     .text-flight-datetime {
       font-size: 13px !important;
     }
-    .label-home-hotel {
-      font-size: 16px !important;
-    }
+    // .label-home-hotel {
+    //   font-size: 16px !important;
+    // }
     .div-point {
       font-size: 14px !important;
     }
@@ -677,9 +684,9 @@
     }
   }
   @media(min-width:350px) and (max-width:375px){
-    .label-home-hotel {
-      font-size: 18px !important;
-    }
+    // .label-home-hotel {
+    //   font-size: 18px !important;
+    // }
     .div-point {
       font-size: 14px !important;
     }
@@ -697,11 +704,11 @@
     }
   }
   @media (min-width:390px) and (max-width:390px) {
-    .label-home-hotel {
-      font-size: 19px !important;
-    }
+    // .label-home-hotel {
+    //   font-size: 18px !important;
+    // }
     .text-point {
-      font-size: 15px !important;
+      font-size: 14px !important;
       letter-spacing: -0.5px;
     }
   }
@@ -865,19 +872,18 @@
     opacity: 1;
   }
   .text-point {
-    font-size: 16px;
+    font-size: 14px;
     color: #fff;
-    text-decoration: underline;
-    margin-left: 4px;
     display: flex;
     align-items: center;
+    font-weight: 500;
   }
 
   .p-bottom-16 {
     padding-bottom: 16px;
   }
-  .div-width-180 {
-    width: 180%;
+  .div-width-200 {
+    width: 200%;
   }
   .div-width-150 {
     width: 150%;

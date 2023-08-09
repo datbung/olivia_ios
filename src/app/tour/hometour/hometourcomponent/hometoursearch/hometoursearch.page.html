@@ -45,22 +45,22 @@
                 <div class="img-cin-cout"><img class="img-padding img-checkin" src="./assets/iocnsearch/ic_checkin.svg"/></div>
   
                 <div class="div-input-right text-input-cin">
-                  <div *ngIf="searchhotel.cindisplay else loaddingcin">
+                  <div *ngIf="tourService.cindisplay else loaddingcin">
                     <div class="text-cin">
-                      <label class="text-cin-input">{{ searchhotel.cindisplay }}</label>
+                      <label class="text-cin-input">{{ tourService.cindisplay }}</label>
                     </div>
                     <div class="font-thu" *ngIf="cofdate==0">
-                      <label class="text-color text-cinthu">{{ searchhotel.cinthu }}</label>
+                      <label class="text-color text-cinthu">{{ tourService.cinthu }}</label>
                     </div>
                     <div class="font-thu" *ngIf="cofdate==1" >
-                      <label class="text-color text-cinthu text-red" >{{searchhotel.cinthu}}</label>
+                      <label class="text-color text-cinthu text-red" >{{tourService.cinthu}}</label>
                     </div>
                   </div>
                   <ng-template #loaddingcin>
                     <div class="div-loadingcin">
                       <ion-skeleton-text
                         animated
-                        style="width:100px;margin: 0;height: 32px"
+                        style="width:100px;margin: 0;height: 32px;margin-top: 8px;"
                       ></ion-skeleton-text>
                     </div>
                   </ng-template>

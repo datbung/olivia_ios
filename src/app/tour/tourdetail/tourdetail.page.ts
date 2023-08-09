@@ -135,7 +135,7 @@ export class TourDetailPage {
             })
          
           })
-          this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: this.tourService.tourDetailId, date: moment(this.searchHotel.CheckInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
+          this.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: this.tourService.tourDetailId, date: moment(this.tourService.checkInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
             if(data && data.Status == "Success" && data.Response && data.Response.length >0){
                 let itemDefault =  data.Response[0];
                 if(itemDefault && itemDefault.Contract){
@@ -172,9 +172,9 @@ export class TourDetailPage {
                             this.tourService.departures = this.listDepartureDate.map(o => o.DepartureDate);
                             this.tourService.departuresItemList = this.listDepartureDate;
 
-                            let itemdeparturemap = this.listDepartureDate.filter((itemd) => {return moment(itemd.DepartureDate).format('DD/MM/YYYY') == moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY') });
+                            let itemdeparturemap = this.listDepartureDate.filter((itemd) => {return moment(itemd.DepartureDate).format('DD/MM/YYYY') == moment(this.tourService.checkInDate).format('DD/MM/YYYY') });
                             if(itemdeparturemap && itemdeparturemap.length >0){
-                              this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
+                              this.departureDate = moment(this.tourService.checkInDate).format('DD/MM/YYYY');
                               this.tourService.DepartureDate = itemdeparturemap[0].DepartureDate;
                               this.zone.run(()=> {
                                 this.tourService.itemDepartureCalendar = itemdeparturemap[0];
@@ -184,7 +184,7 @@ export class TourDetailPage {
 
                               let listDepartureDateSort = [...this.listDepartureDate];
                               listDepartureDateSort.forEach((itemd) => {
-                                itemd.subtractDayDepartured = moment(this.searchHotel.CheckInDate).diff(moment(itemd.DepartureDate));
+                                itemd.subtractDayDepartured = moment(this.tourService.checkInDate).diff(moment(itemd.DepartureDate));
                                 if(itemd.subtractDayDepartured <0){
                                   itemd.subtractDayDepartured= itemd.subtractDayDepartured*-1;
                                 }
@@ -270,7 +270,7 @@ export class TourDetailPage {
           };
           if(slideData && slideData.length >0){
             let listIds = slideData.map(item => item.Id).join(',');
-            se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.searchHotel.CheckInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
+            se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.tourService.checkInDate).format('YYYY-MM-DD')}, 'tourDetail', 'GetMercuriusPriceByTourIds').then((data)=>{
               if(data && data.Status == "Success" && data.Response && data.Response.length >0){
                 for (let index = 0; index < slideData.length; index++) {
                   const element = slideData[index];
@@ -623,7 +623,7 @@ export class TourDetailPage {
       }
 
       ionViewWillEnter(){
-        this.departureDate = moment(this.searchHotel.CheckInDate).format('DD/MM/YYYY');
+        this.departureDate = moment(this.tourService.checkInDate).format('DD/MM/YYYY');
         this.hidetopbar();
         this.updateLikeStatus();
       }

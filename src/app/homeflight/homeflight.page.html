@@ -7,12 +7,13 @@
         </div>
         <div class="padding div-wrap-content">
                 <div class="text-home-hotel d-flex"  >
-                    <div class="div-width-180"><label class="label-home-hotel">Đặt vé máy bay giá rẻ</label>
+                    <div class="div-width-100 d-flex">
+                        <label class="label-home-hotel m-right-8">Đặt vé máy bay giá rẻ</label>
+                        <div class="div-point" *ngIf="valueGlobal.flightAvgPoint" (click)="scrollToDivReview()">{{valueGlobal.flightAvgPoint}} <img class="img-star" src="./assets/ic_flight/star_icon.svg"/> <span class="text-point">({{valueGlobal.flightNumOfReview}})</span></div>
                     </div>
-                    <div class="div-width-150 d-flex d-flex-end">
-                        <div class="div-point" *ngIf="valueGlobal.flightAvgPoint" (click)="scrollToDivReview()">{{valueGlobal.flightAvgPoint}}</div>
-                        <div class="text-point" *ngIf="valueGlobal.flightNumOfReview" (click)="scrollToDivReview()">{{valueGlobal.flightNumOfReview}} reviews</div>
-                    </div>
+                    <!-- <div class="div-width-150 d-flex d-flex-end">
+                        <div class="div-point" *ngIf="valueGlobal.flightAvgPoint" (click)="scrollToDivReview()">{{valueGlobal.flightAvgPoint}} <img class="img-star" src="./assets/ic_flight/star_icon.svg"/> <span class="text-point">({{valueGlobal.flightNumOfReview}})</span></div>
+                    </div> -->
                     
                 </div>
             <div [ngClass]="flighttype == 'twoway' ? 'div-wrap-search-input div-wc-twoway' : 'div-wrap-search-input div-wc-oneway' "></div>

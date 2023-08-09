@@ -364,7 +364,7 @@ export class Tab1Page implements OnInit {
         (error.param = JSON.stringify(options)), C.writeErrorLog(error,response);
       }
       var res=JSON.parse(body);
-      se.topSale=res.total;
+      se.topSale= se.gf.convertNumberToString(res.total);
       console.log(JSON.parse(body));
     });
   }

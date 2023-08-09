@@ -1,4 +1,4 @@
-import { Bookcombo, SearchHotel } from './../../providers/book-service';
+import { Bookcombo } from './../../providers/book-service';
 
 import { Booking } from '../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
@@ -125,7 +125,6 @@ export class TourAddDetailsPage implements OnInit {
     public booking: Booking, public gf: GlobalFunction,public bookCombo:Bookcombo, public httpClient: HttpClient,
     private alertCtrl: AlertController,
     public activityService: ActivityService,
-    public searchhotel: SearchHotel,
     public tourService: tourService,
     public _voucherService: voucherService,
     private modalCtrl: ModalController) {
@@ -134,7 +133,7 @@ export class TourAddDetailsPage implements OnInit {
     if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
       tp = this.tourService.itemDepartureCalendar.TotalRate;
     }else{
-      tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+      tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.tourService.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.tourService.child || 0);
     }
     
     this.totalPriceStr = this.gf.convertNumberToString(tp);
@@ -381,9 +380,9 @@ export class TourAddDetailsPage implements OnInit {
           let objTourReq:any = {};
           objTourReq.TourId = this.tourService.tourDetailId;
           objTourReq.StartDate =  moment(this.tourService.DepartureDate).format('YYYY-MM-DD');
-          objTourReq.AdultNo = this.searchhotel.adult;
-          objTourReq.ChildNo = this.searchhotel.child ? this.searchhotel.child :0;
-          //objTourReq.ChildAges = this.searchhotel.child ? this.searchhotel.arrchild.join(',') : "";
+          objTourReq.AdultNo = this.tourService.adult;
+          objTourReq.ChildNo = this.tourService.child ? this.tourService.child :0;
+          //objTourReq.ChildAges = this.tourService.child ? this.tourService.arrchild.join(',') : "";
           objTourReq.NightNo = this.tourService.itemDetail.NightNo;
           objTourReq.PaymentStatus = -1;
           
@@ -464,7 +463,7 @@ export class TourAddDetailsPage implements OnInit {
               if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
                 tp = this.tourService.itemDepartureCalendar.TotalRate;
               }else{
-                tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+                tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.tourService.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.tourService.child || 0);
               }
               tp = tp *1.08;
               
@@ -488,10 +487,10 @@ export class TourAddDetailsPage implements OnInit {
               objTourReq.CustomerEmail = this._email;
               objTourReq.CustomerName = this.hoten;
               objTourReq.CustomerPhone = this.phone;
-              objTourReq.AdultNo = this.searchhotel.adult;
-              objTourReq.ChildNo = this.searchhotel.child;
-              if(this.searchhotel.arrchild && this.searchhotel.arrchild.length >0){
-                let arrChildAges = this.searchhotel.arrchild.map((a) => a.numage);
+              objTourReq.AdultNo = this.tourService.adult;
+              objTourReq.ChildNo = this.tourService.child;
+              if(this.tourService.arrchild && this.tourService.arrchild.length >0){
+                let arrChildAges = this.tourService.arrchild.map((a) => a.numage);
                 objTourReq.ChildAges = arrChildAges.join(',');
               }else{
                 objTourReq.ChildAges ='';
@@ -728,7 +727,7 @@ export class TourAddDetailsPage implements OnInit {
       if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
         tp = this.tourService.itemDepartureCalendar.TotalRate;
       }else{
-        tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+        tp = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.tourService.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.tourService.child || 0);
       }
       if(this.ischeck && this.tourService.itemDetail.Inbound){
         tp = tp *1.08;
@@ -1093,9 +1092,9 @@ export class TourAddDetailsPage implements OnInit {
             var se = this;
             let body = { "TourId": se.tourService.tourDetailId,
             "StartDate": moment(se.tourService.DepartureDate).format('YYYY-MM-DD'),
-            "AdultNo": se.searchhotel.adult,
-            "ChildNo": se.searchhotel.child ? se.searchhotel.child :0,
-            "ChildAges": se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""
+            "AdultNo": se.tourService.adult,
+            "ChildNo": se.tourService.child ? se.tourService.child :0,
+            "ChildAges": se.tourService.child ? se.tourService.arrchild.map(c=>c.numage).join(',') : ""
             };
           
             return new Promise((resolve, reject) => {
@@ -1105,7 +1104,7 @@ export class TourAddDetailsPage implements OnInit {
                 apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
               };
               //se.gf.RequestApi('POST', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/CheckAllotmentPreBooking', headers, body, 'touradddetails', 'CheckAllotmentPreBooking').then((data)=>{
-                se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child ? se.searchhotel.child :0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}&version=v2`, headers, body, 'touradddetails', 'GetMercuriusTourPrice').then((data)=>{
+                se.gf.RequestApi('GET', C.urls.baseUrl.urlMobile+`/tour/api/TourApi/GetMercuriusTourPrice?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.tourService.adult}&child=${se.tourService.child ? se.tourService.child :0}&childAges=${se.tourService.child ? se.tourService.arrchild.map(c=>c.numage).join(',') : ""}&version=v2`, headers, body, 'touradddetails', 'GetMercuriusTourPrice').then((data)=>{
                   resolve(data);
                })
             })
@@ -1129,7 +1128,7 @@ export class TourAddDetailsPage implements OnInit {
               se.tourService.gaPaymentType = 'Yeu Cau Tu Van';
               se.gf.logEventFirebase('Yeu Cau Tu Van',se.tourService, 'touradddetails', 'add_payment_info', 'Tours');
               se.gf.showLoading();
-              let urlApi = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/CreateRequestQuote?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.searchhotel.adult}&child=${se.searchhotel.child || 0}&childAges=${se.searchhotel.child ? se.searchhotel.arrchild.map(c=>c.numage).join(',') : ""}&nightNo=${se.tourService.itemDetail.NightNo}&totalRate=${se.tourService.totalPrice}&act=book&paymentMethod=1&receiverAddress&customerName=${this.hoten}&customerphone=${this.phone}&customeremail=${this._email}&notes=${this.note}&qty=1`;
+              let urlApi = C.urls.baseUrl.urlMobile+`/tour/api/TourApi/CreateRequestQuote?TourId=${se.tourService.tourDetailId}&date=${moment(se.tourService.DepartureDate).format('YYYY-MM-DD')}&adult=${se.tourService.adult}&child=${se.tourService.child || 0}&childAges=${se.tourService.child ? se.tourService.arrchild.map(c=>c.numage).join(',') : ""}&nightNo=${se.tourService.itemDetail.NightNo}&totalRate=${se.tourService.totalPrice}&act=book&paymentMethod=1&receiverAddress&customerName=${this.hoten}&customerphone=${this.phone}&customeremail=${this._email}&notes=${this.note}&qty=1`;
                   let headers = {
                     apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
                     apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -1315,11 +1314,11 @@ export class TourAddDetailsPage implements OnInit {
                 couponData: {
                   "tour": {
                     "tourId": se.tourService.itemDetail.tourDetailId,
-                    "totalAdult": se.searchhotel.adult,
-                    "totalChild": se.searchhotel.child,
+                    "totalAdult": se.tourService.adult,
+                    "totalChild": se.tourService.child,
                     "jsonObject": "",
-                    "checkIn": se.searchhotel.CheckInDate,
-                    "checkOut": se.searchhotel.CheckOutDate
+                    "checkIn": se.tourService.checkInDate,
+                    "checkOut": se.tourService.checkInDate
                   }
                 }
                 },

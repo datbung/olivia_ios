@@ -1,6 +1,6 @@
 import { Bookcombo, ValueGlobal, SearchHotel, Booking } from './../providers/book-service';
-import { Component, NgZone, OnInit } from '@angular/core';
-import { NavController, ModalController, Events,AlertController,Platform,LoadingController } from '@ionic/angular';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { NavController, ModalController, Events,AlertController,Platform,LoadingController, IonContent } from '@ionic/angular';
 import { AuthService } from '../providers/auth-service';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -26,6 +26,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
   styleUrls: ['hotel-list.scss'],
 })
 export class HotelListPage implements OnInit{
+  @ViewChild('scrollHotelList') contentHotelList: IonContent;
   public id;hotelId
   public json = []; public json1 = [];
   public dataList;
@@ -108,6 +109,7 @@ export class HotelListPage implements OnInit{
 
      se.searchhotel.getChangeInfoHotelList().subscribe((data)=>{
        if(data){
+        se.page=1;
         var item: any ={};
         item.adult=this.searchhotel.adult;
         item.child=this.searchhotel.child;
@@ -129,7 +131,6 @@ export class HotelListPage implements OnInit{
         this.coutdisplayhr = moment(this.datecout).format('DD/MM');
         this.guest = this.searchhotel.child + this.searchhotel.adult;
         this.gf.setCacheSearch(item,1);
-
         let id = this.searchhotel.gbmsg ?  (this.searchhotel.gbmsg.regionId ? this.searchhotel.gbmsg.regionId : this.searchhotel.gbmsg.regionId) : this.authService.regionid;
         if(this.searchhotel.isRecent==1){
           id= this.authService.regionid;
@@ -586,176 +587,6 @@ export class HotelListPage implements OnInit{
       }
     }
 
-    // options = {
-    //   method: 'POST',
-    //   //url: 'https://betapay.ivivu.com/api/contracting/HotelsSearchPriceAjax',
-    //   url: C.urls.baseUrl.urlContracting +'/api/contracting/HotelsSearchPriceAjax',
-    //   timeout: 180000, maxAttempts: 5, retryDelay: 2000,
-    //   headers:
-    //     {},
-    //   form
-    // };
-    // request(options, function (error, response, body) {
-    //   if (error) {
-    //     error.page= "hotellist";
-    //     error.func= "getHotelprice";
-    //     error.param = JSON.stringify(options);
-    //     C.writeErrorLog(error,response);
-    //   };
-    //   if(response.statusCode != 200){
-    //     var objError ={
-    //         page: "hotellist",
-    //         func: "getHotelprice",
-    //         message : response.statusMessage,
-    //         content : response.body,
-    //         type: "warning",
-    //         param: JSON.stringify(options)
-    //       };
-    //     C.writeErrorLog(objError,response);
-    //   }
-    //   se.zone.run(() => {
-    //     se.isLoadPrice = true;
-    //     if(se.page == 1){
-    //       se.jsonhtprice = [];
-    //       se.listHotelPrice=[];
-    //     } 
-        
-    //     se.jsonhtprice1 = JSON.parse(body);
-    //     if (se.jsonhtprice1.HotelListResponse) {
-    //       se.jsonhtprice1 = se.jsonhtprice1.HotelListResponse.HotelList.HotelSummary;
-    //       for (var i = 0; i < se.jsonhtprice1.length; i++) {
-    //         let itemprice = se.jsonhtprice1[i];
-    //         if (se.ischeckAL) {
-    //           if(itemprice.availableNo!=0){
-    //             se.listHotelPrice.push(itemprice);
-    //           }
-    //         } else {
-    //           se.listHotelPrice.push(itemprice);
-    //         }
-            
-    //         //Add vào list ks có giá
-    //         if (se.searchhotel.minprice) {
-    //           if (se.minprice < itemprice.lowRateOta && itemprice.lowRateOta < se.maxprice) {
-    //             se.jsonhtprice.push(itemprice);
-    //           }
-    //         } else {
-    //           se.jsonhtprice.push(itemprice);
-    //         }
-    //       }
-
-         
-    //       //Bind giá vào list ks đã search
-    //         se.fillDataPrice().then((data)=>{
-    //           if(se.json1 && se.json1.length > 0){
-    //             data.forEach(element => {
-    //               if(!se.checkExistsItemInArray(se.json1, element, '')){
-    //                 se.json1.push(element);
-    //               }
-    //             });
-    //           }else{
-    //             se.json1 = data;
-    //           }
-              
-    //           //Check lại phòng có giá hay ko
-    //           setTimeout(() => {
-    //             se.zone.run(()=>{
-    //               se.json1.forEach(element => {
-                    
-    //                 // if(!se.checkExistsPriceItem(element.HotelId)){
-    //                 //   element.MinPriceOTAStr = "";
-    //                 // }
-    //                 //Check lại có nằm trong khoảng giá lọc không, nếu ko thì remove khỏi list
-    //                 if(se.minprice && (!se.checkItemPrice(se.jsonhtprice, element)) 
-    //                 && !(se.minprice*1 < se.clearSubFix(element.MinPriceTAStr)*1 && se.clearSubFix(element.MinPriceTAStr)*1 < se.maxprice*1) ){
-    //                   se.removeItemPrice(se.json1, element);
-    //                 }
-    //               })
-    //               //Loại những item có giá nằm ngoài khoảng minprice, maxprice
-    //               se.json1.forEach(element =>{
-    //                 var itemPriceCheck:any = se.jsonhtprice.filter((item:any)=>{ return item.HotelId == element.HotelId});
-    //                 if (se.minprice && !(se.minprice*1 < se.clearSubFix(element.MinPriceTAStr ? element.MinPriceTAStr : element.MinPrice0TAStr)*1 && se.clearSubFix(element.MinPriceTAStr ? element.MinPriceTAStr : element.MinPrice0TAStr)*1 < se.maxprice*1) ){
-    //                   se.removeItemPrice(se.json1, element);
-    //                 }
-                  
-    //                 if(se.minprice && itemPriceCheck && itemPriceCheck.length >0
-    //                   && (se.minprice*1 < se.clearSubFix(element.MinPriceTAStr ? element.MinPriceTAStr : element.MinPrice0TAStr)*1 && se.clearSubFix(element.MinPriceTAStr ? element.MinPriceTAStr : element.MinPrice0TAStr)*1 < se.maxprice*1)
-    //                   && !(se.minprice < itemPriceCheck[0].lowRateOta && itemPriceCheck[0].lowRateOta < se.maxprice)){
-    //                     se.removeItemPrice(se.json1, element);
-    //                 }
-    //               })
-    //               /////////
-    //             })
-    //             //if(se.json1.length >=5){
-    //               se.ishide = true;
-    //               se.loadpricedone = true;
-    //               se.nodata = se.json1.length == 0;
-    //             //}
-    //             if(se.json1.length >0 && se.json1.length < 6 && se.page * 5 < se.totalData && se.page <=3){
-    //               se.page += 1;
-    //               se.loaddata(se.authService, se.searchhotel, false);
-    //             }
-                
-    //           },200);
-    //         })
-
-    //       //Lâu quá ko có dữ liệu thì cho hiện
-    //       setTimeout(() => {
-    //           se.ishide = true;
-    //           se.loadpricedone = true;
-    //       },1200)
-          
-
-    //     } else {
-    //       //if (!isloadmore) {
-    //         se.ishide = true;
-    //         se.nodata = se.json1.length == 0;
-    //         se.json1.forEach(element => {
-    //           if(!element.HasCheckPrice){
-    //             element.HasCheckPrice = true;
-    //             element.MinPriceOTAStr = 0;
-    //             element.MinPriceTAStr = 0;
-    //           }
-              
-    //         })
-    //       //}
-    //       se.loadpricedone = true;
-    //     }
-    //     setTimeout(() => {
-    //       if (se.json1.length >0 && se.json1.length < 6 && se.page * 5 < se.totalData) {
-    //         se.page += 1;
-    //         se.loaddata(se.authService, se.searchhotel, false);
-    //       } else {
-    //         se.nodata = se.json1.length == 0;
-    //         //se.executeSort();
-    //       }
-    //     }, 10);
-    //     //se.nodata=true;
-    //     if (se.ischeckAL) {
-    //         setTimeout(() => {
-    //         for (let i = 0; i < se.json1.length; i++) {
-    //           const element = se.json1[i];
-    //           if (se.ischeckAL) {
-    //             if (element.MinPriceOTAStr && element.HasCheckPrice) {
-    //               se.nodata=false;
-    //               break;
-    //             }
-    //           } else {
-    //             se.nodata=false;
-    //             break;
-    //           }
-    //         }
-    //           let itemsprice = se.json1.some(item => item.MinPriceOTAStr && item.HasCheckPrice);
-    //           se.nodata = !itemsprice;
-    //           if(se.nodata)
-    //           {
-    //             se.json1=[];
-    //           }
-    //       },1200)
-    //     }
-       
-    //   })
-    // })
-
     let body = `RoomNumber=${se.searchhotel.roomnumber ? se.searchhotel.roomnumber : 1}&IsLeadingPrice=''&ReferenceClient=''&Supplier='IVIVU'`
     +`&CheckInDate=${moment(se.searchhotel.CheckInDate).format('YYYY-MM-DD')}&CheckOutDate=${moment(se.searchhotel.CheckOutDate).format('YYYY-MM-DD')}&CountryID=''&CityID=''&NationalityID=''&RoomsRequest[0][RoomIndex]=${se.searchhotel.roomnumber ? se.searchhotel.roomnumber : 1}&`
     +`RoomsRequest[0][Adults][value]=${se.searchhotel.adult}&RoomsRequest[0][Child][value]=${se.searchhotel.child}&StatusMethod=2&`
@@ -806,8 +637,9 @@ export class HotelListPage implements OnInit{
           //Bind giá vào list ks đã search
             se.fillDataPrice().then((data)=>{
               if(se.json1 && se.json1.length > 0){
-                data.forEach(element => {
+                data.forEach((element,index) => {
                   if(!se.checkExistsItemInArray(se.json1, element, '')){
+                   
                     se.json1.push(element);
                   }
                 });
@@ -846,7 +678,17 @@ export class HotelListPage implements OnInit{
                   se.page += 1;
                   se.loaddata(se.authService, se.searchhotel, false);
                 }
+
+                //scroll đến trang hiện tại
                 
+                setTimeout(()=>{
+                  if(se.page != 1){
+                    let id = se.page;
+                    document.getElementById(id ? id.toString() : '').scrollIntoView({ behavior: 'smooth', block: 'center'  });
+                  }
+                  
+                },100)
+
               },200);
             })
 
@@ -953,13 +795,13 @@ export class HotelListPage implements OnInit{
     return new Promise((resolve, reject) =>{
       se.zone.run(()=>{
           for (let index = 0; index < se.json1.length; index++) {
-            if(se.json1[index].HasCheckPrice) continue;
+            //if(se.json1[index].HasCheckPrice) continue;
             se.json1[index].HasCheckPrice = true;
             for (let i = 0; i < se.listHotelPrice.length; i++) {
               //Chỉ bind lại giá cho hotel, combo bỏ qua
-             
+              //pdanh 08-08-2023: bind cả giá phòng combo
                 if (se.json1[index] && se.json1[index].HotelId == se.listHotelPrice[i].GroupId) {
-                  se.json1[index].MinPriceOTAStr = se.listHotelPrice[i].MinPriceOTAStr;
+                  se.json1[index].MinPriceOTAStr = se.listHotelPrice[i].MinPriceTAStr || se.listHotelPrice[i].MinPriceOTAStr;
                   se.json1[index].MinPriceTAStr = se.listHotelPrice[i].MinPriceTAStr;
                   se.json1[index].RoomNameSubString = se.listHotelPrice[i].RoomNameSubString.replace('...','');
                   se.json1[index].supplier = se.listHotelPrice[i].supplier;
@@ -1155,16 +997,16 @@ export class HotelListPage implements OnInit{
         if (se.dataList[index].DealType) {
   
           if (se.dataList[index].Address) {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice ? se.dataList[index].DealPrice : se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice };
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice ? se.dataList[index].DealPrice : se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page };
           } else {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice? se.dataList[index].DealPrice: se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice? se.dataList[index].DealPrice: se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
           }
         }
         else {
           if (se.dataList[index].Address) {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
           } else {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
           }
         }
         if(item.AvgPoint == "10.0"){
@@ -1427,24 +1269,6 @@ export class HotelListPage implements OnInit{
       }
     }
    
-    // for (let i = 0; i < this.json1.length; i++) {
-    //   const element = this.json1[i];
-    //   if (element.DealPrice!=0 && element.HasCheckPrice &&  element.DealPrice>=this.MaxPrice) {
-    //     this.MaxPrice=element.DealPrice;
-    //   }
-    //   if (element.DealPrice!=0 && element.HasCheckPrice &&  element.DealPrice<=this.MinPrice) {
-    //     this.MinPrice=element.DealPrice;
-    //   }
-    //   if (!element.DealPrice && element.MinPriceOTAStr && element.HasCheckPrice &&  Number(element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, ''))<=this.MinPrice) {
-    //     this.MinPrice=element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, '');
-    //   }
-    //   if (!element.DealPrice && element.MinPriceOTAStr && element.HasCheckPrice &&   Number(element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, ''))>=this.MaxPrice) {
-    //     this.MaxPrice=element.MinPriceOTAStr.replace(/\./g, '').replace(/\,/g, '');
-    //   }
-
-    // }
-    // this.searchhotel.structureLower=this.MinPrice;
-    // this.searchhotel.structureUpper=this.MaxPrice;
   }
   /*** Về trang login
    * PDANH  29/01/2018
@@ -1767,6 +1591,7 @@ export class HotelListPage implements OnInit{
     this.valueGlobal.dayhot=[];
     this.valueGlobal.notSuggestDaily=[];
     this.valueGlobal.notSuggestDailyCB=[];
+    this.contentHotelList.scrollToTop(300);
     this.navCtrl.navigateForward('/popupinfobkg');
   }
 
