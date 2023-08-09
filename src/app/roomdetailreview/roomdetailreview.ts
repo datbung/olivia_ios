@@ -48,7 +48,6 @@ export class RoomdetailreviewPage implements OnInit {
     public _voucherService: voucherService
     ) {
 
-    
       this.ischeckpayment=Roomif.ischeckpayment;
       this.Avatar = Roomif.imgHotel;
       this.Name = booking.HotelName;
@@ -62,7 +61,7 @@ export class RoomdetailreviewPage implements OnInit {
       this.roomtype = Roomif.roomtype;
       this.indexme = booking.indexmealtype;
       this.indexroom = booking.indexroom;
-      this.jsonroom = Roomif.jsonroom;
+      this.jsonroom = {...Roomif.jsonroom};
       this.room = Roomif.arrroom;
       var chuoicin = this.cin.split('-');
       var chuoicout = this.cout.split('-');
@@ -246,9 +245,15 @@ export class RoomdetailreviewPage implements OnInit {
     if (this.ischeckbtnpromo) {
       this.Roomif.promocode= this.promocode;
       this.Roomif.priceshow = this.Pricepointshow;
+      this._voucherService.hotelPromoCode = this.promocode;
+      this._voucherService.hotelTotalDiscount = this.totaldiscountpromo;
+
     }
     else if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){ //thêm luồng voucher heniken
       this.Roomif.promocode= this._voucherService.selectVoucher.code;
+      this.Roomif.priceshow = this.Pricepointshow;
+    }
+    else if(this._voucherService.hotelPromoCode && this._voucherService.hotelTotalDiscount){
       this.Roomif.priceshow = this.Pricepointshow;
     }
     else
@@ -283,15 +288,6 @@ export class RoomdetailreviewPage implements OnInit {
  
   }
   ionViewWillEnter() {
-  //   if (this.Roomif.promocode && this.Roomif.bookingCode) {
-  //      alert("Mã giảm giá "+this.Roomif.promocode+" đã được dùng cho booking "+this.Roomif.bookingCode+".Xin vui lòng thao tác lại booking!");
-  //      this.Roomif.promocode="";
-  //      this.Roomif.bookingCode="";
-  //   }
-  //   if (this.Roomif.point && this.Roomif.bookingCode) {
-  //     alert("Điểm tích luỹ "+this.Roomif.point+" đã được dùng cho booking "+this.Roomif.bookingCode+".Xin vui lòng thao tác lại booking!");
-  //     this.Roomif.bookingCode="";
-  //  }
   if(this.valueGlobal.backValue != 'roompaymentbreakdown'){
     if(this.itemVoucherHotel){
       this._voucherService.rollbackSelectedVoucher.emit(this.itemVoucherHotel);
@@ -624,12 +620,12 @@ export class RoomdetailreviewPage implements OnInit {
             if (se.ischeck) {
               total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
             }
-            se.discountpromo= json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
-            se.Pricepointshow = total -  se.discountpromo;
+            let _discount= json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+            se.Pricepointshow = total -  _discount;
 
             se.strPromoCode = se.promocode;
-            se.totaldiscountpromo = total - se.discountpromo;
-            se.Roomif.discountpromo = se.discountpromo;
+            se.totaldiscountpromo = _discount;
+            se.Roomif.discountpromo = _discount;
             se.edit();
 
             if (se.Pricepointshow>0) {
@@ -734,6 +730,9 @@ export class RoomdetailreviewPage implements OnInit {
           this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
         }
        
+        this._voucherService.hotelPromoCode = this.strPromoCode;
+        this._voucherService.hotelTotalDiscount = this.totaldiscountpromo;
+        this.ischeckpromo = true;
         this.edit();
       }else if (data.data) {//case voucher km
         let vc = data.data;
@@ -751,18 +750,9 @@ export class RoomdetailreviewPage implements OnInit {
             }
           })
         }
+      }else{
+        this.ischeckbtnpromo = false;
       }
-      // if (data.data) {
-      //   this.zone.run(() => {
-      //     if (data.data.promocode) {
-      //       $('.div-point').addClass('div-disabled');
-      //       this.promocode=data.data.promocode;
-      //       this.textpromotion=data.data.promocode;
-      //       this.promofunc();
-      //     }
-      //   })
-        
-      // }
     })
     //}
   }
@@ -798,6 +788,7 @@ export class RoomdetailreviewPage implements OnInit {
     this.Roomif.HotelRoomHBedReservationRequest = JSON.stringify(this.arrroomFS[0].HotelRoomHBedReservationRequest);
     this.Roomif.arrroom = this.arrroomFS;
     this.Roomif.imgRoom = this.arrroomFS[0].Rooms[0].ImagesMaxWidth320;
+    this.Roomif.objMealType = dataRoomChange.itemroom.MealTypeRates[dataRoomChange.index];
     
   }
   nextShuttlebus(){

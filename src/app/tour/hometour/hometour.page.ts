@@ -39,7 +39,7 @@ export class HomeTourPage implements OnInit {
     };
     this.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTotalSale').then((data) => {
       let res = JSON.parse(data);
-      this.totalSale = res.Response;
+      this.totalSale = this.gf.convertNumberToString(res.Response);
     })
   }
   loadTopSale() {

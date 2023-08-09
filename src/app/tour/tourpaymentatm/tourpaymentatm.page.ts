@@ -1,5 +1,5 @@
 import { Bookcombo, ValueGlobal } from './../../providers/book-service';
-import { Booking, RoomInfo, SearchHotel } from '../../providers/book-service';
+import { Booking, RoomInfo } from '../../providers/book-service';
 import { Component, NgZone, ViewChild, OnInit } from '@angular/core';
 import { NavController, LoadingController, ToastController, Platform,AlertController } from '@ionic/angular';
 import { C } from '../../providers/constants';
@@ -37,7 +37,7 @@ export class TourPaymentAtmPage implements OnInit {
   sttbooking=0;
   phone: any;
   constructor(public navCtrl: NavController, private toastCtrl: ToastController, public booking: Booking,
-    public Roomif: RoomInfo, public storage: Storage, public zone: NgZone, public searchhotel: SearchHotel,
+    public Roomif: RoomInfo, public storage: Storage, public zone: NgZone,
     public loadingCtrl: LoadingController, public platform: Platform, public gf: GlobalFunction,public bookCombo:Bookcombo,
     private activatedRoute: ActivatedRoute,public activityService: ActivityService,public alertCtrl: AlertController,
     public valueGlobal: ValueGlobal,
@@ -135,7 +135,7 @@ export class TourPaymentAtmPage implements OnInit {
                   }
                   clearInterval(se.intervalID);
                   se.tourService.paymentType = 1;
-                  se.navCtrl.navigateForward('tourpaymentdone');
+                  se.navCtrl.navigateForward('/tourpaymentdone');
                 }
                 else
                 {
@@ -146,7 +146,7 @@ export class TourPaymentAtmPage implements OnInit {
             }
             //clearInterval(se.intervalID);
             setTimeout(() => {
-              clearInterval(this.intervalID);
+              clearInterval(se.intervalID);
             }, 60000 * 15);
           },
           (error: any) => console.error(error)
@@ -340,7 +340,7 @@ export class TourPaymentAtmPage implements OnInit {
     if (this.loader) {
       this.loader.dismiss();
     }
-    //clearInterval(this.intervalID);
+    clearInterval(this.intervalID);
     this.intervalID = setInterval(() => {
       let url = C.urls.baseUrl.urlMobile + "/tour/api/BookingsApi/GetBookingByCode?code="+this.bookingCode;
       this.zone.run(() => {
@@ -353,7 +353,7 @@ export class TourPaymentAtmPage implements OnInit {
             }
             clearInterval(this.intervalID);
             this.tourService.paymentType = 1;
-            this.navCtrl.navigateForward('tourpaymentdone');
+            this.navCtrl.navigateForward('/tourpaymentdone');
           }
           else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
           {

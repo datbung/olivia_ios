@@ -7,35 +7,65 @@
         top: 15px !important;
         margin: 0 auto !important;
      }
-     .m-top-logo {
-      text-align: center;
-      margin-top: calc(env(safe-area-inset-top) - 30px);
-     }
-.div-relative {
-  
-  .img-close{
-		margin-top: env(safe-area-inset-top);
-		height: 40px;
-		margin-left: 8px;
-	  }
-}
-     .center {
-      padding: 57px 0 0 0;
-      text-align: center;
-      height: 100%;
-      background-image: url('../../assets/backgroundnew.jpg');
-      background-size: cover;
-      }
+
+
+	.login-header {
+		.div-goback{
+			margin-left: 6px;
+		}
+		
+		.header-img-back {
+			margin-top: 4px !important;
+		}
+    .div-header-title {
+			margin-right: 36px;
+      position: relative !important;
+		}
+	}
+	.d-flex {
+		display: flex;
+	}
+  .div-content-register {
+    background-color: #ffffff;
+    .cls-grid {
+      padding: 0;
+    }
+    .no-padding {
+      padding: 0;
+    }
+    .text-label {
+      font-size: 16px;
+      text-align: left;
+      color: #828282;
+    }
+    .text-label-14 {
+      font-size: 14px;
+      text-align: left;
+      color: #828282;
+    }
+    .cls-invalid {
+      background: #828282 !important;
+      opacity: 0.5;
+  }
+  }
+
       ion-item{
           --background: initial;
           --border-color: #fff;
       }
       .text-button{
-      text-align:center;
-      width: 50%;
-      font-size: 16px;
-      color: #ffffff
-    }
+        border-color: #f79221;
+        color: #ffffff;
+        background: #f79221;
+        width: 98%;
+        height: 48px;
+        text-transform: none;
+        font-size: 18px !important;
+        border-radius: 4px !important;
+        text-align: center;
+        width: 100%;
+        padding: 0 12px;
+      }
     .button-outline {
       --border-color:#ffffff;
       --border-width: 1px;
@@ -51,13 +81,14 @@
     }
     .text-color
     {
-      color:white
+      color: #3f3b3b;
     }
-    .passwordIcon[_ngcontent-c0] {
+    .passwordIcon {
       font-size: 2rem !important;
       position: relative !important;
-      top: 10px !important;
+      top: 36px !important;
       margin: 0 auto !important;
+      opacity: 0.8;
   }
   .ion-item
   {
@@ -67,4 +98,8 @@
     margin-top: 5px;
     // margin-left: 10px;
   }
-
+.div-button-register {
+  text-align: center;
+    width: 100%;
+    padding: 0 16px;
+}

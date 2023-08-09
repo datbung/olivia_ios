@@ -740,7 +740,7 @@
         .div-checkin-online-1 {
             align-items: center;
             .div-text-checkin-online{
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: normal;
                 font-stretch: normal;
                 font-style: normal;
@@ -856,3 +856,10 @@
         .div-width-50 {
             width: 50%;
         }
+        .text-note{
+            font-size:14px;
+            color:#828282;
+            font-style: italic;
+            letter-spacing: -0.34px;
+            margin-top: 10px;
+          }

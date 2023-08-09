@@ -46,7 +46,7 @@
         <div class="m-top-24 text-header">Đánh giá gần đây</div>
         <div class="div-line m-top-10 m-bottom-16"></div>
         <div class="div-content-review m-top-24">
-          <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview; let idx = index">
+          <div class="div-wrap-review-item" *ngFor="let slide of listflighttopreview; let idx = index" [id]="slide.reviewId">
             <div class="d-flex">
                 <div class="div-avatar">
                   <img class="slide2 img" src="./assets/ic_flight/user_pic.jpg" />
@@ -57,6 +57,19 @@
                 </div>
             </div>
             <div class="m-top-14 div-text" *ngIf="slide.bestFeature">{{slide.bestFeature}}</div>
+            <div class="div-reply-mess" *ngIf="slide.replyMessage">
+              <div class=" d-flex">
+                <div class="div-icon"><img class="img-ivivu" src="./assets/ic_flight/avatar_ivivu.webp" /></div>
+                <div class="m-left-8 v-align-center">
+                  <div class="div-name">Phản hồi từ iVIVU.com</div>
+                  <div class="div-date" *ngIf="slide.replyDate">{{slide.replyDateDisplay}}</div>
+                </div>
+              </div>
+              
+              <div class="m-top-8 div-text">
+                {{slide.replyMessage}}
+              </div>
+            </div>
             <div class="div-images" *ngIf="slide.images && slide.images.length >0">
                 <div class="div-item-image" *ngFor="let image of slide.images; let idximg = index"  (click)="imgreview(slide.images, idximg, slide.customerName, slide.reviewDateDisplay,2)">
                   <img *ngIf="idximg<4" class="item-image" [src]="image.thumpUrl" />
@@ -73,7 +86,7 @@
         </div>
         <div class="div-relative">
           <div class="div-see-more m-top-16" (click)="showMoreReview()">
-            Hiển thị thêm nhận xét
+            Hiển thị thêm đánh giá
           </div>
         </div>
        

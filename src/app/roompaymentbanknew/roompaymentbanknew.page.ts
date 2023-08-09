@@ -62,7 +62,7 @@ export class RoompaymentbanknewPage implements OnInit {
     this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
     this.accountNumber = "007 1000 895 230";
     this.room = Roomif.arrroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.rowoneactive = true;
     this.textbank = "Vietcombank";
     this.bankName = "Ngân hàng Thương Mại Cổ Phần Ngoại Thương Việt Nam (VCB)";
@@ -715,10 +715,10 @@ export class RoompaymentbanknewPage implements OnInit {
                   {
                     totalprice=(se.Roomif.roomtype as any).PriceAvgPlusTAStr;
                   }
-                  if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
-                    let tp:any = totalprice.replace(/\./g, '').replace(/\,/g, '');
-                    totalprice = se.gf.convertNumberToString(tp - se._voucherService.selectVoucher.rewardsItem.price);
-                  }
+                  // if(se._voucherService.selectVoucher && se._voucherService.selectVoucher.claimed){
+                  //   let tp:any = totalprice.replace(/\./g, '').replace(/\,/g, '');
+                  //   totalprice = se.gf.convertNumberToString(tp - se._voucherService.selectVoucher.rewardsItem.price);
+                  // }
                   if(se.jti){
                     let url  = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=tranfer&BanksTranfer='+se.textbank+'&source=app&amount=' + totalprice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + body.code + '&memberId=' + se.jti + '&buyerPhone=' + se.Roomif.phone;
                     se.gf.CreateUrl(url);

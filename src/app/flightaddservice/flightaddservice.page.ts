@@ -20,6 +20,7 @@ import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { voucherService } from '../providers/voucherService';
 import { HTMLIonOverlayElement } from '@ionic/core';
 import { FlightInfoInternationalPage } from '../flightinternational/flightinfointernationnal/flightinfointernational.page';
+import { FlightdetailPage } from '../flightdetail/flightdetail.page';
 
 @Component({
   selector: 'app-flightaddservice',
@@ -89,6 +90,8 @@ export class FlightaddservicePage implements OnInit {
   isApiDirect: any;
   departCodeDisplay= '';
   returnCodeDisplay='';
+  departDateDisplay: string;
+  returnDateDisplay: string;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -114,16 +117,15 @@ export class FlightaddservicePage implements OnInit {
             if(this._flightService.itemFlightCache.isApiDirect){
               this.departdisplay = this._flightService.objSearch.departCity;
               this.returndisplay = this._flightService.objSearch.returnCity;
-              this.departtimedisplay = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkInDate).dayname + ", " + moment(this._flightService.itemFlightCache.checkInDate).format("DD.MM");
-              this.returntimedisplay = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkOutDate).dayname + ", " + moment(this._flightService.itemFlightCache.checkOutDate).format("DD.MM");
               this.departCodeDisplay = this._flightService.objSearch.departCode;
               this.returnCodeDisplay = this._flightService.objSearch.arrivalCode;
             }else{
               this.departdisplay = this._flightService.itemFlightCache.departCity;
               this.returndisplay = this._flightService.itemFlightCache.returnCity;
-              this.departtimedisplay = this._flightService.itemFlightCache.departTimeDisplay;
-              this.returntimedisplay = this._flightService.itemFlightCache.returnTimeDisplay;
             }
+
+            
+            
            
             this.departFlight = this._flightService.itemFlightCache.departFlight;
             this.returnFlight = this._flightService.itemFlightCache.returnFlight;
@@ -132,7 +134,6 @@ export class FlightaddservicePage implements OnInit {
                 this.landingtime_depart = moment(this.departFlight.landingTime).format("HH:mm");
                 this.departlocationdisplay= this._flightService.itemFlightCache.departCode + " · " + this.departFlight.flightTimeDetailDisplay + " · " +this._flightService.itemFlightCache.returnCode;
 
-                this.departtimedisplay = this._flightService.itemFlightCache.departTimeDisplay +", "+ moment(this.departFlight.departTime).format("YYYY");
             }
             if(this.returnFlight){
                 this.departtime_return = moment(this.returnFlight.departTime).format("HH:mm");
@@ -142,7 +143,11 @@ export class FlightaddservicePage implements OnInit {
                 this.returntimedisplay = this._flightService.itemFlightCache.returnTimeDisplay +", "+ moment(this.returnFlight.departTime).format("YYYY");
             }
 
-            
+            this.departDateDisplay = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkInDate).dayname + ", " + moment(this._flightService.itemFlightCache.checkInDate).format("DD") + " tháng " +moment(this._flightService.itemFlightCache.checkInDate).format("MM");
+            if(this.returnFlight){
+              this.returnDateDisplay = this.gf.getDayOfWeek(this._flightService.itemFlightCache.checkOutDate).dayname + ", " + moment(this._flightService.itemFlightCache.checkOutDate).format("DD")+ " tháng " +moment(this._flightService.itemFlightCache.checkOutDate).format("MM");
+            }
+
             this.isExtenal=_flightService.itemFlightCache.isExtenal;
             //get price cathay
             this._flightService.itemFlightCache.priceCathay =0;
@@ -202,6 +207,14 @@ export class FlightaddservicePage implements OnInit {
                 })
               }else{
                 this.loadHotelCityDone = true;
+              }
+
+              if(dataBooking && dataBooking.allowRequestCheckinOnline){
+                this._flightService.itemFlightCache.allowCheckinOnline = dataBooking.allowRequestCheckinOnline.allowCheckin;
+                this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline.note;
+              }else{
+                this._flightService.itemFlightCache.allowCheckinOnline = false;
+                this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline && dataBooking.allowRequestCheckinOnline.note ? dataBooking.allowRequestCheckinOnline.note : '';
               }
               this.gf.hideLoading();
             })    
@@ -4019,4 +4032,19 @@ buildStringPromoCode(){
       modal.present();
   }
 
+  async showFlightDetail(item, isdepart){
+    var se = this;
+    if(se.isApiDirect){
+      se.showFlightInfo(isdepart);
+    }else{
+      se._flightService.itemFlightCache.itemFlight = item;
+      se._flightService.showFlightDetailFrom = 'flightaddservice';
+      const modal: HTMLIonModalElement =
+      await se.modalCtrl.create({
+        component: FlightdetailPage,
+      });
+      modal.present();
+    }
+   
+  }
 }

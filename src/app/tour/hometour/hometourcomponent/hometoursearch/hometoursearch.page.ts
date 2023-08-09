@@ -7,7 +7,7 @@ import { OverlayEventDetail } from '@ionic/core';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import * as request from 'requestretry';
-import { SearchHotel, ValueGlobal } from 'src/app/providers/book-service';
+import {  ValueGlobal } from 'src/app/providers/book-service';
 import { tourService } from 'src/app/providers/tourService';
 import { CalendarModal, CalendarModalOptions, DayConfig } from 'ion2-calendar';
 // import { SelectDateRangePage } from 'src/app/selectdaterange/selectdaterange.page';
@@ -31,7 +31,6 @@ export class HomeTourSearchPage implements OnInit {
     public storage: Storage,
     private actionsheetCtrl: ActionSheetController,
     private platform: Platform,
-    public searchhotel: SearchHotel,
     public tourService: tourService,
     public valueGlobal: ValueGlobal) {
   }
@@ -73,6 +72,13 @@ export class HomeTourSearchPage implements OnInit {
         })
       }
     })
+    if(!this.tourService.checkInDate){
+      this.tourService.checkInDate = moment(new Date()).add(1, 'days');
+      this.tourService.cindisplay = moment(this.gf.getCinIsoDate(this.tourService.checkInDate)).format("DD-MM-YYYY");
+      this.tourService.datecin = new Date(this.gf.getCinIsoDate(this.tourService.checkInDate));
+      this.getCinCoutDayName();
+    }
+    
 
   }
 
@@ -108,8 +114,8 @@ export class HomeTourSearchPage implements OnInit {
     }
     
     se.allowclickcalendar = false;
-    let fromdate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
-    let todate = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
+    let fromdate = new Date(this.gf.getCinIsoDate(this.tourService.checkInDate));
+    //let todate = new Date(this.gf.getCinIsoDate(this.tourService.CheckOutDate));
     let _daysConfig: DayConfig[] = [];
     for (let j = 0; j < this.valueGlobal.listlunar.length; j++) {
       _daysConfig.push({
@@ -193,9 +199,9 @@ export class HomeTourSearchPage implements OnInit {
       const date = event.data;
       if (event.data) {
          se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
-           se.searchhotel.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
-           se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
+          se.tourService.checkInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
+          se.tourService.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
+          se.tourService.cindisplay = moment(se.gf.getCinIsoDate(se.tourService.datecin)).format("DD-MM-YYYY");
            se.getCinCoutDayName();
          })
       }
@@ -247,9 +253,11 @@ export class HomeTourSearchPage implements OnInit {
   
             
               se.zone.run(() => {
-                se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format("YYYY-MM-DD");
-                se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(fromdate)).format("DD-MM-YYYY");
-                se.searchhotel.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format("YYYY-MM-DD");
+                // se.tourService.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format("YYYY-MM-DD");
+                // se.tourService.cindisplay = moment(se.gf.getCinIsoDate(fromdate)).format("DD-MM-YYYY");
+                // se.tourService.CheckOutDate = moment(se.gf.getCinIsoDate(todate)).format("YYYY-MM-DD");
+                se.tourService.checkInDate = moment(se.gf.getCinIsoDate(fromdate)).format("YYYY-MM-DD");
+                se.tourService.cindisplay = moment(se.gf.getCinIsoDate(fromdate)).format("DD-MM-YYYY");
               });
               
             }
@@ -261,29 +269,29 @@ export class HomeTourSearchPage implements OnInit {
     this.modalCtrl.dismiss();
   }
   getCinCoutDayName() {
-    if (this.searchhotel.datecin) {
-      this.searchhotel.cinthu = moment(this.searchhotel.datecin).format("dddd");
-      switch (this.searchhotel.cinthu) {
+    if (this.tourService.datecin) {
+      this.tourService.cinthu = moment(this.tourService.datecin).format("dddd");
+      switch (this.tourService.cinthu) {
         case "Monday":
-          this.searchhotel.cinthu = "Thứ 2";
+          this.tourService.cinthu = "Thứ 2";
           break;
         case "Tuesday":
-          this.searchhotel.cinthu = "Thứ 3";
+          this.tourService.cinthu = "Thứ 3";
           break;
         case "Wednesday":
-          this.searchhotel.cinthu = "Thứ 4";
+          this.tourService.cinthu = "Thứ 4";
           break;
         case "Thursday":
-          this.searchhotel.cinthu = "Thứ 5";
+          this.tourService.cinthu = "Thứ 5";
           break;
         case "Friday":
-          this.searchhotel.cinthu = "Thứ 6";
+          this.tourService.cinthu = "Thứ 6";
           break;
         case "Saturday":
-          this.searchhotel.cinthu = "Thứ 7";
+          this.tourService.cinthu = "Thứ 7";
           break;
         default:
-          this.searchhotel.cinthu = "Chủ nhật";
+          this.tourService.cinthu = "Chủ nhật";
           break;
       }
     }

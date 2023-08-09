@@ -80,7 +80,9 @@ export class FlightselectpaxPage implements OnInit {
   plusadults() {
     let pax = this.adults + this.child + (this.infant ? this.infant : 0);
     if( pax <9){
-      this.adults++;
+      this.zone.run(()=>{
+        this.adults++;
+      })
     }
     else{
       this.gf.showToastWarning('iVIVU phục vụ tối đa 9 hành khách và mỗi người lớn chỉ đi kèm 1 em bé.');
@@ -95,7 +97,9 @@ export class FlightselectpaxPage implements OnInit {
   }
   minusadults() {
     if (this.adults > 1) {
-      this.adults--;
+      this.zone.run(()=>{
+        this.adults--;
+      })
     }
     if (this.adults == 1) {
       this.ischeckadults = false;
@@ -108,7 +112,10 @@ export class FlightselectpaxPage implements OnInit {
   pluschild() {
     let pax = this.adults + this.child + (this.infant ? this.infant : 0);
     if(pax < 9){
-      this.child++;
+      this.zone.run(()=>{
+        this.child++;
+      })
+      
       var arr = {id: this.child, text: 'Trẻ em' + ' ' + this.child, numage: "7" }
       this.arrchild.push(arr);
     }
@@ -120,7 +127,9 @@ export class FlightselectpaxPage implements OnInit {
   minuschild() {
 
     if (this.child > 0) {
-      this.child--;
+      this.zone.run(()=>{
+        this.child--;
+      })
       this.removeChildInArrayChild(this.arrchild);
       this.removeChildInArrayChild(this._flightService.itemFlightCache.arrchild);
     }
@@ -138,7 +147,9 @@ export class FlightselectpaxPage implements OnInit {
   plusinfant() {
     let pax = this.adults + this.child + (this.infant ? this.infant : 0);
     if(pax <9 ){
-      this.infant++;
+      this.zone.run(()=>{
+        this.infant++;
+      })
       var arr = {id: this.infant, text: 'Trẻ sơ sinh' + ' ' + this.infant, numage: "1", isInfant: true }
       this.arrchild.push(arr);
       
@@ -152,7 +163,9 @@ export class FlightselectpaxPage implements OnInit {
   minusinfant() {
 
     if (this.infant > 0) {
-      this.infant--;
+      this.zone.run(()=>{
+        this.infant--;
+      })
       this.removeInfantInArrayChild(this.arrchild);
       this.removeInfantInArrayChild(this._flightService.itemFlightCache.arrchild);
     }
@@ -191,22 +204,27 @@ export class FlightselectpaxPage implements OnInit {
   }
 
   public removeInfantInArrayChild(array){
-    let item = array.filter((i) => { return i.isInfant})[0];
-    if(item){
-      array.forEach( (arrayItem, index) => {
-        if(arrayItem.id == item.id && arrayItem.isInfant) array.splice(index,1);
-      });
+    if(array && array.length >0){
+      let item = array.filter((i) => { return i.isInfant})[0];
+      if(item){
+        array.forEach( (arrayItem, index) => {
+          if(arrayItem.id == item.id && arrayItem.isInfant) array.splice(index,1);
+        });
+      }
     }
    
   }
 
   public removeChildInArrayChild(array){
-    let item = array.filter((i) => { return !i.isInfant})[0];
-    if(item){
-      array.forEach( (arrayItem, index) => {
-        if(arrayItem.id == item.id && !arrayItem.isInfant) array.splice(index,1);
-      });
+    if(array && array.length >0){
+      let item = array.filter((i) => { return !i.isInfant})[0];
+      if(item){
+        array.forEach( (arrayItem, index) => {
+          if(arrayItem.id == item.id && !arrayItem.isInfant) array.splice(index,1);
+        });
+      }
     }
+   
    
   }
 
@@ -223,7 +241,7 @@ export class FlightselectpaxPage implements OnInit {
         this._flightService.itemFlightChangePax.emit(1);
         
         if(this.valueGlobal.backValue == "flightchangeinfo"){
-          this.modalCtrl.dismiss();
+          this.modalCtrl.dismiss(1);
         }else{
             this.navCtrl.back();
         }

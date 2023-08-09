@@ -177,7 +177,7 @@ export class CombocarnewPage implements OnInit {
     this.children = booking.Child;
     this.totalChild = booking.Child;
     this.roomtype = Roomif.roomtype;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.room = Roomif.arrroom;
     var chuoicin = this.cin.split('-');
     var chuoicout = this.cout.split('-');
@@ -1206,7 +1206,6 @@ export class CombocarnewPage implements OnInit {
       else {
         priceseatret = (self.pricereturn * self.totalAdult) + self.diff_feeret;
       }
-
       self.PriceAvgPlusTAStr = self.PriceAvgPlusTA + priceseatdep + priceseatret + (self.surchargedepd + self.surchargedept + self.surchargeretd + self.surchargerett) * self.totalAdult;
       self.total = self.PriceAvgPlusTAStr;
       self.PriceAvgPlusTAStr = self.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -1464,7 +1463,6 @@ export class CombocarnewPage implements OnInit {
         else {
           priceseatret = (self.pricereturn * self.totalAdult) + self.diff_feeret;
         }
-
         self.PriceAvgPlusTAStr = self.PriceAvgPlusTA + priceseatdep + priceseatret + (self.surchargedepd + self.surchargedept + self.surchargeretd + self.surchargerett) * self.totalAdult;
         self.total = self.PriceAvgPlusTAStr;
         self.PriceAvgPlusTAStr = self.PriceAvgPlusTAStr.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -2364,7 +2362,7 @@ export class CombocarnewPage implements OnInit {
               se.modalCtrl.dismiss();
             }, 100)
 
-            se.searchhotel.changeInfoHotelList.emit(1);
+            se.searchhotel.publicChangeInfoHotelList(1);
           }
         }
       }

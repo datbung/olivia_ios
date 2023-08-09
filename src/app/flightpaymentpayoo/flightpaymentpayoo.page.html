@@ -45,6 +45,7 @@
       <ion-label class="text" text-wrap>
         Tổng tiền: <span class="totalPrice">{{total}}</span>
       </ion-label>
+      <div *ngIf="payment_fee" class="text-sub">*(Đã bao gồm {{gf.convertNumberToString(payment_fee)}} phí tiện ích)</div>
     </div>
     <div>
       <ion-label class="text" text-wrap>

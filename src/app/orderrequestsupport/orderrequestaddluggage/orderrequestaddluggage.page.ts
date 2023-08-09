@@ -77,12 +77,29 @@ export class OrderRequestAddluggagePage implements OnInit {
     private zone: NgZone,
     public _flightService: flightService,
     public activityService: ActivityService) {
+    
+  }
+
+  ionViewWillEnter(){
     if(this.activityService.objPaymentMytrip){
       console.log(this.activityService.objPaymentMytrip);
       let itemFlightTrip = this.activityService.objPaymentMytrip.trip;
       this.roundtrip = itemFlightTrip.itemdepart && (itemFlightTrip.itemreturn && itemFlightTrip.itemreturn.airlineCode && itemFlightTrip.itemreturn.airlineName.toLowerCase().indexOf('cathay') == -1 && ['GO', 'RETURN', 'GOROUNDTRIP', 'RETURNROUNDTRIP'].indexOf(itemFlightTrip.itemreturn.trip_Code) == -1);
       this.departLuggage = [];
       this.returnLuggage = [];
+      this.totalprice =0;
+      this.totalpricedisplay ='';
+      this.listPass =[];
+      this.listPassReturn =[];
+      itemFlightTrip.itemdepart.passengers.forEach(p => {
+        p.departLuggage = null;
+      });
+      if(itemFlightTrip.itemreturn && itemFlightTrip.itemreturn.passengers){
+        itemFlightTrip.itemreturn.passengers.forEach(p => {
+          p.returnLuggage = null;
+        });
+      }
+      
     
      
       if(itemFlightTrip && itemFlightTrip.itemdepart && itemFlightTrip.itemdepart){
@@ -100,7 +117,7 @@ export class OrderRequestAddluggagePage implements OnInit {
             if(data.passengers && data.passengers.passenger){
               this.departPass = data.passengers.passenger;
             }
-            this.listPass = itemFlightTrip.itemdepart.passengers;
+            this.listPass = [...itemFlightTrip.itemdepart.passengers];
             this.mapPassenger(data.baggage[0].airLineCode ,1);
             this.checkAllowAddMoreLuggage(itemFlightTrip.itemdepart, 1);
             this.hadBuyLuggageDepart = this.listPass.filter((p) => p.allowAddMoreLuggage).length ==0;
@@ -131,7 +148,7 @@ export class OrderRequestAddluggagePage implements OnInit {
               if(datareturn.passengers && datareturn.passengers.passenger){
                 this.returnPass = datareturn.passengers.passenger;
               }
-                this.listPassReturn = itemFlightTrip.itemreturn.passengers;
+                this.listPassReturn = [...itemFlightTrip.itemreturn.passengers];
                 this.mapPassenger(datareturn.baggage[0].airLineCode ,2);
                 this.checkAllowAddMoreLuggage(itemFlightTrip.itemreturn, 2);
                 this.hadBuyLuggageReturn = this.listPassReturn.filter((p) => p.allowAddMoreLuggage).length ==0;
@@ -147,7 +164,7 @@ export class OrderRequestAddluggagePage implements OnInit {
               if(datareturn.passengers && datareturn.passengers.passenger){
                 this.returnPass = datareturn.passengers.passenger;
               }
-                this.listPassReturn = itemFlightTrip.itemreturn.passengers;
+                this.listPassReturn = [...itemFlightTrip.itemreturn.passengers];
                 this.mapPassenger(datareturn.baggage[0].airLineCode ,2);
                 this.checkAllowAddMoreLuggage(itemFlightTrip.itemreturn, 2);
                 this.hadBuyLuggageReturn = this.listPassReturn.filter((p) => p.allowAddMoreLuggage).length ==0;
@@ -269,6 +286,7 @@ export class OrderRequestAddluggagePage implements OnInit {
   }
 
   goback(){
+    //this.rollBackObjectRequestAddLuggage();
     this.listPass.forEach((p)=> {
       p.departLuggage = null;
     });
@@ -377,7 +395,9 @@ export class OrderRequestAddluggagePage implements OnInit {
       departWeight: this.listPass.reduce((totalweight,p) => { return totalweight + (p.departLuggage ? p.departLuggage.weight : 0); }, 0),
       returnWeight: this.listPassReturn.reduce((totalweight,p) => { return totalweight + (p.returnLuggage ? p.returnLuggage.weight : 0); }, 0),
       objectDepartLuggage: obj,
-      objectReturnLuggage: objreturn
+      objectReturnLuggage: objreturn,
+      listPass: this.listPass,
+      listPassReturn: this.listPassReturn
     }
 
     //console.log(this.activityService.objRequestAddLuggage.objectDepartLuggage);
@@ -504,4 +524,63 @@ export class OrderRequestAddluggagePage implements OnInit {
   getAirlineShortName(name) {
     return name.toLowerCase().indexOf('vietnam airline') != -1 ? 'VN' : (name.toLowerCase().indexOf('vietjet') != -1 ? 'VJ' : 'QH');
   }
+
+  rollBackObjectRequestAddLuggage(){
+      if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage.items  && this.activityService.objRequestAddLuggage.objectDepartLuggage.items.length >0){
+        let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+        let  headers = {
+          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+          'Content-Type': 'application/json; charset=utf-8',
+        };
+        let body = this.activityService.objRequestAddLuggage.objectDepartLuggage;
+        body.isDelete = true;
+        this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentselect', 'rollBackObjectRequestAddLuggage' ).then((data) => {
+          if(data && data == "success"){
+  
+            if(this.activityService.objRequestAddLuggage.listPassReturn && this.activityService.objRequestAddLuggage.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+              let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+              let  headers = {
+                "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                'Content-Type': 'application/json; charset=utf-8',
+              };
+              let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+              body.isDelete = true;
+              this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentselect', 'rollBackObjectRequestAddLuggage' ).then((data1) => {
+                if(data1 && data1 == "success"){
+                  this.gf.hideLoading();
+                }else{
+                  this.gf.hideLoading();
+                  this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+                }
+              })
+            }else{
+              this.gf.hideLoading();
+            }
+          } else{
+            this.gf.hideLoading();
+            this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+          }
+          
+        })
+      }
+      else if(this.activityService.objRequestAddLuggage.listPassReturn && this.activityService.objRequestAddLuggage.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+        let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+        let  headers = {
+          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+          'Content-Type': 'application/json; charset=utf-8',
+        };
+        let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+        body.isDelete = true;
+        this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentselect', 'rollBackObjectRequestAddLuggage' ).then((data1) => {
+          if(data1 && data1 == "success"){
+            this.gf.hideLoading();
+          } else{
+            this.gf.hideLoading();
+            this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+          }
+        })
+      }else{
+        this.gf.hideLoading();
+      }
+    }
 }

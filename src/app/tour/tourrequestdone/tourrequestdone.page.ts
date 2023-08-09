@@ -1,4 +1,4 @@
-import { SearchHotel, ValueGlobal } from './../../providers/book-service';
+import {  ValueGlobal } from './../../providers/book-service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, NgZone } from '@angular/core';
 import * as moment from 'moment';
@@ -20,7 +20,7 @@ import { tourService } from 'src/app/providers/tourService';
 })
 export class TourRequestDonePage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, public _flightService: flightService,
-    private navCtrl: NavController, public searchhotel: SearchHotel, public storage: Storage, private zone: NgZone,
+    private navCtrl: NavController, public storage: Storage, private zone: NgZone,
     public valueGlobal: ValueGlobal,
     public gf: GlobalFunction,
     private modalCtrl: ModalController,

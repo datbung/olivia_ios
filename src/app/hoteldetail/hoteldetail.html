@@ -747,7 +747,7 @@
                             <span
                               *ngIf="mealtype.Penaltys && mealtype.Penaltys[0].PenaltyDescription && mealtype.Penaltys[0].PenaltyDescription.length <=70"
                               class="penalty-text"
-                              [innerHTML]="mealtype.Penaltys && mealtype.Penaltys[0].PenaltyDescription.replace('p>','ion-label>').replace('- ','')"></span>
+                              [innerHTML]="mealtype.Penaltys && mealtype.Penaltys[0].PenaltyDescription.replace('p>','ion-label>').replace('p>','ion-label>').replace('- ','')"></span>
                             <div style="margin-top: -4px;" (click)="penaltySelected(hotelRoomClasses.length*itemindex+j+1)">
                               <button
                                 *ngIf="!mealtype.Penaltys[0].IsPenaltyFree && mealtype.Penaltys[0].PenaltyDescription && mealtype.Penaltys[0].PenaltyDescription.length > 70"
@@ -759,7 +759,7 @@
                               *ngIf="penaltyItemSelected==hotelRoomClasses.length*itemindex+j+1">
                               <ion-label *ngFor="let pen of mealtype.Penaltys; let k = index"
                                 class="penalty-active-description"
-                                [innerHTML]="pen.PenaltyDescription.replace('p>','ion-label>')"
+                                [innerHTML]="pen.PenaltyDescription.replace('p>','ion-label>').replace('p>','ion-label>')"
                                 [ngClass]="mealtype.Penaltys.length > 1 && k==mealtype.Penaltys.length-1 ? 'none-p-top' : ''">
                               </ion-label>
                             </div>
@@ -776,7 +776,7 @@
                               *ngIf="penaltyItemSelected==hotelRoomClasses.length*itemindex+j+1">
                               <ion-label *ngFor="let pen of mealtype.Penaltys; let k = index"
                                 class="penalty-active-description"
-                                [innerHTML]="pen.PenaltyDescription.replace('p>','ion-label>')"
+                                [innerHTML]="pen.PenaltyDescription.replace('p>','ion-label>').replace('p>','ion-label>')"
                                 [ngClass]="mealtype.Penaltys.length > 1 && k==mealtype.Penaltys.length-1 ? 'none-p-top' : ''">
                               </ion-label>
                             </div>
@@ -1220,7 +1220,7 @@
                       
                     </div>
                     <!-- last row -->
-                    <div class="last-row">
+                    <!-- <div class="last-row">
                         <div *ngIf="loginuser" >
                           <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''">
                               <div style="font-weight: bold">
@@ -1270,7 +1270,7 @@
                                 </div>
                               </div>
                             </div>
-                      </div>
+                      </div> -->
                       
                     </div>
               </div>

@@ -169,6 +169,8 @@ export class OrderPage {
   isTTV=false;
   includePrice: any;
   ischeckqrLink=false;
+  _departTicketInfoCRM: any;
+  _returnTicketInfoCRM: any;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -402,36 +404,11 @@ export class OrderPage {
         this.networkProvider.setNetworkStatus(true);
         this.gf.setNetworkStatus(true);
         this.isConnected = true;
-        //Có cache thì ưu tiên load cache
-        // this.storage.get('listmytrips').then(data => {
-        //   if (data) {
-        //     this.loadMytrip(data, false);
-        //     this.activityService.tab3Loaded = true;
-        //     //Sau 1s load lại dữ liệu mới nhất
-        //     setTimeout(() => {
-        //       this.getdata(null, false);
-        //     }, 1 * 1000);
-        //   } else {
-        //     setTimeout(() => {
-        //       this.getdata(null, false);
-        //       this.activityService.tab3Loaded = true;
-        //     }, 300)
-        //   }
-        // })
+       
         this.getdata(null, false);
         setTimeout(() => {
           this.getdata(null, true);
         }, 1000)
-        // this.storage.get('listmytripshistory').then(data => {
-        //   if (data) {
-        //     this.loadMytrip(data, true);
-        //   }else{
-        //     setTimeout(()=>{
-        //       this.getdata(null, true);
-        //     },1000)
-
-        //   }
-        // })
 
         //load dữ liệu topdeal suggest
         this.storage.get('listtopdealdefault').then((data: any) => {
@@ -452,15 +429,6 @@ export class OrderPage {
         })
       }
     }
-    // else if (this.activityService.tab3Loaded && this.listAlltrips.length >= 0) {
-    //   this.hasloaddata = true;
-    //   this.isConnected = true;
-    //   if (this.mytripcount + this.requestripcount > 0) {
-    //     this.nexttripcounttext = " (" + this.mytripcount * 1 + this.requestripcount * 1 + ")";
-    //   } else {
-    //     this.nexttripcounttext = "";
-    //   }
-    // }
   }
 
   ionViewDismiss() {
@@ -552,8 +520,8 @@ export class OrderPage {
         var options = {
           method: 'GET',
           url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
-          //url: "http://localhost:34290/"+ '/api/dashboard/getMyTripPaging?memberId=91f60b04-328e-4e04-a603-cd49139e2c0c&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
-          //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?memberId=b2d138c8-378f-404f-ac1e-647df522defa&getall=true&getHistory='+ishistory+'&pageIndex='+se.pageIndex+'&pageSize='+se.pageSize,
+          //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&memberid=17c3fd5b-a372-41dd-936b-69beac9aa933&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
+          
           headers:
           {
             'accept': 'application/json',
@@ -1115,7 +1083,7 @@ export class OrderPage {
                   //console.log(JSON.parse(element.booking_json_data));
                   //check đã xuất vé + có checkin online
                   element.bookingjson = JSON.parse(element.booking_json_data);
-                  // console.log(element.bookingjson);
+                   console.log(element.bookingjson);
                   if ((element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate != '' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate != ''))) {
                     let objjson = JSON.parse(element.booking_json_data);
                     let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo && p.CheckinInfo.indexOf('http') != -1) });
@@ -1142,49 +1110,61 @@ export class OrderPage {
                     }
                     // console.log(JSON.parse(element.booking_json_data));
                   }
-                  if (element.hotel_name.indexOf("VMB QT") != -1) {
-
+                  if (element.hotel_name.indexOf("VMB QT") != -1  || element.hotel_id == "F000002") {
+                    element.isBookingVMBQT = true;
+                    element.allowCheckinOnline = false;
                     if (element.booking_json_data) {
-
+                    
                       // element.bookingjson = JSON.parse(element.booking_json_data);
                       if (element.bookingjson && element.bookingjson.length > 0) {
                         element.totalCost = 0;
-                        let _timezone = new Date().getTimezoneOffset();
-                        element.bookingjson.forEach(elementbkg => {
-                          if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
-                            element.isBookingVMBQT = true;
+                        let _timezone = new Date(element.checkInDate).getTimezoneOffset();
+                        element.bookingjson.forEach((elementbkg,idx) => {
+                          if (elementbkg.Supplier3rd){
+                            element.isTravelPort = true;
                           }
-
                           if (elementbkg && elementbkg.Transits) {
                             element.totalCost += elementbkg.TotalCost * 1;
 
                             for (let index = 0; index < elementbkg.Transits.length; index++) {
-                              const element = elementbkg.Transits[index];
-                              let cin = moment(new Date(this.gf.getCinIsoDate(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('YYYY-MM-DD');
-                              if (_timezone != -420) {
-                                element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('HH:mm');
-                                element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('HH:mm');
+                              const elementTran = elementbkg.Transits[index];
+                              let cin = moment(new Date(this.gf.getCinIsoDate(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('YYYY-MM-DD');
+                              if(element.bookingJsonDataParse && element.bookingJsonDataParse[idx] && element.bookingJsonDataParse[idx].transits[index] && element.bookingJsonDataParse[idx].transits[index].departTimeParse){
+                                elementTran.DepartTimeDisplay = moment(element.bookingJsonDataParse[idx].transits[index].departTimeParse).format('HH:mm');
+                                let _d = element.bookingJsonDataParse[idx].transits[index].departTimeParse;
+                                elementTran.DepartDayDisplay = moment(_d).format('DD')+ "Thg " + moment(_d).format('MM');
+                                if(elementTran.LandingTime){
+                                  elementTran.LandingTimeDisplay = moment(element.bookingJsonDataParse[idx].transits[index].landingTimeParse).format('HH:mm');
+                                  let _dr = element.bookingJsonDataParse[idx].transits[index].landingTimeParse;
+                                  elementTran.LandingDayDisplay = moment(_dr).format('DD')+ "Thg " + moment(_dr).format('MM');
+                                }
+                                cin = moment(_d).format('YYYY-MM-DD');
+                                }else{
+                                if (_timezone != -420) {
+                                  elementTran.DepartTimeDisplay = moment(new Date(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('HH:mm');
+                                  elementTran.LandingTimeDisplay = moment(new Date(elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('HH:mm');
 
-                                element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('DD') + "Thg " + moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('MM');
-                                element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('DD') + "Thg " + moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('MM');
-                                cin = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + Math.abs(_timezone) * 60000 + 25200000)).format('YYYY-MM-DD');
+                                  elementTran.DepartDayDisplay = moment(new Date(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('DD') + "Thg " + moment(new Date(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('MM');
+                                  elementTran.LandingDayDisplay = moment(new Date(elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('DD') + "Thg " + moment(new Date(elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('MM');
+                                  cin = moment(new Date(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1 + _timezone * 60000 + 25200000)).format('YYYY-MM-DD');
 
-                              } else {
-                                element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
-                                element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
-                                element.DepartDayDisplay = moment(new Date(this.gf.getCinIsoDate(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('DD') + "Thg " + moment(new Date(this.gf.getCinIsoDate(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('MM');
-                                element.LandingDayDisplay = moment(new Date(this.gf.getCinIsoDate(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1))).format('DD') + "Thg " + moment(new Date(this.gf.getCinIsoDate(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1))).format('MM');
+                                } else {
+                                  elementTran.DepartTimeDisplay = moment(new Date(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                                  elementTran.LandingTimeDisplay = moment(new Date(elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                                  elementTran.DepartDayDisplay = moment(new Date(this.gf.getCinIsoDate(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('DD') + "Thg " + moment(new Date(this.gf.getCinIsoDate(elementTran.DepartTime.replace('/Date(', '').replace(')/', '') * 1))).format('MM');
+                                  elementTran.LandingDayDisplay = moment(new Date(this.gf.getCinIsoDate(elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1))).format('DD') + "Thg " + moment(new Date(this.gf.getCinIsoDate(elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1))).format('MM');
+                                }
                               }
-                              element.departAirport = this.getAirportByCode(element.FromPlaceCode);
-                              element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
+                              elementTran.departAirport = this.getAirportByCode(elementTran.FromPlaceCode);
+                              elementTran.landingAirport = this.getAirportByCode(elementTran.ToPlaceCode);
 
-                              element.cindisplay = this.gf.getDayOfWeek(cin).daynameshort + ", " + moment(cin).format('DD-MM-YYYY')
+                              elementTran.cindisplay = this.gf.getDayOfWeek(cin).daynameshort + ", " + moment(cin).format('DD-MM-YYYY')
 
                               let elementNext = elementbkg.Transits[index + 1];
                               if (elementNext) {
 
                                 let dt = elementNext.DepartTime.replace('/Date(', '').replace(')/', '') * 1;
-                                let lt = element.LandingTime.replace('/Date(', '').replace(')/', '') * 1;
+                                let lt = elementTran.LandingTime.replace('/Date(', '').replace(')/', '') * 1;
                                 let diffminutes = moment(dt).diff(lt, 'minutes');
                                 if (diffminutes) {
                                   let hours: any = Math.floor(diffminutes / 60);
@@ -1195,14 +1175,16 @@ export class OrderPage {
                                   if (minutes < 10) {
                                     minutes = "0" + minutes;
                                   }
-                                  element.timeOverlay = hours + ' tiếng ' + minutes + ' phút';
+                                  elementTran.timeOverlay = hours + ' tiếng ' + minutes + ' phút';
                                 }
                               }
                             }
 
                           }
                         });
-
+                        if(element.payment_fee){ 
+                          this.totalCost = this.totalCost - element.payment_fee;
+                        }
                       }
                       element.flightRoundTripStr = 'Vé máy bay ' + (element.bookingjson.length > 1 ? 'khứ hồi' : 'một chiều');
                       if (element.totalPaxStr) {
@@ -1515,7 +1497,7 @@ export class OrderPage {
                     element.infant = 0;
 
                     element.bookingsComboData[0].passengers.forEach((elementlug, index) => {
-                      let yearold = 18;
+                      let yearold = 18*12;
                       if (elementlug.dob) {
                         let arr = [];
                         if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
@@ -1527,23 +1509,23 @@ export class OrderPage {
 
                         if (arr.length > 0) {
                           let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-                          yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
+                          yearold = moment(element.checkInDate).diff(moment(newdob), 'month');
                         }
 
-                        elementlug.isAdult = yearold > 12 ? true : false;
+                        elementlug.isAdult = yearold > 12*12 ? true : false;
                         if (elementlug.isAdult) {
                           element.adult += 1;
                         } else {
                           if (!element.textChildDisplay) {
                             element.textChildDisplay = "(";
                           }
-                          if (yearold < 2) {
+                          if (yearold < 2*12) {
                             element.infant += 1;
                             elementlug.isInfant = true;
-                            element.textChildDisplay += element.textChildDisplay && element.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                            element.textChildDisplay += element.textChildDisplay && element.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? Math.round(yearold/12) : 1) : (yearold > 0 ? Math.round(yearold/12) : 1);
                           } else {
                             element.child += 1;
-                            element.textChildDisplay += element.textChildDisplay && element.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                            element.textChildDisplay += element.textChildDisplay && element.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? Math.round(yearold/12) : 1) : (yearold > 0 ? Math.round(yearold/12) : 1);
                           }
                         }
 
@@ -1586,7 +1568,7 @@ export class OrderPage {
                   if (element.bookingsComboData && element.bookingsComboData[1] && element.bookingsComboData[1].passengers && element.bookingsComboData[1].passengers.length > 0) {
 
                     element.bookingsComboData[1].passengers.forEach((elementlug, index) => {
-                      let yearold = 18;
+                      let yearold = 18*12;
                       if (elementlug.dob) {
                         let arr = [];
                         if (elementlug.dob && elementlug.dob.indexOf('/') != -1) {
@@ -1598,14 +1580,14 @@ export class OrderPage {
 
                         if (arr.length > 0) {
                           let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-                          yearold = moment(element.checkInDate).diff(moment(newdob), 'years');
+                          yearold = moment(element.checkInDate).diff(moment(newdob), 'month');
                         }
 
-                        elementlug.isAdult = yearold > 12 ? true : false;
+                        elementlug.isAdult = yearold > 12*12 ? true : false;
                         if (elementlug.isAdult) {
                           // element.adult += 1;
                         } else {
-                          if (yearold < 2) {
+                          if (yearold < 2*12) {
                             elementlug.isInfant = true;
                           }
                         }
@@ -1646,6 +1628,12 @@ export class OrderPage {
                   let today = new Date();
                   let d = new Date(Number(arrday[0]), Number(arrday[1]) - 1, Number(arrday[2]), Number(arrhours[0]), Number(arrhours[1]), 0);
                   let diffminutes = moment(d).diff(today, 'minutes');
+                   //pdanh - 05-07-2023: Fix lỗi timezone hạn thanh toán
+                   if (_timezone != -420) {
+                     let _nt = new Date().getTime();
+                     let _nd = moment(_nt * 1 + _timezone * 60000 + 25200000);
+                     diffminutes = moment(element.delivery_payment_date).diff(_nd, 'minutes');
+                   }
                   //Quá hạn thanh toán thì không hiển thị thông tin thanh toán
                   if (diffminutes < 0) {
                     element.deliveryPaymentDisplay = "";
@@ -1730,17 +1718,40 @@ export class OrderPage {
                   let temp = element.bookingsComboData[0].departureDate.split("/");
                   let daytemp=temp[2]+ temp[1] + temp[0];
                   var dep = moment(daytemp+ " " + element.bookingsComboData[0].departureTime, "YYYYMMDD HH:mm")
-                  let diffminutes = moment(dep).diff(new Date(), 'minutes');
-                  if (diffminutes <= 210) {
-                    this.zone.run(() => {
-                      element.bookingjson[0].RequestCheckin=0;
-                      element.ischeckinOnl=true;
-                  
-                    })
-                  }
-                  // if (element.booking_id=='VC0002078') {
-                  //   se.listMyTrips.push(element);
-                  // }
+                  let _time = moment(dep).diff(new Date(), 'minutes');
+               
+                  //pdanh 02-08-2023: Thêm valid checkin online
+                  //pdanh 07-08-2023: Sửa lại lấy từ thông tin load api
+                   //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
+                   //Nếu _time > 24 tiếng => cho phép chọn checkin online
+                   this.zone.run(() => {
+                    // if(_time > 24*60){
+                    //   element.ischeckinOnl = false;
+                    //   element.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
+                    // }
+                    // //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
+                    // else if(24*60 > _time && _time > 4*60){
+                    //   element.ischeckinOnl = true;
+                    //   element.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
+                    // }
+                    // //Nếu _time <= 4: Ẩn nút YC Checkin online
+                    // else if(_time <=4*60){
+                    //   element.ischeckinOnl = true;
+                    //   element.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
+                    // }
+                    if(element.allowRequestCheckinOnline){
+                      element.ischeckinOnl = !element.allowRequestCheckinOnline.allowCheckin;
+                      element.textCheckinOnline = element.allowRequestCheckinOnline.note;
+                    }
+                  })
+
+                 if(element.isBookingVMBQT && element.bookingJsonDataParse && element.bookingJsonDataParse.length >0){
+                  //element.ischeckinOnl = false;
+                  let d = element.bookingJsonDataParse[0].departureDateParse;
+                  let dr = element.bookingJsonDataParse.length ==1 ? element.bookingJsonDataParse[0].arrivalDateParse : element.bookingJsonDataParse[element.bookingJsonDataParse.length-1].departureDateParse;
+                  element.checkInDisplay = se.gf.getDayOfWeek(d).daynameshort + ", " + moment(d).format('DD-MM-YYYY');
+                  element.checkOutDisplay = se.gf.getDayOfWeek(dr).daynameshort + ", " + moment(dr).format('DD-MM-YYYY');
+                 }
                   se.listMyTrips.push(element);
                   se.mytripcount++;
                   //se.nextflightcounttext ="(" + se.mytripcount +")";
@@ -1789,6 +1800,7 @@ export class OrderPage {
                 // if (element.booking_id=='VC0002078') {
                 //   se.listMyTrips.push(element);
                 // }
+                
                 se.listMyTrips.push(element);
                 se.mytripcount++;
               }
@@ -2113,13 +2125,17 @@ export class OrderPage {
             se.coutDC = coutDCdepart + coutDCreturn;
             se.totalDichung = TotalPriceGo + TotalPriceReturn;
             se.totalVMB = se.listMyTrips[0].amount_after_tax - se.totalService - se.totalDichung + se.listMyTrips[0].promotionDiscountAmount;
-
+            if(se.listMyTrips[0].payment_fee){
+              se.totalVMB = se.totalVMB - se.listMyTrips[0].payment_fee;
+            }
           }
           if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
             se.amount_after_tax = se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount;
           } else {
             se.amount_after_tax = se.listMyTrips[0].amount_after_tax
           }
+
+         
         } else {
           se.hasdata = false;
         }
@@ -2148,29 +2164,59 @@ export class OrderPage {
           }
 
           else if (se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].isBookingVMBQT) {
-            se.getSummaryBooking(se.listMyTrips[0]);
-            if (se.listMyTrips[0].off_hotel_paypolicy && se.listMyTrips[0].off_hotel_paypolicy.indexOf('\r\n')) {
+            if(se.listMyTrips[0].isTravelPort){
+              se.getSummaryBooking(se.listMyTrips[0]);
+            }
+            
+            if (se.listMyTrips[0].bookingJsonDataParse && se.listMyTrips[0].bookingJsonDataParse.length >0) {
               let arrpolicy = se.listMyTrips[0].off_hotel_paypolicy.split('\r\n');
               se.listMyTrips[0].listpolicy = [];
               arrpolicy.forEach(element => {
                 if (element && element.toLowerCase().indexOf('đổi chiều đi') != -1) {
                   se.listMyTrips[0].hasdepartpolicy = true;
-                  se.listMyTrips[0].listpolicy.push({ type: 1, name: element.replace('-', ''), isdepart: true });
+                  se.listMyTrips[0].listpolicy.push({ type: 1, name: element.replace('-', ''), isdepart: true, typePolicy:1});//1- đổi vé; 2- hủy vé 
                 } else if (element && element.toLowerCase().indexOf('đổi chiều về') != -1) {
                   se.listMyTrips[0].hasreturnpolicy = true;
-                  se.listMyTrips[0].listpolicy.push({ type: 1, name: element.replace('-', ''), isdepart: false });
+                  se.listMyTrips[0].listpolicy.push({ type: 1, name: element.replace('-', ''), isdepart: false, typePolicy:1 });
                 }
                 else if (element && element.toLowerCase().indexOf('hủy chiều đi') != -1) {
                   se.listMyTrips[0].hasdepartpolicy = true;
-                  se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: true });
+                  se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: true, typePolicy:2 });
                 } else if (element && element.toLowerCase().indexOf('hủy chiều về') != -1) {
                   se.listMyTrips[0].hasreturnpolicy = true;
-                  se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: false });
+                  se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: false, typePolicy:2 });
                 }
               });
+              // se.listMyTrips[0].listpolicy = [];
+              // if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].cancelPolicy){
+              //   se.listMyTrips[0].hasdepartpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 2, name: se.listMyTrips[0].bookingJsonDataParse[0].cancelPolicy, isdepart: true, typePolicy:2});//1- đổi vé; 2- hủy vé 
+              // }
+              // if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].changePolicy){
+              //   se.listMyTrips[0].hasdepartpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 1, name: se.listMyTrips[0].bookingJsonDataParse[0].changePolicy, isdepart: true, typePolicy:1});
+              // }
+              // if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].cancelPolicy){
+              //   se.listMyTrips[0].hasreturnpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 2, name: se.listMyTrips[0].bookingJsonDataParse[1].cancelPolicy, isdepart: false, typePolicy:2});//1- đổi vé; 2- hủy vé 
+              // }
+              // if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].changePolicy){
+              //   se.listMyTrips[0].hasdepartpolicy = true;
+              //   se.listMyTrips[0].listpolicy.push({ type: 1, name: se.listMyTrips[0].bookingJsonDataParse[1].changePolicy, isdepart: false, typePolicy:1});
+              // }
             }
+           
+
             if (se.listMyTrips[0].paid_amount && se.listMyTrips[0].paid_amount > 0) {
               se.listMyTrips[0].priceShow = (se.listMyTrips[0].amount_after_tax - se.listMyTrips[0].paid_amount).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+            }
+            //pdanh 12-07-2023: Sửa lỗi sync thông tin, điều kiện vé update dưới CRM
+            //Nếu có cập nhật từ CRM thì ưu tiên show thông tin update dưới CRM( 'ticketConditions' trong object 'bookingJsonDataParse')
+            if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions){
+              se.listMyTrips[0].departTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions;
+            }
+            if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions){
+              se.listMyTrips[0].returnTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions;
             }
           }
           else if(se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].booking_type == 'TICKET'){
@@ -2194,7 +2240,8 @@ export class OrderPage {
           if (se.listMyTrips && se.listMyTrips.length == 1 && !(se.listMyTrips[0].pay_method == 3 || se.listMyTrips[0].pay_method == 51 || se.listMyTrips[0].pay_method == 2)) {
             se.buildLinkQrCode(se.listMyTrips[0]);
           }
-
+          console.log('rq xxxxx')
+          console.log(se.listMyTrips[0].bookingjson[0].RequestCheckin)
           se.zone.run(() => {
             se.hasloaddata = true;
             se.hasdata = true;
@@ -2584,52 +2631,37 @@ export class OrderPage {
                 }
                 if (elementHis.booking_id.indexOf("FLY") != -1 || elementHis.booking_id.indexOf("VMB") != -1 || elementHis.booking_type == "CB_FLY_HOTEL") {
                   elementHis.isFlyBooking = true;
-                  if (elementHis.hotel_name.indexOf("VMB QT") != -1) {
-                    //elementHis.isBookingVMBQT = true;
+                  if (elementHis.hotel_name.indexOf("VMB QT") != -1  || elementHis.hotel_id == "F000002") {
+                    elementHis.isBookingVMBQT = true;
                     if (elementHis.booking_json_data) {
                       // console.log(JSON.parse(elementHis.booking_json_data));
                       elementHis.bookingjson = JSON.parse(elementHis.booking_json_data);
                       if (elementHis.bookingjson && elementHis.bookingjson.length > 0) {
                         elementHis.bookingjson.forEach(elementbkg => {
-                          if (elementbkg && elementbkg.Supplier3rd == "Travelport") {
-                            elementHis.isBookingVMBQT = true;
+                          if (elementbkg.Supplier3rd){
+                            elementHis.isTravelPort = true;
                           }
-
                           if (elementbkg && elementbkg.Transits) {
                             elementHis.totalCost += elementbkg.TotalCost * 1;
-                            // if(elementbkg.Transits.length >1){
-                            // let dt = elementbkg.Transits[1].DepartTime.replace('/Date(','').replace(')/','')*1;
-                            //         let lt = elementbkg.Transits[0].LandingTime.replace('/Date(','').replace(')/','')*1;
-                            //         let diffminutes = moment(dt).diff(lt, 'minutes');
-                            //         if(diffminutes){
-                            //           let hours:any = Math.floor(diffminutes/60);
-                            //           let minutes:any = diffminutes - (hours*60);
-                            //           if(hours < 10){
-                            //             hours = hours != 0?  "0"+hours : "0";
-                            //           }
-                            //           if(minutes < 10){
-                            //             minutes = "0"+minutes;
-                            //           }
-                            //           elementbkg.timeOverlay = hours+' tiếng '+minutes+' phút';
-                            //         }
-                            //       }
-                            // elementbkg.Transits.forEach(element => {
-                            //     element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                            //     element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(','').replace(')/','')*1)).format('HH:mm');
-                            //     element.departAirport = this.getAirportByCode(element.FromPlaceCode);
-                            //     element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
-                            //     let cin = moment(new Date(element.DepartTime.replace('/Date(','').replace(')/','')*1)).format('YYYY-MM-DD');
-                            //     element.cindisplay = this.gf.getDayOfWeek(cin).dayname+ ", " + moment(cin).format('DD') + "Thg " + moment(cin).format('MM');
-                            //   });
-                            //console.log(new Date(this.departTransits[0].DepartTime.replace('/Date(','').replace(')/','')*1));
+                           
                             for (let index = 0; index < elementbkg.Transits.length; index++) {
                               const element = elementbkg.Transits[index];
-                              element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
-                              element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                              if(elementHis.bookingJsonDataParse && elementHis.bookingJsonDataParse[idx] && elementHis.bookingJsonDataParse[idx].transits[index] && elementHis.bookingJsonDataParse[idx].transits[index].departTimeParse){
+                                element.DepartTimeDisplay = moment(elementHis.bookingJsonDataParse[idx].transits[index].departTimeParse).format('HH:mm');
+                                let _d = elementHis.bookingJsonDataParse[idx].transits[index].departTimeParse;
+                                element.DepartDayDisplay = moment(_d).format('DD')+ "Thg " + moment(_d).format('MM');
+                                  if(element.LandingTime){
+                                    element.LandingTimeDisplay = moment(elementHis.bookingJsonDataParse[idx].transits[index].landingTimeParse).format('HH:mm');
+                                    let _dr = elementHis.bookingJsonDataParse[idx].transits[index].landingTimeParse;
+                                    element.LandingDayDisplay = moment(_dr).format('DD')+ "Thg " + moment(_dr).format('MM');
+                                  }
+                                }else{
+                                  element.DepartTimeDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
+                                  element.LandingTimeDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('HH:mm');
 
-                              element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
-                              element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
-
+                                  element.DepartDayDisplay = moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.DepartTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
+                                  element.LandingDayDisplay = moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('DD') + "Thg " + moment(new Date(element.LandingTime.replace('/Date(', '').replace(')/', '') * 1)).format('MM');
+                                }
 
                               element.departAirport = this.getAirportByCode(element.FromPlaceCode);
                               element.landingAirport = this.getAirportByCode(element.ToPlaceCode);
@@ -2658,7 +2690,7 @@ export class OrderPage {
 
                           }
                         });
-
+                      
                       }
                       elementHis.flightRoundTripStr = 'Vé máy bay ' + (elementHis.bookingjson.length > 1 ? 'khứ hồi' : 'một chiều');
                       if (elementHis.totalPaxStr) {
@@ -2799,7 +2831,7 @@ export class OrderPage {
                     elementHis.infant = 0;
 
                     elementHis.bookingsComboData[0].passengers.forEach((elementHislug, index) => {
-                      let yearold = 18;
+                      let yearold = 18*12;
                       let arr = [];
                       if (elementHislug.dob) {
                         if (elementHislug.dob && elementHislug.dob.indexOf('/') != -1) {
@@ -2811,23 +2843,23 @@ export class OrderPage {
 
                         if (arr.length > 0) {
                           let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-                          yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
+                          yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'month');
                         }
 
-                        elementHislug.isAdult = yearold > 12 ? true : false;
+                        elementHislug.isAdult = yearold > 12*12 ? true : false;
                         if (elementHislug.isAdult) {
                           elementHis.adult += 1;
                         } else {
                           if (!elementHis.textChildDisplay) {
                             elementHis.textChildDisplay = "(";
                           }
-                          if (yearold < 2) {
+                          if (yearold < 2*12) {
                             elementHis.infant += 1;
                             elementHislug.isInfant = true;
-                            elementHis.textChildDisplay += elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                            elementHis.textChildDisplay += elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? Math.round(yearold/12) : 1) : (yearold > 0 ? Math.round(yearold/12) : 1);
                           } else {
                             elementHis.child += 1;
-                            elementHis.textChildDisplay += elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? yearold : 1) : (yearold > 0 ? yearold : 1);
+                            elementHis.textChildDisplay += elementHis.textChildDisplay && elementHis.textChildDisplay.length > 1 ? ", " + (yearold > 0 ? Math.round(yearold/12) : 1) : (yearold > 0 ? Math.round(yearold/12) : 1);
                           }
                         }
 
@@ -2869,7 +2901,7 @@ export class OrderPage {
                   if (elementHis.bookingsComboData && elementHis.bookingsComboData[1] && elementHis.bookingsComboData[1].passengers && elementHis.bookingsComboData[1].passengers.length > 0) {
 
                     elementHis.bookingsComboData[1].passengers.forEach((elementHislug, index) => {
-                      let yearold = 18;
+                      let yearold = 18*12;
                       let arr = [];
                       if (elementHislug.dob) {
                         if (elementHislug.dob && elementHislug.dob.indexOf('/') != -1) {
@@ -2881,14 +2913,14 @@ export class OrderPage {
 
                         if (arr.length > 0) {
                           let newdob = new Date(Number(arr[2]), Number(arr[1] - 1), Number(arr[0]));
-                          yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'years');
+                          yearold = moment(elementHislug.checkInDate).diff(moment(newdob), 'month');
                         }
 
-                        elementHislug.isAdult = yearold > 12 ? true : false;
+                        elementHislug.isAdult = yearold > 12*12 ? true : false;
                         if (elementHislug.isAdult) {
                           //elementHis.adult += 1;
                         } else {
-                          if (yearold < 2) {
+                          if (yearold < 2*12) {
                             elementHislug.isInfant = true;
                           }
                         }
@@ -3311,8 +3343,8 @@ export class OrderPage {
             if (element.dob) {
               let arr = element.dob.split('/');
               let newdate = new Date(Number(arr[2]), Number(arr[1]), Number(arr[0]));
-              let yearold = moment(new Date()).diff(moment(newdate), 'years');
-              element.isAdult = yearold > 12 ? true : false;
+              let yearold = moment(new Date()).diff(moment(newdate), 'month');
+              element.isAdult = yearold > 12*12 ? true : false;
             }
 
 
@@ -5106,6 +5138,7 @@ export class OrderPage {
       se.hasloaddata = true;
       return;
     }
+    se._mytripservice.backroute = "order";
     se.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
     this.activityService.objPaymentMytrip.trip.priceShow = se.amount_after_tax;
     if (trip.booking_type == 'COMBO_FLIGHT') {
@@ -5125,7 +5158,7 @@ export class OrderPage {
       }
 
     }
-    else if (trip.isBookingVMBQT) {
+    else if (trip.isBookingVMBQT&& trip.isTravelPort) {
       se._flightService.itemFlightInternational = null;
       se.activityService.objPaymentMytrip = trip;
       this.gf.showLoading();
@@ -5570,7 +5603,7 @@ export class OrderPage {
 
   getDetailTicket(item, trip, isdepart) {
     let se = this;
-    let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType}&airbusCode=${item.aircraft}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(trip.bookingDate).format('YYYY-MM-DD')}`;
+    let url = C.urls.baseUrl.urlFlight + `gate/apiv1/GetDetailTicketAirBus?airlineCode=${item.airline}&ticketType=${item.ticketClass}&flightNumber=${item.flightNumber}&fromPlace=${item.fromPlaceCode}&toPlace=${item.toPlaceCode}&resbookCode=${item.ticketType||''}&airbusCode=${item.aircraft||''}&departDate=${moment(item.departTime).format('YYYY-MM-DD')}&bookingDate=${moment(trip.bookingDate).format('YYYY-MM-DD')}`;
     this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
       if (data) {
         se.zone.run(() => {
@@ -5648,17 +5681,20 @@ export class OrderPage {
         var ticketClass = se.listMyTrips[0].bookingsComboData[0].ticketClass;
         var departDate = se.listMyTrips[0].bookingsComboData[0].departTime;
         var flightNumber = se.listMyTrips[0].bookingsComboData[0].flightNumner;
+        var fromplace = se.listMyTrips[0].bookingJsonDataParse[0].departCode;
+        var toplace = se.listMyTrips[0].bookingJsonDataParse[0].arrivalCode;
       } else {
         var airlineCode = this.getairlineCode(stt);
         var ticketClass = se.listMyTrips[0].bookingsComboData[1].ticketClass;
         var departDate = se.listMyTrips[0].bookingsComboData[1].departTime;
         var flightNumber = se.listMyTrips[0].bookingsComboData[1].flightNumner;
-
+        var fromplace = se.listMyTrips[0].bookingJsonDataParse[1].departCode;
+        var toplace = se.listMyTrips[0].bookingJsonDataParse[1].arrivalCode;
       }
 
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode=" + airlineCode + "&ticketType=" + ticketClass + "&flightNumber=" + flightNumber + "&departDate=" + departDate + "&bookingDate=" + moment(this.listMyTrips[0].bookingDate).format('YYYY-MM-DD'),
+        url: C.urls.baseUrl.urlFlight + "gate/apiv1/GetDetailTicketAirBus?airlineCode=" + airlineCode + "&ticketType=" + ticketClass + "&flightNumber=" + flightNumber + "&departDate=" + departDate + "&bookingDate=" + moment(this.listMyTrips[0].bookingDate).format('YYYY-MM-DD')+`&fromPlace=${fromplace}&toPlace=${toplace}`,
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
 
@@ -5682,50 +5718,55 @@ export class OrderPage {
         if (response.statusCode == 200) {
           let result = JSON.parse(body);
           if (stt == 0) {
-            se.baggageHandedDepart = result.ticketCondition.baggageHanded;
-            se.luggageSignedDepart = result.ticketCondition.luggageSigned;
+            se.baggageHandedDepart = se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions.BaggageHanded ? se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions.BaggageHanded : result.ticketCondition.baggageHanded;
+            se.luggageSignedDepart = se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions.LuggageSigned ? se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions.LuggageSigned : result.ticketCondition.luggageSigned;
             se.departConditionInfo = result;
             if (se.listMyTrips[0] && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length > 0) {
               se.listMyTrips[0].bookingsComboData[0].passengers.forEach(element => {
                 element.hanhLyshow = "";
-                if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kg', '')) + Number(result.ticketCondition.luggageSigned);
+                if (element.hanhLy && se.luggageSignedDepart) {
+                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kgs', '').replace('kg', '')) + Number(se.luggageSignedDepart.toString().replace('kgs', '').replace('kg', ''));
                 } else {
                   if (element.hanhLy) {
                     element.hanhLyshow = element.hanhLy;
                   } else {
-                    element.hanhLyshow = result.ticketCondition.luggageSigned;
+                    element.hanhLyshow = se.luggageSignedDepart;
                   }
 
                 }
                 if (element.hanhLyshow) {
-                  element.hanhLyshow = element.hanhLyshow.toString().replace('kg', '');
+                  element.hanhLyshow = element.hanhLyshow.toString().replace('kgs', '').replace('kg', '');
                 }
               });
             }
+            se._departTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].ticketConditions ? se.listMyTrips[0].bookingJsonDataParse[0] : null;
+            // let _departChangeDepartTimeCRM = !((_departTicketInfoCRM && (!_departTicketInfoCRM.ticketConditions.ChangeDepartTime || _departTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1)) || !_departTicketInfoCRM );
             se.listMyTrips[0].departChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           } else {
-            se.baggageHandedReturn = result.ticketCondition.baggageHanded;
-            se.luggageSignedReturn = result.ticketCondition.luggageSigned
+            se.baggageHandedReturn = se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions && se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions.BaggageHanded ? se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions.BaggageHanded : result.ticketCondition.baggageHanded;
+            se.luggageSignedReturn = se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions && se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions.LuggageSigned ? se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions.LuggageSigned : result.ticketCondition.luggageSigned;
+            
             se.returnConditionInfo = result;
             if (se.listMyTrips[0] && se.listMyTrips[0].bookingsComboData && se.listMyTrips[0].bookingsComboData.length > 1) {
               se.listMyTrips[0].bookingsComboData[1].passengers.forEach(element => {
                 element.hanhLyshow = "";
-                if (element.hanhLy && result.ticketCondition.luggageSigned) {
-                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kg', '')) + Number(result.ticketCondition.luggageSigned);
+                if (element.hanhLy && se.luggageSignedReturn) {
+                  element.hanhLyshow = Number(element.hanhLy.toString().replace('kgs', '').replace('kg', '')) + Number(se.luggageSignedReturn.toString().replace('kgs', '').replace('kg', ''));
                 } else {
                   if (element.hanhLy) {
                     element.hanhLyshow = element.hanhLy;
                   } else {
-                    element.hanhLyshow = result.ticketCondition.luggageSigned;
+                    element.hanhLyshow = se.luggageSignedReturn;
                   }
 
                 }
                 if (element.hanhLyshow) {
-                  element.hanhLyshow = element.hanhLyshow.toString().replace('kg', '');
+                  element.hanhLyshow = element.hanhLyshow.toString().replace('kgs', '').replace('kg', '');
                 }
               });
             }
+            se._returnTicketInfoCRM = se.listMyTrips[0].bookingJsonDataParse[1]&& se.listMyTrips[0].bookingJsonDataParse[1].ticketConditions ? se.listMyTrips[0].bookingJsonDataParse[1] : null;
+            // let _returnChangeDepartTimeCRM = !((_returnTicketInfoCRM && (!_returnTicketInfoCRM.ticketConditions.ChangeDepartTime || _returnTicketInfoCRM.ticketConditions.ChangeDepartTime.indexOf('Không') != -1)) || !_returnTicketInfoCRM );
             se.listMyTrips[0].returnChangeDepartTime = !((result && (!result.ticketCondition.changeDepartTime || result.ticketCondition.changeDepartTime.indexOf('Không') != -1)) || !result );
           }
           resolve(result);

@@ -57,8 +57,8 @@
 
     <div class="d-flex ">
       <div class="div-width-100 div-flex-left">
-          <div class="text-pax" *ngIf="searchhotel.adult && !adult">{{searchhotel.adult}} người lớn</div>
-          <div class="text-pax m-top-4 h-16" *ngIf="!adult"><span *ngIf="searchhotel.child">{{searchhotel.child}} trẻ em</span></div>
+          <div class="text-pax" *ngIf="tourService.adult && !adult">{{tourService.adult}} người lớn</div>
+          <div class="text-pax m-top-4 h-16" *ngIf="!adult"><span *ngIf="tourService.child">{{tourService.child}} trẻ em</span></div>
 
           <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div>
@@ -127,13 +127,23 @@
         </div>
         <div class="div-split-item"></div>
 
-        <ion-item  (click)="flightbuynowpaylater()" class="cls-minheight">
+        <!-- <ion-item  (click)="flightbuynowpaylater()" class="cls-minheight">
           <label class="text-list">
             Mua trước trả sau <img class="img-homecredit" src="./assets/ic_ticket/logo-home-credit.jpg">
           </label>
           <ion-icon slot="end" name="ios-arrow-round-forward" class="m-right-20" *ngIf="!blockPayCard"></ion-icon>
           <div  class="text-bnpl-discount" >Giảm thêm 300.000đ</div>
-        </ion-item>
+        </ion-item> -->
+
+        <div  (click)="flightbuynowpaylater()" class="cls-minheight-new border-bottom m-left-16" >
+          <div class="d-flex m-top-12">
+            <div class="text-list-new ">
+              Mua trước trả sau <img class="img-homecredit" src="./assets/ic_ticket/logo-home-credit.jpg">
+            </div>
+            <div class="div-icon"><ion-icon class="ico-arrow" slot="end" name="ios-arrow-round-forward" *ngIf="!blockPayCard"></ion-icon></div>
+          </div>
+          <div  class="text-bnpl-discount" >Giảm thêm 300.000đ</div>
+        </div>
 
         <ion-item  (click)="tourpaymentmomo()" class="cls-minheight">
           <label class="text-list">

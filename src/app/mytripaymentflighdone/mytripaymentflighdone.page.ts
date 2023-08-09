@@ -27,9 +27,15 @@ export class MytripaymentflighdonePage implements OnInit {
     public storage: Storage,
     public _mytripservice: MytripService) { 
     this.totalpricedisplay=this.activityService.objPaymentMytrip.trip.priceShow;
+    // if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.dataSummaryBooking && this._flightService.itemFlightCache.dataSummaryBooking.totalPrice){
+    //   this.totalpricedisplay = this.gf.convertNumberToString(this._flightService.itemFlightCache.dataSummaryBooking.totalPrice);
+    // }
+   
     this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
     this._email=this.activityService.objPaymentMytrip.trip.cus_email;
-
+    this.getSummaryBooking(this.bookingCode).then((dataSummaryBooking)=>{
+      this.totalpricedisplay =this.gf.convertNumberToString(dataSummaryBooking.totalPrice);
+    })
     //this.storage.remove("listAirport");
     this.storage.get("listAirport").then((data) => {
       if (!data) {
@@ -43,6 +49,32 @@ export class MytripaymentflighdonePage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  getSummaryBooking(resNo) : Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject) => {
+      var options = {
+        method: 'GET',
+        url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+resNo,
+        timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+        headers: {
+          "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      };
+      request(options, function (error, response, body) {
+        if (error) {
+          error.page = "flightpaymentselect";
+          error.func = "getSummaryBooking";
+          error.param = JSON.stringify(options);
+        }
+        if (response.statusCode == 200) {
+          let result = JSON.parse(body);
+          resolve(result);
+        }
+      })
+    })
   }
 
   addToCalendar(){

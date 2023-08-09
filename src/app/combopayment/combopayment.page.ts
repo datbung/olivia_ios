@@ -62,7 +62,7 @@ export class CombopaymentPage implements OnInit {
     this.adults = booking.Adults;
     this.children = booking.Child;
     this.roomtype = Roomif.roomtype;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.room = Roomif.arrroom;
     var chuoicin = this.cin.split('-');
     var chuoicout = this.cout.split('-');

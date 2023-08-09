@@ -1,4 +1,5 @@
 .div-flight-content{
+  background-color: #f2f2f2;
   .d-flex{
     display: flex;
   }
@@ -106,7 +107,6 @@
         width: 100%;
 
         .div-point {
-          width: 40px;
           padding: 1px 8px;
           border-radius: 4px;
           background-color: #9fc43a;
@@ -114,7 +114,15 @@
           font-weight: 600;
           display: flex;
           align-items: center;
+          justify-content: center;
+
+          .img-star {
+            margin: 0 2px;
+          }
         }
+      }
+      .m-right-8 {
+        margin-right: 8px;
       }
       .f-14{
         font-size: 14px;
@@ -203,7 +211,7 @@
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 16px;
+                  font-size: 20px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;
@@ -219,7 +227,7 @@
             
                 .label-home-hotel{
                   color: #ffffff;
-                  font-size: 17px;
+                  font-size: 20px;
                   line-height: 23px;
                   font-weight: 600;
                   letter-spacing: -0.34px;
@@ -386,11 +394,11 @@
         letter-spacing: -0.51px;
         line-height: 1.5;
         color: #3f3b3b;
-        padding-top: 36px;
+        padding-top: 16px;
     }
 
       .div-content-yourflight{
-        height: 59px;
+        height: 80px;
         opacity: 0.9;
         border-radius: 4px;
         background: #fff;
@@ -434,8 +442,8 @@
         font-size: 14px;
         font-weight: 300;
         line-height: 1.5;
-        letter-spacing: -0.4px;
-        color: #000000;
+        letter-spacing: -0.69px;
+        color: #3f3b3b;
         margin-top: 4px;
       }
 
@@ -446,9 +454,8 @@
       /////////////
 
       .div-topdeal-flight, .div-hotdeal{
-        padding: 0 16px;
+        padding-left: 16px;
         background: #f2f2f2;
-        padding-bottom: 1px;
 
         .title-topdeal{
           font-size: 20px;
@@ -481,7 +488,7 @@
             font-size: 18px;
             font-weight: 600;
             line-height: 1.5;
-            letter-spacing: -0.51px;
+            letter-spacing: -0.69px;
             color: #000000;
           }
           .div-first{
@@ -530,7 +537,7 @@
             letter-spacing: -0.69px;
             color: #26bed6;
             height: 34px;
-            padding-top: 11px;
+            padding-top: 5px;
           }
           .text-sub-price{
             font-size: 14px;
@@ -636,7 +643,7 @@
         flex-direction: row;
         overflow-x: scroll;
 
-        .div-wrap-itemdeal {
+        .div-wrap-itemslide {
           display: flex;
           margin-right: 16px;
           overflow-x: scroll;
@@ -666,52 +673,48 @@
     .text-flight-datetime {
       font-size: 13px !important;
     }
-    .label-home-hotel {
-      font-size: 14px !important;
-    }
+    // .label-home-hotel {
+    //   font-size: 16px !important;
+    // }
     .div-point {
       font-size: 14px !important;
     }
-    
+    .text-point {
+      font-size: 14px !important;
+    }
   }
   @media(min-width:350px) and (max-width:375px){
-    .label-home-hotel {
-      font-size: 14px !important;
-    }
+    // .label-home-hotel {
+    //   font-size: 18px !important;
+    // }
     .div-point {
       font-size: 14px !important;
     }
-    
-  }
-
-  @media screen and (max-width:360px) {
-    .div-wrap-itemdeal {
-      min-width: 318px !important;
+    .text-point {
+      font-size: 14px !important;
     }
-  }
-  @media (min-width:375px) and (max-width:375px) {
-    .div-wrap-itemdeal {
-      min-width: 343px !important;
+    .text-flight-title {
+      font-size: 16px !important;
+    }
+    .text-flight-datetime {
+      font-size: 12px !important;
+    }
+    .div-wrap-itemslide {
+      min-width: 296px !important;
     }
   }
   @media (min-width:390px) and (max-width:390px) {
-    .div-wrap-itemdeal {
-      min-width: 358px !important;
+    // .label-home-hotel {
+    //   font-size: 18px !important;
+    // }
+    .text-point {
+      font-size: 14px !important;
+      letter-spacing: -0.5px;
     }
   }
-  @media (min-width:410px) and (max-width:412px) {
-    .div-wrap-itemdeal {
-      min-width: 380px !important;
-    }
-  }
-  @media (min-width:414px) and (max-width:414px) {
-    .div-wrap-itemdeal {
-      min-width: 382px !important;
-    }
-  }
-  @media (min-width:420px) and (max-width:430px) {
-    .div-wrap-itemdeal {
-      min-width: 398px !important;
+  @media (min-width:390px) and (max-width:430px) {
+    .div-wrap-itemslide {
+      min-width: 340px !important;
     }
   }
 
@@ -719,7 +722,6 @@
     //padding: 0 16px;
     padding-left: 16px;
     background: #f2f2f2;
-    padding-bottom: 16px;
   }
   @media (min-width: 412px) and (max-width: 420px) {
     .div-wrap-search-input{
@@ -868,4 +870,31 @@
   
   .slide.active {
     opacity: 1;
+  }
+  .text-point {
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+
+  .p-bottom-16 {
+    padding-bottom: 16px;
+  }
+  .div-width-200 {
+    width: 200%;
+  }
+  .div-width-150 {
+    width: 150%;
+  }
+  .d-flex-end {
+    justify-content: flex-end;
+  }
+  .div-text-pax {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: -0.69px;
+    color: #3f3b3b;
   }

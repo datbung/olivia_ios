@@ -38,7 +38,12 @@ export class FlightpaymentdonePage implements OnInit {
     private _calendar: Calendar,
     public _voucherService: voucherService) { 
       if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.pnr){
-        this.total = this._flightService.itemFlightCache.totalPrice;
+        if(this._flightService.itemFlightCache.dataSummaryBooking){
+          this.total = this._flightService.itemFlightCache.dataSummaryBooking.totalPrice;
+        }else{
+          this.total = this._flightService.itemFlightCache.totalPrice;
+        }
+        
         this._email = this._flightService.itemFlightCache.email;
         this.bookingCode =  this._flightService.itemFlightCache.pnr.bookingCode ? this._flightService.itemFlightCache.pnr.bookingCode : this._flightService.itemFlightCache.pnr.resNo;
         this.bookingFlight = this._flightService.itemFlightCache;

@@ -95,18 +95,21 @@ export class OrderRequestSupportPage implements OnInit {
     if(this._flightService.fromOrderRequestChangeFlight){
       if(this._mytripservice.rootPage == "homeflight"){
         this._flightService.itemTabFlightActive.emit(true);
-        setTimeout(()=>{
-          
-        },200)
         
         this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
         this._mytripservice.backfrompage= "";
       }else {
-        
+        this._flightService.itemMenuFlightClick.emit(2);
         this.navCtrl.navigateBack(['/app/tabs/tab3']);
       }
     }else{
-      this.navCtrl.navigateBack(['/app/tabs/tab3']);
+      if(this._flightService.fromOrderRequestDetailSupport){
+        this.navCtrl.navigateBack('/mytripdetail');
+      }else{
+        this._flightService.itemMenuFlightClick.emit(2);
+        this.navCtrl.navigateBack(['/app/tabs/tab3']);
+      }
+      
     }
   }
 

@@ -61,7 +61,7 @@ export class TicketpaymentbankPage implements OnInit {
     this.bankBranch = "Chi nhánh Tp. Hồ Chí Minh";
     this.accountNumber = "007 1000 895 230";
     this.room = Roomif.arrroom;
-    this.jsonroom = Roomif.jsonroom;
+    this.jsonroom = {...Roomif.jsonroom};
     this.rowoneactive = true;
     this.textbank = "Vietcombank";
     this.bankName = "Ngân hàng Thương Mại Cổ Phần Ngoại Thương Việt Nam (VCB)";

@@ -134,6 +134,7 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
                       se.gf.hideLoading();
                       se.safariViewController.hide();
                       clearInterval(se.intervalID);
+                      se.rollBackObjectRequestAddLuggage();
                       se.gf.showAlertPaymentFail();
                     }
                   })
@@ -217,6 +218,7 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
       }else{
         se.hideLoading();
         se.gf.hideLoading();
+        se.rollBackObjectRequestAddLuggage();
         se.gf.showAlertPaymentFail();
       }
     })
@@ -404,6 +406,7 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
                         }
                         clearInterval(this.intervalID);
                         this._flightService.paymentError = checkpay;
+                        this.rollBackObjectRequestAddLuggage();
                         this.gf.showAlertPaymentFail();
                       }
           
@@ -440,6 +443,7 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
               clearInterval(se.intervalID);
               se.gf.hideLoading();
               se.safariViewController.hide();
+              se.rollBackObjectRequestAddLuggage();
               se.gf.showAlertPaymentFail();
             }
                 
@@ -623,5 +627,64 @@ export class OrderRequestAddluggagePaymentChooseBankPage implements OnInit {
       ]
     });
     alert.present();
+  }
+
+  rollBackObjectRequestAddLuggage(){
+    if(this.activityService.objRequestAddLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage && this.activityService.objRequestAddLuggage.objectDepartLuggage.items  && this.activityService.objRequestAddLuggage.objectDepartLuggage.items.length >0){
+      let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+      let  headers = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+      let body = this.activityService.objRequestAddLuggage.objectDepartLuggage;
+      body.isDelete = true;
+      this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data) => {
+        if(data && data == "success"){
+
+          if(this.activityService.objRequestAddLuggage.listPassReturn && this.activityService.objRequestAddLuggage.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+            let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+            let  headers = {
+              "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+              'Content-Type': 'application/json; charset=utf-8',
+            };
+            let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+            body.isDelete = true;
+            this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
+              if(data1 && data1 == "success"){
+                this.gf.hideLoading();
+              }else{
+                this.gf.hideLoading();
+                this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+              }
+            })
+          }else{
+            this.gf.hideLoading();
+          }
+        } else{
+          this.gf.hideLoading();
+          this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+        }
+        
+      })
+    }
+    else if(this.activityService.objRequestAddLuggage.listPassReturn && this.activityService.objRequestAddLuggage.listPassReturn.some((p) => {return p.returnLuggage && p.returnLuggage.amount >0 })){
+      let urllug = C.urls.baseUrl.urlFlight + "gate/apiv1/AddBaggage";
+      let  headers = {
+        "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+        'Content-Type': 'application/json; charset=utf-8',
+      };
+      let body = this.activityService.objRequestAddLuggage.objectReturnLuggage;
+      body.isDelete = true;
+      this.gf.RequestApi('POST', urllug, headers , body, 'orderrequestaddluggagepaymentchoosebank', 'AddBaggage' ).then((data1) => {
+        if(data1 && data1 == "success"){
+          this.gf.hideLoading();
+        } else{
+          this.gf.hideLoading();
+          this.gf.showAlertMessageOnly('Mua hành lý không thành công. Vui lòng liên hệ iVIVU để được hỗ trợ thêm!');
+        }
+      })
+    }else{
+      this.gf.hideLoading();
+    }
   }
 }

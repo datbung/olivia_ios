@@ -364,7 +364,7 @@ export class Tab1Page implements OnInit {
         (error.param = JSON.stringify(options)), C.writeErrorLog(error,response);
       }
       var res=JSON.parse(body);
-      se.topSale=res.total;
+      se.topSale= se.gf.convertNumberToString(res.total);
       console.log(JSON.parse(body));
     });
   }
@@ -2482,7 +2482,7 @@ export class Tab1Page implements OnInit {
           se.searchhotel.recent.push(item1);
         }
         //Xóa clone page-hotel-list do push page
-        this.valueGlobal.logingoback='/app/tabs/hotellist/true';
+        this.valueGlobal.logingoback='/app/tabs/hotellist/false';
         var item: any ={};
         item.adult=se.searchhotel.adult;
         item.child=se.searchhotel.child;
@@ -3010,7 +3010,7 @@ export class Tab1Page implements OnInit {
     this.searchhotel.gbmsg = obj;
     this.searchhotel.flag = 1;
     //this.navCtrl.navigateForward('/hotellist/true');
-    this.valueGlobal.logingoback="/hotellist/true";
+    this.valueGlobal.logingoback="/hotellist/false";
     //this.navCtrl.navigateForward("/app/tabs/hotellist/true");
     var itemRecent: any ={};
         itemRecent.adult=this.searchhotel.adult;
@@ -3032,7 +3032,7 @@ export class Tab1Page implements OnInit {
         itemRecent.code = item.regionCode;
         this.searchhotel.objRecent=itemRecent;
         this.gf.setCacheSearch(itemRecent,0);
-    this.navCtrl.navigateForward("/hotellist/true");
+    this.navCtrl.navigateForward("/hotellist/false");
     this.hideStatusBar();
     //google analytic
     this.gf.googleAnalytion(
@@ -3597,27 +3597,22 @@ export class Tab1Page implements OnInit {
           if(se.flightService.tabFlightIndex != 1){
             se.hideStatusBar();
           }
-          //console.log(event.detail.scrollTop)
           let el = document.getElementsByClassName('div-flight-topdeal');
           let eluseful = document.getElementsByClassName('div-useful-title');
           let elinter = document.getElementsByClassName('div-flightinternational-topdeal');
           let el1 = $('.div-flightinternational-topdeal');
           if(el && el.length >0){
-            if(event.detail.scrollTop >= 1200 ){
+            if(event.detail.scrollTop >= 1140 ){
               if(elinter && elinter.length >0 && event.detail.scrollTop < ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999 ) - 250){
-               // setTimeout(()=>{
                   if(el.length >0 && el[0] && !el[0].classList.contains("cls-topdeal-float")){
                     el[0].classList.add('cls-topdeal-float');
                   }
                   if(el1 && el1[0] && el1[0].classList.contains("cls-topdeal-float")){
                     el1[0].classList.remove('cls-topdeal-float');
                   }
-                //},100)
                
               }else{
                 
-                  //el[0].classList.remove('cls-topdeal-float');
-                  //setTimeout(()=>{
                     if(el1 && el1.length >0 && event.detail.scrollTop >= ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999) - 220 ){
                     
                         if(el1.length >0 && el1[0] && !el1[0].classList.contains("cls-topdeal-float")){
@@ -3628,7 +3623,6 @@ export class Tab1Page implements OnInit {
                     else if(el1 && el1[0] && el1.length >0 && event.detail.scrollTop < ($('.div-group-name') && $('.div-group-name').length >0 ? $('.div-group-name')[0].offsetTop : 99999) -120){
                       el1[0].classList.remove('cls-topdeal-float');
                     }
-                //},100)
               }
             }else{
               if(el[0]){
@@ -3650,17 +3644,6 @@ export class Tab1Page implements OnInit {
             }
           }
 
-          // if(eluseful && eluseful.length >0){
-          //   let h = 1100 + ($('.div-topdeal-flight')[0] ? $('.div-topdeal-flight')[0].offsetHeight : 0);
-          //   if(event.detail.scrollTop >= h){
-          //     if(eluseful.length >0 && !eluseful[0].classList.contains("cls-topdeal-float")){
-          //       eluseful[0].classList.add('cls-topdeal-float');
-          //     }
-          //   }
-          //   else{
-          //     eluseful[0].classList.remove('cls-topdeal-float');
-          //   }
-          // }
           
         }
   }

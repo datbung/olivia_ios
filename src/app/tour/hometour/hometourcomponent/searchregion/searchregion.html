@@ -149,7 +149,7 @@
         </div>
       </div>
       <div style="margin-top: 20px">
-          <label *ngIf="ischecktext">Không tìm thấy kết quả tìm kiếm.Vui lòng nhập lại!</label>
+          <label *ngIf="ischecktext && items.length==0">Không tìm thấy kết quả tìm kiếm.Vui lòng nhập lại!</label>
       </div>
     </div>
     <ng-template #loadsdk>

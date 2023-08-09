@@ -242,6 +242,7 @@ export class OccupancyPage implements OnInit {
 
     const picker = await this.pickerController.create({
       columns: this.getColumns(1, se.ChildAgeTo, columnOptions, textchild),
+      mode: 'ios',
       cssClass: 'action-sheets-select-age',
       buttons: [
         {

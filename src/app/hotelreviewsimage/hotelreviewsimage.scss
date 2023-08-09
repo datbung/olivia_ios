@@ -74,6 +74,12 @@
     .border-bottom {
       border-bottom: solid 0.5px #f2f2f2;
     }
+    .text-center {
+      text-align: center;
+    }
+    .m-right-36 {
+      margin-right: 36px;
+    }
     .center
     {
       @media (min-width:320px) and (max-width: 360px) {

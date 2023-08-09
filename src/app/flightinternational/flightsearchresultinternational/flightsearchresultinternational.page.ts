@@ -1716,8 +1716,70 @@ export class FlightSearchResultInternationalPage implements OnInit {
               }
                
                 
+            }else if(!data.data || data.role=='backdrop'){
+              this.rollbackObjectSearch();
             }
           })
+      }
+
+      rollbackObjectSearch(){
+        let se = this;
+        let obj = se._flightService.objSearch;
+        se._flightService.itemFlightCache.roundTrip = obj.roundTrip;
+            se._flightService.itemFlightCache.checkInDate = obj.departDate;
+            se._flightService.itemFlightCache.checkOutDate = obj.returnDate;
+            se._flightService.itemFlightCache.checkInDisplayMonth = moment(obj.departDate).format("DD") + " tháng " + moment(obj.departDate).format("MM") + ", " + moment(obj.departDate).format("YYYY");
+            se._flightService.itemFlightCache.checkOutDisplayMonth = moment(obj.returnDate).format("DD") + " tháng " + moment(obj.returnDate).format("MM") + ", " + moment(obj.returnDate).format("YYYY");
+            se._flightService.itemFlightCache.adult = obj.adult;
+            se._flightService.itemFlightCache.child = obj.child;
+            se._flightService.itemFlightCache.infant = obj.infant;
+            se._flightService.itemFlightCache.pax = obj.adult + (obj.child ? obj.child :0)+ (obj.infant ? obj.infant : 0);
+            se._flightService.itemFlightCache.arrchild = obj.arrchild;
+            se._flightService.itemFlightCache.departCity = obj.departCity;
+            se._flightService.itemFlightCache.departCode = obj.departCode;
+            se._flightService.itemFlightCache.departAirport = obj.departAirport;
+            se._flightService.itemFlightCache.returnCity = obj.returnCity;
+            se._flightService.itemFlightCache.returnCode = obj.arrivalCode;
+            se._flightService.itemFlightCache.returnAirport = obj.returnAirport;
+            se._flightService.itemFlightCache.step = 1;
+            se._flightService.itemFlightCache.departTimeDisplay = se.gf.getDayOfWeek(obj.departDate).dayname + ", " + moment(obj.departDate).format("DD") + " thg " + moment(obj.departDate).format("MM");
+            se._flightService.itemFlightCache.returnTimeDisplay = se.gf.getDayOfWeek(obj.returnDate).dayname + ", " + moment(obj.returnDate).format("DD") + " thg " + moment(obj.returnDate).format("MM");
+    
+            se._flightService.itemFlightCache.departInfoDisplay = "Chiều đi" + " · " + se.gf.getDayOfWeek(obj.departDate).dayname + ", " + moment(obj.departDate).format("DD") + " thg " + moment(obj.departDate).format("MM");
+            se._flightService.itemFlightCache.returnInfoDisplay = "Chiều về" + " · " + se.gf.getDayOfWeek(obj.returnDate).dayname + ", " + moment(obj.returnDate).format("DD") + " thg " + moment(obj.returnDate).format("MM");
+    
+            se._flightService.itemFlightCache.departPaymentTitleDisplay = se.gf.getDayOfWeek(obj.departDate).daynameshort + ", " + moment(obj.departDate).format("DD-MM")+ " · " + obj.departCode + " → " +obj.returnCode+ " · ";
+            se._flightService.itemFlightCache.returnPaymentTitleDisplay = se.gf.getDayOfWeek(obj.returnDate).daynameshort + ", " + moment(obj.returnDate).format("DD-MM")+ " · "+ obj.returnCode + " → " +obj.departCode+ " · ";
+
+            se._flightService.itemFlightCache.checkInDisplay = se.getDayOfWeek(obj.departDate).dayname +", " + moment(obj.departDate).format("DD") + " thg " + moment(obj.departDate).format("MM");
+            se._flightService.itemFlightCache.checkOutDisplay = se.getDayOfWeek(obj.returnDate).dayname +", " + moment(obj.returnDate).format("DD") + " thg " + moment(obj.returnDate).format("MM");
+            
+            se.checkInDisplayMonth = se.getDayOfWeek(obj.departDate).dayname +", " + moment(obj.departDate).format("DD") + " thg " + moment(obj.departDate).format("MM");
+            se.checkOutDisplayMonth = se.getDayOfWeek(obj.returnDate).dayname +", " + moment(obj.returnDate).format("DD") + " thg " + moment(obj.returnDate).format("MM");
+            //se._flightService.itemFlightCache.isInternationalFlight = obj.isInternationalFlight;
+            if(se._flightService.listAirport && se._flightService.listAirport.length >0){
+              let placeFrom = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == obj.departCode});
+              let placeTo = se._flightService.listAirport.filter((itemairport) => {return itemairport.code == obj.arrivalCode});
+              if(placeFrom && placeFrom.length >0 && placeTo && placeTo.length >0){
+                
+                se._flightService.itemFlightCache.isExtenalDepart = !placeFrom[0].internal;
+                se._flightService.itemFlightCache.isExtenalReturn = !placeTo[0].internal;
+                se._flightService.itemFlightCache.isInternationalFlight = !placeFrom[0].internal || !placeTo[0].internal;
+                if(!se._flightService.itemFlightCache.isInternationalFlight){
+                    se._flightService.itemFlightCache.isInternationalFlight = false;
+                    se._flightService.itemFlightCache.isExtenalDepart = false;
+                    se._flightService.itemFlightCache.isExtenalReturn = false;
+                }
+              }else {
+                se._flightService.itemFlightCache.isInternationalFlight = false;
+                se._flightService.itemFlightCache.isExtenalDepart = false;
+                se._flightService.itemFlightCache.isExtenalReturn = false;
+              }
+            }else{
+              se._flightService.itemFlightCache.isInternationalFlight = false;
+              se._flightService.itemFlightCache.isExtenalDepart = false;
+              se._flightService.itemFlightCache.isExtenalReturn = false;
+            }
       }
 
       resetValue(){
@@ -2617,8 +2679,8 @@ export class FlightSearchResultInternationalPage implements OnInit {
           if(minutes < 10){
             minutes = "0"+minutes;
           }
-          element.departTimeDisplay = moment(element.departTime).format("HH:mm");
-          element.landingTimeDisplay = moment(element.landingTime).format("HH:mm");
+          //element.departTimeDisplay = moment(element.departTime).format("HH:mm");
+          ///element.landingTimeDisplay = moment(element.landingTime).format("HH:mm");
           element.flightTimeDisplay = hours+"h"+minutes;
           element.flightTimeDetailDisplay = hours+"h"+minutes+"m";
           if(element.details[0].from.length > 3){

@@ -192,13 +192,47 @@ hr
 }
 .cls-list
 {
-  margin-left: -16px;
     .text-list{
-      height: 22px;
-      font-size: 14px;
-      font-weight: 100;
-      letter-spacing: -0.4px;
-      color: #222222;
+      width: 90%;
+      font-size: 16px;
+      color: #3f3b3b;
+      display: flex;
+      align-items: center;
+    }
+
+    
+    .div-icon {
+      width: 10%;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+    }
+    .border-bottom {
+      border-bottom: solid 1px #e9eaec;
+    }
+
+    .cls-arrbank {
+      margin-top: 12px;
+      margin-left: 16px;
+      margin-right: 32px;
+    }
+    .div-width-50 {
+      width: 50% !important;
+    }
+    .div-width-45 {
+      width: 45%;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .m-left-16 {
+      margin-left: 16px;
+    }
+    .div-remembercard {
+      margin-left: 2px;
+      margin-bottom: 16px;
+      margin-top: 12px;
     }
 }
 .cls-divpayment
@@ -300,16 +334,17 @@ hr
 {
   width: 50px;
   vertical-align: middle;
+  margin-left: 8px;
 }
 .img-momo{
   width: 32px;
-    position: absolute;
     top: 6px;
-    margin-left: 100px;
+    margin-left: 8px;
 }
 .cls-minheight
 {
   --min-height: 48px;
+  padding-bottom: 8px;
 }
 .ion-item
 {
@@ -450,8 +485,7 @@ hr
 
       //////////@extend 
       .div-split-item{
-        margin-left: 16px;
-        border-bottom: solid 1px #c8c7cc;
+        border-bottom: solid 1px #e9eaec;
       }
 
       .no-border-bottom{
@@ -466,7 +500,6 @@ hr
       .text-hotfare{
         color: #828282;
         position: absolute;
-        bottom: 2px;
         font-size: 10px;
         font-weight: 300;
         line-height: 1.67;
@@ -690,4 +723,16 @@ color: #2f80ed
           top: 5px;
           padding: 6px;
           margin-left: 8px;
+}
+.text-service-fee {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: italic;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #828282;
+
+  margin-top: 2px;
 }

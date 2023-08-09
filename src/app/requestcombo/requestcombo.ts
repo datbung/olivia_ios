@@ -300,6 +300,7 @@ export class RequestComboPage implements OnInit{
           }else{
             var data = JSON.parse(body);
             if(data.success){
+              se.bookCombo.bookingcode = data.id;
               let priceshow = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? se.gf.convertNumberToString(se.bookCombo.ComboDetail.comboDetail.totalPriceSale) : se.gf.convertNumberToString((se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice : 0));
               let pricecurrency:any = se.bookCombo.ComboDetail && se.bookCombo.ComboDetail.comboDetail ? se.gf.convertNumberToString(se.bookCombo.ComboDetail.comboDetail.totalPriceSale) : se.gf.convertNumberToString((se.bookCombo.ComboRoomPrice ? se.bookCombo.ComboRoomPrice : 0));
               //se.gf.googleAnalytionCustom('purchase',{items: [{item_category:'requestcombo' , item_name: se.bookCombo.HotelName, item_id: se.bookCombo.HotelCode, start_date: se.cin, end_date: se.cout,origin: se.location, destination: se.bookCombo.ComboDetail ? se.bookCombo.ComboDetail.arrivalCode : '' }], value: se.gf.convertNumberToDouble(priceshow) ,currency: "VND"});

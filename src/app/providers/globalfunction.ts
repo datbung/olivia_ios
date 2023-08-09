@@ -5,7 +5,7 @@ import { C } from '../providers/constants';
 import * as $ from 'jquery';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
-import { ValueGlobal,SearchHotel } from './book-service';
+import { ValueGlobal,SearchHotel, RoomInfo, Bookcombo } from './book-service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { File as IonicFileService, FileEntry, IFile } from '@ionic-native/file/ngx';
 import { NativeTransitionOptions } from '@ionic-native/native-page-transitions/ngx';
@@ -79,7 +79,9 @@ export class GlobalFunction{
       private fcm: FCM,
       private searchhotel: SearchHotel,
       public tourService: tourService,
-      private safariViewController: SafariViewController){
+      private safariViewController: SafariViewController,
+      public roomInfo: RoomInfo,
+      public bookcombo: Bookcombo){
 
     }
     
@@ -170,8 +172,12 @@ export class GlobalFunction{
 
   public logEventFirebase(paymentType, itemcache, screenName, viewAction, category){
     if(category == 'Flights'){
+      let _bkgCode = this._flightService.itemFlightCache.bookingCode;
+     
       this.gaSetScreenName("/ve-may-bay/"+itemcache.departCode+"-di-"+itemcache.returnCode);
       this.googleAnalytionCustom(viewAction, { 
+        
+      transaction_id: viewAction=='purchase'? _bkgCode :'',
       items: itemcache.roundTrip ? [
       {
         item_id: "Ve-may-bay-"+itemcache.departCode+"-di-"+itemcache.returnCode,
@@ -230,6 +236,7 @@ export class GlobalFunction{
         this.gaSetScreenName(itemcache.gaHotelDetail.Url);
       }
       this.googleAnalytionCustom(viewAction, {
+        transaction_id: viewAction=='purchase'?(this.roomInfo.bookingCode || this.bookcombo.bookingcode || '') :'',
         currency: "VND",
             value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : 0,
             shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
@@ -257,6 +264,7 @@ export class GlobalFunction{
       if(itemcache && itemcache.gaTourDetail && itemcache.gaTourDetail.TourDetailUrl){
         this.gaSetScreenName('/du-lich/'+itemcache.gaTourDetail.TourDetailUrl.replace('https://www.ivivu.com/',''));
         this.googleAnalytionCustom(viewAction, {
+          transaction_id: viewAction=='purchase'?this.tourService.tourBookingCode :'',
           currency: "VND",
               value: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
               shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
@@ -274,7 +282,8 @@ export class GlobalFunction{
                       item_category4: itemcache.gaTourDetail.TourType ||'',
                       item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
                       price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
-                      quantity: this.searchhotel.adult +(this.searchhotel.child || 0)
+                      quantity: this.searchhotel.adult +(this.searchhotel.child || 0),
+
                   }
               ]
         })
@@ -727,7 +736,7 @@ export class GlobalFunction{
         if(type == 'areavn'){
           res = arrays.some(r => r.countryCode == 'VN');
         }
-        if(type == 'listlastsearchRegion'){
+        if(type == 'listlastsearchRegion' || type=='listlastsearch'){
           res = arrays.some(r => r.code == item.code);
         }
         if(type == 'listlastsearchHot'){
@@ -837,7 +846,7 @@ export class GlobalFunction{
             C.writeErrorLog(error,response);
         }else if(body){
           se.storage.set('checktoken',"1");
-          var obj = JSON.parse(body);
+          //var obj = JSON.parse(body);
   
         }
     })   
@@ -2698,7 +2707,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         handler: () => {
           se._flightService.itemTabFlightActive.emit(true);
           se.valueGlobal.backValue = "homeflight";
-          this._flightService.itemTabFlightActive.emit(1);
+          se._flightService.itemMenuFlightClick.emit(2);
           se.navCtrl.navigateBack('/tabs/tab1');
         }
       }
@@ -2721,6 +2730,7 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
         role: 'OK',
         handler: () => {
           this._flightService.itemTabFlightActive.emit(true);
+          this._flightService.itemMenuFlightClick.emit(2);
           this.valueGlobal.backValue = 'homeflight';
           
           this.navCtrl.navigateBack('/tabs/tab1');
@@ -2734,6 +2744,8 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   goToSearchFlight(){
     this._flightService.itemFlightCache.step = 2;
     this._flightService.itemChangeTicketFlight.emit(1);
+    this._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(true);
     //this.navCtrl.navigateBack('/flightsearchresult');
     if(this._flightService.itemFlightCache.isApiDirect){
       this.navCtrl.navigateBack('/flightsearchresultinternational');
@@ -2745,6 +2757,8 @@ holdTicketCombo(flyBookingCode,iddepart,idreturn): Promise<any>{
   goToSearchFlightInternational(){
     this._flightService.itemFlightCache.step = 2;
     this._flightService.itemChangeTicketFlight.emit(1);
+    this._flightService.itemMenuFlightClick.emit(2);
+    this._flightService.itemTabFlightActive.emit(true);
     this.navCtrl.navigateBack('/flightsearchresultinternational');
   }
 
@@ -3491,20 +3505,17 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
   setCacheSearch(objSearch,stt): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storage.get('arrHistory').then((data) => {
-        var co=0;
-        var objkey=objSearch.id+"_"+objSearch.CheckInDate+"_"+objSearch.CheckOutDate+"_"+objSearch.adult+"_"+objSearch.child;
-        if(data ){
+        var objkey=objSearch.id;
+        if(data){
           for (let i = 0; i < data.length; i++) {
             const element = data[i];
             if (objkey==element.objkey) {
-              // data.splice(i, 1);
-              co=1;
+              data.splice(i, 1);
             }
           }
         }
-        if(co==0){
+    
           this.searchhotel.objRecent=objSearch;
-
           if( !objSearch.imageUrl){
             if(objSearch.isType==0 ){
               this.getHoteldetail(objSearch.id).then((obj) => {
@@ -3569,14 +3580,29 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
               this.storage.set('arrHistory', data);
             }
           }
-        }
-       
-       
+
         resolve(true);
       })
      
     })
    
+  }
+
+  bindDataHistory(data,objSearch,objkey) {
+    if(data && data.length>2){
+      data.splice(0, 1);
+      objSearch.objkey=objkey;
+      data.push(objSearch) 
+      this.storage.set('arrHistory', data);
+      
+    }else{
+      if(!data){
+        data=[];
+      }
+      objSearch.objkey=objkey;
+      data.push(objSearch);
+      this.storage.set('arrHistory', data);
+    }
   }
   getHoteldetail(id): Promise<any> {
     return new Promise((resolve, reject) => {

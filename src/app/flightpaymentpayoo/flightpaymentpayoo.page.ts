@@ -25,6 +25,7 @@ export class FlightpaymentpayooPage implements OnInit {
   allowCheck: any = true;
   allowCheckHoldTicket: boolean = true;_email
   contactOption: any;
+  payment_fee: number;
   constructor(private navCtrl:NavController, public gf: GlobalFunction,
     private activatedRoute: ActivatedRoute,private _flightService: flightService,private safariViewController: SafariViewController,
     private backgroundmode: BackgroundMode,
@@ -46,6 +47,9 @@ export class FlightpaymentpayooPage implements OnInit {
       })
       this.getSummaryBooking(this._flightService.itemFlightCache).then((databkg:any) => {
         this._flightService.itemFlightCache.dataSummaryBooking = databkg;
+
+        this.total= this.gf.convertNumberToString(databkg.totalPrice);
+        this.payment_fee = databkg.paymentFee;
       })    
       this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'flightpaymentpayoo', 'add_payment_info', 'Flights');
     }
@@ -73,7 +77,7 @@ export class FlightpaymentpayooPage implements OnInit {
 
       }, 60000 * 9.1);
     }
-    this.total=this._flightService.itemFlightCache.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    //this.total=this._flightService.itemFlightCache.totalPrice.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     this.textHours = moment(this._flightService.itemFlightCache.periodPaymentDate).format("HH:mm");
     this.PeriodPaymentDate = this._flightService.itemFlightCache.periodPaymentDate ? this.gf.getDayOfWeek(this._flightService.itemFlightCache.periodPaymentDate).dayname + ", " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("DD") + " thg " + moment(this._flightService.itemFlightCache.periodPaymentDate).format("MM") : "";
   }

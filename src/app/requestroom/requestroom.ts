@@ -301,7 +301,7 @@ export class RequestRoomPage implements OnInit{
           }else{
             var data = JSON.parse(body);
             if(data.success){
-
+              se.bookCombo.bookingcode = data.id;
                 
                 se.presentAlert('Gửi yêu cầu thành công','Báo giá sẽ được gửi tới email của quý khách.');
                 //google analytic

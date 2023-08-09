@@ -25,6 +25,7 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
   allowCheck: any = true;
   allowCheckHoldTicket: boolean = true;_email
   contactOption: any;
+  payment_fee: any;
   constructor(private navCtrl:NavController, public gf: GlobalFunction,
     private activatedRoute: ActivatedRoute,private _flightService: flightService,private safariViewController: SafariViewController,
     private backgroundmode: BackgroundMode,
@@ -92,7 +93,13 @@ export class FlightInternationalPaymentPayooPage implements OnInit {
       this.textHours = moment(this.activityService.objPaymentMytrip.delivery_payment_date).format("HH:mm");
       this.PeriodPaymentDate = this.activityService.objPaymentMytrip.delivery_payment_date ? this.gf.getDayOfWeek(this.activityService.objPaymentMytrip.delivery_payment_date).dayname + ", " + moment(this.activityService.objPaymentMytrip.delivery_payment_date).format("DD") + " thg " + moment(this.activityService.objPaymentMytrip.delivery_payment_date).format("MM") : "";
     }
-    
+
+    this.getSummaryBooking(this.bookingCode).then((databkg:any) => {
+      this._flightService.itemFlightCache.dataSummaryBooking = databkg;
+
+      this.total= this.gf.convertNumberToString(databkg.totalPrice);
+      this.payment_fee = this.gf.convertNumberToString(databkg.paymentFee);
+    })    
     
   }
   goback()
@@ -460,12 +467,12 @@ if(itemflight.childs && itemflight.childs.length >0){
       })
   }
 
-  getSummaryBooking(data) : Promise<any>{
+  getSummaryBooking(resNo) : Promise<any>{
     var se = this;
     return new Promise((resolve, reject) => {
       var options = {
         method: 'GET',
-        url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+data.pnr.resNo,
+        url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+resNo,
         timeout: 180000, maxAttempts: 5, retryDelay: 20000,
         headers: {
           "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",

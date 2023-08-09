@@ -477,7 +477,7 @@
         </div>
       </div>
   </ion-content>
-  <ion-footer>
+  <ion-footer *ngIf="!_flightService.showFlightDetailFrom">
     <div class="div-footer d-flex-footer" *ngIf="!_flightService.fromOrderRequestChangeFlight">
         <div class="d-flex-footer div-width-100">
             <div class="div-total">

@@ -51,7 +51,7 @@ export class RoompaymentdonenewPage implements OnInit {
       this._voucherService.selectVoucher = null;
     }
     this._voucherService.publicClearVoucherAfterPaymentDone(1);
-    this.jsonroom = Roomif.jsonroom
+    this.jsonroom = {...Roomif.jsonroom}
     this.ischeckpayment = Roomif.ischeckpayment;
     this.Roomif.ischeckpoint = false;
     var ti = new Date();
@@ -127,7 +127,7 @@ export class RoompaymentdonenewPage implements OnInit {
     else {
       this.priceshow = booking.cost;
     }
-    Roomif.priceshow = "";
+    
     this.getbank();
   }
   ionViewWillEnter(){
@@ -147,6 +147,7 @@ export class RoompaymentdonenewPage implements OnInit {
     this.status = this.activatedRoute.snapshot.paramMap.get('stt');
   }
   next() {
+    this.Roomif.priceshow = "";
     if (this.checkreview == 0) {
       this.showConfirm();
     }

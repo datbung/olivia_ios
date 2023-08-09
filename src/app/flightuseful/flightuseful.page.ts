@@ -19,33 +19,28 @@ export class FlightusefulPage {
     listUseful: any=[];
     itemclick: any;
     type: any;
-    arrLinkImage = [
-        "https://res.ivivu.com/flight/inbound/images/home/qa2.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa4.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa12.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa13.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa14.svg",
-       "https://res.ivivu.com/images/home/qa17_Covid19.svg",
-
-       "https://res.ivivu.com/flight/inbound/images/home/qa8.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa9.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa10.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa15.svg",
-
-       "https://res.ivivu.com/flight/inbound/images/home/qa1.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa11.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa5.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa6.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa16.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa3.svg",
-       "https://res.ivivu.com/flight/inbound/images/home/qa7.svg"
-    ]
-    listUseful1: any=[];
-    listUseful2: any=[];
-    listData: any[];
-    listIdProcedure = [6,8,16,17,18,19];
-    listIdPassport = [12,13,14,20];
-    listIdNote = [5,15,9,10,21,7,11];
+    listIdNew = [
+        {id: 6, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa2.svg",},
+        {id: 12, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa8.svg",},
+        {id: 5, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa1.svg",},
+        {id: 8, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa4.svg",},
+        {id: 13, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa9.svg",},
+        {id: 15, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa11.svg",},
+        {id: 16, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa12.svg",},
+        {id: 14, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa10.svg",},
+        {id: 9, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa5.svg",},
+        {id: 17, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa13.svg",},
+        {id: 20, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa15.svg",},
+        {id: 10, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa6.svg",},
+        //{id: 18, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa14.svg",},
+        {id: 21, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa16.svg",},
+        {id: 19, imageLink: "https://res.ivivu.com/images/home/qa17_Covid19.svg",},
+        {id: 7, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa3.svg",},
+        {id: 11, imageLink: "https://res.ivivu.com/flight/inbound/images/home/qa7.svg",},
+        ];
+    listNewUseful = [];
+    arritem = [1,2,3,4,5,6,7];
+    listNewData: any[];
 
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private zone: NgZone,
@@ -73,22 +68,23 @@ export class FlightusefulPage {
                 'Content-Type': 'application/json; charset=utf-8'
                 }, {}, "homeflight", "GetUsefulHome").then((data) =>{
                   if(data){
-                    data.forEach(element => {
-                        if(this.listIdProcedure.indexOf(element.id) != -1){
-                            this.listUseful.push(element);
-                        }
-                        else if(this.listIdPassport.indexOf(element.id) != -1){
-                            this.listUseful1.push(element);
-                        }
-                        else if(this.listIdNote.indexOf(element.id) != -1){
-                            this.listUseful2.push(element);
+                   
+                    this.listNewUseful  = this.listIdNew.map((item, index) => {
+                    
+                        let itemfilter = data.filter((itemf) => {return item.id == itemf.id});
+                        if(itemfilter && itemfilter.length >0){
+                            return { id: item.id, title: itemfilter[0].title, imageLink: item.imageLink, contents: itemfilter[0].contents};
                         }
                     });
-                        
-                        this.listData = [];
-                        this.listData.push({name: 'Thủ tục', data: this.listUseful});
-                        this.listData.push({name: 'Giấy tờ & Hành lý', data: this.listUseful1});
-                        this.listData.push({name: 'Lưu ý', data: this.listUseful2});
+                    
+                    this.listNewData = [];
+                    this.listNewData.push({id: 1,name: 'slide1', data: this.listNewUseful.splice(0,3),clicked: false});
+                    this.listNewData.push({id: 2,name: 'slide2', data: this.listNewUseful.splice(0,3),clicked: false});
+                    this.listNewData.push({id: 3,name: 'slide3', data: this.listNewUseful.splice(0,3),clicked: false});
+                    this.listNewData.push({id: 4,name: 'slide4', data: this.listNewUseful.splice(0,3),clicked: false});
+                    this.listNewData.push({id: 5,name: 'slide5', data: this.listNewUseful.splice(0,3),clicked: false});
+                    this.listNewData.push({id: 6,name: 'slide6', data: this.listNewUseful.splice(0,3),clicked: false});
+                   
                   }
                 })
         }
@@ -100,13 +96,12 @@ export class FlightusefulPage {
             }else{
                 this.itemclick = item;
 
-                // for (let index = 0; index < this.listUseful.length; index++) {
-                //     const element = this.listUseful[index];
-                //     element.clicked = false;
-                // }
-                this.listData.forEach((itemlist)=>{
+                this.listNewData.forEach((itemlist)=>{
                     itemlist.data.forEach(element => {
-                        element.clicked = false;
+                        if(element){
+                            element.clicked = false;
+                        }
+                        
                     });
                 })
                 
@@ -114,6 +109,7 @@ export class FlightusefulPage {
             
             if(item.clicked){
                 item.clicked = false;
+                this.itemclick = '';
             }else{
                 item.clicked = true;
                 setTimeout(()=>{

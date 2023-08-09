@@ -204,25 +204,14 @@ export class FlightsearchairportPage implements OnInit {
         se._flightService.itemFlightCache.departCity = item.city;
         se._flightService.itemFlightCache.departAirport = item.airport;
         se._flightService.itemFlightCache.itemDepartLocation = item;
-        if(se._flightService.itemFlightCache.objSearch){
-          se._flightService.itemFlightCache.objSearch.departCode = item.code;
-          se._flightService.itemFlightCache.objSearch.departCity = item.city;
-          se._flightService.itemFlightCache.objSearch.departAirport = item.airport;
-        }
-        //se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
-        //se._flightService.itemFlightCache.isExtenalDepart = item.country != "Việt Nam" ? true : false;
+        se._flightService.itemFlightCache.fromCountryCode = item.countryCode;
+       
       }else{
         se._flightService.itemFlightCache.returnCode = item.code;
         se._flightService.itemFlightCache.returnCity = item.city;
         se._flightService.itemFlightCache.returnAirport = item.airport;
         se._flightService.itemFlightCache.itemReturnLocation = item;
-        if(se._flightService.itemFlightCache.objSearch){
-          se._flightService.itemFlightCache.objSearch.returnCode = item.code;
-          se._flightService.itemFlightCache.objSearch.returnCity = item.city;
-          se._flightService.itemFlightCache.objSearch.returnAirport = item.airport;
-        }
-        //se._flightService.itemFlightCache.isExtenal = item.country != "Việt Nam" ? true : false;
-        //se._flightService.itemFlightCache.isExtenalReturn = item.country != "Việt Nam" ? true : false;
+        se._flightService.itemFlightCache.toCountryCode = item.countryCode;
       }
       se.gf.createListLastSearchFlight(item);
       se._flightService.itemFlightChangeLocation.emit(item);

@@ -1,5 +1,4 @@
 
-import {  SearchHotel } from '../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController, LoadingController, Platform, ModalController, AlertController } from '@ionic/angular';
 import { C } from '../../providers/constants';
@@ -43,7 +42,7 @@ export class TourPaymentSelectPage implements OnInit {
   blockPayCard = false;
   constructor(private navCtrl:NavController,public _flightService: flightService
     ,public gf: GlobalFunction, public loadingCtrl: LoadingController
-    ,public searchhotel:SearchHotel, public storage: Storage,
+    , public storage: Storage,
     private modalCtrl: ModalController,
     private platform: Platform,
     private alertCtrl: AlertController,
@@ -79,7 +78,7 @@ export class TourPaymentSelectPage implements OnInit {
         if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
           totalPrice = this.tourService.itemDepartureCalendar.TotalRate;
         }else{
-          totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.searchhotel.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.searchhotel.child || 0);
+          totalPrice = ((this.tourService.itemDepartureCalendar.RateAdultAvg || (this.tourService.itemDepartureCalendar.PriceAdultAvg ||0)) * this.tourService.adult || 0) + ((this.tourService.itemDepartureCalendar.RateChildAvg ||0) * this.tourService.child || 0);
         }
 
         if(this.tourService.TourBooking.IsInvoice && this.tourService.itemDetail.Inbound){
@@ -93,7 +92,7 @@ export class TourPaymentSelectPage implements OnInit {
         this.tourService.totalPriceStr = this.gf.convertNumberToString(totalPrice);
       })
 
-      this.tourService.departureCalendarStr = this.gf.getDayOfWeek(this.searchhotel.CheckInDate).dayname +', '+ moment(this.searchhotel.CheckInDate).format('DD') + ' tháng ' + moment(this.searchhotel.CheckInDate).format('MM') + ' ' + moment(this.searchhotel.CheckInDate).format('YYYY')
+      this.tourService.departureCalendarStr = this.gf.getDayOfWeek(this.tourService.checkInDate).dayname +', '+ moment(this.tourService.checkInDate).format('DD') + ' tháng ' + moment(this.tourService.checkInDate).format('MM') + ' ' + moment(this.tourService.checkInDate).format('YYYY')
      
       this.bookingCode = this.tourService.dataBookResponse.Code;
     }
@@ -219,7 +218,7 @@ export class TourPaymentSelectPage implements OnInit {
                   }
                   clearInterval(se.intervalID);
                   se.tourService.paymentType = 1;
-                  se.navCtrl.navigateForward('tourpaymentdone');
+                  se.navCtrl.navigateForward('/tourpaymentdone');
                 }
                 else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
                 {
@@ -275,7 +274,7 @@ export class TourPaymentSelectPage implements OnInit {
                     }
                     clearInterval(se.intervalID);
                     se.tourService.paymentType = 1;
-                    se.navCtrl.navigateForward('tourpaymentdone');
+                    se.navCtrl.navigateForward('/tourpaymentdone');
                   }
                   else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
                   {
@@ -338,7 +337,7 @@ export class TourPaymentSelectPage implements OnInit {
               }
               clearInterval(this.intervalID);
               this.tourService.paymentType = 1;
-              this.navCtrl.navigateForward('tourpaymentdone');
+              this.navCtrl.navigateForward('/tourpaymentdone');
             }
             else if (checkpay.Response && checkpay.Response.PaymentStatus == 2)
             {

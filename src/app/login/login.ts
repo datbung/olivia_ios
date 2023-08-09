@@ -1,6 +1,6 @@
-import { Component,OnInit, ViewChild } from '@angular/core';
+import { Component,NgZone,OnInit, ViewChild } from '@angular/core';
 import { NavController, NavParams, LoadingController, AlertController,IonRouterOutlet,Platform, ModalController } from '@ionic/angular';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup,Validators } from '@angular/forms';
 import { AuthService } from './../providers/auth-service';
 import { ToastController } from '@ionic/angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
@@ -34,8 +34,9 @@ export class LoginPage implements OnInit{
   loader;
   checkreview;
   public deviceToken;
+  @ViewChild('user') input;emailorphone='';password='';
   @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
-  appversion: string;refreshTokenTimer
+  appversion: string;refreshTokenTimer;
   constructor(
     public navCtrl: NavController, public authService: AuthService, public platform: Platform, private fb: Facebook, private storage: Storage,
     private fcm: FCM,public searchhotel: SearchHotel,private appVersion: AppVersion,public valueGlobal: ValueGlobal,
@@ -44,7 +45,9 @@ export class LoginPage implements OnInit{
     public _flightService: flightService,
     private signInWithApple: SignInWithApple,
     private modalCtrl: ModalController,
-    public _IDFAService: IDFAService) {
+    public _IDFAService: IDFAService,
+    public formBuilder: FormBuilder,
+    private zone: NgZone) {
     //google analytic
     this.storage.get('checkreview').then(checkreview => {
       this.checkreview=checkreview;
@@ -54,6 +57,11 @@ export class LoginPage implements OnInit{
       console.log(version);
       this.appversion=version;
     })
+    this.loginData = this.formBuilder.group({
+      emailorphone: ['', Validators.compose([Validators.required])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+    });
+
     gf.googleAnalytion('login', 'load', '');
   
   }
@@ -447,8 +455,8 @@ export class LoginPage implements OnInit{
     return re.test(String(email).toLowerCase());
   }
   logingg() {
-    this.userData = { btn: ['2'] }
-    //this.app.getActiveNav().push('BlankPage', this.userData);
+    //this.userData = { btn: ['2'] }
+    
     //google analytic
     this.navCtrl.navigateForward('/blank');
     this.gf.googleAnalytion('login', 'logingoogle', '');
@@ -467,15 +475,6 @@ export class LoginPage implements OnInit{
     //google analytic
     this.gf.googleAnalytion('login', 'logout', '');
   }
-  logintk() {
-    //use this.loginData.value to authenticate the user
-
-    // this.app.getActiveNav().push('LoginusernamePage');
-    //google analytic
-    this.navCtrl.navigateForward('loginusername')
-    this.gf.googleAnalytion('login', 'logintk', '');
-
-  }
 
   bypasslogin() {
     // let elements = Array.from(document.querySelectorAll('page-main'));
@@ -490,9 +489,9 @@ export class LoginPage implements OnInit{
     this.gf.googleAnalytion('login', 'bypasslogin', '');
   }
  
-  async presentToast() {
+  async presentToast(msg) {
     let toast = await this.toastCtrl.create({
-      message: "Email hoặc mật khẩu không đúng.",
+      message: msg || "Email hoặc mật khẩu không đúng.",
       duration: 3000,
       position: 'top'
     });
@@ -947,5 +946,199 @@ export class LoginPage implements OnInit{
       ]
     });
     await alert.present();
+  }
+  resetpassword(){
+    this.navCtrl.navigateForward('/forgotpass');
+  }
+  next()
+  {
+    if (this.loginData.value.emailorphone) {
+      var checkmail = this.validateEmail(this.loginData.value.emailorphone);
+      if (checkmail) {
+        if (this.loginData.value.password) {
+          var test = this.loginData.value.password.length;
+          if (test >= 6) {
+            this.logintk();
+          } else {
+            this.presentToast("Mật khẩu phải ít nhất 6 ký tự");
+          }
+        }
+        else
+        {
+          this.presentToast("Vui lòng nhập mật khẩu");
+        }
+      }
+      else{
+        if(this.phonenumber(this.loginData.value.emailorphone))
+        {
+          this.logintk();
+        }
+        else{
+          this.presentToast("Định dạng email không đúng hoặc số điện thoại không chính xác");
+        } 
+      }
+     
+    } else {
+      this.presentToast("Vui lòng nhập email hoặc số điện thoại");
+    }
+  }
+  logintk() {
+    var se = this;
+    se.gf.showLoading();
+    var options = {
+      method: 'POST',
+      url: C.urls.baseUrl.urlMobile + '/api/Account/Login',
+      //url:'http://192.168.10.121:3400/api/Account/Login',
+      timeout: 10000, maxAttempts: 5, retryDelay: 2000,
+      headers:
+      {
+        'cache-control': 'no-cache',
+        'content-type': 'application/json'
+      },
+      body:
+      {
+        emailOrPhone: this.loginData.value.emailorphone,
+        password: this.loginData.value.password,
+        rememberMe: true
+      },
+      json: true
+    };
+
+    request(options, function (error, response, body) {
+      if (error) {
+        error.page = "loginusername";
+        error.func = "logintk";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(error,response);
+        se.gf.hideLoading();
+      };
+      // var result=JSON.parse(body);
+      if (body.auth_token) {
+        se.gf.hideLoading();
+        var decoded = jwt_decode(body.auth_token);
+        se.refreshTokenTimer=decoded.refreshTokenTimer;
+        se.storage.set("savepassword", se.loginData.value.password);
+        se.storage.set("saveemail", decoded.email);
+        se.zone.run(() => {
+          se.storage.set("email", decoded.email);
+          se.storage.set("auth_token", body.auth_token);
+          se.storage.set("username", decoded.fullname);
+          se.storage.set("phone", decoded.phone);
+          se.storage.remove('deviceToken');
+          se.fcm.getToken().then(token => {
+            se.deviceToken = token;
+            se.storage.set('deviceToken',token);
+            //PDANH 19/07/2019: Push memberid & devicetoken
+            if(se.deviceToken){
+              se.gf.pushTokenAndMemberID(body.auth_token, se.deviceToken, se.appversion);
+            }
+          });
+          se.valueGlobal.countNotifi=0;
+          // var checkfullname=se.hasWhiteSpace(decoded.fullname);
+          var checkfullname = se.validateEmail(decoded.fullname);
+          var info;
+          if (!checkfullname) {
+            var textfullname=decoded.fullname.split(' ')
+            //info = { ho: textfullname[0], ten: textfullname[1], phone: decoded.phone}
+            if(textfullname.length >2){
+              let name = '';
+              for(let i = 1; i < textfullname.length; i++){
+                if(i == 1){
+                  name += textfullname[i];
+                }else{
+                  name +=' ' +textfullname[i];
+                }
+              }
+              info = { ho: textfullname[0], ten: name , phone: decoded.phone, gender: decoded.gender}
+            }else if(textfullname.length>1){
+              info = { ho: textfullname[0], ten: textfullname[1], phone: decoded.phone, gender: decoded.gender}
+            }
+            else if(textfullname.length==1){
+              info = { ho: textfullname[0], ten: "", phone: decoded.phone, gender: decoded.gender}
+            }
+            se.storage.set("infocus", info);
+          } else {
+            info = { ho: "", ten: "", phone: decoded.phone, gender: decoded.gender}
+            se.storage.set("infocus", info);
+          }
+          if (Array.isArray(decoded.jti)) {
+            se.storage.set("jti", decoded.jti[0]);
+          }
+          else {
+            se.storage.set("jti", decoded.jti);
+          }
+          if (!se.checkreview) {
+            se.storage.set("checkreview", 0);
+          }
+          
+          se.storage.set("point", decoded.point);
+
+          if (se.loginData.value.ischeck) {
+            se.storage.remove("password");
+            se.storage.remove("emailrmb");
+            se.storage.set("password", se.loginData.value.password);
+            se.storage.set("emailrmb", se.loginData.value.emailorphone);
+          }
+          else
+          {
+            se.storage.remove("password");
+            se.storage.remove("emailrmb");
+          }
+          
+          se.storage.remove('blogtripdefault');
+          se.storage.remove('regionnamesuggest');
+          se.storage.remove('listtopdealdefault');
+          se.gf.setParams(true,'resetBlogTrips');
+          se.searchhotel.rootPage ='login';
+          
+            if(se.valueGlobal.backValue == "flightnotify"){
+              se._flightService.itemMenuFlightClick.emit(3);
+            }
+            if(se.valueGlobal.backValue == "flightaccount"){
+              se._flightService.itemMenuFlightClick.emit(4);
+            }
+            
+          if (se.valueGlobal.logingoback) {
+            if(se.valueGlobal.logingoback =="flightadddetails" || se.valueGlobal.logingoback == "flightadddetailsinternational"){
+              se._flightService.itemFlightLogin.emit(1);
+            }
+            se.navCtrl.navigateBack([se.valueGlobal.logingoback]);
+          }
+          else{
+            se.navCtrl.navigateRoot('/');
+          }
+        }, 10)
+
+      }
+      else {
+        se.gf.hideLoading();
+        se.presentToast(body.msg);
+      }
+    });
+
+   
+    //google analytic
+    this.gf.googleAnalytion('loginusername', 'login', '');
+  }
+  
+  phonenumber(inputtxt) {
+    var n = Number(inputtxt);
+    if (n) {
+      var test1 = inputtxt.length;
+      if (inputtxt) {
+        if (test1 == 10) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      else {
+        return false;
+      }
+    }
+    else {
+      return false;
+    }
   }
 }

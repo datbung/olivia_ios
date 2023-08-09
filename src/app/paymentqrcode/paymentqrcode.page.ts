@@ -81,21 +81,6 @@ export class PaymentqrcodePage implements OnInit {
             })
             var ti = new Date();
             this.paymentDate= moment(ti).add(1, 'hours').format('HH:mm, DD/MM/YYYY');
-            // if(this.activityService.qrcodepaymentfrom ==1){
-            //   this.gf.logEventFirebase(this._flightService.itemFlightCache.paymentType, this._flightService.itemFlightCache, 'paymentqrcode', 'purchase', 'Flights');
-            // }
-            // else if(this.activityService.qrcodepaymentfrom ==2){//ks
-            //   this.gf.logEventFirebase(this.searchhotel.paymentType,this.searchhotel, 'paymentqrcode', 'purchase', 'Hotels');
-            // }
-            // else if(this.activityService.qrcodepaymentfrom ==3){//tour
-            //   this.gf.logEventFirebase(this.searchhotel.paymentType,this.tourService, 'paymentqrcode', 'purchase', 'Tours');
-            // }
-            // else if(this.activityService.qrcodepaymentfrom ==4){//comboflight
-            //   this.gf.logEventFirebase(this.searchhotel.paymentType,this.searchhotel, 'paymentqrcode', 'purchase', 'Combo');
-            // }
-            // else if(this.activityService.qrcodepaymentfrom ==5){//combocar
-            //   this.gf.logEventFirebase(this.searchhotel.paymentType,this.searchhotel, 'paymentqrcode', 'purchase', 'Combo');
-            // }
         }
     ngOnInit() {
 

@@ -73,7 +73,6 @@
           font-size: 14px;
           font-weight: 300;
           color: #828282;
-          margin-left: 2px;
       }
       .label-input{
         font-size: 16px;
@@ -84,7 +83,6 @@
         font-size: 14px;
         font-weight: 300;
         color: #828282;
-        margin-left: 2px;
       }
 
       .div-title-other-request{
@@ -114,7 +112,6 @@
         font-size: 16px;
         font-weight: 300;
         color: #000000;
-        margin-left: 5px;
       }
       .ion-checkbox{
         width: 16px;
@@ -409,4 +406,7 @@
   font-size: 16px;
   line-height: 1.4;
   color: #3f3b3b;
+}
+.no-padding {
+  padding: 0;
 }

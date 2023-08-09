@@ -36,7 +36,7 @@ export class RegisterPage implements OnInit {
     this.regData = this.formBuilder.group({
       emailorphone: ['', Validators.required],
       password: ['', Validators.required],
-      ischeck: ['', Validators.required],
+      name: ['', Validators.required],
     });
   }
   ngOnInit() {
@@ -119,15 +119,6 @@ export class RegisterPage implements OnInit {
       }
     });
   }
-  // CheckPassword(inputtxt) {
-  //   var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-  //   if (inputtxt.match(passw)) {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
   validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());

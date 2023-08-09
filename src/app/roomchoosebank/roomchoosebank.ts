@@ -361,6 +361,7 @@ export class RoomchoosebankPage implements OnInit{
         body:
         {
           RoomClassObj: this.jsonroom.RoomClasses[0].ListObjRoomClass,
+          //RoomClassObj: this.booking.ListRoomClassObject,
           CName: this.Roomif.hoten,
           CEmail: this.booking.CEmail,
           CPhone: this.Roomif.phone,

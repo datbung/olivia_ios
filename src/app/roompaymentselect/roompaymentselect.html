@@ -118,13 +118,13 @@
             </sup>
           </p>
 
-          <p class="total-price" style="text-align: right; margin: 0;" *ngIf="_voucherService.hotelPromoCode&& !Roomif.promocode">
+          <!-- <p class="total-price" style="text-align: right; margin: 0;" *ngIf="_voucherService.hotelPromoCode&& !Roomif.promocode">
             {{gf.convertNumberToString( ((totalPrice - _voucherService.hotelTotalDiscount)>0? (totalPrice - _voucherService.hotelTotalDiscount) : 0 ))}}đ
             <sup>
               <img  src="./assets/ic_green/ic_info.svg">
             </sup>
-          </p>
-          <p class="total-price" style="text-align: right; margin: 0;" *ngIf="_voucherService.hotelPromoCode && Roomif.promocode">
+          </p> -->
+          <p class="total-price" style="text-align: right; margin: 0;" *ngIf="_voucherService.hotelPromoCode">
             {{gf.convertNumberToString(totalPrice)}}đ
             <sup>
               <img  src="./assets/ic_green/ic_info.svg">

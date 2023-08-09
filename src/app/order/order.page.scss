@@ -1254,9 +1254,12 @@
             .cls-text-overflow{
                 max-width: 190px !important;
             }
-            .div-flight-inout {
-                margin-left: 28px !important;
+            .order-content {
+                .div-flight-inout {
+                    margin-left: 28px !important;
+                }
             }
+           
         }
     }
     .div-button{
@@ -1678,6 +1681,7 @@
     }
     .div-departure, .div-return{
         position: relative;
+        min-height: 36px;
 
         
         .div-line{
@@ -3207,6 +3211,9 @@ color: #e52822
 }
 .margin-8-16{
     margin: 8px 0px;
+}
+.m-right-16 {
+    margin-right: 16px;
 }
 .mt-19{
     margin-top: 19px;
@@ -4971,4 +4978,7 @@ and (orientation: portrait) {
                 flex-grow: 0;
                 background-color: #f2f2f2;
                 margin: 8px -16px 8px -16px;
+          }
+          .m-left-16 {
+            margin-left: 16px;
           }

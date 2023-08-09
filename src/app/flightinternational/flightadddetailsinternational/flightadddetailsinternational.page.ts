@@ -104,6 +104,8 @@ export class FlightAdddetailsInternationalPage implements OnInit {
   optionPassport:boolean=false;
   departFlight: any;
   returnFlight: any;
+  allowCheckinOnline: any;
+  textCheckinOnline: any;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -208,6 +210,42 @@ export class FlightAdddetailsInternationalPage implements OnInit {
       let url = C.urls.baseUrl.urlFlightInt + `api/bookings/${this._flightService.itemFlightCache.dataBookingInternational.id}/summary?${new Date().getTime()}`;
       this.gf.RequestApi('GET', url, {}, {}, 'flightadddetailsinternational', 'getSummaryBooking').then((data) => {
         this._flightService.itemFlightCache.dataSummaryBooking = data.data;
+
+        this.getSummaryBookingFIT(data.data.reservationNo).then((data)=>{
+          if(data && data.allowRequestCheckinOnline){
+            this.allowCheckinOnline = data.allowRequestCheckinOnline.allowCheckin;
+            this.textCheckinOnline = data.allowRequestCheckinOnline.note;
+          }else{
+            this.allowCheckinOnline = false;
+            this.textCheckinOnline = "Các hãng bay Quốc tế chưa hỗ trợ Checkin Online";
+          }
+        })
+      })
+    }
+
+    getSummaryBookingFIT(resNo) : Promise<any>{
+      var se = this;
+      return new Promise((resolve, reject) => {
+        var options = {
+          method: 'GET',
+          url: C.urls.baseUrl.urlFlight + "/gate/apiv1/SummaryBooking/"+resNo+"?"+new Date().getTime()+"&stepBooking=service",
+          timeout: 180000, maxAttempts: 5, retryDelay: 20000,
+          headers: {
+            "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+        };
+        request(options, function (error, response, body) {
+          if (error) {
+            error.page = "flightpaymentselect";
+            error.func = "getSummaryBooking";
+            error.param = JSON.stringify(options);
+          }
+          if (response.statusCode == 200) {
+            let result = JSON.parse(body);
+            resolve(result);
+          }
+        })
       })
     }
 
@@ -1240,7 +1278,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                                   return;
                                 }
                                 else if(elementAdult.passportExpireDate){
-                                  let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                                  let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
                                   let diffdate = moment(moment(elementAdult.passportExpireDate).format('YYYY-MM-DD')).diff(moment(returndate), 'days');
                                   if(diffdate < 0){
                                     elementAdult.errorPassportExpireDate = true;
@@ -1302,7 +1340,7 @@ export class FlightAdddetailsInternationalPage implements OnInit {
                         elementChild.textErrorInfo ='';
 
                         let departdatenew = moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
-                        let returndate = moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD');
+                        let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
 
                         if(!elementChild.genderdisplay && !elementChild.name){
                           elementChild.errorInfo = !elementChild.errorInfo;

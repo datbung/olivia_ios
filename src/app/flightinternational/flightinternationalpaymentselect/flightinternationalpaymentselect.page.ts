@@ -50,6 +50,8 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
   totalPrice: number;
   allowApplyVoucher: boolean=true;
   isPaymentMytrip: boolean = false;
+  dataServiceFee = [];
+  dataSF: any;
   constructor(private navCtrl:NavController,public _flightService: flightService
     ,public gf: GlobalFunction, public loadingCtrl: LoadingController
     ,public searchhotel:SearchHotel,private safariViewController: SafariViewController, public storage: Storage,
@@ -137,7 +139,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
         this.checkOutDisplayFullYear = this.itemflight.returnTimeDisplay + ", " + moment(this._flightService.itemFlightCache.itemFlightInternationalReturn.departTime).format("YYYY");
       }
     }
-
+    this._flightService.itemFlightCache.bookingCode = this.bookingCode;
     
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -182,6 +184,35 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
           }, 1000 * 60 * 10);
       })
       
+    })
+
+    //pdanh 20-07-2023: call api tính phí dịch vụ
+    let url = `${C.urls.baseUrl.urlMobile}/api/Data/getaddonpaymentfee?applyFor=vmb&totalPrice=${this.totalPrice}`;
+    this.gf.RequestApi('GET', url, {}, {}, 'flightpaymentselect', 'getaddonpaymentfee').then((data)=>{
+      if(data){
+        this.dataServiceFee = data.filter(d => {return d.applyFor == 'vmb'});
+        console.log(this.dataServiceFee);
+        let atmsf = this.dataServiceFee.filter(d => {return d.levelService == 'atm'});
+        let vssf = this.dataServiceFee.filter(d => {return d.levelService == 'visa'});
+        let jcbsf = this.dataServiceFee.filter(d => {return d.levelService == 'jcb'});
+        let amexsf = this.dataServiceFee.filter(d => {return d.levelService == 'amex'});
+        let alepaysf = this.dataServiceFee.filter(d => {return d.levelService == 'alepay'});
+        let momosf = this.dataServiceFee.filter(d => {return d.levelService == 'momo'});
+        let bnplsf = this.dataServiceFee.filter(d => {return d.levelService == 'bnpl'});
+        let payoo_qrsf = this.dataServiceFee.filter(d => {return d.levelService == 'payoo_qr'});
+        let payoo_storesf = this.dataServiceFee.filter(d => {return d.levelService == 'payoo_store'});
+  
+        this.dataSF = this.dataServiceFee && this.dataServiceFee.length >0 ? {} : null;
+        this.dataSF.atmSF = atmsf && atmsf.length >0 ? atmsf[0] : null;
+        this.dataSF.vsSF = vssf && vssf.length >0 ? vssf[0] : null;
+        this.dataSF.jcbSF = jcbsf && jcbsf.length >0 ? jcbsf[0] : null;
+        this.dataSF.amexSF = amexsf && amexsf.length >0 ? amexsf[0] : null;
+        this.dataSF.alepaySF = alepaysf && alepaysf.length >0 ? alepaysf[0] : null;
+        this.dataSF.momosSF = momosf && momosf.length >0 ? momosf[0] : null;
+        this.dataSF.bnplSF = bnplsf && bnplsf.length >0 ? bnplsf[0] : null;
+        this.dataSF.payoo_qrSF = payoo_qrsf && payoo_qrsf.length >0 ? payoo_qrsf[0] : null;
+        this.dataSF.payoo_storesSF = payoo_storesf && payoo_storesf.length >0 ? payoo_storesf[0] : null;
+      }
     })
 
     C.writePaymentLog("flightinternational", "paymentselect", "purchase", this.bookingCode);
@@ -242,25 +273,7 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     //this.presentLoading();
     this._flightService.itemFlightCache.paymentType = 'banktransfer';
     this.navCtrl.navigateForward('flightinternationalpaymentbank');
-    // this.checkAllowRepay().then((check) => {
-    //   if(check){
-    //     clearInterval(this.intervalID);
-    //     this.navCtrl.navigateForward('flightpaymentbank');
-    //     this.hideLoading();
-    //   }else{
-    //     this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-    //       if(check){
-    //         clearInterval(this.intervalID);
-    //         this.navCtrl.navigateForward('flightpaymentbank');
-    //         this.hideLoading();
-    //       }else{
-    //         this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 1);
-    //         clearInterval(this.intervalID);
-    //         this.hideLoading();
-    //       }
-    //     })
-    //   }
-    // })
+   
     
   }
   flightpaymentatm()
@@ -271,50 +284,12 @@ export class FlightInternationalPaymentSelectPage implements OnInit {
     this._flightService.itemFlightCache.paymentType = 'atm';
     
     this.navCtrl.navigateForward('flightinternationalpaymentchoosebank');
-    // this.presentLoading();
-    // this.checkAllowRepay().then((check) => {
-    //   if(check){
-    //     clearInterval(this.intervalID);
-    //     this.navCtrl.navigateForward('flightinternationalpaymentchoosebank');
-    //     this.hideLoading();
-    //   }else{
-    //       this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-    //         if(check){
-    //           clearInterval(this.intervalID);
-    //           this.navCtrl.navigateForward('flightinternationalpaymentchoosebank');
-    //           this.hideLoading();
-    //         }else{
-    //           this.hideLoading();
-    //           this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 1);
-    //           clearInterval(this.intervalID);
-              
-    //         }
-    //       })
-    //     }
-    //   })
+   
   }
   flightpaymentvisa() {
     if(this.blockPayCard){
       return;
     }
-    // this.presentLoading();
-    // this.checkAllowRepay().then((check) => {
-    //   if(check){
-    //     clearInterval(this.intervalID);
-    //     this.GeTokensOfMember(1);
-    //   }else{
-    //     this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-    //       if(check){
-    //         clearInterval(this.intervalID);
-    //           this.GeTokensOfMember(1);
-    //         }else{
-    //           this.hideLoading();
-    //           this.gf.showAlertOutOfTicketInternational(this._flightService.itemFlightCache, 1);
-    //           clearInterval(this.intervalID);
-    //         }
-    //       })
-    //     }
-    //   })
     this._flightService.itemFlightCache.paymentType = 'visa';
     
     this.GeTokensOfMember(1);

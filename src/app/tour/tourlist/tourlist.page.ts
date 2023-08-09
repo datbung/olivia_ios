@@ -1,4 +1,4 @@
-import { Bookcombo, ValueGlobal, SearchHotel, Booking } from './../../providers/book-service';
+import { Bookcombo, ValueGlobal, Booking } from './../../providers/book-service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { NavController, ModalController, Events,AlertController,Platform,LoadingController, ActionSheetController } from '@ionic/angular';
 import { AuthService } from '../../providers/auth-service';
@@ -49,7 +49,7 @@ export class TourListPage implements OnInit{
   ischeckTimeTour :boolean= true;
   ischeckDepartTour :boolean= false;
   ischeckPriceTour :boolean= true;
-  constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
+  constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
     public storage: Storage,public valueGlobal:ValueGlobal,public alertCtrl: AlertController,public gf: GlobalFunction,
     public activeRoute : ActivatedRoute,
@@ -71,8 +71,8 @@ export class TourListPage implements OnInit{
       
   }
   ionViewWillEnter(){
-    if(this.searchhotel.CheckInDate){
-      this.cindisplayhr = moment(this.gf.getCinIsoDate(this.searchhotel.CheckInDate)).format('DD/MM');
+    if(this.tourService.checkInDate){
+      this.cindisplayhr = moment(this.gf.getCinIsoDate(this.tourService.checkInDate)).format('DD/MM');
     }
     this.hidetopbar();
   }
@@ -108,8 +108,8 @@ export class TourListPage implements OnInit{
       this.loadTourListByDestinationId(this.tourService.itemShowList.Code);
     }
 
-    if(this.searchhotel.CheckInDate){
-      this.cindisplayhr = moment(this.gf.getCinIsoDate(this.searchhotel.CheckInDate)).format('DD/MM');
+    if(this.tourService.checkInDate){
+      this.cindisplayhr = moment(this.gf.getCinIsoDate(this.tourService.checkInDate)).format('DD/MM');
     }
 
     if(this.tourService.itemShowList && this.tourService.itemShowList.Name){
@@ -181,7 +181,7 @@ export class TourListPage implements OnInit{
     };
     if(se.slideData && se.slideData.length >0){
       let listIds = se.slideData.map(item => item.Id).join(',');
-      se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}, 'tourList', 'GetMercuriusPriceByTourIds').then((data)=>{
+      se.gf.RequestApiWithQueryString('GET', C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetMercuriusPriceByTourIds', headers,{TourIds: listIds, date: moment(this.tourService.checkInDate).format('YYYY-MM-DD')}, 'tourList', 'GetMercuriusPriceByTourIds').then((data)=>{
         if(data && data.Status == "Success" && data.Response && data.Response.length >0){
           this.arrTour=[];
           this.arrTourNoPrice=[];
@@ -539,7 +539,7 @@ export class TourListPage implements OnInit{
   sortTimeTour(){
     var se = this
       let direction = -1;
-      var daycin= moment(se.searchhotel.CheckInDate).format("YYYY-MM-DDT00:00:00")
+      var daycin= moment(se.tourService.checkInDate).format("YYYY-MM-DDT00:00:00")
      
       this.slideData=[];
       this.arrTour.forEach(element => {
@@ -656,8 +656,8 @@ export class TourListPage implements OnInit{
     }
     
     se.allowclickcalendar = false;
-    let fromdate = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckInDate));
-    let todate = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckOutDate));
+    let fromdate = new Date(se.gf.getCinIsoDate(se.tourService.checkInDate));
+    //let todate = new Date(se.gf.getCinIsoDate(se.searchhotel.CheckOutDate));
     let _daysConfig: DayConfig[] = [];
     if(se.tourService.departures && se.tourService.departures.length >0) {
       for (let j = 0; j < se.tourService.departures.length; j++) {
@@ -744,9 +744,9 @@ export class TourListPage implements OnInit{
       const date = event.data;
       if (event.data) {
          se.zone.run(() => {
-           se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
-           se.searchhotel.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
-           se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
+           se.tourService.checkInDate = moment(se.gf.getCinIsoDate(event.data.from)).format('YYYY-MM-DD');
+           se.tourService.datecin = new Date(se.gf.getCinIsoDate(event.data.from));
+           se.tourService.cindisplay = moment(se.gf.getCinIsoDate(se.tourService.datecin)).format("DD-MM-YYYY");
          })
       }
   }
@@ -795,9 +795,9 @@ export class TourListPage implements OnInit{
                 se.modalCtrl.dismiss();
               }, 300);
               se.zone.run(() => {
-                se.searchhotel.CheckInDate = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
-                se.searchhotel.datecin = se.gf.getCinIsoDate(fromdate);
-                se.searchhotel.cindisplay = moment(se.gf.getCinIsoDate(se.searchhotel.datecin)).format("DD-MM-YYYY");
+                se.tourService.checkInDate = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
+                se.tourService.datecin = se.gf.getCinIsoDate(fromdate);
+                se.tourService.cindisplay = moment(se.gf.getCinIsoDate(se.tourService.datecin)).format("DD-MM-YYYY");
               })
               se.loadData();
               

@@ -6,6 +6,11 @@
     font-size: 14px;
     color: #333333
 }
+.text-normal {
+    font-size: 16px;
+    text-align: left;
+    color: #828282;
+}
 .btn-save-phone{
     border-color: #f79221;
     color: #ffffff;
@@ -13,7 +18,14 @@
     width: 98%;
     height: 48px;
     text-transform: none;
-    font-size: 17px;
-    font-weight: normal;
-    margin-left: 4px;
+    font-size: 18px !important;
+    border-radius: 4px !important;
+}
+.cls-invalid {
+    background: #828282 !important;
+    opacity: 0.5;
+}
+.cls-inputmail {
+    --padding-top: 0;
+    --padding-bottom: 0;
 }

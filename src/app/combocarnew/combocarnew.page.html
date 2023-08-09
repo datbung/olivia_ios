@@ -270,26 +270,26 @@
           <div class="div-button"><ion-toggle style="margin-top: -4px;" class="toggle-promo" (ionChange)="edit()" [(ngModel)]="ischeck"></ion-toggle></div>
       </div>
       <div class="div-line"></div>
-      <div class="div-flex" (click)="showdiscount()" *ngIf="!strPromoCode">
+      <div class="div-flex" (click)="showdiscount()" *ngIf="!strPromoCode && statusRoom=='AL'">
         <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
         <div class="div-text-center ">
           <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
         </div>
         <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
       </div>
-      <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+      <div class="div-voucher-apply" *ngIf="strPromoCode && statusRoom=='AL'" (click)="showdiscount()">
         <div class="width-250 div-overflow">
           <span class="text-normal">Ưu đãi (<span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span><span class="text-normal">)</span> </span>
         </div>
         <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
         <div class="width-100 text-normal text-right p-r-5" *ngIf="strPromoCode">{{gf.convertNumberToString(totaldiscountpromo)}}đ</div>
       </div>
-      <ion-row> 
+      <ion-row *ngIf="statusRoom=='AL'"> 
         <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
         <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
       </ion-row>
       <hr class="cls-hr" *ngIf="!_voucherService.hasVoucher">
-      <app-voucherslidecarcombo *ngIf="loadcarspricedone"></app-voucherslidecarcombo>
+      <app-voucherslidecarcombo *ngIf="loadcarspricedone && statusRoom=='AL'"></app-voucherslidecarcombo>
 
       <div *ngIf="ischeck||ischeckbtnpromo&& loadcarspricedone">
         <ion-row>
@@ -352,14 +352,14 @@
               <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
               <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
           </ion-row> -->
-          <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode">
+          <div class="div-flex align-center" (click)="showdiscount()" *ngIf="!strPromoCode && statusRoom=='AL'">
             <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ticket_tealish.svg"/></div>
             <div class="div-text-center">
               <div class="width-100">Nhập mã giảm giá <span class="text-sub">(iVIVU Voucher, MGift..)</span></div>
             </div>
             <div class="div-button width-10"><img src="./assets/ic_ordersupport/next.svg"></div>
           </div>
-          <div class="div-voucher-apply" *ngIf="strPromoCode" (click)="showdiscount()">
+          <div class="div-voucher-apply" *ngIf="strPromoCode && statusRoom=='AL'" (click)="showdiscount()">
             <div class="width-200">
               <span class="text-normal">Ưu đãi (</span>
               <!-- <span class="text-code" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{_voucherService.selectVoucher.code}}</span> -->
@@ -369,13 +369,13 @@
             <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="_voucherService.selectVoucher && _voucherService.selectVoucher.claimed ">{{gf.convertNumberToString(_voucherService.selectVoucher.rewardsItem.price)}}đ</div> -->
             <div class="width-100 text-normal text-right p-r-5" *ngIf="totaldiscountpromo">{{gf.convertNumberToString(totaldiscountpromo)}}đ</div>
           </div>
-          <ion-row> 
+          <ion-row *ngIf="statusRoom=='AL'"> 
             <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
             <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
           </ion-row>
   </div>
       <div class="div-split-panel" *ngIf="!_voucherService.hasVoucher"></div>
-      <app-voucherslidecarcombo></app-voucherslidecarcombo>
+      <app-voucherslidecarcombo *ngIf="statusRoom=='AL'"></app-voucherslidecarcombo>
 
       <div *ngIf="!ischeckbtnpromo">
         <ion-row>
