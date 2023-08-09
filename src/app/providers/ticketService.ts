@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 })
 
 export class ticketService{
-  
   private filterTourSubject = new Subject<any>();
   private scrollToDepartureDivSubject = new Subject<any>();
   private searchTicketSubject = new Subject<any>();
@@ -39,6 +38,19 @@ export class ticketService{
   adult : any;
   child : any;
   elder : any;
+  bookingInfo: any;
+  isFilter: boolean = false;
+  inputText: string;
+  slideData: any;
+  regionFilters: any = [];
+  typeFilters: any = [];
+  topicfilters: any = [];
+  ticketFilter: any;
+  countFilter: number;
+  searchType: any;
+  regionModels: any;
+  topicModels: any;
+  typeModels: any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }
@@ -62,5 +74,6 @@ export class ticketService{
   getObservableSearchTicketRegion(): Subject<any> {
     return this.searchTicketSubject;
   }
-  
+
 }
+

@@ -113,13 +113,14 @@ import { FlightDetailInternationalPageModule } from './flightinternational/fligh
 import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
 import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvideo.module';
 import { FlightInternationalFilterClassPageModule } from './flightinternational/flightinternationalfilterclass/flightinternationalfilterclass.module';
+import { TicketfilterPageModule } from './ticket/ticketfilter/ticketfilter.module';
 
-import {
-  RecaptchaModule,
-  RECAPTCHA_SETTINGS,
-  RecaptchaSettings,
-  RecaptchaFormsModule,
-} from 'ng-recaptcha';
+// import {
+//   RecaptchaModule,
+//   RECAPTCHA_SETTINGS,
+//   RecaptchaSettings,
+//   RecaptchaFormsModule,
+// } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [AppComponent],
@@ -177,8 +178,9 @@ import {
     FlightDetailInternationalPageModule,
     FlightConditionAndPriceInternationalPageModule,
     FlightInternationalFilterClassPageModule,
-    RecaptchaModule,
-    RecaptchaFormsModule,
+    // RecaptchaModule,
+    // RecaptchaFormsModule,
+    TicketfilterPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
@@ -238,15 +240,15 @@ import {
     tourService,
     YoutubeVideoPlayer,
     //HTTP,
-    RecaptchaModule,
-    RecaptchaFormsModule,
-    {
-      provide: RECAPTCHA_SETTINGS,
-      useValue: {
-        siteKey: '6Lc3sw0nAAAAAFkU4Vy-i9hMcjX3p1yVMaWiH0x8',
-      } as RecaptchaSettings,
-    },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    // RecaptchaModule,
+    // RecaptchaFormsModule,
+    // {
+    //   provide: RECAPTCHA_SETTINGS,
+    //   useValue: {
+    //     siteKey: '6Lc3sw0nAAAAAFkU4Vy-i9hMcjX3p1yVMaWiH0x8',
+    //   } as RecaptchaSettings,
+    // },
+    // { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

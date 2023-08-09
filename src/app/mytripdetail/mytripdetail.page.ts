@@ -114,6 +114,7 @@ export class MytripdetailPage implements OnInit {
   returnTicketInfoCRM: any;
   _departTicketInfoCRM: any;
   _returnTicketInfoCRM: any;
+  objSummary: any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -253,21 +254,54 @@ export class MytripdetailPage implements OnInit {
         if(this.trip.booking_type && this.trip.booking_type == "TOUR"){
             this.getBookingTourDetail(this.trip);
         }else if (this.trip.booking_type && this.trip.booking_type == "TICKET"){
-          this.gf.ticketGetBookingCRM(this.trip.booking_id).then((data) => {
-            this.objectDetail=data;
-            let arrcd = this.objectDetail.startDate.split('-');
-            let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
-            this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
-            var objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
-            if(objmap && objmap.length >0){
-              this.ischeckqrLink=true;
-            }
-            this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.trip.booking_id , {}, {}, '', '').then((data) => {
-              if (data && data.success) {
-                this.includePrice = data.data.booking.includePrice.split('|');
-                this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
+          if ((this.trip.payment_status == 1 || this.trip.payment_status == 5) && this.trip.approve_date){
+            this.gf.showLoading();
+            this.gf.ticketGetBookingCRM(this.trip.booking_id).then((data) => {
+              this.objectDetail=data;
+              let arrcd = this.objectDetail.startDate.split('-');
+              let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+              this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+              var objmap;
+              if (this.objectDetail.listNotes) {
+                objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
               }
+            
+              if(objmap && objmap.length >0){
+                this.ischeckqrLink=true;
+              }else{
+       
+                  this.GetVoucherLinks(this.trip.booking_id).then((data) => {
+                    this.trip.listVoucher=data;
+               
+                    if (Array.isArray(this.trip.listVoucher)) {
+                      for (let index = 0; index < this.trip.listVoucher.length; index++) {
+                        const result = this.trip.listVoucher[index].split("filename=");
+                        var objlink= {
+                          filename:result[1],
+                          link:this.trip.listVoucher[index]='https://beta-vvcapi.ivivu.com/'+this.trip.listVoucher[index]
+                        }
+                        this.trip.listVoucher[index]=objlink;
+                      }
+                    }else{
+                      this.trip.listVoucher = [];
+                    }
+                 
+                  
+                  })
+                
+              
+                
+              }
+              this.gf.hideLoading();
+             
             });
+          }
+          this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.trip.booking_id , {}, {}, '', '').then((data) => {
+            if (data && data.success) {
+              this.includePrice = data.data.booking.includePrice.split('|');
+              this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
+              this.objSummary=data.data.booking;
+            }
           });
         }
         if(this.trip.child_ages){
@@ -1534,8 +1568,8 @@ export class MytripdetailPage implements OnInit {
   info(){
     this.isttt=!this.isttt;
   }
-  openWebpage() {
-    var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
+  openWebpage(url) {
+    // var url="https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong";
     this.safariViewController.isAvailable()
     .then((available: boolean) => {
       if (available) {
@@ -1602,7 +1636,7 @@ async downloadqrcode(){
     }
   }
   share(item) {
-    this.socialSharing.share(null, null, null, item.CheckinInfo).then(() => {
+    this.socialSharing.share(null, null, null, item).then(() => {
       // Success!
     }).catch(() => {
       // Error!
@@ -1627,6 +1661,16 @@ async downloadqrcode(){
 
 
   downloadPDF(url) {
+    // debugger;
+    // const url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
+    this.fileTransfer.download(url, this.file.documentsDirectory + 'file.pdf').then((entry) => {
+      // console.log('download complete: ' + entry.toURL());
+      this.presentToastr('Đã lưu');
+    }, (error) => {
+      // handle error
+    });
+  }
+  downloadPDFVC(url) {
     // debugger;
     // const url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
     this.fileTransfer.download(url, this.file.documentsDirectory + 'file.pdf').then((entry) => {
@@ -1687,5 +1731,16 @@ async downloadqrcode(){
   ticketinfo(){
     this.isTTV=!this.isTTV;
   }
+  GetVoucherLinks(booking_id): Promise<any>{
+    return new Promise((resolve, reject) => {
+      this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Reservation/GetVoucherLinks?bookingCode='+booking_id , {}, {}, '', '').then((data) => {
+        if (data && data.success) {
 
+            resolve(data.data);
+           
+        }
+      });
+    })
+
+  }
 }

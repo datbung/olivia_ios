@@ -264,6 +264,8 @@ const routes: Routes = [
 
   
   { path: 'userzalo', loadChildren: './userzalo/userzalo.module#UserZaloPageModule' },
+  { path: 'ticketfilter', loadChildren: './ticket/ticketfilter/ticketfilter.module#TicketfilterPageModule' },
+  { path: 'ticketfilterlist', loadChildren: './ticket/ticketfilterlist/ticketfilterlist.module#TicketfilterlistPageModule' },
 ];
 @NgModule({
   imports:

@@ -12,43 +12,53 @@
     </ion-row>
 </ion-header>
 <ion-content padding>
-    <ion-row class="item-room" *ngIf="!trip.isFlyBooking">
-        <!-- Ảnh hotel -->
-        <ion-col size="4" style="padding: 0">
-          <div class="div-wrapimg">
-              <img *ngIf="trip.avatar104" class="img-avatar" src="https:{{trip.avatar104}}">
-              <img *ngIf="!trip.avatar104" class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
-          </div>
-        </ion-col>
-        <!-- Nội dung bên phải -->
-        <ion-col size="8" class="col-mytrip-text-description"  style="padding: 0">
-          <div class="text-left">
-            <!-- Tên hotel -->
-              <h2 class="room-class-name">{{trip.hotel_name}}</h2>
-              <!-- Nội dung combo nếu có -->
-              <ion-row *ngIf="trip.combo_name" >
-                  <label>{{trip.combo_name}}</label>
-              </ion-row>
-              <!-- checkin/checkout -->
-              <ion-row >
-                <ion-col size="1" class="col-icon">
-                  <img src="./assets/imgs/ic_date.svg"> 
-                </ion-col>
-                <ion-col class="col-text">
-                  <label>{{cindisplay}} → {{coutdisplay}}</label>
-                </ion-col>
-              </ion-row>
-              <!-- room/pax -->
-              <ion-row>
-                <ion-col size="1"  class="col-icon">
-                    <img src="./assets/ic_facility/ic_people.svg">
-                </ion-col>
-                <ion-col  class="col-text" style="padding-top: 3px">{{trip.room_count}} phòng | {{trip.totalPaxStr}}</ion-col>
-              </ion-row>
-            </div>
-        </ion-col>
-    </ion-row>
-
+    <div *ngIf="trip.booking_type!='TICKET'">
+        <ion-row class="item-room" *ngIf="!trip.isFlyBooking">
+            <!-- Ảnh hotel -->
+            <ion-col size="4" style="padding: 0">
+              <div class="div-wrapimg">
+                  <img *ngIf="trip.avatar104" class="img-avatar" src="https:{{trip.avatar104}}">
+                  <img *ngIf="!trip.avatar104" class="img-avatar" src="https://cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-104x104.png">
+              </div>
+            </ion-col>
+            <!-- Nội dung bên phải -->
+            <ion-col size="8" class="col-mytrip-text-description"  style="padding: 0">
+              <div class="text-left">
+                <!-- Tên hotel -->
+                  <h2 class="room-class-name">{{trip.hotel_name}}</h2>
+                  <!-- Nội dung combo nếu có -->
+                  <ion-row *ngIf="trip.combo_name" >
+                      <label>{{trip.combo_name}}</label>
+                  </ion-row>
+                  <!-- checkin/checkout -->
+                  <ion-row >
+                    <ion-col size="1" class="col-icon">
+                      <img src="./assets/imgs/ic_date.svg"> 
+                    </ion-col>
+                    <ion-col class="col-text">
+                      <label>{{cindisplay}} → {{coutdisplay}}</label>
+                    </ion-col>
+                  </ion-row>
+                  <!-- room/pax -->
+                  <ion-row>
+                    <ion-col size="1"  class="col-icon">
+                        <img src="./assets/ic_facility/ic_people.svg">
+                    </ion-col>
+                    <ion-col  class="col-text" style="padding-top: 3px">{{trip.room_count}} phòng | {{trip.totalPaxStr}}</ion-col>
+                  </ion-row>
+                </div>
+            </ion-col>
+        </ion-row>
+    
+    </div>
+    <div *ngIf="trip.booking_type=='TICKET'">
+        <div class="text-flight-title ">{{trip.booking_id }}</div>
+        <div class="text-flight-title div-width-600">
+            <div>{{trip.combo_name }}</div>
+            <div class="text-flight-datetime">{{ cindisplay }} </div>
+         </div>
+      
+    </div>
     <div *ngIf="trip.isFlyBooking">
         <div class="text-flight-title ">{{trip.booking_id }}</div>
         <div class="text-flight-title div-width-600 d-flex">

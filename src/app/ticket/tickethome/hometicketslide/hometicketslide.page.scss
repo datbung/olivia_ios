@@ -24,6 +24,9 @@
         .width-50 {
           width: 50%;
         }
+        .width-100 {
+          width: 100%;
+        }
         .text-title2
       {
         font-weight: bold;
@@ -109,6 +112,7 @@
         padding: 8px;
         border-radius: 0 0 4px 4px;
         padding-bottom: 17px;
+        height: 150px;
         .div-hotel-name {
           //height: 45px;
   
@@ -295,13 +299,17 @@
     }
     
     .float-promo-description{
-      margin: 0;
+     
+      font-weight: 600;
+      margin: 0 !important;
       width: 100%;
       color: #fff;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-weight: bold;
+      font-size: 12px;
+      line-height: 1.4;
+
     }
   
     .float-promo:after {
@@ -331,6 +339,9 @@
     }
     .m-right-8{
       margin-right: 8px;
+    }
+    .m-left-8{
+      margin-left: 8px;
     }
     .m-bottom-4 {
       margin-bottom: 4px;
@@ -392,4 +403,11 @@
   }
   .height-63{
     height: 63px;
+  }
+  .m-bottom-45{
+    margin-bottom: 45px;
+  }
+  .text-giatu{
+    font-size: 14px;
+    color: #717484;
   }
