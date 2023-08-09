@@ -117,7 +117,7 @@ export class MytripHistoryPage implements OnInit {
   async feedback(trip: any) {
     var se = this;
     if (trip.booking_id) {
-      se.gf.showLoading();
+      // se.gf.showLoading();
       se.checkBookingReview(trip).then((result) => {
         if (result) {
           this.activityService.objPaymentMytrip = { returnPage: 'mytrip', tripindex: se._mytripservice.currentTrip, paymentStatus: 0, bookingid: trip.HotelIdERP, trip: trip };
@@ -281,7 +281,7 @@ export class MytripHistoryPage implements OnInit {
             'content-type': 'application/json',
             authorization: text
           }
-
+          
           se.gf.RequestApi('GET', C.urls.baseUrl.urlSVC3 + 'review?BookingId=' + trip.booking_id, null, null, 'MyTrip', 'CheckBookingReview').then((data: any) => {
             if (data) {
               //Trả về isSuccess = true => chưa review
@@ -544,7 +544,7 @@ export class MytripHistoryPage implements OnInit {
     if (lstTrips && lstTrips.trips && lstTrips.trips.length > 0) {
       lstTrips.trips.forEach(elementHis => {
         if(!se.gf.checkExistsItemInArray(se.listHistoryTrips, elementHis, 'order')){
-          if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
+          if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') ==-1 && elementHis.booking_type != 'VC') {
             let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
             let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
             elementHis.avatar157 = urlavatar + "-" + "110x157" + tail;
@@ -566,6 +566,11 @@ export class MytripHistoryPage implements OnInit {
         if (elementHis.booking_id.indexOf("FLY") == -1 && elementHis.booking_id.indexOf("VMB") == -1) {
           if (elementHis.flight_ticket_info && elementHis.flight_ticket_info.indexOf("VXR") != -1) {
             elementHis.booking_type = "COMBO_VXR";
+          }
+          else if (elementHis.booking_id.indexOf('VC') != -1) {
+            elementHis.booking_type = "TICKET";//TOUR
+            elementHis.VVCCheckinDisplay =se.gf.getDayOfWeek(se.gf.getCinIsoDate(elementHis.checkInDate)).daynameshort + ", " +  moment(elementHis.checkInDate).format('DD-MM-YYYY');
+            
           }
           if(elementHis.booking_id.indexOf('DL') != -1 ){
             elementHis.tourCheckinDisplay = moment(elementHis.checkInDate).format('DD-MM-YYYY');
@@ -595,7 +600,7 @@ export class MytripHistoryPage implements OnInit {
                
           }
           //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
-            if (elementHis.avatar && elementHis.avatar.indexOf("104x104") ==-1 && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
+            if (elementHis.avatar && elementHis.avatar.indexOf("104x104") ==-1 && elementHis.avatar.indexOf('i.travelapi.com') ==-1 && elementHis.booking_type != 'TICKET') {
               let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
               let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
               if (tail.indexOf("jpeg") !=-1) {
@@ -630,20 +635,29 @@ export class MytripHistoryPage implements OnInit {
                   }
             
              
-              if (elementHis.extra_guest_info) {
-                let arrpax = elementHis.extra_guest_info.split('|');
-                if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
-                  elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
-                  elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
-                }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
-                  elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
-                }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
-                  elementHis.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
-                }
-              }
+                
               if (elementHis.amount_after_tax) {
                 elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+              }
+            }
+            if (elementHis.extra_guest_info) {
+              let arrpax = elementHis.extra_guest_info.split('|');
+              if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
+                elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
+                elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
+              } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
+                elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
+                elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+              }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
+                elementHis.elderDisplay = "Người già x"+ arrpax[2];
+              }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                elementHis.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
+                elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                elementHis.elderDisplay = "Người già x"+ arrpax[2];
               }
             }
             elementHis.isRequestTrip = false;
@@ -711,7 +725,7 @@ export class MytripHistoryPage implements OnInit {
           }
           //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
             //if (elementHis.payment_status != 3) {
-            if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') ==-1) {
+            if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') ==-1 && elementHis.booking_type != 'TICEKT') {
               let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
               let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
               elementHis.avatar = urlavatar + "-" + "104x104" + tail;

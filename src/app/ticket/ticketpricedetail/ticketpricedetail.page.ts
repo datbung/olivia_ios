@@ -29,20 +29,21 @@ export class TicketPriceDetailPage implements OnInit {
     private storage: Storage,
     public ticketService: ticketService,
     public searchhotel: SearchHotel) {
-    if (this.ticketService.itemTicketDetail.avatarLink) {
-      this.avatarLink=this.ticketService.itemTicketDetail.avatarLink;
-    }else{
-      this.avatarLink=this.ticketService.itemTicketDetail.expAvatar;
-    }
+    // if (this.ticketService.itemTicketDetail.avatarLink) {
+    //   this.avatarLink=this.ticketService.itemTicketDetail.avatarLink;
+    // }else{
+    //   this.avatarLink=this.ticketService.itemTicketDetail.expAvatar;
+    // }
      
   }
   goback(){
     this.navCtrl.back();
   }
   ngOnInit(){
-   
+  //  this.getSummary();
   }
   goTicketinfo(){
     this.navCtrl.navigateForward('ticketinfo/'+this.ticketService.itemTicketService.objbooking.bookingCode);
   }
+  
 }

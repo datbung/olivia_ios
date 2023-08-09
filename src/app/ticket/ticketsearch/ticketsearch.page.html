@@ -14,9 +14,9 @@
             src="./assets/imgs/icon_back.svg">
         </div>
         <div class="div-search">
-          <ion-input  #ipSearchHotel [(ngModel)]="inputText" (ionChange)="getItems($event)" [ngClass]="inputText ? 'cls-input-search-text' : 'cls-input-search'" placeholder="Nhập tên địa điểm,thành phố..."></ion-input>
+          <ion-input (keyup.enter)="onEnter()"  #ipSearch [(ngModel)]="ticketService.inputText" (ionChange)="getItems($event)" [ngClass]="ticketService.inputText ? 'cls-input-search-text' : 'cls-input-search'" placeholder="Nhập tên địa điểm,thành phố..."></ion-input>
         </div>
-        <div *ngIf="inputText"  class="img-close" >
+        <div *ngIf="ticketService.inputText"  class="img-close" >
           <img (click)="clearText()"
             src="./assets/imgs/icon_close.svg">
         </div>
@@ -24,7 +24,7 @@
   </ion-header>
 
   <ion-content>
-    <div class="p-all-16 div-ticketsearch-content" *ngIf="!inputText">
+    <div class="p-all-16 div-ticketsearch-content" *ngIf="!ticketService.inputText">
         <div class="div-history-search" *ngIf="listHistorySearch && listHistorySearch.length>0">
             <div class="div-title m-bottom-8">Lịch sử tìm kiếm</div>
             <div class="d-flex div-item-history ">
@@ -32,9 +32,9 @@
                 <div *ngIf="item.name" (click)="clickItemRegion(item)" class="item-region">
                   {{item.name}}
               </div>
-              <div *ngIf="item.expName" (click)="clickItemRegion(item)" class="item-region">
+              <div *ngIf="item.expName" (click)="clickItemRegion(item)" class="item-region width-250">
                 {{item.expName}}
-            </div>
+              </div>
               </div>
              
             </div>
@@ -64,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="inputText">
+    <div *ngIf="ticketService.inputText">
       <div *ngIf="ischecklist" style="padding: 16px;">
         <div (click)="itemclick(item,0)" *ngFor="let item of itemRegion">
           <ion-row >

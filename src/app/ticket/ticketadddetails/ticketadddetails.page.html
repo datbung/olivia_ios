@@ -13,8 +13,6 @@
     <div class="div-img-step">
       <img class="img-step" src="./assets/ic_tour/tour_step1.png">
     </div>
-  
-   
     <div class='m-top-24'>
       <div class="div-login m-bottom-16" *ngIf="!auth_token" (click)="goToLogin()">
         Đã có tài khoản? <span class="text-login">Đăng nhập ngay</span>
@@ -32,20 +30,32 @@
           <ion-item style="--padding-start: 0px" class="item-input-custom">
             <ion-label class="label-name" position="stacked">Điện thoại* (nhận vé SMS/Zalo) <span *ngIf="!phone" class='cls-error'>*</span></ion-label>
             <ion-input class="label-input" [(ngModel)]="phone" maxlength=10 type="tel" required></ion-input>
-  
           </ion-item>
         </ion-col>
       </ion-row>
-      <!-- <ion-row class="m-left-5px">
-        <ion-col size="12">
-          <ion-item style="--padding-start: 0px" class="item-input-custom">
-            <ion-label class="label-name" position="stacked">Email</ion-label>
-            <ion-input #ipEmail class="label-input" [(ngModel)]="_email" type="text" (ionFocus)="scrollToElement(1)" required></ion-input>
-    
-          </ion-item>
-        </ion-col>
-      </ion-row> -->
     </div>
+    <ion-row *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.supplierCode=='KKDAY' && ticketService.bookingInfo.kkdayResource" class="m-left-5px">
+      <ion-col [ngClass]="item.name=='traffic_type' || item.name == 's_date' || item.name == 'arrival_time' ? 'display-none':''" size="6" *ngFor="let item of ticketService.bookingInfo.kkdayResource.data">
+        <ion-item  *ngIf="item.name !='traffic_type' || item.name != 's_date' || item.name != 'arrival_time'" style="--padding-start: 0px" class="item-input-custom">
+          <ion-label class="label-name" position="stacked">{{item.label}}*</ion-label>
+          <ion-input *ngIf="item.dataRaw.length == 0" class="label-input" placeholder="{{item.placeHolder}}" (ionChange)="inputEvent($event,item)" ></ion-input>
+          <ion-select *ngIf="item.dataRaw.length > 0" class="div-item-time" placeholder="- Chọn {{item.label}} -" interface="action-sheet" mode="ios" (ionChange)="selectValue($event,item)">
+            <ion-select-option *ngFor="let itemdetail of item.dataRaw" value={{itemdetail.code}}>{{itemdetail.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+ 
+    <!-- <div *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.supplierCode=='KKDAY' && ischeckkkdayValue" class="m-top-16">
+      <div class="div-options">
+        <div class="text-options-select">{{objdataRaw[0].name}}</div>
+        <div class="text-options">{{objdataRaw[0].address}}</div>
+        <div class="d-flex">
+          <div class="text-options">{{objdataRaw[0].s_time}}</div> <div class="m-5"> ~ </div> <div class="text-options">{{objdataRaw[0].e_time}}</div>
+        </div>
+      </div>
+    </div> -->
     <div style="margin-left: -5px">
         <ion-row>
             <ion-col size="12">

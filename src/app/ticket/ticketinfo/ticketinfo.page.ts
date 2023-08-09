@@ -14,7 +14,7 @@ export class TicketinfoPage implements OnInit {
   code: string;
   expeName: any;
 
-  constructor(private gf:GlobalFunction,private ticketService:ticketService,private navCtrl: NavController, public activatedRoute: ActivatedRoute) { 
+  constructor(private gf: GlobalFunction, private ticketService: ticketService, private navCtrl: NavController, public activatedRoute: ActivatedRoute) {
 
   }
 
@@ -22,15 +22,19 @@ export class TicketinfoPage implements OnInit {
     this.code = this.activatedRoute.snapshot.paramMap.get('code');
     this.getSummary()
   }
-  goback(){
+  goback() {
     this.navCtrl.back();
   }
   getSummary() {
-    this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.code , {}, {}, '', '').then((data) => {
+    this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.code, {}, {}, '', '').then((data) => {
       if (data && data.success) {
-        this.includePrice = data.data.booking.includePrice.split('|');
-        this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
-        this.expeName=data.data.booking.expeName;
+        const [pkgName, description, include, confirm, userManual, cancelPolicy] = data.data.booking.includePrice.split('|');
+        const stylePkg = `<p class='pkg-name'>${pkgName}</p>`
+        const styleDesc = `<p class='pkg-desc'>${description.replaceAll('\n', '').trim() ? description : '\n'}</p>`
+        this.includePrice = `${stylePkg}${styleDesc}${include}${confirm}${userManual}${cancelPolicy}`
+        // this.includePrice = data.data.booking.includePrice.split('|');
+        // this.includePrice = this.includePrice[0]  + this.includePrice[1]  + this.includePrice[2] + this.includePrice[3]+ this.includePrice[4]+ this.includePrice[5];
+        this.expeName = data.data.booking.expeName;
       }
     });
   }

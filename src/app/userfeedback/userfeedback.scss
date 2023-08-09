@@ -97,6 +97,12 @@
     color: #ffffff;
     width: 100%;
 }
+::ng-deep{
+    .native-textarea.sc-ion-textarea-ios
+    {
+        margin-left: 10px;
+    }
+}
 
 @media (min-width:300px) and (max-width: 340px) {
     .col-mytrip-text-description,.col-historytrip-text-description,.col-requestrip-text-description{

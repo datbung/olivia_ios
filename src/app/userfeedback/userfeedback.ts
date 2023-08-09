@@ -61,6 +61,7 @@ export class UserFeedBackPage implements OnInit{
       private file: File,){
         this.trip = this.gf.getParams('tripFeedBack');
         if(!this.trip.isFlyBooking){
+             console.log(this.trip);
             this.loadInfoTrip(this.trip);
           }else{
             this.departCity=this.activityService.objPaymentMytrip.trip.flightFrom;

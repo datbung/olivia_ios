@@ -53,8 +53,9 @@ export class TicketPaymentSelectPage implements OnInit {
     public ticketService: ticketService,
     private safariViewController: SafariViewController,
     private backgroundmode: BackgroundMode,) {
-
-    this.ticketService.departureCalendarStr = this.gf.getDayOfWeek(searchhotel.CheckInDate).dayname + ', ' + moment(searchhotel.CheckInDate).format('DD') + ' tháng ' + moment(searchhotel.CheckInDate).format('MM') + ' ' + moment(searchhotel.CheckInDate).format('YYYY')
+      let arrcd = this.ticketService.itemTicketService.AllotmentDateDisplay.split('-');
+      let nd = new Date(arrcd[2], arrcd[1] - 1, arrcd[0]);
+    this.ticketService.departureCalendarStr = this.gf.getDayOfWeek(nd).dayname + ', ' + ticketService.itemTicketService.AllotmentDateDisplay
 
     this.storage.get('jti').then(jti => {
       if (jti) {
@@ -147,7 +148,6 @@ export class TicketPaymentSelectPage implements OnInit {
                 se.gf.CheckPaymentTicket(url).then((res) => {
                   let checkpay = JSON.parse(res);
                   if (checkpay.response && checkpay.response.payment_status == 5) {
-                    //se.ticketService.paymentType = 1;
                     if (se.safariViewController) {
                       se.safariViewController.hide();
                     }
@@ -158,7 +158,7 @@ export class TicketPaymentSelectPage implements OnInit {
                       paymentMethod: paymentMethod
                     }
                     se.gf.ticketPaymentSave(objbookTicket);
-                    //se.ticketService.paymentType = 1;
+                    se.ticketService.paymentType = 1;
                     se.navCtrl.navigateForward('ticketpaymentdone/0');
                   }
                   else if (checkpay.response && checkpay.response.payment_status == 2) {
@@ -208,12 +208,11 @@ export class TicketPaymentSelectPage implements OnInit {
                 se.gf.CheckPaymentTicket(url).then((res) => {
                   let checkpay = JSON.parse(res);
                   if (checkpay.response && checkpay.response.payment_status == 5) {
-                    //se.ticketService.paymentType = 1;
                     if (se.safariViewController) {
                       se.safariViewController.hide();
                     }
                     clearInterval(se.intervalID);
-                    //se.ticketService.paymentType = 1;
+                    se.ticketService.paymentType = 1;
                     var paymentMethod=se.gf.funcpaymentMethodTicket('momo');
                     let objbookTicket={
                       bookingCode : se.ticketService.itemTicketService.objbooking.bookingCode,
@@ -273,12 +272,11 @@ export class TicketPaymentSelectPage implements OnInit {
         se.gf.CheckPaymentTicket(url).then((res) => {
           let checkpay = JSON.parse(res);
           if (checkpay.response && checkpay.response.payment_status == 5) {
-            //se.ticketService.paymentType = 1;
             if (se.safariViewController) {
               se.safariViewController.hide();
             }
             clearInterval(se.intervalID);
-            //se.ticketService.paymentType = 1;
+            se.ticketService.paymentType = 1;
             var paymentMethod=se.gf.funcpaymentMethodTicket(paymentType);
             let objbookTicket={
               bookingCode : se.ticketService.itemTicketService.objbooking.bookingCode,

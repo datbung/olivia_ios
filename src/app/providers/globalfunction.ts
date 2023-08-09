@@ -18,6 +18,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { tourService } from './tourService';
 import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+import { ticketService } from './ticketService';
 
 @Injectable({
     providedIn: 'root'  // <- ADD THIS
@@ -79,7 +80,7 @@ export class GlobalFunction{
       private fcm: FCM,
       private searchhotel: SearchHotel,
       public tourService: tourService,
-      private safariViewController: SafariViewController){
+      private safariViewController: SafariViewController,private ticketService:ticketService){
 
     }
     
@@ -3976,6 +3977,92 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
       console.log(data);
      }
     });
+  }
+  SearchKeyword(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      let url = C.urls.baseUrl.urlTicket + '/api/Category/SearchV2';
+      let headers = {
+        apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+        apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+      };
+   
+      let body = {};
+      if (this.ticketService.searchType == 1) {
+        body = {
+          keyword: this.ticketService.inputText,
+          searchType: this.ticketService.searchType,
+          sortBy: 1,
+          regionFilters: this.ticketService.regionFilters,
+          typeFilters: this.ticketService.typeFilters,
+          topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
+        }
+      }else if (this.ticketService.searchType == 2){
+        body = {
+          keyword: this.ticketService.inputText,
+          searchType: this.ticketService.searchType,
+          sortBy: 1,
+          regionFilters: this.ticketService.regionFilters,
+          typeFilters: this.ticketService.typeFilters,
+          topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
+          regionId: this.ticketService.itemShowList.id
+        }
+      }else if (this.ticketService.searchType == 3){
+        body = {
+          keyword: this.ticketService.inputText,
+          searchType: this.ticketService.searchType,
+          sortBy: 1,
+          regionFilters: this.ticketService.regionFilters,
+          typeFilters: this.ticketService.typeFilters,
+          topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
+          topicId: this.ticketService.itemTicketTopic.topicId
+        }
+      }
+  
+      this.RequestApi('POST', url, headers, body, 'SearchKeyword', 'SearchKeyword').then((data)=>{
+        this.ticketService.slideData = [];
+        if (data) {
+          this.ticketService.slideData = data.data.listSearchData;
+          if (!this.ticketService.isFilter) {
+            this.ticketService.regionModels= data.data.regionModels;
+            this.ticketService.topicModels= data.data.topicModels;
+            this.ticketService.typeModels= data.data.typeModels;
+            if (this.ticketService.searchType == 2) {
+              // this.ticketService.regionModels =  this.ticketService.regionModels.map((item) => {
+              //   return { ...item, checked:true }
+              // });
+              this.ticketService.regionModels.forEach(element => {
+                if (element.childs.length > 0) {
+                  this.ticketService.regionModels[0].checked = true
+                  element.childs =  element.childs.map((item) => {
+                    return { ...item, checked:true }
+                  });
+                }
+              });
+            
+              
+  
+            }
+            if (this.ticketService.searchType == 3) {
+              this.ticketService.topicModels =  this.ticketService.topicModels.map((item) => {
+                return { ...item, checked:true  }
+              });
+            }
+          }
+        
+          for (let index = 0; index <  this.ticketService.slideData.length; index++) {
+            const element =  this.ticketService.slideData[index];
+            this.convertAvgPoint(element);
+          }
+          resolve(true);
+        }
+      });
+    })
+   
+  }
+  convertAvgPoint(element) {
+    if (element.avgPoint && (element.avgPoint.toString().length == 1 || element.avgPoint == 6 || element.avgPoint == 9 || element.avgPoint == 8 || element.avgPoint == 7)) {
+      element.avgPoint = element.avgPoint + ".0";
+    }
   }
   ticketGetBookingCRM(bookingCode): Promise<any>{
     let headers = {

@@ -9,7 +9,6 @@ import { ticketService } from '../../providers/ticketService';
 import { ValueGlobal } from '../../providers/book-service';
 import { Calendar } from '@ionic-native/calendar/ngx';
 import { Storage } from '@ionic/storage';
-import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
 import { FlightquickbackPage } from 'src/app/flightquickback/flightquickback.page';
 import { CustomAnimations } from 'src/app/providers/CustomAnimations';
 
@@ -31,8 +30,7 @@ export class TicketPaymentPayooPage implements OnInit {
     private zone: NgZone,
     private _calendar: Calendar,
     private _platform: Platform,
-    private storage: Storage,
-    private safariViewController: SafariViewController) {
+    private storage: Storage) {
 
   }
 
@@ -41,7 +39,9 @@ export class TicketPaymentPayooPage implements OnInit {
     this.stt= this.activatedRoute.snapshot.paramMap.get('stt');
     if (this.stt == 0) {
       this.BillingCode = this._ticketService.BillingCode;
-      this.textHours = moment(this._ticketService.periodPaymentDate).format("HH:mm");
+      // this.textHours = moment(this._ticketService.periodPaymentDate).format("HH:mm");
+      var ti = new Date();
+      this.textHours= moment(ti).add(1, 'hours').format('HH:mm');
       this.PeriodPaymentDate = this._ticketService.periodPaymentDate ? this.gf.getDayOfWeek(this._ticketService.periodPaymentDate).dayname + ", " + moment(this._ticketService.periodPaymentDate).format("DD") + " thg " + moment(this._ticketService.periodPaymentDate).format("MM") : "";
     }
     else {
@@ -103,15 +103,10 @@ export class TicketPaymentPayooPage implements OnInit {
       se.gf.CheckPaymentTicket(url).then((res) => {
         let checkpay = JSON.parse(res);
         if (checkpay.response && checkpay.response.payment_status == 5) {
-          //se.ticketService.paymentType = 1;
-          if (se.safariViewController) {
-            se.safariViewController.hide();
-          }
+         
           clearInterval(se.intervalID);
           se.gf.hideLoading();
-          if(se.safariViewController){
-            se.safariViewController.hide();
-          }
+         
           clearInterval(se.intervalID);
           se._ticketService.paymentType = 1;
           var paymentMethod=se.gf.funcpaymentMethodTicket('payoo_qr');
@@ -125,9 +120,7 @@ export class TicketPaymentPayooPage implements OnInit {
         }
         else if (checkpay.response && checkpay.response.payment_status == 2) {
 
-          if (se.safariViewController) {
-            se.safariViewController.hide();
-          }
+         
           clearInterval(se.intervalID);
           se.navCtrl.navigateForward('ticketpaymentfail');
         }
@@ -157,18 +150,14 @@ export class TicketPaymentPayooPage implements OnInit {
         let checkpay = JSON.parse(res);
         if (checkpay.response && checkpay.response.payment_status == 5) {
           se._ticketService.paymentType = 1;
-          if (se.safariViewController) {
-            se.safariViewController.hide();
-          }
+         
           clearInterval(se.intervalID);
           //se.ticketService.paymentType = 1;
           se.navCtrl.navigateForward('ticketpaymentdone/0');
         }
         else if (checkpay.response && checkpay.response.payment_status == 2) {
 
-          if (se.safariViewController) {
-            se.safariViewController.hide();
-          }
+         
           clearInterval(se.intervalID);
           se.navCtrl.navigateForward('ticketpaymentfail');
         }

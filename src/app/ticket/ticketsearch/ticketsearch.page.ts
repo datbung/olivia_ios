@@ -1,5 +1,5 @@
 
-import { Component, NgZone,OnInit } from '@angular/core';
+import { Component, NgZone,OnInit, ViewChild } from '@angular/core';
 import { NavController, ModalController } from '@ionic/angular';
 import { C } from '../../providers/constants';
 import { GlobalFunction } from '../../providers/globalfunction';
@@ -20,76 +20,10 @@ import { ticketService } from 'src/app/providers/ticketService';
   styleUrls: ['ticketsearch.page.scss'],
 })
 export class TicketSearchPage implements OnInit{
+  @ViewChild('ipSearch') myInput ;
     listHistorySearch =[];
     listRegionSearch =[];
-    listHotRegion = [
-        {
-            AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-land-phu-quoc-lazy-river-800x450.jpg',
-            PromotionTitle: 'Vé bán chạy',
-            Name: 'Vé VinWonders Nha Trang',
-            AvgPoint: 9.1,
-            NumOfReview: 54,
-            MinPrice: 350000,
-            Notes: [
-                { Description: '• Hoàn hủy miễn phí 24h'},
-                { Description: '• Xác nhận tức thời'},
-                { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-            ]
-        },
-        {
-            AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-            PromotionTitle: 'Vé bán chạy',
-            Name: 'Vé VinWonders Phú Quốc',
-            AvgPoint: 9.2,
-            NumOfReview: 109,
-            MinPrice: 300000,
-            Notes: [
-                { Description: '• Hoàn hủy miễn phí 24h'},
-                { Description: '• Xác nhận tức thời'},
-                { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-            ]
-        },
-        {
-            AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-            PromotionTitle: 'Vé bán chạy',
-            Name: 'Vé VinWonders Hội An',
-            AvgPoint: 9.4,
-            NumOfReview: 68,
-            MinPrice: 250000,
-            Notes: [
-                { Description: '• Hoàn hủy miễn phí 24h'},
-                { Description: '• Xác nhận tức thời'},
-                { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-            ]
-        },
-        {
-            AvartarLink: 'https://cdn1.ivivu.com/iVivu/2020/12/14/17/img-9613-800x450.jpg',
-            PromotionTitle: 'Vé bán chạy',
-            Name: 'Vé VinWonders Nha Trang',
-            AvgPoint: 9.1,
-            NumOfReview: 54,
-            MinPrice: 200000,
-            Notes: [
-                { Description: '• Hoàn hủy miễn phí 24h'},
-                { Description: '• Xác nhận tức thời'},
-                { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-            ]
-        },
-        {
-            AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-            PromotionTitle: 'Vé bán chạy',
-            Name: 'Vé VinWonders Phú Quốc',
-            AvgPoint: 9.2,
-            NumOfReview: 109,
-            MinPrice: 200000,
-            Notes: [
-                { Description: '• Hoàn hủy miễn phí 24h'},
-                { Description: '• Xác nhận tức thời'},
-                { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-            ]
-        },
-    ];
-    inputText: string='';
+    listHotRegion = [];
     listHotExperience: any;
     ischecktext: boolean;
     ischecklist: boolean;
@@ -102,6 +36,12 @@ export class TicketSearchPage implements OnInit{
       this.loadRegion();
       this.loadBestExperience();
     }
+    ionViewDidEnter(){
+      setTimeout(() => {
+        this.myInput.setFocus();
+      }, 150);
+    }
+   
     loadBestExperience() {
         let se = this;
         let url = `${C.urls.baseUrl.urlTicket}/api/Home/GetBestExperiences`;
@@ -186,10 +126,11 @@ export class TicketSearchPage implements OnInit{
     this.gf.createListLastSearchTicketRegion(item,0);
     this.ticketService.input = item;
     this.ticketService.itemSearchTicket.emit(1);
+    this.ticketService.inputText = "";
     this.navCtrl.back();
   }
   clearText(){
-    this.inputText="";
+    this.ticketService.inputText="";
   }
   itemclick(item,stt) {
     item.stt=stt;
@@ -206,7 +147,7 @@ export class TicketSearchPage implements OnInit{
       this.gf.createListLastSearchTicketRegion(item,stt);
       this.ticketService.input = item;
     }
-
+    this.ticketService.inputText = "";
     this.ticketService.itemSearchTicket.emit(1);
     this.navCtrl.pop();
   }
@@ -215,6 +156,15 @@ export class TicketSearchPage implements OnInit{
     this.ticketService.publicSearchTicketRegion(item);
     this.gf.createListLastSearchTicketRegion(item,1);
     this.ticketService.itemSearchTicket.emit(1);
+    this.ticketService.inputText = "";
     this.navCtrl.pop();
+  }
+  onEnter(){
+    this.ticketService.input = "";
+    this.ticketService.isFilter = false;
+    this.ticketService.itemShowList = "";
+    this.ticketService.itemTicketTopic = "";
+    this.ticketService.searchType = 1 ;
+    this.navCtrl.navigateForward('/ticketfilterlist');
   }
 }

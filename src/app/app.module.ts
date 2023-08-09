@@ -113,6 +113,7 @@ import { FlightDetailInternationalPageModule } from './flightinternational/fligh
 import { FlightConditionAndPriceInternationalPageModule } from './flightinternational/flightconditionandpriceinternational/flightconditionandpriceinternational.module';
 import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvideo.module';
 import { FlightInternationalFilterClassPageModule } from './flightinternational/flightinternationalfilterclass/flightinternationalfilterclass.module';
+import { TicketfilterPageModule } from './ticket/ticketfilter/ticketfilter.module';
 
 
 @NgModule({
@@ -170,6 +171,7 @@ import { FlightInternationalFilterClassPageModule } from './flightinternational/
     FlightDetailInternationalPageModule,
     FlightConditionAndPriceInternationalPageModule,
     FlightInternationalFilterClassPageModule,
+    TicketfilterPageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

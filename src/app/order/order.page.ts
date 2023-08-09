@@ -30,6 +30,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { normalizeURL } from 'ionic-angular';
+import { forEach } from '@angular/router/src/utils/collection';
 //import { PDFGenerator } from '@awesome-cordova-plugins/pdf-generator/ngx';
 @Component({
   selector: 'app-order',
@@ -169,6 +170,7 @@ export class OrderPage {
   isTTV=false;
   includePrice: any;
   ischeckqrLink=false;
+  objSummary: any;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -775,7 +777,7 @@ export class OrderPage {
                 else if (element.booking_id.indexOf('VC') != -1) {
                   element.booking_type = "TICKET";//TOUR
                   element.VVCCheckinDisplay =se.gf.getDayOfWeek(se.gf.getCinIsoDate(element.checkInDate)).daynameshort + ", " +  moment(element.checkInDate).format('DD-MM-YYYY');
-                  
+                  element.VVCCheckinDisplay1 = moment(element.checkInDate).format('DD-MM-YYYY');
                 }
                 //tour
                 else if (element.booking_id && (element.booking_id.indexOf("DL") != -1 || element.booking_id.indexOf("TO") != -1)) {
@@ -788,7 +790,7 @@ export class OrderPage {
                 element.isFlyBooking = false;
 
                 //if (element.payment_status != 3 && element.payment_status != -2) {
-                if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1) {
+                if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1 && element.booking_type != 'TICKET') {
                   let urlavatar = "";
                   let tail = "";
                   if (element.avatar.indexOf('jpeg') != -1) {
@@ -868,26 +870,20 @@ export class OrderPage {
                     element.paymentBefore = hours + "h" + minutes + "'";
                   }
 
-                  if (element.extra_guest_info) {
-                    let arrpax = element.extra_guest_info.split('|');
-                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
-                      element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                      element.childDisplay = "Trẻ em x"+ arrpax[1];
-                    } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
-                      element.paxDisplay = arrpax[0].toString() + " người lớn";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                    }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
-                      element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                      element.childDisplay = "Trẻ em x"+ arrpax[1];
-                      element.elderDisplay = "Người già x"+ arrpax[2];
-                    }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
-                      element.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                      element.elderDisplay = "Người già x"+ arrpax[2];
+                  if (element.booking_type=="TICKET") {
+                    let arrtemp = element.inclusion.split('|');
+                    element.paxDisplay = arrtemp[6];
+                    if (arrtemp[7]) {
+                      let kkdayValue = JSON.parse(arrtemp[7]);
+                      element.kkdayRender = JSON.parse(arrtemp[8]);
+                     
+                      element.objdataRaw = element.kkdayRender[1].dataRaw.filter((el) => { return kkdayValue.traffic.car.s_location==el.id});
+                      // console.log( element.objLocation);
+                      // console.log(element.kkdayRender);
                     }
+                    
                   }
+                  
                   if (element.amount_after_tax) {
                     element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                   }
@@ -936,7 +932,7 @@ export class OrderPage {
                 se.getRatingStar(element);
 
                 
-                // if (element.booking_id=='VC0002078') {
+                // if (element.booking_id=='VC0002855') {
                 //   se.listMyTrips.push(element);
                 // }
                 // if(element.booking_id == 'IVIVU-OFF100346'){
@@ -1102,7 +1098,7 @@ export class OrderPage {
 
                 //if (element.payment_status != 3 && element.payment_status != -2) {
                 //if (element.payment_status != 3) {
-                if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1) {
+                if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1 && element.booking_type != 'TICKET') {
                   let urlavatar = element.avatar.substring(0, element.avatar.length - 4);
                   let tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
                   element.avatar = urlavatar + "-" + "104x104" + tail;
@@ -1654,25 +1650,31 @@ export class OrderPage {
                   let hours = Math.round(diffminutes / 60);
                   let minutes = diffminutes - (hours * 60);
                   element.paymentBefore = hours + "h" + minutes + "'";
-                  if (element.extra_guest_info) {
-                    let arrpax = element.extra_guest_info.split('|');
-                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
-                      element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                      element.adultDisplay = "Trẻ em x"+ arrpax[1];
-                    } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
-                      element.paxDisplay = arrpax[0].toString() + " người lớn";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                    }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
-                      element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                      element.adultDisplay = "Trẻ em x"+ arrpax[1];
-                      element.adultDisplay = "Người già x"+ arrpax[2];
-                    }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
-                      element.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
-                      element.adultDisplay = "Người lớn x"+ arrpax[0];
-                      element.adultDisplay = "Người già x"+ arrpax[2];
-                    }
+                  // if (element.extra_guest_info) {
+                  //   let arrpax = element.extra_guest_info.split('|');
+                  //   if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
+                  //     element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
+                  //     element.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //     element.adultDisplay = "Trẻ em x"+ arrpax[1];
+                  //   } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
+                  //     element.paxDisplay = arrpax[0].toString() + " người lớn";
+                  //     element.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //   }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                  //     element.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                  //     element.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //     element.adultDisplay = "Trẻ em x"+ arrpax[1];
+                  //     element.adultDisplay = "Người già x"+ arrpax[2];
+                  //   }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                  //     element.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
+                  //     element.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //     element.adultDisplay = "Người già x"+ arrpax[2];
+                  //   }
+                  // }
+                  if (element.booking_type=="TICKET") {
+                    let arrtemp = element.inclusion.split('|');
+                    element.paxDisplay = arrtemp[6];
+                    element.kkdayValue = JSON.parse(arrtemp[7]) ;
+                    console.log(element.kkdayValue); 
                   }
                   if (element.amount_after_tax) {
                     element.priceShow = Math.round(element.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
@@ -1738,7 +1740,7 @@ export class OrderPage {
                   
                     })
                   }
-                  // if (element.booking_id=='VC0002078') {
+                  // if (element.booking_id=='VC0002855') {
                   //   se.listMyTrips.push(element);
                   // }
                   se.listMyTrips.push(element);
@@ -1759,7 +1761,7 @@ export class OrderPage {
             if (!se.gf.checkExistsItemInArray(se.listMyTrips, element, 'order')) {
               if (element.request_id.indexOf("HTBKG") == -1) {
                 let urlavatar = "", tail = "";
-                if (element.hotelAvatar.indexOf('i.travelapi.com') == -1) {
+                if (element.hotelAvatar.indexOf('i.travelapi.com') == -1 ) {
                   if (element.hotelAvatar.indexOf('jpeg') != -1) {
                     urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
                     tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
@@ -1786,7 +1788,7 @@ export class OrderPage {
                 element.address = element.hotelAddress;
                 element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                 se.getRatingStar(element);
-                // if (element.booking_id=='VC0002078') {
+                // if (element.booking_id=='VC0002855') {
                 //   se.listMyTrips.push(element);
                 // }
                 se.listMyTrips.push(element);
@@ -2174,21 +2176,51 @@ export class OrderPage {
             }
           }
           else if(se.listMyTrips && se.listMyTrips.length == 1 && se.listMyTrips[0].booking_type == 'TICKET'){
-            this.gf.ticketGetBookingCRM(se.listMyTrips[0].booking_id).then((data) => {
-              this.objectDetail=data;
-              let arrcd = this.objectDetail.startDate.split('-');
-              let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
-              this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
-              var objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
-              if(objmap && objmap.length >0){
-                this.ischeckqrLink=true;
-              }
-              this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + se.listMyTrips[0].booking_id , {}, {}, '', '').then((data) => {
-                if (data && data.success) {
-                  this.includePrice = data.data.booking.includePrice.split('|');
-                  this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
+            if ((se.listMyTrips[0].payment_status == 1 || se.listMyTrips[0].payment_status == 5 ) &&  se.listMyTrips[0].approve_date){
+              this.gf.ticketGetBookingCRM(se.listMyTrips[0].booking_id).then((data) => {
+                this.objectDetail=data;
+                let arrcd = this.objectDetail.startDate.split('-');
+                let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+                this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+                var objmap 
+                if (this.objectDetail.listNotes) {
+                   objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
                 }
+                
+                if(objmap && objmap.length >0){
+                  this.ischeckqrLink=true;
+                }else{
+                  
+                    this.GetVoucherLinks(se.listMyTrips[0].booking_id).then((data) => {
+                      se.listMyTrips[0].listVoucher=data;
+                      if (Array.isArray(se.listMyTrips[0].listVoucher)) {
+                        for (let index = 0; index < se.listMyTrips[0].listVoucher.length; index++) {
+                          const result = se.listMyTrips[0].listVoucher[index].split("filename=");
+                          console.log(result);
+                          var objlink= {
+                            filename:result[1],
+                            link:se.listMyTrips[0].listVoucher[index]='https://beta-vvcapi.ivivu.com/'+se.listMyTrips[0].listVoucher[index]
+                          }
+                          se.listMyTrips[0].listVoucher[index]=objlink;
+                        }
+                      }else{
+                        se.listMyTrips[0].listVoucher=[];
+                      }
+                    
+                    })
+                  
+               
+                  
+                }
+            
               });
+            }
+            this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + se.listMyTrips[0].booking_id , {}, {}, '', '').then((data) => {
+              if (data && data.success) {
+                this.includePrice = data.data.booking.includePrice.split('|');
+                this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
+                this.objSummary=data.data.booking;
+              }
             });
           }
           if (se.listMyTrips && se.listMyTrips.length == 1 && !(se.listMyTrips[0].pay_method == 3 || se.listMyTrips[0].pay_method == 51 || se.listMyTrips[0].pay_method == 2)) {
@@ -2214,14 +2246,17 @@ export class OrderPage {
 
           lstTrips.trips.forEach(elementHis => {
             if (!se.gf.checkExistsItemInArray(se.listHistoryTrips, elementHis, 'order')) {
-              if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
+              if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1 && elementHis.booking_type != 'TICKET') {
                 let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
                 let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
                 elementHis.avatar157 = urlavatar + "-" + "110x157" + tail;
                 elementHis.avatar104 = urlavatar + "-" + "110x104" + tail;
                 elementHis.avatar110 = urlavatar + "-" + "110x118" + tail;
               } else {
-                elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
+                if (elementHis.booking_type != 'VC') {
+                  elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
+                }
+              
               }
               if (elementHis.avatar) {
                 elementHis.avatar = (elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ? elementHis.avatar : 'https:' + elementHis.avatar;
@@ -2271,7 +2306,7 @@ export class OrderPage {
                   }
                 }
                 //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
-                if (elementHis.avatar && elementHis.avatar.indexOf("104x104") == -1 && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
+                if (elementHis.avatar && elementHis.avatar.indexOf("104x104") == -1 && elementHis.avatar.indexOf('i.travelapi.com') == -1 && elementHis.booking_type != 'TICKET') {
                   let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
                   let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
                   elementHis.avatar = urlavatar + "-" + "104x104" + tail;
@@ -2301,27 +2336,30 @@ export class OrderPage {
                     elementHis.deliveryPaymentDisplay = "";
                   }
 
-
-                  if (elementHis.extra_guest_info) {
-                    let arrpax = elementHis.extra_guest_info.split('|');
-                    if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
-                      elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
-                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
-                      elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
-                    } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
-                      elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
-                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
-                    }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
-                      elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
-                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
-                      elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
-                      elementHis.elderDisplay = "Người già x"+ arrpax[2];
-                    }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
-                      elementHis.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
-                      elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
-                      elementHis.elderDisplay = "Người già x"+ arrpax[2];
-                    }
+                  if (elementHis.booking_type=="TICKET") {
+                    let arrtemp = elementHis.inclusion.split('|');
+                    elementHis.paxDisplay = arrtemp[6];
                   }
+                  // if (elementHis.extra_guest_info) {
+                  //   let arrpax = elementHis.extra_guest_info.split('|');
+                  //   if (arrpax && arrpax.length > 1 && arrpax[1] > 0 && arrpax[2] == 0) {
+                  //     elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em";
+                  //     elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //     elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
+                  //   } else if (arrpax && arrpax[0] > 0 && arrpax[1] == 0 && arrpax[2] == 0) {
+                  //     elementHis.paxDisplay = arrpax[0].toString() + " người lớn";
+                  //     elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //   }else if (arrpax && arrpax[0] > 0 && arrpax[1] >0 && arrpax[2] > 0){
+                  //     elementHis.paxDisplay = arrpax[0].toString() + " người lớn, " + arrpax[1].toString() + " trẻ em, " + arrpax[2].toString() + " người già";
+                  //     elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //     elementHis.childDisplay = "Trẻ em x"+ arrpax[1];
+                  //     elementHis.elderDisplay = "Người già x"+ arrpax[2];
+                  //   }else if (arrpax && arrpax[0] > 0 && arrpax[2] > 0){
+                  //     elementHis.paxDisplay = arrpax[0].toString() + " người lớn," + arrpax[2].toString() + " người già";
+                  //     elementHis.adultDisplay = "Người lớn x"+ arrpax[0];
+                  //     elementHis.elderDisplay = "Người già x"+ arrpax[2];
+                  //   }
+                  // }
                   if (elementHis.amount_after_tax) {
                     elementHis.priceShow = Math.round(elementHis.amount_after_tax).toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
                   }
@@ -2577,7 +2615,7 @@ export class OrderPage {
 
                 //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
                 //if (elementHis.payment_status != 3) {
-                if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
+                if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1 && elementHis.booking_type != 'TICKET') {
                   let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
                   let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
                   elementHis.avatar = urlavatar + "-" + "104x104" + tail;
@@ -4246,14 +4284,17 @@ export class OrderPage {
                 //List trip đã đi
                 if (lstTrips.tripHistory.length > 0) {
                   lstTrips.tripHistory.forEach(elementHis => {
-                    if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1) {
+                    if (elementHis.avatar && elementHis.avatar.indexOf('i.travelapi.com') == -1 && elementHis.booking_type != 'TICKET') {
                       let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
                       let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
                       elementHis.avatar157 = urlavatar + "-" + "110x157" + tail;
                       elementHis.avatar104 = urlavatar + "-" + "110x104" + tail;
                       elementHis.avatar110 = urlavatar + "-" + "110x118" + tail;
                     } else {
-                      elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
+                      if (elementHis.booking_type != 'VC') {
+                        elementHis.avatar110 = "//cdn1.ivivu.com/iVivu/2018/02/07/15/noimage-110x124.jpg";
+                      }
+
                     }
                     if (elementHis.avatar) {
                       elementHis.avatar = (elementHis.avatar.toLocaleString().trim().indexOf("http") != -1) ? elementHis.avatar : 'https:' + elementHis.avatar;
@@ -5907,7 +5948,7 @@ export class OrderPage {
 
   }
   share(item) {
-    this.socialSharing.share(null, null, item.CheckinInfo,null).then(() => {
+    this.socialSharing.share(null, null, item,null).then(() => {
       // Success!
     }).catch(() => {
       // Error!
@@ -5929,6 +5970,7 @@ export class OrderPage {
     }
    
   }
+  
   checkinOnline(trip) {
     
     var se = this;
@@ -5987,8 +6029,30 @@ export class OrderPage {
       // handle error
     });
   }
+  downloadPDFVC(url) {
+    // debugger;
+    //  url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
+    this.fileTransfer.download(url, this.file.documentsDirectory + 'filename.pdf').then((entry) => {
+      // console.log('download complete: ' + entry.toURL());
+      this.presentToastr('Đã lưu');
+    }, (error) => {
+      // handle error
+    });
+  }
   ticketinfo(){
     this.isTTV=!this.isTTV;
+  }
+  GetVoucherLinks(booking_id): Promise<any>{
+    return new Promise((resolve, reject) => {
+      this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Reservation/GetVoucherLinks?bookingCode='+booking_id , {}, {}, '', '').then((data) => {
+        if (data && data.success) {
+
+            resolve(data.data);
+           
+        }
+      });
+    })
+
   }
 }
 

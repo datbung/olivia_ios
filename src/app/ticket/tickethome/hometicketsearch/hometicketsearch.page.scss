@@ -139,13 +139,18 @@
       .text-middle{
         display: table-cell;
         vertical-align: middle;
-        height: 48px;
+        height: 45px;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
       }
       .text-placeholder {
         color: #828282;
         font-size: 16px;
         line-height: 20px;
+        display: table-cell;
+        vertical-align: middle;
+      
       }
      
       .text-cin, .text-pax{

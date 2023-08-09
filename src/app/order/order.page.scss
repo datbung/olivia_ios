@@ -620,7 +620,7 @@
             }
 
             .div-wrapimg.img-list{
-                height: 80px !important;
+                height: 90px !important;
             }
 
             .tour-name {
@@ -632,7 +632,7 @@
 
                 overflow: hidden;
                 text-overflow: ellipsis;
-                -webkit-line-clamp: 3;
+                -webkit-line-clamp: 2;
                 display: -webkit-box;
                 /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
             }
@@ -1164,6 +1164,19 @@
 
     ///style ios
     ::ng-deep{
+        p{
+            margin: 0 0 12px;
+            margin-bottom: 5px;
+            color: #3f3b3b;
+            font-size: 14px;
+            line-height: 1.8;
+          }
+        //   .content p {
+        //     margin-bottom: 5px;
+        //     color: #3f3b3b;
+        //     font-size: 14px;
+        //     line-height: 1.8;
+        //   }
         .sc-ion-segment-ios-hion-toolbar:not(.ion-color).sc-ion-segment-ios-s > .segment-button-checked, ion-toolbar .sc-ion-segment-ios-h:not(.ion-color).sc-ion-segment-ios-s > .segment-button-checked {
             
             color: white !important;
@@ -1774,6 +1787,7 @@
 }
 .d-img{
     margin-right: 10px;
+    margin-left: 16px;
 }
 .cls-text{
     font-size: 14px;
@@ -3259,11 +3273,6 @@ color: #e52822
 }
 .text-info{
     font-size: 14px;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
     color: #3f3b3b;
 }
 .m-top-14{
@@ -3318,9 +3327,6 @@ color: #e52822
     color: #868998;
 }
 
-.m-left-4{
-    margin-left: 4px;
-}
 .m-top-13-5{
     margin-top: 13.5px;
 }
@@ -3434,19 +3440,12 @@ color: #e52822
 }
 .text-info-1{
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.4;
-    letter-spacing: normal;
     color: #868998;
 }
 .text-info-2{
     font-size: 16px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    letter-spacing: normal;
     color: #3f3b3b;
 }
 .m-left-20{
@@ -3472,11 +3471,10 @@ color: #e52822
 }
 .text-link{
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
+    color: #2f80ed;
+}
+.text-link-16{
+    font-size: 16px;
     color: #2f80ed;
 }
 .mt22{
@@ -3484,6 +3482,9 @@ color: #e52822
 }
 .m-l-16{
     margin-left: 16px;
+}
+.m-l-10{
+    margin-left: 10px;
 }
 .m-r-16{
     margin-right: 16px;
@@ -3982,15 +3983,7 @@ color: #e52822
 .m-top-6{
     margin-top: 6px;
 }
-.text-info{
-    font-size: 14px;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #3f3b3b;
-}
+
 .text-vedc{
     font-size: 14px;
     font-stretch: normal;
@@ -4143,12 +4136,6 @@ color: #e52822
 .m-top-7{
     margin-top: -7px;
 }
-.m-left-4{
-    margin-left: 4px;
-}
-.m-top-13-5{
-    margin-top: 13.5px;
-}
 .witdh-70{
     width: 70px;
 }
@@ -4244,23 +4231,6 @@ color: #e52822
 .m-top-16{
     margin-top: 16px ;
 }
-.text-info-1{
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.4;
-    letter-spacing: normal;
-    color: #868998;
-}
-.text-info-2{
-    font-size: 16px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    color: #3f3b3b;
-}
 .m-left-20{
     margin-left: 20px;
 }
@@ -4277,18 +4247,7 @@ color: #e52822
     text-align: left;
     color: #f58220;
 }
-.text-link{
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    color: #2f80ed;
-}
-.mt22{
-    margin-top: 22px;
-}
+
 .div-dc-label-name{
     font-size: 14px;
   font-weight: bold;
@@ -4820,17 +4779,7 @@ and (orientation: portrait) {
 .padding-8-12{
     padding: 8px 8px 12px 8px;
 }
-::ng-deep {
-    p{
-      margin: 0 0 12px;
-    }
-    .content p {
-      margin-bottom: 5px;
-      color: #3f3b3b;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-}
+
 .m-top-22{
     margin-top: 22px;
 }
@@ -4972,3 +4921,44 @@ and (orientation: portrait) {
                 background-color: #f2f2f2;
                 margin: 8px -16px 8px -16px;
           }
+          .m-bottom-10{
+            margin-bottom: 10px;
+        }
+        .under-line{
+            text-decoration: underline;
+        }
+        .w-60{
+            width: 60%;
+        }
+        .div-location{
+            margin-top: 16px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            background-color: #f2f2f2;
+          }
+          .div-options{
+            padding: 8px 8px 12px 8px;
+          }
+          .text-options-select{
+            margin-top: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #3f3b3b;
+          }
+          .text-options{
+            margin-top: 6px;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #3f3b3b;
+          }
+          .m-5{
+            margin: 5px;
+          }
+          .text-overflow-ellipsis{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        
+
