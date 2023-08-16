@@ -59,7 +59,7 @@
 
                 <div class="d-flex m-top-8" *ngIf="slide.AvgPoint else noAvgPoint">
                   <div class="div-badge">
-                      <div class="text-point">{{slide.AvgPoint}}</div>
+                      <div class="text-point">{{gf.convertNumberFormat(slide.AvgPoint)}}</div>
                       <div class="text-point-des" *ngIf="slide.AvgPoint>9 && slide.AvgPoint <=10">Xuất sắc</div>
                       <div class="text-point-des" *ngIf="slide.AvgPoint>8 && slide.AvgPoint <=9">Rất tốt</div>
                       <div class="text-point-des" *ngIf="slide.AvgPoint>7 && slide.AvgPoint <=8">Khá tốt</div>

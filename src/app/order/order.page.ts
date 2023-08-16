@@ -2240,8 +2240,8 @@ export class OrderPage {
           if (se.listMyTrips && se.listMyTrips.length == 1 && !(se.listMyTrips[0].pay_method == 3 || se.listMyTrips[0].pay_method == 51 || se.listMyTrips[0].pay_method == 2)) {
             se.buildLinkQrCode(se.listMyTrips[0]);
           }
-          console.log('rq xxxxx')
-          console.log(se.listMyTrips[0].bookingjson[0].RequestCheckin)
+          // console.log('rq xxxxx')
+          // console.log(se.listMyTrips[0].bookingjson[0].RequestCheckin)
           se.zone.run(() => {
             se.hasloaddata = true;
             se.hasdata = true;

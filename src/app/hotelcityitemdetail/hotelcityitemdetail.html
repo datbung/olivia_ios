@@ -44,7 +44,7 @@
       <div class="hotel-detail-note">
         <div class="cls-row-review">
           <div class="p-0 p-relative">
-            <ion-badge ion-badge-border-radius>{{itemdetail.AvgPoint}}</ion-badge>
+            <ion-badge ion-badge-border-radius>{{itemdetail.AvgPointDisplay}}</ion-badge>
             <p *ngIf="itemdetail.AvgPoint>9 && itemdetail.AvgPoint<=10 && itemdetail.NumOfReview >0" class="cls-reviewpoint label-badge">Tuyệt vời
             </p>
             <p *ngIf="itemdetail.AvgPoint>8 && itemdetail.AvgPoint<=9 && itemdetail.NumOfReview >0" class="cls-reviewpoint label-badge">Rất tốt

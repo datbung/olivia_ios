@@ -230,6 +230,7 @@ export class HotelDetailPage implements OnInit {
 
   _hotelDetailContractPrice: Observable<any>;
   _hotelSuggestDaily: Observable<Object>;
+  AvgPointDisplay: any;
 
   constructor(public toastCtrl: ToastController, private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController, public navCtrl: NavController,
     private http: HttpClientModule, public loadingCtrl: LoadingController, public Roomif: RoomInfo, public renderer: Renderer,
@@ -1189,8 +1190,9 @@ export class HotelDetailPage implements OnInit {
           se.json = jsondata.Rating;
           
           se.AvgPoint = jsondata.AvgPoint;
+          se.AvgPointDisplay = jsondata.AvgPoint?jsondata.AvgPoint.toString().replace('.',',') :'';
           if(se.AvgPoint && se.AvgPoint.toString().length == 1){
-            se.AvgPoint = se.AvgPoint + ".0";
+            se.AvgPointDisplay = se.AvgPoint + ",0";
           }
           se.Latitude = jsondata.Latitude;
           se.Longitude = jsondata.Longitude;
@@ -4812,6 +4814,7 @@ async bookcombo() {
       return;
     }
     this.valueGlobal.backValue = 'popupinfobkg';
+    this.searchhotel.changeInfoFromPage = '';
     this.searchhotel.ChildAgeTo = this.ChildAgeTo;
     this.navCtrl.navigateForward('/popupinfobkg');
   }

@@ -189,7 +189,7 @@ export class GlobalFunction{
         item_category3: itemcache.departFlight ? this.getTicketClass(itemcache.departFlight) : itemcache.isInternationalFlight && itemcache.itemFlightInternationalDepart ? this.getTicketClass(itemcache.itemFlightInternationalDepart) : '',
         item_category4: itemcache.isInternationalFlight ? 'Travelport' :"Api", 
         item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : '',
+        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice/(itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0))) : '',
         quantity: itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0),
       },
       {
@@ -202,7 +202,7 @@ export class GlobalFunction{
         item_category3: itemcache.returnFlight ? this.getTicketClass(itemcache.returnFlight) : itemcache.isInternationalFlight && itemcache.itemFlightInternationalReturn ? this.getTicketClass(itemcache.itemFlightInternationalReturn) : '',
         item_category4: itemcache.isInternationalFlight ? 'Travelport' :"Api", 
         item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : '',
+        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice/(itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0))) : '',
         quantity: itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0),
       }
      ] : 
@@ -217,7 +217,7 @@ export class GlobalFunction{
         item_category3: itemcache.departFlight ? this.getTicketClass(itemcache.departFlight) : itemcache.isInternationalFlight && itemcache.itemFlightInternationalDepart? this.getTicketClass(itemcache.itemFlightInternationalDepart) : '',
         item_category4: itemcache.isInternationalFlight ? 'Travelport' :"Api", 
         item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : '',
+        price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice/(itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0))) : '',
         quantity: itemcache.adult + (itemcache.child || 0) + (itemcache.infant || 0),
       }
      ],
@@ -254,7 +254,7 @@ export class GlobalFunction{
                     item_category3: itemcache.gaHotelDetail ? itemcache.gaHotelDetail.RatingValue.toString() : '',
                     item_category4: category == 'Combo' ? 'Combo' : 'Room',
                     item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : 0,
+                    price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice/(itemcache.roomnumber * duration)) : 0,
                     quantity: itemcache.roomnumber * duration
                 }
             ]
@@ -281,8 +281,8 @@ export class GlobalFunction{
                       item_category3: '',
                       item_category4: itemcache.gaTourDetail.TourType ||'',
                       item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
-                      price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice) || 0)),
-                      quantity: this.searchhotel.adult +(this.searchhotel.child || 0),
+                      price: itemcache.totalPrice ? this.convertStringToNumber(itemcache.totalPrice/(this.tourService.adult +(this.tourService.child || 0))) : (itemcache.itemDepartureCalendar && itemcache.itemDepartureCalendar.PriceAdultAvgStr ? this.convertStringToNumber(itemcache.itemDepartureCalendar.PriceAdultAvgStr/(this.tourService.adult +(this.tourService.child || 0))) : (this.convertStringToNumber(itemcache.gaTourDetail.AdultPrice/(this.tourService.adult +(this.tourService.child || 0))) || 0)),
+                      quantity: this.tourService.adult +(this.tourService.child || 0),
 
                   }
               ]
@@ -2142,6 +2142,16 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
 
   convertNumberToFloat(input){
     let ip:any = input ? input.toLocaleString().replace(/\,/g,'').replace(/\./g,'').replace(/\:/g,'')*1 : 0;
+    return ip;
+  }
+
+  convertNumberFormat(input){
+    if(input && (input.toString().length==1)){
+      input = input.toString()+',0';
+    }else if(input ==10){
+      input = '10,0';
+    }
+    let ip:any = input ? input.toLocaleString().replace(/\./g,',') : 0;
     return ip;
   }
 

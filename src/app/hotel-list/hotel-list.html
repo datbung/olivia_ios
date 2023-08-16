@@ -19,9 +19,9 @@
 </ion-header>
 <ion-content #scrollHotelList>
   <div class="div-note" *ngIf="ishide==true">*Giá trung bình phòng 1 đêm cho 2 khách</div>
-  <ion-list *ngIf="(ishide==true && loadpricedone) else loadingsk">
-        <div class="card-background-detailpage">
-          <div *ngFor="let msg of json1; let i = index" [id]="msg.currentPage?msg.currentPage:-1">
+  <div *ngIf="(ishide==true && loadpricedone) else loadingsk" class="cls-background">
+        <div class="card-background-detailpage" *ngIf="json1 && json1.length >0">
+          <div *ngFor="let msg of json1; let i = index" [id]="msg.currentPage?msg.currentPage:-1" class="{{msg.MinPriceOTAStr}}">
             <div *ngIf="!ischeckAL && msg.MinPriceOTAStr && msg.HasCheckPrice && loadpricedone" class="row-item-hotellist">
               <div class="col-img-hotellist">
                   <img  class="img-radius" [src]="msg.Avatar" style="position:relative" (click)="itemSelected(msg)">
@@ -46,27 +46,27 @@
                         <div class="d-flex">
                           <div *ngIf="msg.AvgPoint>0" class="div-width-100" (click)="itemSelected(msg)">
                             <div *ngIf="msg.AvgPoint>9 && msg.AvgPoint<=10" class="m-top-5 d-flex">
-                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                               <p class="label-badge">Tuyệt vời
                               </p>
                             </div>
                             <div *ngIf="msg.AvgPoint>8 && msg.AvgPoint<=9" class="m-top-5 d-flex">
-                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                               <p class="label-badge">Rất tốt
                               </p>
                             </div>
                             <div *ngIf="msg.AvgPoint>7 && msg.AvgPoint<=8" class="m-top-5 d-flex">
-                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                               <p class="label-badge">Khá tốt
                               </p>
                             </div>
                             <div *ngIf="msg.AvgPoint>5 && msg.AvgPoint<=7" class="m-top-5 d-flex">
-                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                               <p class="label-badge">Tạm được
                               </p>
                             </div>
                             <div *ngIf="msg.AvgPoint<=5" class="m-top-5 d-flex">
-                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                               <p class="label-badge">Không tốt
                               </p>
                             </div>
@@ -182,27 +182,27 @@
                     <div class="d-flex">
                       <div *ngIf="msg.AvgPoint>0" class="div-width-100" (click)="itemSelected(msg)">
                         <div *ngIf="msg.AvgPoint>9 && msg.AvgPoint<=10" class="m-top-5  d-flex">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                           <p class="label-badge">Tuyệt vời
                           </p>
                         </div>
                         <div *ngIf="msg.AvgPoint>8 && msg.AvgPoint<=9" class="m-top-5 d-flex">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                           <p class="label-badge">Rất tốt
                           </p>
                         </div>
                         <div *ngIf="msg.AvgPoint>7 && msg.AvgPoint<=8" class="m-top-5 d-flex">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                           <p class="label-badge">Khá tốt
                           </p>
                         </div>
                         <div *ngIf="msg.AvgPoint>5 && msg.AvgPoint<=7" class="m-top-5 d-flex">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                           <p class="label-badge">Tạm được
                           </p>
                         </div>
                         <div *ngIf="msg.AvgPoint<=5" class="m-top-5 d-flex">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                           <p class="label-badge">Không tốt
                           </p>
                         </div>
@@ -312,7 +312,7 @@
           
           </div>
         </div>
-  </ion-list>
+      </div>
 
   <ng-template #loadingsk>
     <div  style="text-align: center">

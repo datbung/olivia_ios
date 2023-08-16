@@ -327,7 +327,12 @@ export class PopupinfobkgPage implements OnInit {
   search()
   {
     this.searchhotel.publicChangeInfoHotelList(1);
-    this.navCtrl.back();
+    if(this.searchhotel.changeInfoFromPage == 'hotellist'){
+      this.navCtrl.navigateBack('/hotellist/true');
+    }else {
+      this.navCtrl.back();
+    }
+    
   }
   bindlunar() {
     var se = this;

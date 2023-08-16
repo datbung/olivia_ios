@@ -20,7 +20,7 @@ export class HomeTourItemSlidePage implements OnInit {
   slideData = [];
   
   slidePopular = [];
-  constructor(private navCtrl: NavController, private gf: GlobalFunction,
+  constructor(private navCtrl: NavController, public gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private zone: NgZone,

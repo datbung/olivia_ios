@@ -58,27 +58,27 @@
                         </p>
                         <div *ngIf="msg.AvgPoint>0">
                           <ion-row *ngIf="msg.AvgPoint>9 && msg.AvgPoint<=10" class="m-top-5">
-                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                             <p class="label-badge">Tuyệt vời
                             </p>
                           </ion-row>
                           <ion-row *ngIf="msg.AvgPoint>8 && msg.AvgPoint<=9" class="m-top-5">
-                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                             <p class="label-badge">Rất tốt
                             </p>
                           </ion-row>
                           <ion-row *ngIf="msg.AvgPoint>7 && msg.AvgPoint<=8" class="m-top-5">
-                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                             <p class="label-badge">Khá tốt
                             </p>
                           </ion-row>
                           <ion-row *ngIf="msg.AvgPoint>5 && msg.AvgPoint<=7" class="m-top-5">
-                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                             <p class="label-badge">Tạm được
                             </p>
                           </ion-row>
                           <ion-row *ngIf="msg.AvgPoint<=5" class="m-top-5">
-                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                            <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPointDisplay}}</ion-badge>
                             <p class="label-badge">Không tốt
                             </p>
                           </ion-row>
