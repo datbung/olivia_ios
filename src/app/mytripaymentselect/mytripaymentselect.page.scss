@@ -250,6 +250,9 @@ color: #2f80ed
   color: #3f3b3b;
   padding: 0;
   padding-left: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .text-ticket-date{

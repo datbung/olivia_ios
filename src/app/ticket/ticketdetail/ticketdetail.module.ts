@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 
 import { TicketDetailPage } from './ticketdetail.page';
 
+
 @NgModule({
   declarations: [
     TicketDetailPage,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
     FormsModule,

@@ -50,7 +50,7 @@
         <ng-template #otherbooking>
           <div
             *ngIf="trip.booking_type == 'TICKET'  else bkgnormal">
-            <div class="div-bkg-ticket m-right-8" *ngIf="objectDetail && ischeckqrLink">
+            <div class="div-bkg-ticket m-right-8" *ngIf="ischeckqrLink">
               <div class="div-ticket-bkg" *ngFor="let itemqr of objectDetail.listNotes;let i=index">
                 <div class="div-name text-name-ticket">{{objectDetail.experienceName}} - {{i+1}}</div>
                 <div class="padding-8-12">
@@ -68,7 +68,7 @@
                       {{objectDetail.startDateShow}}
                     </div>
                   </div>
-                  <div class="d-flex m-top-8" *ngIf="objectDetail.orderNumber">
+                  <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.orderNumber">
                     <div class="text-title-ticket w-110 align-self-end">
                       Order Number
                     </div>
@@ -76,7 +76,7 @@
                       {{objectDetail.orderNumber}}
                     </div>
                   </div>
-                   <div class="d-flex m-top-8" *ngIf="objectDetail.confirmationCode">
+                   <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.confirmationCode">
                     <div class="text-title-ticket w-110 align-self-end">
                       Mã xác nhận
                     </div>
@@ -139,25 +139,25 @@
 
               
             </div>
-            <div class="div-bkg-ticket m-right-8" *ngIf="objectDetail && !ischeckqrLink">
+            <div class="div-bkg-ticket" *ngIf="!ischeckqrLink">
               <div class="div-ticket-bkg">
-                <div class="div-name text-name-ticket">{{objectDetail.experienceName}}</div>
+                <div class="div-name text-name-ticket">{{trip.hotel_name}}</div>
                 <div class="padding-8-12">
                   <div class="text-title-ticket">
                     Gói
                   </div>
                   <div class="text-content m-top-8">
-                    {{objectDetail.packageName}}
+                    {{trip.combo_name}}
                   </div>
                   <div class="d-flex m-top-8">
                     <div class="text-title-ticket w-110 align-self-end">
                       Ngày
                     </div>
                     <div class="text-content">
-                      {{objectDetail.startDateShow}}
+                      {{trip.VVCCheckinDisplay1}}
                     </div>
                   </div>
-                  <div class="d-flex m-top-8" *ngIf="objectDetail.orderNumber">
+                  <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.orderNumber">
                     <div class="text-title-ticket w-110 align-self-end">
                       Order Number
                     </div>
@@ -165,26 +165,66 @@
                       {{objectDetail.orderNumber}}
                     </div>
                   </div>
+                  <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.confirmationCode">
+                    <div class="text-title-ticket w-110 align-self-end">
+                      Mã xác nhận
+                    </div>
+                    <div class="text-content">
+                      {{objectDetail.confirmationCode}}
+                    </div>
+                  </div>
                   <div class="d-flex m-top-8" >
                     <div class="text-title-ticket w-110 align-self-start">
                       Số lượng
                     </div>
                     <div>
-                      <div class="text-content">
-                        {{trip.adultDisplay}}
+                      <div class="text-content" *ngIf="objSummary && objSummary.adultNo>0">
+                        Người lớn x{{objSummary.adultNo}}
                       </div>
-                      <div class="text-content">
-                        {{trip.childDisplay}}
+                      <div class="text-content"  *ngIf="objSummary && objSummary.childNo>0">
+                        Trẻ em x{{objSummary.childNo}}
                       </div>
-                      <div class="text-content">
-                        {{trip.elderDisplay}}
+                      <div class="text-content" *ngIf="objSummary && objSummary.seniorNo>0">
+                        Người già x{{objSummary.seniorNo}}
+                      </div>
+                      <div class="text-content" *ngIf="objSummary && objSummary.custom1No>0">
+                        {{objSummary.custom1Name}} x{{objSummary.custom1No}}
+                      </div>
+                      <div class="text-content" *ngIf="objSummary && objSummary.custom2No>0">
+                        {{objSummary.custom2Name}} x{{objSummary.custom2No}}
                       </div>
                     </div>
                    
                   </div>
+                  <div *ngIf="trip.listVoucher && trip.listVoucher.length > 0" class="m-top-16">
+                    <div class="text-waitpayment">Vé vào cổng / Voucher dịch vụ</div>
+                    <div class="text-name-airport">Tải vé về máy hoặc mở link để sử dụng dịch vụ</div>
+                  </div>
+                  <div *ngFor="let item of trip.listVoucher" class="d-flex m-top-16">
+                    <div (click)="openWebpage(item.link)" class="text-link-16 under-line align-self-center w-60">
+                      {{item.filename}}
+                    </div>
+                    <img (click)="downloadPDFVC(item.link)" class="m-l-10"  src="./assets/ic_mytripbooking/download.svg">
+                    <img (click)="share(item.link)"  class="m-l-16"  src="./assets/ic_mytripbooking/share.svg">
+                  </div>
+                  
+                </div>
+             
+              </div>
+              <div *ngIf="trip.objdataRaw" class="div-location">
+                          
+                <div class="div-options">
+                  <div *ngIf="trip.kkdayRender" class="text-title-ticket">
+                    {{ trip.kkdayRender[1].label}}
+                  </div>
+                  <div class="text-options-select">{{trip.objdataRaw[0].name}}</div>
+                  <div class="text-options">{{trip.objdataRaw[0].address}}</div>
+                  <div class="d-flex">
+                    <div class="text-options">{{trip.objdataRaw[0].s_time}}</div> <div class="m-5"> ~ </div> <div class="text-options">{{trip.objdataRaw[0].e_time}}</div>
+                  </div>
+                
                 </div>
               </div>
-      
               <div class="div-bkg-price">
 
                 <div class="d-flex m-top-8">
@@ -229,21 +269,6 @@
                 </div>
               </div>
 
-              <!-- <div class="d-flex m-top-16" (click)="ticketinfo()">
-                <div class="text-info-2 font-weight-500">
-                  Thông tin vé
-                </div>
-                <div *ngIf="!isTTV" class="position-absolute">
-                  <img src="./assets/imgs/ic_expand.svg" />
-                </div>
-                <div *ngIf="isTTV" class="position-absolute">
-                  <img src="./assets/imgs/ic_expand_down.svg" />
-                </div>
-              </div>
-              <div *ngIf="isTTV" class="m-top-22">
-                <p [innerHTML]="includePrice"></p>
-              </div>
-              <div class="div-line-ticket"></div> -->
             </div>
             <div class="d-flex m-top-16" (click)="ticketinfo()">
               <div class="text-info-2 font-weight-500">
@@ -257,8 +282,16 @@
               </div>
             </div>
             <div *ngIf="isTTV" class="m-top-22">
+           
               <p [innerHTML]="includePrice"></p>
             </div>
+          
+            <div class="text-info-2 font-weight-500 m-top-16 m-bottom-10">
+              Cách thức sử dụng 
+            </div>
+            <p>
+              Vui lòng xuất trình e-voucher để sử dụng dịch vụ      
+            </p>
             <div class="div-line-ticket"></div>
           </div>
 
@@ -1777,7 +1810,7 @@
 
                   <label class="witdh-204">{{pass.Gender}}. <span class="div-name">{{pass.Name}}</span> </label>
                   <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
-                  <img (click)="share(pass)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
+                  <img (click)="share(pass.CheckinInfo)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
                 </div>
               </div>
             </div>
@@ -3340,7 +3373,7 @@
             <img src="./assets/imgs/ic_expand_down.svg" />
           </div>
         </div>
-        <div (click)="openWebpage()" class="mt22 m-l-8" *ngIf="isttt">
+        <div (click)="openWebpage('https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong')" class="mt22 m-l-8" *ngIf="isttt">
           <div class="text-link">
             <u>Hướng dẫn thủ tục hàng không</u>
           </div>
@@ -3591,7 +3624,7 @@
         </div>
       </div>
       <div class="div-panel-1px"></div>
-      <div (click)="openWebpage()" class="d-flex">
+      <div (click)="openWebpage('https://www.ivivu.com/dieu-kien-dieu-khoan-hang-khong')" class="d-flex">
         <div class="text-info-2 font-weight-500">
           Hướng dẫn thủ tục hàng không
         </div>
@@ -3653,7 +3686,7 @@
           <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
               class="div-name">{{pass.Name}}</span> </label>
           <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
-          <img (click)="share(pass)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
+          <img (click)="share(pass.CheckinInfo)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
         </div>
       </div>
       <div class="text-title-broading m-top-12" *ngIf="trip.hadCheckinOnlineReturn">
@@ -3668,7 +3701,7 @@
             <label class="witdh-204" (click)="openWebpage(pass.CheckinInfo)">{{pass.Gender}}. <span
                 class="div-name">{{pass.Name}}</span> </label>
             <img (click)="downloadimg(pass,trip)" src="./assets/ic_mytripbooking/download.svg">
-            <img (click)="share(pass)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
+            <img (click)="share(pass.CheckinInfo)" class="m-left-8px" src="./assets/ic_mytripbooking/share.svg">
           </div>
         </div>
       </div>

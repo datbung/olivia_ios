@@ -17,148 +17,9 @@ import { ticketService } from 'src/app/providers/ticketService';
 })
 export class HomeTicketSlidePage implements OnInit {
   @Input() type:any;
-  slideData = [
-    {
-        Name: 'Vé vui chơi hot',
-        Abbreviation: 'Vé vui chơi đang bán chạy',
-        Notes: '',
-        TicketGroupDetail: [
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-land-phu-quoc-lazy-river-800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Nha Trang',
-                AvgPoint: 9.1,
-                NumOfReview: 54,
-                MinPrice: 350000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Phú Quốc',
-                AvgPoint: 9.2,
-                NumOfReview: 109,
-                MinPrice: 300000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Hội An',
-                AvgPoint: 9.4,
-                NumOfReview: 68,
-                MinPrice: 250000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-        ]
-    },
-    {
-        Name: 'Hẹn hò lý tưởng',
-        Abbreviation: 'Nơi hẹn hò của các cặp đôi',
-        Notes: '',
-        TicketGroupDetail: [
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2020/12/14/17/img-9613-800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Nha Trang',
-                AvgPoint: 9.1,
-                NumOfReview: 54,
-                MinPrice: 200000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Phú Quốc',
-                AvgPoint: 9.2,
-                NumOfReview: 109,
-                MinPrice: 200000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Hội An',
-                AvgPoint: 9.4,
-                NumOfReview: 68,
-                MinPrice: 250000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-        ]
-    },
-    {
-        Name: 'Dành cho gia đình',
-        Abbreviation: 'Gia đình có con nhỏ',
-        Notes: '',
-        TicketGroupDetail: [
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé Vinpearl Safari Phú Quốc',
-                AvgPoint: 9.1,
-                NumOfReview: 54,
-                MinPrice: 350000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé Vinpearl Safari Nam Hội An',
-                AvgPoint: 9.2,
-                NumOfReview: 109,
-                MinPrice: 300000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-            {
-                AvartarLink: 'https://cdn1.ivivu.com/iVivu/2019/09/12/16/vinpearl-safari-phu-quoc-29--800x450.jpg',
-                PromotionTitle: 'Vé bán chạy',
-                Name: 'Vé VinWonders Hội An',
-                AvgPoint: 9.4,
-                NumOfReview: 68,
-                MinPrice: 250000,
-                Notes: [
-                    { Description: '• Hoàn hủy miễn phí 24h'},
-                    { Description: '• Xác nhận tức thời'},
-                    { Description: '• Miễn phí trẻ em cao dưới 99cm'}
-                ]
-            },
-        ]
-    },
-  ];
-  
-  slidePopular = [];
+  slideData = [];
+  slidePopular : any;
+  slidePopularVN: any;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -169,6 +30,7 @@ export class HomeTicketSlidePage implements OnInit {
     public searchhotel: SearchHotel,
     public ticketService: ticketService) {
       this.getAllExperiences();
+      this.getPopularLocationVN();
       this.getPopularLocation();
   }
 
@@ -186,7 +48,14 @@ export class HomeTicketSlidePage implements OnInit {
     se.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'getAllExperiences').then((data) => {
       let res = JSON.parse(data);
       se.slideData = res.data;
-      console.log(res.data);
+      for (let index = 0; index < se.slideData.length; index++) {
+        for (let j = 0; j < se.slideData[index].experienceHomeModels.length; j++) {
+          const elementVVC = se.slideData[index].experienceHomeModels[j];
+          if(elementVVC.avgPoint && (elementVVC.avgPoint == 10  || elementVVC.avgPoint == 6  || elementVVC.avgPoint == 9  || elementVVC.avgPoint == 8  || elementVVC.avgPoint == 7)){
+            elementVVC.avgPoint = elementVVC.avgPoint + ".0";
+          }
+        }
+      }
     })
   }
 
@@ -203,25 +72,50 @@ export class HomeTicketSlidePage implements OnInit {
     })
   }
 
-  getPopularLocation() {
+  getPopularLocationVN() {
     let se = this;
-    let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetPopularLocation';
+    let url = C.urls.baseUrl.urlTicket+'/api/Home/GetRecommendDestination?position=2&vertical=4';
     let headers = {
-      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+      // apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      // apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
     };
-    se.gf.RequestApi('GET', url, headers, null, 'hometouritemslide', 'GetPopularLocation').then((data) => {
+    se.gf.RequestApi('GET', url, headers, null, 'hometicketitemslide', 'GetRecommendDestination').then((data) => {
       let res = JSON.parse(data);
-      console.log(res.Response);
-      se.slidePopular = res.Response;
-      se.slidePopular.forEach(slide => {
-        if(slide.AvatarLink && slide.AvatarLink.indexOf('http') == -1){
-          slide.AvatarLink = 'https:'+slide.AvatarLink;
+      se.slidePopularVN = res.data;
+
+      if(se.slidePopularVN.vertical && se.slidePopularVN.vertical.avatarLink.indexOf('http') == -1){
+          se.slidePopularVN.vertical[0].avatarLink = 'https:'+se.slidePopularVN.vertical[0].avatarLink;
+      }
+
+      se.slidePopularVN.horizontals.forEach(slide => {
+        if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
+          slide.avatarLink = 'https:'+slide.avatarLink;
         }
       });
     })
   }
+  getPopularLocation() {
+    let se = this;
+    let url = C.urls.baseUrl.urlTicket+'/api/Home/GetRecommendDestination?position=3&vertical=3';
+    let headers = {
+      // apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      // apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    se.gf.RequestApi('GET', url, headers, null, 'hometicketitemslide', 'GetRecommendDestination').then((data) => {
+      let res = JSON.parse(data);
+      se.slidePopular = res.data;
 
+      if(se.slidePopular.vertical && se.slidePopular.vertical.avatarLink.indexOf('http') == -1){
+          se.slidePopular.vertical[0].avatarLink = 'https:'+se.slidePopular.vertical[0].avatarLink;
+      }
+
+      se.slidePopular.horizontals.forEach(slide => {
+        if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
+          slide.avatarLink = 'https:'+slide.avatarLink;
+        }
+      });
+    })
+  }
   /**
    * Sự kiện loadmore khi scroll topdeal
    * @param event biến event
@@ -253,8 +147,44 @@ export class HomeTicketSlidePage implements OnInit {
   showTicketList(item){
     if(item){
       this.ticketService.itemTicketTopic = item;
+      this.ticketService.searchType = 3;
+      this.ticketService.isFilter = false;
+      this.ticketService.typeFilters = [];
+      this.ticketService.regionFilters = [];
+      this.ticketService.topicfilters = [];
+      this.ticketService.topicfilters.push(item.topicId);
+      this.ticketService.inputText = "";
       this.ticketService.itemSearchTicket.emit(0);
       this.navCtrl.navigateForward('/ticketlist/0');
     }
+  }
+  showRegionList(item,stt){
+    if(item){
+      this.ticketService.itemShowList = item;
+      this.ticketService.searchType = 2;
+      this.ticketService.isFilter = false;
+      this.ticketService.typeFilters = [];
+      this.ticketService.regionFilters = [];
+      this.ticketService.topicfilters = [];
+      this.ticketService.inputText = "";
+      if (stt==1) {
+        this.getdata();
+      }else{
+        this.ticketService.regionFilters.push(item.id);
+        this.navCtrl.navigateForward('/ticketlist/1');
+      }
+    }
+  }
+  getdata() {
+    let url = C.urls.baseUrl.urlTicket + '/api/Category/GetInitsearchModel';
+    this.gf.RequestApi('GET', url, null, null, 'hometicketslide', 'GetInitsearchModel').then((data) => {
+      let res = JSON.parse(data);
+      var objregion = res.data.regions.filter(item => item.id === this.ticketService.itemShowList.id);
+      this.ticketService.regionFilters = [];
+      objregion[0].childs.forEach(element => {
+        this.ticketService.regionFilters.push(element.id);
+      });
+      this.navCtrl.navigateForward('/ticketlist/1');
+    })
   }
 }

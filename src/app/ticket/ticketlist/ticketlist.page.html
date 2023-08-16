@@ -16,20 +16,20 @@
 </ion-header>
   <ion-content>
     <div *ngIf="loaddatadone else loadskeleton">
-      <div class="innerdeals1 slide2-scroll div-scroll"  padding *ngIf="(slideData && slideData.length >0) else emptydata">
-          <div class="cls-deal" *ngFor="let slide of slideData">
+      <div class="innerdeals1 slide2-scroll div-scroll"  padding *ngIf="(ticketService.slideData && ticketService.slideData.length >0) else emptydata">
+          <div class="cls-deal" *ngFor="let slide of ticketService.slideData">
             <img class="slide2 img" [src]="slide.avatarLink" (click)="itemclickht(slide)" >
             <div class="float-promo" *ngIf="slide.promotionTitle">
               <p class="float-promo-description">{{slide.promotionTitle}}</p>
             </div>
             <div class="div-info">
               <h2 class="hotel-name m-top-8" (click)="itemclickht(slide)" >
-                {{slide.experienceName}}
+                {{slide.expeName}}
             </h2>
             <div class="d-flex m-top-8" *ngIf="slide.avgPoint">
               <div class="div-badge" >
                   <div class="text-point">{{slide.avgPoint}}</div>
-                  <div class="text-point-des" *ngIf="slide.avgPoint >=9 && slide.avgPoint <=10">Xuất sắc</div>
+                  <div class="text-point-des" *ngIf="slide.avgPoint >9 && slide.avgPoint <=10">Xuất sắc</div>
                   <div class="text-point-des" *ngIf="slide.avgPoint>8 && slide.avgPoint <=9">Rất tốt</div>
                   <div class="text-point-des" *ngIf="slide.avgPoint>7 && slide.avgPoint <=8">Khá tốt</div>
                   <div class="text-point-des" *ngIf="slide.avgPoint>6 && slide.avgPoint <=7">Tạm được</div>
@@ -40,19 +40,20 @@
             </div>
 
             <div class="div-notes m-top-16">
-              <div *ngFor="let item of slide.shortDescription.split('\n')" class="d-flex m-bottom-8 m-right-16">
+              <div *ngFor="let item of slide.expeDesc.split('\n')" class="d-flex m-bottom-8 m-right-16">
                 <div class="div-icon-note"><img class="img-check" src="./assets/ic_ticket/check.svg"></div>
                 <div class="div-des-note">{{ item }}</div>
               </div>
             </div>
+            <div *ngIf="slide.numberOfBooking > 0" class="text-num-booking">
+              <div class="text-topsale">{{ slide.numberOfBooking }} khách đặt trong 24 giờ qua</div></div>
+            <div class="cls-row-viewtopsale" >
 
-            <div class="cls-row-viewtopsale d-flex" >
-                <div class="width-70 div-flex-end"><span *ngIf="slide.topSale" class="text-topsale">{{ slide.topSale }} khách đặt trong 24 giờ qua</span></div>
-                <div class=" width-45 " >
-                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice > slide.salePrice">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
+                <div>
+                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice > slide.publicPriceRounded">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
                   <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.PriceAdult > slide.priceDefault && slide.priceDefault == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div> -->
                   <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.priceDefault < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div> -->
-                  <div  class="text-price " *ngIf="slide.salePrice else noprice">{{ gf.convertNumberToString(slide.salePrice) }}đ</div>
+                  <div  class="text-price" *ngIf="slide.publicPriceRounded else noprice"><span class="text-giatu">Giá từ </span>{{ gf.convertNumberToString(slide.publicPriceRounded) }}đ</div>
                   <ng-template #noprice><div  class="text-noprice ">Hết chỗ</div> </ng-template>
                 </div>
                 
@@ -108,8 +109,29 @@
       </ion-list>
     </div>
   </ng-template>
-<!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="slideData1.length < slideData.length">
+<!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="ticketService.slideData1.length < ticketService.slideData.length">
 <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="">
 </ion-infinite-scroll-content>
 </ion-infinite-scroll> -->
   </ion-content>
+  <ion-footer>
+    <ion-row class="div-footer-filtersort">
+        <ion-col style="align-self: center" (click)="openSort()">
+            <div class="p-left-24">
+                <img src="./assets/imgs/ic_sort.svg">
+                <ion-label class="text-sort-and-filter">Sắp xếp</ion-label>
+                <img src="./assets/ic_flight/icon_action_check_circle_tealish.svg" class="chk-order">
+                
+            </div>
+            <div class="div-split"></div>
+        </ion-col>
+        <ion-col (click)="openFilter()">
+                <div class="flightdeparture-button-filter">
+                    <img class="img-filter" src="./assets/imgs/ic_filter.svg">
+                     <ion-badge *ngIf="countFilter > 0" class="cls-badge-filter"><span class="cls-hidden-filter">{{countFilter}}</span></ion-badge>
+                    <ion-label class="text-sort-and-filter label-filter" >Lọc</ion-label>
+                </div>
+                <div class="div-split"></div>
+        </ion-col>
+    </ion-row>
+  </ion-footer>

@@ -57,10 +57,12 @@
 
     <div class="d-flex ">
       <div class="div-width-100 div-flex-left">
-          <div class="text-pax" *ngIf="ticketService.adult">{{ticketService.adult}} người lớn</div>
-          <div class="text-pax m-top-4 h-16" ><span *ngIf="ticketService.child">{{ticketService.child}} trẻ em</span></div>
-            <div class="text-pax m-top-4 h-16" *ngIf="ticketService.elder">{{ticketService.elder}} người lớn tuổi</div>
-
+          <div class="text-pax" *ngIf="ticketService.adult > 0">{{ticketService.adult}} Người lớn</div>
+          <div class="text-pax m-top-4 h-16" *ngIf="ticketService.child > 0"><span >{{ticketService.child}} Trẻ em</span></div>
+          <div class="text-pax m-top-4 h-16"   *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.custom1No>0">{{ticketService.bookingInfo.booking.custom1No}} {{ticketService.bookingInfo.booking.custom1Name}}</div>
+          <div class="text-pax m-top-4 h-16"   *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.custom2No>0">{{ticketService.bookingInfo.booking.custom2No}} {{ticketService.bookingInfo.booking.custom2Name}}</div>
+            <div class="text-pax m-top-4 h-16" *ngIf="ticketService.elder > 0">{{ticketService.elder}} Người lớn tuổi</div>
+          
           <!-- <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div>
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div> -->

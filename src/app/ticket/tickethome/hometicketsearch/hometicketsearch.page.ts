@@ -102,17 +102,20 @@ export class HomeTicketSearchPage implements OnInit {
       this.gf.showToastWarning('Vui lòng chọn điểm đến!');
       return;
     }
-    if(this.itemSearch && this.itemSearch.expId && this.itemSearch.expName){
-      this.ticketService.itemTicketDetail = this.itemSearch;
-      this.ticketService.itemTicketDetail.experienceId = this.itemSearch.expId;
-      this.ticketService.backPage = 'hometicket';
-      this.navCtrl.navigateForward('/ticketdetail');
-    }else {
-      this.ticketService.itemSearchDestination = this.itemSearch;
-      this.ticketService.itemShowList = null;
-      this.navCtrl.navigateForward('/ticketlist/1');
+    if (this.itemSearch) {
+      if(this.itemSearch.expId && this.itemSearch.expName){
+        this.ticketService.itemTicketDetail = this.itemSearch;
+        this.ticketService.itemTicketDetail.experienceId = this.itemSearch.expId;
+        this.ticketService.backPage = 'hometicket';
+        this.navCtrl.navigateForward('/ticketdetail');
+      }else {
+        this.ticketService.itemSearchDestination = this.itemSearch;
+        this.ticketService.itemShowList = null;
+        this.navCtrl.navigateForward('/ticketlist/1');
+      }
     }
-    
+  
+
   }
 
   opendeparture() {

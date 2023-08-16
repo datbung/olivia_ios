@@ -167,9 +167,15 @@
       border-radius: 6px;
   }
   .hotel-name{
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.13px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #003c71;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
   }
 
   .cls-deal{
@@ -228,7 +234,7 @@
       font-size:12px;
       max-width: 95%;
       height: 22px;
-      padding: 3px 8px 0px 12px;
+      padding: 2px 8px 0px 12px;
       // overflow: hidden;
       // text-overflow: ellipsis;
       // white-space: nowrap;
@@ -278,11 +284,16 @@
     }
     //style topsale24h
     .text-topsale{
+      font-size: 14px;
       color: #e52822;
-      letter-spacing: -0.34px;
-      font-size: 12px;
-      font-weight: 100;
-      margin-bottom: 2px;
+      width: 205px;
+      align-items: center;
+      justify-content: flex-end;
+      display: flex;
+      flex-direction: row;
+      background-color: #feeeed;
+      height: 25px;
+      padding-right: 7px;
     }
     .btn-topsale{
       color: #ffffff;
@@ -312,16 +323,16 @@
     position: absolute;height: 48px;width: 48px;align-self: center;right: 30px;top: -8px;
   }
 
-.cls-badge-filter {
-    width: 12px;
-    height: 12px;
-    color: #26bed6;
-    padding-top: 2px;
-    font-size: 10px;
+// .cls-badge-filter {
+//     width: 12px;
+//     height: 12px;
+//     color: #26bed6;
+//     padding-top: 2px;
+//     font-size: 10px;
 
-    top: 16px !important;
-    left: 68% !important;
-}
+//     top: 16px !important;
+//     left: 68% !important;
+// }
 
 .text-empty{
   text-align: center;
@@ -396,14 +407,14 @@
 }
 .div-flex-end {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   flex-direction: column;
 }
 .width-70 {
   width: 70%;
 }
-.width-45 {
-  width: 45%;
+.width-65 {
+  width: 65%;
 }
 .text-price {
   font-size: 22px;
@@ -424,11 +435,7 @@
   color: #828282;
   text-decoration: line-through;
 }
-.text-topsale {
-  font-size: 14px;
-  text-align: left;
-  color: #e52822;
-}
+
 
 .div-notes {
     display: flex;
@@ -490,3 +497,70 @@
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
+.text-giatu{
+  font-size: 14px;
+  color: #717484;
+}
+.div-footer-filtersort{
+  background: #fff;
+  .img-filter{
+    position: absolute;
+    top: 0px;
+    padding-left: 40px;
+  }
+  .label-filter{
+    top: 17px !important;
+    left: 44%;
+    z-index: 9;
+  }
+  .text-sort-and-filter{
+      top: 22px;
+      position: absolute;
+      font-size: 14px;
+      font-weight: 100;
+      letter-spacing: -0.4px;
+  }
+
+  .div-split{
+      position: absolute;
+      height: 20px;
+      border-right: solid 1px #ccc;
+      top: 20px;
+      padding-left: 99%;
+  }
+
+  .flightdeparture-button-filter{
+      position: relative;
+
+      
+  }
+  // .cls-badge-filter{
+  //     top: 8px !important;
+  //     left: 40% !important;
+  // }
+
+  .cls-badge-filter {
+    width: 16px;
+    height: 16px;
+    padding-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    top: 17px;
+    left: 60%;
+  }
+  .chk-order{
+      position: absolute;
+      left: 136px;
+      top: 22px;
+  }
+  .p-left-24{
+      padding-left: 24px;
+  }
+ 
+}
+.text-num-booking{
+  justify-content: flex-end;
+  display: flex;
+}
+

@@ -138,12 +138,11 @@ export class TicketPaymentAtmPage implements OnInit {
               se.gf.CheckPaymentTicket(url).then((res) => {
                 let checkpay = JSON.parse(res);
                 if (checkpay.response && checkpay.response.payment_status == 5) {
-                  //se.ticketService.paymentType = 1;
+                  se.ticketService.paymentType = 1;
                   if (se.safariViewController) {
                     se.safariViewController.hide();
                   }
                   clearInterval(se.intervalID);
-                  //se.ticketService.paymentType = 1;
                   let objbookTicket={
                     bookingCode : this.bookingCode,
                     paymentMethod: 2
@@ -362,7 +361,6 @@ export class TicketPaymentAtmPage implements OnInit {
               se.safariViewController.hide();
             }
             clearInterval(se.intervalID);
-            //se.ticketService.paymentType = 1;
             let objbookTicket={
               bookingCode : this.bookingCode,
               paymentMethod: 2

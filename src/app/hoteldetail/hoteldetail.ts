@@ -4491,7 +4491,8 @@ async bookcombo() {
             self.bookCombo.objComboDetail = self.comboDetail;
             self.bookCombo.MealTypeIndex=null;
             if (self.loginuser) {
-              self.navCtrl.navigateForward('/flightcomboreviews');
+              self.ischeckAllotment(objMealTypeRates);
+            
             }
            
   }
@@ -5174,5 +5175,56 @@ modal.present();
  }
  CheckHasInternal(Meal) {
     return Meal.filter((el) => { return el.Supplier == 'Internal' || el.Supplier  == 'B2B' }).length > 0 ? true : false;
+  }
+  ischeckAllotment(objMealTypeRates){
+    var self = this;
+    var options = {
+      method: 'GET',
+      url: C.urls.baseUrl.urlContracting + '/api/toolsapi/CheckAllotment',
+      qs:
+      {
+        token: '3b760e5dcf038878925b5613c32615ea3',
+        hotelcode: this.booking.HotelId,
+        roomcode: objMealTypeRates[0].RoomId,
+        checkin: this.booking.CheckInDate,
+        checkout: this.booking.CheckOutDate,
+        totalroom: this.Roomif.roomnumber
+      },
+      headers:
+        {}
+    };
+    request(options, function (error, response, body) {
+      if (response.statusCode != 200) {
+        var objError = {
+          page: "hoteldetail",
+          func: "book",
+          message: response.statusMessage,
+          content: response.body,
+          type: "warning",
+          param: JSON.stringify(options)
+        };
+        C.writeErrorLog(objError,response);
+      }
+      if (error) {
+        error.page = "hoteldetail";
+        error.func = "book";
+        error.param = JSON.stringify(options);
+        C.writeErrorLog(error,response);
+        throw new Error(error)
+      };
+     
+      var rs = JSON.parse(body);
+      self.navCtrl.navigateForward('/flightcomboreviews');
+
+      if (rs.Msg == "AL") {
+        self.Roomif.payment = rs.Msg;
+      } else if (rs.Msg == "RQ") {
+        self.Roomif.payment = rs.Msg;
+      }
+      else {
+       
+        self.presentAlertbook();
+      }
+    });
   }
 }

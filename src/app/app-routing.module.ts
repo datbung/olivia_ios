@@ -261,10 +261,11 @@ const routes: Routes = [
     { path: 'ticketpaymentbank', loadChildren: './ticket/ticketpaymentbank/ticketpaymentbank.module#TicketpaymentbankPageModule' },
   { path: 'ticketinfo/:code', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
   { path: 'ticketpaymentfail', loadChildren: './ticket/ticketpaymentfail/ticketpaymentfail.module#TicketpaymentfailPageModule' },
-    
-  { path: 'ticketinfo', loadChildren: './ticket/ticketinfo/ticketinfo.module#TicketinfoPageModule' },
+
   
   { path: 'userzalo', loadChildren: './userzalo/userzalo.module#UserZaloPageModule' },
+  { path: 'ticketfilter', loadChildren: './ticket/ticketfilter/ticketfilter.module#TicketfilterPageModule' },
+  { path: 'ticketfilterlist', loadChildren: './ticket/ticketfilterlist/ticketfilterlist.module#TicketfilterlistPageModule' },
 ];
 @NgModule({
   imports:

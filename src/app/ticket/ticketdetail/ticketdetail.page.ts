@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { NavController, ModalController, ToastController, IonSlides, IonContent } from '@ionic/angular';
+import { NavController, ModalController, ToastController, IonSlides, IonContent,LoadingController } from '@ionic/angular';
 import { GlobalFunction } from '../../providers/globalfunction';
 import $ from 'jquery';
 import { C } from '../../providers/constants';
@@ -14,6 +14,8 @@ import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HotelreviewsvideoPage } from 'src/app/hotelreviewsvideo/hotelreviewsvideo';
 import { ticketService } from '../../providers/ticketService';
+import { SafariViewController } from '@ionic-native/safari-view-controller/ngx';
+
 
 @Component({
   selector: 'app-ticketdetail',
@@ -59,7 +61,14 @@ export class TicketDetailPage {
   isseemorenotes: boolean = false;
   overview: any;
   notes: any;
- 
+  ishowMap: boolean = false;
+  linkGoogleMap: any;
+  kkdayExchanges: any;
+  kkdayVenueLocations: any;
+  objRate: any;
+  kkdayProductIntroDesc: any;
+  kkdayProductExpe: any;
+  loader: any;
     constructor(private navCtrl: NavController, private gf: GlobalFunction,
         private modalCtrl: ModalController,
         private toastCtrl: ToastController,
@@ -68,10 +77,10 @@ export class TicketDetailPage {
         public tourService: tourService,
         public searchHotel: SearchHotel,
         private youtube: YoutubeVideoPlayer,
-        private domSanitizer: DomSanitizer,
-        public ticketService: ticketService) {
+        private sanitizer: DomSanitizer,
+        public ticketService: ticketService,public loadingCtrl: LoadingController,private safariViewController:SafariViewController) {
             this.loaddata();
-           
+
         }
   private loaddata() {
 
@@ -85,9 +94,19 @@ export class TicketDetailPage {
         this.ticketService.experience = res.data.experience;
         this.loadslidedone = true;
         this.AvgPoint = res.data.experience.avgPoint;
+        if(this.AvgPoint && (this.AvgPoint == 10  || this.AvgPoint == 6  || this.AvgPoint == 9  || this.AvgPoint == 8  || this.AvgPoint == 7)){
+          this.AvgPoint = this.AvgPoint + ".0";
+        }
         this.totalReview = res.data.experience.numOfReview;
-
+    
         this.itemDetail = res.data.experience;
+
+        if (this.ticketService.experience.latitude && this.ticketService.experience.longitude) {
+          let link = "https://maps.google.com/maps?q="+this.ticketService.experience.latitude+","+this.ticketService.experience.longitude+"&hl=es;z=14&amp&output=embed";
+          // let link = "https://maps.google.com?q="+this.ticketService.experience.latitude+","+this.ticketService.experience.longitude+"";
+          this.linkGoogleMap = this.sanitizer.bypassSecurityTrustResourceUrl(link);
+        }
+      
         if (this.itemDetail.overview.length >= 1e3) {
           let $ =this.itemDetail.overview.trim().substr(0, 1e3).split(" ");
           $.pop(),
@@ -96,6 +115,7 @@ export class TicketDetailPage {
         }
         else{
           this.overview=this.itemDetail.overview;
+          this.isseemore=true;
         }
         if (this.itemDetail.notes)
         if (this.itemDetail.notes.length >= 2610) {
@@ -110,6 +130,7 @@ export class TicketDetailPage {
         }
       
         this.experiencePackages = res.data.experiencePackages;
+        this.loaddeparturedone = true;
         // this.itemDetail.experienceImages = this.itemDetail.Image.split(', ');
         this.itemDetail.experienceImages.forEach(element => {
           if (element.imageLink.indexOf('http') == -1) {
@@ -117,6 +138,27 @@ export class TicketDetailPage {
           } else {
             this.listSlides.push({ ImageUrl: element.imageLink });
           }
+        });
+        // thêm giới thiệu
+        this.kkdayProductIntroDesc=res.data.kkdayProductIntroDesc;
+        // thêm địa điểm trải nghiệm
+        this.kkdayProductExpe=res.data.kkdayProductExpe;
+        this.kkdayProductExpe.forEach(element => {
+          element.isshow=false;
+          let link = "https://maps.google.com/maps?q="+element.latitude+","+element.longitude+"&hl=es;z=14&amp&output=embed";          element.linkGoogleMap = this.sanitizer.bypassSecurityTrustResourceUrl(link);
+        });
+        // thêm địa điểm đổi vé
+        this.kkdayExchanges=res.data.kkdayExchanges;
+        this.kkdayExchanges.forEach(element => {
+          element.isshow=false;
+          let link = "https://maps.google.com/maps?q="+element.latitude+","+element.longitude+"&hl=es;z=14&amp&output=embed";          element.linkGoogleMap = this.sanitizer.bypassSecurityTrustResourceUrl(link);
+        });
+        this.kkdayVenueLocations=res.data.kkdayVenueLocations;
+
+        this.kkdayVenueLocations.forEach(element => {
+          element.isshow=false;
+          let link = "https://maps.google.com/maps?q="+element.latitude+","+element.longitude+"&hl=es;z=14&amp&output=embed";
+          element.linkGoogleMap = this.sanitizer.bypassSecurityTrustResourceUrl(link);
         });
         let url = C.urls.baseUrl.urlTicket + '/api/Home/GetExperienceSameTopic/' + res.data.topic.id;
         let headers = {
@@ -129,11 +171,14 @@ export class TicketDetailPage {
           if (res.data) {
             for (let i = 0; i < 3; i++) {
               const element = res.data[i];
+                if(element.avgPoint && (element.avgPoint == 10  || element.avgPoint == 6  || element.avgPoint == 9  || element.avgPoint == 8  || element.avgPoint == 7)){
+                  element.avgPoint = element.avgPoint + ".0";
+                }
               this.itemSlide.push(element);
             }
           }
          
-          let url = C.urls.baseUrl.urlTicket + '/api/Detail/GetExperienceReviews?experienceCode=' + this.ticketService.itemTicketDetail.experienceId;
+          let url = C.urls.baseUrl.urlTicket + '/api/Detail/GetExperienceReviews?experienceCode=' + this.ticketService.itemTicketDetail.experienceId+'&pageSize=10&pageindex=1';
           let headers = {
           apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
           apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -141,12 +186,15 @@ export class TicketDetailPage {
          this.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'GetExperienceSameTopic').then((data) => {
           let res = JSON.parse(data);
           this.ticketReviews = res.data.reviews;
-
+          if (this.ticketReviews) {
+            this.ticketReviews =  this.ticketReviews.map((item) => {
+              return { ...item, reviewDateDisplay: moment(this.ticketReviews.reviewDate).format('DD-MM-YYYY') }
+            });
+          }
+     
         });
 
         });
-        this.loaddeparturedone = true;
-
       });
     
   }
@@ -163,13 +211,14 @@ export class TicketDetailPage {
         }
 
         goback() {
-          if(this.ticketService.backPage == 'hometicket'){
-            this.navCtrl.pop();
-            this.ticketService.backPage = '';
-          }else{
-            this.navCtrl.back();
-            this.ticketService.backPage = '';
-          }
+          // if(this.ticketService.backPage == 'hometicket'){
+       
+          //   this.ticketService.backPage = '';
+          // }else{
+          //   this.navCtrl.back();
+          //   this.ticketService.backPage = '';
+          // }
+          this.navCtrl.pop();
           
         }
 
@@ -225,53 +274,117 @@ export class TicketDetailPage {
     }
 
     public scrollFunction = (event: any) => {
-        try {
-          let elheader = document.getElementsByClassName('cls-tourdetail-header');
-          if (event.detail.currentY > 505) {
-            elheader[0].classList.add('float-arrow-enabled');
-            elheader[0].classList.remove('float-arrow-disabled');
-            if (elheader[1]) {
-              elheader[1].classList.add('float-arrow-enabled');
-              elheader[1].classList.remove('float-arrow-disabled');
-            }
+      try {
+        let elheader = document.getElementsByClassName('cls-tourdetail-header');
+        if (event.detail.currentY > 505) {
+          elheader[0].classList.add('float-arrow-enabled');
+          elheader[0].classList.remove('float-arrow-disabled');
+          if (elheader[1]) {
+            elheader[1].classList.add('float-arrow-enabled');
+            elheader[1].classList.remove('float-arrow-disabled');
           }
-          else {
-            elheader[0].classList.add('float-arrow-disabled');
-            elheader[0].classList.remove('float-arrow-enabled');
-            if (elheader[1]) {
-              elheader[1].classList.add('float-arrow-disabled');
-              elheader[1].classList.remove('float-arrow-enabled');
-            }
-          }
-          let  elfooter = document.getElementsByClassName('div-tourdetail-footer');
-          if (event.detail.currentY > 657 && event.detail.currentY < 1574) {
-            elfooter[0].classList.add('float-arrow-disabled');
-            elfooter[0].classList.remove('float-arrow-enabled');
-            if (elfooter[1]) {
-              elfooter[1].classList.add('float-arrow-disabled');
-              elfooter[1].classList.remove('float-arrow-enabled');
-            }
-          }
-          else {
-            elfooter[0].classList.add('float-arrow-enabled');
-            elfooter[0].classList.remove('float-arrow-disabled');
-            if (elfooter[1]) {
-              elfooter[1].classList.add('float-arrow-enabled');
-              elfooter[1].classList.remove('float-arrow-disabled');
-            }
-          }
-          // console.log(event.detail.currentY);
-        } catch (error) {
-          error.page = "hoteldetail";
-          error.func = "scrollFunction";
-          error.param = "";
-          C.writeErrorLog(error, null);
+          document.getElementById('header1').scrollIntoView({  block: 'center'  });
         }
-    
+        else {
+          elheader[0].classList.add('float-arrow-disabled');
+          elheader[0].classList.remove('float-arrow-enabled');
+          if (elheader[1]) {
+            elheader[1].classList.add('float-arrow-disabled');
+            elheader[1].classList.remove('float-arrow-enabled');
+          }
+        }
+
+        if ($('#content2') && $('#content2').length >0 && event.detail.currentY >= $('#content2')[0].offsetTop - 120) {
+          $($('.item-tour-header')[1]).siblings().removeClass('item-header-actived');
+          $($('.item-tour-header')[1]).addClass('item-header-actived');
+          document.getElementById('header2').scrollIntoView({  block: 'center'  });
+
+          if ($('#content3') && $('#content3').length >0&& event.detail.currentY >= $('#content3')[0].offsetTop - 120) {
+            $($('.item-tour-header')[2]).siblings().removeClass('item-header-actived');
+            $($('.item-tour-header')[2]).addClass('item-header-actived');
+            document.getElementById('header3').scrollIntoView({  block: 'center'  });
+          }else if ($('#content3') && $('#content3').length >0 && $('#content2').length >0 && event.detail.currentY < $('#content3')[0].offsetTop - 120 && event.detail.currentY > $('#content2')[0].offsetTop - 120){
+            $($('.item-tour-header')[1]).siblings().removeClass('item-header-actived');
+            $($('.item-tour-header')[1]).addClass('item-header-actived');
+            document.getElementById('header2').scrollIntoView({  block: 'center'  });
+          }
+
+            if ($('#content4') && $('#content4').length >0&& event.detail.currentY >= $('#content4')[0].offsetTop - 120) {
+              $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[4]).addClass('item-header-actived');
+              document.getElementById('header4').scrollIntoView({  block: 'center'  });
+            }else if ($('#content4') && $('#content4').length >0 && $('#content3').length >0 && event.detail.currentY < $('#content4')[0].offsetTop - 120 && event.detail.currentY > $('#content3')[0].offsetTop - 120){
+              $($('.item-tour-header')[2]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[2]).addClass('item-header-actived');
+              document.getElementById('header3').scrollIntoView({  block: 'center'  });
+            }
+  
+            if ($('#content5') && $('#content5').length >0&& event.detail.currentY >= $('#content5')[0].offsetTop - 120) {
+              $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[4]).addClass('item-header-actived');
+              document.getElementById('header5').scrollIntoView({  block: 'center'  });
+            }else if ($('#content5') && $('#content5').length >0 && $('#content4').length >0 && event.detail.currentY < $('#content5')[0].offsetTop - 120 && event.detail.currentY > $('#content4')[0].offsetTop - 120){
+              $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[3]).addClass('item-header-actived');
+              document.getElementById('header4').scrollIntoView({  block: 'center'  });
+            }
+  
+            if ($('#content6') && $('#content6').length >0&& event.detail.currentY >= $('#content6')[0].offsetTop - 120) {
+              $($('.item-tour-header')[5]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[5]).addClass('item-header-actived');
+              document.getElementById('header6').scrollIntoView({  block: 'center'  });
+            }else if ($('#content6') && $('#content6').length >0 && $('#content5').length >0&& event.detail.currentY < $('#content6')[0].offsetTop - 120 && event.detail.currentY > $('#content5')[0].offsetTop - 120){
+              $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[4]).addClass('item-header-actived');
+              document.getElementById('header5').scrollIntoView({  block: 'center'  });
+            }
+
+            if ($('#divReview') && $('#divReview').length >0&& event.detail.currentY >= $('#divReview')[0].offsetTop - 120) {
+              $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[3]).addClass('item-header-actived');
+              document.getElementById('header7').scrollIntoView({  block: 'center'  });
+            }
+            if ($('#divGT') && $('#divGT').length >0&& event.detail.currentY >= $('#divGT')[0].offsetTop - 120) {
+              $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+              $($('.item-tour-header')[3]).addClass('item-header-actived');
+              document.getElementById('headerGT').scrollIntoView({  block: 'center'  });
+            }
+            if ($('#divDDTN') && $('#divDDTN').length >0&& event.detail.currentY >= $('#divDDTN')[0].offsetTop - 120) {
+              if (this.kkdayProductIntroDesc) {
+                $($('.item-tour-header')[4]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[4]).addClass('item-header-actived');
+                document.getElementById('headerDDTN').scrollIntoView({  block: 'center'  });
+              }else{
+                $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+                $($('.item-tour-header')[3]).addClass('item-header-actived');
+                document.getElementById('headerDDTN').scrollIntoView({  block: 'center'  });
+              }
+            
+            }
+            // else if ($('#divDDTN') && $('#divDDTN').length >0&& event.detail.currentY < $('#divDDTN')[0].offsetTop - 120 && event.detail.currentY > $('#content6')[0].offsetTop - 120){
+            //   $($('.item-tour-header')[3]).siblings().removeClass('item-header-actived');
+            //   $($('.item-tour-header')[3]).addClass('item-header-actived');
+            //   document.getElementById('header6').scrollIntoView({  block: 'center'  });
+            // }
+
+        }else {
+          $($('.item-tour-header')[0]).siblings().removeClass('item-header-actived');
+          $($('.item-tour-header')[0]).addClass('item-header-actived');
+        }
+
+        
+
+      } catch (error) {
+        error.page = "hoteldetail";
+        error.func = "scrollFunction";
+        error.param = "";
+        C.writeErrorLog(error, null);
       }
+  
+    }
 
       changeItemHeader(index) {
-          var se = this;
+
           if(index) {
             $($('.item-tour-header')[index-1]).siblings().removeClass('item-header-actived');
             $($('.item-tour-header')[index-1]).addClass('item-header-actived');
@@ -447,7 +560,8 @@ export class TicketDetailPage {
      showTicketServices(itemService){
         if(itemService){
           this.ticketService.itemTicketService = itemService;
-          this.navCtrl.navigateForward('/ticketservice');
+          this.FindAvailableRateDateByExpeId(itemService);
+        
         }
      }
 
@@ -473,4 +587,82 @@ export class TicketDetailPage {
     seemorenotes(){
       this.isseemorenotes=true;
     }
+    openmap(){
+      this.ishowMap=!this.ishowMap;
+      if (this.ishowMap) {
+        this.presentLoadingRelated();
+      }
+     
     }
+    async presentLoadingRelated() {
+      var loader = await this.loadingCtrl.create({
+        message: "",
+        duration: 1000
+      });
+      loader.present();
+    }
+    async presentLoading() {
+      this.loader = await this.loadingCtrl.create({
+        message: ""
+      });
+      this.loader.present();
+    }
+    showdetail(item){
+      item.isshow=!item.isshow;
+      if (item.isshow) {
+        this.presentLoadingRelated();
+      }
+    }
+    FindAvailableRateDateByExpeId(itemService) {
+      this.gf.showLoading();
+      let obj = {
+        expeId: this.ticketService.itemTicketDetail.experienceId,
+      }
+      let headers =
+      {
+        'content-type': 'application/json'
+      }
+      this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/FindAvailableRateDateByExpeId', headers, obj, 'ticketservice', 'FindAvailableRateDateByExpeId').then((data: any) => {
+        if (data && data.success && data.data.length>0) {
+          this.objRate=data.data;
+        }
+        if (this.objRate) {
+          this.ticketService.itemTicketService.itemObjRate = {};
+          this.ticketService.itemTicketService.itemObjRate = this.objRate.find((el) => { return el.pkgId == itemService.id });
+          if ( this.ticketService.itemTicketService.itemObjRate.specs &&  this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+            this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
+              element.child =  element.child.map((item) => {
+                return { ...item, action: false}
+              });
+            });
+            
+          }
+     
+        }
+        this.GetCalendarBySkuId(itemService);
+      })
+  
+    }
+    GetCalendarBySkuId(itemService) {
+      let obj = {
+        expeId: this.ticketService.itemTicketDetail.experienceId,
+      }
+      let headers =
+      {
+        'content-type': 'application/json'
+      }
+      this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/GetCalendarBySkuId', headers, obj, 'ticketservice', 'FindAvailableRateDateByExpeId').then((data: any) => {
+
+        this.gf.hideLoading();
+        if (data && data.success && data.data.length>0) {
+          this.ticketService.itemTicketService.itemObjRateTime = {};
+          this.ticketService.itemTicketService.itemObjRateTime=data.data;
+        }
+        if (this.ticketService.itemTicketService.itemObjRateTime) {
+          this.ticketService.itemTicketService.itemObjRateTime = this.ticketService.itemTicketService.itemObjRateTime.find((el) => { return el.pkgId == itemService.id });
+        }
+        this.navCtrl.navigateForward('/ticketservice');
+      })
+  
+    }
+  }
