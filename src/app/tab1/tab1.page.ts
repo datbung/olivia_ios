@@ -3925,27 +3925,28 @@ export class Tab1Page implements OnInit {
     if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
       this._mytripservice.rootPage = "homeflight";
+      this.valueGlobal.activeTab=1;
       this.flightService.itemTabFlightFocus.emit(1);
-        if (document.querySelector(".tabbar")) {
-          document.querySelector(".tabbar")['style'].display = 'none';
-          if(document.querySelector(".tabbar")[1]){
-            document.querySelector(".tabbar")[0]['style'].display = 'none';
-            document.querySelector(".tabbar")[1]['style'].display = 'none';
-          }
-        }
-        if(document.getElementsByClassName("homefood-footer").length >0){
-          document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
-          if(document.getElementsByClassName("homefood-footer")[1]){
-            document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
-          }
-         }
+        // if (document.querySelector(".tabbar")) {
+        //   document.querySelector(".tabbar")['style'].display = 'none';
+        //   if(document.querySelector(".tabbar")[1]){
+        //     document.querySelector(".tabbar")[0]['style'].display = 'none';
+        //     document.querySelector(".tabbar")[1]['style'].display = 'none';
+        //   }
+        // }
+        // if(document.getElementsByClassName("homefood-footer").length >0){
+        //   document.getElementsByClassName("homefood-footer")[0]['style'].display ='none';
+        //   if(document.getElementsByClassName("homefood-footer")[1]){
+        //     document.getElementsByClassName("homefood-footer")[1]['style'].display ='none';
+        //   }
+        //  }
 
-         if(document.getElementsByClassName("homeflight-footer").length >0){
-          document.getElementsByClassName("homeflight-footer")[0]['style'].display ='block';
-          if(document.getElementsByClassName("homeflight-footer")[1]){
-            document.getElementsByClassName("homeflight-footer")[1]['style'].display ='block';
-          }
-         }
+        //  if(document.getElementsByClassName("homeflight-footer").length >0){
+        //   document.getElementsByClassName("homeflight-footer")[0]['style'].display ='block';
+        //   if(document.getElementsByClassName("homeflight-footer")[1]){
+        //     document.getElementsByClassName("homeflight-footer")[1]['style'].display ='block';
+        //   }
+        //  }
      
       //this.getAddress();
       

@@ -4022,24 +4022,28 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
           topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
         }
       }else if (this.ticketService.searchType == 2){
+        // var arrregion = [];
+        // arrregion.push(this.ticketService.itemShowList.id);
         body = {
           keyword: this.ticketService.inputText,
           searchType: this.ticketService.searchType,
           sortBy: 1,
-          regionFilters: this.ticketService.regionFilters,
-          typeFilters: this.ticketService.typeFilters,
+          // regionFilters: this.ticketService.regionFilters,
+          // typeFilters: this.ticketService.typeFilters,
           topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
-          regionId: this.ticketService.itemShowList.id
+          regionIds: this.ticketService.regionFilters
         }
       }else if (this.ticketService.searchType == 3){
+        // var arrTopic = [];
+        // arrTopic.push(this.ticketService.itemTicketTopic.topicId);
         body = {
           keyword: this.ticketService.inputText,
           searchType: this.ticketService.searchType,
           sortBy: 1,
           regionFilters: this.ticketService.regionFilters,
-          typeFilters: this.ticketService.typeFilters,
-          topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
-          topicId: this.ticketService.itemTicketTopic.topicId
+          // typeFilters: this.ticketService.typeFilters,
+          // topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
+          topicIds: this.ticketService.topicfilters
         }
       }
   
@@ -4047,32 +4051,32 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
         this.ticketService.slideData = [];
         if (data) {
           this.ticketService.slideData = data.data.listSearchData;
-          if (!this.ticketService.isFilter) {
+     
             this.ticketService.regionModels= data.data.regionModels;
             this.ticketService.topicModels= data.data.topicModels;
             this.ticketService.typeModels= data.data.typeModels;
-            if (this.ticketService.searchType == 2) {
-              // this.ticketService.regionModels =  this.ticketService.regionModels.map((item) => {
-              //   return { ...item, checked:true }
-              // });
-              this.ticketService.regionModels.forEach(element => {
-                if (element.childs.length > 0) {
-                  this.ticketService.regionModels[0].checked = true
-                  element.childs =  element.childs.map((item) => {
-                    return { ...item, checked:true }
-                  });
-                }
-              });
+            // if (this.ticketService.searchType == 2) {
+            //   // this.ticketService.regionModels =  this.ticketService.regionModels.map((item) => {
+            //   //   return { ...item, checked:true }
+            //   // });
+            //   this.ticketService.regionModels.forEach(element => {
+            //     if (element.childs.length > 0) {
+            //       this.ticketService.regionModels[0].checked = true
+            //       element.childs =  element.childs.map((item) => {
+            //         return { ...item, checked:true }
+            //       });
+            //     }
+            //   });
             
               
   
-            }
-            if (this.ticketService.searchType == 3) {
-              this.ticketService.topicModels =  this.ticketService.topicModels.map((item) => {
-                return { ...item, checked:true  }
-              });
-            }
-          }
+            // }
+            // if (this.ticketService.searchType == 3) {
+            //   this.ticketService.topicModels =  this.ticketService.topicModels.map((item) => {
+            //     return { ...item, checked:true  }
+            //   });
+            // }
+          
         
           for (let index = 0; index <  this.ticketService.slideData.length; index++) {
             const element =  this.ticketService.slideData[index];

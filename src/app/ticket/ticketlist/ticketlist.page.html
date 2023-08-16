@@ -50,10 +50,10 @@
             <div class="cls-row-viewtopsale" >
 
                 <div>
-                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice > slide.salePrice">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
+                  <div  class="cls-price-strike" *ngIf="slide.publicPrice && slide.publicPrice > slide.publicPriceRounded">{{ gf.convertNumberToString(slide.publicPrice) }}đ</div>
                   <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.PriceAdult > slide.priceDefault && slide.priceDefault == slide.AdultSalePrice">{{ gf.convertNumberToString(slide.PriceAdult) }}đ</div> -->
                   <!-- <div  class="cls-price-strike" *ngIf="slide.PriceAdult && slide.priceDefault && slide.priceDefault < slide.AdultSalePrice">{{ gf.convertNumberToString(slide.AdultSalePrice) }}đ</div> -->
-                  <div  class="text-price" *ngIf="slide.salePrice else noprice"><span class="text-giatu">Giá từ </span>{{ gf.convertNumberToString(slide.salePrice) }}đ</div>
+                  <div  class="text-price" *ngIf="slide.publicPriceRounded else noprice"><span class="text-giatu">Giá từ </span>{{ gf.convertNumberToString(slide.publicPriceRounded) }}đ</div>
                   <ng-template #noprice><div  class="text-noprice ">Hết chỗ</div> </ng-template>
                 </div>
                 

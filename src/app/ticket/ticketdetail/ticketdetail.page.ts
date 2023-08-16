@@ -560,7 +560,7 @@ export class TicketDetailPage {
      showTicketServices(itemService){
         if(itemService){
           this.ticketService.itemTicketService = itemService;
-          this.getRateDateByExpeId(itemService);
+          this.FindAvailableRateDateByExpeId(itemService);
         
         }
      }
@@ -613,7 +613,7 @@ export class TicketDetailPage {
         this.presentLoadingRelated();
       }
     }
-    getRateDateByExpeId(itemService) {
+    FindAvailableRateDateByExpeId(itemService) {
       this.gf.showLoading();
       let obj = {
         expeId: this.ticketService.itemTicketDetail.experienceId,
@@ -623,15 +623,13 @@ export class TicketDetailPage {
         'content-type': 'application/json'
       }
       this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/FindAvailableRateDateByExpeId', headers, obj, 'ticketservice', 'FindAvailableRateDateByExpeId').then((data: any) => {
-
-        this.gf.hideLoading();
         if (data && data.success && data.data.length>0) {
           this.objRate=data.data;
         }
         if (this.objRate) {
           this.ticketService.itemTicketService.itemObjRate = {};
           this.ticketService.itemTicketService.itemObjRate = this.objRate.find((el) => { return el.pkgId == itemService.id });
-          if ( this.ticketService.itemTicketService.itemObjRate.specs &&  this.ticketService.itemTicketService.itemObjRate.specs.length >0) {
+          if ( this.ticketService.itemTicketService.itemObjRate.specs &&  this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
             this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
               element.child =  element.child.map((item) => {
                 return { ...item, action: false}
@@ -640,6 +638,28 @@ export class TicketDetailPage {
             
           }
      
+        }
+        this.GetCalendarBySkuId(itemService);
+      })
+  
+    }
+    GetCalendarBySkuId(itemService) {
+      let obj = {
+        expeId: this.ticketService.itemTicketDetail.experienceId,
+      }
+      let headers =
+      {
+        'content-type': 'application/json'
+      }
+      this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/GetCalendarBySkuId', headers, obj, 'ticketservice', 'FindAvailableRateDateByExpeId').then((data: any) => {
+
+        this.gf.hideLoading();
+        if (data && data.success && data.data.length>0) {
+          this.ticketService.itemTicketService.itemObjRateTime = {};
+          this.ticketService.itemTicketService.itemObjRateTime=data.data;
+        }
+        if (this.ticketService.itemTicketService.itemObjRateTime) {
+          this.ticketService.itemTicketService.itemObjRateTime = this.ticketService.itemTicketService.itemObjRateTime.find((el) => { return el.pkgId == itemService.id });
         }
         this.navCtrl.navigateForward('/ticketservice');
       })

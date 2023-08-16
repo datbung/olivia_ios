@@ -54,7 +54,7 @@
                 {{item.dailydisplay}}
               </div> -->
             </div>
-            <div class="m-top-16" *ngIf="arrSkus && arrSkus.length>0 && !itemTicketService.itemObjRate.specs">
+            <div class="m-top-16" *ngIf="arrSkus && arrSkus.length>0 && (!itemTicketService.itemObjRate.specs || itemTicketService.itemObjRate.specs.length == 0)">
               <div *ngIf="arrSkus && arrSkus.length>1" class="text-label">
                 Chọn loại vé:
               </div>

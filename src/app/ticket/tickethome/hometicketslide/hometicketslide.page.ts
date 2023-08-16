@@ -19,6 +19,7 @@ export class HomeTicketSlidePage implements OnInit {
   @Input() type:any;
   slideData = [];
   slidePopular : any;
+  slidePopularVN: any;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -29,6 +30,7 @@ export class HomeTicketSlidePage implements OnInit {
     public searchhotel: SearchHotel,
     public ticketService: ticketService) {
       this.getAllExperiences();
+      this.getPopularLocationVN();
       this.getPopularLocation();
   }
 
@@ -70,9 +72,31 @@ export class HomeTicketSlidePage implements OnInit {
     })
   }
 
+  getPopularLocationVN() {
+    let se = this;
+    let url = C.urls.baseUrl.urlTicket+'/api/Home/GetRecommendDestination?position=2&vertical=4';
+    let headers = {
+      // apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+      // apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+    };
+    se.gf.RequestApi('GET', url, headers, null, 'hometicketitemslide', 'GetRecommendDestination').then((data) => {
+      let res = JSON.parse(data);
+      se.slidePopularVN = res.data;
+
+      if(se.slidePopularVN.vertical && se.slidePopularVN.vertical.avatarLink.indexOf('http') == -1){
+          se.slidePopularVN.vertical[0].avatarLink = 'https:'+se.slidePopularVN.vertical[0].avatarLink;
+      }
+
+      se.slidePopularVN.horizontals.forEach(slide => {
+        if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
+          slide.avatarLink = 'https:'+slide.avatarLink;
+        }
+      });
+    })
+  }
   getPopularLocation() {
     let se = this;
-    let url = C.urls.baseUrl.urlTicket+'/api/Home/GetRecommendDestination';
+    let url = C.urls.baseUrl.urlTicket+'/api/Home/GetRecommendDestination?position=3&vertical=3';
     let headers = {
       // apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
       // apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
@@ -90,10 +114,8 @@ export class HomeTicketSlidePage implements OnInit {
           slide.avatarLink = 'https:'+slide.avatarLink;
         }
       });
-      console.log(se.slidePopular);
     })
   }
-
   /**
    * Sự kiện loadmore khi scroll topdeal
    * @param event biến event
@@ -130,12 +152,13 @@ export class HomeTicketSlidePage implements OnInit {
       this.ticketService.typeFilters = [];
       this.ticketService.regionFilters = [];
       this.ticketService.topicfilters = [];
+      this.ticketService.topicfilters.push(item.topicId);
       this.ticketService.inputText = "";
       this.ticketService.itemSearchTicket.emit(0);
       this.navCtrl.navigateForward('/ticketlist/0');
     }
   }
-  showRegionList(item){
+  showRegionList(item,stt){
     if(item){
       this.ticketService.itemShowList = item;
       this.ticketService.searchType = 2;
@@ -144,7 +167,24 @@ export class HomeTicketSlidePage implements OnInit {
       this.ticketService.regionFilters = [];
       this.ticketService.topicfilters = [];
       this.ticketService.inputText = "";
-      this.navCtrl.navigateForward('/ticketlist/1');
+      if (stt==1) {
+        this.getdata();
+      }else{
+        this.ticketService.regionFilters.push(item.id);
+        this.navCtrl.navigateForward('/ticketlist/1');
+      }
     }
+  }
+  getdata() {
+    let url = C.urls.baseUrl.urlTicket + '/api/Category/GetInitsearchModel';
+    this.gf.RequestApi('GET', url, null, null, 'hometicketslide', 'GetInitsearchModel').then((data) => {
+      let res = JSON.parse(data);
+      var objregion = res.data.regions.filter(item => item.id === this.ticketService.itemShowList.id);
+      this.ticketService.regionFilters = [];
+      objregion[0].childs.forEach(element => {
+        this.ticketService.regionFilters.push(element.id);
+      });
+      this.navCtrl.navigateForward('/ticketlist/1');
+    })
   }
 }

@@ -84,11 +84,7 @@ export class TicketListPage implements OnInit {
       if (this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId) {
         // this.loadTicketList(this.ticketService.itemTicketTopic.topicId, 0);
         this.name = this.ticketService.itemTicketTopic.topicName
-        this.gf.SearchKeyword().then((data) => {
-          if (data) {
-            this.loaddatadone = true;
-          }
-        })
+      
       }
 
     } else {
@@ -98,12 +94,12 @@ export class TicketListPage implements OnInit {
       //   this.loadTicketList(this.ticketService.itemShowList.id, 1);
       // }
       this.name =  this.ticketService.itemShowList.name;
-      this.gf.SearchKeyword().then((data) => {
-        if (data) {
-          this.loaddatadone = true;
-        }
-      })
     }
+    this.gf.SearchKeyword().then((data) => {
+      if (data) {
+        this.loaddatadone = true;
+      }
+    })
 
 
   }

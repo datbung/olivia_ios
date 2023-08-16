@@ -30,13 +30,16 @@
     </div>
     <div class="div-line m-top-12 m-bottom-16"></div>
 
-    <div *ngIf="arrFilter && !(ticketService.searchType == 2 || ticketService.searchType == 3 || ticketService.inputText)">
+    <div *ngIf="arrFilter">
       <div class="text-title">Địa điểm</div>
+      <div>
+
+      </div>
       <div *ngFor="let item of arrFilter.regions" class="m-top-13">
         <div *ngIf="item.childs.length > 0">
           <div class="d-flex">
             <ion-checkbox class="cls-checkbox" mode='md' [checked]=item.checked (ionChange)="checkEvent($event,item,0)"></ion-checkbox>
-            <div class="m-left-4 text-normal">{{item.name}}</div>
+            <div class="m-left-4 text-normal">{{item.name}} <span *ngIf="item.quantity>0">({{item.quantity}})</span></div>
             <img class="img-updown" (click)="showmore(item)" *ngIf="!item.show" src="./assets/ic_ticket/icon_navigation_expand_more.svg"/>
             <img class="img-updown" (click)="showmore(item)" *ngIf="item.show" src="./assets/ic_ticket/collapse.svg"/>
           </div>
@@ -49,9 +52,21 @@
         </div>
       </div>
 
-      <div class="div-line m-top-21 m-bottom-16"></div>
+
+      <!-- <div class="div-line m-top-21 m-bottom-16"></div>
       <div class="text-title">Loại dịch vụ</div>
       <div *ngFor="let item of arrFilter.types" class="m-top-13">
+        <div class="d-flex">
+          <ion-checkbox class="cls-checkbox" mode='md' [checked]=item.checked (ionChange)="checkEvent($event,item,1)"></ion-checkbox>
+          <div class="m-left-4 text-normal">{{item.name}} <span *ngIf="item.quantity>0">({{item.quantity}})</span></div>
+
+        </div>
+      </div>
+       -->
+
+      <div class="div-line m-top-21 m-bottom-16"></div>
+      <div class="text-title">Chủ đề</div>
+      <div *ngFor="let item of arrFilter.topics" class="m-top-13">
         <div class="d-flex">
           <ion-checkbox class="cls-checkbox" mode='md' [checked]=item.checked (ionChange)="checkEvent($event,item,1)"></ion-checkbox>
           <div class="m-left-4 text-normal">{{item.name}} <span *ngIf="item.quantity>0">({{item.quantity}})</span></div>
@@ -59,20 +74,8 @@
           <img class="img-updown" src="./assets/ic_ticket/collapse.svg"/> -->
         </div>
       </div>
-      
-
-      <div class="div-line m-top-21 m-bottom-16"></div>
-      <div class="text-title">Chủ đề</div>
-      <div *ngFor="let item of arrFilter.topics" class="m-top-13">
-        <div class="d-flex">
-          <ion-checkbox class="cls-checkbox" mode='md' [checked]=item.checked (ionChange)="checkEvent($event,item,1)"></ion-checkbox>
-          <div class="m-left-4 text-normal">{{item.name}}</div>
-          <!-- <img class="img-updown" src="./assets/ic_ticket/icon_navigation_expand_more.svg"/>
-          <img class="img-updown" src="./assets/ic_ticket/collapse.svg"/> -->
-        </div>
-      </div>
     </div>
-
+<!-- 
     <div *ngIf="ticketService.searchType == 2 || ticketService.searchType == 3 || ticketService.inputText">
       <div class="text-title">Địa điểm</div>
       <div *ngFor="let item of ticketService.regionModels" class="m-top-13">
@@ -100,8 +103,6 @@
         <div class="d-flex">
           <ion-checkbox class="cls-checkbox" mode='md' [checked]=item.checked (ionChange)="checkEvent($event,item,1)"></ion-checkbox>
           <div class="m-left-4 text-normal">{{item.name}} <span *ngIf="item.quantity>0">({{item.quantity}})</span></div>
-          <!-- <img class="img-updown" src="./assets/ic_ticket/icon_navigation_expand_more.svg"/>
-          <img class="img-updown" src="./assets/ic_ticket/collapse.svg"/> -->
         </div>
       </div>
       
@@ -112,11 +113,9 @@
         <div class="d-flex">
           <ion-checkbox class="cls-checkbox" mode='md' [checked]=item.checked (ionChange)="checkEvent($event,item,1)"></ion-checkbox>
           <div class="m-left-4 text-normal">{{item.name}}</div>
-          <!-- <img class="img-updown" src="./assets/ic_ticket/icon_navigation_expand_more.svg"/>
-          <img class="img-updown" src="./assets/ic_ticket/collapse.svg"/> -->
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
 </ion-content>

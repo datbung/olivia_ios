@@ -59,6 +59,7 @@ export class TicketServicePage implements OnInit {
   ischeckbtn: boolean = false;
   specs:any={};
   objectLength: number = 0;
+  timeId: string = "";
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events: Events,
     public gf: GlobalFunction, public modalCtrl: ModalController, private pickerController: PickerController, private storage: Storage,
     public tourService: tourService,
@@ -158,15 +159,21 @@ export class TicketServicePage implements OnInit {
         {
           element.child[0].action=true;
           this.specs[element.id] = element.child[0].child_id;
+          if (i==0) {
+            this.timeId = element.child[0].child_id;
+          }else{
+            this.timeId = this.timeId+','+element.child[0].child_id
+          }
+      
         }
       }
+   
       this.objectLength = Object.keys(this.specs).length; 
       let arrSort= this.itemTicketService.itemObjRate.specs.find((el) => { return el.name == 'Điểm trả khách' || el.name == 'Điểm đón khách'});
       if (arrSort) {
         arrSort.child.sort(function(a, b){
           return a.child_name.length - b.child_name.length;
         });
-        console.log( arrSort.child);
         var foundIndex =  this.itemTicketService.itemObjRate.specs.findIndex(x => x.name == 'Điểm trả khách' || x.name == 'Điểm đón khách');
         this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSort.child;
       }
@@ -377,16 +384,31 @@ export class TicketServicePage implements OnInit {
             }
 
             let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
-            let objday = this.itemTicketService.itemObjRate.dailyRate.filter((f) => { return f.date == fromdate });
-            if (objday && objday.length > 0) {
-              let totalprice;
-              totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
-                if (elementday.children[0]) {
-                  $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                } 
-                // else {
-                //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                // }
+            if (!this.timeId) {
+              let objday = this.itemTicketService.itemObjRate.dailyRate.filter((f) => { return f.date == fromdate });
+              if (objday && objday.length > 0) {
+                let totalprice;
+                totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
+                  if (elementday.children[0]) {
+                    $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                  } 
+                  // else {
+                  //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                  // }
+              }
+            }
+            else{
+              let objday = this.itemTicketService.itemObjRateTime.skus[this.timeId].dailyRate;
+              if (objday && objday.length > 0) {
+                let totalprice;
+                totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
+                  if (elementday.children[0]) {
+                    $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                  } 
+                  // else {
+                  //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                  // }
+              }
             }
           }
          }
@@ -658,6 +680,25 @@ export class TicketServicePage implements OnInit {
     this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSpecs;
     this.specs[item.id] = itemc.child_id;
     this.objectLength = Object.keys(this.specs).length; 
+    this.timeId = "";
+    for (let i = 0; i < this.itemTicketService.itemObjRate.specs.length; i++) {
+      const element = this.itemTicketService.itemObjRate.specs[i];
+      if(element.child.length > 0)
+      {
+        for (let j = 0; j < element.child.length; j++) {
+          const elementC = element.child[j];
+          if (elementC.action == true) {
+            if (i==0) {
+              this.timeId = element.child[j].child_id;
+            }else{
+              this.timeId = this.timeId+','+element.child[j].child_id
+            }
+            break;
+          }
+        }
+      }
+    }
+ 
     this.subject.next(true);
   }
   RecheckRateBooking() {
@@ -728,6 +769,16 @@ export class TicketServicePage implements OnInit {
             this.arrSkus[this.indexSku].action = true;
             this.reCheckToken = this.arrSkus[this.indexSku].reCheckToken;
             this.itemTicketService.skus = this.arrSkus[this.indexSku];
+            if (this.timeId) {
+              if (this.itemTicketService.skus.allowAdult) {
+                this.timeId = this.timeId +','+'adult'
+              }
+            }
+            if (this.timeId) {
+              if (this.itemTicketService.skus.allowChild) {
+                this.timeId = this.timeId +','+'child'
+              }
+            }
             this.calculatePrice();
           }
         })
