@@ -84,10 +84,11 @@ export class FlightTopReviewPage {
         }
 
         showReviewList(slide){
-          if(slide && slide.replyMessage){
-            this._flightService.itemReview = slide;
-          }
-            this.navCtrl.navigateForward('/flighttopreviewlist');
+          // if(slide && slide.replyMessage){
+          //   this._flightService.itemReview = slide;
+          // }
+          this._flightService.itemReview = slide;
+          this.navCtrl.navigateForward('/flighttopreviewlist');
         }
 
         /**

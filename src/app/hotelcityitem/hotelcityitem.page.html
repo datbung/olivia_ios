@@ -24,7 +24,7 @@
                         <div class="div-hotel-point v-align-center m-top-2">
                             <div *ngIf="item.Point>0" class="view-row v-align-center">
                                 <div class="m-top-5">
-                                  <ion-badge class="cls-badge" ion-badge-border-radius>{{item.Point}}</ion-badge>
+                                  <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(item.Point)}}</ion-badge>
                                 </div>
                                 <div *ngIf="item.ReviewCount" class="text-reviews m-l-4">{{item.ReviewCount}} đánh giá</div>
                               </div>

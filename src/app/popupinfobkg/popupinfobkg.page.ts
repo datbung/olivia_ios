@@ -86,7 +86,7 @@ export class PopupinfobkgPage implements OnInit {
   }
   async closeModal()
   {
-    this.valueGlobal.notRefreshDetail = !this.changedate; 
+    this.valueGlobal.notRefreshDetail = true; 
     this.navCtrl.back();
   }
   closecalendar(){
@@ -298,8 +298,8 @@ export class PopupinfobkgPage implements OnInit {
             se.cin = moment(se.gf.getCinIsoDate(fromdate)).format('YYYY-MM-DD');
             se.cout = moment(se.gf.getCinIsoDate(todate)).format('YYYY-MM-DD');
             se.zone.run(() => {
-              se.searchhotel.CheckInDate = se.cin;
-              se.searchhotel.CheckOutDate = se.cout;
+              //se.searchhotel.CheckInDate = se.cin;
+              //se.searchhotel.CheckOutDate = se.cout;
               se.datecin = new Date(se.gf.getCinIsoDate(se.cin));
               se.datecout = new Date(se.gf.getCinIsoDate(se.cout));
               se.cindisplay = moment(se.datecin).format('DD-MM');
@@ -311,8 +311,8 @@ export class PopupinfobkgPage implements OnInit {
               se.bindlunar();
               se.getDayName(se.datecin, se.datecout);
             });
-            se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
-            se.storage.set('hasChangeDate', true);
+            //se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
+            //se.storage.set('hasChangeDate', true);
           }
         }
       }
@@ -326,8 +326,19 @@ export class PopupinfobkgPage implements OnInit {
   }
   search()
   {
+    this.searchhotel.CheckInDate = this.cin;
+    this.searchhotel.CheckOutDate = this.cout;
+    this.gf.setCacheSearchHotelInfo({checkInDate: this.searchhotel.CheckInDate, checkOutDate: this.searchhotel.CheckOutDate, adult: this.searchhotel.adult, child: this.searchhotel.child, childAge: this.searchhotel.arrchild, roomNumber: this.searchhotel.roomnumber});
+    this.storage.set('hasChangeDate', true);
+
     this.searchhotel.publicChangeInfoHotelList(1);
-    this.navCtrl.back();
+    if(this.searchhotel.changeInfoFromPage == 'hotellist'){
+      this.navCtrl.navigateBack('/hotellist/true');
+    }else {
+      this.valueGlobal.notRefreshDetail = false;
+      this.navCtrl.back();
+    }
+    
   }
   bindlunar() {
     var se = this;

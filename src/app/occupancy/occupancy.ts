@@ -75,19 +75,19 @@ export class OccupancyPage implements OnInit {
    
   }
   closeModal() {
-    this.searchhotel.adult=this.adults;
-    this.searchhotel.child=this.child;
-    this.searchhotel.roomnumber=this.room;
-    this.searchhotel.arrchild= this.arrchild;
+    // this.searchhotel.adult=this.adults;
+    // this.searchhotel.child=this.child;
+    // this.searchhotel.roomnumber=this.room;
+    // this.searchhotel.arrchild= this.arrchild;
 
-    for (let i = 0; i < this.arrchild.length; i++) {
-      const element = this.arrchild[i];
-      if(!element.numage)
-      {
-        alert('Vui lòng chọn tuổi trẻ em');
-        return;
-      }
-    }
+    // for (let i = 0; i < this.arrchild.length; i++) {
+    //   const element = this.arrchild[i];
+    //   if(!element.numage)
+    //   {
+    //     alert('Vui lòng chọn tuổi trẻ em');
+    //     return;
+    //   }
+    // }
     if(this.showpopupfromrequestcombo){
       this.gf.setParams(false,'requestcombo');
       this.modalCtrl.dismiss();
@@ -215,7 +215,7 @@ export class OccupancyPage implements OnInit {
       this.gf.setCacheSearchHotelInfo({checkInDate: this.searchhotel.CheckInDate, checkOutDate: this.searchhotel.CheckOutDate, adult: this.searchhotel.adult, child: this.searchhotel.child, childAge: this.searchhotel.arrchild, roomNumber: this.searchhotel.roomnumber});
       if(this.showpopupfromrequestcombo){
         this.gf.setParams(false, 'requestcombo');
-        this.modalCtrl.dismiss();
+        this.modalCtrl.dismiss(true);
       }else{
         this.navCtrl.back();
       }

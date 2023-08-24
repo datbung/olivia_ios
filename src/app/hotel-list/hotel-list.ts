@@ -69,6 +69,10 @@ export class HotelListPage implements OnInit{
   isLoaddata: boolean=false;
   isLoadPrice: boolean;
   _hotelListPrice: Observable<any>;
+  adult: number;
+  child: number;
+  arrchild: any=[];
+  roomnumber: number;
   
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
@@ -84,6 +88,10 @@ export class HotelListPage implements OnInit{
     if(this.searchhotel.isRecent==1){
       this.name =authService.region;
     }
+    this.adult=this.searchhotel.adult;
+    this.child=this.searchhotel.child;
+    this.arrchild= this.searchhotel.arrchild;
+    this.roomnumber= this.searchhotel.roomnumber;
     this.ischeckAL=this.searchhotel.ischeckAL;
     this.searchhotel.location="";
     this.searchhotel.hasSortHotelList =  this.searchhotel.chuoi  ||this.searchhotel.facsearch || this.searchhotel.tagIds || this.searchhotel.classIds || this.searchhotel.tagIds || this.searchhotel.ischeckAL; 
@@ -109,40 +117,55 @@ export class HotelListPage implements OnInit{
 
      se.searchhotel.getChangeInfoHotelList().subscribe((data)=>{
        if(data){
-        se.page=1;
-        var item: any ={};
-        item.adult=this.searchhotel.adult;
-        item.child=this.searchhotel.child;
-        item.arrchild= this.searchhotel.arrchild;
-        item.roomnumber= this.searchhotel.roomnumber;
-        item.imageUrl = this.searchhotel.objRecent.imageUrl;
-        var checkInDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
-        var checkOutDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
-        item.CheckInDate=this.searchhotel.CheckInDate
-        item.CheckOutDate=this.searchhotel.CheckOutDate;
-        item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
-        item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
-        item.id=this.searchhotel.objRecent.id;
-        item.name=this.searchhotel.objRecent.name;
-        item.isType=this.searchhotel.objRecent.isType;
-        this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
-        this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
-        this.cindisplayhr = moment(this.datecin).format('DD/MM');
-        this.coutdisplayhr = moment(this.datecout).format('DD/MM');
-        this.guest = this.searchhotel.child + this.searchhotel.adult;
-        this.gf.setCacheSearch(item,1);
-        let id = this.searchhotel.gbmsg ?  (this.searchhotel.gbmsg.regionId ? this.searchhotel.gbmsg.regionId : this.searchhotel.gbmsg.regionId) : this.authService.regionid;
-        if(this.searchhotel.isRecent==1){
-          id= this.authService.regionid;
-          this.name =this.authService.region;
-        }
-        let key = `hotellist_${id}_${this.searchhotel.adult}_${this.searchhotel.child}_${(this.searchhotel.roomnumber ? this.searchhotel.roomnumber : 1)}_${moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}_${moment(this.searchhotel.CheckOutDate).format('YYYY-MM-DD')}_${this.page}`;
-        if(this.searchhotel.keySearchHotelList && this.searchhotel.keySearchHotelList == key && this.json1 && this.json1.length >0){
-          this.ishide = true;
-          return;
-        }else{
-          se.doRefresh();
-        }
+        setTimeout(()=>{
+          se.zone.run(()=> {
+          
+            se.page=1;
+          se.ishide = false;
+          var item: any ={};
+          item.adult=this.searchhotel.adult;
+          item.child=this.searchhotel.child;
+          item.arrchild= this.searchhotel.arrchild;
+          item.roomnumber= this.searchhotel.roomnumber;
+          item.imageUrl = this.searchhotel.objRecent.imageUrl;
+          var checkInDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+          var checkOutDate=new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
+          item.CheckInDate=this.searchhotel.CheckInDate
+          item.CheckOutDate=this.searchhotel.CheckOutDate;
+          item.checkInDate=moment(checkInDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkInDate).format('MM') +', ' +moment(checkInDate).format('YYYY')
+          item.checkOutDate=moment(checkOutDate).format('DD')+ ' '+ 'tháng' + ' ' +  moment(checkOutDate).format('MM') +', ' +moment(checkOutDate).format('YYYY')
+          item.id=this.searchhotel.objRecent.id;
+          item.name=this.searchhotel.objRecent.name;
+          item.isType=this.searchhotel.objRecent.isType;
+          this.datecin = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckInDate));
+          this.datecout = new Date(this.gf.getCinIsoDate(this.searchhotel.CheckOutDate));
+          this.cindisplayhr = moment(this.datecin).format('DD/MM');
+          this.coutdisplayhr = moment(this.datecout).format('DD/MM');
+          this.guest = this.searchhotel.child + this.searchhotel.adult;
+          this.adult=this.searchhotel.adult;
+          this.child=this.searchhotel.child;
+          this.arrchild= this.searchhotel.arrchild;
+          this.roomnumber= this.searchhotel.roomnumber;
+          this.gf.setCacheSearch(item,1);
+          let id = this.searchhotel.gbmsg ?  (this.searchhotel.gbmsg.regionId ? this.searchhotel.gbmsg.regionId : this.searchhotel.gbmsg.regionId) : this.authService.regionid;
+          if(this.searchhotel.isRecent==1){
+            id= this.authService.regionid;
+            this.name =this.authService.region;
+          }
+          let key = `hotellist_${id}_${this.searchhotel.adult}_${this.searchhotel.child}_${(this.searchhotel.roomnumber ? this.searchhotel.roomnumber : 1)}_${moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}_${moment(this.searchhotel.CheckOutDate).format('YYYY-MM-DD')}_${this.page}`;
+          if(this.searchhotel.keySearchHotelList && this.searchhotel.keySearchHotelList == key && this.json1 && this.json1.length >0){
+            setTimeout(()=>{
+              this.ishide = true;
+            },1500)
+            
+            
+          }else{
+            se.doRefresh();
+          }
+            
+        })
+        },350)
+        
          
        }
      })
@@ -180,11 +203,10 @@ export class HotelListPage implements OnInit{
     let key = `hotellist_${id}_${this.searchhotel.adult}_${this.searchhotel.child}_${(this.searchhotel.roomnumber ? this.searchhotel.roomnumber : 1)}_${moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}_${moment(this.searchhotel.CheckOutDate).format('YYYY-MM-DD')}_${this.page}`;
     if(this.searchhotel.keySearchHotelList && this.searchhotel.keySearchHotelList == key && this.isLoaddata && this.json1 && this.json1.length >0){
       this.ishide = true;
-      return;
     }else{
       this.searchhotel.keySearchHotelList =`hotellist_${id}_${this.searchhotel.adult}_${this.searchhotel.child}_${(this.searchhotel.roomnumber ? this.searchhotel.roomnumber : 1)}_${moment(this.searchhotel.CheckInDate).format('YYYY-MM-DD')}_${moment(this.searchhotel.CheckOutDate).format('YYYY-MM-DD')}_${this.page}`;
-    }
-    var strurl = C.urls.baseUrl.urlGet + '/hotelslist?regionId=' + id + '&page=' + this.page + '&pageSize=60&version=2' + (this.memberid ? '&memberid='+this.memberid : '');
+
+      var strurl = C.urls.baseUrl.urlGet + '/hotelslist?regionId=' + id + '&page=' + this.page + '&pageSize=60&version=2' + (this.memberid ? '&memberid='+this.memberid : '');
     if (searchhotel.chuoi) {
       if (searchhotel.minprice) {
         this.minprice = searchhotel.minprice
@@ -370,6 +392,8 @@ export class HotelListPage implements OnInit{
     })
 
     se.gf.googleAnalytion(se.searchhotel.gbmsg ?  (se.searchhotel.gbmsg.regionCode ? se.searchhotel.gbmsg.regionCode : se.searchhotel.gbmsg.regionCode) : se.authService.regioncode,'screen_view',{})
+    }
+    
   }
   /**Hàm sort list khách sạn theo giá, điểm trung bình 
      * PDANH 23/01/2018
@@ -608,11 +632,14 @@ export class HotelListPage implements OnInit{
         if(se.page == 1){
           se.jsonhtprice = [];
           se.listHotelPrice=[];
+          
         } 
         
         se.jsonhtprice1 = data;
+        
         if (se.jsonhtprice1.HotelListResponse) {
           se.jsonhtprice1 = se.jsonhtprice1.HotelListResponse.HotelList.HotelSummary;
+          
           for (var i = 0; i < se.jsonhtprice1.length; i++) {
             let itemprice = se.jsonhtprice1[i];
             if (se.ischeckAL) {
@@ -635,17 +662,22 @@ export class HotelListPage implements OnInit{
 
          
           //Bind giá vào list ks đã search
+          
             se.fillDataPrice().then((data)=>{
-              if(se.json1 && se.json1.length > 0){
-                data.forEach((element,index) => {
-                  if(!se.checkExistsItemInArray(se.json1, element, '')){
-                   
-                    se.json1.push(element);
+              
+                
+                  if(se.page != 1){
+                    data.forEach((element,index) => {
+                      if(!se.checkExistsItemInArray(se.json1, element, '')){
+                      
+                        se.json1.push(element);
+                      }
+                    });
+                  }else{
+                      se.json1 = [];
+                      se.json1 = data;
                   }
-                });
-              }else{
-                se.json1 = data;
-              }
+              
               
               //Check lại phòng có giá hay ko
               setTimeout(() => {
@@ -671,9 +703,12 @@ export class HotelListPage implements OnInit{
                     }
                   })
                 })
+                //setTimeout(()=>{
                   se.ishide = true;
                   se.loadpricedone = true;
+                  
                   se.nodata = se.json1.length == 0;
+                //},500)
                 if(se.json1.length >0 && se.json1.length < 6 && se.page * 5 < se.totalData && se.page <=3){
                   se.page += 1;
                   se.loaddata(se.authService, se.searchhotel, false);
@@ -798,8 +833,6 @@ export class HotelListPage implements OnInit{
             //if(se.json1[index].HasCheckPrice) continue;
             se.json1[index].HasCheckPrice = true;
             for (let i = 0; i < se.listHotelPrice.length; i++) {
-              //Chỉ bind lại giá cho hotel, combo bỏ qua
-              //pdanh 08-08-2023: bind cả giá phòng combo
                 if (se.json1[index] && se.json1[index].HotelId == se.listHotelPrice[i].GroupId) {
                   se.json1[index].MinPriceOTAStr = se.listHotelPrice[i].MinPriceTAStr || se.listHotelPrice[i].MinPriceOTAStr;
                   se.json1[index].MinPriceTAStr = se.listHotelPrice[i].MinPriceTAStr;
@@ -903,6 +936,7 @@ export class HotelListPage implements OnInit{
               se.zone.run(() => {
                 se.dataListLike = JSON.parse(body);
                 se.executePushData().then(()=>{
+                
                   se.getHotelprice(isloadmore);
                 })
               });
@@ -997,16 +1031,16 @@ export class HotelListPage implements OnInit{
         if (se.dataList[index].DealType) {
   
           if (se.dataList[index].Address) {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice ? se.dataList[index].DealPrice : se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page };
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, AvgPointDisplay: se.gf.convertNumberFormat(se.dataList[index].Point), DealPrice: se.dataList[index].DealPrice ? se.dataList[index].DealPrice : se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page };
           } else {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, DealPrice: se.dataList[index].DealPrice? se.dataList[index].DealPrice: se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, AvgPointDisplay: se.gf.convertNumberFormat(se.dataList[index].Point), DealPrice: se.dataList[index].DealPrice? se.dataList[index].DealPrice: se.dataList[index].DealPrice, DealType: se.dataList[index].DealType, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
           }
         }
         else {
           if (se.dataList[index].Address) {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, AvgPointDisplay: se.gf.convertNumberFormat(se.dataList[index].Point), SubLocation: se.dataList[index].Address, Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
           } else {
-            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
+            item = { Avatar: se.dataList[index].Avatar, Name: se.dataList[index].HotelName, AvgPoint: se.dataList[index].Point, AvgPointDisplay: se.gf.convertNumberFormat(se.dataList[index].Point), SubLocation: '', Rating: se.dataList[index].Rating, HotelId: se.dataList[index].HotelId, RoomNameSubString: "", MinPriceOTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", PromotionDescriptionSubstring: "", MinPriceTAStr: se.dataList[index].MinPrice ? se.dataList[index].MinPrice.toLocaleString().replace("VND", "").trim() : "", Liked: itemlike,HasCheckPrice: false ,StyleTag: se.dataList[index].StyleTag,Facilities: se.dataList[index].Facilities, IsShowPrice: se.dataList[index].IsShowPrice, currentPage: se.page};
           }
         }
         if(item.AvgPoint == "10.0"){
@@ -1029,7 +1063,7 @@ export class HotelListPage implements OnInit{
         }
         })
         //setTimeout(() => {
-          se.ishide = true;
+          //se.ishide = true;
         //},200);
       //se.ishide = true;
       return resolve(se.json1);
@@ -1088,6 +1122,10 @@ export class HotelListPage implements OnInit{
       //this.router.navigateByUrl('/hoteldetail/'+id);
       setTimeout(()=>{
         //this.router.navigateByUrl('/app/tabs/hoteldetail/'+id);
+          this.searchhotel.adult = this.adult;
+          this.searchhotel.child = this.child;
+          this.searchhotel.arrchild = this.arrchild;
+          this.searchhotel.roomnumber = this.roomnumber;
         this.navCtrl.navigateForward('/hoteldetail/'+  msg.HotelId);
       },10)
       
@@ -1592,11 +1630,19 @@ export class HotelListPage implements OnInit{
     this.valueGlobal.notSuggestDaily=[];
     this.valueGlobal.notSuggestDailyCB=[];
     this.contentHotelList.scrollToTop(300);
+    //this.searchhotel.CheckInDate = this.cin;
+    //this.searchhotel.CheckOutDate = this.cout;
+    this.searchhotel.adult = this.adult;
+    this.searchhotel.child = this.child;
+    this.searchhotel.arrchild = this.arrchild;
+    this.searchhotel.roomnumber = this.roomnumber;
     this.navCtrl.navigateForward('/popupinfobkg');
   }
 
   doRefresh(){
-    this.loadpricedone = false;
+    this.zone.run(()=>{
+      this.loadpricedone = false;
+      this.ishide = false;
       this.nodata = false;
       this.json1 = [];
       this.dataList = [];
@@ -1605,6 +1651,9 @@ export class HotelListPage implements OnInit{
       this.searchhotel.ischeckAL=false;
       this.ischeckAL=false;
       this.loaddata(this.authService,this.searchhotel,1);//tạm gán chung refresh với loadmore
+    })
+   
+      
   }
 
   loadUserDataLike() {

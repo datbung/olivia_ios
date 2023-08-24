@@ -84,6 +84,9 @@ export class HotelCityItemDetailPage implements OnInit {
     if(item){
        
       se.itemdetail = item;
+      if(se.itemdetail && se.itemdetail.AvgPoint){
+        se.itemdetail.AvgPointDisplay = se.gf.convertNumberFormat(se.itemdetail.AvgPoint);
+      }
       if (item.HotelImages.length > 0 && (!se.slideData || se.slideData.length == 0)) {
         se.slideData = item.HotelImages;
         for (let index = 0; index < se.slideData.length; index++) {

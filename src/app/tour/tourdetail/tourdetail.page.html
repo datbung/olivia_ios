@@ -62,7 +62,7 @@
             
                 <div class="div-badge m-top-8 d-flex" >
                     <div class="div-h-28 width-50 d-flex" *ngIf="AvgPoint">
-                        <div class="text-point p-right-8">{{AvgPoint}}</div>
+                        <div class="text-point p-right-8">{{gf.convertNumberFormat(AvgPoint)}}</div>
                         <div class="text-point-des" *ngIf="AvgPoint>9 && AvgPoint <=10">Xuất sắc</div>
                         <div class="text-point-des" *ngIf="AvgPoint>8 && AvgPoint <=9">Rất tốt</div>
                         <div class="text-point-des" *ngIf="AvgPoint>7 && AvgPoint <=8">Khá tốt</div>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="width-50">
                         <div class="d-flex d-flex-end" *ngIf="totalReview >0" (click)="scrollToTopGroupReview(1)">
-                            <div class="text-comment p-right-24">{{totalReview}} đánh giá</div>
+                            <div class="text-comment p-right-24">{{gf.convertNumberToString(totalReview)}} đánh giá</div>
                             <div class="div-icon-comment"><ion-icon class="icon-comment" name="ios-arrow-round-forward"></ion-icon></div>
                         </div>
                     </div>
@@ -266,14 +266,14 @@
                     <div class="text-headline" >Đánh giá của khách hàng</div>
         
                     <div class="d-flex div-avg-point" >
-                        <div class="div-btn-point f-20">{{AvgPoint}}</div>
+                        <div class="div-btn-point f-20">{{gf.convertNumberFormat(AvgPoint)}}</div>
                         <div class="div-text-point width-100">
                             <div class="text-comment" *ngIf="AvgPoint>9 && AvgPoint <=10">Tuyệt vời</div>
                             <div class="text-comment" *ngIf="AvgPoint>8 && AvgPoint <=9">Rất tốt</div>
                             <div class="text-comment" *ngIf="AvgPoint>7 && AvgPoint <=8">Khá tốt</div>
                             <div class="text-comment" *ngIf="AvgPoint>6 && AvgPoint <=7">Tạm được</div>
                             <div class="text-comment" *ngIf="AvgPoint>5 && AvgPoint <=6">Không tốt</div>
-                            <div class="text-total-comment">{{totalReview}} đánh giá</div>
+                            <div class="text-total-comment">{{gf.convertNumberToString(totalReview)}} đánh giá</div>
                         </div>
                     </div>
         
@@ -283,7 +283,7 @@
                         <div *ngFor="let review of tourReviews; let idxreview = index" [ngClass]="idxreview >=5 ? 'div-item-review div-collapse' : 'div-item-review'">
                             <div class="d-flex">
                                 <div class="width-50 d-flex h-22">
-                                    <div class="div-btn-point f-14">{{review.ReviewPoint}}</div>
+                                    <div class="div-btn-point f-14">{{gf.convertNumberFormat(review.ReviewPoint)}}</div>
                                     <div class="text-comment-sub v-align-center width-100" *ngIf="review.ReviewPoint>9 && review.ReviewPoint <=10">Xuất sắc</div>
                                     <div class="text-comment-sub v-align-center width-100" *ngIf="review.ReviewPoint>8 && review.ReviewPoint <=9">Rất tốt</div>
                                     <div class="text-comment-sub v-align-center width-100" *ngIf="review.ReviewPoint>7 && review.ReviewPoint <=8">Khá tốt</div>
@@ -356,13 +356,13 @@
     
                                         <div class="d-flex m-top-8" *ngIf="slide.AvgPoint else noAvgPoint">
                                             <div class="div-badge">
-                                                <div class="text-point">{{slide.AvgPoint}}</div>
+                                                <div class="text-point">{{gf.convertNumberFormat(slide.AvgPoint)}}</div>
                                                 <div class="text-point-des" *ngIf="slide.AvgPoint>9 && slide.AvgPoint <=10">Xuất sắc</div>
                                                 <div class="text-point-des" *ngIf="slide.AvgPoint>8 && slide.AvgPoint <=9">Rất tốt</div>
                                                 <div class="text-point-des" *ngIf="slide.AvgPoint>7 && slide.AvgPoint <=8">Khá tốt</div>
                                                 <div class="text-point-des" *ngIf="slide.AvgPoint>6 && slide.AvgPoint <=7">Tạm được</div>
                                                 <div class="text-point-des" *ngIf="slide.AvgPoint>5 && slide.AvgPoint <=6">Không tốt</div>
-                                                <div  *ngIf="slide.NumOfReview"> | <span class="text-comment">{{slide.NumOfReview}} đánh giá</span></div>
+                                                <div  *ngIf="slide.NumOfReview"> | <span class="text-comment">{{gf.convertNumberToString(slide.NumOfReview)}} đánh giá</span></div>
                                             </div>
                                         </div>
                                         <!-- <ng-template #noAvgPoint>

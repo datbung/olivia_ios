@@ -2712,7 +2712,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
         scrollToDivReview(){
           
           setTimeout(()=> {
-            document.getElementById('divReviews').scrollIntoView({  block: 'center', inline: 'nearest', behavior: 'smooth' });
+            document.getElementById('divReviews').scrollIntoView({  block: "end", behavior: 'smooth' });
           },300)
         }
 

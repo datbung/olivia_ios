@@ -16,23 +16,21 @@
 
 <ion-content >
   <div class="p-all-16">
-    <form [formGroup]="forgotpassData">
+   
+   <form [formGroup]="forgotpassData">
             <div class="m-top-8">
               <ion-item style="--padding-start: 0px" >
                 <ion-label class="text-normal" position="stacked">Số điện thoại hoặc email</ion-label>
                 <ion-input class="cls-inputmail" [(ngModel)]="phoneoremail" formControlName="phoneoremail"></ion-input>
               </ion-item>
             </div>
+        </form>
             <!-- <div class="m-top-24">
-              <re-captcha
-              formControlName="captcha"
-              [(ngModel)]="captcha"
-              data-sitekey="6Lc3sw0nAAAAAFkU4Vy-i9hMcjX3p1yVMaWiH0x8"
-              ></re-captcha>
+              <re-captcha (resolved)="resolved($event)"></re-captcha>
             </div> -->
             <div class="m-top-16 text-normal">Vui lòng nhập số điện thoại hoặc Email Quý khách đã đăng ký với iVIVU</div>
-      <div class="m-top-16"><button ion-button round outline [ngClass]="forgotpassData.invalid ? 'button btn-save-phone cls-invalid' : 'button btn-save-phone' " [disabled]="forgotpassData.invalid" (click)="next()">Kích hoạt lại mật khẩu</button></div>
-    </form>
+      <div class="m-top-16"><button ion-button round outline [ngClass]="(!forgotpassData.valid)  ? 'button btn-save-phone cls-invalid' : 'button btn-save-phone' " [disabled]="!forgotpassData.valid" (click)="next()">Kích hoạt lại mật khẩu</button></div>
+    
   </div>
 
 </ion-content>

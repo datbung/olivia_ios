@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup,Validators } from '@angular/forms';
 import { AuthService } from './../providers/auth-service';
 import { ToastController } from '@ionic/angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
+//import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Storage } from '@ionic/storage';
 import { C } from './../providers/constants';
 import * as request from 'requestretry';
@@ -47,7 +47,8 @@ export class LoginPage implements OnInit{
     private modalCtrl: ModalController,
     public _IDFAService: IDFAService,
     public formBuilder: FormBuilder,
-    private zone: NgZone) {
+    private zone: NgZone,
+    ) {
     //google analytic
     this.storage.get('checkreview').then(checkreview => {
       this.checkreview=checkreview;
@@ -455,11 +456,10 @@ export class LoginPage implements OnInit{
     return re.test(String(email).toLowerCase());
   }
   logingg() {
-    //this.userData = { btn: ['2'] }
-    
-    //google analytic
-    this.navCtrl.navigateForward('/blank');
-    this.gf.googleAnalytion('login', 'logingoogle', '');
+  //  this._googlePlus.login(
+  //   {'reversedClientId': 'com.googleusercontent.apps.936105820400-6hh4r5l1qgvkjkua746j4c2ceaag91t4', 
+  //   'offline': true},
+  //  ).then(value => console.log(value));
   }
   logout() {
     this.fb.logout()

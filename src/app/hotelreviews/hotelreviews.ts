@@ -33,6 +33,7 @@ export class HotelReviewsPage implements OnInit{
   reviewsk= [1,2,3,4,5];
   loaddatadone = false;
   fromhotel: boolean = true;
+  AvgPointDisplay: any;
   constructor(public platform: Platform,public navCtrl: NavController,public gf: GlobalFunction,private activatedRoute: ActivatedRoute,public zone: NgZone, public searchhotel: SearchHotel, public modalCtrl: ModalController,
     private storage: Storage) {
     this.HotelID = this.activatedRoute.snapshot.paramMap.get('id');
@@ -67,8 +68,9 @@ export class HotelReviewsPage implements OnInit{
               }
               this.numHotelReviews = data.NumOfReview;
               this.AvgPoint = data.AvgPoint;
+              this.AvgPointDisplay = data.AvgPoint ? data.AvgPoint.toString().replace('.',',') : '';
               if(this.AvgPoint.toString().length == 1){
-                this.AvgPoint = this.AvgPoint + ".0";
+                this.AvgPointDisplay =  this.AvgPoint + ",0";
               }
               this.sortdate();
           })

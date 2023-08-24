@@ -8,10 +8,13 @@ import { IonicModule } from '@ionic/angular';
 import { ForgotpassPage } from './forgotpass.page';
 
 
-// import {
-//   RecaptchaModule,
-//   RecaptchaFormsModule,
-// } from 'ng-recaptcha';
+import {
+  RecaptchaModule,
+  RECAPTCHA_SETTINGS,
+  RecaptchaSettings,
+  RecaptchaFormsModule,
+  //RecaptchaComponent,
+} from 'ng-recaptcha';
 
 const routes: Routes = [
   {
@@ -27,11 +30,19 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    //RecaptchaModule,
-   // RecaptchaFormsModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ForgotpassPage],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  providers: [
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: '6Lfy_gAnAAAAAK1jziFGhO6qF9irAG6b-lYsa27h',
+      } as RecaptchaSettings,
+    },
+  ],
 })
 export class ForgotpassPageModule {}

@@ -87,12 +87,12 @@
       <div class="hotel-detail-note">
         <ion-row *ngIf="AvgPoint>9 && AvgPoint<=10 && numHotelReviews >0" class="cls-row-review" >
           <ion-col style="padding:0px">
-            <ion-badge ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+            <ion-badge ion-badge-border-radius>{{AvgPointDisplay}}</ion-badge>
             <p class="cls-reviewpoint label-badge"  >Tuyệt vời
             </p>
             <ion-note item-end style="margin-right: -15px;margin-top: 0;" (click)="btnseemore()">
               <button  ion-button icon-only clear class="btn-review">
-                {{numHotelReviews}} Đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} Đánh giá
                 <ion-icon style="right: -4px;position: absolute;top: -1px;font-size: 24px;" name="ios-arrow-round-forward"></ion-icon>
               </button>
             </ion-note>
@@ -100,12 +100,12 @@
         </ion-row>
         <ion-row *ngIf="AvgPoint>8 && AvgPoint<=9 && numHotelReviews >0" >
           <ion-col style="padding:0px">
-            <ion-badge ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+            <ion-badge ion-badge-border-radius>{{AvgPointDisplay}}</ion-badge>
             <p class="cls-reviewpoint label-badge" >Rất tốt
             </p>
             <ion-note item-end style="margin-right: -15px;margin-top: 0;" (click)="btnseemore()">
               <button  ion-button icon-only clear class="btn-review">
-                {{numHotelReviews}} Đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} Đánh giá
                 <ion-icon style="right: -4px;position: absolute;top: -1px;font-size: 24px;" name="ios-arrow-round-forward"></ion-icon>
               </button>
             </ion-note>
@@ -113,12 +113,12 @@
         </ion-row>
         <ion-row *ngIf="AvgPoint>7 && AvgPoint<=8 && numHotelReviews >0" >
           <ion-col style="padding:0px">
-            <ion-badge ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+            <ion-badge ion-badge-border-radius>{{AvgPointDisplay}}</ion-badge>
             <p class="cls-reviewpoint label-badge" >Khá tốt
             </p>
             <ion-note item-end style="margin-right: -15px;margin-top: 0;" (click)="btnseemore()">
               <button  ion-button icon-only clear class="btn-review">
-                {{numHotelReviews}} Đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} Đánh giá
                 <ion-icon style="right: -4px;position: absolute;top: -1px;font-size: 24px;" name="ios-arrow-round-forward"></ion-icon>
               </button>
             </ion-note>
@@ -126,12 +126,12 @@
         </ion-row>
         <ion-row *ngIf="AvgPoint>5 && AvgPoint<=7 && numHotelReviews >0" >
           <ion-col style="padding:0px">
-            <ion-badge ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+            <ion-badge ion-badge-border-radius>{{AvgPointDisplay}}</ion-badge>
             <p class="cls-reviewpoint label-badge" >Tạm được
             </p>
             <ion-note item-end style="margin-right: -15px;margin-top: 0;" (click)="btnseemore()">
               <button  ion-button icon-only clear class="btn-review">
-                {{numHotelReviews}} Đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} Đánh giá
                 <ion-icon style="right: -4px;position: absolute;top: -1px;font-size: 24px;" name="ios-arrow-round-forward"></ion-icon>
               </button>
             </ion-note>
@@ -139,12 +139,12 @@
         </ion-row>
         <ion-row *ngIf="AvgPoint<=5 && numHotelReviews >0" >
           <ion-col style="padding:0px">
-            <ion-badge ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+            <ion-badge ion-badge-border-radius>{{AvgPointDisplay}}</ion-badge>
             <p class="cls-reviewpoint label-badge" >Không tốt
             </p>
             <ion-note item-end style="margin-right: -15px;margin-top: 0;" (click)="btnseemore()">
               <button  ion-button icon-only clear class="btn-review">
-                {{numHotelReviews}} Đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} Đánh giá
                 <ion-icon style="right: -4px;position: absolute;top: -1px;font-size: 24px;" name="ios-arrow-round-forward"></ion-icon>
               </button>
             </ion-note>
@@ -1028,48 +1028,48 @@
         Đánh giá của khách hàng
       </label>
       <div class="div-review lh-normal"  *ngIf="AvgPoint>9 && AvgPoint<=10 && numHotelReviews >0">
-        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{gf.convertNumberFormat(AvgPoint)}}</ion-badge>
         <div class="cls-ml6">
             <div  class="text-point">Tuyệt vời</div>
             <div class="num-review">
-                {{numHotelReviews}} đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} đánh giá
             </div>
         </div>
       </div>
       
       <div class="div-review lh-normal"  *ngIf="AvgPoint>8 && AvgPoint<=9 && numHotelReviews >0">
-        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{gf.convertNumberFormat(AvgPoint)}}</ion-badge>
         <div class="cls-ml6">
             <div  class="text-point">Rất tốt</div>
             <div class="num-review">
-                {{numHotelReviews}} đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} đánh giá
             </div>
         </div>
       </div>
       <div class="div-review lh-normal"  *ngIf="AvgPoint>7 && AvgPoint<=8 && numHotelReviews >0">
-        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{gf.convertNumberFormat(AvgPoint)}}</ion-badge>
         <div class="cls-ml6">
             <div  class="text-point">Khá tốt</div>
             <div class="num-review">
-                {{numHotelReviews}} đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} đánh giá
             </div>
         </div>
       </div>
       <div class="div-review lh-normal"  *ngIf="AvgPoint>5 && AvgPoint<=7 && numHotelReviews >0">
-        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{gf.convertNumberFormat(AvgPoint)}}</ion-badge>
         <div class="cls-ml6">
             <div  class="text-point">Tạm được</div>
             <div class="num-review">
-                {{numHotelReviews}} đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} đánh giá
             </div>
         </div>
       </div>
       <div class="div-review lh-normal"  *ngIf="AvgPoint<=5 && numHotelReviews >0">
-        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{AvgPoint}}</ion-badge>
+        <ion-badge class="cls-ionbadge" ion-badge-border-radius>{{gf.convertNumberFormat(AvgPoint)}}</ion-badge>
         <div class="cls-ml">
             <div  class="text-point">Không tốt</div>
             <div class="num-review">
-                {{numHotelReviews}} đánh giá
+                {{gf.convertNumberToString(numHotelReviews)}} đánh giá
             </div>
         </div>
       </div>
@@ -1093,34 +1093,34 @@
       <div [ngClass]=" idx ==0 ? 'div-hotelreview mt16' : 'div-hotelreview mt25'"  *ngFor="let msg of arrHotelReviews; let idx = index">
         <div *ngIf="msg.ReviewPoint>9 && msg.ReviewPoint<=10 && numHotelReviews >0" class="pos-relative">
           <div class="div-review">
-            <ion-badge class="cls-ionbadgerw" ion-badge-border-radius>{{msg.ReviewPoint}}</ion-badge>
+            <ion-badge class="cls-ionbadgerw" ion-badge-border-radius>{{gf.convertNumberFormat(msg.ReviewPoint)}}</ion-badge>
             <div class="cls-ml8">Tuyệt vời
             </div>
           </div>
           <div *ngIf="msg.ReviewPoint>8 && msg.ReviewPoint<=9 && numHotelReviews >0">
             <div class="div-review">
-              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.ReviewPoint}}</ion-badge>
+              <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.ReviewPoint)}}</ion-badge>
               <div class="cls-ml8">Rất tốt
               </div>
             </div>
           </div>
           <div *ngIf="msg.ReviewPoint>7 && msg.ReviewPoint<=8 && numHotelReviews >0">
             <div class="div-review">
-              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.ReviewPoint}}</ion-badge>
+              <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.ReviewPoint)}}</ion-badge>
               <div class="cls-ml8">Khá tốt
               </div>
             </div>
           </div>
           <div *ngIf="msg.ReviewPoint>5 && msg.ReviewPoint<=7 && numHotelReviews >0">
             <div class="div-review">
-              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.ReviewPoint}}</ion-badge>
+              <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.ReviewPoint)}}</ion-badge>
               <div class="cls-ml8">Tạm được
               </div>
             </div>
           </div>
           <div *ngIf="msg.ReviewPoint<=5 && numHotelReviews >0">
             <div class="div-review">
-              <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.ReviewPoint}}</ion-badge>
+              <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.ReviewPoint)}}</ion-badge>
               <div class="cls-ml8">Không tốt
               </div>
             </div>
@@ -1149,7 +1149,7 @@
       <!-- <hr *ngIf="numHotelReviews>3" style="margin-top: 0px; margin-left: 16px;"> -->
     </div>
     <div *ngIf="numHotelReviews>3" align="center" class="div-seedetail">
-      <button ion-button clear class="text-seedetails" (click)="btnseemore()">Xem {{numHotelReviews}} đánh giá <img src="./assets/imgs/vector.svg"></button>
+      <button ion-button clear class="text-seedetails" (click)="btnseemore()">Xem {{gf.convertNumberToString(numHotelReviews)}} đánh giá <img src="./assets/imgs/vector.svg"></button>
     </div>
     <div class="div-split"></div>
 
@@ -1187,27 +1187,27 @@
                       </p>
                       <div *ngIf="msg.AvgPoint>0">
                         <ion-row *ngIf="msg.AvgPoint>9 && msg.AvgPoint<=10" class="m-top-5">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.AvgPoint)}}</ion-badge>
                           <p class="label-badge">Tuyệt vời
                           </p>
                         </ion-row>
                         <ion-row *ngIf="msg.AvgPoint>8 && msg.AvgPoint<=9" class="m-top-5">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.AvgPoint)}}</ion-badge>
                           <p class="label-badge">Rất tốt
                           </p>
                         </ion-row>
                         <ion-row *ngIf="msg.AvgPoint>7 && msg.AvgPoint<=8" class="m-top-5">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.AvgPoint)}}</ion-badge>
                           <p class="label-badge">Khá tốt
                           </p>
                         </ion-row>
                         <ion-row *ngIf="msg.AvgPoint>5 && msg.AvgPoint<=7" class="m-top-5">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.AvgPoint)}}</ion-badge>
                           <p class="label-badge">Tạm được
                           </p>
                         </ion-row>
                         <ion-row *ngIf="msg.AvgPoint<=5" class="m-top-5">
-                          <ion-badge class="cls-badge" ion-badge-border-radius>{{msg.AvgPoint}}</ion-badge>
+                          <ion-badge class="cls-badge" ion-badge-border-radius>{{gf.convertNumberFormat(msg.AvgPoint)}}</ion-badge>
                           <p class="label-badge">Không tốt
                           </p>
                         </ion-row>
@@ -1219,59 +1219,7 @@
                       </div>
                       
                     </div>
-                    <!-- last row -->
-                    <!-- <div class="last-row">
-                        <div *ngIf="loginuser" >
-                          <div *ngIf="msg.DealType"   [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''">
-                              <div style="font-weight: bold">
-                                <div *ngIf="msg.DealPrice" class="text-combo"  text-left class="p-top-dealtype">
-                                  <img src="./assets/ic_combo.svg">
-                                  <label class="cls-lineheight">{{msg.DealType}}</label>
-                                </div>
-                                <div *ngIf="!msg.DealPrice" class="text-combo"  text-left class="p-top-dealtype-6">
-                                    <img src="./assets/ic_combo.svg">
-                                    <label class="cls-lineheight">{{msg.DealType}}</label>
-                                  </div>
-                                <div  *ngIf="msg.DealPrice" text-right class=" price">
-                                  <label *ngIf="msg.DealPrice!=0" class="label-dealprice">{{ msg.DealPrice }} đ</label>
-                                </div>
-                                <div  *ngIf="!msg.DealPrice" text-right class="price" style="top:4px">
-                                  <ion-icon class="ico-gift" name="gift"></ion-icon>
-                                  <label *ngIf="!msg.DealPrice" class="label-nondealprice">Giá ưu đãi!</label>
-                                </div>
-                              </div>
-                            </div>
-                            <div *ngIf="!msg.DealType"  [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''">
-                              <div text-right *ngIf="msg.MinPriceOTAStr && msg.MinPriceTAStr && msg.MinPriceOTAStr!=msg.MinPriceTAStr && msg.MinPriceTAStr!=0 && msg.MinPriceOTAStr<msg.MinPriceTAStr && loginuser" class="label-minpriceTA">{{msg.MinPriceTAStr}} đ</div>
-                              <div >
-                                <div col-7 text-left class="p-top-minprice">
-                                  <label >{{msg.RoomNameSubString}}</label>
-                                </div>
-                                <div col-5 text-right class="p-top-10 price">
-                                  <div>
-                                      <label *ngIf="msg.MinPriceOTAStr" class="label-minprice">{{msg.MinPriceOTAStr}} đ</label>
-                                      <label *ngIf="!msg.MinPriceOTAStr" class="label-minprice">Hết phòng</label>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                            <div *ngIf="!loginuser"  [ngClass]="msg.AvgPoint==0? 'p-top-18' : ''" (click)="goToLogin()">
-                                <div *ngIf="msg.DealType">
-                                    <div>
-                                        <div>
-                                            <span class="label-price-login t-bold">Giá ưu đãi!</span><span class="label-price-login text-login"> Đăng nhập để xem</span>
-                                        </div>
-                                      </div>
-                                </div>
-                              <div *ngIf="!msg.DealType">
-                                <div>
-                                    <span class="label-price-login t-bold">Giá ưu đãi!</span><span class="label-price-login text-login"> Đăng nhập để xem</span>
-                                </div>
-                              </div>
-                            </div>
-                      </div> -->
-                      
+                    
                     </div>
               </div>
             </div>
