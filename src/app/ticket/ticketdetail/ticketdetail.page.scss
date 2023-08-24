@@ -800,15 +800,17 @@
   right: 16px;
 }
 .location-title{
-  width: 110px;
+  width: 130px;
   height: 25px;
-  padding: 4px 12px;
+  padding: 2px 12px;
   border-radius: 4px;
   background-color: #f4f5f6;
+  text-align: center;      
 }
 .location-text{
-  font-size: 14px;
+  font-size: 16px;
   color: #3f3b3b;
+  line-height: 1.4;
 }
 .location-name{
   font-size: 16px;

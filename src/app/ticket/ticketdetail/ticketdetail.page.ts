@@ -218,7 +218,7 @@ export class TicketDetailPage {
           //   this.navCtrl.back();
           //   this.ticketService.backPage = '';
           // }
-          this.navCtrl.pop();
+          this.navCtrl.back();
           
         }
 
@@ -623,23 +623,24 @@ export class TicketDetailPage {
         'content-type': 'application/json'
       }
       this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/FindAvailableRateDateByExpeId', headers, obj, 'ticketservice', 'FindAvailableRateDateByExpeId').then((data: any) => {
+        this.gf.hideLoading();
         if (data && data.success && data.data.length>0) {
           this.objRate=data.data;
         }
         if (this.objRate) {
           this.ticketService.itemTicketService.itemObjRate = {};
           this.ticketService.itemTicketService.itemObjRate = this.objRate.find((el) => { return el.pkgId == itemService.id });
-          if ( this.ticketService.itemTicketService.itemObjRate.specs &&  this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
-            this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
-              element.child =  element.child.map((item) => {
-                return { ...item, action: false}
-              });
+          this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
+            element.child = element.child.map((item, index) => {
+              if (index === 0) {
+                return { ...item, action: true };
+              }
+              return { ...item, action: false };
             });
-            
-          }
-     
+          });
         }
-        this.GetCalendarBySkuId(itemService);
+        this.navCtrl.navigateForward('/ticketservice');
+        // this.GetCalendarBySkuId(itemService);
       })
   
     }
@@ -661,7 +662,7 @@ export class TicketDetailPage {
         if (this.ticketService.itemTicketService.itemObjRateTime) {
           this.ticketService.itemTicketService.itemObjRateTime = this.ticketService.itemTicketService.itemObjRateTime.find((el) => { return el.pkgId == itemService.id });
         }
-        this.navCtrl.navigateForward('/ticketservice');
+
       })
   
     }

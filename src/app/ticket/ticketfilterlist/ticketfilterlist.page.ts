@@ -143,7 +143,7 @@ export class TicketfilterlistPage implements OnInit {
   goback() {
     this.ticketService.itemSearchDestination = "";
     this.ticketService.itemShowList = "";
-    this.navCtrl.navigateBack('/app/tabs/tab1');
+    this.navCtrl.navigateBack('/tabs/tab1');
   }
 
   itemclickht(item) {

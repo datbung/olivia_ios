@@ -32,9 +32,9 @@ export class TicketSearchPage implements OnInit{
   itemTicket:any
   constructor(
     public gf: GlobalFunction,public navCtrl: NavController, private storage: Storage, public ticketService: ticketService,public zone: NgZone) {
-        this.loadHistorySearch();
+      this.loadHistorySearch();
       this.loadRegion();
-      this.loadBestExperience();
+
     }
     ionViewDidEnter(){
       setTimeout(() => {
@@ -50,6 +50,7 @@ export class TicketSearchPage implements OnInit{
             apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
         };
         se.gf.RequestApi('GET', url, headers, null, 'ticketsearch', 'GetBestExperiences').then((data) => {
+            this.gf.hideLoading()
             let res = JSON.parse(data);
             se.listHotExperience = res.data;
         })
@@ -93,14 +94,12 @@ export class TicketSearchPage implements OnInit{
         else {
           se.ischecklist = false;
           se.ischecktext=false;
-          // se.items.forEach(element => {
-          //     element.show = false;
-          // });
         }
       }
 
     loadRegion() {
         let se = this;
+        this.gf.showLoading()
         let url = C.urls.baseUrl.urlTicket+'/api/Home/GetAllRegions';
         let headers = {
             apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
@@ -109,7 +108,7 @@ export class TicketSearchPage implements OnInit{
         se.gf.RequestApi('GET', url, headers, null, 'ticketsearch', 'GetAllRegions').then((data) => {
             let res = JSON.parse(data);
             se.listRegionSearch = res.data;
-            console.log(res.data);
+            se.loadBestExperience();
         })
     }
   
@@ -125,9 +124,10 @@ export class TicketSearchPage implements OnInit{
     this.ticketService.publicSearchTicketRegion(item);
     this.gf.createListLastSearchTicketRegion(item,0);
     this.ticketService.input = item;
-    this.ticketService.itemSearchTicket.emit(1);
+    // this.ticketService.itemSearchTicket.emit(1);
     this.ticketService.inputText = "";
-    this.navCtrl.back();
+          this.gotoListSearch();
+    // this.navCtrl.back();
   }
   clearText(){
     this.ticketService.inputText="";
@@ -148,16 +148,38 @@ export class TicketSearchPage implements OnInit{
       this.ticketService.input = item;
     }
     this.ticketService.inputText = "";
-    this.ticketService.itemSearchTicket.emit(1);
-    this.navCtrl.pop();
+  
+    this.gotoListSearch();
+
+  
+    // this.ticketService.itemSearchTicket.emit(1);
+    // this.navCtrl.pop();
+  }
+  gotoListSearch() {
+    if (this.ticketService.input) {
+      if (this.ticketService.input.expId && this.ticketService.input.expName) {
+        this.ticketService.itemTicketDetail = this.ticketService.input;
+        this.ticketService.itemTicketDetail.experienceId = this.ticketService.input.expId;
+        this.ticketService.backPage = 'hometicket';
+        this.navCtrl.navigateForward('/ticketdetail');
+      } else {
+        this.ticketService.itemSearchDestination = this.ticketService.input;
+        this.ticketService.searchType = 1;
+        this.ticketService.regionFilters = [];
+        this.ticketService.regionFilters.push(this.ticketService.itemSearchDestination.id);
+        this.ticketService.itemShowList = null;
+        this.navCtrl.navigateForward('/ticketlist/2');
+      }
+    }
   }
   funcHotExperience(item){
     this.ticketService.input = item;
     this.ticketService.publicSearchTicketRegion(item);
     this.gf.createListLastSearchTicketRegion(item,1);
-    this.ticketService.itemSearchTicket.emit(1);
+    // this.ticketService.itemSearchTicket.emit(1);
     this.ticketService.inputText = "";
-    this.navCtrl.pop();
+    this.gotoListSearch();
+    // this.navCtrl.pop();
   }
   onEnter(){
     this.ticketService.input = "";
@@ -165,6 +187,7 @@ export class TicketSearchPage implements OnInit{
     this.ticketService.itemShowList = "";
     this.ticketService.itemTicketTopic = "";
     this.ticketService.searchType = 1 ;
-    this.navCtrl.navigateForward('/ticketfilterlist');
+    this.gotoListSearch();
+    // this.navCtrl.navigateForward('/ticketlist/2');
   }
 }

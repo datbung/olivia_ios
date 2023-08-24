@@ -45,6 +45,8 @@ export class TicketListPage implements OnInit {
   buttonPriceMinToMax: boolean = false;
   buttonPriceMaxToMin: boolean = false;
   countFilter: any;
+  arrRegion:any;
+  arrTopic:any;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel,
     public modalCtrl: ModalController, public events: Events, private router: Router, public booking: Booking, public loadingCtrl: LoadingController,
     public storage: Storage, public valueGlobal: ValueGlobal, public alertCtrl: AlertController, public gf: GlobalFunction,
@@ -69,6 +71,25 @@ export class TicketListPage implements OnInit {
     if (this.searchhotel.CheckInDate) {
       this.cindisplayhr = moment(this.searchhotel.CheckInDate).format('DD/MM');
     }
+    this.status = this.activeRoute.snapshot.paramMap.get('stt');
+    if (this.status == 0) {
+      if (this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId) {
+        // this.loadTicketList(this.ticketService.itemTicketTopic.topicId, 0);
+        this.name = this.ticketService.itemTicketTopic.topicName
+      
+      }
+
+    } else if (this.status == 1){
+      this.name =  this.ticketService.itemShowList.name;
+    } else if (this.status == 2){
+      
+      this.name =  "Kết quả tìm kiếm";
+    }
+    this.gf.SearchKeyword().then((data) => {
+      if (data) {
+        this.setData();
+      }
+    })
   }
 
   loadData() {
@@ -87,21 +108,17 @@ export class TicketListPage implements OnInit {
       
       }
 
-    } else {
-      // if (this.ticketService.itemSearchDestination && this.ticketService.itemSearchDestination.id) {
-      //   this.loadTicketList(this.ticketService.itemSearchDestination.id, 1);
-      // }else if (this.ticketService.itemShowList && this.ticketService.itemShowList.id){
-      //   this.loadTicketList(this.ticketService.itemShowList.id, 1);
-      // }
+    } else if (this.status == 1){
       this.name =  this.ticketService.itemShowList.name;
+    } else if (this.status == 2){
+      
+      this.name =  "Kết quả tìm kiếm";
     }
     this.gf.SearchKeyword().then((data) => {
       if (data) {
         this.loaddatadone = true;
       }
     })
-
-
   }
 
   loadTicketList(id, stt) {
@@ -239,7 +256,7 @@ export class TicketListPage implements OnInit {
   goback() {
     this.ticketService.itemSearchDestination = "";
     this.ticketService.itemShowList = "";
-    this.navCtrl.navigateBack('/app/tabs/tab1');
+    this.navCtrl.navigateBack('/tabs/tab1');
   }
 
   itemclickht(item) {
@@ -390,13 +407,67 @@ export class TicketListPage implements OnInit {
         // }
         this.gf.SearchKeyword().then((data) => {
           if (data) {
-            this.loaddatadone = true;
+            this.setData();
           }
         })
       }
     })
   }
+  private setData() {
+    this.loaddatadone = true;
+    this.arrRegion = [];
+    this.arrTopic = [];
+    this.ticketService.ticketFilter.regions.forEach(region => {
+      const matchingChilds = region.childs.filter(child => this.ticketService.regionFilters.includes(child.id));
+      if (matchingChilds.length == region.childs.length && matchingChilds.length > 0) {
+        region.isRegion = true;
+        this.arrRegion.push(region);
+      } else {
+        if (matchingChilds.length > 0) {
+          this.arrRegion.push(...matchingChilds);
+        }
+      }
+    });
+
+    const matchingTopic = this.ticketService.topicModels.filter(item => this.ticketService.topicfilters.includes(item.id));
+    if (matchingTopic.length > 0) {
+      this.arrTopic.push(...matchingTopic);
+    }
+    this.name = "Kết quả tìm kiếm";
+  }
+
   reFilter(){
     this.openFilter();
+  }
+  deleteFilter(stt,param){
+    // 0:region 1:topic
+    if (stt == 0) {
+      if (param.isRegion == true) {
+        this.arrRegion = this.arrRegion.filter(item => item.id !== param.id);
+        const matchingChilds = this.ticketService.ticketFilter.regions.filter(item => item.id == param.id);
+        let arr = [];
+        matchingChilds[0].childs.forEach(element => {
+          arr.push(element.id);
+        });
+        this.ticketService.regionFilters =  this.ticketService.regionFilters.filter(item => !arr.includes(item));
+      }
+      else{
+        this.arrRegion = this.arrRegion.filter(item => item.id !== param.id);
+        this.ticketService.regionFilters = this.ticketService.regionFilters.filter(item => item !== param.id);
+      }
+   
+    }else if (stt == 1){
+      this.arrTopic = this.arrTopic.filter(item => item.id !== param.id);
+      this.ticketService.topicfilters = this.ticketService.topicfilters.filter(item => item !== param.id);
+    }
+    else if (stt == 2)
+    {
+      this.ticketService.inputText = "";
+    }
+    this.gf.SearchKeyword().then((data) => {
+      if (data) {
+        this.loaddatadone = true;
+      }
+    })
   }
 }

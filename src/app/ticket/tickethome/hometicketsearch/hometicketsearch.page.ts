@@ -110,8 +110,11 @@ export class HomeTicketSearchPage implements OnInit {
         this.navCtrl.navigateForward('/ticketdetail');
       }else {
         this.ticketService.itemSearchDestination = this.itemSearch;
+        this.ticketService.searchType = 1
+        this.ticketService.regionFilters = [];
+        this.ticketService.regionFilters.push(this.ticketService.itemSearchDestination.id);
         this.ticketService.itemShowList = null;
-        this.navCtrl.navigateForward('/ticketlist/1');
+        this.navCtrl.navigateForward('/ticketlist/2');
       }
     }
   

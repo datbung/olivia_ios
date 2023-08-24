@@ -160,6 +160,7 @@ export class HomeTicketSlidePage implements OnInit {
   }
   showRegionList(item,stt){
     if(item){
+      this.ticketService.itemTicketTopic = "";
       this.ticketService.itemShowList = item;
       this.ticketService.searchType = 2;
       this.ticketService.isFilter = false;

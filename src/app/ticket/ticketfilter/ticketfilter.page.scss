@@ -30,9 +30,8 @@
 }
 .img-search{
     position: absolute;
-    top: 6%;
+    top: 11%;
     color: #ffffff;
-    margin-top: 18px;
     right: 34px;
 }
 
@@ -85,6 +84,7 @@
 .cls-checkbox{
     width: 24px;
     height: 24px;
+    border: 0.5px solid #b2b3bd
 }
 .div-flightfilter-footer{
     background-color: #ffffff; text-align: center; display: flex;
@@ -115,4 +115,8 @@
       } 
 
       
+  }
+  .img-location{
+    width: 16px;
+    height: 16px;
   }
