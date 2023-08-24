@@ -59,7 +59,10 @@ export class TicketServicePage implements OnInit {
   ischeckbtn: boolean = false;
   specs:any={};
   objectLength: number = 0;
-  timeId: string = "";
+  dailyRatePkgs: { pkgId: number; adults: any; childs: any; seniors: any; custom1: any; custom2: any; checkin: string; time: string;  specs: any };
+  chooseExpPkg: any;
+
+  timeId: any;
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public searchhotel: SearchHotel, public authService: AuthService, private http: HttpClientModule, public events: Events,
     public gf: GlobalFunction, public modalCtrl: ModalController, private pickerController: PickerController, private storage: Storage,
     public tourService: tourService,
@@ -71,12 +74,11 @@ export class TicketServicePage implements OnInit {
 
       this.loaddeparturedone = true;
       this.itemTicketService = this.ticketService.itemTicketService;
-
     }
     else {
       this.hasDeparture = false;
     }
-
+    this.selectNewPackage(this.ticketService.itemTicketService.itemObjRate.pkgId)
     // var timestamp = new Date();
     // var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
     // var date = new Date(res);
@@ -100,28 +102,37 @@ export class TicketServicePage implements OnInit {
     var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
    
-    if (this.itemTicketService.itemObjRate) {
+    if (this.dailyRatePkgs.specs) {
       
-      this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
+      // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
       var Tomorrow = moment(date).format("DD/MM");
   
       this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-      this.checkinDate =  this.itemTicketService.itemObjRate.checkin
-      this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.daysInAdvance).format('DD-MM-YYYY');
+      let matchedSkus =  this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
+
+      this.checkinDate =  matchedSkus[0].skusDaily.dailyRate[0].date
+      this.dailyRatePkgs.checkin = this.checkinDate
+      // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
+      // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];   
+      // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate;
     } else {
-      this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
+      // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
       var Tomorrow = moment(date).format("DD/MM");
   
       this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-      this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
-      this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.daysInAdvance).format('DD-MM-YYYY');
+      // this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
+      this.checkinDate =  this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
+      this.dailyRatePkgs.checkin = this.checkinDate
+      // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
+      // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];  
+      // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate
     }
 
     // }
     this.index = 0;
-    if (this.itemTicketService.itemObjRate && this.itemTicketService.itemObjRate.times.length >0) {
-      this.timeTicket = this.itemTicketService.itemObjRate.times[0];
-    }
+    // if (this.itemTicketService.itemObjRate.times && this.itemTicketService.itemObjRate.times.length >0) {
+    //   this.timeTicket = this.itemTicketService.itemObjRate.times[0];
+    // }
    
     if (this.itemTicketService.minPax > 0) {
       if (this.itemTicketService.allowAdults) {
@@ -149,25 +160,7 @@ export class TicketServicePage implements OnInit {
       this.adult = 1;
     }
     if (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length>0) {
-      // let arr = this.itemTicketService.itemObjRate.specs.find((el) => { return el.child.length == 1});
-      // if (arr) {
-      //   this.specs[arr.id] = arr.child[0].child_id;
-      // }
-      for (let i = 0; i < this.itemTicketService.itemObjRate.specs.length; i++) {
-        const element = this.itemTicketService.itemObjRate.specs[i];
-        if(element.child.length > 0)
-        {
-          element.child[0].action=true;
-          this.specs[element.id] = element.child[0].child_id;
-          if (i==0) {
-            this.timeId = element.child[0].child_id;
-          }else{
-            this.timeId = this.timeId+','+element.child[0].child_id
-          }
-      
-        }
-      }
-   
+ 
       this.objectLength = Object.keys(this.specs).length; 
       let arrSort= this.itemTicketService.itemObjRate.specs.find((el) => { return el.name == 'Điểm trả khách' || el.name == 'Điểm đón khách'});
       if (arrSort) {
@@ -178,7 +171,7 @@ export class TicketServicePage implements OnInit {
         this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSort.child;
       }
     }
-   
+
     this.GetDailyRatePackages();
     this.subject.pipe(debounceTime(500)).subscribe(value => {
       if (value) {
@@ -223,16 +216,21 @@ export class TicketServicePage implements OnInit {
     if (this.arrSkus.length > 0 && this.totalPax < this.itemTicketService.maxPax && this.totalPax >= this.itemTicketService.minPax) {
       if (type == 1) {
         this.adult++;
+        this.dailyRatePkgs.adults = this.adult
       } else if (type == 2) {
         this.child++;
+        this.dailyRatePkgs.childs = this.child
       } else if (type == 3) {
         this.elder++;
+        this.dailyRatePkgs.seniors = this.elder
       }
       else if (type == 4) {
         this.Custom1++;
+        this.dailyRatePkgs.custom1 = this.Custom1
       }
       else if (type == 5) {
         this.Custom2++;
+        this.dailyRatePkgs.custom2 = this.Custom1
       }
       this.totalPax = this.adult + this.child + this.elder + this.Custom1 + this.Custom2;
       this.ischeckbtn=false;
@@ -372,7 +370,7 @@ export class TicketServicePage implements OnInit {
           let monthstartdate: any = objtextmonth.trim().split(" ")[0];
           let yearstartdate: any = objtextmonth.trim().split(" ")[1];
   
-         if (this.itemTicketService.itemObjRate && this.itemTicketService.itemObjRate.dailyRate.length > 0) {
+         if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
           for (let j = 0; j < listdayinmonth.length; j++) {
             const elementday = listdayinmonth[j];
             let fday: any;
@@ -384,31 +382,47 @@ export class TicketServicePage implements OnInit {
             }
 
             let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
-            if (!this.timeId) {
-              let objday = this.itemTicketService.itemObjRate.dailyRate.filter((f) => { return f.date == fromdate });
-              if (objday && objday.length > 0) {
-                let totalprice;
-                totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
-                  if (elementday.children[0]) {
-                    $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                  } 
-                  // else {
-                  //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                  // }
-              }
+            let nowday =moment(new Date(Year, Month, Day)).format('YYYYMMDD');
+            let objday
+            if (this.timeId) {
+              objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
             }
             else{
-              let objday = this.itemTicketService.itemObjRateTime.skus[this.timeId].dailyRate;
-              if (objday && objday.length > 0) {
-                let totalprice;
-                totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
-                  if (elementday.children[0]) {
-                    $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                  } 
-                  // else {
-                  //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                  // }
-              }
+              objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+            }
+            var fromDateNum = parseInt(fromdate.replace(/-/g, ""), 10);
+            var nowdayNum = parseInt(nowday.replace(/-/g, ""), 10);
+            var specificDateStr ;
+            if (this.timeId) {
+              specificDateStr = this.timeId[0].skusDaily.dailyRate[this.timeId[0].skusDaily.dailyRate.length - 1];
+            }
+            else{
+              specificDateStr = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.length - 1];
+            }
+         
+            if (objday && objday.length > 0) {
+              let totalprice;
+              totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
+              if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
+                if (elementday.children[0]) {
+                  $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                } 
+              } 
+            
+                // else {
+                //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                // }
+            }
+            else{
+              if (elementday.children[0]) {
+                var specificDateNum = parseInt(specificDateStr.date.replace(/-/g, ""), 10);
+                if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
+                  $(elementday.children[0]).addClass('not-available-price-in-range');
+                  var pElement = elementday.querySelector('p'); // Lấy thẻ p bên trong button
+                  pElement.classList.add('text-xam'); 
+                  $(elementday.children[0]).attr('disabled', 'disabled');
+                }
+              } 
             }
           }
          }
@@ -438,6 +452,7 @@ export class TicketServicePage implements OnInit {
       se.zone.run(() => {
         // se.searchhotel.CheckInDate = moment(event.data.from).format('YYYY-MM-DD');
         se.checkinDate = moment(event.data.from).format('YYYY-MM-DD');
+        this.dailyRatePkgs.checkin = this.checkinDate;
         se.searchhotel.datecin = new Date(event.data.from);
         se.searchhotel.cindisplay = moment(se.searchhotel.datecin).format("DD-MM-YYYY");
 
@@ -449,64 +464,92 @@ export class TicketServicePage implements OnInit {
   * @param e biến event
   */
   async clickedElement(e: any) {
+    var se = this;
     var obj: any = e.currentTarget;
-    if ($(obj).hasClass('on-selected')) {
-      if (this.modalCtrl) {
-        let fday: any;
-        let tday: any;
-        var monthenddate: any;
-        var yearenddate: any;
-        var monthstartdate: any;
-        var yearstartdate: any;
-        var objTextMonthEndDate: any;
-        var objTextMonthStartDate: any;
-        if ($('.days-btn.lunarcalendar.on-selected > p')[0]) {
-          fday = $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
-          tday = fday;
-          objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ', '');
-          objTextMonthEndDate = objTextMonthStartDate;
-        } else {
-          fday = $('.on-selected > p')[0].textContent;
-          tday = fday;
-          objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ', '');
-          objTextMonthEndDate = objTextMonthStartDate;
-        }
-        if (
-          objTextMonthEndDate &&
-          objTextMonthEndDate.length > 0 &&
-          objTextMonthStartDate &&
-          objTextMonthStartDate.length > 0
-        ) {
-          monthstartdate = objTextMonthStartDate.split(" ")[0];
-          yearstartdate = objTextMonthStartDate.split(" ")[1];
-          monthenddate = objTextMonthEndDate.split(" ")[0];
-          yearenddate = objTextMonthEndDate.split(" ")[1];
-          var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
-          var todate = new Date(yearenddate, monthenddate - 1, tday * 1 + 1);
-          if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {
-            var se = this;
-            setTimeout(() => {
-              se.modalCtrl.dismiss();
-            }, 300);
-            // se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
-            se.ticketService.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
-            se.checkinDate = moment(fromdate).format('YYYY-MM-DD');
-            // se.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
-            se.dateDisplay = moment(fromdate).format('DD-MM');
-            // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-            //   const element = this.itemTicketService.dailyRatePkgs[i];
-            //   element.action=false;
-            //   if (element.daily==se.searchhotel.CheckInDate) {
-            //     this.index=i;
-            //     element.action=true;
-            //   }
-            // }
-            this.ischeckDate = true;
-            se.GetDailyRatePackages();
+    var pElement = obj.querySelector('p');
+    if (pElement && !pElement.classList.contains('text-xam')) {
+      if ($(obj).hasClass('on-selected')) {
+        if (this.modalCtrl) {
+          let fday: any;
+          let tday: any;
+          var monthenddate: any;
+          var yearenddate: any;
+          var monthstartdate: any;
+          var yearstartdate: any;
+          var objTextMonthEndDate: any;
+          var objTextMonthStartDate: any;
+  
+          if ($('.days-btn.lunarcalendar.on-selected > p')[0]) {
+            fday = $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
+            tday = fday;
+            objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ', '');
+            objTextMonthEndDate = objTextMonthStartDate;
+          } else {
+            fday = $('.on-selected > p')[0].textContent;
+            tday = fday;
+            objTextMonthStartDate = $('.on-selected').closest('.month-box').children()[0].textContent.replace('Tháng ', '');
+            objTextMonthEndDate = objTextMonthStartDate;
+          }
+          if (
+            objTextMonthEndDate &&
+            objTextMonthEndDate.length > 0 &&
+            objTextMonthStartDate &&
+            objTextMonthStartDate.length > 0
+          ) {
+            monthstartdate = objTextMonthStartDate.split(" ")[0];
+            yearstartdate = objTextMonthStartDate.split(" ")[1];
+            monthenddate = objTextMonthEndDate.split(" ")[0];
+            yearenddate = objTextMonthEndDate.split(" ")[1];
+            var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
+            var todate = new Date(yearenddate, monthenddate - 1, tday * 1 + 1);
+            if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {
+  
+              setTimeout(() => {
+                se.modalCtrl.dismiss();
+              }, 300);
+              // se.searchhotel.CheckInDate = moment(fromdate).format('YYYY-MM-DD');
+              se.ticketService.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
+              se.checkinDate = moment(fromdate).format('YYYY-MM-DD');
+              this.dailyRatePkgs.checkin = this.checkinDate;
+              // se.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
+              se.dateDisplay = moment(fromdate).format('DD-MM');
+              // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
+              //   const element = this.itemTicketService.dailyRatePkgs[i];
+              //   element.action=false;
+              //   if (element.daily==se.searchhotel.CheckInDate) {
+              //     this.index=i;
+              //     element.action=true;
+              //   }
+              // }
+              this.ischeckDate = true;
+              se.GetDailyRatePackages();
+            }
           }
         }
       }
+    }else{
+      var buttonElement = $(obj); 
+      buttonElement.removeClass('on-selected');
+
+    
+      var targetDate = new Date(this.checkinDate); // Chuyển đổi ngày mục tiêu thành đối tượng Date
+      $(".days-btn").each(function() {
+        var buttonElement1 = $(this); // Lấy thẻ button
+        var dayText = buttonElement1.find('p').text();// Lấy nội dung của thẻ p
+        var year = new Date().getFullYear();
+        // var month = new Date().getMonth();
+        var monthText = buttonElement.find('.price-calendar-text-ticket').text(); 
+        // Tạo đối tượng Date từ ngày, tháng và năm
+        var buttonDate = new Date(year, monthText, parseInt(dayText));
+        var formattedDate = moment(buttonDate).format('YYYY-MM-DD');
+        // So sánh ngày của thẻ với ngày mục tiêu
+        if (formattedDate == se.checkinDate) {
+          buttonElement1.addClass('on-selected'); // Thêm class "on-selected" cho thẻ button có ngày trùng khớp
+        }
+      });
+     
     }
+  
   }
   closecalendar() {
     this.modalCtrl.dismiss();
@@ -652,6 +695,7 @@ export class TicketServicePage implements OnInit {
   }
   checkactionDate(item) {
     this.checkinDate = moment(item.daily).format('YYYY-MM-DD');
+    this.dailyRatePkgs.checkin = this.checkinDate;
     this.dateDisplay = moment(item.daily).format('DD/MM');
     // this.searchhotel.CheckInDate = moment(item.daily).format('YYYY-MM-DD');
     // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
@@ -678,26 +722,31 @@ export class TicketServicePage implements OnInit {
     arrSpecs[index].action=true;
     var foundIndex =  this.itemTicketService.itemObjRate.specs.findIndex(x => x.id == item.id);
     this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSpecs;
-    this.specs[item.id] = itemc.child_id;
-    this.objectLength = Object.keys(this.specs).length; 
-    this.timeId = "";
-    for (let i = 0; i < this.itemTicketService.itemObjRate.specs.length; i++) {
-      const element = this.itemTicketService.itemObjRate.specs[i];
-      if(element.child.length > 0)
-      {
-        for (let j = 0; j < element.child.length; j++) {
-          const elementC = element.child[j];
-          if (elementC.action == true) {
-            if (i==0) {
-              this.timeId = element.child[j].child_id;
-            }else{
-              this.timeId = this.timeId+','+element.child[j].child_id
-            }
-            break;
-          }
-        }
-      }
+    // this.specs[item.id] = itemc.child_id;
+    // this.dailyRatePkgs.specs = this.specs;
+    // this.objectLength = Object.keys(this.specs).length; 
+    this.onSelectSpecs(item.id,itemc.child_id);
+    if(this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0){
+      this.timeId = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
     }
+    // this.timeId = "";
+    // for (let i = 0; i < this.itemTicketService.itemObjRate.specs.length; i++) {
+    //   const element = this.itemTicketService.itemObjRate.specs[i];
+    //   if(element.child.length > 0)
+    //   {
+    //     for (let j = 0; j < element.child.length; j++) {
+    //       const elementC = element.child[j];
+    //       if (elementC.action == true) {
+    //         if (i==0) {
+    //           this.timeId = element.child[j].child_id;
+    //         }else{
+    //           this.timeId = this.timeId+','+element.child[j].child_id
+    //         }
+    //         break;
+    //       }
+    //     }
+    //   }
+    // }
  
     this.subject.next(true);
   }
@@ -737,18 +786,7 @@ export class TicketServicePage implements OnInit {
   }
   GetDailyRatePackages() {
     this.gf.showLoading();
-    let obj = {
-      pkgId: this.ticketService.itemTicketService.id,
-      checkin: this.checkinDate,
-      adults: this.adult,
-      childs: this.child,
-      seniors: this.elder,
-      custom1: this.Custom1,
-      custom2: this.Custom2,
-      time: this.timeTicket,
-      specs:this.specs
-      // supplier: this.ticketService.experience.supplier
-    }
+    let obj = this.dailyRatePkgs
     let headers =
     {
       'content-type': 'application/json'
@@ -769,16 +807,16 @@ export class TicketServicePage implements OnInit {
             this.arrSkus[this.indexSku].action = true;
             this.reCheckToken = this.arrSkus[this.indexSku].reCheckToken;
             this.itemTicketService.skus = this.arrSkus[this.indexSku];
-            if (this.timeId) {
-              if (this.itemTicketService.skus.allowAdult) {
-                this.timeId = this.timeId +','+'adult'
-              }
-            }
-            if (this.timeId) {
-              if (this.itemTicketService.skus.allowChild) {
-                this.timeId = this.timeId +','+'child'
-              }
-            }
+            // if (this.timeId) {
+            //   if (this.itemTicketService.skus.allowAdult) {
+            //     this.timeId = this.timeId +','+'adult'
+            //   }
+            // }
+            // if (this.timeId) {
+            //   if (this.itemTicketService.skus.allowChild) {
+            //     this.timeId = this.timeId +','+'child'
+            //   }
+            // }
             this.calculatePrice();
           }
         })
@@ -811,7 +849,84 @@ export class TicketServicePage implements OnInit {
   }
   timeOption(event) {
     this.timeTicket = event.detail.value;
+    this.dailyRatePkgs.time = this.timeTicket;
     this.GetDailyRatePackages();
   }
+
+  async selectNewPackage(pkgId){
+
+    const pkgSelect = this.ticketService.itemTicketService;
+    this.chooseExpPkg = pkgSelect;
+
+    const { allowAdults, allowChildren, allowSeniors, allowCustom1, allowCustom2, departureTimes, minPax } = pkgSelect
+    let minPaxNew = minPax
+
+    const _packageSearch = this.ticketService.itemTicketService.itemObjRate
+    // nếu có option chẳn / lẽ thì check xem default là lẽ thì sẽ + thêm 1
+    if(_packageSearch && _packageSearch.isMultipleLimit && minPaxNew % 2 !== 0){
+      minPaxNew += 1
+    }
+
+    this.dailyRatePkgs = {
+      pkgId: pkgId,
+      adults: allowAdults ? minPaxNew : 0,
+      childs: (!allowAdults && allowChildren) ? minPaxNew : 0,
+      seniors: (!allowAdults && !allowChildren && allowSeniors) ? minPaxNew : 0,
+      custom1: (!allowAdults && !allowChildren && !allowSeniors && allowCustom1) ? minPaxNew : 0,
+      custom2: (!allowAdults && !allowChildren && !allowSeniors && !allowCustom1 && allowCustom2) ? minPaxNew : 0,
+      checkin: this.checkinDate,
+      time: '',
+      specs: {}
+    }
+
+    // set default time và specs
+    if(_packageSearch && _packageSearch.specs && _packageSearch.specs.length !== 0){
+    }
+    if(_packageSearch && _packageSearch.dailyRateAvailableSpes && _packageSearch.dailyRateAvailableSpes.length !== 0){
+      const [_dailyRateAvailable] = _packageSearch.dailyRateAvailableSpes
+      
+      // set default cho spec
+      // const _specRemoved = _dailyRateAvailable.specs.filter(x => !this.specsRemove.includes(x))
+      _packageSearch.specs.forEach((_spec, index) =>{
+        this.onSelectSpecs(_spec.id, _dailyRateAvailable.specs[index])
+      })
+ 
+      if(_packageSearch.specs && _packageSearch.specs.length !== 0){
+        this.timeId = _packageSearch.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
+        
+        if (this.timeId && this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0){
+          this.itemTicketService.itemObjRate.times = this.timeId[0].skusDaily.times;
+          this.timeTicket = this.timeId[0].skusDaily.times[0];
+          this.dailyRatePkgs.time = this.timeId[0].skusDaily.times[0];
+        }
+      }else{
+        if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length >0) {
+          this.itemTicketService.itemObjRate.times = this.itemTicketService.itemObjRate.skus[0].skusDaily.times;
+          this.timeTicket = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
+          this.dailyRatePkgs.time = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
+        }
+      }
+    }
+  }
+ 
+  async onSelectSpecs(parentKey: string, childId: string){
+    if(!this.isSpecAvailable(childId)) return;
+    const newSpecs = { ...this.dailyRatePkgs.specs }
+    newSpecs[parentKey] = childId
+    const { specs } = this.dailyRatePkgs
+    specs[parentKey] = childId
+  }
+  isSpecAvailable(childId: string){
+    const _packageSearch = this.ticketService.itemTicketService.itemObjRate;
+    if(_packageSearch.specs.length === 1){
+      if(_packageSearch.skus.some(x => x.spec.length === 1 && x.spec[0] === childId && x.skusDaily.dailyRate.length !== 0)){
+        return true
+      }else{
+        return false
+      }
+    }
+    return true
+  }
+
 }
 

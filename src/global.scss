@@ -55,9 +55,9 @@ ion-header {
     z-index: 1;
 
     .header-img-close{
-        width: 36px;
-        height: 36px;
-        margin-top: 8px;
+        width: 46px;
+        height: 46px;
+        margin-top: 5px;
     }
   }
 }
@@ -1674,6 +1674,19 @@ button.days-btn {
 
 .ticket-calendar-custom {
 
+  .not-available-price-in-range:before{
+    width: 0.5px;
+    height: 32.5px;
+    transform: rotate(225deg);
+    background-color: #868998;
+    content: "";
+    position: absolute;
+    top: 0;
+  }
+  .text-xam{
+    color: #bdbdbd!important;
+    cursor: not-allowed!important;
+  }
   .div-month-text-small{
     transition: visibility 1s, opacity 1s linear;
     margin-left: 26px;
@@ -1701,6 +1714,7 @@ button.days-btn {
     .text-black {
       color: #3f3b3b;
     }
+  
 
     @media (min-width: 350px) and (max-width: 375px) {
       margin-left: 18px !important;

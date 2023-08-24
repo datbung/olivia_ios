@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { ModalController, NavController } from '@ionic/angular';
 import { C } from '../../providers/constants';
 import { GlobalFunction } from 'src/app/providers/globalfunction';
 import { ticketService } from 'src/app/providers/ticketService';
@@ -12,32 +12,44 @@ import { element } from 'protractor';
 export class TicketfilterPage implements OnInit {
   arrFilter: any;
   arrResult: any;
-  constructor(private modalCtrl: ModalController, public gf: GlobalFunction, public ticketService: ticketService) { }
+  itemTicket: any;
+  itemRegion: any;
+  constructor(private navCtrl: NavController,private modalCtrl: ModalController, private gf: GlobalFunction, private ticketService: ticketService,public zone: NgZone) { }
 
   ngOnInit() {
+    // this.getdata(0)
     if (this.ticketService.isFilter) {
       this.arrFilter = this.ticketService.ticketFilter;
-      if (this.ticketService.itemShowList) {
-        for (let i = 0; i < this.arrFilter.regions.length; i++) {
-          const element = this.arrFilter.regions[i];
-          var idx = element.childs.findIndex((el) => { return el.id == this.ticketService.itemShowList.id });
-          if (idx != - 1) {
-            element.childs[idx].checked = true;
-          }
-
-        }
-      }
-      if (this.ticketService.itemTicketTopic) {
-        var idx = this.arrFilter.topics.findIndex((el) => { return el.id == this.ticketService.itemTicketTopic.topicId });
+      this.executeQuantity(0);
+   
+      // this.arrFilter.regions = this.arrFilter.regions.map((item) => {
+      //   return { ...item, show: false }
+      // });
+      // if (this.ticketService.regionFilters.length > 0) {
+      //   this.ticketService.ticketFilter.regions.forEach(region => {
+      //     const matchingChilds = region.childs.filter(child => this.ticketService.regionFilters.includes(child.id));
+      //     if (matchingChilds.length == region.childs.length && matchingChilds.length > 0) {
+      //       this.arrRegion.push(region);
+      //     }else{
+      //       if (matchingChilds.length > 0) {
+      //         this.arrRegion.push(...matchingChilds);
+      //       }
+      //     }
+      //   });
+      // }
+      this.arrFilter.topics = this.arrFilter.topics.map((item) => {
+        return { ...item, checked: false }
+      });
+      if (this.ticketService.topicfilters.length > 0) {
+        var idx = this.arrFilter.topics.findIndex(item => this.ticketService.topicfilters.includes(item.id));
         this.arrFilter.topics[idx].checked = true;
-
       }
     } else {
-      this.getdata()
+      this.getdata(0)
     }
 
   }
-  getdata() {
+  getdata(stt) {
     let url = C.urls.baseUrl.urlTicket + '/api/Category/GetInitsearchModel';
     this.gf.RequestApi('GET', url, null, null, 'ticketfilter', 'GetInitsearchModel').then((data) => {
       let res = JSON.parse(data);
@@ -45,66 +57,64 @@ export class TicketfilterPage implements OnInit {
       this.arrFilter.regions = this.arrFilter.regions.map((item) => {
         return { ...item, show: false }
       });
-
-      if (this.ticketService.itemShowList) {
-        for (let i = 0; i < this.arrFilter.regions.length; i++) {
-          const element = this.arrFilter.regions[i];
-          var idx = element.childs.findIndex((el) => { return el.id == this.ticketService.itemShowList.id });
-          if (idx != - 1) {
-            element.childs[idx].checked = true;
+      if (stt == 0) {
+        if (this.ticketService.itemShowList) {
+          for (let i = 0; i < this.arrFilter.regions.length; i++) {
+            const element = this.arrFilter.regions[i];
+            // var idx = element.findIndex((el) => { return el.id == this.ticketService.itemShowList.id });
+            if (element.id == this.ticketService.itemShowList.id ) {
+              element.checked = true;
+            }
+            
           }
         }
+        this.arrFilter.topics = this.arrFilter.topics.map((item) => {
+          return { ...item, checked: false }
+        });
+        if (this.ticketService.itemTicketTopic) {
+          var idx = this.arrFilter.topics.findIndex((el) => { return el.id == this.ticketService.itemTicketTopic.topicId });
+          this.arrFilter.topics[idx].checked = true;
+        }
+        this.executeQuantity(1);
       }
-      this.arrFilter.topics = this.arrFilter.topics.map((item) => {
-        return { ...item, checked: false }
-      });
-      if (this.ticketService.itemTicketTopic) {
-        var idx = this.arrFilter.topics.findIndex((el) => { return el.id == this.ticketService.itemTicketTopic.topicId });
-        this.arrFilter.topics[idx].checked = true;
-      }
-      //map quantity
-      // if (this.ticketService.searchType == 2 || this.ticketService.searchType == 3 || this.ticketService.inputText) {
-      //   this.arrFilter.regions.forEach(element => {
-      //     for (let i = 0; i <  element.childs.length; i++) {
-      //       const elementC = element.childs[i];
-      //       if (elementC.quantity > 0 && ) {
 
-      //       }
-      //     }
-
-      //   });
-      // }
-      this.executeQuantity();
     })
   }
-  private executeQuantity() {
-    if (true) {
+  private executeQuantity(stt) {
       this.arrFilter.regions.forEach(parent => {
-        if (this.ticketService.searchType == 2) {
-          const [parentVM] = this.ticketService.regionModels.filter(x => x.id === parent.id);
-          if (parentVM && parentVM.childs.length > 0) {
-            parent.checked = true;
-            parent.childs.forEach(child => {
-              child.checked = true;
-            });
-          }
-        } else {
-          const [parentVM] = this.ticketService.regionModels.filter(x => x.id === parent.id);
-          parent.childs.forEach(child => {
-            // if (this.ticketService.regionModels.includes(child.id.toString())) {
-            //   child.checked = true;
-            // } else {
-            //   child.checked = false;
-            // }
-
-            if (parentVM) {
-              const [childVM] = parentVM.childs.filter(x => x.id === child.id);
-              child.quantity = childVM ? childVM.quantity : 0;
-            } else {
-              child.quantity = 0;
+        const [parentVM] = this.ticketService.regionModels.filter(x => x.id === parent.id)
+        parent.childs.forEach(child =>{
+            if(this.ticketService.regionFilters.includes(child.id)){
+                child.checked = true;
+                parent.show = true;
+            }else{
+                child.checked = false
             }
-          });
+            // binding quantity
+            if(parentVM){
+                parent.quantity = parentVM.quantity
+                const [childVM] = parentVM.childs.filter(x => x.id === child.id)
+                child.quantity = childVM ? childVM.quantity : 0
+            }else{
+                parent.quantity = 0
+                child.quantity = 0
+            }
+        })
+        let checkChild = parent.childs.filter(x => x.checked);
+        if (checkChild.length > 0) {
+          parent.checked = true;
+        }else{
+          parent.checked = false;
         }
+        // if (stt==0) {
+        //   let countObj = parent.childs.filter(x => x.checked == true);
+        //   if (countObj.length == parent.childs.length) {
+        //     parent.checked = true;
+        //   }else{
+        //     parent.checked = false;
+        //   }
+        // }
+    
         parent.quantity = parent.childs.reduce((n, {quantity}) => n + quantity, 0);
       });
       // this.arrFilter.types.forEach(_type => {
@@ -112,13 +122,13 @@ export class TicketfilterPage implements OnInit {
       //   _type.quantity = typeVM ? typeVM.quantity : 0;
 
       // });
+      
       this.arrFilter.topics.forEach(_type => {
         const [typeVM] = this.ticketService.topicModels.filter(x => x.id === _type.id);
         _type.quantity = typeVM ? typeVM.quantity : 0;
 
       });
-    }
-
+  
   }
 
   close() {
@@ -126,17 +136,40 @@ export class TicketfilterPage implements OnInit {
   }
   getItems(ev: any) {
     this.ticketService.inputText = ev.detail.value;
-    if (!this.ticketService.inputText) {
-      this.ticketService.searchType = 1;
-      this.getdata();
-    }
+    // if (!this.ticketService.inputText) {
+    //   this.ticketService.searchType = 1;
+    //   this.getdata(0);
+    // }
+    var se = this;
+        if(ev.detail.value){
+          const val = ev.detail.value;
+          let url = `${C.urls.baseUrl.urlTicket}/api/Home/SearchExperience?keyword=` +val;
+          let headers = {
+            apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
+            apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
+          };
+          se.gf.RequestApi('GET', url, headers, null, 'searchregion', 'getItems').then((data) => {
+                  se.zone.run(() => {
+                    let lstitems = JSON.parse(data);
+                    console.log(lstitems);
+                    if(lstitems.data.experiences.length && lstitems.data.experiences.length >0 || lstitems.data.regions.length && lstitems.data.regions.length >0){
+                      se.itemTicket = lstitems.data.experiences;
+                      se.itemRegion = lstitems.data.regions;
+                    }else{
+                      // se.items.forEach(element => {
+                      //   element.show = false;
+                      // });
+                      // se.ischecktext=true;
+                    }
+                  });
+          })
+         }
   }
   search() {
       this.ticketService.searchType = 1;
       this.gf.SearchKeyword().then(() => {
-        this.executeQuantity();
+        this.executeQuantity(1);
       })
-
   }
   checkEvent(ev: any, item, stt) {
     item.checked = ev.detail.checked;
@@ -149,7 +182,7 @@ export class TicketfilterPage implements OnInit {
       else {
         if (this.ticketService.itemShowList && item.childs[0].id == this.ticketService.itemShowList.id) {
           this.ticketService.itemShowList = "";
-          this.getdata();
+          this.getdata(0);
           this.ticketService.searchType = 1;
         }
         item.childs = item.childs.map((itemC) => {
@@ -168,10 +201,11 @@ export class TicketfilterPage implements OnInit {
     //   this.getdata();
     //   this.ticketService.searchType = 1;
     // }
-    this.newMethod();
+    this.ticketService.searchType = 1;
+    this.setData();
     this.gf.SearchKeyword().then((data) => {
       if (data) {
-        this.executeQuantity();
+        this.executeQuantity(1);
       }
     })
 
@@ -184,7 +218,9 @@ export class TicketfilterPage implements OnInit {
 
       this.ticketService.ticketFilter = this.arrFilter;
       this.ticketService.countFilter = 0;
-      this.newMethod();
+      this.ticketService.itemTicketTopic = "";
+      this.ticketService.itemShowList = "";
+      this.setData();
       // this.ticketService.itemShowList = "";
       // this.ticketService.itemTicketTopic = "";
 
@@ -236,7 +272,7 @@ export class TicketfilterPage implements OnInit {
       }
     })
   }
-  private newMethod() {
+  private setData() {
     
     this.ticketService.regionFilters = [];
     for (let i = 0; i < this.arrFilter.regions.length; i++) {
@@ -269,10 +305,42 @@ export class TicketfilterPage implements OnInit {
   }
 
   clearFilter() {
-    this.ticketService.itemShowList = "";
-    this.ticketService.itemTicketTopic = "";
+    // this.ticketService.itemShowList = "";
+    // this.ticketService.itemTicketTopic = "";
+    this.arrFilter.regions = [];
+    this.arrFilter.topics = [];
     this.ticketService.inputText = "";
     this.ticketService.searchType = 1;
-    this.getdata();
+    this.getdata(1);
+  }
+  itemclick(item,stt) {
+    if (stt==1) {
+      this.ticketService.itemTicketDetail = item;
+      this.ticketService.itemTicketDetail.experienceId = item.id;
+      this.ticketService.backPage = 'hometicket';
+      this.modalCtrl.dismiss({ hasfilter: false });
+      this.ticketService.inputText = "";
+      this.navCtrl.navigateForward('/ticketdetail');   
+    }else {
+      this.ticketService.itemSearchDestination = item;
+      this.ticketService.searchType = 1
+      this.ticketService.regionFilters = [];
+      this.ticketService.regionFilters.push(this.ticketService.itemSearchDestination.id);
+      this.ticketService.itemShowList = null;
+      this.ticketService.inputText = "";
+      this.ticketService.ticketFilter = this.arrFilter;
+      this.ticketService.isFilter = true;
+      this.gf.SearchKeyword().then(() => {
+        this.executeQuantity(1);
+        this.modalCtrl.dismiss({ hasfilter: true });
+      })
+
+   
+    }
+    
+  }
+  gotoSearch(){
+    this.modalCtrl.dismiss({ hasfilter: false });
+    this.navCtrl.navigateForward('/ticketsearch'); 
   }
 }

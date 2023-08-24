@@ -115,12 +115,6 @@ import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvid
 import { FlightInternationalFilterClassPageModule } from './flightinternational/flightinternationalfilterclass/flightinternationalfilterclass.module';
 import { TicketfilterPageModule } from './ticket/ticketfilter/ticketfilter.module';
 
-import {
-  RecaptchaModule,
-  RECAPTCHA_SETTINGS,
-  RecaptchaSettings,
-  RecaptchaComponent,
-} from 'ng-recaptcha';
 
 @NgModule({
   declarations: [AppComponent],
@@ -241,13 +235,7 @@ import {
     YoutubeVideoPlayer,
     //HTTP,
     // RecaptchaModule,
-    // RecaptchaFormsModule,
-    {
-      provide: RECAPTCHA_SETTINGS,
-      useValue: {
-        siteKey: '6Lfy_gAnAAAAAK1jziFGhO6qF9irAG6b-lYsa27h',
-      } as RecaptchaSettings,
-    },
+    // RecaptchaFormsModule,x
     // { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
