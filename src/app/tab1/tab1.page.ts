@@ -3907,10 +3907,10 @@ export class Tab1Page implements OnInit {
   }
 
   setActiveTab(currentIndex){
- 
-    if(currentIndex != 3){
-      this.activeTab = currentIndex;
-    }
+    this.activeTab = currentIndex;
+    // if(currentIndex != 3){
+    //   this.activeTab = currentIndex;
+    // }
     
     if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
@@ -3946,29 +3946,13 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    else if (currentIndex === 3) {//combo
-      //this.valueGlobal.activeTab = 3;
-        this.valueGlobal.backValue = "";
-        this.searchhotel.adult=this.adult;
-        this.searchhotel.child=this.child;
-        this.searchhotel.roomnumber= this.roomnumber;
-         this.navCtrl.navigateForward('/topdeallist');
-      // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
-      // if (document.querySelector(".tabbar")) {
-      // document.querySelector(".tabbar")['style'].display = 'flex';
-      // if(document.querySelector(".tabbar")[1]){
-      //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
-      //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
-      // }
-      // }
-      // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-      // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
-      // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
-    }
-    // else if (currentIndex === 3) {//Ticket
-    //   this._mytripservice.rootPage = "hometicket";
-    //   this.valueGlobal.logingoback = "";
-    //   this.valueGlobal.activeTab=3;
+    // else if (currentIndex === 3) {//combo
+    //   //this.valueGlobal.activeTab = 3;
+    //     this.valueGlobal.backValue = "";
+    //     this.searchhotel.adult=this.adult;
+    //     this.searchhotel.child=this.child;
+    //     this.searchhotel.roomnumber= this.roomnumber;
+    //      this.navCtrl.navigateForward('/topdeallist');
     //   // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
     //   // if (document.querySelector(".tabbar")) {
     //   // document.querySelector(".tabbar")['style'].display = 'flex';
@@ -3981,6 +3965,22 @@ export class Tab1Page implements OnInit {
     //   // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
     //   // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
     // }
+    else if (currentIndex === 3) {//Ticket
+      this._mytripservice.rootPage = "hometicket";
+      this.valueGlobal.logingoback = "";
+      this.valueGlobal.activeTab=3;
+      // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
+      // if (document.querySelector(".tabbar")) {
+      // document.querySelector(".tabbar")['style'].display = 'flex';
+      // if(document.querySelector(".tabbar")[1]){
+      //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
+      //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
+      // }
+      // }
+      // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
+      // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
+      // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
+    }
     else{
       this._mytripservice.rootPage = "homehotel";
       this.valueGlobal.ischeckFavourite='Hotel';
