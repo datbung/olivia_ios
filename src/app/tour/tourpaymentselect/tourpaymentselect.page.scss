@@ -264,17 +264,46 @@ hr
 }
 .cls-list
 {
-  margin-left: -16px;
-  margin-right: -16px;
-  padding-right: 16px;
-
     .text-list{
-      height: 22px;
-      font-size: 14px;
-      font-weight: 300;
-      letter-spacing: -0.4px;
-      color: #222222;
-      width: 100%;
+      width: 90%;
+      font-size: 16px;
+      color: #3f3b3b;
+      display: flex;
+      align-items: center;
+    }
+
+    .div-icon {
+      width: 10%;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+    }
+    .border-bottom {
+      border-bottom: solid 1px #e9eaec;
+    }
+
+    .cls-arrbank {
+      margin-top: 12px;
+      margin-left: 16px;
+      margin-right: 32px;
+    }
+    .div-width-50 {
+      width: 50% !important;
+    }
+    .div-width-45 {
+      width: 45%;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .m-left-16 {
+      margin-left: 16px;
+    }
+    .div-remembercard {
+      margin-left: 2px;
+      margin-bottom: 16px;
+      margin-top: 12px;
     }
 }
 .m-right-2{
@@ -381,11 +410,14 @@ hr
 {
   width: 50px;
   vertical-align: middle;
+  margin-left: 8px;
 }
 .img-momo
 {
-  width: 40px;
+  width: 32px;
   vertical-align: middle;
+  top: 3px;
+  margin-left: 8px;
 }
 .img-visa
     {
@@ -393,15 +425,11 @@ hr
       height: 22px;
       vertical-align: middle;
     }
-.img-momo{
-  width: 32px;
-    position: absolute;
-    top: 6px;
-    margin-left: 8px;
-}
+
 .cls-minheight
 {
   --min-height: 48px;
+  padding-bottom: 8px;
 }
 .ion-item
 {
@@ -547,7 +575,6 @@ hr
       }
 
       .div-split-item{
-        margin-left: 16px;
         border-bottom: solid 0.5px rgba(204,204,204,0.5);
       }
 
@@ -562,15 +589,10 @@ hr
       }
       .text-hotfare{
         color: #828282;
-        position: absolute;
-        bottom: 2px;
         font-size: 10px;
         font-weight: 300;
         line-height: 1.67;
         letter-spacing: -0.24px;
-        margin: 0;
-        margin-left: 2px;
-        margin-top: 3px;
       }
       .label-input{
         font-size: 13px;
@@ -708,3 +730,49 @@ hr
       .m-left-16 {
         margin-left: 16px;
       }
+
+      
+.text-normal {
+  font-size: 14px;
+  color: #3f3b3b;
+}
+
+.text-strike {
+  text-decoration: line-through;
+   text-align: right;
+   margin: 0;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.m-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.p-r-24 {
+  padding-right: 24px;
+}
+.m-bottom-16 {
+ margin-bottom: 16px;
+}
+.img-homecredit {
+  width: 56px;
+  padding: 6px;
+  vertical-align: middle;
+  top: 3px;
+  margin-left: 8px;
+}
+.text-service-fee {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: italic;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #828282;
+
+  margin-top: 2px;
+}

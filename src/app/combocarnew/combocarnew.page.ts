@@ -567,6 +567,12 @@ export class CombocarnewPage implements OnInit {
     this.bookCombo.idpointretd = '';
     this.bookCombo.idpointrett = '';
     this.valueGlobal.backValue = 'carcombo';
+    if(moment(this.booking.CheckOutDate).format('DD-MM-YYYY') != moment(this.searchhotel.CheckOutDate).format('DD-MM-YYYY') || moment(this.booking.CheckInDate).format('DD-MM-YYYY') != moment(this.searchhotel.CheckInDate).format('DD-MM-YYYY'))
+    {
+      this.searchhotel.CheckInDate = this.booking.CheckInDate;
+      this.searchhotel.CheckOutDate = this.booking.CheckOutDate;
+      this.valueGlobal.notRefreshDetail = false;
+    }
     //this.navCtrl.navigateBack(['/app/tabs/hoteldetail/' + this.booking.HotelId]);
     this.navCtrl.navigateBack('/hoteldetail/'+ this.booking.HotelId);
   }
@@ -2349,13 +2355,13 @@ export class CombocarnewPage implements OnInit {
             se.coutshow = moment(todate).format('DD-MM-YYYY');
             se.cin = moment(fromdate).format('YYYY-MM-DD');
             se.cout = moment(todate).format('YYYY-MM-DD');
-            se.searchhotel.CheckInDate = se.booking.CheckInDate;
-            se.searchhotel.CheckOutDate = se.booking.CheckOutDate;
+            //se.searchhotel.CheckInDate = se.booking.CheckInDate;
+            //se.searchhotel.CheckOutDate = se.booking.CheckOutDate;
             se.bookCombo.FormParam.CheckInDate = se.booking.CheckInDate;
             se.bookCombo.FormParam.CheckOutDate = se.booking.CheckOutDate;
             se.duration = moment(todate).diff( moment(fromdate), 'days');
             se.TotalNight = se.duration;
-            se.gf.setCacheSearchHotelInfo({checkInDate: se.searchhotel.CheckInDate, checkOutDate: se.searchhotel.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
+            se.gf.setCacheSearchHotelInfo({checkInDate: se.booking.CheckInDate, checkOutDate: se.booking.CheckOutDate, adult: se.searchhotel.adult, child: se.searchhotel.child, childAge: se.searchhotel.arrchild, roomNumber: se.searchhotel.roomnumber});
             se.storage.set('hasChangeDate', true);
             se.checkComboAfterChangedate();
             setTimeout(() => {

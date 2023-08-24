@@ -69,6 +69,10 @@ export class HotelListPage implements OnInit{
   isLoaddata: boolean=false;
   isLoadPrice: boolean;
   _hotelListPrice: Observable<any>;
+  adult: number;
+  child: number;
+  arrchild: any=[];
+  roomnumber: number;
   
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone, public authService: AuthService, public bookcombo: Bookcombo, public value: ValueGlobal, public searchhotel: SearchHotel, 
     public modalCtrl: ModalController,  public events: Events, private router: Router,public booking: Booking,public loadingCtrl: LoadingController,
@@ -84,6 +88,10 @@ export class HotelListPage implements OnInit{
     if(this.searchhotel.isRecent==1){
       this.name =authService.region;
     }
+    this.adult=this.searchhotel.adult;
+    this.child=this.searchhotel.child;
+    this.arrchild= this.searchhotel.arrchild;
+    this.roomnumber= this.searchhotel.roomnumber;
     this.ischeckAL=this.searchhotel.ischeckAL;
     this.searchhotel.location="";
     this.searchhotel.hasSortHotelList =  this.searchhotel.chuoi  ||this.searchhotel.facsearch || this.searchhotel.tagIds || this.searchhotel.classIds || this.searchhotel.tagIds || this.searchhotel.ischeckAL; 
@@ -134,6 +142,10 @@ export class HotelListPage implements OnInit{
           this.cindisplayhr = moment(this.datecin).format('DD/MM');
           this.coutdisplayhr = moment(this.datecout).format('DD/MM');
           this.guest = this.searchhotel.child + this.searchhotel.adult;
+          this.adult=this.searchhotel.adult;
+          this.child=this.searchhotel.child;
+          this.arrchild= this.searchhotel.arrchild;
+          this.roomnumber= this.searchhotel.roomnumber;
           this.gf.setCacheSearch(item,1);
           let id = this.searchhotel.gbmsg ?  (this.searchhotel.gbmsg.regionId ? this.searchhotel.gbmsg.regionId : this.searchhotel.gbmsg.regionId) : this.authService.regionid;
           if(this.searchhotel.isRecent==1){
@@ -1110,6 +1122,10 @@ export class HotelListPage implements OnInit{
       //this.router.navigateByUrl('/hoteldetail/'+id);
       setTimeout(()=>{
         //this.router.navigateByUrl('/app/tabs/hoteldetail/'+id);
+          this.searchhotel.adult = this.adult;
+          this.searchhotel.child = this.child;
+          this.searchhotel.arrchild = this.arrchild;
+          this.searchhotel.roomnumber = this.roomnumber;
         this.navCtrl.navigateForward('/hoteldetail/'+  msg.HotelId);
       },10)
       
@@ -1614,6 +1630,12 @@ export class HotelListPage implements OnInit{
     this.valueGlobal.notSuggestDaily=[];
     this.valueGlobal.notSuggestDailyCB=[];
     this.contentHotelList.scrollToTop(300);
+    //this.searchhotel.CheckInDate = this.cin;
+    //this.searchhotel.CheckOutDate = this.cout;
+    this.searchhotel.adult = this.adult;
+    this.searchhotel.child = this.child;
+    this.searchhotel.arrchild = this.arrchild;
+    this.searchhotel.roomnumber = this.roomnumber;
     this.navCtrl.navigateForward('/popupinfobkg');
   }
 

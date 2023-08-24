@@ -12,7 +12,7 @@ import { element } from 'protractor';
 export class TicketfilterPage implements OnInit {
   arrFilter: any;
   arrResult: any;
-  constructor(private modalCtrl: ModalController, private gf: GlobalFunction, private ticketService: ticketService) { }
+  constructor(private modalCtrl: ModalController, public gf: GlobalFunction, public ticketService: ticketService) { }
 
   ngOnInit() {
     if (this.ticketService.isFilter) {

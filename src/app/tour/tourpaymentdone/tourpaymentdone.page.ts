@@ -66,7 +66,12 @@ export class TourPaymentDonePage implements OnInit {
     this.gf.hideLoading();
     if(this.tourService.BookingTourMytrip) {
       this.bookingCode = this.tourService.BookingTourMytrip.booking_id;
-      this.total = this.gf.convertNumberToString(this.tourService.BookingTourMytrip.amount_after_tax);
+      if(this.tourService.BookingTourMytrip.payment_fee){
+        this.total = this.gf.convertNumberToString(this.tourService.BookingTourMytrip.amount_after_tax + this.tourService.BookingTourMytrip.payment_fee);
+      }else{
+        this.total = this.gf.convertNumberToString(this.tourService.BookingTourMytrip.amount_after_tax);
+      }
+      
     }else{
       this.bookingCode = this.tourService.tourBookingCode;
       if(this.tourService.discountPrice){
