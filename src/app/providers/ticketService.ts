@@ -51,6 +51,8 @@ export class ticketService{
   regionModels: any;
   topicModels: any;
   typeModels: any;
+  selectedDateDisplay: string;
+  selectedDate: string;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

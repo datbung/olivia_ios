@@ -521,6 +521,8 @@ export class TicketServicePage implements OnInit {
               //     element.action=true;
               //   }
               // }
+              se.ticketService.selectedDateDisplay =  moment(fromdate).format('DD-MM-YYYY');
+              se.ticketService.selectedDate =  moment(fromdate).format('YYYY-MM-DD');
               this.ischeckDate = true;
               se.GetDailyRatePackages();
             }

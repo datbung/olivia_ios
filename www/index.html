@@ -30,8 +30,41 @@
   <meta name="theme-color" content="#1976d2">
   <!-- <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.0.3/custom-elements-es5-adapter.js" async></script> -->
   <script lang="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.4/xlsx.core.min.js"></script>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<link rel="stylesheet" href="styles.5516efa48aa4ffb43c26.css"></head>
+
+  <link rel="preconnect" href="https://www.google.com">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <script async defer src="https://www.google.com/recaptcha/api.js?render=6Lfy_gAnAAAAAK1jziFGhO6qF9irAG6b-lYsa27h"></script>
+<script>
+  // How this code snippet works:
+  // This logic overwrites the default behavior of `grecaptcha.ready()` to
+  // ensure that it can be safely called at any time. When `grecaptcha.ready()`
+  // is called before reCAPTCHA is loaded, the callback function that is passed
+  // by `grecaptcha.ready()` is enqueued for execution after reCAPTCHA is
+  // loaded.
+  if(typeof grecaptcha === 'undefined') {
+    grecaptcha = {};
+  }
+  grecaptcha.ready = function(cb){
+    if(typeof grecaptcha === 'undefined') {
+      // window.__grecaptcha_cfg is a global variable that stores reCAPTCHA's
+      // configuration. By default, any functions listed in its 'fns' property
+      // are automatically executed when reCAPTCHA loads.
+      const c = '___grecaptcha_cfg';
+      window[c] = window[c] || {};
+      (window[c]['fns'] = window[c]['fns']||[]).push(cb);
+    } else {
+      cb();
+    }
+  }
+
+  // Usage
+  grecaptcha.ready(function(){
+    grecaptcha.render("container", {
+      sitekey: "6Lfy_gAnAAAAAK1jziFGhO6qF9irAG6b-lYsa27h"
+    });
+  });
+</script>
+<link rel="stylesheet" href="styles.5782eb43d6ac26f6e177.css"></head>
 
 <body>
     <script>
@@ -55,6 +88,6 @@
        
 
   <noscript>Please enable JavaScript to continue using this application.</noscript>
-<script type="text/javascript" src="runtime.05f642ba3409130d8fb3.js"></script><script type="text/javascript" src="es2015-polyfills.a1e156cbb5d3c17b0464.js" nomodule></script><script type="text/javascript" src="polyfills.d27744b0bc483714fa2d.js"></script><script type="text/javascript" src="scripts.7691b53a4fb4a9020182.js"></script><script type="text/javascript" src="cordova.98fc7fcb7c020c1504f6.js"></script><script type="text/javascript" src="main.2a225b3b3d159171c377.js"></script></body>
+<script type="text/javascript" src="runtime.b4291110d9979210d07c.js"></script><script type="text/javascript" src="es2015-polyfills.a1e156cbb5d3c17b0464.js" nomodule></script><script type="text/javascript" src="polyfills.d27744b0bc483714fa2d.js"></script><script type="text/javascript" src="scripts.7691b53a4fb4a9020182.js"></script><script type="text/javascript" src="cordova.98fc7fcb7c020c1504f6.js"></script><script type="text/javascript" src="main.9a72fbbd11125e07d78f.js"></script></body>
 
 </html>

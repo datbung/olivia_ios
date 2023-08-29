@@ -19,7 +19,8 @@ import { OverlayEventDetail } from '@ionic/core';
 
 import { ticketService } from 'src/app/providers/ticketService';
 import { forEach } from '@angular/router/src/utils/collection';
-import { element } from 'protractor';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 /**
  * Generated class for the RoomadddetailsPage page.
  *
@@ -76,8 +77,24 @@ export class TicketAdddetailsPage implements OnInit {
   customInfo: any;
   customInfoGeneral: any;
   generalInfo: any;
-  groupDataOutputs: any;
-  groupDataBinding: any;
+  groupDataOutputs: any=[];
+  groupDataBinding: any=[];
+  customInfoArr: any=[];
+  customGeneralInfoArr: any=[];
+  trafficInfoArr: any=[];
+  trafficCarInfoArr: any=[];
+  trafficFlightInfoArr: any=[];
+  arrHours = ['00','01','02','03','04','05','06','07','08','09','10','11','12'];
+  arrMinutes = ['00','01','02','03','04','05','06','07','08','09','10',
+  '11','12','13','14','15','16','17','18','19','20',
+  '21','22','23','24','25','26','27','28','29','30',
+  '31','32','33','34','35','36','37','38','39','40',
+  '41','42','43','44','45','46','47','48','49','50',
+  '51','52','53','54','55','56','57','58','59',];
+  hours: any='00';
+  minutes: any='00';
+  trafficQtyInfoArr: any=[];
+  //public ticketCustomData: FormGroup;
   ngOnInit() {
 
   }
@@ -89,7 +106,8 @@ export class TicketAdddetailsPage implements OnInit {
     public searchhotel: SearchHotel,
     public tourService: tourService,
     public _voucherService: voucherService,
-    public ticketService: ticketService, public valueGlobal: ValueGlobal, public actionsheetCtrl: ActionSheetController) {
+    public ticketService: ticketService, public valueGlobal: ValueGlobal, public actionsheetCtrl: ActionSheetController,
+    private formBuilder: FormBuilder) {
     this.ischeckpayment = Roomif.ischeckpayment;
     // let tp =0;
 
@@ -154,7 +172,7 @@ export class TicketAdddetailsPage implements OnInit {
     //   priceBooking = this.booking.cost.replace(/\./g, '').replace(/\,/g, '');
     // }
     this.getSummary();
-
+   
   }
   GetUserInfo() {
     var se = this;
@@ -805,24 +823,29 @@ export class TicketAdddetailsPage implements OnInit {
     if (this.ischeck) {
       isInvoice = 1;
     }
-    let objCustomer = {
-      companyAddress: this.address,
-      companyContactEmail: this.emailhddt,
-      companyContactName: this.hotenhddt,
-      companyName: this.companyname,
-      companyTaxCode: this.tax,
+    let objCustomer = 
+    {
+      memberId: this.memberid || '',
+      username: this.hoten || '',
+      customerTitle: '',
       customerName: this.hoten,
       customerPhone: this.phone,
-      isInvoice: isInvoice,
+      // customerEmail: email,
+      leadingTitle: '',
       leadingName: this.hoten,
       leadingPhone: this.phone,
-      memberId: "",
-      paxList: "",
+      // leadingEmail: email,
+      isInvoice: isInvoice ? 1 : 0,
+      companyName: isInvoice ? this.companyname : '',
+      companyTaxCode: isInvoice ? this.tax: '',
+      companyAddress: isInvoice ? this.address : '',
+      companyContactEmail: isInvoice ? this.emailhddt : '',
+      companyContactName: isInvoice ? this.hotenhddt : '',
+      paxList: '',
       tourNotes: this.note,
-      username: "",
-      kkdayValue: JSON.stringify(this.kkdayValue),
-      kkdayRender: (this.ticketService.bookingInfo.booking.supplierCode == 'KKDAY' && this.ticketService.bookingInfo.kkdayResource) ? JSON.stringify(this.ticketService.bookingInfo.kkdayResource.data) : ""
-    }
+      kkdayResource: this.kkdayResource,
+      code: []//this.vouchers.filter(x => x.checked).map(x => x.code)
+    };
     let headers =
     {
       'content-type': 'application/json'
@@ -840,7 +863,7 @@ export class TicketAdddetailsPage implements OnInit {
   createObjectBooking(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.Roomif.notetotal = "";
-      this.gf.googleAnalytion('touradddetails', 'tour_payment_info', '');
+      //this.gf.googleAnalytion('touradddetails', 'tour_payment_info', '');
       if (this.hoten) {
         this.hoten = this.hoten.trim();
         var checktext = this.hasWhiteSpace(this.hoten);
@@ -920,25 +943,86 @@ export class TicketAdddetailsPage implements OnInit {
           return;
         }
       }
-      // if (this.isCustom) {
-      //   if (this.kkdayValue.custom[0].nationality != undefined) {
-      //     if (!this.kkdayValue.custom[0].nationality) {
-      //       alert('Vui lòng chọn quốc gia');
-      //       resolve(false);
-      //       return;
-      //     }
-      //   }
-      //   if (this.kkdayValue.custom[0].meal != undefined) {
-      //     if (!this.kkdayValue.custom[0].nationality) {
-      //       alert('Vui lòng chọn bữa ăn');
-      //       resolve(false);
-      //       return;
-      //     }
-      //   }
-      // }
-      if (this.isTraffic) {
-
+      if(this.customInfoArr){
+        for (let index = 0; index < this.customInfoArr.length; index++) {
+          const element = this.customInfoArr[index];
+          for (let indexc = 0; indexc < element.listCustom.length; indexc++) {
+            const elementCheck = element.listCustom[indexc];
+            if(!elementCheck[elementCheck.name]){
+              if(this.customInfoArr.length >1){
+                this.gf.showToastWarning(`${elementCheck.label} Khách ${index+1} không hợp lệ. Vui lòng kiểm tra lại`);
+              }else if(this.customInfoArr.length ==1){
+                this.gf.showToastWarning(`${elementCheck.label} không hợp lệ. Vui lòng kiểm tra lại`);
+              }
+              
+                resolve(false);
+                return;
+            }else{
+              this.kkdayResource.dataInput.custom[index][elementCheck.name] = elementCheck[elementCheck.name];
+            }
+          }
+          
+        }
       }
+      if(this.customGeneralInfoArr){
+        for (let index = 0; index < this.customGeneralInfoArr.length; index++) {
+          const element = this.customGeneralInfoArr[index];
+          for (let indexc = 0; indexc < element.listCustom.length; indexc++) {
+            const elementCheck = element.listCustom[indexc];
+            if(!elementCheck[elementCheck.name] && elementCheck.name != 'have_app'){
+              if((elementCheck.name == 'contact_app' || elementCheck.name == 'contact_app_account') && !elementCheck['allowInput']){
+                this.kkdayResource.dataInput.custom[index][elementCheck.name] = '';
+              }else{
+                this.gf.showToastWarning(`${elementCheck.label} không hợp lệ. Vui lòng kiểm tra lại`);
+                resolve(false);
+                return;
+              }
+            }else{
+              this.kkdayResource.dataInput.custom[index][elementCheck.name] = elementCheck[elementCheck.name];
+            }
+          }
+          
+        }
+      }
+      if(this.trafficInfoArr){
+        for (let index = 0; index < this.trafficInfoArr.length; index++) {
+          const element = this.trafficInfoArr[index];
+          if(!element[element.name]){
+            this.gf.showToastWarning(`${element.label} không hợp lệ. Vui lòng kiểm tra lại`);
+              resolve(false);
+              return;
+          }
+          else{
+            this.kkdayResource.dataInput.traffic.car[element.name] = element[element.name];
+          }
+        }
+      }
+      if(this.trafficCarInfoArr){
+        for (let index = 0; index < this.trafficCarInfoArr.length; index++) {
+          const element = this.trafficCarInfoArr[index];
+          if(!element[element.name]){
+            this.gf.showToastWarning(`${element.label} không hợp lệ. Vui lòng kiểm tra lại`);
+              resolve(false);
+              return;
+          }else{
+            this.kkdayResource.dataInput.traffic.car[element.name] = element[element.name];
+          }
+        }
+      }
+      if(this.trafficFlightInfoArr){
+        for (let index = 0; index < this.trafficFlightInfoArr.length; index++) {
+          const element = this.trafficFlightInfoArr[index];
+          if(!element[element.name]){
+            this.gf.showToastWarning(`${element.label} không hợp lệ. Vui lòng kiểm tra lại`);
+              resolve(false);
+              return;
+          }else{
+            this.kkdayResource.dataInput.traffic.flight[element.name] = element[element.name];
+          }
+        }
+      }
+
+      console.log(this.kkdayResource.dataInput);
       resolve(true);
     })
 
@@ -956,10 +1040,10 @@ export class TicketAdddetailsPage implements OnInit {
     this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.ticketService.itemTicketService.objbooking.bookingCode, {}, {}, '', '').then((data) => {
       if (data && data.success && data.data.kkdayResource) {
         this.summaryBooking = data.data;
-        this.kkdayResource = data.data.kkdayResource
+        this.kkdayResource = data.data.kkdayResource;
         if (this.summaryBooking.booking.supplement) {
           try {
-            this.kkdayResource.dataInput = JSON.parse(data.data.booking.supplement)
+            this.kkdayResource.dataInput = JSON.parse(data.data.booking.supplement);
           } catch {
 
           }
@@ -968,10 +1052,10 @@ export class TicketAdddetailsPage implements OnInit {
         if (this.kkdayResource.dataInput.custom && this.kkdayResource.dataInput.custom.length !== 0) {
           this.kkdayResource.dataInput.custom.forEach(_custom => {
             if ('tel_country_code' in _custom && !_custom['tel_country_code']) {
-              _custom['tel_country_code'] = '84'
+              _custom['tel_country_code'] = '84';
             }
             if ('nationality' in _custom && !_custom['nationality']) {
-              _custom['nationality'] = 'VN'
+              _custom['nationality'] = 'VN';
             }
           })
         }
@@ -988,14 +1072,14 @@ export class TicketAdddetailsPage implements OnInit {
           // console.log(_trafficValidConverted)
           for (const [_key, _value] of Object.entries(_trafficValidConverted)) {
             for (const [_keyEntries, _valueEntries] of Object.entries(_value as any)) {
-              const [dataOutput] = this.kkdayResource.data.filter(x => x.name === _keyEntries)
+              const [dataOutput] = this.kkdayResource.data.filter(x => x.name === _keyEntries);
 
               if (dataOutput && dataOutput.dataRaw && dataOutput.dataRaw.length === 1) {
-                const [firstDataRaw] = dataOutput.dataRaw
+                const [firstDataRaw] = dataOutput.dataRaw;
                 if (typeof firstDataRaw === 'string') {
-                  this.kkdayResource.dataInput.traffic[_key][_keyEntries] = firstDataRaw
+                  this.kkdayResource.dataInput.traffic[_key][_keyEntries] = firstDataRaw;
                 } else {
-                  this.kkdayResource.dataInput.traffic[_key][_keyEntries] = firstDataRaw[dataOutput.field]
+                  this.kkdayResource.dataInput.traffic[_key][_keyEntries] = firstDataRaw[dataOutput.field];
                 }
               }
             }
@@ -1003,67 +1087,179 @@ export class TicketAdddetailsPage implements OnInit {
         }
 
         // console.log(this.kkdayResource.dataInput.custom)
-
+       //let _formGroup = {};
         if (this.kkdayResource.dataInput.custom) {
-          this.customs = this.kkdayResource.dataInput.custom
-          // console.log(this.customs)
+          this.customs = this.kkdayResource.dataInput.custom;
+          
+          // this.customs.forEach(element => {
+          //   _formGroup[element] = ['', Validators.compose([Validators.required])]
+          // });
         }
         if (this.kkdayResource.dataInput.traffic) {
-          this.traffic = this.kkdayResource.dataInput.traffic
+          this.traffic = this.kkdayResource.dataInput.traffic;
+         
+          
         }
 
         const dataOutputNotfound = this.kkdayResource.data.filter(x => !this.DATA_NAME.includes(x.name) && x.label)
 
         if(this.kkdayResource.dataInput.custom){
-          const [_firstCustom] = this.kkdayResource.dataInput.custom
-          const _customKeys = Object.keys(_firstCustom)
+          const [_firstCustom] = this.kkdayResource.dataInput.custom;
+          const _customKeys = Object.keys(_firstCustom);
+          //console.log(_customKeys)
 
-          this.customInfo = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'CustomInfo')
-          // console.log(this.customInfo)
-          this.customInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo')
+          let _customInfo = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'CustomInfo');
+          //console.log(_customInfo)
+          for (let index = 0; index < this.kkdayResource.dataInput.custom.length; index++) {
+            let element = this.kkdayResource.dataInput.custom[index];
+            let _listCustom = [];
+            _customInfo.forEach(elementCustom => {
+              elementCustom.index = index+1;
+              elementCustom[elementCustom.name] = '';
+              if ('tel_country_code' == elementCustom.name) {
+                elementCustom[elementCustom.name] = '+84';
+              }
+              if ('nationality' == elementCustom.name) {
+                elementCustom[elementCustom.name] = 'Vietnam';
+              }
+              elementCustom.dataRawSearch = [...elementCustom.dataRaw];
+              _listCustom.push({...elementCustom});
+            });
+           let _itemCustom = {listCustom: _listCustom};
+            this.customInfoArr.push(_itemCustom);
+          }
+
+          this.customInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo');
+          let _customInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo');
+          if(_customInfoGeneral && _customInfoGeneral.length >0){
+            let _refField = [];
+            for (let index = 0; index < _customInfoGeneral.length; index++) {
+              let element = _customInfoGeneral[index];
+              element[element.name] = '';
+              element.dataRawSearch = [...element.dataRaw];
+              //this.customGeneralInfoArr.push({..._customInfoGeneral[0]});
+
+              _customInfoGeneral.forEach(elementCustom => {
+                elementCustom.index = index+1;
+                elementCustom[elementCustom.name] = '';
+                
+                elementCustom.dataRawSearch = [...elementCustom.dataRaw];
+                if(elementCustom.name == 'have_app' && elementCustom.ref && elementCustom.ref.length >0){
+                  _refField = elementCustom.ref;
+                }
+                if(elementCustom.name && _refField.indexOf(elementCustom.name) != -1){
+                  elementCustom['allowInput'] = true;
+                }else {
+                  elementCustom['allowInput'] ='undefined';
+                }
+              });
+             
+            }
+            let _itemGeneralCustom = {listCustom: _customInfoGeneral};
+            this.customGeneralInfoArr.push(_itemGeneralCustom);
+          }
+
+          console.log(this.customInfoArr);
+          console.log(this.customGeneralInfoArr);
         }
 
         if(this.kkdayResource.dataInput.traffic){
-          const _allCustomKeys = [...this.customInfo.map(x => x.name), ...this.customInfoGeneral.map(x => x.name)]
-          this.generalInfo = dataOutputNotfound.filter(x => !_allCustomKeys.includes(x.name) && x.session === 'GeneralInfo')
+          //const [_firstCustom] = this.kkdayResource.dataInput.custom;
+          //const _customKeys = Object.keys(_firstCustom);
+          let _trafficInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && x.name == 's_location');
+          if(_trafficInfo && _trafficInfo.length >0 && _trafficInfo[0].dataRaw && _trafficInfo[0].dataRaw.length >0){
+            _trafficInfo[0][_trafficInfo[0].name] = _trafficInfo[0].dataRaw[0].name;
+            _trafficInfo[0].dataRawSearch = [..._trafficInfo[0].dataRaw];
+            this.trafficInfoArr.push({..._trafficInfo[0]});
+            //console.log(this.trafficInfoArr);
+          }
           
-          const titleFilters = this.generalInfo.map(x => x.title)
-          // console.log(titleFilters)
-
-          const titleDistincts = [...new Set(titleFilters)]
-          // console.log(titleDistincts)
-          titleDistincts.forEach(_item =>{
-            const _dataOutputs = this.generalInfo.filter(x => x.title === _item)
-
-            this.groupDataOutputs.push({
-              title: _item,
-              dataOutputs: _dataOutputs
-            })
-
-            const valueObject: any[] = [];
-            _dataOutputs.forEach(_data =>{
-              // console.log(_data)
-              // valueObject.push({
-              //   [_data.name]: ''
-              // })
-         
+          if(this.kkdayResource.dataInput.traffic && this.kkdayResource.dataInput.traffic.car){
+              //const [_firstCustom] = this.kkdayResource.dataInput.traffic.car;
+              const _customCarKeys = Object.keys(this.kkdayResource.dataInput.traffic.car);
+            let _trafficCarInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customCarKeys.includes(x.name));
+            if(_trafficCarInfo && _trafficCarInfo.length >0){
+              _trafficCarInfo.forEach(element => {
+                //element[element.name] = element.dataRaw[0].name;
+                element.dataRawSearch = [...element.dataRaw];
+                if(element.type == 'date' && this.ticketService.selectedDate){
+                  element[element.name]= this.ticketService.selectedDate;
+                }
+                this.trafficCarInfoArr.push({...element});
+              });
               
-            })
-            this.groupDataBinding.push(valueObject)
-          })
+              console.log(this.trafficCarInfoArr);
+            }
+          }
+          
+          if(this.kkdayResource.dataInput.traffic && this.kkdayResource.dataInput.traffic.flight){
+            //const [_firstCustom] = this.kkdayResource.dataInput.traffic.flight;
+            const _customFlightKeys = Object.keys(this.kkdayResource.dataInput.traffic.flight);
+            let _trafficFlightInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customFlightKeys.includes(x.name));
+            if(_trafficFlightInfo && _trafficFlightInfo.length >0){
+              _trafficFlightInfo.forEach(element => {
+                //element[element.name] = element.dataRaw[0].name;
+                element.dataRawSearch = [...element.dataRaw];
+                if(element.name == 'arrival_time'){
+                  element.showHours = false;
+                  element.showMinutes = false;
+                }
+                else if(element.type == 'date' && this.ticketService.selectedDate){
+                  element[element.name]= this.ticketService.selectedDate;
+                }
+                this.trafficFlightInfoArr.push({...element});
+              });
+              //console.log(this.trafficFlightInfoArr);
+            }
+          }
 
-          // console.log(this.groupDataOutputs)
-          // console.log(this.groupDataBinding)
+          if(this.kkdayResource.dataInput.traffic && this.kkdayResource.dataInput.traffic.qty){
+            const _customFlightKeys = Object.keys(this.kkdayResource.dataInput.traffic.qty);
+            let _trafficQtyInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customFlightKeys.includes(x.name));
+            if(_trafficQtyInfo && _trafficQtyInfo.length >0){
+              _trafficQtyInfo.forEach(element => {
+                element.dataRawSearch = [...element.dataRaw];
+                this.trafficQtyInfoArr.push({...element});
+              });
+              //console.log(this.trafficFlightInfoArr);
+            }
+          }
+         
+          //_formGroup[_trafficInfo[0].name] = ['', Validators.compose([Validators.required])];
+          // const [_firstCustom] = this.kkdayResource.dataInput.custom;
+          // const _customKeys = Object.keys(_firstCustom);
+          // let __customInfo = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'CustomInfo');
+          // const _allCustomKeys = [...__customInfo.map(x => x.name), ...this.customInfoGeneral.map(x => x.name)];
+          // this.generalInfo = dataOutputNotfound.filter(x => !_allCustomKeys.includes(x.name) && x.session === 'GeneralInfo');
+          
+          // const titleFilters = this.generalInfo.map(x => x.title);
+          // // console.log(titleFilters)
+
+          // const titleDistincts = [...new Set(titleFilters)];
+          // // console.log(titleDistincts)
+          // titleDistincts.forEach(_item =>{
+          //   const _dataOutputs = this.generalInfo.filter(x => x.title === _item);
+
+          //   this.groupDataOutputs.push({
+          //     title: _item,
+          //     dataOutputs: _dataOutputs
+          //   });
+
+          //   const valueObject: any[] = [];
+          //   _dataOutputs.forEach(_data =>{
+          //     // console.log(_data)
+          //     // valueObject.push({
+          //     //   [_data.name]: ''
+          //     // })
+          //   })
+          //   this.groupDataBinding.push(valueObject);
+
+          //})
+
+         
         }
-        // this.ticketService.bookingInfo = data.data;
-        // this.kkdayValue = this.ticketService.bookingInfo.kkdayResource.dataInput;
-        // if ('custom' in this.kkdayValue) {
-        //   this.isCustom = true;
-        // }
-        // if ('traffic' in this.kkdayValue) {
-        //   this.isTraffic = true;
-        // }
 
+        //console.log(_formGroup);
       }
     });
   }
@@ -1128,5 +1324,97 @@ export class TicketAdddetailsPage implements OnInit {
     // }
     // console.log(this.kkdayValue);
   }
+
+  getCusInfoDataRaw(ev, item){
+    var se = this;
+      
+        se.zone.run(()=>{
+          if(ev != 'dropdownicon'){
+            item.showDataRaw = true;
+          }else{
+            item.showDataRaw = !item.showDataRaw;
+            if(!item.showDataRaw && !item[item.name]){
+              item.errorDataRaw = true;
+            }
+          }
+          
+        })
+        
+        if(ev != 'dropdownicon' && ev.detail && ev.detail.data){
+          
+          const val =  ev.detail.data.toLowerCase();
+          let filteritems = item.dataRawSearch.filter((element) => { return se.gf.convertFontVNI(element.name.toLowerCase()).indexOf(val) != -1 });
+    
+          se.zone.run(()=>{
+            if(filteritems && filteritems.length >0){
+              item.dataRawSearch = [...filteritems];
+            }
+          })
+         
+        }else{
+          se.zone.run(()=>{
+            item.dataRawSearch = [...item.dataRaw];
+          })
+        }
+      
+    
+  }
+
+  selectCusInfoDataRaw(item, _selectData){
+      var se = this;
+      se.zone.run(()=>{
+        item[item.name] = _selectData.name;
+        item.showDataRaw = false;
+        item.errorDataRaw = false;
+        item.textErrorPassportCountry = "";
+      })
+    }
+
+    changeContactApp(event, _cusGeneralInfo){
+      
+      if(event.detail.value && _cusGeneralInfo && _cusGeneralInfo.ref && _cusGeneralInfo.ref.length >0){
+        this.zone.run(()=>{
+          this.customGeneralInfoArr.forEach(elementGIA => {
+            elementGIA.listCustom.forEach(elementItem => {
+                if(elementItem && elementItem.allowInput != 'undefined'){
+                  elementItem.allowInput = event.detail.value=="1" ? false : true;
+                  //elementItem[elementItem.name] = event.detail.value=="1" ? false : true;
+                }
+                if(elementItem.name=='have_app'){
+                  elementItem['have_app'] = event.detail.value=="1" ? false : true;
+                }
+            });
+          });
+        })
+        
+      }
+    }
+
+    onBlurCusInfoDataRaw(event, item) {
+      setTimeout(()=>{
+        item.showDataRaw = false;
+      },100)
+      
+    }
+
+    clickShowHours(item){
+      item.showHours = !item.showHours;
+    }
+    clickShowMinutes(item){
+      item.showMinutes = !item.showMinutes;
+    }
+    selectTime(type,value,item){
+      if(type==1){
+        this.hours = value;
+        item.hours = value;
+        item[item.name] = `${value}:${this.minutes}`;
+        //this.kkdayResource.dataInput.traffic.flight.arrival_time = `${value}:${this.minutes}`;
+      }else{
+        this.minutes = value;
+        item.minutes = value;
+        item[item.name] = `${this.hours}:${value}`;
+        //this.kkdayResource.dataInput.traffic.flight.arrival_time = `${this.hours}:${value}`;
+      }
+    }
 }
 

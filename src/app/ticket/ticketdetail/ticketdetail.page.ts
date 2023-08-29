@@ -7,7 +7,7 @@ import { tourService } from '../../providers/tourService';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
-import { SearchHotel } from 'src/app/providers/book-service';
+import { SearchHotel, ValueGlobal } from 'src/app/providers/book-service';
 import { HotelreviewsimagePage } from 'src/app/hotelreviewsimage/hotelreviewsimage';
 
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player/ngx';
@@ -78,9 +78,10 @@ export class TicketDetailPage {
         public searchHotel: SearchHotel,
         private youtube: YoutubeVideoPlayer,
         private sanitizer: DomSanitizer,
-        public ticketService: ticketService,public loadingCtrl: LoadingController,private safariViewController:SafariViewController) {
+        public ticketService: ticketService,public loadingCtrl: LoadingController,private safariViewController:SafariViewController,
+        public valueGlobal: ValueGlobal) {
             this.loaddata();
-
+           
         }
   private loaddata() {
 
@@ -218,7 +219,8 @@ export class TicketDetailPage {
           //   this.navCtrl.back();
           //   this.ticketService.backPage = '';
           // }
-          this.navCtrl.back();
+          this.valueGlobal.backValue = "hometicket";
+          this.navCtrl.navigateBack('tabs/tab1');
           
         }
 
@@ -630,14 +632,17 @@ export class TicketDetailPage {
         if (this.objRate) {
           this.ticketService.itemTicketService.itemObjRate = {};
           this.ticketService.itemTicketService.itemObjRate = this.objRate.find((el) => { return el.pkgId == itemService.id });
-          this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
-            element.child = element.child.map((item, index) => {
-              if (index === 0) {
-                return { ...item, action: true };
-              }
-              return { ...item, action: false };
+          if(this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs){
+            this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
+              element.child = element.child.map((item, index) => {
+                if (index === 0) {
+                  return { ...item, action: true };
+                }
+                return { ...item, action: false };
+              });
             });
-          });
+          }
+          
         }
         this.navCtrl.navigateForward('/ticketservice');
         // this.GetCalendarBySkuId(itemService);

@@ -485,8 +485,8 @@
             <div *ngIf="loaddeparturedone else loadingprice" class="div-price">
                 <!-- <span class="text-price-footer" *ngIf="(tourService.itemDepartureCalendar && tourService.itemDepartureCalendar.PriceAdultAvgStr)">{{tourService.itemDepartureCalendar.PriceAdultAvgStr}}</span>
                 <span class="text-price-footer" *ngIf="(!tourService.itemDepartureCalendar || !tourService.itemDepartureCalendar.PriceAdultAvgStr)">{{gf.convertNumberToString(itemDetail.AdultPrice)}}</span> -->
-                <span class="text-price-footer">{{gf.convertNumberToString(experiencePackages[0].minRate)}}</span>
-                <span *ngIf="experiencePackages[0].minRate" class="text-price-sub">đ/khách</span>
+                <span class="text-price-footer" *ngIf="experiencePackages && experiencePackages[0] && experiencePackages[0].minRate">{{gf.convertNumberToString(experiencePackages[0].minRate)}}</span>
+                <span *ngIf="experiencePackages && experiencePackages[0] && experiencePackages[0].minRate" class="text-price-sub">đ/khách</span>
             </div>
             <ng-template #loadingprice>
                 <ion-skeleton-text animated

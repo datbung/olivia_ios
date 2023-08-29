@@ -14,7 +14,7 @@ export class TicketfilterPage implements OnInit {
   arrResult: any;
   itemTicket: any;
   itemRegion: any;
-  constructor(private navCtrl: NavController,private modalCtrl: ModalController, private gf: GlobalFunction, private ticketService: ticketService,public zone: NgZone) { }
+  constructor(private navCtrl: NavController,private modalCtrl: ModalController, public gf: GlobalFunction, public ticketService: ticketService,public zone: NgZone) { }
 
   ngOnInit() {
     // this.getdata(0)

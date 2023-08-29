@@ -17,6 +17,9 @@
       <div class="div-login m-bottom-16" *ngIf="!auth_token" (click)="goToLogin()">
         Đã có tài khoản? <span class="text-login">Đăng nhập ngay</span>
       </div>
+      <div class="label-title">
+        Thông tin người đặt
+      </div>
       <ion-row class="m-left-5px">
           <ion-col size="12">
               <ion-item style="--padding-start: 0px" class="item-input-custom">
@@ -33,8 +36,18 @@
           </ion-item>
         </ion-col>
       </ion-row>
+
+      <ion-row class="m-left-5px">
+        <ion-col size="12">
+          <ion-item style="--padding-start: 0px" class="item-input-custom">
+            <ion-label class="label-name" position="stacked">Ghi chú & yêu cầu đặc biệt</ion-label>
+            <ion-input class="label-input" [(ngModel)]="note" type="note" required></ion-input>
+           
+          </ion-item>
+        </ion-col>
+      </ion-row>
     </div>
-    <ion-row *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.supplierCode=='KKDAY' && ticketService.bookingInfo.kkdayResource" class="m-left-5px">
+    <!-- <ion-row *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.supplierCode=='KKDAY' && ticketService.bookingInfo.kkdayResource" class="m-left-5px">
       <ion-col [ngClass]="item.name=='traffic_type' || item.name == 's_date' || item.name == 'arrival_time' ? 'display-none':''" size="6" *ngFor="let item of ticketService.bookingInfo.kkdayResource.data">
         <ion-item  *ngIf="item.name !='traffic_type' || item.name != 's_date' || item.name != 'arrival_time'" style="--padding-start: 0px" class="item-input-custom">
           <ion-label class="label-name" position="stacked">{{item.label}}*</ion-label>
@@ -44,31 +57,299 @@
           </ion-select>
         </ion-item>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
+    
+      <div class="div-split-panel m-top-24 m-bottom-16" *ngIf="customInfoArr && customInfoArr.length >0"></div>
+      
+      <div *ngIf="customInfoArr && customInfoArr.length >0">
+        <div class="label-title" >
+          Thông tin khách
+        </div>
+        <div *ngFor="let itemInfo of customInfoArr;let idx = index">
+          <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length >1">Khách {{idx+1}} <span class="text-sub">(Người lớn từ 12 tuổi trở lên)</span></div>
+          <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length ==1">Thông tin khách đặt dịch vụ</div>
+          <div *ngFor="let cusInfo of itemInfo.listCustom;let idx = index">
+            <div class="text-sub m-top-12" *ngIf="cusInfo.label">
+              {{cusInfo.label}} <span class="cls-required">*</span>
+            </div>
+            <div class="cls-input-height"><ion-input class="cls-input-custom" [(ngModel)]="cusInfo[cusInfo.name]" *ngIf="cusInfo.name && cusInfo.type=='text'" (ionInput)="inputEvent($event, cusInfo)" required></ion-input></div>
+                <div  class="div-relative">
+                  <ion-searchbar  class="cls-searchbar-custom" *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0"
+                    searchIcon="false" cancelIcon="false" [(ngModel)]="cusInfo[cusInfo.name]"
+                    #input id="input" style="padding: 0;" autocomplete="on" autocorrect="true" 
+                    debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, cusInfo)" (ionFocus)="getCusInfoDataRaw($event, cusInfo)" 
+                    (ionBlur)="onBlurCusInfoDataRaw($event, cusInfo)" required></ion-searchbar>
+                    <div [ngClass]="cusInfo.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0"
+                                      (click)="getCusInfoDataRaw('dropdownicon', cusInfo)">
+                                      <img *ngIf="!cusInfo.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
+                                      <img *ngIf="cusInfo.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
+                                  </div>
+                    <div *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-country">
+                      <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
+                        selectData.name }}</ion-item>
+                    </div>
+                </div>
 
- 
-    <!-- <div *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.supplierCode=='KKDAY' && ischeckkkdayValue" class="m-top-16">
-      <div class="div-options">
-        <div class="text-options-select">{{objdataRaw[0].name}}</div>
-        <div class="text-options">{{objdataRaw[0].address}}</div>
-        <div class="d-flex">
-          <div class="text-options">{{objdataRaw[0].s_time}}</div> <div class="m-5"> ~ </div> <div class="text-options">{{objdataRaw[0].e_time}}</div>
+                <div class="cls-custom-date" *ngIf="cusInfo.name && cusInfo.type=='date'">
+                  <ion-datetime cancelText="Thoát" doneText="Hoàn thành" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY"
+                    [(ngModel)]="cusInfo[cusInfo.name]"
+                    required></ion-datetime>
+                </div>
+          </div>
+          
         </div>
       </div>
-    </div> -->
-    <div style="margin-left: -5px">
-        <ion-row>
-            <ion-col size="12">
-              <ion-item style="--padding-start: 0px" class="item-input-custom">
-                <ion-label class="label-name" position="stacked">Yêu cầu khác</ion-label>
-                <ion-input #ipNote class="label-input" (ionFocus)="scrollToElement(2)" [(ngModel)]="note"></ion-input>
-              </ion-item>
-            </ion-col>
-          </ion-row>
+
+      <div class="div-split-panel m-top-24 m-bottom-16" *ngIf="customGeneralInfoArr && customGeneralInfoArr.length >0"></div>
+      <div *ngIf="customGeneralInfoArr && customGeneralInfoArr.length >0">
+        <div class="label-title" >
+          Thông tin chung
+        </div>
+        <div *ngFor="let itemGeneralInfo of customGeneralInfoArr;let idx = index">
+          <div *ngFor="let cusGeneralInfo of itemGeneralInfo.listCustom;let idx = index">
+            <div class="text-sub m-top-12" *ngIf="cusGeneralInfo.label">
+              {{cusGeneralInfo.label}} <span class="cls-required">*</span>
+            </div>
+            <div class="cls-option">
+              <ion-radio-group *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='bool' && cusGeneralInfo.name=='have_app'" (ionChange)="changeContactApp($event, cusGeneralInfo)">
+                <div class="d-flex m-top-8">
+                  <div class="v-align-center">
+                    <ion-radio value="0" [checked]="true" mode="md"></ion-radio>
+                    <ion-label class="m-left-6">Có</ion-label>
+                  </div>
+                  <div class="m-left-32">
+                    <ion-radio value="1" mode="md"></ion-radio>
+                    <ion-label class="m-left-6">Không</ion-label>
+                  </div>
+                </div>
+                  
+              </ion-radio-group>
+            </div>
+            <div class="cls-input-height"><ion-input [disabled]="!cusGeneralInfo.allowInput" class="cls-input-custom" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='text'"  required></ion-input></div>
+                <div *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 " class="div-relative">
+                  <ion-searchbar  class="cls-searchbar-custom" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 "
+                  searchIcon="false" cancelIcon="false" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]"
+                  #input id="input" style="padding: 0;" autocomplete="on" autocorrect="true"
+                  debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, cusGeneralInfo)" (ionFocus)="getCusInfoDataRaw($event, cusGeneralInfo)" (ionBlur)="onBlurCusInfoDataRaw($event, cusGeneralInfo)"
+                  [disabled]="!cusGeneralInfo.allowInput"
+                  required></ion-searchbar>
+                  <div [ngClass]="cusGeneralInfo.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 &&cusGeneralInfo.allowInput"
+                                      (click)="getCusInfoDataRaw('dropdownicon', cusGeneralInfo)">
+                                      <img *ngIf="!cusGeneralInfo.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
+                                      <img *ngIf="cusGeneralInfo.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
+                                  </div>
+                  <div *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 && cusGeneralInfo.showDataRaw" class="cls-selection-country">
+                    <ion-item [disabled]="!cusGeneralInfo.allowInput" class="item-country" *ngFor="let selectGeneralData of cusGeneralInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusGeneralInfo, selectGeneralData)">{{
+                      selectGeneralData.name }}</ion-item>
+                  </div>
+                </div>
+              
+
+          </div>
+          
+        </div>
       </div>
 
-      <hr class="cls-hr">
+      <div class="div-split-panel m-top-24 m-bottom-16" *ngIf="trafficInfoArr && trafficInfoArr.length >0"></div>
+      <div *ngIf="trafficInfoArr && trafficInfoArr.length >0">
+        <div class="label-title" >
+          Quầy đổi vé
+        </div>
+        <div *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 " >
+          <div class="text-sub m-top-12" *ngIf="trafficInfoArr[0].label">
+            {{trafficInfoArr[0].label}} <span class="cls-required">*</span>
+          </div>
+          <div class="div-relative">
+            <ion-searchbar  class="cls-searchbar-custom" *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 "
+              searchIcon="false" cancelIcon="false" [(ngModel)]="trafficInfoArr[0][trafficInfoArr[0].name]"
+              #input id="input" style="padding: 0;" autocomplete="on" autocorrect="true"
+              debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, trafficInfoArr[0])" (ionFocus)="getCusInfoDataRaw($event, trafficInfoArr[0])" required></ion-searchbar>
+              <div [ngClass]="trafficInfoArr[0].errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 "
+                                  (click)="getCusInfoDataRaw('dropdownicon', trafficInfoArr[0])">
+                                  <img *ngIf="!trafficInfoArr[0].errorDataRaw" src="./assets/imgs/ic_down_b.svg">
+                                  <img *ngIf="trafficInfoArr[0].errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
+                              </div>
+              <div *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 && trafficInfoArr[0].showDataRaw" class="cls-selection-country">
+                <ion-item class="item-country" *ngFor="let selectGeneralData of trafficInfoArr[0].dataRawSearch" (click)="selectCusInfoDataRaw(trafficInfoArr[0], selectGeneralData)">{{
+                  selectGeneralData.name }}</ion-item>
+              </div>
+          </div>
+          
+        </div>
+      </div>
 
+      <div *ngIf="trafficCarInfoArr && trafficCarInfoArr.length >0">
+        <div class="label-title m-top-16" >
+          Thông tin đưa đón
+        </div>
+        <div *ngFor="let itemTraffic of trafficCarInfoArr; let idxtf = index">
+          <div *ngIf=" itemTraffic.name " >
+            <div [ngClass]="idxtf ==0 ? 'text-sub m-top-12' : 'text-sub m-top-16' " *ngIf="itemTraffic.label">
+              {{itemTraffic.label}} <span class="cls-required">*</span>
+            </div>
+            <div class="div-relative">
+              <ion-searchbar  class="cls-searchbar-custom" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
+                searchIcon="false" cancelIcon="false" [(ngModel)]="itemTraffic[itemTraffic.name]"
+                #input id="input" style="padding: 0;" autocomplete="on" autocorrect="true"
+                debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, itemTraffic)" (ionFocus)="getCusInfoDataRaw($event, itemTraffic)" required></ion-searchbar>
+                <div [ngClass]="itemTraffic.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
+                                    (click)="getCusInfoDataRaw('dropdownicon', itemTraffic)">
+                                    <img *ngIf="!itemTraffic.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
+                                    <img *ngIf="itemTraffic.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
+                                </div>
+                <div *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.showDataRaw && itemTraffic.type=='array'" class="cls-selection-country">
+                  <ion-item class="item-country" *ngFor="let selectGeneralData of itemTraffic.dataRawSearch" (click)="selectCusInfoDataRaw(itemTraffic, selectGeneralData)">{{
+                    selectGeneralData.name }}</ion-item>
+                </div>
+            </div>
+
+            <div *ngIf="itemTraffic.type == 'date'" class="div-traffic-date d-flex">
+              <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
+              <div class="div-text-date">{{ticketService.selectedDateDisplay}}</div>
+            </div>
+
+            <div *ngIf="itemTraffic.type == 'time'" class="div-traffic-time d-flex">
+              <div class="div-relative div-select-time"  (click)="clickShowHours(itemTraffic)">
+                <div *ngIf="itemTraffic.showHours" class="cls-select-time"><ion-item *ngFor="let hour of arrHours" (click)="selectTime(1,hour,itemTraffic)">{{hour}}</ion-item></div>
+                <div *ngIf="itemTraffic.hours" class="cls-time">{{itemTraffic.hours}}</div>
+                <div class="div-icon-down"></div>
+              </div>
+              <div class="text-time m-left-8">giờ</div>
+             
+              <div class="div-relative div-select-time m-left-32" (click)="clickShowMinutes(itemTraffic)">
+                <div *ngIf="itemTraffic.showMinutes" class="cls-select-time">
+                  <ion-item *ngFor="let minute of arrMinutes" (click)="selectTime(2,minute,itemTraffic)">{{minute}}</ion-item>
+                </div>
+                <div *ngIf="itemTraffic.minutes" class="cls-time">{{itemTraffic.minutes}}</div>
+                <div class="div-icon-down"></div>
+              </div>
+              <div class="text-time m-left-8">phút</div>
+            </div>
+
+            <div *ngIf="itemTraffic.type=='text' || itemTraffic.type=='string'">
+              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" required></ion-input>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div>
+
+      <div *ngIf="trafficFlightInfoArr && trafficFlightInfoArr.length >0">
+        <div class="label-title m-top-16" >
+          Thông tin chuyến bay
+        </div>
+        <div *ngFor="let itemTraffic of trafficFlightInfoArr; let idxtf = index">
+          <div *ngIf=" itemTraffic.name " >
+            <div [ngClass]="idxtf ==0 ? 'text-sub m-top-12' : 'text-sub m-top-16' " *ngIf="itemTraffic.label">
+              {{itemTraffic.label}} <span class="cls-required">*</span>
+            </div>
+            <div class="div-relative">
+              <ion-searchbar  class="cls-searchbar-custom" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
+                searchIcon="false" cancelIcon="false" [(ngModel)]="itemTraffic[itemTraffic.name]"
+                #input id="input" style="padding: 0;" autocomplete="on" autocorrect="true"
+                debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, itemTraffic)" (ionFocus)="getCusInfoDataRaw($event, itemTraffic)" required></ion-searchbar>
+                <div [ngClass]="itemTraffic.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
+                                    (click)="getCusInfoDataRaw('dropdownicon', itemTraffic)">
+                                    <img *ngIf="!itemTraffic.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
+                                    <img *ngIf="itemTraffic.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
+                                </div>
+                <div *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.showDataRaw && itemTraffic.type=='array'" class="cls-selection-country">
+                  <ion-item class="item-country" *ngFor="let selectGeneralData of itemTraffic.dataRawSearch" (click)="selectCusInfoDataRaw(itemTraffic, selectGeneralData)">{{
+                    selectGeneralData.name }}</ion-item>
+                </div>
+            </div>
+            
+
+            <div *ngIf="itemTraffic.type=='text' || itemTraffic.type=='string'">
+              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" required></ion-input>
+            </div>
+
+            <div *ngIf="itemTraffic.type == 'date'" class="div-traffic-date d-flex">
+              <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
+              <div class="div-text-date">{{ticketService.selectedDateDisplay}}</div>
+            </div>
+            <div *ngIf="itemTraffic.type == 'time'" class="div-traffic-time d-flex">
+              
+              <div class="div-relative div-select-time"  (click)="clickShowHours(itemTraffic)">
+                <div *ngIf="itemTraffic.showHours" class="cls-select-time"><ion-item *ngFor="let hour of arrHours" (click)="selectTime(1,hour,itemTraffic)">{{hour}}</ion-item></div>
+                <div *ngIf="itemTraffic.hours" class="cls-time">{{itemTraffic.hours}}</div>
+                <div class="div-icon-down"></div>
+              </div>
+              <div class="text-time m-left-8">giờ</div>
+             
+              <div class="div-relative div-select-time m-left-32" (click)="clickShowMinutes(itemTraffic)">
+                <div *ngIf="itemTraffic.showMinutes" class="cls-select-time">
+                  <ion-item *ngFor="let minute of arrMinutes" (click)="selectTime(2,minute,itemTraffic)">{{minute}}</ion-item>
+                </div>
+                <div *ngIf="itemTraffic.minutes" class="cls-time">{{itemTraffic.minutes}}</div>
+                <div class="div-icon-down"></div>
+              </div>
+              <div class="text-time m-left-8">phút</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div *ngIf="trafficQtyInfoArr && trafficQtyInfoArr.length >0">
+          <div class="label-title m-top-16" >
+            Số lượng hành khách
+          </div>
+          <div *ngFor="let itemTrafficQty of trafficQtyInfoArr; let idxtf = index">
+            <div *ngIf=" itemTrafficQty.name " >
+              <div [ngClass]="idxtf ==0 ? 'text-sub m-top-12' : 'text-sub m-top-16' " *ngIf="itemTrafficQty.label">
+                {{itemTrafficQty.label}} <span class="cls-required">*</span>
+              </div>
+              <div class="div-relative">
+                <ion-searchbar  class="cls-searchbar-custom" *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.type=='array'"
+                  searchIcon="false" cancelIcon="false" [(ngModel)]="itemTrafficQty[itemTrafficQty.name]"
+                  #input id="input" style="padding: 0;" autocomplete="on" autocorrect="true"
+                  debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, itemTrafficQty)" (ionFocus)="getCusInfoDataRaw($event, itemTrafficQty)" required></ion-searchbar>
+                  <div [ngClass]="itemTrafficQty.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.type=='array'"
+                                      (click)="getCusInfoDataRaw('dropdownicon', itemTrafficQty)">
+                                      <img *ngIf="!itemTrafficQty.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
+                                      <img *ngIf="itemTrafficQty.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
+                                  </div>
+                  <div *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.showDataRaw && itemTrafficQty.type=='array'" class="cls-selection-country">
+                    <ion-item class="item-country" *ngFor="let selectGeneralData of itemTrafficQty.dataRawSearch" (click)="selectCusInfoDataRaw(itemTrafficQty, selectGeneralData)">{{
+                      selectGeneralData.name }}</ion-item>
+                  </div>
+              </div>
+              
+  
+              <div *ngIf="itemTrafficQty.type=='text' || itemTrafficQty.type=='string'">
+                <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTrafficQty[itemTrafficQty.name]" required></ion-input>
+              </div>
+  
+              <div *ngIf="itemTrafficQty.type == 'date'" class="div-traffic-date d-flex">
+                <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
+                <div class="div-text-date">{{ticketService.selectedDateDisplay}}</div>
+              </div>
+              <div *ngIf="itemTrafficQty.type == 'time'" class="div-traffic-time d-flex">
+                
+                <div class="div-relative div-select-time"  (click)="clickShowHours(itemTrafficQty)">
+                  <div *ngIf="itemTrafficQty.showHours" class="cls-select-time"><ion-item *ngFor="let hour of arrHours" (click)="selectTime(1,hour,itemTrafficQty)">{{hour}}</ion-item></div>
+                  <div *ngIf="itemTrafficQty.hours" class="cls-time">{{itemTrafficQty.hours}}</div>
+                  <div class="div-icon-down"></div>
+                </div>
+                <div class="text-time m-left-8">giờ</div>
+               
+                <div class="div-relative div-select-time m-left-32" (click)="clickShowMinutes(itemTrafficQty)">
+                  <div *ngIf="itemTrafficQty.showMinutes" class="cls-select-time">
+                    <ion-item *ngFor="let minute of arrMinutes" (click)="selectTime(2,minute,itemTrafficQty)">{{minute}}</ion-item>
+                  </div>
+                  <div *ngIf="itemTrafficQty.minutes" class="cls-time">{{itemTrafficQty.minutes}}</div>
+                  <div class="div-icon-down"></div>
+                </div>
+                <div class="text-time m-left-8">phút</div>
+              </div>
+            </div>
+          </div>
+        
+        
+      </div>
+ 
+      <div class="div-split-panel m-top-24 m-bottom-16"></div>
       <ion-row class="m-left-5px">
         <div class='width-100 d-flex'>
           <div class='width-100 div-align-bottom '><ion-label class="label-order">Yêu cầu xuất hóa đơn</ion-label></div>
