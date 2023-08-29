@@ -19,9 +19,9 @@
     
     <div class="innerdeals1 slide2-scroll div-scroll" padding
       *ngIf="(ticketService.slideData && ticketService.slideData.length >0) else emptydata">
-      <div *ngIf="ticketService.inputText" class="div-filter">
+      <div *ngIf="ticketService.input" class="div-filter">
         <div  class="item-region d-flex">
-            <span>{{ticketService.inputText}}</span> <div class="div-img-close" (click)="deleteFilter(2,item)"><img src="./assets/ic_ticket/clear.svg"/></div>
+            <span>{{ticketService.input.name}}</span> <div class="div-img-close" (click)="deleteFilter(2,item)"><img src="./assets/ic_ticket/clear.svg"/></div>
         </div>
        </div>
       <div *ngIf="arrRegion && arrRegion.length > 0" class="div-filter">
@@ -88,9 +88,9 @@
     <ng-template #emptydata>
       
       <div class="div-empty" style="text-align: center">
-        <div *ngIf="ticketService.inputText" class="div-filter">
+        <div *ngIf="ticketService.input" class="div-filter">
           <div  class="item-region d-flex">
-              <span>{{ticketService.inputText}}</span> <div class="div-img-close" (click)="deleteFilter(2,item)"><img src="./assets/ic_ticket/clear.svg"/></div>
+            <span>{{ticketService.input.name}}</span>  <div class="div-img-close" (click)="deleteFilter(2,item)"><img src="./assets/ic_ticket/clear.svg"/></div>
           </div>
          </div>
         <div *ngIf="arrRegion && arrRegion.length > 0" class="div-filter">

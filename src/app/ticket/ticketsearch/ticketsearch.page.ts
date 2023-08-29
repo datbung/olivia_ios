@@ -160,6 +160,7 @@ export class TicketSearchPage implements OnInit{
       if (this.ticketService.input.expId && this.ticketService.input.expName) {
         this.ticketService.itemTicketDetail = this.ticketService.input;
         this.ticketService.itemTicketDetail.experienceId = this.ticketService.input.expId;
+        this.ticketService.input = "";
         this.ticketService.backPage = 'hometicket';
         this.navCtrl.navigateForward('/ticketdetail');
       } else {

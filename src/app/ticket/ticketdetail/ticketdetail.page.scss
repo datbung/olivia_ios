@@ -853,3 +853,11 @@
 .font-size-14{
   font-size: 14px;
 }
+.text-service-des-3 {
+  max-height: 3.6em; /* Tối đa 3 dòng (3.6em là 3 dòng với font-size thông thường) */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Số dòng tối đa */
+  /* autoprefixer: ignore next */ 
+  -webkit-box-orient: vertical;
+}
