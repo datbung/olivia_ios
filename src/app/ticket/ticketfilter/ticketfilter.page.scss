@@ -30,7 +30,7 @@
 }
 .img-search{
     position: absolute;
-    top: 11%;
+    top: 8%;
     color: #ffffff;
     right: 34px;
 }
@@ -84,7 +84,7 @@
 .cls-checkbox{
     width: 24px;
     height: 24px;
-    border: 0.5px solid #b2b3bd
+    --border-width: 1px;
 }
 .div-flightfilter-footer{
     background-color: #ffffff; text-align: center; display: flex;
@@ -120,3 +120,7 @@
     width: 16px;
     height: 16px;
   }
+// .custom-checkbox::part(checkmark) {
+//     border: 0.5px solid #b2b3bd; /* Đổi màu và độ dày viền tùy ý */
+// }
+ 

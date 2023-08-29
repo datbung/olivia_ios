@@ -55,11 +55,11 @@ export class TicketServicePage implements OnInit {
   totalPax = 0
   daysInAdvance: number | Date;
   ischeckDate: boolean = false;
-   subject = new Subject();
+  subject = new Subject();
   ischeckbtn: boolean = false;
-  specs:any={};
+  specs: any = {};
   objectLength: number = 0;
-  dailyRatePkgs: { pkgId: number; adults: any; childs: any; seniors: any; custom1: any; custom2: any; checkin: string; time: string;  specs: any };
+  dailyRatePkgs: { pkgId: number; adults: any; childs: any; seniors: any; custom1: any; custom2: any; checkin: string; time: string; specs: any };
   chooseExpPkg: any;
 
   timeId: any;
@@ -101,16 +101,33 @@ export class TicketServicePage implements OnInit {
     var datenow = new Date();
     var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
-   
+
     if (this.dailyRatePkgs.specs) {
-      
+
+      if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+        if (this.ticketService.itemTicketService.itemObjRate.specs.length === 1) {
+          this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
+            element.child.forEach(elementC => {
+              if (elementC.child_id === this.dailyRatePkgs.specs[element.id]) {
+                elementC.action = true;
+              } else {
+                elementC.action = false;
+              }
+            });
+          });
+        }
+      }
       // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
       var Tomorrow = moment(date).format("DD/MM");
-  
-      this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-      let matchedSkus =  this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
 
-      this.checkinDate =  matchedSkus[0].skusDaily.dailyRate[0].date
+      this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
+      let matchedSkus = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
+      if (matchedSkus.length > 0) {
+        this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date
+      }
+      else {
+        this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
+      }
       this.dailyRatePkgs.checkin = this.checkinDate
       // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
       // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];   
@@ -118,10 +135,10 @@ export class TicketServicePage implements OnInit {
     } else {
       // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
       var Tomorrow = moment(date).format("DD/MM");
-  
+
       this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
       // this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
-      this.checkinDate =  this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
+      this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
       this.dailyRatePkgs.checkin = this.checkinDate
       // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
       // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];  
@@ -133,7 +150,7 @@ export class TicketServicePage implements OnInit {
     // if (this.itemTicketService.itemObjRate.times && this.itemTicketService.itemObjRate.times.length >0) {
     //   this.timeTicket = this.itemTicketService.itemObjRate.times[0];
     // }
-   
+
     if (this.itemTicketService.minPax > 0) {
       if (this.itemTicketService.allowAdults) {
         this.adult = this.itemTicketService.minPax;
@@ -159,15 +176,15 @@ export class TicketServicePage implements OnInit {
     else {
       this.adult = 1;
     }
-    if (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length>0) {
- 
-      this.objectLength = Object.keys(this.specs).length; 
-      let arrSort= this.itemTicketService.itemObjRate.specs.find((el) => { return el.name == 'Điểm trả khách' || el.name == 'Điểm đón khách'});
+    if (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length > 0) {
+
+      this.objectLength = Object.keys(this.specs).length;
+      let arrSort = this.itemTicketService.itemObjRate.specs.find((el) => { return el.name == 'Điểm trả khách' || el.name == 'Điểm đón khách' });
       if (arrSort) {
-        arrSort.child.sort(function(a, b){
+        arrSort.child.sort(function (a, b) {
           return a.child_name.length - b.child_name.length;
         });
-        var foundIndex =  this.itemTicketService.itemObjRate.specs.findIndex(x => x.name == 'Điểm trả khách' || x.name == 'Điểm đón khách');
+        var foundIndex = this.itemTicketService.itemObjRate.specs.findIndex(x => x.name == 'Điểm trả khách' || x.name == 'Điểm đón khách');
         this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSort.child;
       }
     }
@@ -191,7 +208,7 @@ export class TicketServicePage implements OnInit {
       // let totalPrice = this.itemTicketService.skus.rateAdult * this.searchhotel.adult + this.itemTicketService.skus.rateChild * this.searchhotel.child  + this.itemTicketService.skus.rateSenior * this.searchhotel.elder;
       this.zone.run(() => {
         this.totalPrice = this.itemTicketService.skus.totalRateRounded;
-        this.ischeckbtn=true;
+        this.ischeckbtn = true;
       })
     }
 
@@ -233,10 +250,10 @@ export class TicketServicePage implements OnInit {
         this.dailyRatePkgs.custom2 = this.Custom1
       }
       this.totalPax = this.adult + this.child + this.elder + this.Custom1 + this.Custom2;
-      this.ischeckbtn=false;
+      this.ischeckbtn = false;
       this.subject.next(true);
-    }else{
-      alert('Vé chỉ được phép đặt tối đa '+this.totalPax+' khách');
+    } else {
+      alert('Vé chỉ được phép đặt tối đa ' + this.totalPax + ' khách');
     }
   }
   removePax(type) {
@@ -251,7 +268,7 @@ export class TicketServicePage implements OnInit {
           return;
         }
         this.adult--;
-        this.ischeckbtn=false;
+        this.ischeckbtn = false;
         this.subject.next(true);
 
       } else if (type == 2) {
@@ -264,7 +281,7 @@ export class TicketServicePage implements OnInit {
           return;
         }
         this.child--;
-        this.ischeckbtn=false;
+        this.ischeckbtn = false;
         this.subject.next(true);
       } else if (type == 3) {
         if (this.elder <= 0) {
@@ -276,7 +293,7 @@ export class TicketServicePage implements OnInit {
           return;
         }
         this.elder--;
-        this.ischeckbtn=false;
+        this.ischeckbtn = false;
         this.subject.next(true);
       } else if (type == 4) {
         if (this.Custom1 <= 0) {
@@ -288,7 +305,7 @@ export class TicketServicePage implements OnInit {
           return;
         }
         this.Custom1--;
-        this.ischeckbtn=false;
+        this.ischeckbtn = false;
         this.subject.next(true);
       } else if (type == 5) {
         if (this.Custom2 <= 0) {
@@ -300,7 +317,7 @@ export class TicketServicePage implements OnInit {
           return;
         }
         this.Custom2--;
-        this.ischeckbtn=false;
+        this.ischeckbtn = false;
         this.subject.next(true);
       }
       this.totalPax = this.adult + this.child + this.elder + this.Custom1 + this.Custom2;
@@ -319,7 +336,7 @@ export class TicketServicePage implements OnInit {
     let fromdate;
     fromdate = new Date(this.checkinDate);
     let _daysConfig: DayConfig[] = [];
-    
+
     const options: CalendarModalOptions = {
       pickMode: "single",
       title: "Chọn ngày",
@@ -369,64 +386,59 @@ export class TicketServicePage implements OnInit {
           let objtextmonth = em.children[0].textContent.replace('Tháng ', '');
           let monthstartdate: any = objtextmonth.trim().split(" ")[0];
           let yearstartdate: any = objtextmonth.trim().split(" ")[1];
-  
-         if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
-          for (let j = 0; j < listdayinmonth.length; j++) {
-            const elementday = listdayinmonth[j];
-            let fday: any;
-            let chuoi = elementday.textContent.split(':');
-            if (chuoi[0].length == 6) {
-              fday = elementday.textContent.substring(0, 1);
-            } else {
-              fday = elementday.textContent.substring(0, 2);
-            }
 
-            let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
-            let nowday =moment(new Date(Year, Month, Day)).format('YYYYMMDD');
-            let objday
-            if (this.timeId) {
-              objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
-            }
-            else{
-              objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
-            }
-            var fromDateNum = parseInt(fromdate.replace(/-/g, ""), 10);
-            var nowdayNum = parseInt(nowday.replace(/-/g, ""), 10);
-            var specificDateStr ;
-            if (this.timeId) {
-              specificDateStr = this.timeId[0].skusDaily.dailyRate[this.timeId[0].skusDaily.dailyRate.length - 1];
-            }
-            else{
-              specificDateStr = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.length - 1];
-            }
-         
-            if (objday && objday.length > 0) {
-              let totalprice;
-              totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
-              if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
-                if (elementday.children[0]) {
-                  $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                } 
-              } 
-            
-                // else {
-                //   $(elementday).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                // }
-            }
-            else{
-              if (elementday.children[0]) {
-                var specificDateNum = parseInt(specificDateStr.date.replace(/-/g, ""), 10);
+          if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
+            for (let j = 0; j < listdayinmonth.length; j++) {
+              const elementday = listdayinmonth[j];
+              let fday: any;
+              let chuoi = elementday.textContent.split(':');
+              if (chuoi[0].length == 6) {
+                fday = elementday.textContent.substring(0, 1);
+              } else {
+                fday = elementday.textContent.substring(0, 2);
+              }
+
+              let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
+              let nowday = moment(new Date(Year, Month, Day)).format('YYYYMMDD');
+              let objday
+              if (this.timeId && this.timeId.length > 0) {
+                objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+              }
+              else {
+                objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+              }
+              var fromDateNum = parseInt(fromdate.replace(/-/g, ""), 10);
+              var nowdayNum = parseInt(nowday.replace(/-/g, ""), 10);
+              var specificDateStr;
+              if (this.timeId && this.timeId.length > 0) {
+                specificDateStr = this.timeId[0].skusDaily.dailyRate[this.timeId[0].skusDaily.dailyRate.length - 1];
+              }
+              else {
+                specificDateStr = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.length - 1];
+              }
+              var specificDateNum = parseInt(specificDateStr.date.replace(/-/g, ""), 10);
+              if (objday && objday.length > 0) {
+                let totalprice;
+                totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
                 if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
-                  $(elementday.children[0]).addClass('not-available-price-in-range');
-                  var pElement = elementday.querySelector('p'); // Lấy thẻ p bên trong button
-                  pElement.classList.add('text-xam'); 
-                  $(elementday.children[0]).attr('disabled', 'disabled');
+                  if (elementday.children[0]) {
+                    $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                  }
                 }
-              } 
+              }
+              else {
+                if (elementday.children[0]) {
+                  if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
+                    $(elementday.children[0]).addClass('not-available-price-in-range');
+                    var pElement = elementday.querySelector('p'); // Lấy thẻ p bên trong button
+                    pElement.classList.add('text-xam');
+                    $(elementday.children[0]).attr('disabled', 'disabled');
+                  }
+                }
+              }
             }
           }
-         }
-         
+
           $('#' + em.id).addClass('cls-animation-calendar');
           let divsmall = $('#' + em.id + ' small');
           if (divsmall && divsmall.length > 0) {
@@ -478,7 +490,7 @@ export class TicketServicePage implements OnInit {
           var yearstartdate: any;
           var objTextMonthEndDate: any;
           var objTextMonthStartDate: any;
-  
+
           if ($('.days-btn.lunarcalendar.on-selected > p')[0]) {
             fday = $('.days-btn.lunarcalendar.on-selected > p')[0].innerText;
             tday = fday;
@@ -503,7 +515,7 @@ export class TicketServicePage implements OnInit {
             var fromdate = new Date(yearstartdate, monthstartdate - 1, fday);
             var todate = new Date(yearenddate, monthenddate - 1, tday * 1 + 1);
             if (fromdate && todate && moment(todate).diff(fromdate, "days") >= 0) {
-  
+
               setTimeout(() => {
                 se.modalCtrl.dismiss();
               }, 300);
@@ -529,18 +541,18 @@ export class TicketServicePage implements OnInit {
           }
         }
       }
-    }else{
-      var buttonElement = $(obj); 
+    } else {
+      var buttonElement = $(obj);
       buttonElement.removeClass('on-selected');
 
-    
+
       var targetDate = new Date(this.checkinDate); // Chuyển đổi ngày mục tiêu thành đối tượng Date
-      $(".days-btn").each(function() {
+      $(".days-btn").each(function () {
         var buttonElement1 = $(this); // Lấy thẻ button
         var dayText = buttonElement1.find('p').text();// Lấy nội dung của thẻ p
         var year = new Date().getFullYear();
         // var month = new Date().getMonth();
-        var monthText = buttonElement.find('.price-calendar-text-ticket').text(); 
+        var monthText = buttonElement.find('.price-calendar-text-ticket').text();
         // Tạo đối tượng Date từ ngày, tháng và năm
         var buttonDate = new Date(year, monthText, parseInt(dayText));
         var formattedDate = moment(buttonDate).format('YYYY-MM-DD');
@@ -549,9 +561,9 @@ export class TicketServicePage implements OnInit {
           buttonElement1.addClass('on-selected'); // Thêm class "on-selected" cho thẻ button có ngày trùng khớp
         }
       });
-     
+
     }
-  
+
   }
   closecalendar() {
     this.modalCtrl.dismiss();
@@ -711,26 +723,50 @@ export class TicketServicePage implements OnInit {
   }
   funcsku(index) {
     this.indexSku = index;
-    this.arrSkus =  this.arrSkus.map((item) => {
-      return { ...item, action: false}
+    this.arrSkus = this.arrSkus.map((item) => {
+      return { ...item, action: false }
     });
     this.arrSkus[this.indexSku].action = true;
     this.subject.next(true);
   }
-  funcspecs(arrSpecs,item,itemc,index) {
-    arrSpecs =  arrSpecs.map((item) => {
-      return { ...item, action: false}
+  funcspecs(arrSpecs, item, itemc, index) {
+    arrSpecs = arrSpecs.map((item) => {
+      return { ...item, action: false }
     });
-    arrSpecs[index].action=true;
-    var foundIndex =  this.itemTicketService.itemObjRate.specs.findIndex(x => x.id == item.id);
+    arrSpecs[index].action = true;
+    var foundIndex = this.itemTicketService.itemObjRate.specs.findIndex(x => x.id == item.id);
     this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSpecs;
     // this.specs[item.id] = itemc.child_id;
     // this.dailyRatePkgs.specs = this.specs;
     // this.objectLength = Object.keys(this.specs).length; 
-    this.onSelectSpecs(item.id,itemc.child_id);
-    if(this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0){
-      this.timeId = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
+    this.onSelectSpecs(item.id, itemc.child_id);
+    if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0) {
+      this.timeId = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','));
+      if (this.timeId && this.timeId.length > 0) {
+        let objDate = this.timeId[0].skusDaily.dailyRate.filter(x => x.price > 0)
+        if (objDate && objDate.length > 0) {
+          this.checkinDate = objDate[0].date;
+          this.dailyRatePkgs.checkin = objDate[0].date;
+          var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
+          this.dateDisplay = dateParts[2] + "-" + dateParts[1];
+          this.ticketService.itemTicketService.AllotmentDateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+        }
+      }
+      if (this.timeId && this.timeId.length > 0 && this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0) {
+        this.itemTicketService.itemObjRate.times = this.timeId[0].skusDaily.times;
+        this.timeTicket = this.timeId[0].skusDaily.times[0];
+        this.dailyRatePkgs.time = this.timeId[0].skusDaily.times[0];
+      }
+    } else {
+      if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
+        this.itemTicketService.itemObjRate.times = this.itemTicketService.itemObjRate.skus[0].skusDaily.times;
+        this.timeTicket = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
+        this.dailyRatePkgs.time = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
+      }
+
     }
+
+
     // this.timeId = "";
     // for (let i = 0; i < this.itemTicketService.itemObjRate.specs.length; i++) {
     //   const element = this.itemTicketService.itemObjRate.specs[i];
@@ -749,7 +785,7 @@ export class TicketServicePage implements OnInit {
     //     }
     //   }
     // }
- 
+
     this.subject.next(true);
   }
   RecheckRateBooking() {
@@ -795,34 +831,25 @@ export class TicketServicePage implements OnInit {
     }
     this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Detail/GetDailyRatePackages', headers, obj, 'ticketservice', 'GetDailyRatePackages').then((data: any) => {
       this.gf.hideLoading();
-      this.arrSkus=[];
-      this.itemTicketService.skus =[];
-      this.ischeckbtn=false;
+      this.arrSkus = [];
+      this.itemTicketService.skus = [];
+      this.ischeckbtn = false;
       if (data && data.success) {
         this.arrSkus = data.data.skus;
         this.zone.run(() => {
           if (this.arrSkus && this.arrSkus.length > 0) {
-            this.arrSkus =  this.arrSkus.map((item) => {
-              return { ...item, action: false}
+            this.arrSkus = this.arrSkus.map((item) => {
+              return { ...item, action: false }
             });
-                    
+
             this.arrSkus[this.indexSku].action = true;
             this.reCheckToken = this.arrSkus[this.indexSku].reCheckToken;
             this.itemTicketService.skus = this.arrSkus[this.indexSku];
-            // if (this.timeId) {
-            //   if (this.itemTicketService.skus.allowAdult) {
-            //     this.timeId = this.timeId +','+'adult'
-            //   }
-            // }
-            // if (this.timeId) {
-            //   if (this.itemTicketService.skus.allowChild) {
-            //     this.timeId = this.timeId +','+'child'
-            //   }
-            // }
+
             this.calculatePrice();
           }
         })
-      
+
       } else {
         alert('Lỗi request api')
       }
@@ -855,7 +882,7 @@ export class TicketServicePage implements OnInit {
     this.GetDailyRatePackages();
   }
 
-  async selectNewPackage(pkgId){
+  async selectNewPackage(pkgId) {
 
     const pkgSelect = this.ticketService.itemTicketService;
     this.chooseExpPkg = pkgSelect;
@@ -865,7 +892,7 @@ export class TicketServicePage implements OnInit {
 
     const _packageSearch = this.ticketService.itemTicketService.itemObjRate
     // nếu có option chẳn / lẽ thì check xem default là lẽ thì sẽ + thêm 1
-    if(_packageSearch && _packageSearch.isMultipleLimit && minPaxNew % 2 !== 0){
+    if (_packageSearch && _packageSearch.isMultipleLimit && minPaxNew % 2 !== 0) {
       minPaxNew += 1
     }
 
@@ -881,28 +908,26 @@ export class TicketServicePage implements OnInit {
       specs: {}
     }
 
-    // set default time và specs
-    if(_packageSearch && _packageSearch.specs && _packageSearch.specs.length !== 0){
-    }
-    if(_packageSearch && _packageSearch.dailyRateAvailableSpes && _packageSearch.dailyRateAvailableSpes.length !== 0){
+
+    if (_packageSearch && _packageSearch.dailyRateAvailableSpes && _packageSearch.dailyRateAvailableSpes.length !== 0) {
       const [_dailyRateAvailable] = _packageSearch.dailyRateAvailableSpes
-      
-      // set default cho spec
-      // const _specRemoved = _dailyRateAvailable.specs.filter(x => !this.specsRemove.includes(x))
-      _packageSearch.specs.forEach((_spec, index) =>{
-        this.onSelectSpecs(_spec.id, _dailyRateAvailable.specs[index])
+
+      this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
+        // let objAction = _spec.child.filter(x => x.action == true);
+        this.onSelectSpecs(_spec.id, _dailyRateAvailable.specs[index]);
+
       })
- 
-      if(_packageSearch.specs && _packageSearch.specs.length !== 0){
+
+      if (_packageSearch.specs && _packageSearch.specs.length !== 0) {
         this.timeId = _packageSearch.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
-        
-        if (this.timeId && this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0){
+
+        if (this.timeId && this.timeId.length > 0 && this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0) {
           this.itemTicketService.itemObjRate.times = this.timeId[0].skusDaily.times;
           this.timeTicket = this.timeId[0].skusDaily.times[0];
           this.dailyRatePkgs.time = this.timeId[0].skusDaily.times[0];
         }
-      }else{
-        if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length >0) {
+      } else {
+        if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
           this.itemTicketService.itemObjRate.times = this.itemTicketService.itemObjRate.skus[0].skusDaily.times;
           this.timeTicket = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
           this.dailyRatePkgs.time = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
@@ -910,20 +935,21 @@ export class TicketServicePage implements OnInit {
       }
     }
   }
- 
-  async onSelectSpecs(parentKey: string, childId: string){
-    if(!this.isSpecAvailable(childId)) return;
+
+  async onSelectSpecs(parentKey: string, childId: string) {
+    if (!this.isSpecAvailable(childId))
+      return;
     const newSpecs = { ...this.dailyRatePkgs.specs }
     newSpecs[parentKey] = childId
     const { specs } = this.dailyRatePkgs
-    specs[parentKey] = childId
+    specs[parentKey] = childId;
   }
-  isSpecAvailable(childId: string){
-    const _packageSearch = this.ticketService.itemTicketService.itemObjRate;
-    if(_packageSearch.specs.length === 1){
-      if(_packageSearch.skus.some(x => x.spec.length === 1 && x.spec[0] === childId && x.skusDaily.dailyRate.length !== 0)){
+  isSpecAvailable(childId: string) {
+    // const _packageSearch = this.ticketService.itemTicketService.itemObjRate;
+    if (this.ticketService.itemTicketService.itemObjRate.specs.length === 1) {
+      if (this.ticketService.itemTicketService.itemObjRate.skus.some(x => x.spec.length === 1 && x.spec[0] === childId && x.skusDaily.dailyRate.length !== 0)) {
         return true
-      }else{
+      } else {
         return false
       }
     }

@@ -242,7 +242,7 @@
   }
 ::ng-deep{
     .action-sheet-group.sc-ion-action-sheet-ios:first-child {
-        margin-top: 0px;
+        height: 50%;
     }
     .action-sheet-group.sc-ion-action-sheet-ios {
         overflow-y: auto !important;
@@ -374,29 +374,19 @@
         color: white;
       }
       .div-option-time-sku{
-        height: 44px;
         margin: 8px 8px 8px 0px;
         padding: 12px 8px;
         border-radius: 4px;
         border: solid 0.5px #ccc;
         background-color: #fff;
         text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        min-width: 185px;
       }
       .div-option-time-sku-action{
-        height: 44px;
         margin: 8px 8px 8px 0px;
         padding: 12px 8px;
         border-radius: 4px;
         text-align: center;
         color: #26bed6;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        min-width: 185px;
         border: solid 2px #26bed6;
         background-color: #fff;
         font-size: 16px;
@@ -462,7 +452,7 @@
         }
       }
       .text-label {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 500;
         color: #3f3b3b;
       }
@@ -500,4 +490,14 @@
         font-size: 18px;
         font-weight: bold;
     }
+    .div-colum{
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    .spec-not-found{
+        cursor: not-allowed;
+        color: #aaa;
+    }
+    
    

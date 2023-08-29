@@ -67,32 +67,7 @@ export class HomeTicketSearchPage implements OnInit {
         })
       }
     })
-
-    // this.ticketService.itemSearchDeparture.subscribe((data) => {
-    //   if(data){
-    //     this.zone.run(()=> {
-    //       this.itemSearchDepature = this.ticketService.itemDeparture;
-    //       this.ticketService.itemSearchDepature = this.ticketService.itemDeparture;
-    //     })
-    //   }
-    // })
-    //this.getTicketBanners();
   }
-
-  getTicketBanners() {
-    let se = this;
-    let url = C.urls.baseUrl.urlTicket+'/api/Home/GetAllBanners';
-    let headers = {
-      apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
-      apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
-    };
-    se.gf.RequestApi('GET', url, headers, null, 'hometicketsearch', 'GetAllBanners').then((data) => {
-      let res = JSON.parse(data);
-      //se.slideData = res.data;
-      console.log(res.data);
-    })
-  }
-
   change() {
     this.navCtrl.navigateForward('/ticketsearch');
   }

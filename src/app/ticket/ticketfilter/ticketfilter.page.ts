@@ -100,12 +100,31 @@ export class TicketfilterPage implements OnInit {
                 child.quantity = 0
             }
         })
-        let checkChild = parent.childs.filter(x => x.checked);
-        if (checkChild.length > 0) {
-          parent.checked = true;
-        }else{
+        // let checkChild = parent.childs.filter(x => x.checked);
+        // if (checkChild.length > 0) {
+        //   parent.indeterminate = true;
+        // }else{
+        //   parent.indeterminate = false;
+        // }
+   
+          parent.indeterminate = false;
           parent.checked = false;
+          if (parent.childs.length > 0) {
+            let countObj = parent.childs.filter(x => x.checked == true);
+            if (countObj.length == parent.childs.length) {
+              parent.checked = true;
+            }else{
+              if (countObj.length > 0) {
+
+                parent.indeterminate = true;
+              }
+            
+            }  
+          
         }
+
+           
+       
         // if (stt==0) {
         //   let countObj = parent.childs.filter(x => x.checked == true);
         //   if (countObj.length == parent.childs.length) {
@@ -180,14 +199,11 @@ export class TicketfilterPage implements OnInit {
         });
       }
       else {
-        if (this.ticketService.itemShowList && item.childs[0].id == this.ticketService.itemShowList.id) {
-          this.ticketService.itemShowList = "";
-          this.getdata(0);
-          this.ticketService.searchType = 1;
+        if (!item.indeterminate) {
+          item.childs = item.childs.map((itemC) => {
+            return { ...itemC, checked: false }
+          });
         }
-        item.childs = item.childs.map((itemC) => {
-          return { ...itemC, checked: false }
-        });
       }
     }
 

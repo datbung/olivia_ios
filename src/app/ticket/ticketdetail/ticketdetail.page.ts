@@ -127,7 +127,8 @@ export class TicketDetailPage {
             $ = this.isIncludeUnclosedElement(qn) ? ($ = qn.trim().substr(0, qn.lastIndexOf("<")).split(" ")).join(" ") + ' ...' : qn + ' ...',
             this.notes = $
         }else{
-          this.notes =this.itemDetail.notes
+          this.notes =this.itemDetail.notes;
+          this.isseemorenotes = true;
         }
       
         this.experiencePackages = res.data.experiencePackages;
@@ -632,7 +633,7 @@ export class TicketDetailPage {
         if (this.objRate) {
           this.ticketService.itemTicketService.itemObjRate = {};
           this.ticketService.itemTicketService.itemObjRate = this.objRate.find((el) => { return el.pkgId == itemService.id });
-          if(this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs){
+          if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs.length >0) {
             this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
               element.child = element.child.map((item, index) => {
                 if (index === 0) {
@@ -642,7 +643,6 @@ export class TicketDetailPage {
               });
             });
           }
-          
         }
         this.navCtrl.navigateForward('/ticketservice');
         // this.GetCalendarBySkuId(itemService);
