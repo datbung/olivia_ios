@@ -1367,7 +1367,7 @@ export class TicketAdddetailsPage implements OnInit {
   selectCusInfoDataRaw(item, _selectData){
       var se = this;
       se.zone.run(()=>{
-        item[item.name] = _selectData.name;
+        item[item.name] = item.name != 'meal' ? _selectData.name : _selectData.meal_type_name;
         item.showDataRaw = false;
         item.errorDataRaw = false;
         item.textErrorPassportCountry = "";

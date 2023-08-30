@@ -502,6 +502,16 @@ ion-radio {
     margin-left: 16px;
   }
 }
+.item-select-location {
+  ion-item {
+    border-bottom: solid 0.5px #f2f2f2;
+    --inner-border-width: 0;
+    --padding-start: 0;
+    margin-left: 16px;
+    min-height: 58px;
+    padding-top: 8px;
+  }
+}
 .div-select-time {
   border: solid 1px #dedfe3;
   width: 60px;

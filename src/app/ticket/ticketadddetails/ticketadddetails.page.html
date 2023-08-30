@@ -73,9 +73,13 @@
                                       <img *ngIf="!cusInfo.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                       <img *ngIf="cusInfo.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                   </div>
-                    <div *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item">
+                    <div *ngIf="cusInfo.name && cusInfo.name != 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item">
                       <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
                         selectData.name }}</ion-item>
+                    </div>
+                    <div *ngIf="cusInfo.name && cusInfo.name == 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item">
+                      <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
+                        selectData.meal_type_name }}</ion-item>
                     </div>
                 </div>
 
@@ -159,7 +163,7 @@
                                   <img *ngIf="trafficInfoArr[0].errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                               </div>
               <div *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 && trafficInfoArr[0].showDataRaw" class="cls-selection-item">
-                <ion-item class="item-country" *ngFor="let selectGeneralData of trafficInfoArr[0].dataRawSearch" (click)="selectCusInfoDataRaw(trafficInfoArr[0], selectGeneralData)">{{
+                <ion-item class="item-country item-select-location" *ngFor="let selectGeneralData of trafficInfoArr[0].dataRawSearch" (click)="selectCusInfoDataRaw(trafficInfoArr[0], selectGeneralData)">{{
                   selectGeneralData.name }}</ion-item>
               </div>
           </div>
