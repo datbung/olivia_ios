@@ -490,6 +490,21 @@ ion-radio {
   background: #fff;
   z-index: 99;
 }
+.cls-selection-item {
+  height: 178px;
+  overflow: scroll;
+  position: absolute;
+  width: 100%;
+  background: #fff;
+  z-index: 99;
+  
+  ion-item {
+    border-bottom: solid 0.5px #f2f2f2;
+    --inner-border-width: 0;
+    --padding-start: 0;
+    margin-left: 16px;
+  }
+}
 .div-select-time {
   border: solid 1px #dedfe3;
   width: 60px;
@@ -528,6 +543,10 @@ ion-radio {
   ion-datetime {
     --padding-start: 0;
   }
+}
+ion-searchbar {
+  padding: 0;
+  padding-inline-end: 12px;
 }
 
 }
@@ -601,6 +620,11 @@ ion-radio {
     background-color: #f79321;
     color: #fff;
     width: 100%;
+  }
+
+  .cls-sup {
+    top: 0;
+    margin-left: 5px;
   }
 }
 
