@@ -1040,6 +1040,7 @@ export class TicketAdddetailsPage implements OnInit {
     this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.ticketService.itemTicketService.objbooking.bookingCode, {}, {}, '', '').then((data) => {
       if (data && data.success && data.data.kkdayResource) {
         this.summaryBooking = data.data;
+        this.ticketService.bookingInfo = data.data;
         this.kkdayResource = data.data.kkdayResource;
         if (this.summaryBooking.booking.supplement) {
           try {
