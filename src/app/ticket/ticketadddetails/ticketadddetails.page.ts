@@ -1040,7 +1040,6 @@ export class TicketAdddetailsPage implements OnInit {
     this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Booking/Summary/' + this.ticketService.itemTicketService.objbooking.bookingCode, {}, {}, '', '').then((data) => {
       if (data && data.success && data.data.kkdayResource) {
         this.summaryBooking = data.data;
-        this.ticketService.bookingInfo = data.data;
         this.kkdayResource = data.data.kkdayResource;
         if (this.summaryBooking.booking.supplement) {
           try {
@@ -1107,10 +1106,10 @@ export class TicketAdddetailsPage implements OnInit {
         if(this.kkdayResource.dataInput.custom){
           const [_firstCustom] = this.kkdayResource.dataInput.custom;
           const _customKeys = Object.keys(_firstCustom);
-          //console.log(_customKeys)
+          
 
           let _customInfo = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'CustomInfo');
-          //console.log(_customInfo)
+          //Thông tin khách
           for (let index = 0; index < this.kkdayResource.dataInput.custom.length; index++) {
             let element = this.kkdayResource.dataInput.custom[index];
             let _listCustom = [];
@@ -1123,13 +1122,17 @@ export class TicketAdddetailsPage implements OnInit {
               if ('nationality' == elementCustom.name) {
                 elementCustom[elementCustom.name] = 'Vietnam';
               }
+              
               elementCustom.dataRawSearch = [...elementCustom.dataRaw];
+              if(elementCustom.type == 'array' && elementCustom.dataRawSearch && elementCustom.dataRawSearch.length ==1){
+                elementCustom[elementCustom.name] = elementCustom.dataRawSearch[0].name;
+              }
               _listCustom.push({...elementCustom});
             });
            let _itemCustom = {listCustom: _listCustom};
             this.customInfoArr.push(_itemCustom);
           }
-
+          //Thông tin chung
           this.customInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo');
           let _customInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo');
           if(_customInfoGeneral && _customInfoGeneral.length >0){
@@ -1138,7 +1141,6 @@ export class TicketAdddetailsPage implements OnInit {
               let element = _customInfoGeneral[index];
               element[element.name] = '';
               element.dataRawSearch = [...element.dataRaw];
-              //this.customGeneralInfoArr.push({..._customInfoGeneral[0]});
 
               _customInfoGeneral.forEach(elementCustom => {
                 elementCustom.index = index+1;
@@ -1153,6 +1155,10 @@ export class TicketAdddetailsPage implements OnInit {
                 }else {
                   elementCustom['allowInput'] ='undefined';
                 }
+
+                if(elementCustom.type == 'array' && elementCustom.dataRawSearch && elementCustom.dataRawSearch.length ==1){
+                  elementCustom[elementCustom.name] = elementCustom.dataRawSearch[0].name;
+                }
               });
              
             }
@@ -1160,28 +1166,24 @@ export class TicketAdddetailsPage implements OnInit {
             this.customGeneralInfoArr.push(_itemGeneralCustom);
           }
 
-          console.log(this.customInfoArr);
-          console.log(this.customGeneralInfoArr);
+          //console.log(this.customInfoArr);
+          //console.log(this.customGeneralInfoArr);
         }
 
+        //Quầy nhận vé
         if(this.kkdayResource.dataInput.traffic){
-          //const [_firstCustom] = this.kkdayResource.dataInput.custom;
-          //const _customKeys = Object.keys(_firstCustom);
           let _trafficInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && x.name == 's_location');
           if(_trafficInfo && _trafficInfo.length >0 && _trafficInfo[0].dataRaw && _trafficInfo[0].dataRaw.length >0){
             _trafficInfo[0][_trafficInfo[0].name] = _trafficInfo[0].dataRaw[0].name;
             _trafficInfo[0].dataRawSearch = [..._trafficInfo[0].dataRaw];
             this.trafficInfoArr.push({..._trafficInfo[0]});
-            //console.log(this.trafficInfoArr);
           }
-          
+          //Thông tin đưa đón
           if(this.kkdayResource.dataInput.traffic && this.kkdayResource.dataInput.traffic.car){
-              //const [_firstCustom] = this.kkdayResource.dataInput.traffic.car;
               const _customCarKeys = Object.keys(this.kkdayResource.dataInput.traffic.car);
-            let _trafficCarInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customCarKeys.includes(x.name));
+            let _trafficCarInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customCarKeys.includes(x.name) && x.label != "Quầy nhận vé");
             if(_trafficCarInfo && _trafficCarInfo.length >0){
               _trafficCarInfo.forEach(element => {
-                //element[element.name] = element.dataRaw[0].name;
                 element.dataRawSearch = [...element.dataRaw];
                 if(element.type == 'date' && this.ticketService.selectedDate){
                   element[element.name]= this.ticketService.selectedDate;
@@ -1189,17 +1191,16 @@ export class TicketAdddetailsPage implements OnInit {
                 this.trafficCarInfoArr.push({...element});
               });
               
-              console.log(this.trafficCarInfoArr);
+              //console.log(this.trafficCarInfoArr);
             }
           }
           
+          //Thông tin chuyến bay
           if(this.kkdayResource.dataInput.traffic && this.kkdayResource.dataInput.traffic.flight){
-            //const [_firstCustom] = this.kkdayResource.dataInput.traffic.flight;
             const _customFlightKeys = Object.keys(this.kkdayResource.dataInput.traffic.flight);
             let _trafficFlightInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customFlightKeys.includes(x.name));
             if(_trafficFlightInfo && _trafficFlightInfo.length >0){
               _trafficFlightInfo.forEach(element => {
-                //element[element.name] = element.dataRaw[0].name;
                 element.dataRawSearch = [...element.dataRaw];
                 if(element.name == 'arrival_time'){
                   element.showHours = false;
@@ -1210,10 +1211,9 @@ export class TicketAdddetailsPage implements OnInit {
                 }
                 this.trafficFlightInfoArr.push({...element});
               });
-              //console.log(this.trafficFlightInfoArr);
             }
           }
-
+          //Thông tin số lượng
           if(this.kkdayResource.dataInput.traffic && this.kkdayResource.dataInput.traffic.qty){
             const _customFlightKeys = Object.keys(this.kkdayResource.dataInput.traffic.qty);
             let _trafficQtyInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && _customFlightKeys.includes(x.name));
@@ -1329,6 +1329,7 @@ export class TicketAdddetailsPage implements OnInit {
   getCusInfoDataRaw(ev, item){
     var se = this;
       
+
         se.zone.run(()=>{
           if(ev != 'dropdownicon'){
             item.showDataRaw = true;
@@ -1357,8 +1358,10 @@ export class TicketAdddetailsPage implements OnInit {
             item.dataRawSearch = [...item.dataRaw];
           })
         }
-      
-    
+        console.log('input_'+item.name);
+      setTimeout(()=>{
+        document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+      },100)
   }
 
   selectCusInfoDataRaw(item, _selectData){
