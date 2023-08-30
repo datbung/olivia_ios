@@ -40,10 +40,7 @@
                 Chọn thời gian:
               </div>
               <div class="width-45 d-flex div-item-time" >
-                <!-- <select>
-                  <option onchange="timeOption(item)" *ngFor="let item of itemTicketService.departureTimes" value={{item}}>{{item}}</option>
-                </select> -->
-                <ion-select id="myselectmodal" style="width: 100%;" (ionChange)="timeOption($event)" interface="action-sheet" mode="ios" selectedText={{timeTicket}}>
+                <ion-select cancelText="Hủy" id="myselectmodal" style="width: 100%;" (ionChange)="timeOption($event)" interface="action-sheet" mode="ios" selectedText={{timeTicket}}>
                   <ion-select-option  *ngFor="let item of itemTicketService.itemObjRate.times" value={{item}}>{{item}}</ion-select-option>
               </ion-select>
               </div>
@@ -310,10 +307,11 @@
                 </div>
                </div>
               </div>
-              <div class="margin-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowAdult && itemTicketService.skus.supplier != 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+              <div *ngIf="itemTicketService && itemTicketService.skus" class="width-62 text-label margin-top-16" >
+                Chọn số lượng:
+              </div>
+              <div  *ngIf="itemTicketService.skus && itemTicketService.skus.allowAdult && itemTicketService.skus.supplier != 'KKDAY'">
+             
                 <div class="div-item-departure-date d-flex margin-top-12 div-border">
                   <div class="width-30 margin-left-12">
                     <div>Người lớn</div>
@@ -335,9 +333,7 @@
               </div>
 
               <div class="margin-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowAdult && itemTicketService.skus.supplier == 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+               
                 <div class="div-item-departure-date d-flex margin-top-12 div-border">
                   <div class="width-30 margin-left-12">
                     <div>Người lớn</div>
@@ -359,9 +355,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowChild  && itemTicketService.skus.supplier != 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+                
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
                     <div>Trẻ em</div>
@@ -383,9 +377,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowChild && itemTicketService.skus.supplier == 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+            
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
                     <div>Trẻ em</div>
@@ -407,9 +399,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowSenior && itemTicketService.skus.supplier != 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+              
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
                     <div>Người lớn tuổi</div>
@@ -430,9 +420,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowSenior && itemTicketService.skus.supplier == 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+    
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
                     <div>Người lớn tuổi</div>
@@ -453,9 +441,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom1 && itemTicketService.skus.supplier != 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+             
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
            
                   <div class="width-30 margin-left-12">
@@ -479,9 +465,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom1 && itemTicketService.skus.supplier == 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+             
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
            
                   <div class="width-30 margin-left-12">
@@ -505,9 +489,7 @@
               </div>
 
               <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom2 && itemTicketService.skus.supplier != 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+              
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
                     <div>{{itemTicketService.nameCustom2}}</div>
@@ -528,9 +510,7 @@
               </div>
             
               <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom2 && itemTicketService.skus.supplier == 'KKDAY'">
-                <div class="width-62 text-label" >
-                  Chọn số lượng:
-                </div>
+             
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
                     <div>{{itemTicketService.nameCustom2}}</div>

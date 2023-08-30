@@ -240,9 +240,10 @@
       font-size: 16px !important;
     }
   }
+
 ::ng-deep{
     .action-sheet-group.sc-ion-action-sheet-ios:first-child {
-        height: 50%;
+        margin-top: 100px;
     }
     .action-sheet-group.sc-ion-action-sheet-ios {
         overflow-y: auto !important;
