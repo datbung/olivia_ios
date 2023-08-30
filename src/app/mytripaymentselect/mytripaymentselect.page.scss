@@ -3,6 +3,12 @@
     {
       font-weight: bold;
       font-size: 18px;
+      max-height: 3.6em; /* Tối đa 3 dòng (3.6em là 3 dòng với font-size thông thường) */
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Số dòng tối đa */
+      /* autoprefixer: ignore next */ 
+      -webkit-box-orient: vertical;
       .text-green
       {
         color: #26bed6

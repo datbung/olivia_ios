@@ -251,6 +251,11 @@ export class TicketServicePage implements OnInit {
       }
       this.totalPax = this.adult + this.child + this.elder + this.Custom1 + this.Custom2;
       this.ischeckbtn = false;
+      this.dailyRatePkgs.adults = this.adult;
+      this.dailyRatePkgs.childs = this.child;
+      this.dailyRatePkgs.seniors = this.elder;
+      this.dailyRatePkgs.custom1 = this.Custom1;
+      this.dailyRatePkgs.custom2 = this.Custom2;
       this.subject.next(true);
     } else {
       alert('Vé chỉ được phép đặt tối đa ' + this.totalPax + ' khách');
@@ -269,7 +274,7 @@ export class TicketServicePage implements OnInit {
         }
         this.adult--;
         this.ischeckbtn = false;
-        this.subject.next(true);
+        // this.subject.next(true);
 
       } else if (type == 2) {
         if (this.child == 0) {
@@ -282,7 +287,7 @@ export class TicketServicePage implements OnInit {
         }
         this.child--;
         this.ischeckbtn = false;
-        this.subject.next(true);
+        // this.subject.next(true);
       } else if (type == 3) {
         if (this.elder <= 0) {
           this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
@@ -294,7 +299,7 @@ export class TicketServicePage implements OnInit {
         }
         this.elder--;
         this.ischeckbtn = false;
-        this.subject.next(true);
+        // this.subject.next(true);
       } else if (type == 4) {
         if (this.Custom1 <= 0) {
           this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
@@ -306,7 +311,7 @@ export class TicketServicePage implements OnInit {
         }
         this.Custom1--;
         this.ischeckbtn = false;
-        this.subject.next(true);
+        // this.subject.next(true);
       } else if (type == 5) {
         if (this.Custom2 <= 0) {
           this.gf.showToastWarning('Số lượng khách không hợp lệ. Vui lòng kiểm tra lại.');
@@ -318,8 +323,14 @@ export class TicketServicePage implements OnInit {
         }
         this.Custom2--;
         this.ischeckbtn = false;
-        this.subject.next(true);
+    
       }
+      this.dailyRatePkgs.adults = this.adult;
+      this.dailyRatePkgs.childs = this.child;
+      this.dailyRatePkgs.seniors = this.elder;
+      this.dailyRatePkgs.custom1 = this.Custom1;
+      this.dailyRatePkgs.custom2 = this.Custom2;
+      this.subject.next(true);
       this.totalPax = this.adult + this.child + this.elder + this.Custom1 + this.Custom2;
     }
 
@@ -750,6 +761,7 @@ export class TicketServicePage implements OnInit {
           var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
           this.dateDisplay = dateParts[2] + "-" + dateParts[1];
           this.ticketService.itemTicketService.AllotmentDateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+          this.ischeckDate = true;
         }
       }
       if (this.timeId && this.timeId.length > 0 && this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0) {
