@@ -48,9 +48,9 @@
       </ion-row>
     </div>
     
-      <div class="div-split-panel m-top-24 m-bottom-16" *ngIf="customInfoArr && customInfoArr.length >0"></div>
+      <div class="div-split-panel m-top-24 m-bottom-16" *ngIf="customInfoArr && customInfoArr.length >0 && customInfoArr[0].listCustom && customInfoArr[0].listCustom.length>0"></div>
       
-      <div *ngIf="customInfoArr && customInfoArr.length >0">
+      <div *ngIf="customInfoArr && customInfoArr.length >0 && customInfoArr[0].listCustom && customInfoArr[0].listCustom.length>0">
         <div class="label-title" >
           Thông tin khách
         </div>
@@ -61,11 +61,11 @@
             <div class="text-sub m-top-12" *ngIf="cusInfo.label">
               {{cusInfo.label}} <span class="cls-required">*</span>
             </div>
-            <div class="cls-input-height"><ion-input class="cls-input-custom" [(ngModel)]="cusInfo[cusInfo.name]" *ngIf="cusInfo.name && cusInfo.type=='text'" (ionInput)="inputEvent($event, cusInfo)" required></ion-input></div>
+            <div class="cls-input-height"><ion-input id="input_{{cusInfo.name}}" class="cls-input-custom" [(ngModel)]="cusInfo[cusInfo.name]" *ngIf="cusInfo.name && cusInfo.type=='text'" (ionInput)="inputEvent($event, cusInfo)"  (ionFocus)="getCusInfoDataRaw($event, cusInfo)" required></ion-input></div>
                 <div  class="div-relative">
                   <ion-searchbar  class="cls-searchbar-custom" *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0"
                     searchIcon="false" cancelIcon="false" [(ngModel)]="cusInfo[cusInfo.name]"
-                    #input id="input" autocomplete="on" autocorrect="true" 
+                    #input id="input_{{cusInfo.name}}" autocomplete="on" autocorrect="true" 
                     debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, cusInfo)" (ionFocus)="getCusInfoDataRaw($event, cusInfo)" 
                     (ionBlur)="onBlurCusInfoDataRaw($event, cusInfo)" required></ion-searchbar>
                     <div [ngClass]="cusInfo.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0"
@@ -73,11 +73,11 @@
                                       <img *ngIf="!cusInfo.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                       <img *ngIf="cusInfo.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                   </div>
-                    <div *ngIf="cusInfo.name && cusInfo.name != 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item">
+                    <div id="input_{{cusInfo.name}}" *ngIf="cusInfo.name && cusInfo.name != 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusInfo)">
                       <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
                         selectData.name }}</ion-item>
                     </div>
-                    <div *ngIf="cusInfo.name && cusInfo.name == 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item">
+                    <div id="input_{{cusInfo.name}}" *ngIf="cusInfo.name && cusInfo.name == 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusInfo)">
                       <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
                         selectData.meal_type_name }}</ion-item>
                     </div>
@@ -99,7 +99,7 @@
           Thông tin chung
         </div>
         <div *ngFor="let itemGeneralInfo of customGeneralInfoArr;let idx = index">
-          <div *ngFor="let cusGeneralInfo of itemGeneralInfo.listCustom;let idx = index">
+          <div *ngFor="let cusGeneralInfo of itemGeneralInfo.listCustom;let idx = index" [ngClass]="!cusGeneralInfo.allowInput ? 'cls-deactive' : ''">
             <div class="text-sub m-top-12" *ngIf="cusGeneralInfo.label">
               {{cusGeneralInfo.label}} <span class="cls-required">*</span>
             </div>
@@ -118,7 +118,7 @@
                   
               </ion-radio-group>
             </div>
-            <div class="cls-input-height"><ion-input [disabled]="!cusGeneralInfo.allowInput" class="cls-input-custom" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='text'"  required></ion-input></div>
+            <div class="cls-input-height"><ion-input id="input_{{cusGeneralInfo.name}}" [disabled]="!cusGeneralInfo.allowInput" class="cls-input-custom" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='text'" (ionFocus)="inputFocusCustom($event, cusGeneralInfo)" required></ion-input></div>
                 <div *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 " class="div-relative">
                   <ion-searchbar  class="cls-searchbar-custom" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 "
                   searchIcon="false" cancelIcon="false" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]"
@@ -131,7 +131,7 @@
                                       <img *ngIf="!cusGeneralInfo.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                       <img *ngIf="cusGeneralInfo.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                   </div>
-                  <div *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 && cusGeneralInfo.showDataRaw" class="cls-selection-item">
+                  <div id="input_{{cusGeneralInfo.name}}" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 && cusGeneralInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusGeneralInfo)" >
                     <ion-item [disabled]="!cusGeneralInfo.allowInput" class="item-country" *ngFor="let selectGeneralData of cusGeneralInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusGeneralInfo, selectGeneralData)">{{
                       selectGeneralData.name }}</ion-item>
                   </div>
@@ -155,14 +155,14 @@
           <div class="div-relative">
             <ion-searchbar  class="cls-searchbar-custom" *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 "
               searchIcon="false" cancelIcon="false" [(ngModel)]="trafficInfoArr[0][trafficInfoArr[0].name]"
-              #input id="input" autocomplete="on" autocorrect="true"
+              #input id="input_{{trafficInfoArr[0].name}}" autocomplete="on" autocorrect="true"
               debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, trafficInfoArr[0])" (ionFocus)="getCusInfoDataRaw($event, trafficInfoArr[0])" required></ion-searchbar>
               <div [ngClass]="trafficInfoArr[0].errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 "
                                   (click)="getCusInfoDataRaw('dropdownicon', trafficInfoArr[0])">
                                   <img *ngIf="!trafficInfoArr[0].errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                   <img *ngIf="trafficInfoArr[0].errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                               </div>
-              <div *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 && trafficInfoArr[0].showDataRaw" class="cls-selection-item">
+              <div *ngIf=" trafficInfoArr[0].dataRaw && trafficInfoArr[0].dataRaw.length >0 && trafficInfoArr[0].showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, trafficInfoArr[0])" >
                 <ion-item class="item-country item-select-location" *ngFor="let selectGeneralData of trafficInfoArr[0].dataRawSearch" (click)="selectCusInfoDataRaw(trafficInfoArr[0], selectGeneralData)">{{
                   selectGeneralData.name }}</ion-item>
               </div>
@@ -183,26 +183,26 @@
             <div class="div-relative">
               <ion-searchbar  class="cls-searchbar-custom" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
                 searchIcon="false" cancelIcon="false" [(ngModel)]="itemTraffic[itemTraffic.name]"
-                #input id="input" autocomplete="on" autocorrect="true"
+                #input id="input_{{itemTraffic.name}}" autocomplete="on" autocorrect="true"
                 debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, itemTraffic)" (ionFocus)="getCusInfoDataRaw($event, itemTraffic)" required></ion-searchbar>
                 <div [ngClass]="itemTraffic.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
                                     (click)="getCusInfoDataRaw('dropdownicon', itemTraffic)">
                                     <img *ngIf="!itemTraffic.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                     <img *ngIf="itemTraffic.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                 </div>
-                <div *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.showDataRaw && itemTraffic.type=='array'" class="cls-selection-item">
+                <div id="input_{{itemTraffic.name}}" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.showDataRaw && itemTraffic.type=='array'" class="cls-selection-item"  (click)="inputFocusCustom($event, itemTraffic)">
                   <ion-item class="item-country" *ngFor="let selectGeneralData of itemTraffic.dataRawSearch" (click)="selectCusInfoDataRaw(itemTraffic, selectGeneralData)">{{
                     selectGeneralData.name }}</ion-item>
                 </div>
             </div>
 
-            <div *ngIf="itemTraffic.type == 'date'" class="div-traffic-date d-flex">
+            <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type == 'date'" class="div-traffic-date d-flex"  (click)="inputFocusCustom($event, itemTraffic)">
               <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
               <div class="div-text-date">{{ticketService.selectedDateDisplay}}</div>
             </div>
 
             <div *ngIf="itemTraffic.type == 'time'" class="div-traffic-time d-flex">
-              <div class="div-relative div-select-time"  (click)="clickShowHours(itemTraffic)">
+              <div id="input_{{itemTraffic.name}}" class="div-relative div-select-time"  (click)="clickShowHours(itemTraffic)"  (click)="inputFocusCustom($event, itemTraffic)">
                 <div *ngIf="itemTraffic.showHours" class="cls-select-time"><ion-item *ngFor="let hour of arrHours" (click)="selectTime(1,hour,itemTraffic)">{{hour}}</ion-item></div>
                 <div *ngIf="itemTraffic.hours" class="cls-time">{{itemTraffic.hours}}</div>
                 <div class="div-icon-down"></div>
@@ -219,8 +219,8 @@
               <div class="text-time m-left-8">phút</div>
             </div>
 
-            <div *ngIf="itemTraffic.type=='text' || itemTraffic.type=='string'">
-              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" required></ion-input>
+            <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type=='text' || itemTraffic.type=='string'" >
+              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" (ionFocus)="inputFocusCustom($event, itemTraffic)" required></ion-input>
             </div>
           </div>
         </div>
@@ -240,14 +240,14 @@
             <div class="div-relative">
               <ion-searchbar  class="cls-searchbar-custom" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
                 searchIcon="false" cancelIcon="false" [(ngModel)]="itemTraffic[itemTraffic.name]"
-                #input id="input" autocomplete="on" autocorrect="true"
+                #input id="input_{{itemTraffic.name}}" autocomplete="on" autocorrect="true"
                 debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, itemTraffic)" (ionFocus)="getCusInfoDataRaw($event, itemTraffic)" required></ion-searchbar>
                 <div [ngClass]="itemTraffic.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.type=='array'"
                                     (click)="getCusInfoDataRaw('dropdownicon', itemTraffic)">
                                     <img *ngIf="!itemTraffic.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                     <img *ngIf="itemTraffic.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                 </div>
-                <div *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.showDataRaw && itemTraffic.type=='array'" class="cls-selection-item">
+                <div id="input_{{itemTraffic.name}}" *ngIf=" itemTraffic.dataRaw && itemTraffic.dataRaw.length >0 && itemTraffic.showDataRaw && itemTraffic.type=='array'" class="cls-selection-item"  (click)="inputFocusCustom($event, itemTraffic)">
                   <ion-item class="item-country" *ngFor="let selectGeneralData of itemTraffic.dataRawSearch" (click)="selectCusInfoDataRaw(itemTraffic, selectGeneralData)">{{
                     selectGeneralData.name }}</ion-item>
                 </div>
@@ -255,10 +255,10 @@
             
 
             <div *ngIf="itemTraffic.type=='text' || itemTraffic.type=='string'">
-              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" required></ion-input>
+              <ion-input id="input_{{itemTraffic.name}}" class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" required  (ionFocus)="getCusInfoDataRaw($event, itemTraffic)"></ion-input>
             </div>
 
-            <div *ngIf="itemTraffic.type == 'date'" class="div-traffic-date d-flex">
+            <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type == 'date'" class="div-traffic-date d-flex">
               <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
               <div class="div-text-date">{{ticketService.selectedDateDisplay}}</div>
             </div>
@@ -312,22 +312,22 @@
               <div class="div-relative">
                 <ion-searchbar  class="cls-searchbar-custom" *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.type=='array'"
                   searchIcon="false" cancelIcon="false" [(ngModel)]="itemTrafficQty[itemTrafficQty.name]"
-                  #input id="input" autocomplete="on" autocorrect="true"
+                  #input id="input_{{itemTrafficQty.name}}" autocomplete="on" autocorrect="true"
                   debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, itemTrafficQty)" (ionFocus)="getCusInfoDataRaw($event, itemTrafficQty)" required></ion-searchbar>
                   <div [ngClass]="itemTrafficQty.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.type=='array'"
                                       (click)="getCusInfoDataRaw('dropdownicon', itemTrafficQty)">
                                       <img *ngIf="!itemTrafficQty.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                       <img *ngIf="itemTrafficQty.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                   </div>
-                  <div *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.showDataRaw && itemTrafficQty.type=='array'" class="cls-selection-item">
+                  <div id="input_{{itemTrafficQty.name}}" *ngIf=" itemTrafficQty.dataRaw && itemTrafficQty.dataRaw.length >0 && itemTrafficQty.showDataRaw && itemTrafficQty.type=='array'" class="cls-selection-item" (click)="inputFocusCustom($event, itemTrafficQty)">
                     <ion-item class="item-country" *ngFor="let selectGeneralData of itemTrafficQty.dataRawSearch" (click)="selectCusInfoDataRaw(itemTrafficQty, selectGeneralData)">{{
                       selectGeneralData.name }}</ion-item>
                   </div>
               </div>
               
   
-              <div *ngIf="itemTrafficQty.type=='text' || itemTrafficQty.type=='string'">
-                <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTrafficQty[itemTrafficQty.name]" required></ion-input>
+              <div *ngIf="itemTrafficQty.type=='text' || itemTrafficQty.type=='string'" >
+                <ion-input id="input_{{itemTrafficQty.name}}" class="cls-input-custom" type="note" [(ngModel)]="itemTrafficQty[itemTrafficQty.name]" (ionFocus)="inputFocusCustom($event, itemTrafficQty)" required></ion-input>
               </div>
   
               <div *ngIf="itemTrafficQty.type == 'date'" class="div-traffic-date d-flex">
@@ -336,14 +336,14 @@
               </div>
               <div *ngIf="itemTrafficQty.type == 'time'" class="div-traffic-time d-flex">
                 
-                <div class="div-relative div-select-time"  (click)="clickShowHours(itemTrafficQty)">
+                <div id="input_{{itemTrafficQty.name}}" class="div-relative div-select-time"  (click)="clickShowHours(itemTrafficQty)" (click)="inputFocusCustom($event, itemTrafficQty)">
                   <div *ngIf="itemTrafficQty.showHours" class="cls-select-time"><ion-item *ngFor="let hour of arrHours" (click)="selectTime(1,hour,itemTrafficQty)">{{hour}}</ion-item></div>
                   <div *ngIf="itemTrafficQty.hours" class="cls-time">{{itemTrafficQty.hours}}</div>
                   <div class="div-icon-down"></div>
                 </div>
                 <div class="text-time m-left-8">giờ</div>
                
-                <div class="div-relative div-select-time m-left-32" (click)="clickShowMinutes(itemTrafficQty)">
+                <div id="input_{{itemTrafficQty.name}}" class="div-relative div-select-time m-left-32" (click)="clickShowMinutes(itemTrafficQty)" (click)="inputFocusCustom($event, itemTrafficQty)">
                   <div *ngIf="itemTrafficQty.showMinutes" class="cls-select-time">
                     <ion-item *ngFor="let minute of arrMinutes" (click)="selectTime(2,minute,itemTrafficQty)">{{minute}}</ion-item>
                   </div>

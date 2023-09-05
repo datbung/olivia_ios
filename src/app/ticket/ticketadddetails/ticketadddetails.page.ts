@@ -84,7 +84,7 @@ export class TicketAdddetailsPage implements OnInit {
   trafficInfoArr: any=[];
   trafficCarInfoArr: any=[];
   trafficFlightInfoArr: any=[];
-  arrHours = ['00','01','02','03','04','05','06','07','08','09','10','11','12'];
+  arrHours = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
   arrMinutes = ['00','01','02','03','04','05','06','07','08','09','10',
   '11','12','13','14','15','16','17','18','19','20',
   '21','22','23','24','25','26','27','28','29','30',
@@ -1022,7 +1022,7 @@ export class TicketAdddetailsPage implements OnInit {
         }
       }
 
-      console.log(this.kkdayResource.dataInput);
+      //console.log(this.kkdayResource.dataInput);
       resolve(true);
     })
 
@@ -1167,13 +1167,13 @@ export class TicketAdddetailsPage implements OnInit {
             this.customGeneralInfoArr.push(_itemGeneralCustom);
           }
 
-          //console.log(this.customInfoArr);
-          //console.log(this.customGeneralInfoArr);
+          console.log(this.customInfoArr);
+          console.log(this.customGeneralInfoArr);
         }
 
         //Quầy nhận vé
         if(this.kkdayResource.dataInput.traffic){
-          let _trafficInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && x.name == 's_location');
+          let _trafficInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && x.name == 's_location' && x.label == "Quầy nhận vé");
           if(_trafficInfo && _trafficInfo.length >0 && _trafficInfo[0].dataRaw && _trafficInfo[0].dataRaw.length >0){
             _trafficInfo[0][_trafficInfo[0].name] = _trafficInfo[0].dataRaw[0].name;
             _trafficInfo[0].dataRawSearch = [..._trafficInfo[0].dataRaw];
@@ -1262,6 +1262,9 @@ export class TicketAdddetailsPage implements OnInit {
         }
 
         //console.log(_formGroup);
+      }
+      else if(data && data.success && data.data){
+        this.ticketService.bookingInfo = data.data;
       }
     });
   }
@@ -1361,7 +1364,10 @@ export class TicketAdddetailsPage implements OnInit {
         }
         console.log('input_'+item.name);
       setTimeout(()=>{
-        document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        if(document.getElementById('input_'+item.name)){
+          document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        }
+        
       },100)
   }
 
@@ -1420,6 +1426,15 @@ export class TicketAdddetailsPage implements OnInit {
         item[item.name] = `${this.hours}:${value}`;
         //this.kkdayResource.dataInput.traffic.flight.arrival_time = `${this.hours}:${value}`;
       }
+    }
+
+    inputFocusCustom(event, item){
+      setTimeout(()=>{
+        if(document.getElementById('input_'+item.name)){
+          document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        }
+        
+      },100)
     }
 }
 
