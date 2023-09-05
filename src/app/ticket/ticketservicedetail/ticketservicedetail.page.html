@@ -15,8 +15,12 @@
           Vé vào cổng: {{itemTicketService.name}}
       </div>
 
+      <div *ngIf="itemTicketService.description" [innerHTML]="itemTicketService.description" class="text-normal m-top-16"></div>
+      
       <div class="headline-title m-top-16" *ngIf="itemTicketService.programContent">Thông tin sản phẩm</div>
       <div [innerHTML]="itemTicketService.programContent" class="text-normal m-top-16"></div>
+
+   
 
       <div *ngIf="itemTicketService.generalTerms" class="div-split-panel"></div>
       <div class="headline-title" *ngIf="itemTicketService.generalTerms">Điều khoản chung</div>

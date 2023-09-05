@@ -104,7 +104,7 @@ export class TicketServicePage implements OnInit {
 
     if (this.dailyRatePkgs.specs) {
 
-      if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+      if (this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
         if (this.ticketService.itemTicketService.itemObjRate.specs.length === 1) {
           this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
             element.child.forEach(elementC => {
@@ -910,14 +910,16 @@ export class TicketServicePage implements OnInit {
 
     if (_packageSearch && _packageSearch.dailyRateAvailableSpes && _packageSearch.dailyRateAvailableSpes.length !== 0) {
       const [_dailyRateAvailable] = _packageSearch.dailyRateAvailableSpes
-
-      this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
-        let objAction = _spec.child.filter(x => x.action == true);
-        if (objAction && objAction.length>0) {
-          this.onSelectSpecs(_spec.id, objAction[0].child_id);
-        }
-
-      })
+      if (this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+        this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
+          let objAction = _spec.child.filter(x => x.action == true);
+          if (objAction && objAction.length>0) {
+            this.onSelectSpecs(_spec.id, objAction[0].child_id);
+          }
+  
+        })
+      }
+   
 
       if (_packageSearch.specs && _packageSearch.specs.length !== 0) {
         this.timeId = _packageSearch.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
