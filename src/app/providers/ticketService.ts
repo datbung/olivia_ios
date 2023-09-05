@@ -46,7 +46,7 @@ export class ticketService{
   typeFilters: any = [];
   topicfilters: any = [];
   ticketFilter: any;
-  countFilter: number;
+  countFilter: number = 1;
   searchType: any;
   regionModels: any;
   topicModels: any;

@@ -113,6 +113,7 @@ export class TicketListPage implements OnInit {
     } else if (this.status == 2){
       this.name =  "Kết quả tìm kiếm";
     }
+    this.ticketService.countFilter = 1;
     this.gf.SearchKeyword().then((data) => {
       if (data) {
         this.loaddatadone = true;
@@ -447,6 +448,7 @@ export class TicketListPage implements OnInit {
     this.openFilter();
   }
   deleteFilter(stt,param){
+    this.ticketService.countFilter = 0;
     // 0:region 1:topic
     if (stt == 0) {
       if (param.isRegion == true) {
@@ -472,6 +474,7 @@ export class TicketListPage implements OnInit {
       this.ticketService.regionFilters =  this.ticketService.regionFilters.filter(item => item!=this.ticketService.input.id);
       this.ticketService.input = "";
     }
+    this.ticketService.countFilter = this.ticketService.topicfilters.length + this.ticketService.regionFilters.length;
     this.gf.SearchKeyword().then((data) => {
       if (data) {
         this.loaddatadone = true;

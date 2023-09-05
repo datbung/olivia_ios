@@ -41,8 +41,26 @@ export class TicketfilterPage implements OnInit {
         return { ...item, checked: false }
       });
       if (this.ticketService.topicfilters.length > 0) {
-        var idx = this.arrFilter.topics.findIndex(item => this.ticketService.topicfilters.includes(item.id));
-        this.arrFilter.topics[idx].checked = true;
+        // var idx = this.arrFilter.topics.findIndex(item => this.ticketService.topicfilters.includes(item.id));
+        // this.arrFilter.topics[idx].checked = true;
+        this.arrFilter.topics = this.arrFilter.topics.map((item) => {
+          // Kiểm tra xem item có trong mảng topicfilters hay không
+          const isItemInTopicFilters = this.ticketService.topicfilters.includes(item.id);
+        
+          // Nếu có trong topicfilters, đặt checked thành true, ngược lại giữ nguyên giá trị checked
+          return {
+            ...item,
+            checked: isItemInTopicFilters,
+          };
+        });
+        
+       
+        
+        
+        
+        
+        
+        
       }
     } else {
       this.getdata(0)
