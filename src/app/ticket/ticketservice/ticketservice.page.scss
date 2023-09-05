@@ -500,5 +500,11 @@
         cursor: not-allowed;
         color: #aaa;
     }
+    .non-pkg{
+        opacity: 0.65;
+        cursor: not-allowed;
+        pointer-events: none;
+        box-shadow: none;
+    }
     
    
