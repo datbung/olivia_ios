@@ -977,6 +977,9 @@ export class TicketAdddetailsPage implements OnInit {
                 resolve(false);
                 return;
               }
+            }
+            else if(!this.kkdayResource.dataInput.custom && this.kkdayResource.dataInput.mobile_device){
+              this.kkdayResource.dataInput.mobile_device[elementCheck.name] = elementCheck[elementCheck.name];
             }else{
               this.kkdayResource.dataInput.custom[index][elementCheck.name] = elementCheck[elementCheck.name];
             }
@@ -1169,6 +1172,34 @@ export class TicketAdddetailsPage implements OnInit {
 
           console.log(this.customInfoArr);
           console.log(this.customGeneralInfoArr);
+        }
+
+        //device
+        if(this.kkdayResource.dataInput.mobile_device){
+          const _customKeys = Object.keys(this.kkdayResource.dataInput.mobile_device);
+
+          let _mobileDeviceInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo');
+          if(_mobileDeviceInfoGeneral && _mobileDeviceInfoGeneral.length >0){
+            for (let index = 0; index < _mobileDeviceInfoGeneral.length; index++) {
+              let element = _mobileDeviceInfoGeneral[index];
+              element[element.name] = '';
+              element.dataRawSearch = [...element.dataRaw];
+
+              _mobileDeviceInfoGeneral.forEach(elementCustom => {
+                elementCustom.index = index+1;
+                elementCustom[elementCustom.name] = '';
+                elementCustom['allowInput'] ='undefined';
+                elementCustom.dataRawSearch = [...elementCustom.dataRaw];
+
+                if(elementCustom.type == 'array' && elementCustom.dataRawSearch && elementCustom.dataRawSearch.length ==1){
+                  elementCustom[elementCustom.name] = elementCustom.dataRawSearch[0].name;
+                }
+              });
+             
+            }
+            let _itemGeneralCustom = {listCustom: _mobileDeviceInfoGeneral};
+            this.customGeneralInfoArr.push(_itemGeneralCustom);
+          }
         }
 
         //Quầy nhận vé

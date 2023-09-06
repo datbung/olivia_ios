@@ -104,7 +104,7 @@ export class TicketServicePage implements OnInit {
 
     if (this.dailyRatePkgs.specs) {
 
-      if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+      if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
         if (this.ticketService.itemTicketService.itemObjRate.specs.length === 1) {
           this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
             element.child.forEach(elementC => {

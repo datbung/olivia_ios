@@ -115,6 +115,7 @@ export class MytripdetailPage implements OnInit {
   _departTicketInfoCRM: any;
   _returnTicketInfoCRM: any;
   objSummary: any;
+  expandPrice: boolean;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -301,6 +302,7 @@ export class MytripdetailPage implements OnInit {
               this.includePrice = data.data.booking.includePrice.split('|');
               this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
               this.objSummary=data.data.booking;
+              
             }
           });
         }
@@ -1730,6 +1732,9 @@ async downloadqrcode(){
   }
   ticketinfo(){
     this.isTTV=!this.isTTV;
+  }
+  showPrice(){
+    this.expandPrice = !this.expandPrice
   }
   GetVoucherLinks(booking_id): Promise<any>{
     return new Promise((resolve, reject) => {

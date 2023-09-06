@@ -5269,7 +5269,7 @@ export class OrderPage {
       this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
       return;
     }
-    if (trip.payment_status == 1 || trip.payment_status == 5 || trip.payment_status == 9 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay)) {
+    if (trip.payment_status == 1 || trip.payment_status == 5 || trip.payment_status == 9 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay) ) {//test vvc
       if (trip) {
         this.enableheader = false;
         this._mytripservice.tripdetail = trip;

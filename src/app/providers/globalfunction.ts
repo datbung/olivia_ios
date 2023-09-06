@@ -622,7 +622,7 @@ export class GlobalFunction{
           textbank = "BIDV";
           bankName = "NH TM CP Đầu Tư và Phát Triển Việt Nam (BIDV)";
           bankBranch = "Chi Nhánh 02, Tp.HCM";
-          accountNumber = "130 1000 147 4890";
+          accountNumber = "130 147 4890";
           urlimgbank = "https://res.ivivu.com/payment/img/banklogo/7.bidv.png";
           url = 'https://www.bidv.vn:81/iportalweb/iRetail@1';
           break;
