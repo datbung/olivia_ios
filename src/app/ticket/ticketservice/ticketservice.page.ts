@@ -398,7 +398,7 @@ export class TicketServicePage implements OnInit {
           let monthstartdate: any = objtextmonth.trim().split(" ")[0];
           let yearstartdate: any = objtextmonth.trim().split(" ")[1];
 
-          if (this.timeId && this.timeId.length > 0) {
+          if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
             for (let j = 0; j < listdayinmonth.length; j++) {
               const elementday = listdayinmonth[j];
               let fday: any;
@@ -412,10 +412,14 @@ export class TicketServicePage implements OnInit {
               let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
               let nowday = moment(new Date(Year, Month, Day)).format('YYYYMMDD');
               let objday = []
-              objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
-              // else {
-              //    objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
-              // }
+              if (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length>0) {
+                if (this.timeId && this.timeId.length > 0) {
+                  objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+                }
+              }
+              else {
+                 objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+              }
               var fromDateNum = parseInt(fromdate.replace(/-/g, ""), 10);
               var nowdayNum = parseInt(nowday.replace(/-/g, ""), 10);
               var specificDateStr;
@@ -750,6 +754,7 @@ export class TicketServicePage implements OnInit {
     // this.objectLength = Object.keys(this.specs).length; 
     this.onSelectSpecs(item.id, itemc.child_id);
     if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0) {
+      this.timeId = [];
       this.timeId = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','));
       if (this.timeId && this.timeId.length > 0) {
         let objDate = this.timeId[0].skusDaily.dailyRate.filter(x => x.price > 0 && x.date === this.checkinDate)
@@ -905,12 +910,16 @@ export class TicketServicePage implements OnInit {
 
     if (_packageSearch && _packageSearch.dailyRateAvailableSpes && _packageSearch.dailyRateAvailableSpes.length !== 0) {
       const [_dailyRateAvailable] = _packageSearch.dailyRateAvailableSpes
-
-      this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
-        // let objAction = _spec.child.filter(x => x.action == true);
-        this.onSelectSpecs(_spec.id, _dailyRateAvailable.specs[index]);
-
-      })
+      if (this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+        this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
+          let objAction = _spec.child.filter(x => x.action == true);
+          if (objAction && objAction.length>0) {
+            this.onSelectSpecs(_spec.id, objAction[0].child_id);
+          }
+  
+        })
+      }
+   
 
       if (_packageSearch.specs && _packageSearch.specs.length !== 0) {
         this.timeId = _packageSearch.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))

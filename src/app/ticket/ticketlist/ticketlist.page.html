@@ -165,8 +165,7 @@
     <ion-col (click)="openFilter()">
       <div class="flightdeparture-button-filter">
         <img class="img-filter" src="./assets/imgs/ic_filter.svg">
-        <ion-badge *ngIf="countFilter > 0" class="cls-badge-filter"><span
-            class="cls-hidden-filter">{{countFilter}}</span></ion-badge>
+        <ion-badge class="cls-badge-filter"><span class="cls-hidden-filter">{{ticketService.countFilter}}</span></ion-badge>
         <ion-label class="text-sort-and-filter label-filter">Lọc</ion-label>
       </div>
       <div class="div-split"></div>
