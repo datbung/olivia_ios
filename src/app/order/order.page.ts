@@ -173,6 +173,7 @@ export class OrderPage {
   _departTicketInfoCRM: any;
   _returnTicketInfoCRM: any;
   objSummary: any;
+  expandPrice: boolean;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -900,7 +901,7 @@ export class OrderPage {
                 se.getRatingStar(element);
 
                 
-                // if (element.booking_id=='VC0002855') {
+                // if (element.booking_id=='VC0003308') {
                 //   se.listMyTrips.push(element);
                 // }
                 // if(element.booking_id == 'IVIVU-OFF100346'){
@@ -1762,7 +1763,8 @@ export class OrderPage {
                   
                     })
                   }
-                  // if (element.booking_id=='VC0002855') {
+                 
+                  // if (element.booking_id=='VC0003308') {
                   //   se.listMyTrips.push(element);
                   // }
                   se.listMyTrips.push(element);
@@ -6093,6 +6095,9 @@ export class OrderPage {
   }
   ticketinfo(){
     this.isTTV=!this.isTTV;
+  }
+  showPrice(){
+    this.expandPrice = !this.expandPrice;
   }
   GetVoucherLinks(booking_id): Promise<any>{
     return new Promise((resolve, reject) => {

@@ -116,6 +116,7 @@ export class MytripdetailPage implements OnInit {
   _returnTicketInfoCRM: any;
   objSummary: any;
   expandPrice: boolean;
+  ticketChangeLocation: any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -258,10 +259,14 @@ export class MytripdetailPage implements OnInit {
           if ((this.trip.payment_status == 1 || this.trip.payment_status == 5) && this.trip.approve_date){
             this.gf.showLoading();
             this.gf.ticketGetBookingCRM(this.trip.booking_id).then((data) => {
-              this.objectDetail=data;
-              let arrcd = this.objectDetail.startDate.split('-');
-              let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
-              this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+              
+                this.objectDetail=data;
+              if(this.objectDetail && this.objectDetail.startDate){
+                let arrcd = this.objectDetail.startDate.split('-');
+                let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+                this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+              }
+             
               var objmap;
               if (this.objectDetail.listNotes) {
                 objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
@@ -302,7 +307,17 @@ export class MytripdetailPage implements OnInit {
               this.includePrice = data.data.booking.includePrice.split('|');
               this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
               this.objSummary=data.data.booking;
-              
+              if(this.objSummary && this.objSummary.supplement){
+                console.log(JSON.parse(this.objSummary.supplement));
+                let _objSup = JSON.parse(this.objSummary.supplement);
+                  if(_objSup && _objSup.traffic && _objSup.traffic.car && _objSup.traffic.car.s_location && this.objSummary.expeName.indexOf('Vé') != -1){
+                      this.ticketChangeLocation = _objSup.traffic.car.s_location;
+                  }
+              }
+              if(this.objSummary && this.objSummary.includePrice){
+                let arr = this.objSummary.includePrice.split('|');
+                console.log(arr);
+              }
             }
           });
         }
@@ -1734,7 +1749,7 @@ async downloadqrcode(){
     this.isTTV=!this.isTTV;
   }
   showPrice(){
-    this.expandPrice = !this.expandPrice
+    this.expandPrice = !this.expandPrice;
   }
   GetVoucherLinks(booking_id): Promise<any>{
     return new Promise((resolve, reject) => {
