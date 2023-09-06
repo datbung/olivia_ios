@@ -125,10 +125,14 @@
             </div>
             <div class="div-bkg-ticket" *ngIf="!ischeckqrLink">
               
-              <!-- <div *ngIf="objSummary && ticketChangeLocation" class="div-ticket-location">
-                <div class="exp-name text-name-ticket text-bold">{{objSummary.expeName}}</div>
+              <div *ngIf="objSummary && ticketChangeLocation" class="div-ticket-location m-top-24 m-right-8">
+                <div class="exp-name text-name-ticket">{{objSummary.expeName}}</div>
                 <div class="text-sub-download" *ngIf=""></div>
-              </div> -->
+                <div *ngIf="ticketChangeLocation" class="div-p8">
+                  <div class="text-normal">Địa điểm đổi vé:</div>
+                  <div class="text-title m-top-8">{{ticketChangeLocation}}</div>
+                </div>
+              </div>
               <div *ngIf="trip.objdataRaw" class="div-location">
                           
                 <div class="div-options">
