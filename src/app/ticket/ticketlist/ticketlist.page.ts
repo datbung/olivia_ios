@@ -76,20 +76,31 @@ export class TicketListPage implements OnInit {
       if (this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId) {
         // this.loadTicketList(this.ticketService.itemTicketTopic.topicId, 0);
         this.name = this.ticketService.itemTicketTopic.topicName
+        this.gf.SearchKeyword().then((data) => {
+          if (data) {
+            this.setData(1);
+          }
+        })
       
       }
 
     } else if (this.status == 1){
       this.name =  this.ticketService.itemShowList.name;
+      this.gf.SearchKeyword().then((data) => {
+        if (data) {
+          this.setData(1);
+        }
+      })
     } else if (this.status == 2){
-      
-      this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
+      this.gf.SearchKeyword().then((data) => {
+        if (data) {
+          this.setData(1);
+          this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
+        }
+      })
+
     }
-    this.gf.SearchKeyword().then((data) => {
-      if (data) {
-        this.setData(1);
-      }
-    })
+ 
   }
 
   loadData() {
