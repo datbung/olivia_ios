@@ -54,7 +54,6 @@ export class TicketServicePage implements OnInit {
   timeTicket: any;
   totalPax = 0
   daysInAdvance: number | Date;
-  ischeckDate: boolean = false;
   subject = new Subject();
   ischeckbtn: boolean = false;
   specs: any = {};
@@ -96,9 +95,9 @@ export class TicketServicePage implements OnInit {
     var timestamp = new Date();
     var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
-    var Tomorrow = moment(date).format("YYYYMMDD");
+    // var Tomorrow = moment(date).format("YYYYMMDD");
 
-    var datenow = new Date();
+    // var datenow = new Date();
     var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
 
@@ -118,9 +117,10 @@ export class TicketServicePage implements OnInit {
         }
       }
       // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-      var Tomorrow = moment(date).format("DD/MM");
+      // var Tomorrow = moment(date).format("DD/MM");
 
-      this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
+      // this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
+
       let matchedSkus = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
       if (matchedSkus.length > 0) {
         this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date
@@ -134,17 +134,16 @@ export class TicketServicePage implements OnInit {
       // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate;
     } else {
       // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-      var Tomorrow = moment(date).format("DD/MM");
-
-      this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-      // this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
+      // var Tomorrow = moment(date).format("DD/MM");
+      // this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
       this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
       this.dailyRatePkgs.checkin = this.checkinDate
       // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
       // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];  
       // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate
     }
-
+    var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
+    this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
     // }
     this.index = 0;
     // if (this.itemTicketService.itemObjRate.times && this.itemTicketService.itemObjRate.times.length >0) {
@@ -188,7 +187,7 @@ export class TicketServicePage implements OnInit {
         this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSort.child;
       }
     }
-
+    this.gf.showLoading();
     this.GetDailyRatePackages();
     this.subject.pipe(debounceTime(500)).subscribe(value => {
       if (value) {
@@ -222,10 +221,10 @@ export class TicketServicePage implements OnInit {
     if (this.arrSkus && this.arrSkus.length == 0) {
       return;
     }
-    if (!this.ischeckDate) {
-      alert('Vui lòng chọn ngày');
-      return;
-    }
+    // if (!this.ischeckDate) {
+    //   alert('Vui lòng chọn ngày');
+    //   return;
+    // }
     this.RecheckRateBooking();
   }
 
@@ -495,6 +494,7 @@ export class TicketServicePage implements OnInit {
     if (pElement && !pElement.classList.contains('text-xam')) {
       if ($(obj).hasClass('on-selected')) {
         if (this.modalCtrl) {
+          this.ischeckbtn = false;
           let fday: any;
           let tday: any;
           var monthenddate: any;
@@ -537,7 +537,7 @@ export class TicketServicePage implements OnInit {
               se.checkinDate = moment(fromdate).format('YYYY-MM-DD');
               this.dailyRatePkgs.checkin = this.checkinDate;
               // se.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
-              se.dateDisplay = moment(fromdate).format('DD-MM');
+              se.dateDisplay = moment(fromdate).format('DD-MM-YYYY');
               // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
               //   const element = this.itemTicketService.dailyRatePkgs[i];
               //   element.action=false;
@@ -548,7 +548,7 @@ export class TicketServicePage implements OnInit {
               // }
               se.ticketService.selectedDateDisplay =  moment(fromdate).format('DD-MM-YYYY');
               se.ticketService.selectedDate =  moment(fromdate).format('YYYY-MM-DD');
-              this.ischeckDate = true;
+              // this.ischeckDate = true;
               se.GetDailyRatePackages();
             }
           }
@@ -714,7 +714,7 @@ export class TicketServicePage implements OnInit {
   funcdate(item) {
 
     this.checkactionDate(item);
-    this.ischeckDate = true;
+    // this.ischeckDate = true;
     // this.calculatePrice();
     this.GetDailyRatePackages();
 
@@ -747,6 +747,7 @@ export class TicketServicePage implements OnInit {
       return { ...item, action: false }
     });
     arrSpecs[index].action = true;
+    this.ischeckbtn = false;
     var foundIndex = this.itemTicketService.itemObjRate.specs.findIndex(x => x.id == item.id);
     this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSpecs;
     // this.specs[item.id] = itemc.child_id;
@@ -764,9 +765,9 @@ export class TicketServicePage implements OnInit {
             this.checkinDate = objDateNext[0].date;
             this.dailyRatePkgs.checkin = objDateNext[0].date;
             var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
-            this.dateDisplay = dateParts[2] + "-" + dateParts[1];
+            this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
             this.ticketService.itemTicketService.AllotmentDateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
-            this.ischeckDate = true;
+            // this.ischeckDate = true;
           }
           
         }
@@ -822,7 +823,7 @@ export class TicketServicePage implements OnInit {
     });
   }
   GetDailyRatePackages() {
-    this.gf.showLoading();
+
     let obj = this.dailyRatePkgs
     let headers =
     {
