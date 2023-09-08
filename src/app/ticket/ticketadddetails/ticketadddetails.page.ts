@@ -1361,7 +1361,7 @@ export class TicketAdddetailsPage implements OnInit {
     // console.log(this.kkdayValue);
   }
 
-  getCusInfoDataRaw(ev, item){
+  getCusInfoDataRaw(ev, item, idx){
     var se = this;
       
 
@@ -1393,13 +1393,25 @@ export class TicketAdddetailsPage implements OnInit {
             item.dataRawSearch = [...item.dataRaw];
           })
         }
-        console.log('input_'+item.name);
+       // console.log('input_'+item.name);
+       
       setTimeout(()=>{
-        if(document.getElementById('input_'+item.name)){
-          document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        if(document.getElementById('input_'+item.name+(idx != 'undefined' ? ('_'+idx) : ''))){
+          if(item.name == 'fullName'){
+            $('.div-ticket-adddetail-content').addClass('cls-minheight-900');
+          }
+          document.getElementById('input_'+item.name+(idx != 'undefined' ? ('_'+idx) : '')).scrollIntoView({ behavior: 'smooth', block: 'center'  });
         }
         
       },100)
+  }
+
+  cusInfoLostFocus(ev, item){
+    if(document.getElementById('input_'+item.name)){
+      if(item.name == 'fullName'){
+        $('.div-ticket-adddetail-content').removeClass('cls-minheight-900');
+      }
+    }
   }
 
   selectCusInfoDataRaw(item, _selectData){
@@ -1459,10 +1471,10 @@ export class TicketAdddetailsPage implements OnInit {
       }
     }
 
-    inputFocusCustom(event, item){
+    inputFocusCustom(event, item,idx){
       setTimeout(()=>{
-        if(document.getElementById('input_'+item.name)){
-          document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        if(document.getElementById('input_'+item.name+item.name+(idx != 'undefined' ? ('_'+idx) : ''))){
+          document.getElementById('input_'+item.name+item.name+(idx != 'undefined' ? ('_'+idx) : '')).scrollIntoView({ behavior: 'smooth', block: 'center'  });
         }
         
       },100)

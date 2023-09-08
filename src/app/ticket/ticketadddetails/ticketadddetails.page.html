@@ -8,8 +8,8 @@
       </ion-title>
         </ion-toolbar>
   </ion-header>
-<ion-content class="div-ticket-adddetail-content">
-  <div class="p-all-16">
+<ion-content>
+  <div class="p-all-16 div-ticket-adddetail-content">
     <div class="div-img-step">
       <img class="img-step" src="./assets/ic_tour/tour_step1.png">
     </div>
@@ -52,32 +52,32 @@
       
       <div *ngIf="customInfoArr && customInfoArr.length >0 && customInfoArr[0].listCustom && customInfoArr[0].listCustom.length>0">
         <div class="label-title" >
-          Thông tin khách
+          Thông tin khách sử dụng dịch vụ
         </div>
         <div *ngFor="let itemInfo of customInfoArr;let idx = index">
           <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length >1">Khách {{idx+1}} <span class="text-sub">(Người lớn từ 12 tuổi trở lên)</span></div>
-          <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length ==1">Thông tin khách đặt dịch vụ</div>
-          <div *ngFor="let cusInfo of itemInfo.listCustom;let idx = index">
+          <!-- <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length ==1">Thông tin khách đặt dịch vụ</div> -->
+          <div *ngFor="let cusInfo of itemInfo.listCustom;let idxinfo = index">
             <div class="text-sub m-top-12" *ngIf="cusInfo.label">
               {{cusInfo.label}} <span class="cls-required">*</span>
             </div>
-            <div class="cls-input-height"><ion-input id="input_{{cusInfo.name}}" class="cls-input-custom" [(ngModel)]="cusInfo[cusInfo.name]" *ngIf="cusInfo.name && cusInfo.type=='text'" (ionInput)="inputEvent($event, cusInfo)"  (ionFocus)="getCusInfoDataRaw($event, cusInfo)" required></ion-input></div>
+            <div class="cls-input-height"><ion-input id="input_{{cusInfo.name}}_{{idx}}" class="cls-input-custom" [(ngModel)]="cusInfo[cusInfo.name]" *ngIf="cusInfo.name && cusInfo.type=='text'" (ionInput)="inputEvent($event, cusInfo)"  (ionFocus)="getCusInfoDataRaw($event, cusInfo,idx)" (ionBlur)="cusInfoLostFocus($event, cusInfo)" required></ion-input></div>
                 <div  class="div-relative">
                   <ion-searchbar  class="cls-searchbar-custom" *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0"
                     searchIcon="false" cancelIcon="false" [(ngModel)]="cusInfo[cusInfo.name]"
-                    #input id="input_{{cusInfo.name}}" autocomplete="on" autocorrect="true" 
-                    debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, cusInfo)" (ionFocus)="getCusInfoDataRaw($event, cusInfo)" 
+                    #input id="input_{{cusInfo.name}}_{{idx}}" autocomplete="on" autocorrect="true" 
+                    debounce="10" placeholder="" (ionInput)="getCusInfoDataRaw($event, cusInfo,idx)" (ionFocus)="getCusInfoDataRaw($event, cusInfo,idx)" 
                     (ionBlur)="onBlurCusInfoDataRaw($event, cusInfo)" required></ion-searchbar>
                     <div [ngClass]="cusInfo.errorDataRaw ? 'div-icon-down bottom-6 cls-error' : 'div-icon-down bottom-6'" *ngIf="cusInfo.name && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0"
-                                      (click)="getCusInfoDataRaw('dropdownicon', cusInfo)">
+                                      (click)="getCusInfoDataRaw('dropdownicon', cusInfo,idx)">
                                       <img *ngIf="!cusInfo.errorDataRaw" src="./assets/imgs/ic_down_b.svg">
                                       <img *ngIf="cusInfo.errorDataRaw" src="./assets/ic_flight/ic_down_orange.svg">
                                   </div>
-                    <div id="input_{{cusInfo.name}}" *ngIf="cusInfo.name && cusInfo.name != 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusInfo)">
+                    <div id="input_{{cusInfo.name}}_{{idx}}" *ngIf="cusInfo.name && cusInfo.name != 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusInfo,idx)">
                       <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
                         selectData.name }}</ion-item>
                     </div>
-                    <div id="input_{{cusInfo.name}}" *ngIf="cusInfo.name && cusInfo.name == 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusInfo)">
+                    <div id="input_{{cusInfo.name}}_{{idx}}" *ngIf="cusInfo.name && cusInfo.name == 'meal' && cusInfo.type=='array' && cusInfo.dataRaw && cusInfo.dataRaw.length >0 && cusInfo.showDataRaw" class="cls-selection-item" (click)="inputFocusCustom($event, cusInfo,idx)">
                       <ion-item class="item-country" *ngFor="let selectData of cusInfo.dataRawSearch" (click)="selectCusInfoDataRaw(cusInfo, selectData)">{{
                         selectData.meal_type_name }}</ion-item>
                     </div>
