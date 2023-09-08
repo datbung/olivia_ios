@@ -83,7 +83,7 @@ export class TicketListPage implements OnInit {
       this.name =  this.ticketService.itemShowList.name;
     } else if (this.status == 2){
       
-      this.name =  "Kết quả tìm kiếm";
+      this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
     }
     this.gf.SearchKeyword().then((data) => {
       if (data) {
@@ -111,7 +111,7 @@ export class TicketListPage implements OnInit {
     } else if (this.status == 1){
       this.name =  this.ticketService.itemShowList.name;
     } else if (this.status == 2){
-      this.name =  "Kết quả tìm kiếm";
+      this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
     }
     this.ticketService.countFilter = 1;
     this.gf.SearchKeyword().then((data) => {
@@ -439,7 +439,7 @@ export class TicketListPage implements OnInit {
         this.arrTopic.push(...matchingTopic);
       }
       this.ticketService.input = "";
-      this.name = "Kết quả tìm kiếm";
+      this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
     }
 
   }
@@ -478,6 +478,7 @@ export class TicketListPage implements OnInit {
     this.gf.SearchKeyword().then((data) => {
       if (data) {
         this.loaddatadone = true;
+        this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
       }
     })
   }
