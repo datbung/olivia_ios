@@ -116,6 +116,7 @@ export class TicketPaymentDonePage implements OnInit {
     modal.present();
   }
   goMyTrip(){
+    this._flightService.itemMenuFlightClick.emit(2);
     this.navCtrl.navigateBack(['/app/tabs/tab3']);
   }
 }
