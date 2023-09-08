@@ -31,6 +31,7 @@ import { File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { normalizeURL } from 'ionic-angular';
 import { forEach } from '@angular/router/src/utils/collection';
+import { MytripTicketQrcodeSlidePage } from '../mytripticketqrcodeslide/mytripticketqrcodeslide';
 //import { PDFGenerator } from '@awesome-cordova-plugins/pdf-generator/ngx';
 @Component({
   selector: 'app-order',
@@ -174,6 +175,8 @@ export class OrderPage {
   _returnTicketInfoCRM: any;
   objSummary: any;
   expandPrice: boolean;
+  ticketDownloadFiles: any=[];
+  showIncludeContent: string;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -901,7 +904,7 @@ export class OrderPage {
                 se.getRatingStar(element);
 
                 
-                // if (element.booking_id=='VC0003308') {
+                // if (element.booking_id=='VC0003327') {
                 //   se.listMyTrips.push(element);
                 // }
                 // if(element.booking_id == 'IVIVU-OFF100346'){
@@ -1764,7 +1767,7 @@ export class OrderPage {
                     })
                   }
                  
-                  // if (element.booking_id=='VC0003308') {
+                  // if (element.booking_id=='VC0003327') {
                   //   se.listMyTrips.push(element);
                   // }
                   se.listMyTrips.push(element);
@@ -2238,14 +2241,40 @@ export class OrderPage {
             if ((se.listMyTrips[0].payment_status == 1 || se.listMyTrips[0].payment_status == 5 ) &&  se.listMyTrips[0].approve_date){
               this.gf.ticketGetBookingCRM(se.listMyTrips[0].booking_id).then((data) => {
                 this.objectDetail=data;
-                let arrcd = this.objectDetail.startDate.split('-');
-                let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
-                this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
-                var objmap 
+               
+                if(this.objectDetail && this.objectDetail.startDate){
+                  let arrcd = this.objectDetail.startDate.split('-');
+                  let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+                  this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+                }
+
+                var objmap;
                 if (this.objectDetail.listNotes) {
                    objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
                 }
-                
+
+                // if(this.objectDetail && this.objectDetail.fileUrls && this.objectDetail.fileUrls.length >0){
+                //   let _arrsplit = this.objectDetail.fileUrls[0].split('&');
+                //   if(_arrsplit && _arrsplit.length >0 && _arrsplit[1]){
+                //     let _fname = _arrsplit[1].split('=');
+                //     this.ticketDownloadFile = _fname[1] || '';
+                //   }
+                // }
+                if(this.objectDetail && this.objectDetail.fileUrls && this.objectDetail.fileUrls.length >0){
+                  this.objectDetail.fileUrls.forEach(element => {
+                    if(element.indexOf('&') != -1){
+                      let _arrsplit = element.split('&');
+                      if(_arrsplit && _arrsplit.length >0 && _arrsplit[1]){
+                        let _fname = _arrsplit[1].split('=');
+                        this.ticketDownloadFiles.push({name: _fname[1] || '', url: element});
+                      }
+                    }else{
+                      this.ticketDownloadFiles.push({name: element, url: element });
+                    }
+                   
+                  });
+                  
+                }
                 if(objmap && objmap.length >0){
                   this.ischeckqrLink=true;
                 }else{
@@ -2279,6 +2308,15 @@ export class OrderPage {
                 this.includePrice = data.data.booking.includePrice.split('|');
                 this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
                 this.objSummary=data.data.booking;
+
+                this.showIncludeContent ='';
+                if(this.objSummary && this.objSummary.includePrice){
+                  let arr = this.objSummary.includePrice.split('|');
+                  console.log(arr);
+                  if(arr && arr.length >0 && arr[4]){
+                    this.showIncludeContent = arr[4];
+                  }
+                }
               }
             });
           }
@@ -6008,6 +6046,13 @@ export class OrderPage {
       // Error!
     });
   }
+  sharePDF(url){
+    this.socialSharing.share(null, null, null, url).then(() => {
+      // Success!
+    }).catch(() => {
+      // Error!
+    });
+  }
   async downloadimg(item,trip) {
     console.log(trip);
     if (trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1 || trip.bookingsComboData[0].airlineName.indexOf('BAMBOO') != -1) {
@@ -6110,6 +6155,17 @@ export class OrderPage {
       });
     })
 
+  }
+
+  async showQrCodeSlide(){
+    if(this.ischeckqrLink){
+      this._mytripservice.objectDetail = this.objectDetail;
+        const modal: HTMLIonModalElement = await this.modalCtrl.create({
+          component: MytripTicketQrcodeSlidePage,
+        });
+        modal.present();
+        
+    }
   }
 }
 

@@ -5138,6 +5138,32 @@ and (orientation: portrait) {
                     line-height: 1.4;
                     color: #3f3b3b;
                 }
+                .text-sub-download {
+                    font-size: 14px;
+                    text-align: left;
+                    color: #3f3b3b;
+                    font-weight: 500 !important;
+                    padding-top: 0 !important;
+                }
+                .div-v-align {
+                    display: flex;
+                    align-items: center;
+                }
+                .div-link {
+                    width: 100%;
+                    a {
+                        color: #2f80ed;
+                        text-decoration: underline;
+                    }
+                }
+                .div-button-ticket {
+                    width: 24px;
+                    height: 24px;
+
+                    .img-button-ticket {
+                        min-width: 24px;
+                    }
+                }
             }
         }
         

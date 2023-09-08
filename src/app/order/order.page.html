@@ -1355,7 +1355,7 @@
                               </div>
                             </div>
                            
-                            <div *ngIf="itemqr.qrLink" class="div-bkg-qrcode">
+                            <div *ngIf="itemqr.qrLink" class="div-bkg-qrcode" (click)="showQrCodeSlide()">
                               <img class="img-qrcode" src={{itemqr.qrLink}}>
                             </div>
                             <div *ngIf="itemqr.token" class="div-bkg-ticketcode">{{itemqr.token}}</div>
@@ -1365,7 +1365,68 @@
                         </div>
                         <div class="div-bkg-ticket" *ngIf="!ischeckqrLink">
                           
-                          
+                          <div *ngIf="((objSummary && ticketChangeLocation) || (objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0)) else showConfirmationCode" class="div-ticket-location m-top-24">
+                            <div class="exp-name text-name-ticket" *ngIf="objSummary && objSummary.expeName">{{objSummary.expeName}}</div>
+                            <div class="exp-name text-name-ticket" *ngIf="!objSummary && objectDetail && objectDetail.experienceName">{{objectDetail.experienceName}}</div>
+                            <div class="exp-name text-sub-download p-top-8" *ngIf="objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0">Tải về máy hoặc mở link để sử dụng dịch vụ</div>
+                            <!-- <div class="div-v-align p-left-8 m-top-16 d-flex" *ngIf="objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0">
+                              <div class="div-link" (click)="downloadPDFVC(objectDetail.fileUrls[0])"><a >{{ticketDownloadFile}}</a></div>
+                              <div class="div-button-ticket m-right-8" (click)="downloadPDFVC(objectDetail.fileUrls[0])"> <img class="img-button-ticket" src="./assets/ic_ticket/download.svg" /></div>
+                              <div class="div-button-ticket m-right-8" (click)="sharePDF(objectDetail.fileUrls[0])"><img class="img-button-ticket" src="./assets/ic_ticket/share.svg" /></div>
+                            </div> -->
+                            <div  *ngIf="objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0">
+                              <div class="div-v-align p-left-8 m-top-16 d-flex" *ngFor="let fileurl of ticketDownloadFiles">
+                                <div class="div-link" (click)="downloadPDFVC(fileurl.url)"><a >{{fileurl.name}}</a></div>
+                                <div class="div-button-ticket m-right-8" (click)="downloadPDFVC(fileurl.url)"> <img class="img-button-ticket" src="./assets/ic_ticket/download.svg" /></div>
+                                <div class="div-button-ticket m-right-8" (click)="sharePDF(fileurl.url)"><img class="img-button-ticket" src="./assets/ic_ticket/share.svg" /></div>
+                              </div>
+                              
+                            </div>
+                            <div *ngIf="ticketChangeLocation" class="div-p8">
+                              <div class="text-normal">Địa điểm đổi vé:</div>
+                              <div class="text-title m-top-8">{{ticketChangeLocation}}</div>
+                            </div>
+                            <div class="div-p8" *ngIf="showIncludeContent" [innerHTML]="showIncludeContent"></div>
+                          </div>
+
+                          <ng-template #showConfirmationCode>
+                            <div class="div-ticket-location m-top-24" *ngIf="objectDetail">
+                              <div class="exp-name text-name-ticket">{{objectDetail.experienceName}}</div>
+                              <div class="padding-8-12">
+                                <div class="text-title-ticket">
+                                  Gói
+                                </div>
+                                <div class="text-content m-top-8">
+                                  {{objectDetail.packageName}}
+                                </div>
+                                <div class="d-flex m-top-8">
+                                  <div class="text-title-ticket w-110 align-self-end">
+                                    Ngày
+                                  </div>
+                                  <div class="text-content">
+                                    {{objectDetail.startDateShow}}
+                                  </div>
+                                </div>
+                                <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.orderNumber">
+                                  <div class="text-title-ticket w-110 align-self-end">
+                                    Order Number
+                                  </div>
+                                  <div class="text-content">
+                                    {{objectDetail.orderNumber}}
+                                  </div>
+                                </div>
+                                 <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.confirmationCode">
+                                  <div class="text-title-ticket w-110 align-self-end">
+                                    Mã xác nhận
+                                  </div>
+                                  <div class="text-content">
+                                    {{objectDetail.confirmationCode}}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-template>
+
                           <div *ngIf="trip.objdataRaw" class="div-location">
                                       
                             <div class="div-options">
