@@ -23,7 +23,7 @@
         <div [ngClass]="itemTicketService ? 'm-top-16' : 'm-top-16 cls-no-departure' ">
             <div class="div-item-departure-date d-flex">
                 <div class="width-62 text-label">
-                    Chọn ngày:
+                  Chọn ngày tham quan:
                 </div>
                 <div class="width-45 d-flex div-item-time" (click)="openPickupCalendar()">
                     <div class="v-align-center m-r-8"><img src="./assets/ic_ticket/ic_calendar.svg"></div>
@@ -696,12 +696,12 @@
               </div>
             </div>
 
-            <div class="m-top-12 div-last div-text-date" *ngIf="ischeckDate">
+            <!-- <div class="m-top-12 div-last div-text-date" *ngIf="ischeckDate">
               <div class="div-text-date">
                 Ngày dịch vụ: <span class="text-span">{{ticketService.itemTicketService.AllotmentDateDisplay}}</span>
               </div>
               
-            </div>
+            </div> -->
 
             <div *ngIf="arrSkus && arrSkus.length>0">
               <div class="d-flex div-total m-top-26" *ngIf="itemTicketService.Note">
