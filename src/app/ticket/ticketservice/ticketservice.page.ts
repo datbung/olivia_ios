@@ -123,10 +123,18 @@ export class TicketServicePage implements OnInit {
 
       let matchedSkus = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
       if (matchedSkus.length > 0) {
-        this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date
+        this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date;
       }
       else {
-        this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
+        for (let index = 0; index < this.itemTicketService.itemObjRate.skus.length; index++) {
+          const element = this.itemTicketService.itemObjRate.skus[index];
+          if(element.skusDaily && element.skusDaily.dailyRate[0]){
+            this.checkinDate = element.skusDaily.dailyRate[0].date;
+            break;
+          }
+          
+        }
+        
       }
       this.dailyRatePkgs.checkin = this.checkinDate
       // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
