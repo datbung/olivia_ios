@@ -8,8 +8,8 @@
       </ion-title>
         </ion-toolbar>
   </ion-header>
-<ion-content class="div-ticket-adddetail-content">
-  <div class="p-all-16">
+<ion-content>
+  <div class="p-all-16 div-ticket-adddetail-content">
     <div class="div-img-step">
       <img class="img-step" src="./assets/ic_tour/tour_step1.png">
     </div>
@@ -52,11 +52,11 @@
       
       <div *ngIf="customInfoArr && customInfoArr.length >0 && customInfoArr[0].listCustom && customInfoArr[0].listCustom.length>0">
         <div class="label-title" >
-          Thông tin khách
+          Thông tin khách sử dụng dịch vụ
         </div>
         <div *ngFor="let itemInfo of customInfoArr;let idx = index">
           <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length >1">Khách {{idx+1}} <span class="text-sub">(Người lớn từ 12 tuổi trở lên)</span></div>
-          <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length ==1">Thông tin khách đặt dịch vụ</div>
+          <!-- <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length ==1">Thông tin khách đặt dịch vụ</div> -->
           <div *ngFor="let cusInfo of itemInfo.listCustom;let idx = index">
             <div class="text-sub m-top-12" *ngIf="cusInfo.label">
               {{cusInfo.label}} <span class="cls-required">*</span>

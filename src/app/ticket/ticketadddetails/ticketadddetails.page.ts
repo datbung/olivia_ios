@@ -1393,9 +1393,17 @@ export class TicketAdddetailsPage implements OnInit {
             item.dataRawSearch = [...item.dataRaw];
           })
         }
-        console.log('input_'+item.name);
+       // console.log('input_'+item.name);
+       
       setTimeout(()=>{
         if(document.getElementById('input_'+item.name)){
+          if(item.name == 'fullName'){
+            $('.div-ticket-adddetail-content').addClass('cls-minheight-900');
+
+            setTimeout(()=>{
+              $('.div-ticket-adddetail-content').removeClass('cls-minheight-900');
+            },5000)
+          }
           document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
         }
         
