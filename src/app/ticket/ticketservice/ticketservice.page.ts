@@ -162,7 +162,8 @@ export class TicketServicePage implements OnInit {
           element.action = true;
         }
         let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
-        element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : moment(element.date).format('DD/M');
+        let todayDate = moment(new Date()).format('YYYY-MM-DD');
+        element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
       });
     }
     
@@ -242,6 +243,7 @@ export class TicketServicePage implements OnInit {
     //   alert('Vui lòng chọn ngày');
     //   return;
     // }
+    this.ticketService.totalPax = this.totalPax;
     this.RecheckRateBooking();
   }
 
@@ -273,6 +275,7 @@ export class TicketServicePage implements OnInit {
       this.dailyRatePkgs.custom1 = this.Custom1;
       this.dailyRatePkgs.custom2 = this.Custom2;
       this.subject.next(true);
+       
     } else {
       alert('Vé chỉ được phép đặt tối đa ' + this.totalPax + ' khách');
     }
@@ -558,14 +561,16 @@ export class TicketServicePage implements OnInit {
               this.dailyRatePkgs.checkin = this.checkinDate;
               // se.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
               se.dateDisplay = moment(fromdate).format('DD-MM-YYYY');
-              // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-              //   const element = this.itemTicketService.dailyRatePkgs[i];
-              //   element.action=false;
-              //   if (element.daily==se.searchhotel.CheckInDate) {
-              //     this.index=i;
-              //     element.action=true;
-              //   }
-              // }
+              
+              if(this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length>0){
+                this.itemTicketService.dailyRatePkgs.forEach(element => {
+                  element.action=false;
+                  if(element.date == this.checkinDate){
+                    element.action = true;
+                  }
+                })
+              }
+              
               se.ticketService.selectedDateDisplay =  moment(fromdate).format('DD-MM-YYYY');
               se.ticketService.selectedDate =  moment(fromdate).format('YYYY-MM-DD');
               // this.ischeckDate = true;
@@ -980,7 +985,8 @@ export class TicketServicePage implements OnInit {
           element.action = true;
         }
         let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
-        element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : moment(element.date).format('DD/M');
+        let todayDate = moment(new Date()).format('YYYY-MM-DD');
+        element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
       });
     }
   }

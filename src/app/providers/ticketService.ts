@@ -53,6 +53,7 @@ export class ticketService{
   typeModels: any;
   selectedDateDisplay: string;
   selectedDate: string;
+  totalPax: number;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }
