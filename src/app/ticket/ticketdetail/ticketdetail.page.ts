@@ -633,18 +633,24 @@ export class TicketDetailPage {
         if (this.objRate) {
           this.ticketService.itemTicketService.itemObjRate = {};
           this.ticketService.itemTicketService.itemObjRate = this.objRate.find((el) => { return el.pkgId == itemService.id });
-          if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length >0) {
-            this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
-              element.child = element.child.map((item, index) => {
-                if (index === 0) {
-                  return { ...item, action: true };
-                }
-                return { ...item, action: false };
+          if (this.ticketService.itemTicketService.itemObjRate) {
+            if (this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length >0) {
+              this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
+                element.child = element.child.map((item, index) => {
+                  if (index === 0) {
+                    return { ...item, action: true };
+                  }
+                  return { ...item, action: false };
+                });
               });
-            });
+            }
+            this.navCtrl.navigateForward('/ticketservice');
+          }
+          else{
+            alert("Gói dịch vụ chưa có ngày khởi hành, vui lòng chọn gói khác");
           }
         }
-        this.navCtrl.navigateForward('/ticketservice');
+
         // this.GetCalendarBySkuId(itemService);
       })
   
