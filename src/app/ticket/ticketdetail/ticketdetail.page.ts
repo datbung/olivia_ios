@@ -92,7 +92,7 @@ export class TicketDetailPage {
       };
       this.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'getAllExperiences').then((data) => {
         let res = JSON.parse(data);
-        this.ticketService.itemExperienceDetail = res;
+        this.ticketService.itemExperienceDetail = res.data;
         this.ticketService.experience = res.data.experience;
         this.loadslidedone = true;
         this.AvgPoint = res.data.experience.avgPoint;
