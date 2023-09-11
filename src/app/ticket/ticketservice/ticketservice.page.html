@@ -73,7 +73,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -97,7 +97,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -142,7 +142,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -164,7 +164,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded  && Custom1 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -186,7 +186,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -208,7 +208,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -230,7 +230,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -250,8 +250,8 @@
                     <div class="text-sub">{{itemTicketService.noteSeniors}}</div>
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
-                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
@@ -271,8 +271,8 @@
                     <div class="text-sub">{{itemTicketService.noteSeniors}}</div>
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
-                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
@@ -322,7 +322,7 @@
                 </div>
                 <div class="text-price-car width-30" >
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
           
   
@@ -344,7 +344,7 @@
                 </div>
                 <div class="text-price-car width-30" >
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
           
   
@@ -367,7 +367,7 @@
                   </div>
                   <div class="text-price-car width-30" >
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                   </div>
             
                   <div class="width-40 d-flex div-item-car">
@@ -389,7 +389,7 @@
                   </div>
                   <div class="text-price-car width-30" >
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                   </div>
             
                   <div class="width-40 d-flex div-item-car">
@@ -410,7 +410,7 @@
                 </div>
                 <div class="text-price-car width-30">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded && elder>0">0</span>
                 </div>
           
                 <div class="width-40 d-flex div-item-car">
@@ -431,7 +431,7 @@
                 </div>
                 <div class="text-price-car width-30">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded && elder>0">0</span>
                 </div>
           
                 <div class="width-40 d-flex div-item-car">
@@ -454,7 +454,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                   </div>
                  
                   <div class="width-40 d-flex div-item-car">
@@ -478,7 +478,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                   </div>
                  
                   <div class="width-40 d-flex div-item-car">
@@ -501,7 +501,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                   </div>
                   
                   <div class="width-40 d-flex div-item-car">
@@ -522,7 +522,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                   </div>
                   
                   <div class="width-40 d-flex div-item-car">
@@ -593,7 +593,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -616,7 +616,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -638,7 +638,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -660,7 +660,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -681,7 +681,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
