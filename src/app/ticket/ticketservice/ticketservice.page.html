@@ -45,11 +45,11 @@
               </ion-select>
               </div>
           </div>
-            <div class="d-flex margin-left-16 div-scroll">
+            <div class="d-flex margin-left--4 div-scroll">
               
-              <!-- <div (click)="funcdate(item)" class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngFor="let item of itemTicketService.dailyRatePkgs">
-                {{item.dailydisplay}}
-              </div> -->
+              <div (click)="funcdate(item)"  *ngFor="let item of itemTicketService.dailyRatePkgs; let idx = index">
+                <div class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngIf="idx<4">{{item.dailydisplay}}</div>
+              </div>
             </div>
             <div class="m-top-16" *ngIf="arrSkus && arrSkus.length>0 && (!itemTicketService.itemObjRate.specs || itemTicketService.itemObjRate.specs.length == 0)">
               <div *ngIf="arrSkus && arrSkus.length>1" class="text-label">
@@ -755,7 +755,7 @@
       </div>
       <div  *ngIf="!ischeckbtn" class="width-100 cls-no-departure">
         <button ion-button round outline class="button btn-book">
-            Đặt ngay
+            Đang lấy giá
         </button>
     </div>
    

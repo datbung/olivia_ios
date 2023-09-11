@@ -118,7 +118,7 @@
                   
               </ion-radio-group>
             </div>
-            <div class="cls-input-height"><ion-input id="input_{{cusGeneralInfo.name}}" [disabled]="!cusGeneralInfo.allowInput" class="cls-input-custom" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='text'" (ionFocus)="inputFocusCustom($event, cusGeneralInfo)" required></ion-input></div>
+            <div class="cls-input-height"><ion-input id="input_{{cusGeneralInfo.name}}" [disabled]="!cusGeneralInfo.allowInput" class="cls-input-custom" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='text'" (ionFocus)="inputFocusCustom($event, cusGeneralInfo)" (ionBlur)="inputLostFocusCustom()" required></ion-input></div>
                 <div *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 " class="div-relative">
                   <ion-searchbar  class="cls-searchbar-custom" *ngIf="cusGeneralInfo.name && cusGeneralInfo.type=='array' && cusGeneralInfo.dataRaw && cusGeneralInfo.dataRaw.length >0 "
                   searchIcon="false" cancelIcon="false" [(ngModel)]="cusGeneralInfo[cusGeneralInfo.name]"
@@ -220,7 +220,7 @@
             </div>
 
             <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type=='text' || itemTraffic.type=='string'" >
-              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" (ionFocus)="inputFocusCustom($event, itemTraffic)" required></ion-input>
+              <ion-input class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" (ionFocus)="inputFocusCustom($event, itemTraffic)" (ionBlur)="inputLostFocusCustom()" required></ion-input>
             </div>
           </div>
         </div>

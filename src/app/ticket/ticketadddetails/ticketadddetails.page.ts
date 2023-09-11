@@ -1397,8 +1397,8 @@ export class TicketAdddetailsPage implements OnInit {
        
       setTimeout(()=>{
         if(document.getElementById('input_'+item.name+(idx != 'undefined' ? ('_'+idx) : ''))){
-          if(item.name == 'fullName'){
-            $('.div-ticket-adddetail-content').addClass('cls-minheight-900');
+          if(item.type != 'array'){
+            $('.div-ticket-adddetail-content').addClass('cls-padding-bottom-350');
           }
           document.getElementById('input_'+item.name+(idx != 'undefined' ? ('_'+idx) : '')).scrollIntoView({ behavior: 'smooth', block: 'center'  });
         }
@@ -1408,9 +1408,7 @@ export class TicketAdddetailsPage implements OnInit {
 
   cusInfoLostFocus(ev, item){
     if(document.getElementById('input_'+item.name)){
-      if(item.name == 'fullName'){
-        $('.div-ticket-adddetail-content').removeClass('cls-minheight-900');
-      }
+        $('.div-ticket-adddetail-content').removeClass('cls-padding-bottom-350');
     }
   }
 
@@ -1473,11 +1471,19 @@ export class TicketAdddetailsPage implements OnInit {
 
     inputFocusCustom(event, item,idx){
       setTimeout(()=>{
+        if(!$('.div-ticket-adddetail-content').hasClass('cls-padding-bottom-350')){
+          $('.div-ticket-adddetail-content').addClass('cls-padding-bottom-350');
+        }
+        
         if(document.getElementById('input_'+item.name+item.name+(idx != 'undefined' ? ('_'+idx) : ''))){
           document.getElementById('input_'+item.name+item.name+(idx != 'undefined' ? ('_'+idx) : '')).scrollIntoView({ behavior: 'smooth', block: 'center'  });
         }
         
       },100)
+    }
+
+    inputLostFocusCustom(){
+      $('.div-ticket-adddetail-content').removeClass('cls-padding-bottom-350');
     }
 }
 
