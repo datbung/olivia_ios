@@ -316,6 +316,7 @@ export class TicketAdddetailsPage implements OnInit {
         // }
 
       }
+      this.gf.logEventFirebase('',this.tourService, 'ticketadddetails', 'add_shipping_info', 'Ticket');
       this.gf.hideLoading();
     })
 

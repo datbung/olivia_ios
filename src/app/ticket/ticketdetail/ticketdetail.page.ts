@@ -81,7 +81,7 @@ export class TicketDetailPage {
         public ticketService: ticketService,public loadingCtrl: LoadingController,private safariViewController:SafariViewController,
         public valueGlobal: ValueGlobal) {
             this.loaddata();
-           
+            this.gf.logEventFirebase('',this.tourService, 'ticketdetail', 'view_item', 'Ticket');
         }
   private loaddata() {
 
@@ -92,6 +92,7 @@ export class TicketDetailPage {
       };
       this.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'getAllExperiences').then((data) => {
         let res = JSON.parse(data);
+        this.ticketService.itemExperienceDetail = res;
         this.ticketService.experience = res.data.experience;
         this.loadslidedone = true;
         this.AvgPoint = res.data.experience.avgPoint;

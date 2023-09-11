@@ -128,6 +128,7 @@ export class TicketPaymentSelectPage implements OnInit {
 
   openWebpage(url: string,paymentType) {
     var se = this;
+    
     this.safariViewController.isAvailable()
       .then((available: boolean) => {
         if (available) {
@@ -185,6 +186,7 @@ export class TicketPaymentSelectPage implements OnInit {
         }
       }
       );
+      se.gf.logEventFirebase(paymentType, se.ticketService, 'ticketpaymentselect', 'add_payment_info', 'Ticket');
   }
 
   openWebpageMomo(url: string) {
@@ -245,6 +247,7 @@ export class TicketPaymentSelectPage implements OnInit {
         }
       }
       );
+      se.gf.logEventFirebase('momo', se.ticketService, 'ticketpaymentselect', 'add_payment_info', 'Ticket');
   }
 
   async presentLoading() {
@@ -260,6 +263,7 @@ export class TicketPaymentSelectPage implements OnInit {
   }
   ticketpaymentmomo() {
     this.ticketService.paymentType = 1;
+    this.ticketService.gaPaymentType = 'momo';
     this.createBookingUrl('momo');
   }
 
@@ -365,6 +369,7 @@ export class TicketPaymentSelectPage implements OnInit {
 
   createBookingUrl(paymentType) {
     let se = this, url = '';
+    se.ticketService.gaPaymentType = 'paymentType';
     this.gf.showLoading();
     if (paymentType == 'momo') {
       url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=' + paymentType + '&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti + '&TokenId=' + (se.tokenid ? se.tokenid : '') + '&rememberToken=' + (se.isremember ? se.isremember : 'false') + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight&version=2';
@@ -422,6 +427,7 @@ export class TicketPaymentSelectPage implements OnInit {
   ticketpaymentpayoostore() {
     this.gf.showLoading();
     let se = this;
+    se.ticketService.gaPaymentType = 'payoostore';
     var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_store&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode + '&buyerPhone=' + se.phone + '&memberId=' + se.jti + '&TokenId=' + (se.tokenid ? se.tokenid : '') + '&rememberToken=' + (se.isremember ? se.isremember : 'false') + '&callbackUrl=ivivuapp%3A%2F%2Fapp%2Fhomeflight&version=2';
     this.gf.CreatePayoo(url).then(datapayoo => {
       this.gf.hideLoading();
@@ -488,6 +494,7 @@ export class TicketPaymentSelectPage implements OnInit {
 
   ticketpaymentpayooqr() {
     let se = this;
+    se.ticketService.gaPaymentType = 'payooqr';
     se.gf.showLoading();
     let url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=payoo_qr&source=app&amount=' + this.ticketService.totalPriceNum + '&orderCode=' + this.ticketService.itemTicketService.objbooking.bookingCode +'&buyerPhone=' +se.phone + '&memberId=' + se.jti + '&TokenId='+(se.tokenid ? se.tokenid : '') +'&rememberToken='+(se.isremember ? se.isremember : 'false')+'&callbackUrl='+ C.urls.baseUrl.urlPayment +'/Home/BlankDeepLink'+'&version=2';
           se.gf.CreatePayoo(url).then(datapayoo => {
@@ -502,25 +509,28 @@ export class TicketPaymentSelectPage implements OnInit {
               se.showAlertPaymentError();
             }
           })
-
+         
   }
   ticketbuynowpaylater() {
+    this.ticketService.gaPaymentType = 'bnpl';
     this.createBookingUrl('bnpl');
   }
   ticketpaymentbank() {
     clearInterval(this.intervalID);
+    this.ticketService.gaPaymentType = 'banktransfer';
     this.navCtrl.navigateForward('/ticketpaymentbank');
   }
   ticketpaymentatm() {
     clearInterval(this.intervalID);
-    //this.ticketService.paymentType = 1;
-    //this.navCtrl.navigateForward('ticketpaymentatm');
+    this.ticketService.gaPaymentType = 'atm';
     this.navCtrl.navigateForward('ticketpaymentatm/0');
   }
   ticketpaymentvisa() {
+    this.ticketService.gaPaymentType = 'visa';
     this.createBookingUrl('visa');
   }
   ticketpaymentatoffice() {
+    this.ticketService.gaPaymentType = 'office';
     this.navCtrl.navigateForward('/ticketpaymentatoffice');
   }
 }

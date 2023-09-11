@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 })
 
 export class ticketService{
+  gaPaymentType = '';
   private filterTourSubject = new Subject<any>();
   private scrollToDepartureDivSubject = new Subject<any>();
   private searchTicketSubject = new Subject<any>();
@@ -54,6 +55,7 @@ export class ticketService{
   selectedDateDisplay: string;
   selectedDate: string;
   totalPax: number;
+  itemExperienceDetail: any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

@@ -575,6 +575,7 @@ export class TicketpaymentbankPage implements OnInit {
     }
     this.gf.ticketPaymentSave(objbookTicket);
     this.activityService.ischeckPage="ticketpaymentbank";
+    this.gf.logEventFirebase('banktransfer', this.ticketService, 'ticketpaymentbank', 'add_payment_info', 'Ticket');
     this.navCtrl.navigateForward('/paymentqrcode');
   }
   clearClonePage(pagename) {

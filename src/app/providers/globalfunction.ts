@@ -290,6 +290,41 @@ export class GlobalFunction{
       }
       
     }
+    else if(category == 'Ticket'){
+      //this.ticketService.totalPriceNum
+      try {
+        if(this.ticketService.itemExperienceDetail){
+          this.gaSetScreenName('ve-vui-choi/'+this.ticketService.itemExperienceDetail.topic.code +'/'+ this.ticketService.itemExperienceDetail.experience.code);
+          this.googleAnalytionCustom(viewAction, {
+            transaction_id: viewAction=='purchase'?this.ticketService.itemExperienceDetail.experience.code :'',
+            currency: "VND",
+                value: this.ticketService.totalPriceNum ||0,
+                shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
+                payment_type: paymentType ? this.getGAPaymentType(paymentType) : '',
+                items: [
+                    {
+                        item_id: this.ticketService.itemExperienceDetail.experience.code,
+                        item_name: this.ticketService.itemExperienceDetail.experience.name,
+                        discount: itemcache.gaDiscountPromo || 0,
+                        index: 0,
+                        item_brand: "iVIVU.com",
+                        item_category: 'Tickets',
+                        item_category2: this.ticketService.itemExperienceDetail.city && this.ticketService.itemExperienceDetail.city.code ? this.ticketService.itemExperienceDetail.city.code : 'Hồ Chí Minh',
+                        item_category3: '',
+                        item_category4: this.ticketService.itemExperienceDetail.topic.code ||'',
+                        item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
+                        price: this.ticketService.totalPriceNum ? this.convertStringToNumber(this.ticketService.totalPriceNum/ this.ticketService.totalPax) : 0,
+                        quantity: this.ticketService.totalPax || 0,
+  
+                    }
+                ]
+          })
+        }
+      } catch (error) {
+        throw error;
+      }
+      
+    }
             
   }
 

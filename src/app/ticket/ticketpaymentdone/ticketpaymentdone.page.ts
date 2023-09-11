@@ -68,23 +68,7 @@ export class TicketPaymentDonePage implements OnInit {
 
   async ionViewWillEnter() {
     this.gf.hideLoading();
-    // if(this.ticketService.BookingTourMytrip) {
-    //   this.bookingCode = this.ticketService.BookingTourMytrip.booking_id;
-    //   this.total = this.gf.convertNumberToString(this.ticketService.BookingTourMytrip.amount_after_tax);
-    // }else{
-    //   this.bookingCode = this.ticketService.tourBookingCode;
-    //   if(this.ticketService.discountPrice){
-    //     this.total = this.gf.convertNumberToString(this.ticketService.discountPrice);
-    //   }else{
-    //     this.total = this.gf.convertNumberToString(this.ticketService.totalPrice);
-    //   }
-    // }
-    
-    // let se = this;
-    // se.gf.googleAnalytionCustom('purchase', { item_category: 'tour', start_date: se.ticketService.DepartureDate, end_date: se.searchhotel.CheckOutDate, origin: this.ticketService.itemSearchDestination ? this.ticketService.itemSearchDestination.Name || this.ticketService.itemSearchDestination.RegionCode : '', destination: se.ticketService.itemDetail.Destinations, value: se.ticketService.tourTotal, currency: "VND" });
-    //   se._voucherService.publicClearVoucherAfterPaymentDone(1);
-    //   se.ticketService.promocode = "";
-    //   se.ticketService.discountpromo = 0;
+    this.gf.logEventFirebase(this.ticketService.gaPaymentType,this.ticketService, 'ticketpaymentdone', 'purchase', 'Ticket');
   }
 
   next() {

@@ -181,6 +181,7 @@ export class TicketPaymentAtmPage implements OnInit {
       }
     }
   );
+  se.gf.logEventFirebase('atm', se.ticketService, 'ticketpaymentatm', 'add_payment_info', 'Ticket');
   }
   
 
