@@ -153,6 +153,7 @@ export class TicketServicePage implements OnInit {
     }
     var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
     this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+    this.ticketService.itemTicketService.AllotmentDateDisplay =  this.dateDisplay
     // }
     this.index = 0;
     //Select ngày theo ngày đang default 
