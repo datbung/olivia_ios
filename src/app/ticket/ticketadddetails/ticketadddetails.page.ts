@@ -110,7 +110,7 @@ export class TicketAdddetailsPage implements OnInit {
     private formBuilder: FormBuilder) {
     this.ischeckpayment = Roomif.ischeckpayment;
     // let tp =0;
-
+      //console.log((ticketService.itemTicketService.dailyRatePkgs.adult + (ticketService.itemTicketService.dailyRatePkgs.child||0)));
     if (this.ticketService && this.ticketService.itemTicketService) {
       // tp = ((this.ticketService.itemTicketService.PriceAdultAvg ||0) * this.searchhotel.adult || 0) + ((this.ticketService.itemTicketService.PriceChildAvg ||0) * this.searchhotel.child || 0) + ((this.ticketService.itemTicketService.PriceElderAvg ||0) * this.searchhotel.elder || 0);
       this.totalPriceStr = this.gf.convertNumberToString(this.ticketService.totalPriceNum);
@@ -304,6 +304,7 @@ export class TicketAdddetailsPage implements OnInit {
   }
 
   next() {
+    this.gf.showLoading();
     this.createObjectBooking().then((checkvalid) => {
       if (checkvalid) {
         this.CustomerSave();
@@ -315,6 +316,8 @@ export class TicketAdddetailsPage implements OnInit {
         // }
 
       }
+      this.gf.logEventFirebase('',this.tourService, 'ticketadddetails', 'add_shipping_info', 'Ticket');
+      this.gf.hideLoading();
     })
 
   }

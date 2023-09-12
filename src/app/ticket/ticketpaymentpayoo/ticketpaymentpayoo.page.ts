@@ -64,6 +64,7 @@ export class TicketPaymentPayooPage implements OnInit {
     }else{
       this.total = this._ticketService.totalPriceNum.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
     }
+    this.gf.logEventFirebase('Payoo', this._ticketService, 'ticketpaymentpayoo', 'add_payment_info', 'Ticket');
   }
   goback() {
     if (this.stt == 1) {

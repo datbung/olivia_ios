@@ -51,8 +51,11 @@
       <div class="div-split-panel m-top-24 m-bottom-16" *ngIf="customInfoArr && customInfoArr.length >0 && customInfoArr[0].listCustom && customInfoArr[0].listCustom.length>0"></div>
       
       <div *ngIf="customInfoArr && customInfoArr.length >0 && customInfoArr[0].listCustom && customInfoArr[0].listCustom.length>0">
-        <div class="label-title" >
+        <div class="label-title" *ngIf="customInfoArr.length == ticketService.totalPax">
           Thông tin khách sử dụng dịch vụ
+        </div>
+        <div class="label-title" *ngIf="customInfoArr.length != ticketService.totalPax">
+          Thông tin khách đại diện
         </div>
         <div *ngFor="let itemInfo of customInfoArr;let idx = index">
           <div [ngClass]="idx==0? 'cus-title m-top-16' : 'cus-title m-top-24'" *ngIf="customInfoArr && customInfoArr.length >1">Khách {{idx+1}} <span class="text-sub">(Người lớn từ 12 tuổi trở lên)</span></div>
