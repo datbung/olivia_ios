@@ -155,6 +155,9 @@ export class TicketServicePage implements OnInit {
     this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
     // }
     this.index = 0;
+    this.ticketService.selectedDateDisplay =  moment(this.checkinDate).format('DD-MM-YYYY');
+    this.ticketService.selectedDate =  moment(this.checkinDate).format('YYYY-MM-DD');
+    this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.checkinDate).format('DD-MM-YYYY');
     //Select ngày theo ngày đang default 
     if(this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length >0){
       this.itemTicketService.dailyRatePkgs.forEach(element => {
@@ -792,6 +795,7 @@ export class TicketServicePage implements OnInit {
     // this.dailyRatePkgs.specs = this.specs;
     // this.objectLength = Object.keys(this.specs).length; 
     this.onSelectSpecs(item.id, itemc.child_id);
+    
     if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0) {
       this.timeId = [];
       this.timeId = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','));
@@ -814,6 +818,19 @@ export class TicketServicePage implements OnInit {
           this.timeTicket = this.timeId[0].skusDaily.times[0];
           this.dailyRatePkgs.time = this.timeId[0].skusDaily.times[0];
         }
+        if(this.timeId[0].skusDaily.dailyRate){
+          this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate;
+          this.itemTicketService.dailyRatePkgs.forEach(element => {
+            element.action = false;
+            if(element.date == this.checkinDate){
+              element.action = true;
+            }
+            let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
+            let todayDate = moment(new Date()).format('YYYY-MM-DD');
+            element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
+          });
+        }
+        
       }
      
     } else {
