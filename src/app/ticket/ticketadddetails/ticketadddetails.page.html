@@ -261,11 +261,11 @@
               <ion-input id="input_{{itemTraffic.name}}" class="cls-input-custom" type="note" [(ngModel)]="itemTraffic[itemTraffic.name]" required  (ionFocus)="getCusInfoDataRaw($event, itemTraffic)"></ion-input>
             </div>
 
-            <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type == 'date' && itemTraffic.name != 'departure_date'" class="div-traffic-date d-flex">
+            <!-- <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type == 'date' && itemTraffic.name != 'departure_date'" class="div-traffic-date d-flex">
               <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
               <div class="div-text-date" >{{ticketService.selectedDateDisplay}}</div>
-            </div>
-            <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type == 'date' && itemTraffic.name == 'departure_date'" class="div-traffic-date cls-input-date d-flex">
+            </div> -->
+            <div id="input_{{itemTraffic.name}}" *ngIf="itemTraffic.type == 'date'" class="div-traffic-date cls-input-date d-flex">
               <div class="div-icon-date"><img class="img-date" src="./assets/ic_tour/ic_date.svg" /></div>
               <ion-datetime cancelText="Thoát" doneText="Hoàn thành" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY" class="cls-traffic-date"
                     [(ngModel)]="itemTraffic[itemTraffic.name]"
