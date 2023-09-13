@@ -94,6 +94,7 @@ export class TicketAdddetailsPage implements OnInit {
   hours: any='00';
   minutes: any='00';
   trafficQtyInfoArr: any=[];
+  totalPriceNum: number;
   //public ticketCustomData: FormGroup;
   ngOnInit() {
 
@@ -104,10 +105,9 @@ export class TicketAdddetailsPage implements OnInit {
     private alertCtrl: AlertController,
     public activityService: ActivityService,
     public searchhotel: SearchHotel,
-    public tourService: tourService,
     public _voucherService: voucherService,
     public ticketService: ticketService, public valueGlobal: ValueGlobal, public actionsheetCtrl: ActionSheetController,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,public modalCtrl: ModalController) {
     this.ischeckpayment = Roomif.ischeckpayment;
     // let tp =0;
       //console.log((ticketService.itemTicketService.dailyRatePkgs.adult + (ticketService.itemTicketService.dailyRatePkgs.child||0)));
@@ -171,6 +171,7 @@ export class TicketAdddetailsPage implements OnInit {
     // } else if (this.booking.cost) {
     //   priceBooking = this.booking.cost.replace(/\./g, '').replace(/\,/g, '');
     // }
+    this.totalPriceNum = this.ticketService.totalPriceNum;
     this.getSummary();
    
   }
@@ -288,16 +289,20 @@ export class TicketAdddetailsPage implements OnInit {
         this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
         this._voucherService.selectVoucher = null;
       }
-
-      this.itemVoucherTour = null;
-      this.promocode = "";
-      this.discountpromo = 0;
-      this.ischeckpromo = false;
-      this.tourService.promocode = "";
-      this.tourService.discountpromo = 0;
-      this.tourService.totalPriceBeforeDiscount = 0;
-      this.tourService.discountPrice = null;
-      this.tourService.usePointPrice = 0;
+      if (this.ticketService.promocode) {
+        this.itemVoucherTour = null;
+        this.promocode = "";
+        this.discountpromo = 0;
+        this.ischeckpromo = false;
+        this.ticketService.promocode = "";
+        this.totalPriceNum = this.totalPriceNum + this.ticketService.discountpromo;
+        this.ticketService.discountpromo = 0;
+      }
+     
+      // this.tourService.discountpromo = 0;
+      // this.tourService.totalPriceBeforeDiscount = 0;
+      // this.tourService.discountPrice = null;
+      // this.tourService.usePointPrice = 0;
       this.edit(2);
     })
     this.GetUserInfo()
@@ -316,7 +321,7 @@ export class TicketAdddetailsPage implements OnInit {
         // }
 
       }
-      this.gf.logEventFirebase('',this.tourService, 'ticketadddetails', 'add_shipping_info', 'Ticket');
+      this.gf.logEventFirebase('',this.ticketService, 'ticketadddetails', 'add_shipping_info', 'Ticket');
       this.gf.hideLoading();
     })
 
@@ -383,7 +388,7 @@ export class TicketAdddetailsPage implements OnInit {
       }
 
       let tp = 0;
-      this.tourService.discountPrice = 0;
+      this.ticketService.discountPrice = 0;
       tp = ((this.ticketService.itemTicketService.PriceAdultAvg || 0) * this.searchhotel.adult || 0) + ((this.ticketService.itemTicketService.PriceChildAvg || 0) * this.searchhotel.child || 0) + ((this.ticketService.itemTicketService.PriceElderAvg || 0) * this.searchhotel.elder || 0);
       // if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
       //   tp = this.tourService.itemDepartureCalendar.TotalRate;
@@ -393,21 +398,21 @@ export class TicketAdddetailsPage implements OnInit {
       // if(this.ischeck && this.tourService.itemDetail.Inbound){
       //   tp = tp *1.08;
       // }
-      this.tourService.totalPriceBeforeDiscount = tp;
+      this.ticketService.totalPriceBeforeDiscount = tp;
       if (this.ischeckpoint && this.point > 0) {
         if (this.point >= tp) {
           this.usePointPrice = tp;
         } else {
           this.usePointPrice = this.point;
         }
-        this.tourService.usePointPrice = this.usePointPrice;
+        this.ticketService.usePointPrice = this.usePointPrice;
 
         tp = tp - this.point;
         if (tp <= 0) {
           this.Pricepointshow = 0;
           tp = 0;
         }
-        this.tourService.discountPrice = tp;
+        this.ticketService.discountPrice = tp;
       }
 
       if (this.discountpromo) {
@@ -416,10 +421,10 @@ export class TicketAdddetailsPage implements OnInit {
           this.Pricepointshow = 0;
           tp = 0;
         }
-        this.tourService.discountPrice = tp;
+        this.ticketService.discountPrice = tp;
       }
 
-      this.tourService.totalPrice = tp;
+      // this.tourService.totalPrice = tp;
       this.zone.run(() => {
         this.totalPriceStr = tp > 0 ? this.gf.convertNumberToString(tp) : "0";
       })
@@ -477,11 +482,11 @@ export class TicketAdddetailsPage implements OnInit {
     this.promocode = "";
     this.discountpromo = 0;
     this.ischeckpromo = false;
-    this.tourService.promocode = "";
-    this.tourService.discountpromo = 0;
-    this.tourService.totalPriceBeforeDiscount = 0;
-    this.tourService.discountPrice = null;
-    this.tourService.usePointPrice = 0;
+    this.ticketService.promocode = "";
+    // this.tourService.discountpromo = 0;
+    // this.tourService.totalPriceBeforeDiscount = 0;
+    // this.tourService.discountPrice = null;
+    // this.tourService.usePointPrice = 0;
     // this.navCtrl.back()
     this.navCtrl.navigateBack('ticketservice');
   }
@@ -730,15 +735,11 @@ export class TicketAdddetailsPage implements OnInit {
           'content-type': 'application/json'
         },
         body: {
-          bookingCode: 'TOUR', code: se.promocode, totalAmount: se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, ''), comboDetailId: "",
+          bookingCode: this.ticketService.itemTicketService.objbooking.bookingCode, code: se.promocode, totalAmount: this.ticketService.totalPriceNum,
           couponData: {
-            "tour": {
-              "tourId": se.tourService.itemDetail.tourDetailId,
-              "totalAdult": se.searchhotel.adult,
-              "totalChild": se.searchhotel.child,
-              "jsonObject": "",
-              "checkIn": se.searchhotel.CheckInDate,
-              "checkOut": se.searchhotel.CheckOutDate
+            "vvc": {
+              "experienceId": se.ticketService.itemTicketDetail.experienceId,
+              "supplier": se.ticketService.bookingInfo.booking.supplierCode
             }
           }
         },
@@ -750,23 +751,16 @@ export class TicketAdddetailsPage implements OnInit {
         se.zone.run(() => {
           var json = body;
           if (json.error == 0) {
-            var total = se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, '');
 
             se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
-            se.Pricepointshow = total - se.discountpromo;
-            se.tourService.discountpromo = se.discountpromo;
+            se.totalPriceNum = se.totalPriceNum - se.discountpromo;
+            se.ticketService.discountpromo = se.discountpromo;
             se.ischeckpromo = true;
-            // if (se.ischeckpoint) {
-            //   total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
-            // }
-            if (se.Pricepointshow > 0) {
-              se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-              //se.ischeckpromo = true;
+        
+            if (se.totalPriceNum <= 0) {
+              se.totalPriceNum = 0;
             }
-            else {
-              //se.ischeckbtnpromo = true;
-              se.Pricepointshow = 0;
-            }
+            
             se.msg = json.msg;
             se.edit(2);
             //se.ischecktext=0;
@@ -819,6 +813,7 @@ export class TicketAdddetailsPage implements OnInit {
 
   showTicketPrice() {
     this.ticketService.totalPriceStr = this.totalPriceStr;
+    this.ticketService.totalPriceNum = this.totalPriceNum;
     this.navCtrl.navigateForward('/ticketpricedetail');
   }
   CustomerSave() {
@@ -826,6 +821,11 @@ export class TicketAdddetailsPage implements OnInit {
     if (this.ischeck) {
       isInvoice = 1;
     }
+    let arrpromo = [];
+    if (this.promocode) {
+      arrpromo.push(this.promocode);
+    }
+  
     let objCustomer = 
     {
       memberId: this.memberid || '',
@@ -847,7 +847,7 @@ export class TicketAdddetailsPage implements OnInit {
       paxList: '',
       tourNotes: this.note,
       kkdayResource: this.kkdayResource,
-      code: []//this.vouchers.filter(x => x.checked).map(x => x.code)
+      code: arrpromo//this.vouchers.filter(x => x.checked).map(x => x.code)
     };
     let headers =
     {
@@ -856,7 +856,19 @@ export class TicketAdddetailsPage implements OnInit {
     this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/CustomerSave/' + this.ticketService.itemTicketService.objbooking.bookingCode, headers, objCustomer, 'ticketservice', 'RecheckRateBooking').then((data: any) => {
       if (data && data.success) {
         this.ticketService.totalPriceStr = this.totalPriceStr;
-        this.navCtrl.navigateForward('/ticketpaymentselect');
+        this.ticketService.totalPriceNum = this.totalPriceNum;
+        if (this.totalPriceNum > 0) {
+          this.navCtrl.navigateForward('/ticketpaymentselect');
+        }else{
+          this.ticketService.paymentType = 1;
+          let objbookTicket = {
+            bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
+            paymentMethod: 8
+          }
+          this.gf.ticketPaymentSave(objbookTicket);
+          this.gf.logEventFirebase('office', this.ticketService, 'ticketpaymentatoffice', 'add_payment_info', 'Ticket');
+          this.navCtrl.navigateForward('/ticketpaymentdone/0');
+        }
       } else {
         alert(data.error);
       }
@@ -1488,5 +1500,56 @@ export class TicketAdddetailsPage implements OnInit {
     inputLostFocusCustom(){
       $('.div-ticket-adddetail-content').removeClass('cls-padding-bottom-350');
     }
-}
+    async showdiscount(){
+      $('.div-point').removeClass('div-disabled');
+      this._voucherService.openFrom = 'ticketadddetails';
+      this.msg="";
+      this.zone.run(()=> {
+      
+        if (this.ticketService.promocode) {
+          this.promocode = "";
+          this.discountpromo = 0;
+          this.ischeckpromo = false;
+          this.ticketService.promocode = "";
+          this.totalPriceNum = this.totalPriceNum + this.ticketService.discountpromo;
+          this.ticketService.discountpromo = 0;
+        }
+
+      })
+      const modal: HTMLIonModalElement =
+      await this.modalCtrl.create({
+        component: AdddiscountPage,
+      });
+      modal.present();
+      if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this.edit(2);
+      modal.onDidDismiss().then((data: OverlayEventDetail) => {
+        if (data.data) {
+          let vc = data.data;
+          if(vc.applyFor && vc.applyFor != 'tour'){
+            this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
+            this._voucherService.rollbackSelectedVoucher.emit(vc);
+            return;
+          }else {
+            this.zone.run(() => {
+              if (data.data.promocode) {
+                $('.div-point').addClass('div-disabled');
+                this.promocode=data.data.promocode;
+                this.textpromotion=data.data.promocode;
+                this.ticketService.promocode = data.data.promocode;
+                this.promofunc(vc.applyFor && vc.applyFor == 'tour' ? vc : '');
+               
+              }
+            })
+          }
+          
+        }
+      })
+      //}
+    }
+  }
+    
 

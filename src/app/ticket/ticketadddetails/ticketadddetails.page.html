@@ -418,7 +418,7 @@
       </div>
       <hr class="cls-hr">
       <div class="div-voucher">
-        <!-- <div class="div-flex" *ngIf="point>0">
+        <div class="div-flex" *ngIf="point>0">
          
             <div class="div-icon"><img class="icon-point" src="./assets/ic_voucher/ivvpoint_tealish.svg"/></div>
             <div class="div-text-normal">
@@ -426,9 +426,9 @@
               <div class="width-100 text-point text-right">-{{gf.convertNumberToString(point)}}đ</div>
             </div>
             <div class="div-button"><ion-toggle style="margin-top: -4px;" class="toggle-promo" (ionChange)="edit(2)" [(ngModel)]="ischeckpoint"></ion-toggle></div>
-        </div> -->
+        </div>
       
-        <!-- <div class="div-line"></div>
+        <div class="div-line"></div>
         <div (click)="showdiscount()" *ngIf="!promocode">
 
           <div class="div-text-normal ">
@@ -436,7 +436,7 @@
           </div>
           <div class="div-text-normal text-blue">Chọn hoặc nhập mã khuyến mãi</div>
       
-        </div> -->
+        </div>
         <div class="div-voucher-apply d-flex" *ngIf="promocode" (click)="showdiscount()">
           <div class="width-200">
             <span class="text-normal">Ưu đãi (</span>
@@ -446,8 +446,8 @@
           <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}đ</div>
         </div>
         <ion-row> 
-          <ion-label style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
-          <ion-label style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+          <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
+          <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
         </ion-row>
     
         <app-voucherslidetour></app-voucherslidetour>
@@ -481,7 +481,7 @@
           <div class="text-price-strike-footer" *ngIf="ticketService.totalPriceBeforeDiscount"><span >{{gf.convertNumberToString(ticketService.totalPriceBeforeDiscount)}}đ</span></div>
           <div><span class="text-price-footer" *ngIf="ticketService.discountPrice || ticketService.discountPrice==0">{{gf.convertNumberToString(ticketService.discountPrice)}}</span><span class="text-price-sub">đ</span></div>
         </div> -->
-        <div><span class="text-price-footer">{{gf.convertNumberToString(ticketService.totalPriceNum)}}</span><span class="text-price-sub">đ</span><sup class="cls-sup">
+        <div><span class="text-price-footer" *ngIf="totalPriceNum > 0">{{gf.convertNumberToString(totalPriceNum)}}</span><span *ngIf="totalPriceNum == 0" class="text-price-footer">0</span><span class="text-price-sub">đ</span><sup class="cls-sup">
           <img  src="./assets/ic_green/ic_info.svg">
         </sup></div>
     </div>
