@@ -1167,6 +1167,15 @@
                 {{gf.convertNumberToString(trip.promotionDiscountAmount)}} VND</div>
             </div>
 
+            <div class="d-flex m-top-8" *ngIf="trip.payment_fee">
+              <div class="text-pax div-width-250">
+                Phí tiện ích
+              </div>
+              <div class="text-price text-right div-width-100">
+                {{gf.convertNumberToString(trip.payment_fee)}} VND
+              </div>
+            </div>
+
             <div class="div-line-tour"></div>
 
             <div class="d-flex">

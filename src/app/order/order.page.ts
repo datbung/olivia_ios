@@ -904,13 +904,10 @@ export class OrderPage {
                 se.getRatingStar(element);
 
                 
-                // if (element.booking_id=='VC0003327') {
+                // if (element.booking_id=='DL0828508') {
                 //   se.listMyTrips.push(element);
                 // }
-                // if(element.booking_id == 'IVIVU-OFF100346'){
-                //   se.listMyTrips.push(element);
-                //   se.mytripcount++;
-                // }
+              
                 se.listMyTrips.push(element);
                 se.mytripcount++;
                 if (element.insuranceInfo && element.insuranceInfo.adultList.length > 0) {
@@ -1767,7 +1764,7 @@ export class OrderPage {
                     })
                   }
                  
-                  // if (element.booking_id=='VC0003327') {
+                  // if (element.booking_id=='DL0828508') {
                   //   se.listMyTrips.push(element);
                   // }
                   se.listMyTrips.push(element);

@@ -567,7 +567,7 @@ export class TourAddDetailsPage implements OnInit {
             }
             
           }else{
-            this.gf.showAlertMessageOnly(data.Msg);
+            this.gf.showAlertMessageOnly('Ngày chọn hết allotment, vui lòng chọn ngày khác!');
           }
         })
       }
