@@ -9,7 +9,6 @@ import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction, ActivityService } from '../../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
-import { tourService } from 'src/app/providers/tourService';
 import * as moment from 'moment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as $ from 'jquery';
@@ -56,7 +55,7 @@ export class TicketAdddetailsPage implements OnInit {
   point: number;
   promocode: string = '';
   discountpromo: number = 0;
-  itemVoucherTour: any;
+  itemVoucherTicket: any;
   ischeckpoint = false;
   msg: string;
   textpromotion: any;
@@ -95,9 +94,75 @@ export class TicketAdddetailsPage implements OnInit {
   minutes: any='00';
   trafficQtyInfoArr: any=[];
   totalPriceNum: number;
+  ischeckTime = false;
   //public ticketCustomData: FormGroup;
   ngOnInit() {
-
+    this._voucherService.getTicketObservable().subscribe((itemVoucher)=> {
+      if(itemVoucher){
+        if(itemVoucher.applyFor && itemVoucher.applyFor != 'vvc'){
+          this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} không áp dụng cho chương trình này. Quý khách vui lòng kiểm tra lại.`);
+          return;
+        }
+        // if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherTicket){
+        //   this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+        //   this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+        //   return;
+        // }
+        if(itemVoucher.claimed){
+          this.zone.run(()=>{
+            this._voucherService.selectVoucher = itemVoucher;
+            this.itemVoucherTicket = itemVoucher;
+            this.promocode = itemVoucher.code;
+            this.discountpromo = itemVoucher.rewardsItem.price;
+            this.ischeckpromo = true;
+            this.ticketService.promocode = itemVoucher.code;
+            this.ticketService.discountpromo = this.discountpromo;
+            this.totalPriceNum = this.totalPriceNum - this.discountpromo;
+            if (this.totalPriceNum <= 0) {
+              this.totalPriceNum = 0;
+            }
+          })
+        }else{
+          this.zone.run(()=>{
+            this.totalPriceNum = this.ticketService.totalPriceNum;
+            this._voucherService.selectVoucher = null;
+            this.itemVoucherTicket = null;
+            this.promocode = "";
+            this.discountpromo = 0;
+            this.ischeckpromo = false;
+            this.ticketService.promocode = "";
+            this.ticketService.discountpromo = 0;
+            this.ticketService.totalPriceBeforeDiscount = 0;
+            this.ticketService.discountPrice = null;
+            
+          })
+          
+        }
+  
+        // this.edit(2);
+        // if (this.modalCtrl) {
+        //   this.modalCtrl.dismiss();
+        // }
+      
+        setTimeout(()=> {
+          this.checkVoucherClaimed();
+        },300)
+      }
+    })
+    
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this._voucherService.selectVoucher = null;
+          this.itemVoucherTicket = null;
+          this.promocode = "";
+          this.discountpromo = 0;
+          this.ticketService.usePointPrice = 0;
+          //this.ischeckbtnpromo = false;
+          //this.ischeckpromo = false;
+          this.edit(2);
+      }
+    })
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,
     private toastCtrl: ToastController, public Roomif: RoomInfo, public storage: Storage, public loadingCtrl: LoadingController,
@@ -290,7 +355,7 @@ export class TicketAdddetailsPage implements OnInit {
         this._voucherService.selectVoucher = null;
       }
       if (this.ticketService.promocode) {
-        this.itemVoucherTour = null;
+        this.itemVoucherTicket = null;
         this.promocode = "";
         this.discountpromo = 0;
         this.ischeckpromo = false;
@@ -478,7 +543,7 @@ export class TicketAdddetailsPage implements OnInit {
     }
   }
   goback() {
-    this.itemVoucherTour = null;
+    this.itemVoucherTicket = null;
     this.promocode = "";
     this.discountpromo = 0;
     this.ischeckpromo = false;
@@ -762,7 +827,7 @@ export class TicketAdddetailsPage implements OnInit {
             }
             
             se.msg = json.msg;
-            se.edit(2);
+            // se.edit(2);
             //se.ischecktext=0;
             //se.ischeckerror=0;
           }
@@ -802,9 +867,9 @@ export class TicketAdddetailsPage implements OnInit {
   }
 
   checkVoucherClaimed() {
-    if (this.itemVoucherTour && this.itemVoucherTour.claimed) {
+    if (this.itemVoucherTicket && this.itemVoucherTicket.claimed) {
       this._voucherService.vouchers.forEach((element) => {
-        if (element.id == this.itemVoucherTour.id) {
+        if (element.id == this.itemVoucherTicket.id) {
           element.claimed = true;
         }
       });
@@ -1312,6 +1377,7 @@ export class TicketAdddetailsPage implements OnInit {
       else if(data && data.success && data.data){
         this.ticketService.bookingInfo = data.data;
       }
+      this.ischeckTime = true;
     });
   }
   async selectValue(ev, item) {
@@ -1506,14 +1572,14 @@ export class TicketAdddetailsPage implements OnInit {
       this.msg="";
       this.zone.run(()=> {
       
-        if (this.ticketService.promocode) {
-          this.promocode = "";
-          this.discountpromo = 0;
-          this.ischeckpromo = false;
-          this.ticketService.promocode = "";
-          this.totalPriceNum = this.totalPriceNum + this.ticketService.discountpromo;
-          this.ticketService.discountpromo = 0;
-        }
+        // if (this.ticketService.promocode) {
+        //   this.promocode = "";
+        //   this.discountpromo = 0;
+        //   this.ischeckpromo = false;
+        //   this.ticketService.promocode = "";
+        //   this.totalPriceNum = this.ticketService.totalPriceNum;
+        //   this.ticketService.discountpromo = 0;
+        // }
 
       })
       const modal: HTMLIonModalElement =
@@ -1525,11 +1591,13 @@ export class TicketAdddetailsPage implements OnInit {
         this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
         this._voucherService.selectVoucher = null;
       }
+  
+    
       this.edit(2);
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
         if (data.data) {
           let vc = data.data;
-          if(vc.applyFor && vc.applyFor != 'tour'){
+          if(vc.applyFor && vc.applyFor != 'vvc'){
             this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
             this._voucherService.rollbackSelectedVoucher.emit(vc);
             return;
@@ -1540,7 +1608,7 @@ export class TicketAdddetailsPage implements OnInit {
                 this.promocode=data.data.promocode;
                 this.textpromotion=data.data.promocode;
                 this.ticketService.promocode = data.data.promocode;
-                this.promofunc(vc.applyFor && vc.applyFor == 'tour' ? vc : '');
+                this.promofunc(vc.applyFor && vc.applyFor == 'vvc' ? vc : '');
                
               }
             })

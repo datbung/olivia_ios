@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { TicketAdddetailsPage } from './ticketadddetails.page';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-//import { VoucherSlideTourPageModule } from '../../voucher/voucherslidetour/voucherslidetour.module';
+import { VoucherSlideTicketPageModule } from '../../voucher/voucherslideticket/voucherslideticket.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    //VoucherSlideTourPageModule,
+    VoucherSlideTicketPageModule,
     RouterModule.forChild([
       {
         path: '',
