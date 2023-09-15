@@ -59,7 +59,9 @@ import { tourService } from '../providers/tourService';
 import { flightService } from '../providers/flightService';
 import { MytripService } from "../providers/mytrip-service.service";
 import { BizTravelService } from "../providers/bizTravelService";
-import { marker } from "leaflet";
+
+import { CodePush,SyncStatus,InstallMode } from '@ionic-native/code-push/ngx';
+
 /**
  *
  * Generated class for the MainPage page.
@@ -168,6 +170,7 @@ export class Tab1Page implements OnInit {
   allowShowCalendarFirstTime: any = true;
   arrHistory = [];
   topSale: any;
+  deviceid: any;
   constructor(
     
     public navCtrl: NavController,
@@ -201,12 +204,15 @@ export class Tab1Page implements OnInit {
     public tourService: tourService,
     public flightService: flightService,
     public _mytripservice: MytripService,
-    public bizTravelService: BizTravelService
+    public bizTravelService: BizTravelService,
+    private codePush: CodePush,
   ) {
     //this.splashScreen.hide();
     //this.gf.refreshToken();
     //bizTravelService.isCompany = true;
-
+    this.storage.get('deviceToken').then((devicetoken) => {
+      this.deviceid = devicetoken;
+    });
     this.storage.get('jti').then((memberid) => {
       this.storage.get('deviceToken').then((devicetoken) => {
         if(devicetoken){
@@ -365,7 +371,7 @@ export class Tab1Page implements OnInit {
       }
       var res=JSON.parse(body);
       se.topSale= se.gf.convertNumberToString(res.total);
-      console.log(JSON.parse(body));
+      //console.log(JSON.parse(body));
     });
   }
   public async ngOnInit(): Promise<void> {
@@ -2810,6 +2816,28 @@ export class Tab1Page implements OnInit {
     }
   }
 
+  ionViewDidEnter() {
+    try {
+      this.codePush.notifyApplicationReady().then(()=>{
+        this.codePush.checkForUpdate().then((data)=>{
+            this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
+
+            });
+             this.valueGlobal.updatedLastestVersion = true;
+        })
+      })
+    } catch (error) {
+      let objError = {
+        page: 'appcomponent',
+        func: 'autoupdate',
+        message: 'error',
+        content: error,
+        type: "error",
+      };
+      C.writeErrorLog(objError,error);
+    }
+  }
+
   hideStatusBar(){
     var se = this;
     let el = document.getElementsByClassName('div-statusbar-float');
@@ -2818,6 +2846,9 @@ export class Tab1Page implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.platform.ready().then(()=>{
+      this.splashScreen.hide();
+    })
     if (this.networkProvider.isOnline()) {
       this.isConnected = true;
     } else {
@@ -2829,16 +2860,7 @@ export class Tab1Page implements OnInit {
       );
       return;
     }
-    // this.fcmNative.getToken().then(token => {
-    //   this.storage.get('checktoken').then(checktoken => {
-    //     if (!checktoken) {
-    //       //PDANH 19/07/2019: Push memberid & devicetoken
-    //         this.gf.pushTokenAndMemberID("", token, this.appversion);
-    //       }
-    //   })
    
-    // });
-    //this.getShowNotice();
     this.valueGlobal.logingoback = '/app/tabs/tab1';
     if (this.searchhotel.backPage=='foodpaymentdonepage'||this.searchhotel.backPage=='foodplaceotherpage'
     ||this.searchhotel.backPage=='foodpaymentchoosebank'||this.searchhotel.backPage=='foodpaymentselect'||this.searchhotel.backPage=='foodinstallmentdone' || this.valueGlobal.backValue =="homefood") {
@@ -3946,40 +3968,12 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    // else if (currentIndex === 3) {//combo
-    //   //this.valueGlobal.activeTab = 3;
-    //     this.valueGlobal.backValue = "";
-    //     this.searchhotel.adult=this.adult;
-    //     this.searchhotel.child=this.child;
-    //     this.searchhotel.roomnumber= this.roomnumber;
-    //      this.navCtrl.navigateForward('/topdeallist');
-    //   // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
-    //   // if (document.querySelector(".tabbar")) {
-    //   // document.querySelector(".tabbar")['style'].display = 'flex';
-    //   // if(document.querySelector(".tabbar")[1]){
-    //   //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
-    //   //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
-    //   // }
-    //   // }
-    //   // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-    //   // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
-    //   // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
-    // }
+    
     else if (currentIndex === 3) {//Ticket
       this._mytripservice.rootPage = "hometicket";
       this.valueGlobal.logingoback = "";
       this.valueGlobal.activeTab=3;
-      // $(".div-wraper-home").removeClass("cls-disabled").addClass("cls-visible");
-      // if (document.querySelector(".tabbar")) {
-      // document.querySelector(".tabbar")['style'].display = 'flex';
-      // if(document.querySelector(".tabbar")[1]){
-      //   document.querySelector(".tabbar")[0]['style'].display = 'flex';
-      //   document.querySelector(".tabbar")[1]['style'].display = 'flex';
-      // }
-      // }
-      // $(".div-wraper-slide").removeClass("cls-visible").addClass("cls-disabled");
-      // $(".div-wraper-home").removeClass("cls-visible").addClass("cls-disabled");
-      // $(".cls-notice").removeClass("cls-visible").addClass("cls-disabled");
+     
     }
     else{
       this._mytripservice.rootPage = "homehotel";
@@ -4167,6 +4161,67 @@ export class Tab1Page implements OnInit {
     }
   );
   }
+
+
+  async showAlertUpdate(msg){
+    var se = this;
+    let alert = await this.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-showmore",
+      buttons: [
+      {
+        text: 'Cập nhật',
+        role: 'OK',
+        handler: () => {
+          se.codePush.sync().subscribe((syncStatus) => { 
+            switch (syncStatus) {
+              case SyncStatus.DOWNLOADING_PACKAGE:
+                  this.gf.showLoadingMessage("Đang tải...");
+                  break;
+              case SyncStatus.INSTALLING_UPDATE:
+                  this.gf.hideLoadingMessage();
+                  break;
+          }
+          });
+          const downloadProgress = (progress) => { 
+            console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); 
+          }
+          se.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+        }
+      }
+    ]
+  });
+  alert.present();
+  }
+
+  codePushStatusDidChange = (status: any) => {
+    let objError = {
+      page: "appComponent",
+      func: "codePushStatusDidChange",
+      message: 'Auto Update Failed',
+      content: JSON.stringify({ deviceId:  this.deviceid, appVersion: this.appversion}),
+      type: "warning",
+      param: ''
+    };
+    try {
+      switch (status) {
+        case SyncStatus.UPDATE_IGNORED:
+          C.writeErrorLog(objError,'UPDATE_IGNORED');
+          break;
+          case SyncStatus.ERROR:
+            C.writeErrorLog(objError,'ERROR');
+            break;
+            case SyncStatus.DOWNLOADING_PACKAGE:
+              this.gf.showAlertMessageOnly('Đang tải bản cập nhật mới nhất.');
+              break;
+              case SyncStatus.INSTALLING_UPDATE:
+              this.gf.showAlertMessageOnly('Đang cài đặt bản cập nhật mới nhất.');
+              break;
+      }
+    } catch (err) {
+      C.writeErrorLog(objError,'UNKNOW');
+    }
+  };
 }
 
 

@@ -118,7 +118,7 @@ export class FlightTopReviewListPage implements OnInit {
                   this.listImages = Array.prototype.concat.apply([], _images);
                 }
                 
-               console.log(this.listImages);
+               //console.log(this.listImages);
               }
             })
     }

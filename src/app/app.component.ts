@@ -185,29 +185,6 @@ export class AppComponent {
         
       }
 
-      try {
-        this.codePush.notifyApplicationReady().then(()=>{
-          this.codePush.checkForUpdate().then((data)=>{
-            if(data){
-              this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
-  
-              });
-               this.valueGlobal.updatedLastestVersion = true;
-            }
-          })
-        })
-      } catch (error) {
-        let objError = {
-          page: 'appcomponent',
-          func: 'autoupdate',
-          message: 'error',
-          content: error,
-          type: "error",
-        };
-        C.writeErrorLog(objError,error);
-      }
-      
-
       this.deeplinks.routeWithNavController(this.navCtrl, {
         '/login': LoginPage
       }).subscribe(match => {
@@ -301,37 +278,6 @@ export class AppComponent {
     })
   }
 
-  async showAlertUpdate(msg){
-    var se = this;
-    let alert = await this.alertCtrl.create({
-      message: msg,
-      cssClass: "cls-alert-showmore",
-      backdropDismiss: false,
-      buttons: [
-      {
-        text: 'Cập nhật',
-        role: 'OK',
-        handler: () => {
-          se.codePush.sync().subscribe((syncStatus) => { 
-            switch (syncStatus) {
-              case SyncStatus.DOWNLOADING_PACKAGE:
-                  this.gf.showLoadingMessage("Đang tải...");
-                  break;
-              case SyncStatus.INSTALLING_UPDATE:
-                  this.gf.hideLoadingMessage();
-                  break;
-          }
-          });
-          const downloadProgress = (progress) => { 
-            console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); 
-          }
-          se.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
-        }
-      }
-    ]
-  });
-  alert.present();
-  }
 
   async presentToastWarning(msg) {
     let toast = await this.toastCtrl.create({
@@ -345,27 +291,6 @@ export class AppComponent {
     toast.present();
   }
 
-  codePushStatusDidChange = (status: any) => {
-    let objError = {
-      page: "appComponent",
-      func: "codePushStatusDidChange",
-      message: 'Auto Update Failed',
-      content: JSON.stringify({ deviceId:  this.deviceid, appVersion: this.appversion}),
-      type: "warning",
-      param: ''
-    };
-    try {
-      switch (status) {
-        case SyncStatus.UPDATE_IGNORED:
-          C.writeErrorLog(objError,'UPDATE_IGNORED');
-          break;
-          case SyncStatus.ERROR:
-            C.writeErrorLog(objError,'ERROR');
-            break;
-      }
-    } catch (err) {
-      C.writeErrorLog(objError,'UNKNOW');
-    }
-  };
+ 
 
 }

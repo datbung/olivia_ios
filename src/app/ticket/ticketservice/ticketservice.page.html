@@ -45,7 +45,7 @@
               </ion-select>
               </div>
           </div>
-            <div *ngIf="itemTicketService.dailyRatePkgs && itemTicketService.dailyRatePkgs.length > 0" class="d-flex margin-left--4 div-scroll">
+            <div *ngIf="arrSkus && arrSkus.length>0 && itemTicketService.dailyRatePkgs && itemTicketService.dailyRatePkgs.length > 0" class="d-flex margin-left--4 div-scroll">
               
               <div (click)="funcdate(item)"  *ngFor="let item of itemTicketService.dailyRatePkgs; let idx = index">
                 <div class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngIf="idx<4">{{item.dailydisplay}}</div>

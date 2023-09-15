@@ -79,26 +79,11 @@ export class TicketServicePage implements OnInit {
       this.hasDeparture = false;
     }
     this.selectNewPackage(this.ticketService.itemTicketService.itemObjRate.pkgId)
-    // var timestamp = new Date();
-    // var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
-    // var date = new Date(res);
-    // var Tomorrow = moment(date).format("YYYYMMDD");
-
-    // var datenow = new Date();
-    // var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
-    // var date = new Date(res);
-    // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-    // var Tomorrow = moment(date).format("DD/MM");
-
-    // this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-    // this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
-    // this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.daysInAdvance).format('DD-MM-YYYY');
+  
     var timestamp = new Date();
     var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
-    // var Tomorrow = moment(date).format("YYYYMMDD");
-
-    // var datenow = new Date();
+    
     var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
 
@@ -117,11 +102,7 @@ export class TicketServicePage implements OnInit {
           });
         }
       }
-      // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-      // var Tomorrow = moment(date).format("DD/MM");
-
-      // this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-
+      
       let matchedSkus = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
       if (matchedSkus.length > 0) {
         this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date;
@@ -138,23 +119,16 @@ export class TicketServicePage implements OnInit {
         
       }
       this.dailyRatePkgs.checkin = this.checkinDate
-      // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
-      // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];   
-      // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate;
+     
     } else {
-      // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-      // var Tomorrow = moment(date).format("DD/MM");
-      // this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
+    
       this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
       this.dailyRatePkgs.checkin = this.checkinDate
-      // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
-      // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];  
-      // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate
+      
     }
     var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
     this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
     this.ticketService.itemTicketService.AllotmentDateDisplay =  this.dateDisplay
-    // }
     this.index = 0;
     this.ticketService.selectedDateDisplay =  moment(this.checkinDate).format('DD-MM-YYYY');
     this.ticketService.selectedDate =  moment(this.checkinDate).format('YYYY-MM-DD');
@@ -805,9 +779,7 @@ export class TicketServicePage implements OnInit {
     this.ischeckbtn = false;
     var foundIndex = this.itemTicketService.itemObjRate.specs.findIndex(x => x.id == item.id);
     this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSpecs;
-    // this.specs[item.id] = itemc.child_id;
-    // this.dailyRatePkgs.specs = this.specs;
-    // this.objectLength = Object.keys(this.specs).length; 
+   
     this.onSelectSpecs(item.id, itemc.child_id);
     
     if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0) {
@@ -902,6 +874,7 @@ export class TicketServicePage implements OnInit {
       this.gf.hideLoading();
       this.arrSkus = [];
       this.itemTicketService.skus = [];
+      //this.itemTicketService.dailyRatePkgs = [];
       this.ischeckbtn = false;
       if (data && data.success) {
         this.arrSkus = data.data.skus;

@@ -1907,7 +1907,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                   }
                   
                 };
-                console.log(se.listinternationalflighttopdeal);
+                //console.log(se.listinternationalflighttopdeal);
                 setTimeout(()=>{
                   
                   se.hassomelistinteroneway = se.listinternationalflighttopdeal.some(l => l.listflighttopdealoneway) ;
@@ -2049,7 +2049,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               }
               
                 //console.log(se.listflighttopdealoneway);
-                console.log(se.listflighttopdealroundtrip);
+                //console.log(se.listflighttopdealroundtrip);
             },50)
             
             
@@ -2610,7 +2610,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             }
             var res=JSON.parse(body);
             se.topSale=se.gf.convertNumberToString(res.total);
-            console.log(JSON.parse(body));
+            //console.log(JSON.parse(body));
           });
         }
 
