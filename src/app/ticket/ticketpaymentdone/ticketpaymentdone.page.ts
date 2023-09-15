@@ -64,6 +64,8 @@ export class TicketPaymentDonePage implements OnInit {
     }else{
       this.experienceName = this.activityService.objPaymentMytrip.trip.hotel_name;
     }
+    this.ticketService.promocode = "";
+    this.ticketService.discountpromo = 0;
   }
 
   async ionViewWillEnter() {

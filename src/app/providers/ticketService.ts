@@ -56,6 +56,10 @@ export class ticketService{
   selectedDate: string;
   totalPax: number;
   itemExperienceDetail: any;
+  promocode: string;
+  discountpromo: number;
+  totalPriceBeforeDiscount: number;
+  usePointPrice: number;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

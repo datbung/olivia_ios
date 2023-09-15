@@ -140,7 +140,7 @@ export class TicketServicePage implements OnInit {
         this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate
        
       }else{
-        if (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length == 0) {
+        if (!this.itemTicketService.itemObjRate.specs || (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length == 0)) {
           this.itemTicketService.dailyRatePkgs = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate;
         }
 
@@ -982,18 +982,18 @@ export class TicketServicePage implements OnInit {
           this.dailyRatePkgs.time = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
         }
       }
-      this.itemTicketService.dailyRatePkgs = [];
-      if(this.timeId && this.timeId[0].skusDaily.dailyRate.length > 0){ 
-        this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate;
-        this.itemTicketService.dailyRatePkgs.forEach(element => {
-          if(element.date == this.checkinDate){
-            element.action = true;
-          }
-          let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
-          let todayDate = moment(new Date()).format('YYYY-MM-DD');
-          element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
-        });
-      }
+      // this.itemTicketService.dailyRatePkgs = [];
+      // if(this.timeId && this.timeId[0].skusDaily.dailyRate.length > 0){ 
+      //   this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate;
+      //   this.itemTicketService.dailyRatePkgs.forEach(element => {
+      //     if(element.date == this.checkinDate){
+      //       element.action = true;
+      //     }
+      //     let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
+      //     let todayDate = moment(new Date()).format('YYYY-MM-DD');
+      //     element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
+      //   });
+      // }
     
     }
   }

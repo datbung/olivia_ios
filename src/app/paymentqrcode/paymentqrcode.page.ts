@@ -16,7 +16,7 @@ import { FlightquickbackPage } from '../flightquickback/flightquickback.page';
 import { CustomAnimations } from '../providers/CustomAnimations';
 import {tourService } from '../providers/tourService';
 import { voucherService } from '../providers/voucherService';
-
+import {ticketService } from '../providers/ticketService';
 @Component({
   selector: 'app-paymentqrcode',
   templateUrl: './paymentqrcode.page.html',
@@ -51,7 +51,7 @@ export class PaymentqrcodePage implements OnInit {
         public bookCombo: Bookcombo,
         public Roomif: RoomInfo,
         public booking: Booking,
-        public _voucherService: voucherService
+        public _voucherService: voucherService,public ticketService:ticketService
          ){
             this.bankName = activityService.bankName;
             this.bankTransfer = activityService.bankTransfer;
@@ -83,7 +83,8 @@ export class PaymentqrcodePage implements OnInit {
             this.paymentDate= moment(ti).add(1, 'hours').format('HH:mm, DD/MM/YYYY');
         }
     ngOnInit() {
-
+      this.ticketService.promocode = "";
+      this.ticketService.discountpromo = 0;
     }
     async ionViewWillEnter(){
 

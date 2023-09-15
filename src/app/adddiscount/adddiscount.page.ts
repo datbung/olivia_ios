@@ -8,7 +8,7 @@ import { flightService } from './../providers/flightService';
 import { voucherService } from '../providers/voucherService';
 import { tourService } from '../providers/tourService';
 import { Storage } from '@ionic/storage';
-
+import { ticketService } from '../providers/ticketService';
 @Component({
   selector: 'app-adddiscount',
   templateUrl: './adddiscount.page.html',
@@ -28,7 +28,7 @@ export class AdddiscountPage implements OnInit {
     public searchHotel: SearchHotel,
     public tourService: tourService,
     public gf: GlobalFunction,
-    private storage: Storage) { 
+    private storage: Storage,public ticketService: ticketService) { 
       this._voucherService.listPromoCode = [];
       this._voucherService.listObjectPromoCode = [];
       this._voucherService.totalDiscountPromoCode = 0;
@@ -141,7 +141,17 @@ export class AdddiscountPage implements OnInit {
             }
           };
           _bookingCode = 'TOUR';
-        } else{
+        }
+        else if(se._voucherService.openFrom == 'ticketadddetails'){
+          coupondata = {
+            "vvc": {
+              "experienceId": se.ticketService.itemTicketDetail.experienceId,
+              "supplier": se.ticketService.bookingInfo.booking.supplierCode
+            }
+          };
+          _bookingCode = this.ticketService.itemTicketService.objbooking.bookingCode;
+        }
+         else{
           coupondata = {
             "hotel": {
               "hotelId": this.booking.HotelId,
@@ -156,20 +166,38 @@ export class AdddiscountPage implements OnInit {
           };
           _bookingCode = 'HOTEL';
         }
-  
-        var options = {
-          method: 'POST',
-          url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
-          headers:
-          {
-            'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
-            'cache-control': 'no-cache',
-            'content-type': 'application/json'
-          },
-          body: { bookingCode: _bookingCode ,code: code, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : (se._flightService.itemFlightCache.totalPrice || (se._flightService.itemFlightInternational ?se._flightService.itemFlightInternational.totalPrice :0))), comboDetailId: se.bookCombo.ComboId,
-          couponData: coupondata},
-          json: true
-        };
+        var options;
+        if(se._voucherService.openFrom == 'ticketadddetails')
+        {
+          options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+            headers:
+            {
+              'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+              'cache-control': 'no-cache',
+              'content-type': 'application/json'
+            },
+            body: { bookingCode: _bookingCode ,code: code, totalAmount: this.ticketService.totalPriceNum,
+            couponData: coupondata},
+            json: true
+          };
+        }else{
+          options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+            headers:
+            {
+              'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+              'cache-control': 'no-cache',
+              'content-type': 'application/json'
+            },
+            body: { bookingCode: _bookingCode ,code: code, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : (se._flightService.itemFlightCache.totalPrice || (se._flightService.itemFlightInternational ?se._flightService.itemFlightInternational.totalPrice :0))), comboDetailId: se.bookCombo.ComboId,
+            couponData: coupondata},
+            json: true
+          };
+        }
+     
     
         request(options, function (error, response, body) {
           if (error) throw new Error(error);
