@@ -27,6 +27,7 @@ export class VoucherSlideTicketPage implements OnInit{
     vouchers = [];
   msgApplyFor: any;
   msgMultiVoucherError='';
+  VoucherData: any;
     constructor(public platform: Platform,public navCtrl: NavController,public toastCtrl: ToastController,
         public zone: NgZone,public storage: Storage,public alertCtrl: AlertController,public modalCtrl: ModalController,public valueGlobal: ValueGlobal,
         public gf: GlobalFunction,
@@ -148,6 +149,7 @@ export class VoucherSlideTicketPage implements OnInit{
           this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ voucher.applyFor == 'hotel' ? 'khách sạn' : 'tour'}. Quý khách vui lòng chọn lại mã khác!`);
           return;
         } else{
+         
           this.gf.showLoading();
           this.checkVoucherActive(voucher).then((check) => {
             this.gf.hideLoading();
@@ -171,11 +173,19 @@ export class VoucherSlideTicketPage implements OnInit{
               return;
             }else{
                   voucher.claimed = !voucher.claimed;
+                  if (voucher.claimed) {
+                    if (this._voucherService.ticketTotalDiscount >= this.ticketService.bookingInfo.booking.totalPriceAfterDiscount) {
+                      voucher.claimed = false;
+                      alert("Không thể giảm ít hơn 0đ");
+                      return;
+                    }
+                  }
                   if(voucher.claimed && !this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
                     this._voucherService.voucherSelected.push(voucher);
                   }else if(!voucher.claimed && this.gf.checkExistsItemInArray(this._voucherService.voucherSelected, voucher, 'voucher')){
                     this.gf.removeItemInArray(this._voucherService.voucherSelected, voucher);
                   }
+                  voucher.rewardsItem.price = this.VoucherData.discount
                   //console.log(this.item);
                   //this._voucherService.itemSelectVoucher.emit(voucher);
                   this._voucherService.publicVoucherTicketClicked(voucher);
@@ -199,7 +209,7 @@ export class VoucherSlideTicketPage implements OnInit{
                 'content-type': 'application/json'
               },
               body: {
-                bookingCode: this.ticketService.itemTicketService.objbooking.bookingCode, code: itemVoucher.code, totalAmount: this.ticketService.totalPriceNum,
+                bookingCode: this.ticketService.itemTicketService.objbooking.bookingCode, code: itemVoucher.code, totalAmount: this.ticketService.bookingInfo.booking.totalPriceAfterDiscount,
                 couponData: {
                   "vvc": {
                     "experienceId": se.ticketService.itemTicketDetail.experienceId,
@@ -215,6 +225,7 @@ export class VoucherSlideTicketPage implements OnInit{
               var json = body;
               if (json.error == 0) {
                 itemVoucher.type = json.data.type;
+                se.VoucherData = json.data;
                 if(se._voucherService.voucherSelected && se._voucherService.voucherSelected.length >0 && (se._voucherService.voucherSelected.some(v => v.type != json.data.type && v.id != itemVoucher.id) || se._voucherService.voucherSelected.some(v => v.type != 2 && v.id != itemVoucher.id))){
                   se.msgMultiVoucherError = "Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một mã";
                   resolve(false);

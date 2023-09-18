@@ -429,7 +429,7 @@
         </div> -->
       
         <div class="div-line"></div>
-        <div (click)="showdiscount()" *ngIf="!promocode">
+        <div (click)="showdiscount()" *ngIf="!strPromoCode">
 
           <div class="div-text-normal ">
             <div class="width-100 text-bold">Bạn có mã voucher? <span class="text-sub">(iVIVU Voucher, Heniken..)</span></div>
@@ -437,14 +437,13 @@
           <div class="div-text-normal text-blue">Chọn hoặc nhập mã khuyến mãi</div>
       
         </div>
-        <div class="div-voucher-apply d-flex" *ngIf="promocode" (click)="showdiscount()">
+        <div class="div-voucher-apply d-flex"  *ngIf="strPromoCode" (click)="showdiscount()">
           <div class="width-200">
             <span class="text-normal">Ưu đãi (</span>
-            <span class="text-code" *ngIf="promocode">{{promocode}}</span>
+            <span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span>
             <span class="text-normal">)</span> 
           </div>
-          <div class="width-100 text-normal text-right p-r-5" *ngIf="promocode">{{gf.convertNumberToString(discountpromo)}}đ</div>
-        </div>
+          <div class="width-100 text-normal text-right p-r-5" *ngIf="strPromoCode">{{gf.convertNumberToString(totaldiscountpromo)}}đ</div>        </div>
         <ion-row> 
           <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
           <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>

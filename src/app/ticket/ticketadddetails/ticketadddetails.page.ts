@@ -19,7 +19,7 @@ import { OverlayEventDetail } from '@ionic/core';
 import { ticketService } from 'src/app/providers/ticketService';
 import { forEach } from '@angular/router/src/utils/collection';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { HTMLIonOverlayElement } from '@ionic/core';
 /**
  * Generated class for the RoomadddetailsPage page.
  *
@@ -95,74 +95,213 @@ export class TicketAdddetailsPage implements OnInit {
   trafficQtyInfoArr: any=[];
   totalPriceNum: number;
   ischeckTime = false;
+  strPromoCode: any;
+  totaldiscountpromo: any;
+  ischeckerror: number;
+  promotionCode: string;
+  itemVoucher: any;
+  alert: HTMLIonAlertElement;
   //public ticketCustomData: FormGroup;
   ngOnInit() {
     this._voucherService.getTicketObservable().subscribe((itemVoucher)=> {
       if(itemVoucher){
-        if(itemVoucher.applyFor && itemVoucher.applyFor != 'vvc'){
+        if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
           this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-          this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} không áp dụng cho chương trình này. Quý khách vui lòng kiểm tra lại.`);
+          this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
           return;
         }
-        // if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherTicket){
-        //   this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-        //   this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
-        //   return;
-        // }
-        if(itemVoucher.claimed){
-          this.zone.run(()=>{
-            this._voucherService.selectVoucher = itemVoucher;
-            this.itemVoucherTicket = itemVoucher;
+        this.zone.run(()=>{
+          if(itemVoucher.claimed){
+            this.itemVoucher = itemVoucher;
             this.promocode = itemVoucher.code;
+            this.promotionCode = itemVoucher.code;
             this.discountpromo = itemVoucher.rewardsItem.price;
-            this.ischeckpromo = true;
-            this.ticketService.promocode = itemVoucher.code;
-            this.ticketService.discountpromo = this.discountpromo;
-            this.totalPriceNum = this.totalPriceNum - this.discountpromo;
-            if (this.totalPriceNum <= 0) {
-              this.totalPriceNum = 0;
-            }
-          })
-        }else{
-          this.zone.run(()=>{
-            this.totalPriceNum = this.ticketService.totalPriceNum;
-            this._voucherService.selectVoucher = null;
-            this.itemVoucherTicket = null;
-            this.promocode = "";
-            this.discountpromo = 0;
-            this.ischeckpromo = false;
-            this.ticketService.promocode = "";
-            this.ticketService.discountpromo = 0;
-            this.ticketService.totalPriceBeforeDiscount = 0;
-            this.ticketService.discountPrice = null;
+            this.buildStringPromoCode();
             
-          })
-          
-        }
-  
-        // this.edit(2);
-        // if (this.modalCtrl) {
-        //   this.modalCtrl.dismiss();
-        // }
-      
-        setTimeout(()=> {
-          this.checkVoucherClaimed();
-        },300)
+          }else{
+            this.itemVoucher = null;
+            this.promocode = "";
+            this.promotionCode = "";
+            this.discountpromo = 0;
+            this.buildStringPromoCode();
+
+            if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+              this.strPromoCode = '';
+              this.totaldiscountpromo = 0;
+            }
+          }
+          this.totalPriceAll();
+        })
       }
     })
     
-    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
-      if(check){
-        this._voucherService.selectVoucher = null;
-          this.itemVoucherTicket = null;
-          this.promocode = "";
-          this.discountpromo = 0;
-          this.ticketService.usePointPrice = 0;
-          //this.ischeckbtnpromo = false;
-          //this.ischeckpromo = false;
-          this.edit(2);
+    this._voucherService.getVoucherUsedObservable().subscribe(async (itemVoucher)=> {
+      if(itemVoucher){
+        this.showAlertVoucherUsed();
       }
     })
+
+    //  this._voucherService.getObservable().subscribe(async (itemVoucher)=> {
+    //   if(itemVoucher){
+    //     if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
+    //       this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+    //       this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
+    //       return;
+    //     }
+
+       
+
+    //     //this._voucherService.selectVoucher = itemVoucher;
+    //     this.zone.run(()=>{
+    //       if(itemVoucher.claimed){
+    //         this.itemVoucher = itemVoucher;
+    //         this.promocode = itemVoucher.code;
+    //         this.promotionCode = itemVoucher.code;
+    //         this.discountpromo = itemVoucher.rewardsItem.price;
+    //         // if(!this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
+    //         //   this.listVouchersApply.push(itemVoucher);
+    //         // }
+    //        this.buildStringPromoCode();
+            
+    //       }else{
+    //         this.itemVoucher = null;
+    //         this.promocode = "";
+    //         this.promotionCode = "";
+    //         this.discountpromo = 0;
+    //         // if(this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
+    //         //   this.gf.removeItemInArray(this.listVouchersApply, itemVoucher);
+    //         // }
+    //         this.buildStringPromoCode();
+
+    //         if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+    //           this.strPromoCode = '';
+    //           this.totaldiscountpromo = 0;
+    //         }
+    //       }
+    //       this.totalPriceAll();
+    //     })
+    //     // const element = await this.modalCtrl.getTop();
+    //     //   if (element) {
+    //     //     element.dismiss();
+    //     //   }
+    //     //this.modalCtrl.dismiss();
+    //   }
+    // })
+
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this.itemVoucher = null;
+        this.promocode = "";
+        this.promotionCode = "";
+        this.discountpromo = 0;
+        this.strPromoCode = "";
+        this.totaldiscountpromo=0;
+        this.ticketService.itemFlightCache.hasvoucher = false;
+        this.ticketService.itemFlightCache.listVouchersAlreadyApply = [];
+        this._voucherService.totalDiscountPromoCode =0;
+        this._voucherService.listPromoCode =[];
+        this._voucherService.voucherSelected = [];
+        this._voucherService.flightPromoCode = "";
+        this._voucherService.flightTotalDiscount=0;
+        this.totalPriceAll();
+      }
+    })
+  }
+  async showAlertVoucherUsed() {
+    var se = this;
+    const overlays = document.querySelectorAll('ion-alert, ion-modal');
+    const overlaysArr = Array.from(overlays) as HTMLIonOverlayElement[];
+    let msg = `Mã voucher ${se.ticketService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se.ticketService.itemFlightCache.pnr.resNo}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+    this.alert = await se.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-choiceseat",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'OK',
+          handler: () => {
+            overlaysArr.forEach(o => o.dismiss());
+            this.goback();
+          }
+        },
+        {
+          text: 'Hủy',
+          role: 'Cancel',
+          handler: () => {
+            this.promocode = "";
+            this.promotionCode = "";
+            this.discountpromo = 0;
+            this.strPromoCode = '';
+            this.totaldiscountpromo = 0;
+            this.ticketService.itemFlightCache.promotionCode = "";
+            this.ticketService.itemFlightCache.discount = 0;
+            this.ticketService.itemFlightCache.discountpromo = 0;
+            this._voucherService.voucherSelected = [];
+            this._voucherService.listPromoCode = "";
+            this._voucherService.listObjectPromoCode = [];
+            this._voucherService.totalDiscountPromoCode = 0;
+            overlaysArr.forEach(o => o.dismiss());
+          }
+        }
+      ]
+    });
+    this.alert.present();
+  }
+
+  async showAlertPromoCode() {
+    var se = this;
+    const overlays = document.querySelectorAll('ion-alert, ion-modal');
+    const overlaysArr = Array.from(overlays) as HTMLIonOverlayElement[];
+    let msg = `Mã voucher ${se.ticketService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${this.ticketService.itemTicketService.objbooking.bookingCode}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+    this.alert = await se.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-choiceseat",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'OK',
+          handler: () => {
+            overlaysArr.forEach(o => o.dismiss());
+            this.goback();
+          }
+        },
+        {
+          text: 'Hủy',
+          role: 'Cancel',
+          handler: () => {
+            this.promocode = "";
+            this.promotionCode = "";
+            this.discountpromo = 0;
+            this.strPromoCode = '';
+            this.totaldiscountpromo = 0;
+            this.ticketService.itemFlightCache.promotionCode = "";
+            this.ticketService.itemFlightCache.discount = 0;
+            this.ticketService.itemFlightCache.discountpromo = 0;
+            this._voucherService.voucherSelected = [];
+            this._voucherService.listPromoCode = "";
+            this._voucherService.listObjectPromoCode = [];
+            this._voucherService.totalDiscountPromoCode = 0;
+            this._voucherService.ticketPromoCode ="";
+            this._voucherService.ticketTotalDiscount=0;
+            se.totalPriceAll();
+            overlaysArr.forEach(o => o.dismiss());
+          }
+        }
+      ]
+    });
+    this.alert.present();
+  }
+  totalPriceAll() {
+    this.totalPriceNum = this.ticketService.bookingInfo.booking.totalPriceAfterDiscount;
+    this.totalPriceNum = this.totalPriceNum - this.totaldiscountpromo;
+    this.ticketService.discountpromo = this.totaldiscountpromo;
+    this.ischeckpromo = true;
+
+    if (this.totalPriceNum*1 <= 0) {
+      this.totalPriceNum = 0;
+    }
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,
     private toastCtrl: ToastController, public Roomif: RoomInfo, public storage: Storage, public loadingCtrl: LoadingController,
@@ -354,21 +493,12 @@ export class TicketAdddetailsPage implements OnInit {
         this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
         this._voucherService.selectVoucher = null;
       }
-      if (this.ticketService.promocode) {
-        this.itemVoucherTicket = null;
-        this.promocode = "";
-        this.discountpromo = 0;
-        this.ischeckpromo = false;
-        this.ticketService.promocode = "";
-        this.totalPriceNum = this.totalPriceNum + this.ticketService.discountpromo;
-        this.ticketService.discountpromo = 0;
-      }
-     
       // this.tourService.discountpromo = 0;
       // this.tourService.totalPriceBeforeDiscount = 0;
       // this.tourService.discountPrice = null;
       // this.tourService.usePointPrice = 0;
-      this.edit(2);
+      // this.edit(2);
+      // this.totalPriceNum = this.totalPriceNum + this.ticketService.discountpromo;
     })
     this.GetUserInfo()
   }
@@ -548,11 +678,17 @@ export class TicketAdddetailsPage implements OnInit {
     this.discountpromo = 0;
     this.ischeckpromo = false;
     this.ticketService.promocode = "";
-    // this.tourService.discountpromo = 0;
-    // this.tourService.totalPriceBeforeDiscount = 0;
-    // this.tourService.discountPrice = null;
-    // this.tourService.usePointPrice = 0;
-    // this.navCtrl.back()
+    this.itemVoucher = null;
+    this.promotionCode = "";
+    this.discountpromo = 0;
+    this.strPromoCode = '';
+    this.totaldiscountpromo = 0;
+    this._voucherService.voucherSelected = [];
+    this._voucherService.listPromoCode = "";
+    this._voucherService.listObjectPromoCode = [];
+    this._voucherService.totalDiscountPromoCode = 0;
+    this._voucherService.ticketPromoCode = "";
+    this._voucherService.ticketTotalDiscount=0;    
     this.navCtrl.navigateBack('ticketservice');
   }
 
@@ -816,7 +952,12 @@ export class TicketAdddetailsPage implements OnInit {
         se.zone.run(() => {
           var json = body;
           if (json.error == 0) {
+            se.msg = json.msg;
+            se.ischeckerror = 0;
+            se.promotionCode=se.promocode;
 
+            se.strPromoCode = se.promocode;
+            se.totaldiscountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
             se.totalPriceNum = se.totalPriceNum - se.discountpromo;
             se.ticketService.discountpromo = se.discountpromo;
@@ -832,27 +973,34 @@ export class TicketAdddetailsPage implements OnInit {
             //se.ischeckerror=0;
           }
           else if (json.error == 1) {
-            se.ischeckpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
-            //se.ischecktext=1;
-            //se.ischeckerror=1;
+            se.ischeckerror = 1;
+
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else if (json.error == 2) {
-            //se.ischeckbtnpromo = false;
-            se.ischeckpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
-            //se.ischecktext=2;
-            //se.ischeckerror=1;
+            se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
+          }
+          else if (json.error == 3) {
+            se.msg = json.msg;
+            se.discountpromo = 0;
+  
+            se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else {
-            //se.ischeckbtnpromo = false;
-            se.ischeckpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
-            //se.ischecktext = 2;
-            //se.ischeckerror = 1;
+            se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
         })
       });
@@ -879,6 +1027,7 @@ export class TicketAdddetailsPage implements OnInit {
   showTicketPrice() {
     this.ticketService.totalPriceStr = this.totalPriceStr;
     this.ticketService.totalPriceNum = this.totalPriceNum;
+    this._voucherService.ticketPromoCode = this.strPromoCode;
     this.navCtrl.navigateForward('/ticketpricedetail');
   }
   CustomerSave() {
@@ -886,9 +1035,11 @@ export class TicketAdddetailsPage implements OnInit {
     if (this.ischeck) {
       isInvoice = 1;
     }
-    let arrpromo = [];
-    if (this.promocode) {
-      arrpromo.push(this.promocode);
+
+    let promoCodeArray = [];
+    if (this.strPromoCode) {
+      // Tách chuỗi thành mảng bằng dấu phẩy (,)
+      promoCodeArray  = this.strPromoCode.split(', ');
     }
   
     let objCustomer = 
@@ -912,7 +1063,7 @@ export class TicketAdddetailsPage implements OnInit {
       paxList: '',
       tourNotes: this.note,
       kkdayResource: this.kkdayResource,
-      code: arrpromo//this.vouchers.filter(x => x.checked).map(x => x.code)
+      code: promoCodeArray
     };
     let headers =
     {
@@ -1591,11 +1742,24 @@ export class TicketAdddetailsPage implements OnInit {
         this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
         this._voucherService.selectVoucher = null;
       }
-  
+      this._voucherService.listPromoCode = [];
+      this.buildStringPromoCode();
+     this.totalPriceAll();
     
-      this.edit(2);
+      // this.edit(2);
       modal.onDidDismiss().then((data: OverlayEventDetail) => {
-        if (data.data) {
+        //case multi voucher tiền mặt
+        if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+          if(this.strPromoCode){
+            this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+            this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+          }else{
+            this.strPromoCode = this._voucherService.listPromoCode.join(', ');
+            this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
+          }
+         
+        }
+        else if (data.data) {
           let vc = data.data;
           if(vc.applyFor && vc.applyFor != 'vvc'){
             this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
@@ -1615,8 +1779,31 @@ export class TicketAdddetailsPage implements OnInit {
           }
           
         }
+        this.totalPriceAll();
       })
       //}
+    }
+    buildStringPromoCode(){
+  
+      if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+        this.strPromoCode = this._voucherService.voucherSelected.map(item => item.code).join(', ');
+        this.totaldiscountpromo = this._voucherService.voucherSelected.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+      }else{
+        this.strPromoCode = '';
+        this.totaldiscountpromo = 0;
+      }
+    
+      if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+        if(this.strPromoCode){
+          this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+        }else{
+          this.strPromoCode += this._voucherService.listPromoCode.join(', ');
+        }
+          
+          this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+      }
+      this._voucherService.ticketPromoCode = this.strPromoCode;
+      this._voucherService.ticketTotalDiscount = this.totaldiscountpromo;
     }
   }
     

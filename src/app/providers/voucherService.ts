@@ -36,6 +36,8 @@ export class voucherService{
   comboCarTotalDiscount: number;
   flightPromoCode: string;
   flightTotalDiscount: number;
+  ticketPromoCode: any;
+  ticketTotalDiscount: any;
 
   publicRollbackAllSelectedVoucher(data: any) {
     this.rollbackAllSelectedVoucher.next(data);

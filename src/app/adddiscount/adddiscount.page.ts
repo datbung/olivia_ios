@@ -169,6 +169,10 @@ export class AdddiscountPage implements OnInit {
         var options;
         if(se._voucherService.openFrom == 'ticketadddetails')
         {
+          if (this._voucherService.ticketTotalDiscount >= this.ticketService.bookingInfo.booking.totalPriceAfterDiscount) {
+            alert("Không thể giảm ít hơn 0đ");
+            return;
+          }
           options = {
             method: 'POST',
             url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
@@ -178,7 +182,7 @@ export class AdddiscountPage implements OnInit {
               'cache-control': 'no-cache',
               'content-type': 'application/json'
             },
-            body: { bookingCode: _bookingCode ,code: code, totalAmount: this.ticketService.totalPriceNum,
+            body: { bookingCode: _bookingCode ,code: code, totalAmount: this.ticketService.bookingInfo.booking.totalPriceAfterDiscount,
             couponData: coupondata},
             json: true
           };

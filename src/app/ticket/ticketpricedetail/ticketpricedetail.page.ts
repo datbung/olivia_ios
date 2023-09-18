@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import * as request from 'requestretry';
 import { ticketService } from 'src/app/providers/ticketService';
 import { SearchHotel } from 'src/app/providers/book-service';
+import { voucherService } from 'src/app/providers/voucherService';
 
 @Component({
   selector: 'app-ticketpricedetail',
@@ -28,7 +29,7 @@ export class TicketPriceDetailPage implements OnInit {
     private zone: NgZone,
     private storage: Storage,
     public ticketService: ticketService,
-    public searchhotel: SearchHotel) {
+    public searchhotel: SearchHotel,public _voucherService: voucherService) {
     // if (this.ticketService.itemTicketDetail.avatarLink) {
     //   this.avatarLink=this.ticketService.itemTicketDetail.avatarLink;
     // }else{

@@ -1047,7 +1047,7 @@ public getAppVersion() {
                   resolve({error: 401});
                 }
                 else{
-                  resolve([]);
+                  resolve(body);
                 }
 
             })
