@@ -60,6 +60,7 @@ export class ticketService{
   discountpromo: number;
   totalPriceBeforeDiscount: number;
   usePointPrice: number;
+  itemFlightCache: any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }
