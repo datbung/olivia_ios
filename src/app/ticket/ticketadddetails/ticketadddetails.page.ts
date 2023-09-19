@@ -141,53 +141,6 @@ export class TicketAdddetailsPage implements OnInit {
       }
     })
 
-    //  this._voucherService.getObservable().subscribe(async (itemVoucher)=> {
-    //   if(itemVoucher){
-    //     if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
-    //       this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
-    //       this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
-    //       return;
-    //     }
-
-       
-
-    //     //this._voucherService.selectVoucher = itemVoucher;
-    //     this.zone.run(()=>{
-    //       if(itemVoucher.claimed){
-    //         this.itemVoucher = itemVoucher;
-    //         this.promocode = itemVoucher.code;
-    //         this.promotionCode = itemVoucher.code;
-    //         this.discountpromo = itemVoucher.rewardsItem.price;
-    //         // if(!this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
-    //         //   this.listVouchersApply.push(itemVoucher);
-    //         // }
-    //        this.buildStringPromoCode();
-            
-    //       }else{
-    //         this.itemVoucher = null;
-    //         this.promocode = "";
-    //         this.promotionCode = "";
-    //         this.discountpromo = 0;
-    //         // if(this.gf.checkExistsItemInArray(this.listVouchersApply, itemVoucher, 'voucher')){
-    //         //   this.gf.removeItemInArray(this.listVouchersApply, itemVoucher);
-    //         // }
-    //         this.buildStringPromoCode();
-
-    //         if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
-    //           this.strPromoCode = '';
-    //           this.totaldiscountpromo = 0;
-    //         }
-    //       }
-    //       this.totalPriceAll();
-    //     })
-    //     // const element = await this.modalCtrl.getTop();
-    //     //   if (element) {
-    //     //     element.dismiss();
-    //     //   }
-    //     //this.modalCtrl.dismiss();
-    //   }
-    // })
-
     this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
       if(check){
         this.itemVoucher = null;
@@ -688,7 +641,8 @@ export class TicketAdddetailsPage implements OnInit {
     this._voucherService.listObjectPromoCode = [];
     this._voucherService.totalDiscountPromoCode = 0;
     this._voucherService.ticketPromoCode = "";
-    this._voucherService.ticketTotalDiscount=0;    
+    this._voucherService.ticketTotalDiscount=0;  
+    this._voucherService.vouchers = [];  
     this.navCtrl.navigateBack('ticketservice');
   }
 
