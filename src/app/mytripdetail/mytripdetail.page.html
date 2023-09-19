@@ -228,7 +228,11 @@
                   <div class="text-left div-width-100">Trẻ em x<span>{{objSummary.custom2No}}</span></div>
                   <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.custom2AvgPrice)}}</div>
                 </div>
-
+                <div *ngIf="trip.deal_no && trip.promotionDiscountAmount" class="d-flex m-top-8">
+                  <div class="text-left div-width-100">Ưu đãi</div>
+                  <div class="text-price-right div-width-100">
+                    {{gf.convertNumberToString(trip.promotionDiscountAmount)}}</div>
+                </div>
               <div class="div-ticket-border-bottom m-top-8 m-bottom-8"></div>
 
               <div class="d-flex">
