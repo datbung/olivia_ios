@@ -290,6 +290,7 @@ export class Tab5Page implements OnInit {
               this.gf.setParams(true, 'resetBlogTrips');
               this.storage.remove('listblogtripdefault');
               this.storage.remove('listmytrips');
+              this.storage.remove('flighttopdeal');
               this.storage.clear();
              
               this.zone.run(() => {

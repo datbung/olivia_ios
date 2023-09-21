@@ -11,10 +11,7 @@
                         <label class="label-home-hotel m-right-8">Đặt vé máy bay giá rẻ</label>
                         <div class="div-point" *ngIf="valueGlobal.flightAvgPoint" (click)="scrollToDivReview()">{{valueGlobal.flightAvgPoint}} <img class="img-star" src="./assets/ic_flight/star_icon.svg"/> <span class="text-point">({{valueGlobal.flightNumOfReview}})</span></div>
                     </div>
-                    <!-- <div class="div-width-150 d-flex d-flex-end">
-                        <div class="div-point" *ngIf="valueGlobal.flightAvgPoint" (click)="scrollToDivReview()">{{valueGlobal.flightAvgPoint}} <img class="img-star" src="./assets/ic_flight/star_icon.svg"/> <span class="text-point">({{valueGlobal.flightNumOfReview}})</span></div>
-                    </div> -->
-                    
+            
                 </div>
             <div [ngClass]="flighttype == 'twoway' ? 'div-wrap-search-input div-wc-twoway' : 'div-wrap-search-input div-wc-oneway' "></div>
             <div class="div-direction">
@@ -195,8 +192,7 @@
                     <div class="subtitle-topdeal m-bottom-16">Giá tốt nhất từ VietnamAirlines, Bamboo, Vietjet...</div>
                 </div>
                     <!-- List 1 chiều -->
-                <!-- <ion-slides #sliderInboundTab (ionSlideDidChange)="slidetabchange(1)"  mode="ios" [options]="slideOpts" *ngIf="flighttype == 'oneway' && listflighttopdealoneway && listflighttopdealoneway.slide && listflighttopdealoneway.slide.length >0">
-                        <ion-slide style="display: block;" *ngFor="let itemslide of listflighttopdealoneway.slide"> -->
+              
                             <div *ngIf="flighttype == 'oneway' && listflighttopdealoneway && listflighttopdealoneway.slide && listflighttopdealoneway.slide.length >0"  class="div-wrap-slide">
                                 <div *ngFor="let itemslide of listflighttopdealoneway.slide"  class="div-wrap-itemslide">
                                             <div  *ngFor="let itemdeal of itemslide.list; let idx = index" (click)="select(itemdeal)" >
@@ -243,27 +239,12 @@
                                 </div>
                             </div>
 
-                            <!-- <ng-template #loadsdkinbound>
-                                <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-                                <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-                                <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-                            </ng-template> -->
-                        <!-- </ion-slide>
-                </ion-slides> -->
-               
-                <!-- <div class="div-wrap-dot" *ngIf="flighttype == 'oneway' &&listflighttopdealoneway && listflighttopdealoneway.slide && listflighttopdealoneway.slide.length >0">
-                    <div [ngClass]=" tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of listflighttopdealoneway.slide; let idxinbound=index" (click)="selectDot(idxinbound)"></div>
-                </div> -->
-           
-            
                 <div class="div-flight-topdeal m-top-16 m-bottom-16" *ngIf="flighttype == 'twoway' &&listflighttopdealroundtrip && listflighttopdealroundtrip.slide && listflighttopdealroundtrip.slide.length >0 ">
                     <div class="title-topdeal">Giá vé nội địa tốt nhất</div>
                     <div class="subtitle-topdeal m-bottom-16">Giá tốt nhất từ VietnamAirlines, Bamboo, Vietjet...</div>
                 </div>
                     <!-- List 2 chiều -->
-                <!-- <ion-slides #sliderInboundTab (ionSlideDidChange)="slidetabchange(1)" mode="ios" [options]="slideOpts" *ngIf="flighttype == 'twoway' && loadflighttopdealdone && listflighttopdealroundtrip && listflighttopdealroundtrip.slide && listflighttopdealroundtrip.slide.length >0">
-                    <ion-slide style="display: block;" *ngFor="let itemslide of listflighttopdealroundtrip.slide">
-                        <div > -->
+            
                             <div *ngIf="flighttype == 'twoway' && listflighttopdealroundtrip && listflighttopdealroundtrip.slide && listflighttopdealroundtrip.slide.length >0" class="div-wrap-slide">
                                 <div *ngFor="let itemslide of listflighttopdealroundtrip.slide"  class="div-wrap-itemslide">
                                     <div  *ngFor="let itemdeal of itemslide.list; let idx = index" (click)="select(itemdeal)">
@@ -310,21 +291,7 @@
                                 </div>
                             </div>
                             
-                        <!-- </div>
-
-                        <ng-template #loadsdkinbound>
-                            <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-                            <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-                            <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-                        </ng-template>
-                        </ion-slide>
-                </ion-slides> -->
-                
-                <!-- <div class="div-wrap-dot" *ngIf="flighttype == 'twoway' && listflighttopdealroundtrip && listflighttopdealroundtrip.slide && listflighttopdealroundtrip.slide.length >0">
-                    <div [ngClass]=" tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of listflighttopdealroundtrip.slide; let idxinbound=index" (click)="selectDot(idxinbound)"></div>
-                </div> -->
-           
-
+                 
         </div>
 
             <div class="div-flightinternational-topdeal p-top-24 m-bottom-16" *ngIf="listinternationalflighttopdeal && listinternationalflighttopdeal.length >0 && ((flighttype == 'oneway' && hassomelistinteroneway) || (flighttype == 'twoway' && hassomelistintertwoway ) )">
@@ -339,8 +306,7 @@
                     <div class="div-wrap-flighttopdeal" *ngIf="idx==0">
                     
                         <div [ngClass]="idx==0 ? 'div-group-name m-top-16' : 'div-group-name m-top-24' " *ngIf="flighttype == 'oneway' && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0">{{itemgroup.groupName}}</div>
-                        <!-- <ion-slides #sliderOutboundTab1 (ionSlideDidChange)="slidetaboutboundchange(itemgroup,idx+1)" mode="ios" [options]="slideOpts" *ngIf="flighttype == 'oneway' && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0">
-                            <ion-slide style="display: block;" *ngFor="let itemslide1 of itemgroup.listflighttopdealoneway" > -->
+                      
                             <div *ngIf="flighttype == 'oneway' && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0" class="div-wrap-slide">
                                 <div *ngFor="let itemslide1 of itemgroup.listflighttopdealoneway" class="div-wrap-itemslide">
                                     <div  *ngFor="let itemdeal1 of itemslide1.list; let idx = index" (click)="select(itemdeal1)">
@@ -388,18 +354,9 @@
                                     </div>
                                 </div>
                             </div>
-                                
-                            <!-- </ion-slide>
-                        </ion-slides> -->
-
-<!--                         
-                        <div class="div-wrap-dot" *ngIf="loadinterflighttopdealdone && flighttype == 'oneway'">
-                            <div [ngClass]=" itemgroup.tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of itemgroup.listflighttopdealoneway; let idxinbound=index" (click)="selectDotOutbound(itemgroup,idx+1, idxinbound)"></div>
-                        </div> -->
-                    
+                     
                         <div [ngClass]="idx==0 ? 'div-group-name m-top-16' : 'div-group-name m-top-24' " *ngIf=" flighttype == 'twoway' && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0">{{itemgroup.groupName}}</div>
-                        <!-- <ion-slides #sliderOutboundTab1 (ionSlideDidChange)="slidetaboutboundchange(itemgroup,idx+1)" mode="ios" [options]="slideOpts" *ngIf="loadinterflighttopdealdone && flighttype == 'twoway' &&itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0">
-                            <ion-slide style="display: block;" *ngFor="let itemslide1 of itemgroup.listflighttopdealroundtrip" > -->
+                     
                             <div *ngIf=" flighttype == 'twoway' &&itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0" class="div-wrap-slide">
                                 <div *ngFor="let itemslide1 of itemgroup.listflighttopdealroundtrip" class="div-wrap-itemslide">
                                     <div  *ngFor="let itemdeal1 of itemslide1.list; let idx = index" (click)="select(itemdeal1)">
@@ -447,21 +404,13 @@
                                     </div>
                                 </div>
                             </div>
-                                
-                            <!-- </ion-slide>
-                        </ion-slides> -->
-                            <!-- <div class="div-wrap-dot" *ngIf="flighttype == 'twoway'">
-                                <div [ngClass]=" itemgroup.tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of itemgroup.listflighttopdealroundtrip; let idxinbound=index" (click)="selectDotOutbound(itemgroup,idx+1, idxinbound)"></div>
-                            </div> -->
                     
-
                     </div>
 
                     <div class="div-wrap-flighttopdeal" *ngIf="idx==1">
                         <div *ngIf="flighttype == 'oneway' else group2twoway">
                             <div [ngClass]="idx==0 ? 'div-group-name m-top-16' : 'div-group-name m-top-24' " *ngIf="itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0">{{itemgroup.groupName}}</div>
-                            <!-- <ion-slides #sliderOutboundTab2 (ionSlideDidChange)="slidetaboutboundchange(itemgroup,idx+1)" [options]="slideOpts" *ngIf="loadinterflighttopdealdone && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0">
-                                <ion-slide style="display: block;" *ngFor="let itemslide2 of itemgroup.listflighttopdealoneway"> -->
+                         
                                 <div *ngIf=" itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0" class="div-wrap-slide">
                                     <div *ngFor="let itemslide2 of itemgroup.listflighttopdealoneway" class="div-wrap-itemslide">
                                         <div  *ngFor="let itemdeal2 of itemslide2.list; let idx = index" (click)="select(itemdeal2)" >
@@ -504,17 +453,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                    
-                                <!-- </ion-slide>
-                            </ion-slides>
-                            <div class="div-wrap-dot">
-                                <div [ngClass]=" itemgroup.tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of itemgroup.listflighttopdealoneway; let idxinbound=index" (click)="selectDotOutbound(itemgroup,idx+1, idxinbound)"></div>
-                            </div> -->
+                          
                         </div>
                         <ng-template #group2twoway>
                             <div [ngClass]="idx==0 ? 'div-group-name m-top-16' : 'div-group-name m-top-24' " *ngIf="itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0">{{itemgroup.groupName}}</div>
-                            <!-- <ion-slides #sliderOutboundTab2 (ionSlideDidChange)="slidetaboutboundchange(itemgroup,idx+1)" [options]="slideOpts" *ngIf="loadinterflighttopdealdone && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0">
-                                <ion-slide style="display: block;" *ngFor="let itemslide2 of itemgroup.listflighttopdealroundtrip"> -->
+                           
                                     <div *ngIf=" itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0" class="div-wrap-slide">
                                         <div *ngFor="let itemslide2 of itemgroup.listflighttopdealroundtrip" class="div-wrap-itemslide">
                                             <div  *ngFor="let itemdeal2 of itemslide2.list; let idx = index" (click)="select(itemdeal2)" >
@@ -557,12 +500,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                <!-- </ion-slide>
-                                </ion-slides>
-                                <div class="div-wrap-dot">
-                                    <div [ngClass]=" itemgroup.tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of itemgroup.listflighttopdealroundtrip; let idxinbound=index" (click)="selectDotOutbound(itemgroup,idx+1, idxinbound)"></div>
-                                </div> -->
+                          
                         </ng-template>
 
                     </div>
@@ -571,8 +509,7 @@
                     <div class="div-wrap-flighttopdeal" *ngIf="idx==2">
                         <div *ngIf="flighttype == 'oneway' else group3twoway">
                             <div [ngClass]="idx==0 ? 'div-group-name m-top-16' : 'div-group-name m-top-24' " *ngIf="itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0">{{itemgroup.groupName}}</div>
-                            <!-- <ion-slides #sliderOutboundTab3 (ionSlideDidChange)="slidetaboutboundchange(itemgroup,idx+1)" [options]="slideOpts" *ngIf="loadinterflighttopdealdone && itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0">
-                                <ion-slide style="display: block;" *ngFor="let itemslide3 of itemgroup.listflighttopdealoneway"> -->
+                           
                                     <div *ngIf=" itemgroup.listflighttopdealoneway && itemgroup.listflighttopdealoneway.length >0" class="div-wrap-slide">
                                         <div *ngFor="let itemslide3 of itemgroup.listflighttopdealoneway" class="div-wrap-itemslide">
                                             <div  *ngFor="let itemdeal3 of itemslide3.list; let idx = index" (click)="select(itemdeal3)">
@@ -616,16 +553,11 @@
                                         </div>
                                     </div>
                                     
-                                <!-- </ion-slide>
-                            </ion-slides>
-                            <div class="div-wrap-dot">
-                                <div [ngClass]=" itemgroup.tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of itemgroup.listflighttopdealoneway; let idxinbound=index" (click)="selectDotOutbound(itemgroup,idx+1, idxinbound)"></div>
-                            </div> -->
+                             
                         </div>
                         <ng-template #group3twoway>
                             <div [ngClass]="idx==0 ? 'div-group-name m-top-16' : 'div-group-name m-top-24' " *ngIf="itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0">{{itemgroup.groupName}}</div>
-                            <!-- <ion-slides #sliderOutboundTab3 (ionSlideDidChange)="slidetaboutboundchange(itemgroup,idx+1)" [options]="slideOpts" *ngIf="loadinterflighttopdealdone && itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0">
-                                <ion-slide style="display: block;" *ngFor="let itemslide3 of itemgroup.listflighttopdealroundtrip"> -->
+                            
                                     <div *ngIf=" itemgroup.listflighttopdealroundtrip && itemgroup.listflighttopdealroundtrip.length >0" class="div-wrap-slide">
                                         <div *ngFor="let itemslide3 of itemgroup.listflighttopdealroundtrip" class="div-wrap-itemslide">
                                             <div  *ngFor="let itemdeal3 of itemslide3.list; let idx = index" (click)="select(itemdeal3)">
@@ -668,12 +600,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                <!-- </ion-slide>
-                                </ion-slides>
-                                <div class="div-wrap-dot">
-                                    <div [ngClass]=" itemgroup.tabInbound== idxinbound+1 ? 'div-dot selected' : 'div-dot'" *ngFor="let itemdot of itemgroup.listflighttopdealroundtrip; let idxinbound=index" (click)="selectDotOutbound(itemgroup,idx+1, idxinbound)"></div>
-                                </div> -->
+                             
                         </ng-template>
 
                     </div>

@@ -276,26 +276,15 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                 this.reloadInfo();
               }
             })
-
-            // this.storage.get('flighttopdeal').then((data) => {
-            //   if(data){
-            //     this.storage.get('clearcacheflighttopdeal').then((data) => {
-            //       if(!data){
-            //         this.storage.remove('flighttopdeal');
-            //         this.loadflighttopdeal();
-            //       }else{
-            //         this.loadcachetopdeal(data);
-            //       }
-                  
-            //     })
-            //   }else{
-            //       this.loadflighttopdeal();
-            //   }
-            // })
             
             setTimeout(()=>{
               this.loadflighttopdeal();
             }, 1  * 1000);
+
+            //5' refresh lại api lấy mới dữ liệu
+            setTimeout(()=>{
+              this.reloadflighttopdeal();
+            }, 5 * 60  * 1000);
 
             this.loadCalendarPrice();
 
@@ -813,12 +802,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
         changeRoundTrip(ev){
 
           this.reloadInfoOneway(!ev.currentTarget.checked);
-          this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
 
           if(this.listflighttopdeal && this.listflighttopdeal.length >0){
            this.showDivFlightTopDeal = this.listflighttopdeal.some(item => item.roundTrip == ev.currentTarget.checked);
           }
           this.zone.run(()=>{
+            this.flighttype= ev.currentTarget.checked ? "twoway" : "oneway";
             this.roundTrip = ev.currentTarget.checked;
             this.tabInbound = 1;
             for (let index = 0; index < this.listinternationalflighttopdeal.length; index++) {
@@ -1734,6 +1723,28 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           })
       }
 
+      reloadflighttopdeal(){
+        var se = this;
+        let urlPath = C.urls.baseUrl.urlFlight + "gate/apiv1/GetHotDeal" + ( se.memberid ? "?memberid="+(se.memberid||'')+"&version=2" : "?version=2");
+          let headers = {
+                  "Authorization": "Basic YXBwOmNTQmRuWlV6RFFiY1BySXNZdz09",
+                  'Content-Type': 'application/json; charset=utf-8'
+                  }
+          this.gf.RequestApi('GET', urlPath, headers, {}, '', '').then((data)=>{
+            se.storage.get('flighttopdeal').then((data)=>{
+              if(data){
+                se.storage.remove('flighttopdeal').then(()=>{
+                  se.storage.set("flighttopdeal", data);
+                  se.loadcachetopdeal(data);
+                })
+              }else{
+                se.storage.set("flighttopdeal", data);
+                se.loadcachetopdeal(data);
+              }
+            })
+          })
+      }
+
       bindFlightTopDealFromCache(){
         let se = this;
         se.storage.get('flighttopdeal').then((data)=>{
@@ -1778,32 +1789,14 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
          
           setTimeout(()=>{
             if(se.listinternationalflighttopdeal && se.listinternationalflighttopdeal.length >0 && se.listinternationalflighttopdeal[0] && se.listinternationalflighttopdeal[0].list){
-              // se.listinternationalflighttopdeal.forEach(element => {
-              //   se.zone.run(() => element.list.sort(function (a, b) {
-              //     let direction = -1;
-              //       //if((a['roundTrip'] && b['roundTrip']) || (!a['roundTrip'] && !b['roundTrip'])){
-              //         if (a['price'] * 1 < b['price'] * 1 ) {
-              //           return 1 * direction;
-              //         }
-              //         else if (a['price'] * 1 > b['price'] * 1) {
-              //           return -1 * direction;
-              //         }else if(a['price'] *1 == b['price']*1){
-              //           return a['timesortorder'] - b['timesortorder'];
-              //         }
-                  
-              //     }))
-              // });
-
-          
               
-                //se.listinternationalflighttopdeal.forEach((element,indexgroup) => {
                 for (let index = 0; index < se.listinternationalflighttopdeal.length; index++) {
                     const element = se.listinternationalflighttopdeal[index];
                 
                   element.tabInbound =1;
                   element.listoneway = element.list.filter((item) => {return item.return && !item.return.fromPlaceName });
                   element.listroundtrip = element.list.filter((item) => {return item.return && item.return.fromPlaceName});
-                  if(element.listoneway && element.listoneway.length >0){
+                  if(element.listoneway && element.listoneway.length >0 ){
                     let slide1 = [];
                     let slide2 = [];
                     let slide3 = [];
@@ -1831,26 +1824,29 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                         slide6.push(elementList);
                       }
                     }
-                    element.slide = [];
-                    if(slide1.length >0){
-                      element.slide.push({name: 'slide1', list: slide1});
+                    if(!element.slide || (element.slide && element.slide.length == 0)){
+                      element.slide = [];
+                      if(slide1.length >0){
+                        element.slide.push({name: 'slide1', list: slide1});
+                      }
+                      if(slide2.length >0){
+                        element.slide.push({name: 'slide2', list: slide2});
+                      }
+                      if(slide3.length >0){
+                        element.slide.push({name: 'slide3', list: slide3});
+                      }
+                      if(slide4.length >0){
+                        element.slide.push({name: 'slide4', list: slide4});
+                      }
+                      if(slide5.length >0){
+                        element.slide.push({name: 'slide5', list: slide5});
+                      }
+                      if(slide6.length >0){
+                        element.slide.push({name: 'slide6', list: slide6});
+                      }
+                      
                     }
-                    if(slide2.length >0){
-                      element.slide.push({name: 'slide2', list: slide2});
-                    }
-                    if(slide3.length >0){
-                      element.slide.push({name: 'slide3', list: slide3});
-                    }
-                    if(slide4.length >0){
-                      element.slide.push({name: 'slide4', list: slide4});
-                    }
-                    if(slide5.length >0){
-                      element.slide.push({name: 'slide5', list: slide5});
-                    }
-                    if(slide6.length >0){
-                      element.slide.push({name: 'slide6', list: slide6});
-                    }
-                    
+                   
                     element.listflighttopdealoneway = element.slide;
                   }
 
@@ -1883,26 +1879,28 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                         slide6.push(elementList);
                       }
                     }
-                   
-                    element.slide = [];
-                    if(slide1.length >0){
-                      element.slide.push({name: 'slide1', list: slide1});
-                    }
-                    if(slide2.length >0){
-                      element.slide.push({name: 'slide2', list: slide2});
-                    }
-                    if(slide3.length >0){
-                      element.slide.push({name: 'slide3', list: slide3});
-                    }
-                    if(slide4.length >0){
-                      element.slide.push({name: 'slide4', list: slide4});
-                    }
-                    if(slide5.length >0){
-                      element.slide.push({name: 'slide5', list: slide5});
-                    }
-                    if(slide6.length >0){
-                      element.slide.push({name: 'slide6', list: slide6});
-                    }
+                    
+                    //if(!element.slide || (element.slide && element.slide.length == 0)){
+                      element.slide = [];
+                      if(slide1.length >0){
+                        element.slide.push({name: 'slide1', list: slide1});
+                      }
+                      if(slide2.length >0){
+                        element.slide.push({name: 'slide2', list: slide2});
+                      }
+                      if(slide3.length >0){
+                        element.slide.push({name: 'slide3', list: slide3});
+                      }
+                      if(slide4.length >0){
+                        element.slide.push({name: 'slide4', list: slide4});
+                      }
+                      if(slide5.length >0){
+                        element.slide.push({name: 'slide5', list: slide5});
+                      }
+                      if(slide6.length >0){
+                        element.slide.push({name: 'slide6', list: slide6});
+                      }
+                    //}
                     element.listflighttopdealroundtrip = element.slide;
                   }
                   
@@ -1914,40 +1912,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                   se.hassomelistintertwoway = se.listinternationalflighttopdeal.some(l => l.listflighttopdealroundtrip) ;
                 },100)
             }
-            if(data && data.length >0 && data[0] && data[0].list){
-            
-              // data.forEach(element => {
-              //     se.zone.run(() => element.list.sort(function (a, b) {
-              //       let direction = -1;
-              //         if((a['roundTrip'] && b['roundTrip']) || (!a['roundTrip'] && !b['roundTrip'])){
-              //           if (a['price'] * 1 < b['price'] * 1 ) {
-              //             return 1 * direction;
-              //           }
-              //           else if (a['price'] * 1 > b['price'] * 1) {
-              //             return -1 * direction;
-              //           }
-              //         }else if(a['roundTrip'] && !b['roundTrip']){
-              //           return 1 * direction;
-              //         }else if(!a['roundTrip'] && b['roundTrip']){
-              //           return -1 * direction;
-              //         }
-              //       }))
-              //   });
-            }else{
-                // se.zone.run(() => data.sort(function (a, b) {
-                //   let direction = -1;
-                //   if (a['price'] * 1 < b['price'] * 1) {
-                //     return 1 * direction;
-                //   }
-                //   else if (a['price'] * 1 > b['price'] * 1) {
-                //     return -1 * direction;
-                //   }
-                    
-                // }))
-            }
             
             setTimeout(()=>{
-              if(se.listflighttopdealoneway && se.listflighttopdealoneway.length >0){
+              if(se.listflighttopdealoneway && se.listflighttopdealoneway.length >0 && (!se.listflighttopdealoneway.slide || (se.listflighttopdealoneway.slide && se.listflighttopdealoneway.slide.length == 0))){
                 let slide1 = [];
                 let slide2 = [];
                 let slide3 = [];
@@ -1997,7 +1964,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                
               }
               
-              if(se.listflighttopdealroundtrip && se.listflighttopdealroundtrip.length >0){
+              if(se.listflighttopdealroundtrip && se.listflighttopdealroundtrip.length >0  && (!se.listflighttopdealroundtrip.slide || (se.listflighttopdealroundtrip.slide && se.listflighttopdealroundtrip.slide.length == 0))){
                 let slideroundtrip1 = [];
                 let slideroundtrip2 = [];
                 let slideroundtrip3 = [];
@@ -2052,7 +2019,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                 //console.log(se.listflighttopdealroundtrip);
             },50)
             
-            
+            //console.log(se.listinternationalflighttopdeal);
           },100)
           
 
