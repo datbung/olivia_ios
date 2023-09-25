@@ -21,20 +21,6 @@
 
     <div class="text-title">Điểm dừng</div>
     <div class="div-wrap-stop">
-      <!-- <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==1 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
-        <div class="text-stop-normal v-align-center" (click)="checkItem(1, $event, 1)">Chỉ bay thẳng
-        </div>
-      </div>
-
-      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==2 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
-         <div class="text-stop-normal v-align-center"  (click)="checkItem(1, $event, 2)">Tối đa 1 điểm dừng
-        </div>
-      </div>
-
-      <div [ngClass]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.stopSelected && _flightService.objectFilterInternational.stopSelected ==3 ? 'd-flex m-top-8 item-stop cls-active-text':'d-flex m-top-8 item-stop' ">
-        <div class="text-stop-normal v-align-center"  (click)="checkItem(1, $event, 3)">Số điểm dừng bất kỳ
-        </div>
-      </div> -->
       <ion-radio-group (ionChange)="checkItem(1, $event, -1)" [(ngModel)]="stopSelected" mode="md">
         <div class="d-flex m-top-20">
           <div class="div-check-class">
@@ -68,124 +54,6 @@
       </ion-radio-group>
     </div>
 
-    <!-- <div class="div-split-panel"></div> -->
-
-    <!-- <div class="text-title m-top-8">Hạng vé</div>
-    <ion-radio-group >
-      <div class="d-flex m-top-16">
-        <div class="div-check-class">
-          <ion-radio value="-1" [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.classSelected && _flightService.objectFilterInternational.classSelected =='-1'"
-          (ionSelect)="checkItemClass($event,-1)"></ion-radio>
-        </div>
-        <div>
-          <div class="text-normal " >Nhiều hạng</div>
-          <div class="text-normal v-align-center-custom div-min-price">
-            <div>Tất cả các hạng vé của máy bay</div>
-          </div>
-        </div>
-        
-      </div>
-
-      <div class="d-flex m-top-12">
-        <div class="div-check-class">
-          <ion-radio value="1" [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.classSelected && _flightService.objectFilterInternational.classSelected.toLowerCase() == 'economy'"
-          (ionSelect)="checkItemClass($event,1)"></ion-radio>
-        </div>
-        <div>
-          <div class="text-normal " >Phổ thông (Economy Class)</div>
-          <div class="text-normal v-align-center-custom div-min-price">
-            <div>Loại vé máy bay thông thường nhất</div>
-          </div>
-        </div>
-        
-      </div>
-
-      <div class="d-flex m-top-12">
-        <div class="div-check-class">
-          <ion-radio value="2" [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.classSelected && _flightService.objectFilterInternational.classSelected.toLowerCase() == 'premiumeconomy'"
-          (ionSelect)="checkItemClass($event,2)"></ion-radio>
-        </div>
-        <div class="div-width-100">
-          <div class="text-normal " >Phổ thông đặc biệt (Premium Economy)</div>
-          <div class="text-normal v-align-center-custom div-min-price">
-            <div class="d-flex">
-              <div class="div-text-item-class">Hạng ghế trung bình nằm giữa hạng ghế thương gia và hạng ghế phổ thông</div>
-              <div class="div-icon-arrow" (click)="expandItemClass($event,2)">
-                <img *ngIf="!divItemClass2Selected" class="img-expand " src="./assets/ic_flight_international/expand_down.svg" >
-                <img *ngIf="divItemClass2Selected" class="img-expand " src="./assets/ic_flight_international/expand_up.svg" >
-              </div>
-            </div>
-            
-          </div>
-        </div>
-        
-      </div>
-
-      <div class="d-flex m-top-12">
-        <div class="div-check-class">
-          <ion-radio value="3" [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.classSelected && _flightService.objectFilterInternational.classSelected.toLowerCase() == 'business'"
-          (ionSelect)="checkItemClass($event,3)"></ion-radio>
-        </div>
-        <div class="div-width-100">
-          <div class="text-normal " >Hạng ghế thương gia (Business Class)</div>
-          <div class="text-normal v-align-center-custom div-min-price">
-            <div class="d-flex">
-              <div class="div-text-item-class">Quầy check-in riêng, phòng chờ đẳng cấp. Ghế ngồi khoang riêng và nhiều tiện nghi đặc biệt trên máy bay</div>
-              <div class="div-icon-arrow" (click)="expandItemClass($event,3)">
-                <img *ngIf="!divItemClass3Selected" class="img-expand " src="./assets/ic_flight_international/expand_down.svg" >
-                <img *ngIf="divItemClass3Selected" class="img-expand " src="./assets/ic_flight_international/expand_up.svg" >
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
-      <div class="d-flex m-top-12">
-        <div class="div-check-class">
-          <ion-radio value="4" [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.classSelected && _flightService.objectFilterInternational.classSelected.toLowerCase() == 'first'"
-          (ionSelect)="checkItemClass($event,4)"></ion-radio>
-        </div>
-        <div class="div-width-100">
-          <div class="text-normal " >Hạng nhất (First Class)</div>
-          <div class="text-normal v-align-center-custom div-min-price">
-            <div class="d-flex">
-              <div class="div-text-item-class">Hạng ghế phục vụ cao cấp nhất, cao hơn hạng vé thương gia, không gian riêng tư trên máy bay, ghế nằm thoải mái, đầu bếp 5 sao phục vụ bữa ăn, hệ thống giải trí, minibar...</div>
-              <div class="div-icon-arrow" (click)="expandItemClass($event,4)">
-                <img *ngIf="!divItemClass4Selected" class="img-expand " src="./assets/ic_flight_international/expand_down.svg" >
-                <img *ngIf="divItemClass4Selected" class="img-expand " src="./assets/ic_flight_international/expand_up.svg" >
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
-      <div class="d-flex m-top-12">
-        <div class="div-check-class">
-          <ion-radio value="5" [checked]="_flightService.objectFilterInternational && _flightService.objectFilterInternational.classSelected && _flightService.objectFilterInternational.classSelected.toLowerCase() == 'premiumfirst'"
-          (ionSelect)="checkItemClass($event,5)"></ion-radio>
-        </div>
-        <div class="div-width-100">
-          <div class="text-normal " >Hạng nhất đặc biệt (Premium First)</div>
-          <div class="text-normal v-align-center-custom div-min-price ">
-            <div class="d-flex">
-              <div class="div-text-item-class">Hạng nhất cao cấp giới hạn đặc biệt không phải chuyến bay nào cũng có, tùy thuộc vào lịch trình, sân bay, khu vực bay...</div>
-              <div class="div-icon-arrow" (click)="expandItemClass($event,5)">
-                <img *ngIf="!divItemClass5Selected" class="img-expand " src="./assets/ic_flight_international/expand_down.svg" >
-                <img *ngIf="divItemClass5Selected" class="img-expand " src="./assets/ic_flight_international/expand_up.svg" >
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
-    </ion-radio-group> -->
-
-    
-
-    
     <div class="div-split-panel"></div>
 
     <div class="text-title">Hãng hàng không</div>
@@ -211,7 +79,6 @@
     <div class="text-title ">Thời gian quá cảnh</div>
     <div class="div-fitler-price d-flex m-bottom-16">
       <div class="div-left text-price">{{minoverlaydisplay}} - {{maxoverlaydisplay}}</div>
-      <!-- <div class="div-right text-price">{{maxoverlaydisplay}}</div> -->
     </div>
     <div><ion-range class="flight-filter-stops" step=1 [pin]="true" [(ngModel)]="pinoverlayvalue" (ionChange)="changeoverlay($event)" [min]="minoverlayvalue" [max]="maxoverlayvalue" dualKnobs="false" [(ngModel)]="overlayobject" ></ion-range></div>
 
@@ -219,7 +86,6 @@
     <div class="text-title ">Giá vé</div>
     <div class="div-fitler-price d-flex m-bottom-16">
       <div class="div-left text-price">{{minpricedisplay}} - {{maxpricedisplay}}</div>
-      <!-- <div class="div-right text-price">{{maxpricedisplay}}</div> -->
     </div>
     <div>
       <ion-range class="flight-filter-range" step=1 [pin]="true" [(ngModel)]="pinvalue" (ionChange)="changeprice($event)" [min]="minvalue" [max]="maxvalue" dualKnobs="false" [(ngModel)]="priceobject"></ion-range>

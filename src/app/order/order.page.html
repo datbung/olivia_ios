@@ -1474,12 +1474,12 @@
                             </div>
             
                             <div class="d-flex m-top-8" *ngIf="objSummary && objSummary.custom1No && objSummary.custom1AvgPrice">
-                              <div class="text-left div-width-100">Trẻ em x<span>{{objSummary.custom1No}}</span></div>
+                              <div class="text-left div-width-100">{{objSummary.custom1Name}} x<span>{{objSummary.custom1No}}</span></div>
                               <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.custom1AvgPrice)}}</div>
                             </div>
             
                             <div class="d-flex m-top-8" *ngIf="objSummary && objSummary.custom2No && objSummary.custom2AvgPrice">
-                              <div class="text-left div-width-100">Trẻ em x<span>{{objSummary.custom2No}}</span></div>
+                              <div class="text-left div-width-100">{{objSummary.custom2Name}} x<span>{{objSummary.custom2No}}</span></div>
                               <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.custom2AvgPrice)}}</div>
                             </div>
                             <div *ngIf="trip.deal_no && trip.promotionDiscountAmount" class="d-flex m-top-8">

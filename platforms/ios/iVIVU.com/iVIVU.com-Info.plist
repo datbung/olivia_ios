@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.2.1</string>
+	<string>4.2.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -52,7 +52,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>4.2.1</string>
+	<string>4.2.2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -125,9 +125,9 @@
 		<string>pt-BR</string>
 	</array>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện lịch cho tùy chọn thêm ghi chú vào lịch cá nhân</string>
+	<string/>
 	<key>NSContactsUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện lịch cho tùy chọn thêm ghi chú vào lịch cá nhân</string>
+	<string/>
 	<key>FacebookAppID</key>
 	<string>628025334278848</string>
 	<key>FacebookDisplayName</key>
@@ -135,7 +135,7 @@
 	<key>FacebookUrlSchemeSuffix</key>
 	<string>null</string>
 	<key>FacebookHybridAppEvents</key>
-	<string>true</string>
+	<string>false</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -148,6 +148,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	
+	
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

@@ -4050,7 +4050,7 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
   }
   SearchKeyword(): Promise<any>{
     return new Promise((resolve, reject) => {
-      let url = C.urls.baseUrl.urlTicket + '/api/Category/SearchV2';
+      let url = C.urls.baseUrl.urlTicket + '/api/Category/SearchV3';
       let headers = {
         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
         apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'
