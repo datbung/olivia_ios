@@ -3,8 +3,10 @@
     <ion-row>
       <ion-col class="header-title">
         <label>Chuyến đi của tôi</label>
-          <div class="div-refresh" (click)="doRefresh(0)">
-              <img class="img-refresh" src="./assets/imgs/refresh.svg" >
+          <div class="div-refresh">
+            <img (click)="openSort()" src="./assets/imgs/ic_sort.svg">
+            <img (click)="doRefresh(0)" class="img-refresh" src="./assets/imgs/refresh.svg" >
+             
           </div>
       </ion-col>
     </ion-row>

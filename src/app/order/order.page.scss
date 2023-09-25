@@ -350,10 +350,11 @@
         font-size: 20px;
         font-weight: bold;
         .div-refresh{
+            display: flex;
             position: absolute;
             top: 0px;
             right: 0px;
-            padding: 12px;
+            // padding: 12px;
             padding-right: 16px;
         }
         .img-refresh{
@@ -1164,6 +1165,87 @@
 
     ///style ios
     ::ng-deep{
+        .cls-border-bottom .action-sheet-button-inner.sc-ion-action-sheet-ios{
+            border-bottom: solid 0.5px #bdbdbd;
+          }
+          .cls-border-bottom .action-sheet-button-inner.sc-ion-action-sheet-md{
+            border-bottom: solid 0.5px #bdbdbd;
+          }
+          @media (min-height:812px) and (max-height: 1024px) {
+            .action-sheets-tourlist-sort .alert-button-group.sc-ion-alert-ios, .action-sheets-flightsearchresult-fitler .alert-button-group.sc-ion-alert-ios{
+              margin-bottom: 30px;
+            }
+          }
+    
+          //style ios
+        .action-sheets-tourlist-sort .action-sheet-container.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-container.sc-ion-action-sheet-ios{
+          padding: 0;
+      }
+    
+      .action-sheets-tourlist-sort .action-sheet-group.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-group.sc-ion-action-sheet-ios{
+          margin: 0;
+          border-radius: 0;
+      }
+    
+      .action-sheets-tourlist-sort .action-sheet-button.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-button.sc-ion-action-sheet-ios{
+          padding: 0;
+          border-bottom: solid 0.5px #f2f2f2;
+          margin-left: 16px;
+          margin-right: 16px !important;
+          width: 92%;
+      }
+      .action-sheets-tourlist-sort .sc-ion-action-sheet-ios.selected, .action-sheets-flightsearchresult-fitler .sc-ion-action-sheet-ios.selected {
+          background-image: url('../../assets/imgs/ic_check.svg');
+          background-repeat: no-repeat;
+          background-position: right;
+          width: 92%;
+      }
+      .action-sheets-tourlist-sort .sc-ion-action-sheet-md.selected, .action-sheets-flightsearchresult-fitler .sc-ion-action-sheet-md.selected {
+        background-image: url('../../assets/imgs/ic_check.svg');
+        background-repeat: no-repeat;
+        background-position: right;
+        width: 100%;
+    }
+    
+      .action-sheets-tourlist-sort .action-sheet-title.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-title.sc-ion-action-sheet-ios{
+        font-size: 18px;
+        color: #000000;
+        line-height: 27px;
+        letter-spacing: -0.51px;
+        font-weight: 600;
+        text-align: left;
+      padding-left: 16px;
+    }
+     
+      .cls-border-bottom .action-sheet-button-inner.sc-ion-action-sheet-ios{
+          border-bottom: solid 0.5px #f2f2f2;
+      }
+    
+      .action-sheets-tourlist-sort .action-sheet-button-inner.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-button-inner.sc-ion-action-sheet-ios {
+          width: 100%;
+          height: 100%;
+          color: black;
+          font-size: 14px;
+          justify-content: left;
+      }
+      .action-sheets-tourlist-sort .action-sheet-button.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-button.sc-ion-action-sheet-ios {
+          padding: 0;
+          border-bottom: solid 0.5px #f2f2f2;
+          margin-left: 16px;
+          margin-right: 16px !important;
+          width: 92%;
+          height: 56px;
+      }
+      .action-sheets-tourlist-sort .action-sheet-selected.sc-ion-action-sheet-ios, .action-sheets-flightsearchresult-fitler .action-sheet-selected.sc-ion-action-sheet-ios{
+          background-image: url('../../assets/imgs/ic_check.svg');
+          background-repeat: no-repeat;
+          background-position: right;
+          width: 92%;
+      }
+      .action-sheets-tourlist-sort .action-sheet-wrapper.sc-ion-action-sheet-ios {
+        margin-bottom: 0;
+      }
+
         p{
             font-size: 14px;
           }

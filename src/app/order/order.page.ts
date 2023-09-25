@@ -177,6 +177,8 @@ export class OrderPage {
   expandPrice: boolean;
   ticketDownloadFiles: any=[];
   showIncludeContent: string;
+  buttonCheckin: boolean = true;
+  buttonBooking: any;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -3281,44 +3283,162 @@ export class OrderPage {
    */
   sortMytrip() {
     var se = this;
-    if (se.listMyTrips && se.listMyTrips.length > 0) {
-      se.zone.run(() => se.listMyTrips.sort(function (a, b) {
-        let direction = -1;
-        if (!a['isRequestTrip'] && !b['isRequestTrip']) {
-          if (moment(a['checkInDate']).diff(moment(b['checkInDate']), 'days') > 0) {
-            return -1 * direction;
+    if (this.activeTabTrip == 1) {
+      if (se.listMyTrips && se.listMyTrips.length > 0) {
+        se.zone.run(() => se.listMyTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-          else {
-            return 1 * direction;
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-        }
-        else if (!a['isRequestTrip'] && b['isRequestTrip']) {
-          if (moment(a['checkInDate']).diff(moment(b['start_date']), 'days') > 0) {
-            return -1 * direction;
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['start_date']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['start_date']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-          else {
-            return 1 * direction;
+        }));
+      }
+    }else{
+      if (se.listHistoryTrips && se.listHistoryTrips.length > 0) {
+        se.zone.run(() => se.listHistoryTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-        }
-        else if (a['isRequestTrip'] && !b['isRequestTrip']) {
-          if (moment(a['start_date']).diff(moment(b['checkInDate']), 'days') > 0) {
-            return -1 * direction;
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-          else {
-            return 1 * direction;
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['start_date']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['start_date']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-        } else {
-          if (moment(a['start_date']).diff(moment(b['start_date']), 'days') > 0) {
-            return -1 * direction;
-          }
-          else {
-            return 1 * direction;
-          }
-        }
-      }));
+        }));
+      }
     }
-  };
-
+    
+  }
+  sortMytripBooking() {
+    var se = this;
+    if (this.activeTabTrip == 1) {
+      if (se.listMyTrips && se.listMyTrips.length > 0) {
+        se.zone.run(() => se.listMyTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+        }));
+      }
+    }else{
+      if (se.listHistoryTrips && se.listHistoryTrips.length > 0) {
+        se.zone.run(() => se.listHistoryTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+        }));
+      }
+    }
+   
+  }
   hideloader() {
     var se = this;
     if (se.myloader) {
@@ -3947,6 +4067,8 @@ export class OrderPage {
     if (document.querySelector(".tabbar")) {
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
+    this.buttonCheckin = true;
+    this.buttonBooking = false;
     this.getdata(null, false);
   }
   SelectHistoryTrip() {
@@ -3954,6 +4076,8 @@ export class OrderPage {
     if (document.querySelector(".tabbar")) {
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
+    this.buttonCheckin = true;
+    this.buttonBooking = false;
     this.getdata(null, true);
   }
 
@@ -5114,6 +5238,8 @@ export class OrderPage {
     se.arrinsurrance = [];
     se.hasloaddata = false;
     se.loaddatadone = false;
+    this.buttonCheckin = true;
+    this.buttonBooking = false;
     se.getdata(null, false);
     setTimeout(() => {
       if (event) {
@@ -6163,6 +6289,51 @@ export class OrderPage {
         modal.present();
         
     }
+  }
+  async openSort() {
+    // if(!this.loadpricedone){
+    //   this.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
+    //   return;
+    // }
+    let actionSheet = await this.actionsheetCtrl.create({
+      cssClass: 'action-sheets-tourlist-sort',
+      buttons: [
+        {
+          text: "Ngày travel date",
+          cssClass: "btn-Checkin cls-border-bottom",
+          handler: () => {
+            this.buttonCheckin = true
+            this.buttonCheckin ? $(".btn-Checkin > span").addClass('selected') : $(".btn-Checkin > span").removeClass('selected');
+
+            this.buttonBooking = false;
+            if (this.buttonCheckin) {
+              this.sortMytrip();
+            }
+          }
+        },
+        {
+          text: "Ngày tạo booking",
+          cssClass: "btn-Booking cls-border-bottom",
+          handler: () => {
+            this.buttonBooking = true;
+            this.buttonBooking ? $(".btn-Booking > span").addClass('selected') : $(".btn-Booking > span").removeClass('selected');
+
+            this.buttonCheckin = false;
+            if (this.buttonBooking) {
+              this.sortMytripBooking();
+            }
+          }
+        }
+       
+
+      ]
+
+    });
+
+    this.buttonCheckin ? $(".btn-Checkin > span").addClass('selected') : $(".btn-Checkin > span").removeClass('selected');
+    this.buttonBooking ? $(".btn-Booking > span").addClass('selected') : $(".btn-Booking > span").removeClass('selected');
+    actionSheet.present();
+
   }
 }
 
