@@ -284,7 +284,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             //5' refresh lại api lấy mới dữ liệu
             setTimeout(()=>{
               this.reloadflighttopdeal();
-            }, 5 * 60  * 1000);
+            }, 1 * 60  * 1000);
 
             this.loadCalendarPrice();
 
@@ -1754,10 +1754,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
         })
       }
 
-      loadcachetopdeal(data){
+      loadcachetopdeal(_data){
         var se = this;
         
-        if(data && data.length >0 && data[0] && data[0].list){
+        if(_data && _data.length >0 && _data[0] && _data[0].list){
+          let data = [..._data];
           data.forEach(elementdata => {
             elementdata.list.forEach(element => {
               element.roundTrip = false;
@@ -1781,12 +1782,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           se.listflighttopdealoneway = se.listflighttopdeal.filter((item) => {return item.roundTrip = false});
           se.listflighttopdealroundtrip = se.listflighttopdeal.filter((item) => {return item.roundTrip = true});
 
-           
           if(data.length >1){
-            se.listinternationalflighttopdeal = data.splice(1,data.length -1);
+            let __data = [..._data];
+            se.listinternationalflighttopdeal = __data.splice(1,__data.length -1);
             se.showDivFlightTopDeal = se.listflighttopdeal.some(item => item.roundTrip == (this.flighttype == 'twoway'));
           }
-         
           setTimeout(()=>{
             if(se.listinternationalflighttopdeal && se.listinternationalflighttopdeal.length >0 && se.listinternationalflighttopdeal[0] && se.listinternationalflighttopdeal[0].list){
               
@@ -1850,6 +1850,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                     element.listflighttopdealoneway = element.slide;
                   }
 
+
                   if(element.listroundtrip && element.listroundtrip.length >0){
                     let slide1 = [];
                     let slide2 = [];
@@ -1880,28 +1881,29 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                       }
                     }
                     
-                    //if(!element.slide || (element.slide && element.slide.length == 0)){
-                      element.slide = [];
+                    if(!element.slideroundtrip || (element.slideroundtrip && element.slideroundtrip.length == 0)){
+                      element.slideroundtrip = [];
                       if(slide1.length >0){
-                        element.slide.push({name: 'slide1', list: slide1});
+                        element.slideroundtrip.push({name: 'slide1', list: slide1});
                       }
                       if(slide2.length >0){
-                        element.slide.push({name: 'slide2', list: slide2});
+                        element.slideroundtrip.push({name: 'slide2', list: slide2});
                       }
                       if(slide3.length >0){
-                        element.slide.push({name: 'slide3', list: slide3});
+                        element.slideroundtrip.push({name: 'slide3', list: slide3});
                       }
                       if(slide4.length >0){
-                        element.slide.push({name: 'slide4', list: slide4});
+                        element.slideroundtrip.push({name: 'slide4', list: slide4});
                       }
                       if(slide5.length >0){
-                        element.slide.push({name: 'slide5', list: slide5});
+                        element.slideroundtrip.push({name: 'slide5', list: slide5});
                       }
                       if(slide6.length >0){
-                        element.slide.push({name: 'slide6', list: slide6});
+                        element.slideroundtrip.push({name: 'slide6', list: slide6});
                       }
-                    //}
-                    element.listflighttopdealroundtrip = element.slide;
+                    }
+
+                    element.listflighttopdealroundtrip = element.slideroundtrip;
                   }
                   
                 };
@@ -1910,7 +1912,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
                   
                   se.hassomelistinteroneway = se.listinternationalflighttopdeal.some(l => l.listflighttopdealoneway) ;
                   se.hassomelistintertwoway = se.listinternationalflighttopdeal.some(l => l.listflighttopdealroundtrip) ;
+                  se.loadinterflighttopdealdone = true;
+                  se.loadflighttopdealdone = true;
                 },100)
+            }else{
+              se.loadinterflighttopdealdone = true;
             }
             
             setTimeout(()=>{
@@ -2017,6 +2023,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               
                 //console.log(se.listflighttopdealoneway);
                 //console.log(se.listflighttopdealroundtrip);
+                se.loadflighttopdealdone = true;
             },50)
             
             //console.log(se.listinternationalflighttopdeal);
@@ -2024,7 +2031,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           
 
         }else{
-          data.forEach(element => {
+          _data.forEach(element => {
             element.roundTrip = false;
             if(element.depart){
               element.fromPlaceName =  element.depart.fromPlaceName;
@@ -2040,8 +2047,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             
             element.priceDisplay = se.gf.convertNumberToString(element.price);
           });
-          se.listflighttopdeal = data.filter((item) => {return item.source == 'inbound'});
-          se.listinternationalflighttopdeal = data.filter((item) => {return item.source == 'outbound' && (!item.roundTrip || (item.roundTrip && item.return.price))});
+          se.listflighttopdeal = _data.filter((item) => {return item.source == 'inbound'});
+          se.listinternationalflighttopdeal = _data.filter((item) => {return item.source == 'outbound' && (!item.roundTrip || (item.roundTrip && item.return.price))});
         }
         
 

@@ -185,7 +185,7 @@
     </div>
 
     <div class="div-topdeal-flight" >
-        <div class="div-wrap-flighttopdeal" *ngIf=" listflighttopdeal && listflighttopdeal.length >0">
+        <div class="div-wrap-flighttopdeal" *ngIf=" (listflighttopdeal && listflighttopdeal.length >0  && loadflighttopdealdone) else loadtopdealsdk">
            
                 <div class="div-flight-topdeal m-top-16 m-bottom-16" *ngIf="flighttype == 'oneway' &&listflighttopdealoneway && listflighttopdealoneway.slide && listflighttopdealoneway.slide.length >0 ">
                     <div class="title-topdeal">Giá vé nội địa tốt nhất</div>
@@ -193,7 +193,7 @@
                 </div>
                     <!-- List 1 chiều -->
               
-                            <div *ngIf="flighttype == 'oneway' && listflighttopdealoneway && listflighttopdealoneway.slide && listflighttopdealoneway.slide.length >0"  class="div-wrap-slide">
+                            <div *ngIf="(flighttype == 'oneway' && listflighttopdealoneway && listflighttopdealoneway.slide && listflighttopdealoneway.slide.length >0 )"  class="div-wrap-slide">
                                 <div *ngFor="let itemslide of listflighttopdealoneway.slide"  class="div-wrap-itemslide">
                                             <div  *ngFor="let itemdeal of itemslide.list; let idx = index" (click)="select(itemdeal)" >
                                             <div [ngClass]="idx == itemslide.list.length-1? 'div-item-flight':'div-item-flight m-bottom-16'" >
@@ -245,7 +245,7 @@
                 </div>
                     <!-- List 2 chiều -->
             
-                            <div *ngIf="flighttype == 'twoway' && listflighttopdealroundtrip && listflighttopdealroundtrip.slide && listflighttopdealroundtrip.slide.length >0" class="div-wrap-slide">
+                            <div *ngIf="(flighttype == 'twoway' && listflighttopdealroundtrip && listflighttopdealroundtrip.slide && listflighttopdealroundtrip.slide.length >0)" class="div-wrap-slide">
                                 <div *ngFor="let itemslide of listflighttopdealroundtrip.slide"  class="div-wrap-itemslide">
                                     <div  *ngFor="let itemdeal of itemslide.list; let idx = index" (click)="select(itemdeal)">
                                         <div [ngClass]="idx == itemslide.list.length-1? 'div-item-flight':'div-item-flight m-bottom-16'" >
@@ -291,15 +291,30 @@
                                 </div>
                             </div>
                             
-                 
+                           
         </div>
+        <ng-template #loadtopdealsdk>
+            <div class="div-wrap-slide m-top-16">
+                <div class="div-wrap-itemslide">
+                    <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                </div>
+                <div class="div-wrap-itemslide">
+                    <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                </div>
+            </div>
+            
+        </ng-template>
 
             <div class="div-flightinternational-topdeal p-top-24 m-bottom-16" *ngIf="listinternationalflighttopdeal && listinternationalflighttopdeal.length >0 && ((flighttype == 'oneway' && hassomelistinteroneway) || (flighttype == 'twoway' && hassomelistintertwoway ) )">
                 <div class="title-topdeal">Giá vé quốc tế tốt nhất</div>
                 <div class="subtitle-topdeal m-bottom-16">Đảm bảo giá tốt từ 1000+ hãng bay quốc tế</div>
             </div>
 
-            <div *ngIf=" listinternationalflighttopdeal && listinternationalflighttopdeal.length >0 && ((flighttype == 'oneway' && hassomelistinteroneway) || (flighttype == 'twoway' && hassomelistintertwoway ) )">
+            <div *ngIf=" (listinternationalflighttopdeal && listinternationalflighttopdeal.length >0 && ((flighttype == 'oneway' && hassomelistinteroneway) || (flighttype == 'twoway' && hassomelistintertwoway ) ) && loadinterflighttopdealdone) else loadtopdealinternationalsdk">
 
                 <div  *ngFor="let itemgroup of listinternationalflighttopdeal; let idx = index" >
 
@@ -608,13 +623,63 @@
                 </div>
 
             </div>
+
+            <ng-template #loadtopdealinternationalsdk>
+                <div class="div-flightinternational-topdeal p-top-24 m-bottom-16">
+                    <div class="title-topdeal"><ion-skeleton-text animated style="width: 30%;height: 22px; border-radius: 4px;"></ion-skeleton-text></div>
+                    <div class="subtitle-topdeal m-bottom-16"><ion-skeleton-text animated style="width: 70%;height: 16px; border-radius: 4px;"></ion-skeleton-text></div>
+                </div>
+                <div class="div-wrap-slide m-top-8">
+                    <div class="div-wrap-itemslide">
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    </div>
+                    <div class="div-wrap-itemslide">
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    </div>
+                </div>
+
+                <div class="div-flightinternational-topdeal p-top-16 m-bottom-16">
+                    <div class="title-topdeal"><ion-skeleton-text animated style="width: 40%;height: 22px; border-radius: 4px;"></ion-skeleton-text></div>
+                    <div class="subtitle-topdeal m-bottom-16"><ion-skeleton-text animated style="width: 70%;height: 16px; border-radius: 4px;"></ion-skeleton-text></div>
+                </div>
+                <div class="div-wrap-slide m-top-8">
+                    <div class="div-wrap-itemslide">
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    </div>
+                    <div class="div-wrap-itemslide">
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    </div>
+                </div>
+
+                <div class="div-flightinternational-topdeal p-top-16 m-bottom-16">
+                    <div class="title-topdeal"><ion-skeleton-text animated style="width: 50%;height: 22px; border-radius: 4px;"></ion-skeleton-text></div>
+                    <div class="subtitle-topdeal m-bottom-16"><ion-skeleton-text animated style="width: 70%;height: 16px; border-radius: 4px;"></ion-skeleton-text></div>
+                </div>
+                <div class="div-wrap-slide m-top-8">
+                    <div class="div-wrap-itemslide">
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    </div>
+                    <div class="div-wrap-itemslide">
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 100%;height: 126px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
+                    </div>
+                </div>
+                
+            </ng-template>
     </div>
 
-    <ng-template #loadtopdealsdk>
-        <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-        <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-        <ion-skeleton-text animated style="width: 100%;height: 120px; border-radius: 4px;margin-bottom: 10px"></ion-skeleton-text>
-    </ng-template>
+    
 
     <div class="div-plan">
         <app-flighttopplan></app-flighttopplan>
