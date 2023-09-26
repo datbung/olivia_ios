@@ -6299,7 +6299,7 @@ export class OrderPage {
       cssClass: 'action-sheets-tourlist-sort',
       buttons: [
         {
-          text: "Ngày travel date",
+          text: "Ngày khởi hành",
           cssClass: "btn-Checkin cls-border-bottom",
           handler: () => {
             this.buttonCheckin = true
@@ -6312,7 +6312,7 @@ export class OrderPage {
           }
         },
         {
-          text: "Ngày tạo booking",
+          text: "Ngày đặt booking",
           cssClass: "btn-Booking cls-border-bottom",
           handler: () => {
             this.buttonBooking = true;
