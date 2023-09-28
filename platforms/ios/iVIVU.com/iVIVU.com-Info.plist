@@ -62,12 +62,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>4.2.2</string>
-	<key>FacebookAdvertiserIDCollectionEnabled</key>
-	<string>true</string>
 	<key>FacebookAppID</key>
 	<string>628025334278848</string>
-	<key>FacebookAutoLogAppEventsEnabled</key>
-	<string>true</string>
 	<key>FacebookDisplayName</key>
 	<string>iVIVU.com</string>
 	<key>FacebookHybridAppEvents</key>
@@ -106,11 +102,12 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>akamaihd.net</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
+			<key>www.recaptcha.net</key>
+			<dict/>
+			<key>m.facebook.com</key>
+			<dict/>
+			<key>graph.facebook.com</key>
+			<dict/>
 			<key>api.facebook.com</key>
 			<dict/>
 			<key>fbcdn.net</key>
@@ -118,30 +115,19 @@
 				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
-			<key>graph.facebook.com</key>
-			<dict/>
-			<key>m.facebook.com</key>
-			<dict/>
-			<key>www.recaptcha.net</key>
-			<dict/>
+			<key>akamaihd.net</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện Bluetooth cho chức năng hệ thống.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSCameraUsageDescription</key>
 	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
 	<key>NSContactsUsageDescription</key>
-	<string></string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Vui lòng cấp phép để chúng tôi có thể mang đến cho bạn những đề xuất chính xác hơn</string>
-	<key>UIBackgroundModes</key>
-	<array/>
+	<string/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -162,5 +148,21 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Ứng dụng cần truy cập thư viện Bluetooth cho chức năng hệ thống.</string>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<string>true</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<string>true</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Vui lòng cấp phép để chúng tôi có thể mang đến cho bạn những đề xuất chính xác hơn</string>
+	<key>UIBackgroundModes</key>
+	<array/>
 </dict>
 </plist>
