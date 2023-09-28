@@ -35,9 +35,18 @@
                                     <label class="rd-text" (click)="radioCheck(2)">Hà Nội</label>
                                     <ion-radio *ngIf="hasDepatureFromCanTho" value="VCA" class="rd-departure" style="padding-left:30px;width: 48px;--color-checked:#26bed6" (click)="radioCheck(3)"></ion-radio>
                                     <label *ngIf="hasDepatureFromCanTho" class="rd-text" (click)="radioCheck(3)">Cần Thơ</label>
+                                    <ion-radio  value="KHAC" class="rd-departure" style="padding-left:30px;width: 48px;--color-checked:#26bed6" (click)="radioCheck(4)"></ion-radio>
+                                    <label class="rd-text" (click)="radioCheck(4)">Khác</label>
                             </ion-radio-group>
                             
                     </ion-list>
+                </ion-row>
+            </div>
+            <div class="hotel-request-name" *ngIf="location == 'KHAC'">
+                <ion-row>
+                    <ion-item  style="--padding-start: 0px;width: 100%;margin: 0 5px;">
+                        <ion-input [(ngModel)]="textOther" placeholder="Nhập địa điểm khởi hành để iVIVU tư vấn ngay" type="text" (ionInput)="inputFocusOther($event)"  required></ion-input>
+                      </ion-item>
                 </ion-row>
             </div>
             <div class="hotel-request-name">
