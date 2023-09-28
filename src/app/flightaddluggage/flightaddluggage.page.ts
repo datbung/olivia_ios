@@ -59,6 +59,10 @@ export class FlightaddluggagePage implements OnInit {
   hasDepartLuggage: boolean;
   hasReturnLuggage: boolean;
   roundtrip: number;
+  emptyAdultLugReturn: any;
+  emptyAdultLug: any;
+  emptyChildLug: any;
+  emptyChildLugReturn: any;
   constructor(public platform: Platform,public navCtrl: NavController, public modalCtrl: ModalController,public valueGlobal:ValueGlobal,
     public searchhotel: SearchHotel, public gf: GlobalFunction,
     public actionsheetCtrl: ActionSheetController,
@@ -108,7 +112,7 @@ export class FlightaddluggagePage implements OnInit {
       
       if(this.departLuggage && this.departLuggage.length>0){
         this.departLuggage.forEach(element => {
-          element.priceshow = "x "+ (this.gf.convertNumberToString(element.amount)||0) +"đ";
+          element.priceshow = " "+ (this.gf.convertNumberToString(element.amount)||0) +"đ";
           if(!element.quantity){
             element.quantity = 0;
           }else{
@@ -129,7 +133,7 @@ export class FlightaddluggagePage implements OnInit {
         //     this.tabluggage = 2;
         // }
         this.returnLuggage.forEach(element => {
-          element.priceshow = "x "+ (this.gf.convertNumberToString(element.amount)||0) +"đ";
+          element.priceshow = " "+ (this.gf.convertNumberToString(element.amount)||0) +"đ";
           if(!element.quantity){
             element.quantity = 0;
           }else{
@@ -148,7 +152,7 @@ export class FlightaddluggagePage implements OnInit {
       if(this.totalprice >0){
         this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
       }
-      
+      this.checkLug();
       
     }
   }
@@ -294,4 +298,77 @@ export class FlightaddluggagePage implements OnInit {
     })
     
 }
+
+  choiceLuggage(pax, item, index, indexpax, type, isdepart){
+    if(type==1){
+      if(isdepart){
+        $('#itemluguc_adult_'+indexpax).removeClass('selected');
+      }else {
+        $('#itemluguc_return_adult_'+indexpax).removeClass('selected');
+      }
+    }else{
+      if(isdepart){
+        $('#itemluguc_child_'+indexpax).removeClass('selected');
+      }else {
+        $('#itemluguc_return_child_'+indexpax).removeClass('selected');
+      }
+    }
+    this.zone.run(()=>{
+      setTimeout(()=>{
+        if(isdepart){
+          pax.itemLug = item;
+          pax.indexLugSelected = index;
+        }else {
+          pax.itemLugReturn = item;
+          pax.indexLugReturnSelected = index;
+        }
+
+        this.checkLug();
+      },10)
+    })
+  }
+  unchoiceLug(pax, item, index, indexpax, type, isdepart){
+    if(type==1){
+      if(isdepart){
+        $('#itemluguc_adult_'+indexpax).addClass('selected');
+        pax.itemLug = null;
+        pax.indexLugSelected = -1;
+      }else {
+        $('#itemluguc_return_adult_'+indexpax).addClass('selected');
+        pax.itemLugReturn = null;
+        pax.indexLugReturnSelected = -1;
+      }
+      
+    }else{
+      if(isdepart){
+        $('#itemluguc_child_'+indexpax).addClass('selected');
+        pax.itemLug = null;
+        pax.indexLugSelected = -1;
+      }else {
+        $('#itemluguc_return_child_'+indexpax).addClass('selected');
+        pax.itemLugReturn = null;
+        pax.indexLugReturnSelected = -1;
+      }
+    }
+    this.checkLug();
+  }
+
+  checkLug(){
+    if(this.departLuggage){
+      this.emptyAdultLug = this._flightService.itemFlightCache.adults && this._flightService.itemFlightCache.adults.length >0 && !this._flightService.itemFlightCache.adults.some(a => a.itemLug);
+      this.emptyChildLug = this._flightService.itemFlightCache.childs && this._flightService.itemFlightCache.childs.length >0 && !this._flightService.itemFlightCache.childs.some(a => a.itemLug);
+    }
+    if(this.returnLuggage){
+      this.emptyAdultLugReturn = this._flightService.itemFlightCache.adults && this._flightService.itemFlightCache.adults.length >0 && !this._flightService.itemFlightCache.adults.some(a => a.itemLugReturn);
+      this.emptyChildLugReturn = this._flightService.itemFlightCache.childs && this._flightService.itemFlightCache.childs.length >0 && !this._flightService.itemFlightCache.childs.some(a => a.itemLugReturn);
+    }
+    
+    this.totalprice = this._flightService.itemFlightCache.adults.reduce((total,a)=>{ return total + (a.itemLug ? (a.itemLug.amount) : 0); }, 0);
+    this.totalprice += this._flightService.itemFlightCache.childs.reduce((total,c)=>{ return total + (c.itemLug ? (c.itemLug.amount) : 0); }, 0);
+    if(this.returnLuggage && this.returnLuggage.length >0){
+      this.totalprice += this._flightService.itemFlightCache.adults.reduce((total,a)=>{ return total + (a.itemLugReturn ? (a.itemLugReturn.amount) : 0); }, 0);
+      this.totalprice += this._flightService.itemFlightCache.childs.reduce((total,c)=>{ return total + (c.itemLugReturn ? (c.itemLugReturn.amount) : 0); }, 0);
+    }
+    this.totalpricedisplay = (this.gf.convertNumberToString(this.totalprice)||0) + "đ";
+  }
 }

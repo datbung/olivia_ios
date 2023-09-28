@@ -29,35 +29,52 @@
       <ion-slides #slideTab (ionSlideDidChange)="slidetabchange()" [options]="slideOpts">
         <!-- Chiều đi -->
         <ion-slide style="display: block;" *ngIf="(departLuggage && departLuggage.length>0) else nodepartluggage">
-            <div *ngIf="departLuggage && departLuggage.length>0">
-              <!-- <div class="text-title ">Chiều đi</div> -->
-              <div *ngFor="let lug of departLuggage">
-                  <div class="d-flex" *ngIf="lug.weight >0">
-                    <div class="text-left-lug div-center-vertical">
-                      <label class="text-room" class="text-room">{{lug.weight}}kg</label>
-                      <label *ngIf="lug.title.indexOf('Oversize') != -1" class="text-oversize">Quá kích cỡ</label>
+            <div *ngIf="departLuggage && departLuggage.length>0 && _flightService.itemFlightCache.adults && _flightService.itemFlightCache.adults.length >0">
+                <div class=" m-top-16" *ngFor="let itemAdult of _flightService.itemFlightCache.adults; let idxa = index">
+                  <div class="text-normal div-align-end">{{itemAdult.genderdisplay}}. <span class="text-bold m-left-4">{{itemAdult.name}}</span></div>
+                  
+                  <div class="d-flex div-wrap-item-luggage">
+                    <div id="itemluguc_adult_{{idxa}}" [ngClass]="emptyAdultLug ? 'div-item-notselected div-item-luggage selected' : 'div-item-notselected div-item-luggage '" (click)="unchoiceLug(itemAdult, lug, idx, idxa, 1, true)">
+                      <div class="div-lug-name">Không có</div>
+                      <div class="div-lug-weight">0 đ</div>
                     </div>
-      
-                    <div class="text-price div-center-vertical">
-                      <label class="text-room" class="text-room">{{lug.priceshow}}</label>
+                    <div *ngFor="let lug of departLuggage; let idx = index" (click)="choiceLuggage(itemAdult, lug, idx, idxa, 1, true)">
+                      <div id="itemlug_adult_{{idxa}}" [ngClass]="itemAdult.itemLug && itemAdult.indexLugSelected == idx ? 'd-flex div-item-luggage selected' : 'd-flex div-item-luggage'" *ngIf="lug.weight >0" >
+                          <div class="div-lug-name">{{lug.weight}} kg <span class="text-normal" *ngIf="lug.title.indexOf('Oversize') != -1"> (HLQK)</span></div>
+                          <div class="div-lug-weight">{{lug.priceshow}}</div>
+                      </div>
                     </div>
-      
-                    <div class="div-justify-center">
-                      <div  class="t-center ic-minus" (click)="minusroom(lug,true)">
-                        <div >
-                          <img *ngIf="!lug.quantity" class="cls-hidden" src="./assets/ic_facility/ic_minus.svg">
-                          <img *ngIf="lug.quantity" src="./assets/ic_facility/ic_minus.svg">
+                  </div>
+                  
+                </div>
+
+                <div *ngIf="_flightService.itemFlightCache.childs && _flightService.itemFlightCache.childs.length >0">
+                  <div class=" m-top-16" *ngFor="let itemChild of _flightService.itemFlightCache.childs; let idxc = index">
+                    <div *ngIf="!itemChild.isInfant else divinfant">
+                      <div class="text-normal div-align-end">{{itemChild.genderdisplay}}. <span class="text-bold m-left-4">{{itemChild.name}}</span></div>
+                      <div class="d-flex div-wrap-item-luggage">
+                        <div id="itemluguc_child_{{idxc}}" [ngClass]="emptyChildLug ? 'div-item-notselected div-item-luggage selected' :'div-item-notselected div-item-luggage '" (click)="unchoiceLug(itemChild, lug, idx, idxc, 2, true)">
+                          <div class="div-lug-name">Không có</div>
+                          <div class="div-lug-weight">0 đ</div>
+                        </div>
+                        <div *ngFor="let lug of departLuggage; let idx = index" (click)="choiceLuggage(itemChild, lug, idx, idxc, 2, true)" >
+                          <div id="itemlug_child_{{idxc}}" [ngClass]="itemChild.itemLug && itemChild.indexLugSelected == idx ? 'd-flex div-item-luggage selected' : 'd-flex div-item-luggage'" *ngIf="lug.weight >0" >
+                              <div class="div-lug-name">{{lug.weight}} kg  <span class="text-normal" *ngIf="lug.title.indexOf('Oversize') != -1"> (HLQK)</span></div>
+                              <div class="div-lug-weight">{{lug.priceshow}}</div>
+                          </div>
                         </div>
                       </div>
-                      <div class="div-center-vertical">{{lug.quantity}}</div>
-                      <div text-right class="t-center ic-plus" (click)="plusroom(lug,true)">
-                        <img  src="./assets/ic_facility/ic_plus.svg">
-                      </div>
+                      
                     </div>
+                    <ng-template #divinfant>
+                      <div class="text-normal div-align-end">{{itemChild.genderdisplay}}. <span class="text-bold m-left-4">{{itemChild.name}}</span></div>
+                      <div class="m-top-8 text-normal">Trẻ sơ sinh không đặt hành lý</div>
+                    </ng-template>
+                    
+                  </div>
                 </div>
-                  
                 
-              </div>
+              
             </div>
          
         </ion-slide>
@@ -89,35 +106,53 @@
 
         <!-- Chiều về -->
         <ion-slide style="display: block;" *ngIf="(returnLuggage && returnLuggage.length>0)  else noreturnluggage">
-            <div *ngIf="returnLuggage && returnLuggage.length>0">
-              <div *ngFor="let lug of returnLuggage">
-                <div class="d-flex" *ngIf="lug.weight >0">
-                  <div class="text-left-lug div-center-vertical">
-                    <label class="text-room" class="text-room">{{lug.weight}}kg</label>
-                    <label *ngIf="lug.title.indexOf('Oversize') != -1" class="text-oversize">Quá kích cỡ</label>
+           
+            <div *ngIf="returnLuggage && returnLuggage.length>0 && _flightService.itemFlightCache.adults && _flightService.itemFlightCache.adults.length >0">
+              <div class=" m-top-16" *ngFor="let itemAdult of _flightService.itemFlightCache.adults; let idxa = index">
+                <div class="text-normal div-align-end">{{itemAdult.genderdisplay}}. <span class="text-bold m-left-4">{{itemAdult.name}}</span></div>
+                
+                <div class="d-flex div-wrap-item-luggage">
+                  <div id="itemluguc_return_adult_{{idxa}}" [ngClass]="emptyAdultLugReturn ? 'div-item-notselected div-item-luggage selected' : 'div-item-notselected div-item-luggage'" (click)="unchoiceLug(itemAdult, lug, idx, idxa, 1, false)">
+                    <div class="div-lug-name">Không có</div>
+                    <div class="div-lug-weight">0 đ</div>
                   </div>
-    
-                  <div class="text-price div-center-vertical">
-                    <label class="text-room" class="text-room">{{lug.priceshow}}</label>
-                  </div>
-    
-                  <div class="div-justify-center">
-                    <div  class="t-center ic-minus" (click)="minusroom(lug,false)">
-                      <div >
-                        <img *ngIf="!lug.quantity" class="cls-hidden" src="./assets/ic_facility/ic_minus.svg">
-                        <img *ngIf="lug.quantity" src="./assets/ic_facility/ic_minus.svg">
-                      </div>
-                    </div>
-                    <div class="div-center-vertical">{{lug.quantity}}</div>
-                    <div text-right class="t-center ic-plus" (click)="plusroom(lug,false)">
-                      <img  src="./assets/ic_facility/ic_plus.svg">
+                  <div *ngFor="let lug of returnLuggage; let idx = index" (click)="choiceLuggage(itemAdult, lug, idx, idxa, 1, false)">
+                    <div id="itemlug_return_adult_{{idxa}}" [ngClass]="itemAdult.itemLugReturn && itemAdult.indexLugReturnSelected == idx ? 'd-flex div-item-luggage selected' : 'd-flex div-item-luggage'" *ngIf="lug.weight >0" >
+                        <div class="div-lug-name">{{lug.weight}} kg <span class="text-normal" *ngIf="lug.title.indexOf('Oversize') != -1"> (HLQK)</span></div>
+                        <div class="div-lug-weight">{{lug.priceshow}}</div>
                     </div>
                   </div>
                 </div>
-                  
                 
               </div>
-            </div>
+              <div *ngIf="_flightService.itemFlightCache.childs && _flightService.itemFlightCache.childs.length >0">
+                <div class=" m-top-16" *ngFor="let itemChild of _flightService.itemFlightCache.childs; let idxc = index">
+                  <div *ngIf="!itemChild.isInfant else divinfant">
+                    <div class="text-normal div-align-end">{{itemChild.genderdisplay}}. <span class="text-bold m-left-4">{{itemChild.name}}</span></div>
+                    <div class="d-flex div-wrap-item-luggage">
+                      <div id="itemluguc_return_child_{{idxc}}" [ngClass]="emptyChildLugReturn ? 'div-item-notselected div-item-luggage selected' : 'div-item-notselected div-item-luggage' " (click)="unchoiceLug(itemChild, lug, idx, idxc, 2, false)">
+                        <div class="div-lug-name">Không có</div>
+                        <div class="div-lug-weight">0 đ</div>
+                      </div>
+                      <div *ngFor="let lug of returnLuggage; let idx = index" (click)="choiceLuggage(itemChild, lug, idx, idxc, 2, false)" >
+                        <div id="itemlug_return_child_{{idxc}}" [ngClass]="itemChild.itemLugReturn && itemChild.indexLugReturnSelected == idx ? 'd-flex div-item-luggage selected' : 'd-flex div-item-luggage'" *ngIf="lug.weight >0" >
+                            <div class="div-lug-name">{{lug.weight}} kg  <span class="text-normal" *ngIf="lug.title.indexOf('Oversize') != -1"> (HLQK)</span></div>
+                            <div class="div-lug-weight">{{lug.priceshow}}</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <ng-template #divinfant>
+                    <div class="text-normal div-align-end">{{itemChild.genderdisplay}}. <span class="text-bold m-left-4">{{itemChild.name}}</span></div>
+                    <div class="m-top-8 text-normal">Trẻ sơ sinh không đặt hành lý</div>
+                  </ng-template>
+                  
+                </div>
+              </div>
+              
+            
+          </div>
            
           </ion-slide>
           <ng-template #noreturnluggage>
@@ -151,8 +186,8 @@
     <div class="div-footer d-flex-footer">
       <div class="div-total">
         <div class="d-flex-footer text-sub-total" *ngIf="(departLuggage && departLuggage.length>0) || (returnLuggage && returnLuggage.length>0)">
-          <div *ngIf="(departLuggage && departLuggage.length>0)">Đi: {{quantitydisplay}}</div>
-          <div *ngIf="returnLuggage && returnLuggage.length>0 ">| Về: {{quantityreturndisplay}}</div>
+          <div *ngIf="(departLuggage && departLuggage.length>0) || (returnLuggage && returnLuggage.length>0)">Hành lý mua thêm</div>
+          <!-- <div *ngIf="returnLuggage && returnLuggage.length>0 ">| Về: {{quantityreturndisplay}}</div> -->
         </div>
         <div class="text-total" *ngIf="totalprice >0">{{totalpricedisplay}} 
       </div>
