@@ -182,24 +182,34 @@ export class FlightadddetailsPage implements OnInit {
             //se.gf.gaSetScreenName('flightadddetails');
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
-        this.zone.run(() => {
-          if(this._flightService.itemFlightCache.allowCheckinOnline){
-            this.allowCheckinOnline = this._flightService.itemFlightCache.allowCheckinOnline;
-            this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline;
+        
+          // if(this._flightService.itemFlightCache.allowCheckinOnline){
+          //   this.allowCheckinOnline = this._flightService.itemFlightCache.allowCheckinOnline;
+          //   this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline;
+          // }else{
+          //   this.allowCheckinOnline = false;
+          //   this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline||'';
+          // }
+        let dataBooking = this._flightService.itemFlightCache.dataBooking;
+          if(dataBooking && dataBooking.allowRequestCheckinOnline){
+            this._flightService.itemFlightCache.allowCheckinOnline = dataBooking.allowRequestCheckinOnline.allowCheckin;
+            this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline.note;
+            this.allowCheckinOnline = dataBooking.allowRequestCheckinOnline.allowCheckin;
+            this.textCheckinOnline = dataBooking.allowRequestCheckinOnline.note;
           }else{
+            this._flightService.itemFlightCache.allowCheckinOnline = false;
             this.allowCheckinOnline = false;
-            this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline||'';
+            this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline && dataBooking.allowRequestCheckinOnline.note ? dataBooking.allowRequestCheckinOnline.note : '';
+            this.textCheckinOnline =dataBooking.allowRequestCheckinOnline && dataBooking.allowRequestCheckinOnline.note ? dataBooking.allowRequestCheckinOnline.note : '';
           }
           
-        })
         
+        this.checkAllowCheckinOnline();
     }
     //pdanh 02-08-2023: Thêm rule valid checkin online
     checkAllowCheckinOnline(){
-      debugger
       this.gf.getSummaryBooking(this._flightService.itemFlightCache).then((data)=>{
         if(data && data.allowRequestCheckinOnline){
-          console.log(data);
           this.zone.run(() => {
             this.allowCheckinOnline = data.allowCheckin;
             this.textCheckinOnline = data.allowRequestCheckinOnline.note;

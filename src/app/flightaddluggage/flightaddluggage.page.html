@@ -28,7 +28,7 @@
     <div class="content-flightaddluggage">
       <ion-slides #slideTab (ionSlideDidChange)="slidetabchange()" [options]="slideOpts">
         <!-- Chiều đi -->
-        <ion-slide style="display: block;" *ngIf="(departLuggage && departLuggage.length>0) else nodepartluggage">
+        <ion-slide style="display: block;width: 100%;" *ngIf="(departLuggage && departLuggage.length>0) else nodepartluggage">
             <div *ngIf="departLuggage && departLuggage.length>0 && _flightService.itemFlightCache.adults && _flightService.itemFlightCache.adults.length >0">
                 <div class=" m-top-16" *ngFor="let itemAdult of _flightService.itemFlightCache.adults; let idxa = index">
                   <div class="text-normal div-align-end">{{itemAdult.genderdisplay}}. <span class="text-bold m-left-4">{{itemAdult.name}}</span></div>
@@ -79,21 +79,21 @@
          
         </ion-slide>
         <ng-template #nodepartluggage>
-          <ion-slide style="display: block;" *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 && departLuggage.length ==0 && !_flightService.itemFlightCache.isApiDirect)">
+          <ion-slide style="display: block;width: 100%;" *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length <=4 && departLuggage.length ==0 && !_flightService.itemFlightCache.isApiDirect)">
             <div class="div-empty text-center">
               <img class="img-empty-lug" src="./assets/ic_flight/luggage_empty.svg">
             </div>
             <div class="div-text-empty text-center div-width-100 m-top-16">Đã bao gồm trong vé máy bay ({{ departConditionInfo.luggageSigned }} kg/1 khách).</div>
           </ion-slide>
 
-          <ion-slide style="display: block;" *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && departLuggage.length ==0 && _flightService.itemFlightCache.isApiDirect)">
+          <ion-slide style="display: block;width: 100%;" *ngIf="(departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && departLuggage.length ==0 && _flightService.itemFlightCache.isApiDirect)">
             <div class="div-empty text-center">
               <img class="img-empty-lug" src="./assets/ic_flight/luggage_empty.svg">
             </div>
             <div class="div-text-empty text-center div-width-100 m-top-16">Đã bao gồm trong vé máy bay ({{ departConditionInfo.luggageSigned }}).</div>
           </ion-slide>
          
-            <ion-slide style="display: block;" *ngIf="(departConditionInfo && !departConditionInfo.luggageSigned && departLuggage.length ==0)">
+            <ion-slide style="display: block;width: 100%;" *ngIf="(departConditionInfo && !departConditionInfo.luggageSigned && departLuggage.length ==0)">
               <div class="div-empty text-center">
                 <img class="img-empty-lug" src="./assets/ic_flight/luggage_empty.svg">
               </div>
@@ -105,7 +105,7 @@
         
 
         <!-- Chiều về -->
-        <ion-slide style="display: block;" *ngIf="(returnLuggage && returnLuggage.length>0)  else noreturnluggage">
+        <ion-slide style="display: block;width: 100%;" *ngIf="(returnLuggage && returnLuggage.length>0)  else noreturnluggage">
            
             <div *ngIf="returnLuggage && returnLuggage.length>0 && _flightService.itemFlightCache.adults && _flightService.itemFlightCache.adults.length >0">
               <div class=" m-top-16" *ngFor="let itemAdult of _flightService.itemFlightCache.adults; let idxa = index">
@@ -156,21 +156,21 @@
            
           </ion-slide>
           <ng-template #noreturnluggage>
-            <ion-slide style="display: block;" *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && returnLuggage.length == 0 && !_flightService.itemFlightCache.isApiDirect)">
+            <ion-slide style="display: block;width: 100%;" *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && returnLuggage.length == 0 && !_flightService.itemFlightCache.isApiDirect)">
               <div class="div-empty text-center">
                 <img class="img-empty-lug" src="./assets/ic_flight/luggage_empty.svg">
               </div>
               <div class="div-text-empty text-center div-width-100 m-top-16">Đã bao gồm trong vé máy bay ({{ returnConditionInfo.luggageSigned }} kg/1 khách).</div>
             </ion-slide>
 
-            <ion-slide style="display: block;" *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && returnLuggage.length == 0 && _flightService.itemFlightCache.isApiDirect) ">
+            <ion-slide style="display: block;width: 100%;" *ngIf="(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && returnLuggage.length == 0 && _flightService.itemFlightCache.isApiDirect) ">
               <div class="div-empty text-center">
                 <img class="img-empty-lug" src="./assets/ic_flight/luggage_empty.svg">
               </div>
               <div class="div-text-empty text-center div-width-100 m-top-16">Đã bao gồm trong vé máy bay ({{ returnConditionInfo.luggageSigned }}).</div>
             </ion-slide>
               
-                <ion-slide style="display: block;" *ngIf="(returnConditionInfo && !returnConditionInfo.luggageSigned && returnLuggage.length ==0)">
+                <ion-slide style="display: block;width: 100%;" *ngIf="(returnConditionInfo && !returnConditionInfo.luggageSigned && returnLuggage.length ==0)">
                   <div class="div-empty text-center">
                     <img class="img-empty-lug" src="./assets/ic_flight/luggage_empty.svg">
                   </div>

@@ -17,7 +17,7 @@ import { tourService } from 'src/app/providers/tourService';
 })
 export class HomeTourPage implements OnInit {
   itemSearch: any;
-  totalSale: any;
+  totalSale: any='99';
   
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,

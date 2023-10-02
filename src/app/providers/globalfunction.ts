@@ -2229,6 +2229,14 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
  
      (await this.loader).present();
    }
+   async showLoadingMessageWithTimeout(msg){
+    this.loader = this.loadCtrl.create({
+       message: msg,
+       duration: 3000
+     });
+ 
+     (await this.loader).present();
+   }
  
    async hideLoadingMessage(){
       (await (this.loader)).dismiss();

@@ -89,7 +89,7 @@ export class Tab4Page implements OnInit{
   }
   loadUserNotificationStatus() {
     var se = this;
-    if (!this.networkProvider.isOnline()) {
+    if (!this.networkProvider.isOnline() && this.platform.is('cordova')) {
       this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
       return;
     }
@@ -212,7 +212,7 @@ export class Tab4Page implements OnInit{
      */
     loadUserNotification(){
       var se = this;
-      if (!this.networkProvider.isOnline()) {
+      if (!this.networkProvider.isOnline()&& this.platform.is('cordova')) {
         this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
         return;
       }

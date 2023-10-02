@@ -408,9 +408,9 @@ export class Tab1Page implements OnInit {
       se._mytripservice.rootPage = "homehotel";
     }
     
-    if(se.activeTab ==1){
-      return;
-    }
+    // if(se.activeTab ==1){
+    //   return;
+    // }
     this.storage.get('arrHistory').then((data: any) => {
       if (data) {
         this.arrHistory = data;
@@ -2818,14 +2818,20 @@ export class Tab1Page implements OnInit {
 
   ionViewDidEnter() {
     try {
-      this.codePush.notifyApplicationReady().then(()=>{
-        this.codePush.checkForUpdate().then((data)=>{
-            this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
-
-            });
-             this.valueGlobal.updatedLastestVersion = true;
+      if(!this.valueGlobal.updatedLastestVersion){
+        this.codePush.notifyApplicationReady().then(()=>{
+            this.codePush.checkForUpdate().then((data)=>{
+              if(data){
+                this.showAlertUpdate('Vui lòng tải bản cập nhật mới nhất!');
+                // this.codePush.sync({ installMode: InstallMode.ON_NEXT_RESUME, minimumBackgroundDuration: 60 * 2 }, this.codePushStatusDidChange).subscribe((syncStatus) => {
+                  
+                // });
+                this.valueGlobal.updatedLastestVersion = true;
+              }
+              
+          })
         })
-      })
+      }
     } catch (error) {
       let objError = {
         page: 'appcomponent',

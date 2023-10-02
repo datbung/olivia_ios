@@ -662,19 +662,21 @@ export class FlightaddservicePage implements OnInit {
         }
       });
       
-      if(chocieDepartLuggage && chocieDepartLuggage.length>0){
-        this.departLuggage = chocieDepartLuggage;
-          this.zone.run(()=>{
-              this.hasdepartluggage = true;
-              this.showbuttonluggage = false;
-          })
-      }else{
-        this.departLuggage = [];
-          this.zone.run(()=>{
-              this.hasdepartluggage = false;
-              this.showbuttonluggage = true;
-          })
-      }
+      setTimeout(()=>{
+        if(chocieDepartLuggage && chocieDepartLuggage.length>0){
+          this.departLuggage = chocieDepartLuggage;
+            this.zone.run(()=>{
+                this.hasdepartluggage = true;
+                this.showbuttonluggage = false;
+            })
+        }else{
+            this.zone.run(()=>{
+                this.hasdepartluggage = false;
+                this.showbuttonluggage = true;
+            })
+        }
+      },50)
+      
       
       //check chiều về
       if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.returnFlight){
@@ -699,7 +701,6 @@ export class FlightaddservicePage implements OnInit {
                     this.showbuttonluggage = false;
                 })
             }else{
-              this.returnLuggage = [];
                 this.zone.run(()=>{
                     this.hasreturnluggage = false;
                     this.showbuttonluggage = true;
@@ -1008,6 +1009,7 @@ export class FlightaddservicePage implements OnInit {
                   this.showbuttonluggage = false;
                   totalprice += departluggageprice;
               }
+             
   
               if(returnluggageprice >0){
                   this.hasreturnluggage = true;

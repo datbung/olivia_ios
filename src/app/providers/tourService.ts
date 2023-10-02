@@ -64,7 +64,7 @@ export class tourService{
   itemDepartureCalendar :any = [];
   //tourService: { Adult: number; AllotmentDate: string; AllotmentNo: number; AvaibleNo: number; BlackOut: boolean; BlockedNo: number; CommissionAdult: number; ContractName: string; Cutoff: boolean; DepartureTime: string[]; Id: number; IsHoliday: boolean; IsSpecial: boolean; PrepaidNo: number; PriceAdult: number; PriceAdultAvg: number; Status: string; UsedNo: number; AllotmentDateStr: string; PriceAdultAvgStr: string; IsMinPrice: boolean; };
   itemShowList: any;
-  listTopSale: any;
+  listTopSale: any=[];
   itemSearchDepature: any;
   itemSearchDestination:any;
   totalPrice: number;

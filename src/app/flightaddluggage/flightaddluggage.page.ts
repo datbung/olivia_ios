@@ -162,23 +162,14 @@ export class FlightaddluggagePage implements OnInit {
   }
 
   goback(){
-    if(!this.hasDepartLuggage){
-      if(this.departLuggage && this.departLuggage.length >0){
-        this.departLuggage.forEach(element => {
-            element.quantity = 0;
-        });
-      }
-      
-    }
-
-    if(!this.hasReturnLuggage){
-      if(this.returnLuggage && this.returnLuggage.length >0){
-        this.returnLuggage.forEach(element => {
-            element.quantity = 0;
-        });
-      }
-      
-    }
+    this._flightService.itemFlightCache.adults.forEach(element => {
+      element.itemLug = null;
+      element.itemLugReturn = null;
+    });
+    this._flightService.itemFlightCache.childs.forEach(elementc => {
+      elementc.itemLug = null;
+      elementc.itemLugReturn = null;
+    });
 
     this.navCtrl.navigateBack('/flightaddservice');
   }
