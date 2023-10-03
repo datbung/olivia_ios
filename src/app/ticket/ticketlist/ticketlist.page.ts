@@ -76,20 +76,31 @@ export class TicketListPage implements OnInit {
       if (this.ticketService.itemTicketTopic && this.ticketService.itemTicketTopic.topicId) {
         // this.loadTicketList(this.ticketService.itemTicketTopic.topicId, 0);
         this.name = this.ticketService.itemTicketTopic.topicName
+        this.gf.SearchKeyword().then((data) => {
+          if (data) {
+            this.setData(1);
+          }
+        })
       
       }
 
     } else if (this.status == 1){
       this.name =  this.ticketService.itemShowList.name;
+      this.gf.SearchKeyword().then((data) => {
+        if (data) {
+          this.setData(1);
+        }
+      })
     } else if (this.status == 2){
-      
-      this.name =  "Kết quả tìm kiếm";
+      this.gf.SearchKeyword().then((data) => {
+        if (data) {
+          this.setData(1);
+          this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
+        }
+      })
+
     }
-    this.gf.SearchKeyword().then((data) => {
-      if (data) {
-        this.setData(1);
-      }
-    })
+ 
   }
 
   loadData() {
@@ -111,8 +122,9 @@ export class TicketListPage implements OnInit {
     } else if (this.status == 1){
       this.name =  this.ticketService.itemShowList.name;
     } else if (this.status == 2){
-      this.name =  "Kết quả tìm kiếm";
+      this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
     }
+    this.ticketService.countFilter = 1;
     this.gf.SearchKeyword().then((data) => {
       if (data) {
         this.loaddatadone = true;
@@ -438,7 +450,7 @@ export class TicketListPage implements OnInit {
         this.arrTopic.push(...matchingTopic);
       }
       this.ticketService.input = "";
-      this.name = "Kết quả tìm kiếm";
+      this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
     }
 
   }
@@ -447,6 +459,7 @@ export class TicketListPage implements OnInit {
     this.openFilter();
   }
   deleteFilter(stt,param){
+    this.ticketService.countFilter = 0;
     // 0:region 1:topic
     if (stt == 0) {
       if (param.isRegion == true) {
@@ -472,9 +485,11 @@ export class TicketListPage implements OnInit {
       this.ticketService.regionFilters =  this.ticketService.regionFilters.filter(item => item!=this.ticketService.input.id);
       this.ticketService.input = "";
     }
+    this.ticketService.countFilter = this.ticketService.topicfilters.length + this.ticketService.regionFilters.length;
     this.gf.SearchKeyword().then((data) => {
       if (data) {
         this.loaddatadone = true;
+        this.name = "Kết quả tìm kiếm ("+this.ticketService.slideData.length+")";
       }
     })
   }

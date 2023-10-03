@@ -357,7 +357,7 @@
     </div>
     <div [ngClass]="blogtrips.length > 0 ? 'title-padding p-left-16 p-top-21' : 'title-padding p-left-16 p-top-30'" style="background-color: #f2f2f2;" *ngIf="slideData1.length >0">
       <ion-label class="text-title2">
-        Ưu đãi tốt nhất hôm nay
+        Combo tốt nhất hôm nay
       </ion-label>
       <div style="margin-top: 5px;text-align: right;float: right;background-color: #f2f2f2;">
         <ion-label (click)="seemoredeal()" style="color: #26bed6">
@@ -1003,15 +1003,15 @@
   </div>
 </div>
 
-<div [ngClass]="activeTab ==1 ? 'div-wraper-flight cls-visible' : 'div-wraper-flight cls-disabled' " style="height: 100%">
+<div *ngIf="activeTab ==1" [ngClass]="activeTab ==1 ? 'div-wraper-flight cls-visible' : 'div-wraper-flight cls-disabled' " style="height: 100%">
   <app-homeflight ></app-homeflight>
 </div>
 
-<div [ngClass]="activeTab ==2 ? 'div-wraper-combo cls-visible' :  'div-wraper-combo cls-disabled'" style="height: auto;">
+<div *ngIf="activeTab ==2" [ngClass]="activeTab ==2 ? 'div-wraper-combo cls-visible' :  'div-wraper-combo cls-disabled'" style="height: auto;">
   <app-hometour></app-hometour>
 </div>
 
-<div [ngClass]="activeTab ==3 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
+<div *ngIf="activeTab ==3" [ngClass]="activeTab ==3 ? 'div-wraper-ticket cls-visible' :  'div-wraper-ticket cls-disabled'" style="height: 100%;">
   <app-hometicket></app-hometicket>
 </div>
 

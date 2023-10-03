@@ -383,7 +383,7 @@ export class OrderRequestAddluggagePaymentBankPage implements OnInit {
       this.ischeckhd = true;
       this.ischecktextend = true;
       this.ischecktext = false;
-      this.text = "NH TM CP Đầu Tư và Phát Triển Việt Nam (BIDV)<br>Chi Nhánh 02, Tp.HCM<br>Số TK: <b>130 1000 147 4890</b><br>Chủ TK: <b>Công ty Cổ Phần IVIVU.COM</b>";
+      this.text = "NH TM CP Đầu Tư và Phát Triển Việt Nam (BIDV)<br>Chi Nhánh 02, Tp.HCM<br>Số TK: <b>130 147 4890</b><br>Chủ TK: <b>Công ty Cổ Phần IVIVU.COM</b>";
       this.isenabledbtn = false;
       this.paymentMethod = "48";
 
@@ -393,7 +393,7 @@ export class OrderRequestAddluggagePaymentBankPage implements OnInit {
       this.textbank = "BIDV";
       this.bankName = "NH TM CP Đầu Tư và Phát Triển Việt Nam (BIDV)";
       this.bankBranch = "Chi Nhánh 02, Tp.HCM";
-      this.accountNumber = "130 1000 147 4890";
+      this.accountNumber = "130 147 4890";
       this.bankTransfer = "BIDV";
     })
 

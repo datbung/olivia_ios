@@ -114,7 +114,8 @@ export class FlightadddetailsPage implements OnInit {
         }
       })
         if(this._flightService.itemFlightCache){
-          
+          let totalprice:any = this._flightService.itemFlightCache.departFlight.totalPrice + (this._flightService.itemFlightCache.returnFlight ? this._flightService.itemFlightCache.returnFlight.totalPrice : 0);
+          this.totalPriceDisplay = this.gf.convertNumberToString(totalprice);
           this.isInternal = this._flightService.itemFlightCache.fromCountryCode == 'VN' && this._flightService.itemFlightCache.toCountryCode == 'VN';
           this.departFlight = this._flightService.itemFlightCache.departFlight;
           if(this._flightService.itemFlightCache.returnFlight){
@@ -130,7 +131,7 @@ export class FlightadddetailsPage implements OnInit {
           let infant = this._flightService.itemFlightCache.infant >0 ? this._flightService.itemFlightCache.infant : 0;
             this.adult = this._flightService.itemFlightCache.adult;
             this.child = this._flightService.itemFlightCache.child*1 + infant*1;
-            this.totalPriceDisplay = this._flightService.itemFlightCache.totalPriceDisplay;
+            //this.totalPriceDisplay = this._flightService.itemFlightCache.totalPriceDisplay;
             this.maxAgeOfChild = moment(new Date()).format('YYYY').toString();
             let mindob ='2007', maxdob = '2020';
             let amindob ='1900', amaxdob = new Date().getFullYear() - 12, maxepdate = 2100;
@@ -161,7 +162,7 @@ export class FlightadddetailsPage implements OnInit {
                     this.childs.push({id: (this._flightService.itemFlightCache.child > 0 ? this._flightService.itemFlightCache.child : index) +1, iddisplay: index +1, name: '', subName: '', dateofbirth: '', gender: 1, genderdisplay: '', isInfant: true, mindob: mindob, maxdob: maxdob, isChild: true ,country: '',passport: '', passportCountry: '', passportExpireDate: '', maxepdate: maxepdate});
                 }
               })
-          }
+            }
             this.loadUserInfo();
             //this.buildForm();
             this.checkAndRebindPaxInfo();
@@ -181,51 +182,29 @@ export class FlightadddetailsPage implements OnInit {
             //se.gf.gaSetScreenName('flightadddetails');
             se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightadddetails', 'add_shipping_info', 'Flights');
         }
-        this.zone.run(() => {
-          if(this._flightService.itemFlightCache.allowCheckinOnline){
-            this.allowCheckinOnline = this._flightService.itemFlightCache.allowCheckinOnline;
-            this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline;
+        
+          // if(this._flightService.itemFlightCache.allowCheckinOnline){
+          //   this.allowCheckinOnline = this._flightService.itemFlightCache.allowCheckinOnline;
+          //   this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline;
+          // }else{
+          //   this.allowCheckinOnline = false;
+          //   this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline||'';
+          // }
+        let dataBooking = this._flightService.itemFlightCache.dataBooking;
+          if(dataBooking && dataBooking.allowRequestCheckinOnline){
+            this._flightService.itemFlightCache.allowCheckinOnline = dataBooking.allowRequestCheckinOnline.allowCheckin;
+            this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline.note;
+            this.allowCheckinOnline = dataBooking.allowRequestCheckinOnline.allowCheckin;
+            this.textCheckinOnline = dataBooking.allowRequestCheckinOnline.note;
           }else{
+            this._flightService.itemFlightCache.allowCheckinOnline = false;
             this.allowCheckinOnline = false;
-            this.textCheckinOnline = this._flightService.itemFlightCache.textCheckinOnline||'';
+            this._flightService.itemFlightCache.textCheckinOnline = dataBooking.allowRequestCheckinOnline && dataBooking.allowRequestCheckinOnline.note ? dataBooking.allowRequestCheckinOnline.note : '';
+            this.textCheckinOnline =dataBooking.allowRequestCheckinOnline && dataBooking.allowRequestCheckinOnline.note ? dataBooking.allowRequestCheckinOnline.note : '';
           }
-          
-        })
         
     }
-    //pdanh 02-08-2023: Thêm rule valid checkin online
-    checkAllowCheckinOnline(){
-      debugger
-      this.gf.getSummaryBooking(this._flightService.itemFlightCache).then((data)=>{
-        if(data && data.allowRequestCheckinOnline){
-          console.log(data);
-          this.zone.run(() => {
-            this.allowCheckinOnline = data.allowCheckin;
-            this.textCheckinOnline = data.allowRequestCheckinOnline.note;
-          })
-        }
-      })
-      // let _time = moment(this._flightService.itemFlightCache.departFlight.departTime).diff(new Date(), 'minutes');
-      //  //_time = khoảng thời gian từ lúc book vé so với ngày khởi hành
-      //  //Nếu _time > 24 tiếng => cho phép chọn checkin online
-      //  this.zone.run(() => {
-      //   if(_time > 24*60){
-      //     this.allowCheckinOnline = true;
-      //     this.textCheckinOnline = "* Thẻ lên tàu bay sẽ được cập nhật trong vòng 24 tiếng trước khi đóng chuyến";
-      //   }
-      //   //Nếu 4 < _time < 24: Ẩn nút YC Checkin online
-      //   else if(24*60 > _time && _time > 4*60){
-      //     this.allowCheckinOnline = false;
-      //     this.textCheckinOnline = "* Vui lòng liên hệ nhân viên iVIVU để được hỗ trợ";
-      //   }
-      //   //Nếu _time <= 4: Ẩn nút YC Checkin online
-      //   else if(_time <=4*60){
-      //     this.allowCheckinOnline = false;
-      //     this.textCheckinOnline = "* Chuyến bay trong khung đóng chuyến. Quý khách vui lòng làm thủ tục tại sân bay";
-      //   }
-      // })
-    }
-
+   
     ionViewDidEnter(){
       this.storage.get('contactOption').then((co)=>{
         this.zone.run(()=>{
@@ -346,7 +325,7 @@ export class FlightadddetailsPage implements OnInit {
                         element.subName = elementcache.subName;
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
-                        if(this._flightService.itemFlightCache.priceCathay>0){
+                        if(elementcache.dateofbirth){
                           element.dateofbirth = elementcache.dateofbirth;
                         }
                         if(se.isExtenal && se.showLotusPoint){
@@ -720,9 +699,14 @@ export class FlightadddetailsPage implements OnInit {
           })
         }
         goback(){
+          this._flightService.itemFlightCache.isCathay = null;
             if(this.activeStep ==1){
                 this.resetLuggage();
-                this.navCtrl.navigateBack('/flightaddservice');
+                if(this._flightService.itemFlightCache.isApiDirect){
+                  this.navCtrl.navigateBack('/flightsearchresultinternational');
+                }else{
+                  this.navCtrl.navigateBack('/flightsearchresult');
+                }
             }else{
                 this._flightService.itemFlightCache.hotenstep2 = this.hoten;
                 this._flightService.itemFlightCache.sodienthoaistep2 = this.sodienthoai;
@@ -1416,7 +1400,10 @@ export class FlightadddetailsPage implements OnInit {
                   }
                 }
                 
-
+                if(!se.ishideNameMail|| se.contactOption=='zalo'){
+                  se._flightService.itemFlightCache.hotenhddt = se.hotenhddt;
+                  se._flightService.itemFlightCache.emailhddt = se.emailhddt;
+                }
         
              
                
@@ -1437,7 +1424,7 @@ export class FlightadddetailsPage implements OnInit {
           const event: any = await alert.onDidDismiss();
           const date = event.data;
           if (event.data) {
-            se.gotopaymentpage();
+            //se.gotopaymentpage();
           }
          
         }
@@ -2263,7 +2250,8 @@ alert.present();
             }
           })
 
-          this.gotopaymentpage();
+          //this.gotopaymentpage();
+          this.navCtrl.navigateForward('/flightaddservice');
         }
 
         gotopaymentpage(){
@@ -3674,7 +3662,7 @@ alert.present();
                       se.storage.set("email", data.data.email);
                       se.storage.set("saveemail", data.data.email);
                       se.email = data.data.email;
-                      se.gotopaymentpage();
+                      //se.gotopaymentpage();
                     }
                   }
                   

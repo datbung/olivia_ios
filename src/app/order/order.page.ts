@@ -31,6 +31,7 @@ import { File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { normalizeURL } from 'ionic-angular';
 import { forEach } from '@angular/router/src/utils/collection';
+import { MytripTicketQrcodeSlidePage } from '../mytripticketqrcodeslide/mytripticketqrcodeslide';
 //import { PDFGenerator } from '@awesome-cordova-plugins/pdf-generator/ngx';
 @Component({
   selector: 'app-order',
@@ -173,6 +174,11 @@ export class OrderPage {
   _departTicketInfoCRM: any;
   _returnTicketInfoCRM: any;
   objSummary: any;
+  expandPrice: boolean;
+  ticketDownloadFiles: any=[];
+  showIncludeContent: string;
+  buttonCheckin: boolean = true;
+  buttonBooking: any;
   constructor(public platform: Platform, public navCtrl: NavController, public searchhotel: SearchHotel, public popoverController: PopoverController,
     public storage: Storage, public zone: NgZone, public modalCtrl: ModalController,
     public alertCtrl: AlertController, public valueGlobal: ValueGlobal, public gf: GlobalFunction, public loadingCtrl: LoadingController,
@@ -900,13 +906,10 @@ export class OrderPage {
                 se.getRatingStar(element);
 
                 
-                // if (element.booking_id=='VC0002855') {
+                // if (element.booking_id=='DL0828508') {
                 //   se.listMyTrips.push(element);
                 // }
-                // if(element.booking_id == 'IVIVU-OFF100346'){
-                //   se.listMyTrips.push(element);
-                //   se.mytripcount++;
-                // }
+              
                 se.listMyTrips.push(element);
                 se.mytripcount++;
                 if (element.insuranceInfo && element.insuranceInfo.adultList.length > 0) {
@@ -1762,7 +1765,8 @@ export class OrderPage {
                   
                     })
                   }
-                  // if (element.booking_id=='VC0002855') {
+                 
+                  // if (element.booking_id=='DL0828508') {
                   //   se.listMyTrips.push(element);
                   // }
                   se.listMyTrips.push(element);
@@ -2236,14 +2240,40 @@ export class OrderPage {
             if ((se.listMyTrips[0].payment_status == 1 || se.listMyTrips[0].payment_status == 5 ) &&  se.listMyTrips[0].approve_date){
               this.gf.ticketGetBookingCRM(se.listMyTrips[0].booking_id).then((data) => {
                 this.objectDetail=data;
-                let arrcd = this.objectDetail.startDate.split('-');
-                let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
-                this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
-                var objmap 
+               
+                if(this.objectDetail && this.objectDetail.startDate){
+                  let arrcd = this.objectDetail.startDate.split('-');
+                  let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+                  this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+                }
+
+                var objmap;
                 if (this.objectDetail.listNotes) {
                    objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
                 }
-                
+
+                // if(this.objectDetail && this.objectDetail.fileUrls && this.objectDetail.fileUrls.length >0){
+                //   let _arrsplit = this.objectDetail.fileUrls[0].split('&');
+                //   if(_arrsplit && _arrsplit.length >0 && _arrsplit[1]){
+                //     let _fname = _arrsplit[1].split('=');
+                //     this.ticketDownloadFile = _fname[1] || '';
+                //   }
+                // }
+                if(this.objectDetail && this.objectDetail.fileUrls && this.objectDetail.fileUrls.length >0){
+                  this.objectDetail.fileUrls.forEach(element => {
+                    if(element.indexOf('&') != -1){
+                      let _arrsplit = element.split('&');
+                      if(_arrsplit && _arrsplit.length >0 && _arrsplit[1]){
+                        let _fname = _arrsplit[1].split('=');
+                        this.ticketDownloadFiles.push({name: _fname[1] || '', url: element});
+                      }
+                    }else{
+                      this.ticketDownloadFiles.push({name: element, url: element });
+                    }
+                   
+                  });
+                  
+                }
                 if(objmap && objmap.length >0){
                   this.ischeckqrLink=true;
                 }else{
@@ -2277,6 +2307,15 @@ export class OrderPage {
                 this.includePrice = data.data.booking.includePrice.split('|');
                 this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
                 this.objSummary=data.data.booking;
+
+                this.showIncludeContent ='';
+                if(this.objSummary && this.objSummary.includePrice){
+                  let arr = this.objSummary.includePrice.split('|');
+                  console.log(arr);
+                  if(arr && arr.length >0 && arr[4]){
+                    this.showIncludeContent = arr[4];
+                  }
+                }
               }
             });
           }
@@ -3244,44 +3283,162 @@ export class OrderPage {
    */
   sortMytrip() {
     var se = this;
-    if (se.listMyTrips && se.listMyTrips.length > 0) {
-      se.zone.run(() => se.listMyTrips.sort(function (a, b) {
-        let direction = -1;
-        if (!a['isRequestTrip'] && !b['isRequestTrip']) {
-          if (moment(a['checkInDate']).diff(moment(b['checkInDate']), 'days') > 0) {
-            return -1 * direction;
+    if (this.activeTabTrip == 1) {
+      if (se.listMyTrips && se.listMyTrips.length > 0) {
+        se.zone.run(() => se.listMyTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-          else {
-            return 1 * direction;
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-        }
-        else if (!a['isRequestTrip'] && b['isRequestTrip']) {
-          if (moment(a['checkInDate']).diff(moment(b['start_date']), 'days') > 0) {
-            return -1 * direction;
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['start_date']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['start_date']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-          else {
-            return 1 * direction;
+        }));
+      }
+    }else{
+      if (se.listHistoryTrips && se.listHistoryTrips.length > 0) {
+        se.zone.run(() => se.listHistoryTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-        }
-        else if (a['isRequestTrip'] && !b['isRequestTrip']) {
-          if (moment(a['start_date']).diff(moment(b['checkInDate']), 'days') > 0) {
-            return -1 * direction;
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['checkInDate']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-          else {
-            return 1 * direction;
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['start_date']).diff(moment(b['checkInDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['start_date']).diff(moment(b['start_date']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
           }
-        } else {
-          if (moment(a['start_date']).diff(moment(b['start_date']), 'days') > 0) {
-            return -1 * direction;
-          }
-          else {
-            return 1 * direction;
-          }
-        }
-      }));
+        }));
+      }
     }
-  };
-
+    
+  }
+  sortMytripBooking() {
+    var se = this;
+    if (this.activeTabTrip == 1) {
+      if (se.listMyTrips && se.listMyTrips.length > 0) {
+        se.zone.run(() => se.listMyTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+        }));
+      }
+    }else{
+      if (se.listHistoryTrips && se.listHistoryTrips.length > 0) {
+        se.zone.run(() => se.listHistoryTrips.sort(function (a, b) {
+          let direction = -1;
+          if (!a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (!a['isRequestTrip'] && b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+          else if (a['isRequestTrip'] && !b['isRequestTrip']) {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          } else {
+            if (moment(a['bookingDate']).diff(moment(b['bookingDate']), 'days') > 0) {
+              return -1 * direction;
+            }
+            else {
+              return 1 * direction;
+            }
+          }
+        }));
+      }
+    }
+   
+  }
   hideloader() {
     var se = this;
     if (se.myloader) {
@@ -3910,6 +4067,8 @@ export class OrderPage {
     if (document.querySelector(".tabbar")) {
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
+    this.buttonCheckin = true;
+    this.buttonBooking = false;
     this.getdata(null, false);
   }
   SelectHistoryTrip() {
@@ -3917,6 +4076,8 @@ export class OrderPage {
     if (document.querySelector(".tabbar")) {
       document.querySelector(".tabbar")['style'].display = 'flex';
     }
+    this.buttonCheckin = true;
+    this.buttonBooking = false;
     this.getdata(null, true);
   }
 
@@ -5077,6 +5238,8 @@ export class OrderPage {
     se.arrinsurrance = [];
     se.hasloaddata = false;
     se.loaddatadone = false;
+    this.buttonCheckin = true;
+    this.buttonBooking = false;
     se.getdata(null, false);
     setTimeout(() => {
       if (event) {
@@ -5269,7 +5432,7 @@ export class OrderPage {
       this.gf.showToastWarning('Thiết bị đang không kết nối mạng, vui lòng bật kết nối để tiếp tục thao tác!');
       return;
     }
-    if (trip.payment_status == 1 || trip.payment_status == 5 || trip.payment_status == 9 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay)) {
+    if (trip.payment_status == 1 || trip.payment_status == 5 || trip.payment_status == 9 || (trip.payment_status == 0 && trip.deliveryPaymentDisplay) ) {//test vvc
       if (trip) {
         this.enableheader = false;
         this._mytripservice.tripdetail = trip;
@@ -6006,6 +6169,13 @@ export class OrderPage {
       // Error!
     });
   }
+  sharePDF(url){
+    this.socialSharing.share(null, null, null, url).then(() => {
+      // Success!
+    }).catch(() => {
+      // Error!
+    });
+  }
   async downloadimg(item,trip) {
     console.log(trip);
     if (trip.bookingsComboData[0].airlineName.indexOf('Vietnam Airlines') != -1  || trip.bookingsComboData[0].airlineName.indexOf('VIETNAM AIRLINES') != -1 || trip.bookingsComboData[0].airlineName.indexOf('BAMBOO') != -1) {
@@ -6094,6 +6264,9 @@ export class OrderPage {
   ticketinfo(){
     this.isTTV=!this.isTTV;
   }
+  showPrice(){
+    this.expandPrice = !this.expandPrice;
+  }
   GetVoucherLinks(booking_id): Promise<any>{
     return new Promise((resolve, reject) => {
       this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Reservation/GetVoucherLinks?bookingCode='+booking_id , {}, {}, '', '').then((data) => {
@@ -6104,6 +6277,62 @@ export class OrderPage {
         }
       });
     })
+
+  }
+
+  async showQrCodeSlide(){
+    if(this.ischeckqrLink){
+      this._mytripservice.objectDetail = this.objectDetail;
+        const modal: HTMLIonModalElement = await this.modalCtrl.create({
+          component: MytripTicketQrcodeSlidePage,
+        });
+        modal.present();
+        
+    }
+  }
+  async openSort() {
+    // if(!this.loadpricedone){
+    //   this.gf.showToastWarning('Đang tìm vé máy bay tốt nhất. Xin quý khách vui lòng đợi trong giây lát!');
+    //   return;
+    // }
+    let actionSheet = await this.actionsheetCtrl.create({
+      cssClass: 'action-sheets-tourlist-sort',
+      buttons: [
+        {
+          text: "Ngày khởi hành",
+          cssClass: "btn-Checkin cls-border-bottom",
+          handler: () => {
+            this.buttonCheckin = true
+            this.buttonCheckin ? $(".btn-Checkin > span").addClass('selected') : $(".btn-Checkin > span").removeClass('selected');
+
+            this.buttonBooking = false;
+            if (this.buttonCheckin) {
+              this.sortMytrip();
+            }
+          }
+        },
+        {
+          text: "Ngày đặt booking",
+          cssClass: "btn-Booking cls-border-bottom",
+          handler: () => {
+            this.buttonBooking = true;
+            this.buttonBooking ? $(".btn-Booking > span").addClass('selected') : $(".btn-Booking > span").removeClass('selected');
+
+            this.buttonCheckin = false;
+            if (this.buttonBooking) {
+              this.sortMytripBooking();
+            }
+          }
+        }
+       
+
+      ]
+
+    });
+
+    this.buttonCheckin ? $(".btn-Checkin > span").addClass('selected') : $(".btn-Checkin > span").removeClass('selected');
+    this.buttonBooking ? $(".btn-Booking > span").addClass('selected') : $(".btn-Booking > span").removeClass('selected');
+    actionSheet.present();
 
   }
 }

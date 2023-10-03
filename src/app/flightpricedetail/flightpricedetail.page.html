@@ -50,10 +50,10 @@
                     <div class="div-width-100">
                       <!-- <div >Hành lý ký gửi</div> -->
                       <div *ngFor="let itemlug of departLuggage" class=" d-flex m-bottom-4">
-                        <div *ngIf="itemlug.quantity >0" class="div-width-100 text-service-plus">
+                        <div *ngIf="itemlug.amount >0" class="div-width-100 text-service-plus">
                         Ký gửi <span class="text-bold">{{itemlug.weight}} kg</span>
                         </div>
-                        <div *ngIf="itemlug.quantity >0" class="div-width-100 text-right">{{ itemlug.quantity}} x {{itemlug.amountDisplay}}</div>
+                        <div *ngIf="itemlug.amount >0" class="div-width-100 text-right">1 x {{itemlug.amountDisplay}}</div>
                       </div>
 
                       
@@ -125,10 +125,10 @@
                   <div class="d-flex m-bottom-4" *ngIf="returnluggageprice">
                     <div class="div-width-100">
                       <div *ngFor="let itemlug of returnLuggage" class=" d-flex m-bottom-4">
-                        <div *ngIf="itemlug.quantity >0" class="div-width-100">
+                        <div *ngIf="itemlug.amount >0" class="div-width-100">
                           Ký gửi <span class="text-bold">{{itemlug.weight}} kg</span>
                         </div>
-                        <div *ngIf="itemlug.quantity >0" class="div-width-100 text-right">{{ itemlug.quantity}} x {{itemlug.amountDisplay}}</div>
+                        <div *ngIf="itemlug.amount >0" class="div-width-100 text-right">1 x {{itemlug.amountDisplay}}</div>
                       </div>
 
                       

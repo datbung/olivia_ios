@@ -551,7 +551,9 @@ export class FlightsearchresultPage implements OnInit {
           //se.gf.gaSetScreenName('flightsearchresult');
           se.gf.logEventFirebase('', se._flightService.itemFlightCache, 'flightsearchresult', 'begin_checkout', 'Flights');
           se._flightService.itemFlightCache.isApiDirect = false;
-          se.navCtrl.navigateForward('/flightaddservice');
+          se._flightService.itemFlightCache.isCathay = false;
+          se._flightService.itemFlightCache.priceCathay = 0;
+          se.navCtrl.navigateForward('/flightadddetails');
           se.stoprequest = true;
       }else{
         //se.gf.showToastWarning('Vé máy bay bạn chọn hiện không còn. Vui lòng chọn lại!');

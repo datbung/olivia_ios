@@ -13,8 +13,8 @@
   <ion-content class="div-tourdeparturecalendar-content">
     <div class="p-all-16">
         <!-- <div class="text-center"><img src="./assets/step/tour_step_1.svg"></div> -->
-        <div *ngIf="itemTicketService.name" class="text-service-name">Vé vào cổng: {{ticketService.itemTicketService.name}}</div>
-        <div *ngIf="itemTicketService.description" class="text-service-des m-top-8">{{itemTicketService.description}}</div>
+        <div *ngIf="itemTicketService.name" class="text-service-name">{{ticketService.itemTicketService.name}}</div>
+        <!-- <div *ngIf="itemTicketService.description" class="text-service-des m-top-8">{{itemTicketService.description}}</div> -->
         <div class="text-service-detail m-top-8" (click)="showTicketServiceDetail(itemTicketService)">Chi tiết gói <span><img class="img-arrow" src="./assets/ic_ticket/arrow-down.svg" /></span></div>
         <div class="div-split-panel" ></div>
         <div class="text-input" *ngIf="itemTicketService.itemObjRate.specs && itemTicketService.itemObjRate.specs.length>0">
@@ -23,7 +23,7 @@
         <div [ngClass]="itemTicketService ? 'm-top-16' : 'm-top-16 cls-no-departure' ">
             <div class="div-item-departure-date d-flex">
                 <div class="width-62 text-label">
-                    Chọn ngày:
+                  Chọn ngày tham quan:
                 </div>
                 <div class="width-45 d-flex div-item-time" (click)="openPickupCalendar()">
                     <div class="v-align-center m-r-8"><img src="./assets/ic_ticket/ic_calendar.svg"></div>
@@ -45,11 +45,11 @@
               </ion-select>
               </div>
           </div>
-            <div class="d-flex margin-left-16 div-scroll">
+            <div *ngIf="arrSkus && arrSkus.length>0 && itemTicketService.dailyRatePkgs && itemTicketService.dailyRatePkgs.length > 0" class="d-flex margin-left--4 div-scroll">
               
-              <!-- <div (click)="funcdate(item)" class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngFor="let item of itemTicketService.dailyRatePkgs">
-                {{item.dailydisplay}}
-              </div> -->
+              <div (click)="funcdate(item)"  *ngFor="let item of itemTicketService.dailyRatePkgs; let idx = index">
+                <div class="div-option-time" [ngClass]="item.action ? 'div-option-time-action': 'div-option-time'" *ngIf="idx<4">{{item.dailydisplay}}</div>
+              </div>
             </div>
             <div class="m-top-16" *ngIf="arrSkus && arrSkus.length>0 && (!itemTicketService.itemObjRate.specs || itemTicketService.itemObjRate.specs.length == 0)">
               <div *ngIf="arrSkus && arrSkus.length>1" class="text-label">
@@ -64,7 +64,7 @@
               <div *ngIf="itemTicketService && itemTicketService.skus" class="width-62 text-label margin-top-16" >
                 Chọn số lượng:
               </div>
-              <div class="div-item-departure-date d-flex  margin-top-12" *ngIf="itemTicketService && itemTicketService.skus.allowAdult && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="div-item-departure-date d-flex  margin-top-12" *ngIf="itemTicketService && itemTicketService.skus.allowAdult && ticketService.itemTicketService.itemObjRate.allowAdult">
                 <div class="width-35">
                    <div>
                     Người lớn
@@ -73,7 +73,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -88,7 +88,7 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex  margin-top-12" *ngIf="itemTicketService && ticketService.itemTicketService.itemObjRate.allowAdult && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="div-item-departure-date d-flex  margin-top-12 non-pkg" *ngIf="itemTicketService && ticketService.itemTicketService.itemObjRate.allowAdult && !itemTicketService.skus.allowAdult">
                 <div class="width-35">
                    <div>
                     Người lớn
@@ -97,7 +97,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -112,7 +112,7 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService && itemTicketService.skus.allowChild && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService && itemTicketService.skus.allowChild && ticketService.itemTicketService.itemObjRate.allowChild">
                 <div class="width-35">
                   <div>Trẻ em</div>
                   <div class="text-sub">{{itemTicketService.noteChildren}}</div>
@@ -120,7 +120,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -134,7 +134,7 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService && ticketService.itemTicketService.itemObjRate.allowChild && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12 non-pkg" *ngIf="itemTicketService && ticketService.itemTicketService.itemObjRate.allowChild && !itemTicketService.skus.allowChild">
                 <div class="width-35">
                   <div>Trẻ em</div>
                   <div class="text-sub">{{itemTicketService.noteChildren}}</div>
@@ -142,7 +142,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -156,7 +156,7 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom1 && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom1 && ticketService.itemTicketService.itemObjRate.allowCustom1">
                 <div class="width-35">
                   <div>{{itemTicketService.nameCustom1}}</div>
                   <div class="text-sub">{{itemTicketService.noteCustom1}}</div>
@@ -164,7 +164,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded  && Custom1 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -178,7 +178,7 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom1 && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12 non-pkg" *ngIf="itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom1 && !itemTicketService.skus.allowCustom1">
                 <div class="width-35">
                   <div>{{itemTicketService.nameCustom1}}</div>
                   <div class="text-sub">{{itemTicketService.noteCustom1}}</div>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -200,7 +200,7 @@
                 </div>
               </div>
 
-               <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom2 && itemTicketService.skus.supplier != 'KKDAY'">
+               <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom2 && ticketService.itemTicketService.itemObjRate.allowCustom2">
                 <div class="width-35">
                   <div>{{itemTicketService.nameCustom2}}</div>
                   <div class="text-sub">{{itemTicketService.noteCustom2}}</div>
@@ -208,7 +208,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -222,7 +222,7 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom2 && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12 non-pkg" *ngIf="itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom2 && !itemTicketService.skus.allowCustom2">
                 <div class="width-35">
                   <div>{{itemTicketService.nameCustom2}}</div>
                   <div class="text-sub">{{itemTicketService.noteCustom2}}</div>
@@ -230,7 +230,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -244,14 +244,14 @@
                 </div>
               </div>          
   
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowSenior && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && itemTicketService.skus.allowSenior && ticketService.itemTicketService.itemObjRate.allowSenior">
                 <div class="width-35">
                     <div>Người lớn tuổi</div>
                     <div class="text-sub">{{itemTicketService.noteSeniors}}</div>
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
-                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
@@ -265,14 +265,14 @@
                 </div>
               </div>
 
-              <div class="div-item-departure-date d-flex margin-top-12" *ngIf="itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowSenior  && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="div-item-departure-date d-flex margin-top-12 non-pkg" *ngIf="itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowSenior && !itemTicketService.skus.allowSenior">
                 <div class="width-35">
                     <div>Người lớn tuổi</div>
                     <div class="text-sub">{{itemTicketService.noteSeniors}}</div>
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
-                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
@@ -313,7 +313,7 @@
               <div *ngIf="itemTicketService && itemTicketService.skus" class="width-62 text-label margin-top-16" >
                 Chọn số lượng:
               </div>
-              <div  *ngIf="itemTicketService.skus && itemTicketService.skus.allowAdult && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="margin-top-16"  *ngIf="itemTicketService.skus && itemTicketService.skus.allowAdult && ticketService.itemTicketService.itemObjRate.allowAdult">
              
                 <div class="div-item-departure-date d-flex margin-top-12 div-border">
                   <div class="width-30 margin-left-12">
@@ -322,7 +322,7 @@
                 </div>
                 <div class="text-price-car width-30" >
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
           
   
@@ -335,7 +335,7 @@
                
               </div>
 
-              <div class="margin-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowAdult && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="margin-top-16 non-pkg" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowAdult && !itemTicketService.skus.allowAdult">
                
                 <div class="div-item-departure-date d-flex margin-top-12 div-border">
                   <div class="width-30 margin-left-12">
@@ -344,7 +344,7 @@
                 </div>
                 <div class="text-price-car width-30" >
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
           
   
@@ -357,7 +357,7 @@
                
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowChild  && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowChild  && ticketService.itemTicketService.itemObjRate.allowChild">
                 
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
@@ -367,7 +367,7 @@
                   </div>
                   <div class="text-price-car width-30" >
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                   </div>
             
                   <div class="width-40 d-flex div-item-car">
@@ -379,7 +379,7 @@
                 
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowChild && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="m-top-16 non-pkg" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowChild && !itemTicketService.skus.allowChild">
             
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
@@ -389,7 +389,7 @@
                   </div>
                   <div class="text-price-car width-30" >
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child > 0">0</span>
                   </div>
             
                   <div class="width-40 d-flex div-item-car">
@@ -401,7 +401,7 @@
                 
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowSenior && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowSenior && ticketService.itemTicketService.itemObjRate.allowSenior">
               
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
@@ -410,7 +410,7 @@
                 </div>
                 <div class="text-price-car width-30">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded && elder>0">0</span>
                 </div>
           
                 <div class="width-40 d-flex div-item-car">
@@ -422,7 +422,7 @@
             
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowSenior && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="m-top-16 non-pkg" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowSenior && !itemTicketService.skus.allowSenior">
     
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
@@ -431,7 +431,7 @@
                 </div>
                 <div class="text-price-car width-30">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded && elder>0">0</span>
                 </div>
           
                 <div class="width-40 d-flex div-item-car">
@@ -443,7 +443,7 @@
             
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom1 && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom1 && ticketService.itemTicketService.itemObjRate.allowCustom1">
              
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
            
@@ -454,7 +454,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                   </div>
                  
                   <div class="width-40 d-flex div-item-car">
@@ -467,7 +467,7 @@
               
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom1 && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="m-top-16 non-pkg" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom1 && !itemTicketService.skus.allowCustom1">
              
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
            
@@ -478,7 +478,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                   </div>
                  
                   <div class="width-40 d-flex div-item-car">
@@ -491,7 +491,7 @@
               
               </div>
 
-              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom2 && itemTicketService.skus.supplier != 'KKDAY'">
+              <div class="m-top-16" *ngIf="itemTicketService.skus && itemTicketService.skus.allowCustom2 && ticketService.itemTicketService.itemObjRate.allowCustom2">
               
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
@@ -501,7 +501,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                   </div>
                   
                   <div class="width-40 d-flex div-item-car">
@@ -512,7 +512,7 @@
                 </div>
               </div>
             
-              <div class="m-top-16" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom2 && itemTicketService.skus.supplier == 'KKDAY'">
+              <div class="m-top-16 non-pkg" *ngIf="itemTicketService && itemTicketService.skus && ticketService.itemTicketService.itemObjRate.allowCustom2 && !itemTicketService.skus.allowCustom2">
              
                 <div class="div-item-departure-date d-flex margin-top-12 div-border" >
                   <div class="width-30 margin-left-12">
@@ -522,7 +522,7 @@
                   </div>
                   <div class="text-price-car width-30">
                     <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                    <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                    <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                   </div>
                   
                   <div class="width-40 d-flex div-item-car">
@@ -593,7 +593,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                  <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateAdultRounded">x {{gf.convertNumberToString(itemTicketService.skus.rateAdultRounded)}}</span>
-                 <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span> -->
+                 <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateAdultRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -616,7 +616,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateChildRounded && child > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateChildRounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded && child == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateChildRounded">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -638,7 +638,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom1Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom1Rounded && Custom1 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -660,7 +660,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">x {{gf.convertNumberToString(itemTicketService.skus.rateCustom2Rounded)}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 == 0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateCustom2Rounded && Custom2 > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25 margin-right-8">
@@ -681,7 +681,7 @@
                 </div>
                 <div class="text-price width-25 margin-right-8" *ngIf="loaddeparturedone else loadingsk">
                   <span *ngIf="itemTicketService.skus && itemTicketService.skus.rateSeniorRounded && elder>0">x {{gf.convertNumberToString(itemTicketService.skus.rateSeniorRounded )}}</span>
-                  <!-- <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder==0">0</span> -->
+                  <span *ngIf="itemTicketService.skus && !itemTicketService.skus.rateSeniorRounded  && elder > 0">0</span>
                 </div>
                 <ng-template #loadingsk>
                   <div class="text-price width-25">
@@ -696,12 +696,12 @@
               </div>
             </div>
 
-            <div class="m-top-12 div-last div-text-date" *ngIf="ischeckDate">
+            <!-- <div class="m-top-12 div-last div-text-date" *ngIf="ischeckDate">
               <div class="div-text-date">
                 Ngày dịch vụ: <span class="text-span">{{ticketService.itemTicketService.AllotmentDateDisplay}}</span>
               </div>
               
-            </div>
+            </div> -->
 
             <div *ngIf="arrSkus && arrSkus.length>0">
               <div class="d-flex div-total m-top-26" *ngIf="itemTicketService.Note">
@@ -755,7 +755,7 @@
       </div>
       <div  *ngIf="!ischeckbtn" class="width-100 cls-no-departure">
         <button ion-button round outline class="button btn-book">
-            Đặt ngay
+          Đặt ngay
         </button>
     </div>
    

@@ -11,7 +11,7 @@ import { VoucherSlideCarComboPageModule } from '../voucher/voucherslidecarcombo/
 import { VoucherSlideHotelPageModule } from '../voucher/voucherslidehotel/voucherslidehotel.module';
 import { VoucherSlideFlightComboPageModule } from '../voucher/voucherslideflightcombo/voucherslideflightcombo.module';
 import { VoucherSlideTourPageModule } from '../voucher/voucherslidetour/voucherslidetour.module';
-
+import { VoucherSlideTicketPageModule } from '../voucher/voucherslideticket/voucherslideticket.module';
 const routes: Routes = [
   {
     path: '',
@@ -29,6 +29,7 @@ const routes: Routes = [
     VoucherSlideCarComboPageModule,
     VoucherSlideFlightComboPageModule,
     VoucherSlideTourPageModule,
+    VoucherSlideTicketPageModule,
     RouterModule.forChild(routes)
   ],
   declarations: [AdddiscountPage],

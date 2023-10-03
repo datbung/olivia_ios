@@ -54,7 +54,6 @@ export class TicketServicePage implements OnInit {
   timeTicket: any;
   totalPax = 0
   daysInAdvance: number | Date;
-  ischeckDate: boolean = false;
   subject = new Subject();
   ischeckbtn: boolean = false;
   specs: any = {};
@@ -74,37 +73,23 @@ export class TicketServicePage implements OnInit {
 
       this.loaddeparturedone = true;
       this.itemTicketService = this.ticketService.itemTicketService;
+      console.log(this.itemTicketService);
     }
     else {
       this.hasDeparture = false;
     }
     this.selectNewPackage(this.ticketService.itemTicketService.itemObjRate.pkgId)
-    // var timestamp = new Date();
-    // var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
-    // var date = new Date(res);
-    // var Tomorrow = moment(date).format("YYYYMMDD");
-
-    // var datenow = new Date();
-    // var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
-    // var date = new Date(res);
-    // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-    // var Tomorrow = moment(date).format("DD/MM");
-
-    // this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-    // this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
-    // this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.daysInAdvance).format('DD-MM-YYYY');
+  
     var timestamp = new Date();
     var res = timestamp.setTime(timestamp.getTime() + 1 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
-    var Tomorrow = moment(date).format("YYYYMMDD");
-
-    var datenow = new Date();
+    
     var res = timestamp.setTime(timestamp.getTime() + 180 * 24 * 60 * 60 * 1000);
     var date = new Date(res);
 
     if (this.dailyRatePkgs.specs) {
 
-      if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+      if (this.ticketService.itemTicketService.itemObjRate && this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
         if (this.ticketService.itemTicketService.itemObjRate.specs.length === 1) {
           this.ticketService.itemTicketService.itemObjRate.specs.forEach(element => {
             element.child.forEach(elementC => {
@@ -117,39 +102,62 @@ export class TicketServicePage implements OnInit {
           });
         }
       }
-      // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-      var Tomorrow = moment(date).format("DD/MM");
-
-      this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
+      
       let matchedSkus = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
       if (matchedSkus.length > 0) {
-        this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date
+        this.checkinDate = matchedSkus[0].skusDaily.dailyRate[0].date;
       }
       else {
-        this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
+        for (let index = 0; index < this.itemTicketService.itemObjRate.skus.length; index++) {
+          const element = this.itemTicketService.itemObjRate.skus[index];
+          if(element.skusDaily && element.skusDaily.dailyRate[0]){
+            this.checkinDate = element.skusDaily.dailyRate[0].date;
+            break;
+          }
+          
+        }
+        
       }
       this.dailyRatePkgs.checkin = this.checkinDate
-      // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
-      // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];   
-      // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate;
+     
     } else {
-      // this.daysInAdvance = datenow.setTime(datenow.getTime() + this.itemTicketService.daysInAdvance * 24 * 60 * 60 * 1000);
-      var Tomorrow = moment(date).format("DD/MM");
-
-      this.dateDisplay = moment(this.daysInAdvance).format('DD/MM') + ' - ' + Tomorrow;
-      // this.checkinDate = moment(this.daysInAdvance).format('YYYY-MM-DD');
+    
       this.checkinDate = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[0].date
       this.dailyRatePkgs.checkin = this.checkinDate
-      // var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
-      // var formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];  
-      // this.ticketService.itemTicketService.AllotmentDateDisplay = formattedDate
+      
+    }
+    var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
+    this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+    this.ticketService.itemTicketService.AllotmentDateDisplay =  this.dateDisplay
+    this.index = 0;
+    this.ticketService.selectedDateDisplay =  moment(this.checkinDate).format('DD-MM-YYYY');
+    this.ticketService.selectedDate =  moment(this.checkinDate).format('YYYY-MM-DD');
+    this.ticketService.itemTicketService.AllotmentDateDisplay = moment(this.checkinDate).format('DD-MM-YYYY');
+    //Select ngày theo ngày đang default 
+    this.itemTicketService.dailyRatePkgs = [];
+     if (this.itemTicketService.itemObjRate.skus){
+      if(this.timeId && this.timeId.length > 0){
+        this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate
+       
+      }else{
+        if (!this.itemTicketService.itemObjRate.specs || (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length == 0)) {
+          this.itemTicketService.dailyRatePkgs = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate;
+        }
+
+      }
+
+    }
+    if (this.itemTicketService.dailyRatePkgs) {
+      this.itemTicketService.dailyRatePkgs.forEach(element => {
+        if(element.date == this.checkinDate){
+          element.action = true;
+        }
+        let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
+        let todayDate = moment(new Date()).format('YYYY-MM-DD');
+        element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
+      });
     }
 
-    // }
-    this.index = 0;
-    // if (this.itemTicketService.itemObjRate.times && this.itemTicketService.itemObjRate.times.length >0) {
-    //   this.timeTicket = this.itemTicketService.itemObjRate.times[0];
-    // }
 
     if (this.itemTicketService.minPax > 0) {
       if (this.itemTicketService.allowAdults) {
@@ -188,7 +196,7 @@ export class TicketServicePage implements OnInit {
         this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSort.child;
       }
     }
-
+    this.gf.showLoading();
     this.GetDailyRatePackages();
     this.subject.pipe(debounceTime(500)).subscribe(value => {
       if (value) {
@@ -222,10 +230,11 @@ export class TicketServicePage implements OnInit {
     if (this.arrSkus && this.arrSkus.length == 0) {
       return;
     }
-    if (!this.ischeckDate) {
-      alert('Vui lòng chọn ngày');
-      return;
-    }
+    // if (!this.ischeckDate) {
+    //   alert('Vui lòng chọn ngày');
+    //   return;
+    // }
+    this.ticketService.totalPax = this.totalPax;
     this.RecheckRateBooking();
   }
 
@@ -257,6 +266,7 @@ export class TicketServicePage implements OnInit {
       this.dailyRatePkgs.custom1 = this.Custom1;
       this.dailyRatePkgs.custom2 = this.Custom2;
       this.subject.next(true);
+       
     } else {
       alert('Vé chỉ được phép đặt tối đa ' + this.totalPax + ' khách');
     }
@@ -411,12 +421,14 @@ export class TicketServicePage implements OnInit {
 
               let fromdate = moment(new Date(yearstartdate, monthstartdate - 1, fday)).format('YYYY-MM-DD');
               let nowday = moment(new Date(Year, Month, Day)).format('YYYYMMDD');
-              let objday
-              if (this.timeId && this.timeId.length > 0) {
-                objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+              let objday = []
+              if (this.itemTicketService.itemObjRate.specs && this.itemTicketService.itemObjRate.specs.length>0) {
+                if (this.timeId && this.timeId.length > 0) {
+                  objday = this.timeId[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+                }
               }
               else {
-                objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
+                 objday = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.filter((f) => { return f.date == fromdate });
               }
               var fromDateNum = parseInt(fromdate.replace(/-/g, ""), 10);
               var nowdayNum = parseInt(nowday.replace(/-/g, ""), 10);
@@ -427,26 +439,29 @@ export class TicketServicePage implements OnInit {
               else {
                 specificDateStr = this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate[this.itemTicketService.itemObjRate.skus[0].skusDaily.dailyRate.length - 1];
               }
-              var specificDateNum = parseInt(specificDateStr.date.replace(/-/g, ""), 10);
-              if (objday && objday.length > 0) {
-                let totalprice;
-                totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
-                if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
-                  if (elementday.children[0]) {
-                    $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
-                  }
-                }
-              }
-              else {
-                if (elementday.children[0]) {
+              if (specificDateStr) {
+                var specificDateNum = parseInt(specificDateStr.date.replace(/-/g, ""), 10);
+                if (objday && objday.length > 0) {
+                  let totalprice;
+                  totalprice = objday[0].price >= 100000000 ? (objday[0].price / 1000000).toFixed(1).replace(".", ",").replace(",0", "") + "tr" : objday[0].price >= 10000000 ? (((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').indexOf(",") > 0 ? ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr').replace("0tr", "tr") : ((objday[0].price / 1000000).toFixed(2).replace(".", ",").replace(",00", "") + 'tr')) : objday[0].price > 0 ? (objday[0].price / 1000).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + 'k' : '';
                   if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
-                    $(elementday.children[0]).addClass('not-available-price-in-range');
-                    var pElement = elementday.querySelector('p'); // Lấy thẻ p bên trong button
-                    pElement.classList.add('text-xam');
-                    $(elementday.children[0]).attr('disabled', 'disabled');
+                    if (elementday.children[0]) {
+                      $(elementday.children[0]).append(`<span class='price-calendar-text-ticket'>${totalprice}</span>`);
+                    }
+                  }
+                }
+                else {
+                  if (elementday.children[0]) {
+                    if (fromDateNum >= nowdayNum && fromDateNum <= specificDateNum) {
+                      $(elementday.children[0]).addClass('not-available-price-in-range');
+                      var pElement = elementday.querySelector('p'); // Lấy thẻ p bên trong button
+                      pElement.classList.add('text-xam');
+                      $(elementday.children[0]).attr('disabled', 'disabled');
+                    }
                   }
                 }
               }
+            
             }
           }
 
@@ -493,6 +508,7 @@ export class TicketServicePage implements OnInit {
     if (pElement && !pElement.classList.contains('text-xam')) {
       if ($(obj).hasClass('on-selected')) {
         if (this.modalCtrl) {
+          this.ischeckbtn = false;
           let fday: any;
           let tday: any;
           var monthenddate: any;
@@ -535,18 +551,20 @@ export class TicketServicePage implements OnInit {
               se.checkinDate = moment(fromdate).format('YYYY-MM-DD');
               this.dailyRatePkgs.checkin = this.checkinDate;
               // se.itemTicketService.AllotmentDateDisplay = moment(fromdate).format('DD-MM-YYYY');
-              se.dateDisplay = moment(fromdate).format('DD-MM');
-              // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-              //   const element = this.itemTicketService.dailyRatePkgs[i];
-              //   element.action=false;
-              //   if (element.daily==se.searchhotel.CheckInDate) {
-              //     this.index=i;
-              //     element.action=true;
-              //   }
-              // }
+              se.dateDisplay = moment(fromdate).format('DD-MM-YYYY');
+              
+              if(this.itemTicketService.dailyRatePkgs && this.itemTicketService.dailyRatePkgs.length>0){
+                this.itemTicketService.dailyRatePkgs.forEach(element => {
+                  element.action=false;
+                  if(element.date == this.checkinDate){
+                    element.action = true;
+                  }
+                })
+              }
+              
               se.ticketService.selectedDateDisplay =  moment(fromdate).format('DD-MM-YYYY');
               se.ticketService.selectedDate =  moment(fromdate).format('YYYY-MM-DD');
-              this.ischeckDate = true;
+              // this.ischeckDate = true;
               se.GetDailyRatePackages();
             }
           }
@@ -712,25 +730,38 @@ export class TicketServicePage implements OnInit {
   funcdate(item) {
 
     this.checkactionDate(item);
-    this.ischeckDate = true;
+    // this.ischeckDate = true;
     // this.calculatePrice();
     this.GetDailyRatePackages();
 
 
   }
   checkactionDate(item) {
-    this.checkinDate = moment(item.daily).format('YYYY-MM-DD');
-    this.dailyRatePkgs.checkin = this.checkinDate;
-    this.dateDisplay = moment(item.daily).format('DD/MM');
+    // this.checkinDate = moment(item.daily).format('YYYY-MM-DD');
+    // this.dailyRatePkgs.checkin = this.checkinDate;
+    // this.dateDisplay = moment(item.daily).format('DD/MM');
     // this.searchhotel.CheckInDate = moment(item.daily).format('YYYY-MM-DD');
-    // for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
-    //   const element = this.itemTicketService.dailyRatePkgs[i];
-    //   element.action = false;
-    //   if (element.daily == item.daily) {
-    //     this.index = i;
-    //     element.action = true;
-    //   }
-    // }
+    this.ischeckbtn = false;
+    for (let i = 0; i < this.itemTicketService.dailyRatePkgs.length; i++) {
+      const element = this.itemTicketService.dailyRatePkgs[i];
+      this.zone.run(()=>{
+        element.action = false;
+        if (element.date == item.date) {
+          this.index = i;
+          element.action = true;
+        }
+      })
+      
+    }
+    let _fromdate = item.date;
+    this.ticketService.itemTicketService.AllotmentDateDisplay = moment(_fromdate).format('DD-MM-YYYY');
+    this.checkinDate = moment(_fromdate).format('YYYY-MM-DD');
+    this.dailyRatePkgs.checkin = this.checkinDate;
+    this.dateDisplay = moment(_fromdate).format('DD-MM-YYYY');
+   
+    this.ticketService.selectedDateDisplay =  moment(_fromdate).format('DD-MM-YYYY');
+    this.ticketService.selectedDate =  moment(_fromdate).format('YYYY-MM-DD');
+    this.subject.next(true);
   }
   funcsku(index) {
     this.indexSku = index;
@@ -745,30 +776,49 @@ export class TicketServicePage implements OnInit {
       return { ...item, action: false }
     });
     arrSpecs[index].action = true;
+    this.ischeckbtn = false;
     var foundIndex = this.itemTicketService.itemObjRate.specs.findIndex(x => x.id == item.id);
     this.itemTicketService.itemObjRate.specs[foundIndex].child = arrSpecs;
-    // this.specs[item.id] = itemc.child_id;
-    // this.dailyRatePkgs.specs = this.specs;
-    // this.objectLength = Object.keys(this.specs).length; 
+   
     this.onSelectSpecs(item.id, itemc.child_id);
+    
     if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length !== 0) {
+      this.timeId = [];
+      this.itemTicketService.dailyRatePkgs = [];
       this.timeId = this.itemTicketService.itemObjRate.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','));
       if (this.timeId && this.timeId.length > 0) {
-        let objDate = this.timeId[0].skusDaily.dailyRate.filter(x => x.price > 0)
-        if (objDate && objDate.length > 0) {
-          this.checkinDate = objDate[0].date;
-          this.dailyRatePkgs.checkin = objDate[0].date;
-          var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
-          this.dateDisplay = dateParts[2] + "-" + dateParts[1];
-          this.ticketService.itemTicketService.AllotmentDateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
-          this.ischeckDate = true;
+        let objDate = this.timeId[0].skusDaily.dailyRate.filter(x => x.price > 0 && x.date === this.checkinDate)
+        if (objDate && objDate.length == 0) {
+          let objDateNext = this.timeId[0].skusDaily.dailyRate.filter(x => x.price > 0)
+          if (objDateNext && objDateNext.length > 0) {
+            this.checkinDate = objDateNext[0].date;
+            this.dailyRatePkgs.checkin = objDateNext[0].date;
+            var dateParts = this.checkinDate.split("-"); // Tách chuỗi thành mảng các phần tử
+            this.dateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+            this.ticketService.itemTicketService.AllotmentDateDisplay = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+            // this.ischeckDate = true;
+          }
+          
         }
+        if (this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0) {
+          this.itemTicketService.itemObjRate.times = this.timeId[0].skusDaily.times;
+          this.timeTicket = this.timeId[0].skusDaily.times[0];
+          this.dailyRatePkgs.time = this.timeId[0].skusDaily.times[0];
+        }
+
+          this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate;
+          this.itemTicketService.dailyRatePkgs.forEach(element => {
+            element.action = false;
+            if(element.date == this.checkinDate){
+              element.action = true;
+            }
+            let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
+            let todayDate = moment(new Date()).format('YYYY-MM-DD');
+            element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
+          });
+        
       }
-      if (this.timeId && this.timeId.length > 0 && this.timeId[0].skusDaily && this.timeId[0].skusDaily.times && this.timeId[0].skusDaily.times.length !== 0) {
-        this.itemTicketService.itemObjRate.times = this.timeId[0].skusDaily.times;
-        this.timeTicket = this.timeId[0].skusDaily.times[0];
-        this.dailyRatePkgs.time = this.timeId[0].skusDaily.times[0];
-      }
+     
     } else {
       if (this.itemTicketService.itemObjRate.skus && this.itemTicketService.itemObjRate.skus.length > 0) {
         this.itemTicketService.itemObjRate.times = this.itemTicketService.itemObjRate.skus[0].skusDaily.times;
@@ -777,27 +827,6 @@ export class TicketServicePage implements OnInit {
       }
 
     }
-
-
-    // this.timeId = "";
-    // for (let i = 0; i < this.itemTicketService.itemObjRate.specs.length; i++) {
-    //   const element = this.itemTicketService.itemObjRate.specs[i];
-    //   if(element.child.length > 0)
-    //   {
-    //     for (let j = 0; j < element.child.length; j++) {
-    //       const elementC = element.child[j];
-    //       if (elementC.action == true) {
-    //         if (i==0) {
-    //           this.timeId = element.child[j].child_id;
-    //         }else{
-    //           this.timeId = this.timeId+','+element.child[j].child_id
-    //         }
-    //         break;
-    //       }
-    //     }
-    //   }
-    // }
-
     this.subject.next(true);
   }
   RecheckRateBooking() {
@@ -835,7 +864,7 @@ export class TicketServicePage implements OnInit {
     });
   }
   GetDailyRatePackages() {
-    this.gf.showLoading();
+
     let obj = this.dailyRatePkgs
     let headers =
     {
@@ -845,6 +874,7 @@ export class TicketServicePage implements OnInit {
       this.gf.hideLoading();
       this.arrSkus = [];
       this.itemTicketService.skus = [];
+      //this.itemTicketService.dailyRatePkgs = [];
       this.ischeckbtn = false;
       if (data && data.success) {
         this.arrSkus = data.data.skus;
@@ -922,13 +952,20 @@ export class TicketServicePage implements OnInit {
 
 
     if (_packageSearch && _packageSearch.dailyRateAvailableSpes && _packageSearch.dailyRateAvailableSpes.length !== 0) {
-      const [_dailyRateAvailable] = _packageSearch.dailyRateAvailableSpes
+      const [_dailyRateAvailable] = _packageSearch.dailyRateAvailableSpes;
+      
+     
 
-      this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
-        // let objAction = _spec.child.filter(x => x.action == true);
-        this.onSelectSpecs(_spec.id, _dailyRateAvailable.specs[index]);
-
-      })
+      if (this.ticketService.itemTicketService.itemObjRate.specs && this.ticketService.itemTicketService.itemObjRate.specs.length > 0) {
+        this.ticketService.itemTicketService.itemObjRate.specs.forEach((_spec, index) => {
+          let objAction = _spec.child.filter(x => x.action == true);
+          if (objAction && objAction.length>0) {
+            this.onSelectSpecs(_spec.id, objAction[0].child_id);
+          }
+  
+        })
+      }
+   
 
       if (_packageSearch.specs && _packageSearch.specs.length !== 0) {
         this.timeId = _packageSearch.skus.filter(x => x.spec.join(',') === Object.values(this.dailyRatePkgs.specs).join(','))
@@ -945,6 +982,19 @@ export class TicketServicePage implements OnInit {
           this.dailyRatePkgs.time = this.itemTicketService.itemObjRate.skus[0].skusDaily.times[0];
         }
       }
+      // this.itemTicketService.dailyRatePkgs = [];
+      // if(this.timeId && this.timeId[0].skusDaily.dailyRate.length > 0){ 
+      //   this.itemTicketService.dailyRatePkgs = this.timeId[0].skusDaily.dailyRate;
+      //   this.itemTicketService.dailyRatePkgs.forEach(element => {
+      //     if(element.date == this.checkinDate){
+      //       element.action = true;
+      //     }
+      //     let tomorrowDate = moment(new Date()).add('days',1).format('YYYY-MM-DD');
+      //     let todayDate = moment(new Date()).format('YYYY-MM-DD');
+      //     element.dailydisplay = element.date == tomorrowDate ? 'Ngày mai' : (element.date == todayDate? 'Hôm nay' :moment(element.date).format('DD/M'));
+      //   });
+      // }
+    
     }
   }
 

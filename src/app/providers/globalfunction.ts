@@ -290,6 +290,41 @@ export class GlobalFunction{
       }
       
     }
+    else if(category == 'Ticket'){
+      //this.ticketService.totalPriceNum
+      try {
+        if(this.ticketService.itemExperienceDetail){
+          this.gaSetScreenName('ve-vui-choi/'+this.ticketService.itemExperienceDetail.topic.code +'/'+ this.ticketService.itemExperienceDetail.experience.code);
+          this.googleAnalytionCustom(viewAction, {
+            transaction_id: viewAction=='purchase'?this.ticketService.itemExperienceDetail.experience.code :'',
+            currency: "VND",
+                value: this.ticketService.totalPriceNum ||0,
+                shipping_tier: paymentType || viewAction == 'add_shipping_info' ? "Ground" : '',
+                payment_type: paymentType ? this.getGAPaymentType(paymentType) : '',
+                items: [
+                    {
+                        item_id: this.ticketService.itemExperienceDetail.experience.code,
+                        item_name: this.ticketService.itemExperienceDetail.experience.name,
+                        discount: itemcache.gaDiscountPromo || 0,
+                        index: 0,
+                        item_brand: "iVIVU.com",
+                        item_category: 'Tickets',
+                        item_category2: this.ticketService.itemExperienceDetail.city && this.ticketService.itemExperienceDetail.city.code ? this.ticketService.itemExperienceDetail.city.code : 'Hồ Chí Minh',
+                        item_category3: '',
+                        item_category4: this.ticketService.itemExperienceDetail.topic.code ||'',
+                        item_category5: paymentType ? this.getGAPaymentType(paymentType) : '', 
+                        price: this.ticketService.totalPriceNum ? this.convertStringToNumber(this.ticketService.totalPriceNum/ this.ticketService.totalPax) : 0,
+                        quantity: this.ticketService.totalPax || 0,
+  
+                    }
+                ]
+          })
+        }
+      } catch (error) {
+        throw error;
+      }
+      
+    }
             
   }
 
@@ -622,7 +657,7 @@ export class GlobalFunction{
           textbank = "BIDV";
           bankName = "NH TM CP Đầu Tư và Phát Triển Việt Nam (BIDV)";
           bankBranch = "Chi Nhánh 02, Tp.HCM";
-          accountNumber = "130 1000 147 4890";
+          accountNumber = "130 147 4890";
           urlimgbank = "https://res.ivivu.com/payment/img/banklogo/7.bidv.png";
           url = 'https://www.bidv.vn:81/iportalweb/iRetail@1';
           break;
@@ -1012,7 +1047,7 @@ public getAppVersion() {
                   resolve({error: 401});
                 }
                 else{
-                  resolve([]);
+                  resolve(body);
                 }
 
             })
@@ -2190,6 +2225,14 @@ public holdflight(flyBookingCode,iddepart,idreturn): Promise<any>{
    async showLoadingMessage(msg){
     this.loader = this.loadCtrl.create({
        message: msg
+     });
+ 
+     (await this.loader).present();
+   }
+   async showLoadingMessageWithTimeout(msg){
+    this.loader = this.loadCtrl.create({
+       message: msg,
+       duration: 3000
      });
  
      (await this.loader).present();
@@ -4015,7 +4058,7 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
   }
   SearchKeyword(): Promise<any>{
     return new Promise((resolve, reject) => {
-      let url = C.urls.baseUrl.urlTicket + '/api/Category/SearchV2';
+      let url = C.urls.baseUrl.urlTicket + '/api/Category/SearchV3';
       let headers = {
         apisecret: '2Vg_RTAccmT1mb1NaiirtyY2Y3OHaqUfQ6zU_8gD8SU',
         apikey: '0HY9qKyvwty1hSzcTydn0AHAXPb0e2QzYQlMuQowS8U'

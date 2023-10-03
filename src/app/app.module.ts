@@ -114,6 +114,7 @@ import { FlightConditionAndPriceInternationalPageModule } from './flightinternat
 import { HotelreviewsvideoPageModule } from './hotelreviewsvideo/hotelreviewsvideo.module';
 import { FlightInternationalFilterClassPageModule } from './flightinternational/flightinternationalfilterclass/flightinternationalfilterclass.module';
 import { TicketfilterPageModule } from './ticket/ticketfilter/ticketfilter.module';
+import { MytripTicketQrcodeSlidePageModule } from './mytripticketqrcodeslide/mytripticketqrcodeslide.module';
 
 
 @NgModule({
@@ -175,6 +176,7 @@ import { TicketfilterPageModule } from './ticket/ticketfilter/ticketfilter.modul
     // RecaptchaModule,
     // RecaptchaFormsModule,
     TicketfilterPageModule,
+    MytripTicketQrcodeSlidePageModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

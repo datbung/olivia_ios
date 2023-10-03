@@ -48,6 +48,7 @@ export class RequestComboPage implements OnInit{
   listpaxhint: any = [];
   hidepaxhint: boolean = false;
   currentSelectPax: any;
+  textOther = "";
     constructor(public toastCtrl: ToastController,private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController,
       public storage: Storage, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, 
       public searchhotel: SearchHotel, public valueGlobal: ValueGlobal,private renderer:Renderer,public navCtrl: NavController,
@@ -227,7 +228,7 @@ export class RequestComboPage implements OnInit{
             CustomerName: this.customerName,
             Email: this.usermail,
             Phone: this.mobile,
-            RequestOther: "",
+            RequestOther: this.textOther,
             Avatar: this.bookCombo.Avatar,
             Address: this.bookCombo.Address,
             Adult: this.searchhotel.adult,
@@ -254,7 +255,7 @@ export class RequestComboPage implements OnInit{
             CustomerName: this.customerName,
             Email: this.usermail,
             Phone: this.mobile,
-            RequestOther: "",
+            RequestOther: this.textOther,
             Avatar: this.bookCombo.Avatar,
             Address: this.bookCombo.Address,
             Adult: this.searchhotel.adult,
@@ -572,6 +573,10 @@ export class RequestComboPage implements OnInit{
         this.location = "VCA";
         this.bookCombo.ComboRoomPrice = (itemprices.length >0 && itemprices[2] && itemprices[2].details[0]) ?  itemprices[2].details[0].totalPriceSale : 0;
       }
+      else if(value==4){
+        itemListDeparture[0].setAttribute('aria-activedescendant',"rb-1-2");
+        this.location = "KHAC";      
+      }
     }
     /***
      * Gọi tổng đài hỗ trợ
@@ -700,6 +705,10 @@ export class RequestComboPage implements OnInit{
     })
     
     
+  }
+  
+  inputFocusOther(event){
+    this.textOther = event.target.value;
   }
 
   inputLostFocus(item){

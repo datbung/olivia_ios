@@ -9,7 +9,6 @@ import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
 import { GlobalFunction, ActivityService } from '../../providers/globalfunction';
 import jwt_decode from 'jwt-decode';
-import { tourService } from 'src/app/providers/tourService';
 import * as moment from 'moment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as $ from 'jquery';
@@ -20,7 +19,7 @@ import { OverlayEventDetail } from '@ionic/core';
 import { ticketService } from 'src/app/providers/ticketService';
 import { forEach } from '@angular/router/src/utils/collection';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { HTMLIonOverlayElement } from '@ionic/core';
 /**
  * Generated class for the RoomadddetailsPage page.
  *
@@ -56,7 +55,7 @@ export class TicketAdddetailsPage implements OnInit {
   point: number;
   promocode: string = '';
   discountpromo: number = 0;
-  itemVoucherTour: any;
+  itemVoucherTicket: any;
   ischeckpoint = false;
   msg: string;
   textpromotion: any;
@@ -84,7 +83,7 @@ export class TicketAdddetailsPage implements OnInit {
   trafficInfoArr: any=[];
   trafficCarInfoArr: any=[];
   trafficFlightInfoArr: any=[];
-  arrHours = ['00','01','02','03','04','05','06','07','08','09','10','11','12'];
+  arrHours = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
   arrMinutes = ['00','01','02','03','04','05','06','07','08','09','10',
   '11','12','13','14','15','16','17','18','19','20',
   '21','22','23','24','25','26','27','28','29','30',
@@ -94,9 +93,168 @@ export class TicketAdddetailsPage implements OnInit {
   hours: any='00';
   minutes: any='00';
   trafficQtyInfoArr: any=[];
+  totalPriceNum: number;
+  ischeckTime = false;
+  strPromoCode: any;
+  totaldiscountpromo: any;
+  ischeckerror: number;
+  promotionCode: string;
+  itemVoucher: any;
+  alert: HTMLIonAlertElement;
   //public ticketCustomData: FormGroup;
   ngOnInit() {
+    this._voucherService.getTicketObservable().subscribe((itemVoucher)=> {
+      if(itemVoucher){
+        if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
+          this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
+          return;
+        }
+        this.zone.run(()=>{
+          if(itemVoucher.claimed){
+            this.itemVoucher = itemVoucher;
+            this.promocode = itemVoucher.code;
+            this.promotionCode = itemVoucher.code;
+            this.discountpromo = itemVoucher.rewardsItem.price;
+            this.buildStringPromoCode();
+            
+          }else{
+            this.itemVoucher = null;
+            this.promocode = "";
+            this.promotionCode = "";
+            this.discountpromo = 0;
+            this.buildStringPromoCode();
 
+            if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+              this.strPromoCode = '';
+              this.totaldiscountpromo = 0;
+            }
+          }
+          this.totalPriceAll();
+        })
+      }
+    })
+    
+    this._voucherService.getVoucherUsedObservable().subscribe(async (itemVoucher)=> {
+      if(itemVoucher){
+        this.showAlertVoucherUsed();
+      }
+    })
+
+    this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+      if(check){
+        this.itemVoucher = null;
+        this.promocode = "";
+        this.promotionCode = "";
+        this.discountpromo = 0;
+        this.strPromoCode = "";
+        this.totaldiscountpromo=0;
+        this.ticketService.itemFlightCache.hasvoucher = false;
+        this.ticketService.itemFlightCache.listVouchersAlreadyApply = [];
+        this._voucherService.totalDiscountPromoCode =0;
+        this._voucherService.listPromoCode =[];
+        this._voucherService.voucherSelected = [];
+        this._voucherService.flightPromoCode = "";
+        this._voucherService.flightTotalDiscount=0;
+        this.totalPriceAll();
+      }
+    })
+  }
+  async showAlertVoucherUsed() {
+    var se = this;
+    const overlays = document.querySelectorAll('ion-alert, ion-modal');
+    const overlaysArr = Array.from(overlays) as HTMLIonOverlayElement[];
+    let msg = `Mã voucher ${se.ticketService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${se.ticketService.itemFlightCache.pnr.resNo}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+    this.alert = await se.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-choiceseat",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'OK',
+          handler: () => {
+            overlaysArr.forEach(o => o.dismiss());
+            this.goback();
+          }
+        },
+        {
+          text: 'Hủy',
+          role: 'Cancel',
+          handler: () => {
+            this.promocode = "";
+            this.promotionCode = "";
+            this.discountpromo = 0;
+            this.strPromoCode = '';
+            this.totaldiscountpromo = 0;
+            this.ticketService.itemFlightCache.promotionCode = "";
+            this.ticketService.itemFlightCache.discount = 0;
+            this.ticketService.itemFlightCache.discountpromo = 0;
+            this._voucherService.voucherSelected = [];
+            this._voucherService.listPromoCode = "";
+            this._voucherService.listObjectPromoCode = [];
+            this._voucherService.totalDiscountPromoCode = 0;
+            overlaysArr.forEach(o => o.dismiss());
+          }
+        }
+      ]
+    });
+    this.alert.present();
+  }
+
+  async showAlertPromoCode() {
+    var se = this;
+    const overlays = document.querySelectorAll('ion-alert, ion-modal');
+    const overlaysArr = Array.from(overlays) as HTMLIonOverlayElement[];
+    let msg = `Mã voucher ${se.ticketService.itemFlightCache.hasvoucher} đang dùng cho đơn hàng ${this.ticketService.itemTicketService.objbooking.bookingCode}. Vui lòng chọn lại vé nếu quý khách muốn tiếp tục thay đổi`;
+    this.alert = await se.alertCtrl.create({
+      message: msg,
+      cssClass: "cls-alert-choiceseat",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'OK',
+          handler: () => {
+            overlaysArr.forEach(o => o.dismiss());
+            this.goback();
+          }
+        },
+        {
+          text: 'Hủy',
+          role: 'Cancel',
+          handler: () => {
+            this.promocode = "";
+            this.promotionCode = "";
+            this.discountpromo = 0;
+            this.strPromoCode = '';
+            this.totaldiscountpromo = 0;
+            this.ticketService.itemFlightCache.promotionCode = "";
+            this.ticketService.itemFlightCache.discount = 0;
+            this.ticketService.itemFlightCache.discountpromo = 0;
+            this._voucherService.voucherSelected = [];
+            this._voucherService.listPromoCode = "";
+            this._voucherService.listObjectPromoCode = [];
+            this._voucherService.totalDiscountPromoCode = 0;
+            this._voucherService.ticketPromoCode ="";
+            this._voucherService.ticketTotalDiscount=0;
+            se.totalPriceAll();
+            overlaysArr.forEach(o => o.dismiss());
+          }
+        }
+      ]
+    });
+    this.alert.present();
+  }
+  totalPriceAll() {
+    this.totalPriceNum = this.ticketService.bookingInfo.booking.totalPriceAfterDiscount;
+    this.totalPriceNum = this.totalPriceNum - this.totaldiscountpromo;
+    this.ticketService.discountpromo = this.totaldiscountpromo;
+    this.ischeckpromo = true;
+
+    if (this.totalPriceNum*1 <= 0) {
+      this.totalPriceNum = 0;
+    }
   }
   constructor(public platform: Platform, public navCtrl: NavController, public zone: NgZone,
     private toastCtrl: ToastController, public Roomif: RoomInfo, public storage: Storage, public loadingCtrl: LoadingController,
@@ -104,13 +262,12 @@ export class TicketAdddetailsPage implements OnInit {
     private alertCtrl: AlertController,
     public activityService: ActivityService,
     public searchhotel: SearchHotel,
-    public tourService: tourService,
     public _voucherService: voucherService,
     public ticketService: ticketService, public valueGlobal: ValueGlobal, public actionsheetCtrl: ActionSheetController,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,public modalCtrl: ModalController) {
     this.ischeckpayment = Roomif.ischeckpayment;
     // let tp =0;
-
+      //console.log((ticketService.itemTicketService.dailyRatePkgs.adult + (ticketService.itemTicketService.dailyRatePkgs.child||0)));
     if (this.ticketService && this.ticketService.itemTicketService) {
       // tp = ((this.ticketService.itemTicketService.PriceAdultAvg ||0) * this.searchhotel.adult || 0) + ((this.ticketService.itemTicketService.PriceChildAvg ||0) * this.searchhotel.child || 0) + ((this.ticketService.itemTicketService.PriceElderAvg ||0) * this.searchhotel.elder || 0);
       this.totalPriceStr = this.gf.convertNumberToString(this.ticketService.totalPriceNum);
@@ -171,6 +328,7 @@ export class TicketAdddetailsPage implements OnInit {
     // } else if (this.booking.cost) {
     //   priceBooking = this.booking.cost.replace(/\./g, '').replace(/\,/g, '');
     // }
+    this.totalPriceNum = this.ticketService.totalPriceNum;
     this.getSummary();
    
   }
@@ -288,22 +446,18 @@ export class TicketAdddetailsPage implements OnInit {
         this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
         this._voucherService.selectVoucher = null;
       }
-
-      this.itemVoucherTour = null;
-      this.promocode = "";
-      this.discountpromo = 0;
-      this.ischeckpromo = false;
-      this.tourService.promocode = "";
-      this.tourService.discountpromo = 0;
-      this.tourService.totalPriceBeforeDiscount = 0;
-      this.tourService.discountPrice = null;
-      this.tourService.usePointPrice = 0;
-      this.edit(2);
+      // this.tourService.discountpromo = 0;
+      // this.tourService.totalPriceBeforeDiscount = 0;
+      // this.tourService.discountPrice = null;
+      // this.tourService.usePointPrice = 0;
+      // this.edit(2);
+      // this.totalPriceNum = this.totalPriceNum + this.ticketService.discountpromo;
     })
     this.GetUserInfo()
   }
 
   next() {
+    this.gf.showLoading();
     this.createObjectBooking().then((checkvalid) => {
       if (checkvalid) {
         this.CustomerSave();
@@ -315,6 +469,8 @@ export class TicketAdddetailsPage implements OnInit {
         // }
 
       }
+      this.gf.logEventFirebase('',this.ticketService, 'ticketadddetails', 'add_shipping_info', 'Ticket');
+      this.gf.hideLoading();
     })
 
   }
@@ -380,7 +536,7 @@ export class TicketAdddetailsPage implements OnInit {
       }
 
       let tp = 0;
-      this.tourService.discountPrice = 0;
+      this.ticketService.discountPrice = 0;
       tp = ((this.ticketService.itemTicketService.PriceAdultAvg || 0) * this.searchhotel.adult || 0) + ((this.ticketService.itemTicketService.PriceChildAvg || 0) * this.searchhotel.child || 0) + ((this.ticketService.itemTicketService.PriceElderAvg || 0) * this.searchhotel.elder || 0);
       // if(this.tourService.itemDepartureCalendar && this.tourService.itemDepartureCalendar.TotalRate){
       //   tp = this.tourService.itemDepartureCalendar.TotalRate;
@@ -390,21 +546,21 @@ export class TicketAdddetailsPage implements OnInit {
       // if(this.ischeck && this.tourService.itemDetail.Inbound){
       //   tp = tp *1.08;
       // }
-      this.tourService.totalPriceBeforeDiscount = tp;
+      this.ticketService.totalPriceBeforeDiscount = tp;
       if (this.ischeckpoint && this.point > 0) {
         if (this.point >= tp) {
           this.usePointPrice = tp;
         } else {
           this.usePointPrice = this.point;
         }
-        this.tourService.usePointPrice = this.usePointPrice;
+        this.ticketService.usePointPrice = this.usePointPrice;
 
         tp = tp - this.point;
         if (tp <= 0) {
           this.Pricepointshow = 0;
           tp = 0;
         }
-        this.tourService.discountPrice = tp;
+        this.ticketService.discountPrice = tp;
       }
 
       if (this.discountpromo) {
@@ -413,10 +569,10 @@ export class TicketAdddetailsPage implements OnInit {
           this.Pricepointshow = 0;
           tp = 0;
         }
-        this.tourService.discountPrice = tp;
+        this.ticketService.discountPrice = tp;
       }
 
-      this.tourService.totalPrice = tp;
+      // this.tourService.totalPrice = tp;
       this.zone.run(() => {
         this.totalPriceStr = tp > 0 ? this.gf.convertNumberToString(tp) : "0";
       })
@@ -470,16 +626,23 @@ export class TicketAdddetailsPage implements OnInit {
     }
   }
   goback() {
-    this.itemVoucherTour = null;
+    this.itemVoucherTicket = null;
     this.promocode = "";
     this.discountpromo = 0;
     this.ischeckpromo = false;
-    this.tourService.promocode = "";
-    this.tourService.discountpromo = 0;
-    this.tourService.totalPriceBeforeDiscount = 0;
-    this.tourService.discountPrice = null;
-    this.tourService.usePointPrice = 0;
-    // this.navCtrl.back()
+    this.ticketService.promocode = "";
+    this.itemVoucher = null;
+    this.promotionCode = "";
+    this.discountpromo = 0;
+    this.strPromoCode = '';
+    this.totaldiscountpromo = 0;
+    this._voucherService.voucherSelected = [];
+    this._voucherService.listPromoCode = "";
+    this._voucherService.listObjectPromoCode = [];
+    this._voucherService.totalDiscountPromoCode = 0;
+    this._voucherService.ticketPromoCode = "";
+    this._voucherService.ticketTotalDiscount=0;  
+    this._voucherService.vouchers = [];  
     this.navCtrl.navigateBack('ticketservice');
   }
 
@@ -727,15 +890,11 @@ export class TicketAdddetailsPage implements OnInit {
           'content-type': 'application/json'
         },
         body: {
-          bookingCode: 'TOUR', code: se.promocode, totalAmount: se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, ''), comboDetailId: "",
+          bookingCode: this.ticketService.itemTicketService.objbooking.bookingCode, code: se.promocode, totalAmount: this.ticketService.totalPriceNum,
           couponData: {
-            "tour": {
-              "tourId": se.tourService.itemDetail.tourDetailId,
-              "totalAdult": se.searchhotel.adult,
-              "totalChild": se.searchhotel.child,
-              "jsonObject": "",
-              "checkIn": se.searchhotel.CheckInDate,
-              "checkOut": se.searchhotel.CheckOutDate
+            "vvc": {
+              "experienceId": se.ticketService.itemTicketDetail.experienceId,
+              "supplier": se.ticketService.bookingInfo.booking.supplierCode
             }
           }
         },
@@ -747,50 +906,55 @@ export class TicketAdddetailsPage implements OnInit {
         se.zone.run(() => {
           var json = body;
           if (json.error == 0) {
-            var total = se.totalPriceStr.toString().replace(/\./g, '').replace(/\,/g, '');
-
-            se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
-            se.Pricepointshow = total - se.discountpromo;
-            se.tourService.discountpromo = se.discountpromo;
-            se.ischeckpromo = true;
-            // if (se.ischeckpoint) {
-            //   total = se.Pricepointshow.toString().replace(/\./g, '').replace(/\,/g, '');
-            // }
-            if (se.Pricepointshow > 0) {
-              se.Pricepointshow = se.Pricepointshow.toLocaleString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-              //se.ischeckpromo = true;
-            }
-            else {
-              //se.ischeckbtnpromo = true;
-              se.Pricepointshow = 0;
-            }
             se.msg = json.msg;
-            se.edit(2);
+            se.ischeckerror = 0;
+            se.promotionCode=se.promocode;
+
+            se.strPromoCode = se.promocode;
+            se.totaldiscountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+            se.discountpromo = json.data.orginDiscount ? json.data.orginDiscount : json.data.discount;
+            se.totalPriceNum = se.totalPriceNum - se.discountpromo;
+            se.ticketService.discountpromo = se.discountpromo;
+            se.ischeckpromo = true;
+        
+            if (se.totalPriceNum <= 0) {
+              se.totalPriceNum = 0;
+            }
+            
+            se.msg = json.msg;
+            // se.edit(2);
             //se.ischecktext=0;
             //se.ischeckerror=0;
           }
           else if (json.error == 1) {
-            se.ischeckpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
-            //se.ischecktext=1;
-            //se.ischeckerror=1;
+            se.ischeckerror = 1;
+
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else if (json.error == 2) {
-            //se.ischeckbtnpromo = false;
-            se.ischeckpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
-            //se.ischecktext=2;
-            //se.ischeckerror=1;
+            se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
+          }
+          else if (json.error == 3) {
+            se.msg = json.msg;
+            se.discountpromo = 0;
+  
+            se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
           else {
-            //se.ischeckbtnpromo = false;
-            se.ischeckpromo = false;
             se.msg = json.msg;
             se.discountpromo = 0;
-            //se.ischecktext = 2;
-            //se.ischeckerror = 1;
+            se.ischeckerror = 1;
+            se.strPromoCode = '';
+            se.totaldiscountpromo = 0;
           }
         })
       });
@@ -805,9 +969,9 @@ export class TicketAdddetailsPage implements OnInit {
   }
 
   checkVoucherClaimed() {
-    if (this.itemVoucherTour && this.itemVoucherTour.claimed) {
+    if (this.itemVoucherTicket && this.itemVoucherTicket.claimed) {
       this._voucherService.vouchers.forEach((element) => {
-        if (element.id == this.itemVoucherTour.id) {
+        if (element.id == this.itemVoucherTicket.id) {
           element.claimed = true;
         }
       });
@@ -816,6 +980,8 @@ export class TicketAdddetailsPage implements OnInit {
 
   showTicketPrice() {
     this.ticketService.totalPriceStr = this.totalPriceStr;
+    this.ticketService.totalPriceNum = this.totalPriceNum;
+    this._voucherService.ticketPromoCode = this.strPromoCode;
     this.navCtrl.navigateForward('/ticketpricedetail');
   }
   CustomerSave() {
@@ -823,6 +989,13 @@ export class TicketAdddetailsPage implements OnInit {
     if (this.ischeck) {
       isInvoice = 1;
     }
+
+    let promoCodeArray = [];
+    if (this.strPromoCode) {
+      // Tách chuỗi thành mảng bằng dấu phẩy (,)
+      promoCodeArray  = this.strPromoCode.split(', ');
+    }
+  
     let objCustomer = 
     {
       memberId: this.memberid || '',
@@ -844,7 +1017,7 @@ export class TicketAdddetailsPage implements OnInit {
       paxList: '',
       tourNotes: this.note,
       kkdayResource: this.kkdayResource,
-      code: []//this.vouchers.filter(x => x.checked).map(x => x.code)
+      code: promoCodeArray
     };
     let headers =
     {
@@ -853,7 +1026,19 @@ export class TicketAdddetailsPage implements OnInit {
     this.gf.RequestApi('POST', C.urls.baseUrl.urlTicket + '/api/Booking/CustomerSave/' + this.ticketService.itemTicketService.objbooking.bookingCode, headers, objCustomer, 'ticketservice', 'RecheckRateBooking').then((data: any) => {
       if (data && data.success) {
         this.ticketService.totalPriceStr = this.totalPriceStr;
-        this.navCtrl.navigateForward('/ticketpaymentselect');
+        this.ticketService.totalPriceNum = this.totalPriceNum;
+        if (this.totalPriceNum > 0) {
+          this.navCtrl.navigateForward('/ticketpaymentselect');
+        }else{
+          this.ticketService.paymentType = 1;
+          let objbookTicket = {
+            bookingCode : this.ticketService.itemTicketService.objbooking.bookingCode,
+            paymentMethod: 8
+          }
+          this.gf.ticketPaymentSave(objbookTicket);
+          this.gf.logEventFirebase('office', this.ticketService, 'ticketpaymentatoffice', 'add_payment_info', 'Ticket');
+          this.navCtrl.navigateForward('/ticketpaymentdone/0');
+        }
       } else {
         alert(data.error);
       }
@@ -977,6 +1162,9 @@ export class TicketAdddetailsPage implements OnInit {
                 resolve(false);
                 return;
               }
+            }
+            else if(!this.kkdayResource.dataInput.custom && this.kkdayResource.dataInput.mobile_device){
+              this.kkdayResource.dataInput.mobile_device[elementCheck.name] = elementCheck[elementCheck.name];
             }else{
               this.kkdayResource.dataInput.custom[index][elementCheck.name] = elementCheck[elementCheck.name];
             }
@@ -1022,7 +1210,7 @@ export class TicketAdddetailsPage implements OnInit {
         }
       }
 
-      console.log(this.kkdayResource.dataInput);
+      //console.log(this.kkdayResource.dataInput);
       resolve(true);
     })
 
@@ -1167,13 +1355,41 @@ export class TicketAdddetailsPage implements OnInit {
             this.customGeneralInfoArr.push(_itemGeneralCustom);
           }
 
-          //console.log(this.customInfoArr);
-          //console.log(this.customGeneralInfoArr);
+          console.log(this.customInfoArr);
+          console.log(this.customGeneralInfoArr);
+        }
+
+        //device
+        if(this.kkdayResource.dataInput.mobile_device){
+          const _customKeys = Object.keys(this.kkdayResource.dataInput.mobile_device);
+
+          let _mobileDeviceInfoGeneral = dataOutputNotfound.filter(x => _customKeys.includes(x.name) && x.session === 'GeneralInfo');
+          if(_mobileDeviceInfoGeneral && _mobileDeviceInfoGeneral.length >0){
+            for (let index = 0; index < _mobileDeviceInfoGeneral.length; index++) {
+              let element = _mobileDeviceInfoGeneral[index];
+              element[element.name] = '';
+              element.dataRawSearch = [...element.dataRaw];
+
+              _mobileDeviceInfoGeneral.forEach(elementCustom => {
+                elementCustom.index = index+1;
+                elementCustom[elementCustom.name] = '';
+                elementCustom['allowInput'] ='undefined';
+                elementCustom.dataRawSearch = [...elementCustom.dataRaw];
+
+                if(elementCustom.type == 'array' && elementCustom.dataRawSearch && elementCustom.dataRawSearch.length ==1){
+                  elementCustom[elementCustom.name] = elementCustom.dataRawSearch[0].name;
+                }
+              });
+             
+            }
+            let _itemGeneralCustom = {listCustom: _mobileDeviceInfoGeneral};
+            this.customGeneralInfoArr.push(_itemGeneralCustom);
+          }
         }
 
         //Quầy nhận vé
         if(this.kkdayResource.dataInput.traffic){
-          let _trafficInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && x.name == 's_location');
+          let _trafficInfo = dataOutputNotfound.filter(x => x.session === 'GeneralInfo' && x.name == 's_location' && x.label == "Quầy nhận vé");
           if(_trafficInfo && _trafficInfo.length >0 && _trafficInfo[0].dataRaw && _trafficInfo[0].dataRaw.length >0){
             _trafficInfo[0][_trafficInfo[0].name] = _trafficInfo[0].dataRaw[0].name;
             _trafficInfo[0].dataRawSearch = [..._trafficInfo[0].dataRaw];
@@ -1263,6 +1479,10 @@ export class TicketAdddetailsPage implements OnInit {
 
         //console.log(_formGroup);
       }
+      else if(data && data.success && data.data){
+        this.ticketService.bookingInfo = data.data;
+      }
+      this.ischeckTime = true;
     });
   }
   async selectValue(ev, item) {
@@ -1327,7 +1547,7 @@ export class TicketAdddetailsPage implements OnInit {
     // console.log(this.kkdayValue);
   }
 
-  getCusInfoDataRaw(ev, item){
+  getCusInfoDataRaw(ev, item, idx){
     var se = this;
       
 
@@ -1359,10 +1579,23 @@ export class TicketAdddetailsPage implements OnInit {
             item.dataRawSearch = [...item.dataRaw];
           })
         }
-        console.log('input_'+item.name);
+       // console.log('input_'+item.name);
+       
       setTimeout(()=>{
-        document.getElementById('input_'+item.name).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        if(document.getElementById('input_'+item.name+(idx != 'undefined' ? ('_'+idx) : ''))){
+          if(item.type != 'array'){
+            $('.div-ticket-adddetail-content').addClass('cls-padding-bottom-350');
+          }
+          document.getElementById('input_'+item.name+(idx != 'undefined' ? ('_'+idx) : '')).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        }
+        
       },100)
+  }
+
+  cusInfoLostFocus(ev, item){
+    if(document.getElementById('input_'+item.name)){
+        $('.div-ticket-adddetail-content').removeClass('cls-padding-bottom-350');
+    }
   }
 
   selectCusInfoDataRaw(item, _selectData){
@@ -1421,5 +1654,111 @@ export class TicketAdddetailsPage implements OnInit {
         //this.kkdayResource.dataInput.traffic.flight.arrival_time = `${this.hours}:${value}`;
       }
     }
-}
+
+    inputFocusCustom(event, item,idx){
+      setTimeout(()=>{
+        if(!$('.div-ticket-adddetail-content').hasClass('cls-padding-bottom-350')){
+          $('.div-ticket-adddetail-content').addClass('cls-padding-bottom-350');
+        }
+        
+        if(document.getElementById('input_'+item.name+item.name+(idx != 'undefined' ? ('_'+idx) : ''))){
+          document.getElementById('input_'+item.name+item.name+(idx != 'undefined' ? ('_'+idx) : '')).scrollIntoView({ behavior: 'smooth', block: 'center'  });
+        }
+        
+      },100)
+    }
+
+    inputLostFocusCustom(){
+      $('.div-ticket-adddetail-content').removeClass('cls-padding-bottom-350');
+    }
+    async showdiscount(){
+      $('.div-point').removeClass('div-disabled');
+      this._voucherService.openFrom = 'ticketadddetails';
+      this.msg="";
+      this.zone.run(()=> {
+      
+        // if (this.ticketService.promocode) {
+        //   this.promocode = "";
+        //   this.discountpromo = 0;
+        //   this.ischeckpromo = false;
+        //   this.ticketService.promocode = "";
+        //   this.totalPriceNum = this.ticketService.totalPriceNum;
+        //   this.ticketService.discountpromo = 0;
+        // }
+
+      })
+      const modal: HTMLIonModalElement =
+      await this.modalCtrl.create({
+        component: AdddiscountPage,
+      });
+      modal.present();
+      if(this._voucherService.selectVoucher && this._voucherService.selectVoucher.claimed){
+        this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+        this._voucherService.selectVoucher = null;
+      }
+      this._voucherService.listPromoCode = [];
+      this.buildStringPromoCode();
+     this.totalPriceAll();
+    
+      // this.edit(2);
+      modal.onDidDismiss().then((data: OverlayEventDetail) => {
+        //case multi voucher tiền mặt
+        if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+          if(this.strPromoCode){
+            this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+            this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+          }else{
+            this.strPromoCode = this._voucherService.listPromoCode.join(', ');
+            this.totaldiscountpromo = this._voucherService.totalDiscountPromoCode;
+          }
+         
+        }
+        else if (data.data) {
+          let vc = data.data;
+          if(vc.applyFor && vc.applyFor != 'vvc'){
+            this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'flight' ? 'vé máy bay' : 'khách sạn'}. Quý khách vui lòng chọn lại mã khác!`);
+            this._voucherService.rollbackSelectedVoucher.emit(vc);
+            return;
+          }else {
+            this.zone.run(() => {
+              if (data.data.promocode) {
+                $('.div-point').addClass('div-disabled');
+                this.promocode=data.data.promocode;
+                this.textpromotion=data.data.promocode;
+                this.ticketService.promocode = data.data.promocode;
+                this.promofunc(vc.applyFor && vc.applyFor == 'vvc' ? vc : '');
+               
+              }
+            })
+          }
+          
+        }
+        this.totalPriceAll();
+      })
+      //}
+    }
+    buildStringPromoCode(){
+  
+      if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+        this.strPromoCode = this._voucherService.voucherSelected.map(item => item.code).join(', ');
+        this.totaldiscountpromo = this._voucherService.voucherSelected.map(item => item.rewardsItem).reduce((total,b)=>{ return total + b.price; }, 0);
+      }else{
+        this.strPromoCode = '';
+        this.totaldiscountpromo = 0;
+      }
+    
+      if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+        if(this.strPromoCode){
+          this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+        }else{
+          this.strPromoCode += this._voucherService.listPromoCode.join(', ');
+        }
+          
+          this.totaldiscountpromo += this._voucherService.totalDiscountPromoCode;
+      }
+      this._voucherService.ticketPromoCode = this.strPromoCode;
+      this._voucherService.ticketTotalDiscount = this.totaldiscountpromo;
+    }
+  }
+    
 

@@ -3,7 +3,7 @@ import { ActivityService, GlobalFunction } from '../providers/globalfunction';
 import { MytripService } from '../providers/mytrip-service.service';
 import { tourService } from '../providers/tourService';
 import * as moment from 'moment';
-import { ActionSheetController, IonRouterOutlet, NavController, ToastController ,AlertController,LoadingController, IonContent, Platform} from '@ionic/angular';
+import { ActionSheetController, IonRouterOutlet, NavController, ToastController ,AlertController,LoadingController, IonContent, Platform, ModalController} from '@ionic/angular';
 import { NetworkProvider } from '../network-provider.service';
 import { SearchHotel, ValueGlobal } from '../providers/book-service';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
@@ -18,6 +18,9 @@ import { File } from '@ionic-native/file/ngx';
 import { normalizeURL } from 'ionic-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { ticketService } from '../providers/ticketService';
+import { MytripTicketQrcodeSlidePage } from '../mytripticketqrcodeslide/mytripticketqrcodeslide';
+import { OverlayEventDetail } from "@ionic/core";
+
 @Component({
   selector: 'app-mytripdetail',
   templateUrl: './mytripdetail.page.html',
@@ -115,6 +118,12 @@ export class MytripdetailPage implements OnInit {
   _departTicketInfoCRM: any;
   _returnTicketInfoCRM: any;
   objSummary: any;
+  expandPrice: boolean;
+  ticketChangeLocation: any;
+  ticketDownloadFile: any;
+  showIncludeContent: any;
+  ticketDownloadFiles: any=[];
+  listQrLink: any;
   constructor(public _mytripservice: MytripService,
     public gf: GlobalFunction,
     private navCtrl: NavController,
@@ -133,7 +142,8 @@ export class MytripdetailPage implements OnInit {
     private platform: Platform,
     private socialSharing: SocialSharing,
     private file: File,
-    private zone: NgZone,private transfer:FileTransfer,private ticketService:ticketService) {
+    private zone: NgZone,private transfer:FileTransfer,private ticketService:ticketService,
+    private modalCtrl: ModalController) {
       if(this._mytripservice.tripdetail){
         this.trip = this._mytripservice.tripdetail;
         // this.getmhoteldetail();
@@ -257,10 +267,29 @@ export class MytripdetailPage implements OnInit {
           if ((this.trip.payment_status == 1 || this.trip.payment_status == 5) && this.trip.approve_date){
             this.gf.showLoading();
             this.gf.ticketGetBookingCRM(this.trip.booking_id).then((data) => {
-              this.objectDetail=data;
-              let arrcd = this.objectDetail.startDate.split('-');
-              let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
-              this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+                
+                this.objectDetail=data;
+              if(this.objectDetail && this.objectDetail.startDate){
+                let arrcd = this.objectDetail.startDate.split('-');
+                let nd = new Date(arrcd[0], arrcd[1] - 1, arrcd[2]);
+                this.objectDetail.startDateShow = moment(nd).format('DD-MM-YYYY');
+              }
+              if(this.objectDetail && this.objectDetail.fileUrls && this.objectDetail.fileUrls.length >0){
+                this.objectDetail.fileUrls.forEach(element => {
+                  if(element.indexOf('&') != -1){
+                    let _arrsplit = element.split('&');
+                    if(_arrsplit && _arrsplit.length >0 && _arrsplit[1]){
+                      let _fname = _arrsplit[1].split('=');
+                      this.ticketDownloadFiles.push({name: _fname[1] || '', url: element});
+                    }
+                  }else{
+                    this.ticketDownloadFiles.push({name: element, url: element });
+                  }
+                 
+                });
+                
+              }
+             
               var objmap;
               if (this.objectDetail.listNotes) {
                 objmap = this.objectDetail.listNotes.filter((item) => item.qrLink);
@@ -268,6 +297,9 @@ export class MytripdetailPage implements OnInit {
             
               if(objmap && objmap.length >0){
                 this.ischeckqrLink=true;
+                this.listQrLink = objmap.map(item => {
+                  return {'qrlink': item.qrLink}
+                });
               }else{
        
                   this.GetVoucherLinks(this.trip.booking_id).then((data) => {
@@ -301,6 +333,21 @@ export class MytripdetailPage implements OnInit {
               this.includePrice = data.data.booking.includePrice.split('|');
               this.includePrice = "<p>" + this.includePrice[0] + " | " + this.includePrice[1] + "</p>" + this.includePrice[2] + this.includePrice[3];
               this.objSummary=data.data.booking;
+              if(this.objSummary && this.objSummary.supplement){
+                console.log(JSON.parse(this.objSummary.supplement));
+                let _objSup = JSON.parse(this.objSummary.supplement);
+                  if(_objSup && _objSup.traffic && _objSup.traffic.car && _objSup.traffic.car.s_location && this.objSummary.expeName.indexOf('Vé') != -1){
+                      this.ticketChangeLocation = _objSup.traffic.car.s_location;
+                  }
+              }
+              this.showIncludeContent ='';
+              if(this.objSummary && this.objSummary.includePrice){
+                let arr = this.objSummary.includePrice.split('|');
+                console.log(arr);
+                if(arr && arr.length >0 && arr[4]){
+                  this.showIncludeContent = arr[4];
+                }
+              }
             }
           });
         }
@@ -1636,7 +1683,7 @@ async downloadqrcode(){
     }
   }
   share(item) {
-    this.socialSharing.share(null, null, null, item).then(() => {
+    this.socialSharing.share(null, null, item, null).then(() => {
       // Success!
     }).catch(() => {
       // Error!
@@ -1731,6 +1778,9 @@ async downloadqrcode(){
   ticketinfo(){
     this.isTTV=!this.isTTV;
   }
+  showPrice(){
+    this.expandPrice = !this.expandPrice;
+  }
   GetVoucherLinks(booking_id): Promise<any>{
     return new Promise((resolve, reject) => {
       this.gf.RequestApi('GET', C.urls.baseUrl.urlTicket + '/api/Reservation/GetVoucherLinks?bookingCode='+booking_id , {}, {}, '', '').then((data) => {
@@ -1742,5 +1792,25 @@ async downloadqrcode(){
       });
     })
 
+  }
+
+  sharePDF(url){
+    this.socialSharing.share(null, null, null, url).then(() => {
+      // Success!
+    }).catch(() => {
+      // Error!
+    });
+  }
+  
+  async showQrCodeSlide(){
+    if(this.ischeckqrLink){
+      this._mytripservice.objectDetail = this.objectDetail;
+      this._mytripservice.listQrLink = this.listQrLink;
+        const modal: HTMLIonModalElement = await this.modalCtrl.create({
+          component: MytripTicketQrcodeSlidePage,
+        });
+        modal.present();
+        
+    }
   }
 }

@@ -10,6 +10,7 @@
    }
    .content-flightaddluggage{
        padding: 16px;
+       padding-right: 0;
 
        .btn-close{
         position: absolute;
@@ -149,6 +150,66 @@
             letter-spacing: -0.51px;
             font-weight: 600;
         }
+    }
+
+    .text-normal {
+        text-align: left;
+        font-size: 14px;
+        font-weight: 500 !important;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .div-wrap-item-luggage {
+        display: flex;
+        width: auto;
+        overflow: scroll;
+        height: 78px;
+        border-bottom: none;
+        padding-top: 16px;
+        padding-left: 3px;
+       
+        .div-item-luggage {
+            display: flex;
+            flex-direction: column;
+            margin-right: 8px;
+            text-align: center;
+            min-width: 113px;
+            height: 58px;
+            padding: 8px 6px;
+            border-radius: 4px;
+            box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+        }
+
+        .div-lug-name {
+            font-size: 16px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #3f3b3b;
+        }
+
+        .div-lug-weight {
+            font-size: 16px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #3f3b3b;
+        }
+    }
+
+    .div-item-luggage.selected {
+        border: solid 2px #26bed6;
     }
     
    }

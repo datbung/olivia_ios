@@ -91,16 +91,21 @@ export class Tab5Page implements OnInit {
         // google analytic
         gf.googleAnalytion('show-more', 'Search', '');
         // Kiểm tra mạng on/off để hiển thị
-        this.networkProvider.getNetworkStatus().subscribe((connected : boolean) => {
-            this.isConnected = connected;
-            if (this.isConnected) {
-                setTimeout(() => {
-                    this.loadEmployeeSupport();
-                }, 100)
-            } else {
-                this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
-            }
-        });
+        if(this.platform.is('cordova')){
+            this.networkProvider.getNetworkStatus().subscribe((connected : boolean) => {
+                this.isConnected = connected;
+                if (this.isConnected) {
+                    setTimeout(() => {
+                        this.loadEmployeeSupport();
+                    }, 100)
+                } else {
+                    this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
+                }
+            });
+        }else{
+            this.isConnected = true;
+        }
+        
     }
 
 
@@ -290,6 +295,7 @@ export class Tab5Page implements OnInit {
               this.gf.setParams(true, 'resetBlogTrips');
               this.storage.remove('listblogtripdefault');
               this.storage.remove('listmytrips');
+              this.storage.remove('flighttopdeal');
               this.storage.clear();
              
               this.zone.run(() => {
@@ -334,17 +340,27 @@ export class Tab5Page implements OnInit {
             this.loginuser = auth_token;
         });
         this.valueGlobal.logingoback = '/app/tabs/tab5';
-        if (this.networkProvider.isOnline()) {
+        if(this.platform.is('cordova')){
+            if (this.networkProvider.isOnline()) {
+                this.isConnected = true;
+                setTimeout(() => {
+                    this.loadEmployeeSupport();
+                    this.GetUserInfo();
+                }, 100)
+                this.loadUserInfo();
+            } else {
+                this.isConnected = false;
+                this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
+            }
+        }else{
             this.isConnected = true;
             setTimeout(() => {
                 this.loadEmployeeSupport();
                 this.GetUserInfo();
             }, 100)
             this.loadUserInfo();
-        } else {
-            this.isConnected = false;
-            this.gf.showWarning('Không có kết nối mạng', 'Vui lòng kết nối mạng để sử dụng các tính năng của ứng dụng', 'Đóng');
         }
+        
         setTimeout(() => {
             se.zone.run(() => {
                 se.storage.get('auth_token').then(auth_token => {

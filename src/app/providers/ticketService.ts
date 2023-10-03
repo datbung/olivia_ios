@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 })
 
 export class ticketService{
+  gaPaymentType = '';
   private filterTourSubject = new Subject<any>();
   private scrollToDepartureDivSubject = new Subject<any>();
   private searchTicketSubject = new Subject<any>();
@@ -46,13 +47,20 @@ export class ticketService{
   typeFilters: any = [];
   topicfilters: any = [];
   ticketFilter: any;
-  countFilter: number;
+  countFilter: number = 1;
   searchType: any;
   regionModels: any;
   topicModels: any;
   typeModels: any;
   selectedDateDisplay: string;
   selectedDate: string;
+  totalPax: number;
+  itemExperienceDetail: any;
+  promocode: string;
+  discountpromo: number;
+  totalPriceBeforeDiscount: number;
+  usePointPrice: number;
+  itemFlightCache: any;
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);
   }

@@ -24,7 +24,7 @@
     </div>
     <div class="cls-divpayment">
     
-    <div class="text-tourname" *ngIf="ticketService.itemTicketService.name">Vé vào cổng: {{ticketService.itemTicketService.name}}</div>
+    <div class="text-tourname" *ngIf="ticketService.itemTicketService.name">{{ticketService.itemTicketService.name}}</div>
     <!-- <div class="text-tourname" *ngIf="ticketService.BookingTourMytrip && ticketService.BookingTourMytrip.hotel_name">{{ticketService.BookingTourMytrip.hotel_name}}</div> -->
     <div class="m-top-6 text-pax">{{ticketService.departureCalendarStr}}</div>
     <div class="div-split"></div>
@@ -59,8 +59,8 @@
       <div class="div-width-100 div-flex-left">
           <div class="text-pax" *ngIf="ticketService.adult > 0">{{ticketService.adult}} Người lớn</div>
           <div class="text-pax m-top-4 h-16" *ngIf="ticketService.child > 0"><span >{{ticketService.child}} Trẻ em</span></div>
-          <div class="text-pax m-top-4 h-16"   *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.custom1No>0">{{ticketService.bookingInfo.booking.custom1No}} {{ticketService.bookingInfo.booking.custom1Name}}</div>
-          <div class="text-pax m-top-4 h-16"   *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.custom2No>0">{{ticketService.bookingInfo.booking.custom2No}} {{ticketService.bookingInfo.booking.custom2Name}}</div>
+          <div class="text-pax m-top-4 "   *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.custom1No>0">{{ticketService.bookingInfo.booking.custom1No}} {{ticketService.bookingInfo.booking.custom1Name}}</div>
+          <div class="text-pax m-top-4 "   *ngIf="ticketService.bookingInfo && ticketService.bookingInfo.booking.custom2No>0">{{ticketService.bookingInfo.booking.custom2No}} {{ticketService.bookingInfo.booking.custom2Name}}</div>
             <div class="text-pax m-top-4 h-16" *ngIf="ticketService.elder > 0">{{ticketService.elder}} Người lớn tuổi</div>
           
           <!-- <div class="text-pax" *ngIf="adult">{{adult}} người lớn</div>
@@ -68,7 +68,8 @@
           <div class="text-pax m-top-4 h-16" ><span *ngIf="child">{{child}} trẻ em</span></div> -->
       </div>
       <div class="div-width-100 text-right m-bottom-16">
-        <div class="text-total-price" >{{gf.convertNumberToString(ticketService.totalPriceNum)}}<span class="text-price-sub">đ</span>
+        <div class="text-total-price" *ngIf="ticketService.totalPriceNum > 0">{{gf.convertNumberToString(ticketService.totalPriceNum)}}<span class="text-price-sub">đ</span>
+          <!-- <div class="text-total-price" *ngIf="ticketService.totalPriceNum == 0">0<span class="text-price-sub">đ</span> -->
         <!-- <div *ngIf="ticketService.totalPriceBeforeDiscount && ticketService.totalPrice != ticketService.totalPriceBeforeDiscount" class="text-price-strike text-right">{{gf.convertNumberToString(ticketService.totalPriceBeforeDiscount)}}<span class="text-price-strike-sub ">đ</span></div> -->
         </div>
         <div class="text-sub">Giá đã bao gồm thuế & phí.</div>

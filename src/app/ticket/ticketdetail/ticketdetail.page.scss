@@ -469,7 +469,7 @@
     font-weight: 600;
     text-align: center;
     color: #3f3b3b;
-    height: 44px;
+    height: 47px;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -478,6 +478,7 @@
     /* autoprefixer: ignore next */ -webkit-box-orient: vertical;
     align-self: flex-end;
     margin-bottom: 8px;
+
   }
   .img-back {
     height: 48px; 
@@ -756,7 +757,7 @@
 .cls-deal-detail {
   min-width: 299px;
   border-radius: 5px;
-  overflow-x: unset !important;
+  overflow-x: hidden !important;
 }
 .height-65{
   height:65px;

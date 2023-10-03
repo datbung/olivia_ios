@@ -194,8 +194,8 @@
                                 <div class="div-desc" *ngIf="isApiDirect && (departConditionInfo && departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.length >0 && hasdepartluggage)"><span class="text-bold">{{ departConditionInfo.luggageSigned }} 
                                     <span class="text-bold" *ngIf="departConditionInfo.luggageSigned && departConditionInfo.luggageSigned.indexOf('kg') == -1">kg</span>/1 khách.</span></div>
                                 <div *ngFor="let itemlug of departLuggage">
-                                    <div *ngIf="itemlug.quantity >0" class="div-desc">
-                                        {{ itemlug.quantity}} x <span class="text-bold">{{itemlug.weight}} kg</span>
+                                    <div *ngIf="itemlug.weight >0" class="div-desc">
+                                        1 x <span class="text-bold">{{itemlug.weight}} kg <span class="text-desc" *ngIf="itemlug.title.indexOf('Oversize') != -1"> (HLQK)</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -212,8 +212,8 @@
                                 <div class="div-desc" *ngIf="!isApiDirect &&(returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length <=4 && hasreturnluggage)"><span class="text-bold">{{ returnConditionInfo.luggageSigned }} kg/1 khách.</span></div>
                                 <div class="div-desc" *ngIf="isApiDirect && (returnConditionInfo && returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.length >0 && hasreturnluggage)"><span class="text-bold">{{ returnConditionInfo.luggageSigned }}<span class="text-bold" *ngIf="returnConditionInfo.luggageSigned && returnConditionInfo.luggageSigned.indexOf('kg') == -1"> kg</span>/1 khách.</span></div>
                                 <div *ngFor="let itemlug of returnLuggage">
-                                    <div *ngIf="itemlug.quantity >0"  class="div-desc">
-                                        {{ itemlug.quantity}} x <span class="text-bold">{{itemlug.weight}} kg</span>
+                                    <div *ngIf="itemlug.weight >0"  class="div-desc">
+                                        1 x <span class="text-bold">{{itemlug.weight}} kg  <span class="text-desc" *ngIf="itemlug.title.indexOf('Oversize') != -1"> (HLQK)</span></span>
                                     </div>
                                 </div>
                                 
@@ -438,34 +438,56 @@
                 </ng-template>
             </div>
              <!-- thêm bao hiem -->
-        <div *ngIf="returnFlight">
-            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !returnFlight.stops && !isApiDirect" class="div-item-service div-seat m-top-16">
+        <div>
+            <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && (!returnFlight || (!returnFlight.stops && returnFlight)) && !isApiDirect" class="div-item-service div-cathay m-top-16">
                 <div class="d-flex m-bottom-6"> 
                     <div class="div-icon 2">
                         <img class="img-icon img-seat" src="./assets/logo/logo_1.svg">
                     </div>
                     <div (click)="showinfoCathay()" class="div-title">Bảo hiểm trễ chuyến</div>
-                    <!-- <div class="div-present div-width-20 text-right"><img class="img-present" src="./assets/ic_flight/present.svg"></div> -->
+                    
                     <div class="text-seen" (click)="noteCathay()"><img src="./assets/ic_flight/info.svg"></div>
                   </div>
                 <div  class="div-desc ">
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần.
                 </div>
-                
-                <!-- <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
-                    Đón hè rực rỡ - Quà tặng hết cỡ <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
-                </div> -->
+              
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>
                     <div>
-                        <ion-toggle (ionChange)="toggleCathay($event)" class="ion-toggle" mode='ios' ></ion-toggle>
+                        <ion-toggle (ionChange)="toggleCathay($event)" class="ion-toggle" mode='ios' [(ngModel)]="_flightService.itemFlightCache.isCathay"></ion-toggle>
                     </div>
                 
-                  </div>
+                </div>
+
+                <div *ngIf="isCathay">
+                    <div class="d-flex m-top-12">
+                        <div class="div-width-100 text-label-name">Họ tên khách</div>
+                        <div class="div-width-100 text-label-name">Sinh ngày</div>
+                     </div>
+                     <div class="d-flex m-top-16" *ngFor="let itemAdult of _flightService.itemFlightCache.adults; let idxa = index">
+                        <div class="div-width-100 text-normal div-align-end">{{itemAdult.genderdisplay}}. <span class="text-bold m-left-4">{{itemAdult.name}}</span></div>
+                        <div class="div-width-100 text-normal">
+                            <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemAdult.mindob"
+                                        [max]="itemAdult.maxbod" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY"
+                                        class="cls-iondatetime" [(ngModel)]="itemAdult.dateofbirth" required></ion-datetime>
+                        </div>
+                     </div>
+
+                     <div class="d-flex m-top-16" *ngFor="let itemChild of _flightService.itemFlightCache.childs; let idxc = index">
+                        <div class="div-width-100 text-normal div-align-end">{{itemChild.genderdisplay}}. <span class="text-bold m-left-4">{{itemChild.name}}</span></div>
+                        <div class="div-width-100 text-normal">
+                            <ion-datetime cancelText="Thoát" doneText="Hoàn thành" [min]="itemChild.mindob"
+                                        [max]="itemChild.maxbod" displayFormat="DD-MM-YYYY" pickerFormat="DD MM YYYY"
+                                        class="cls-iondatetime" [(ngModel)]="itemChild.dateofbirth" required></ion-datetime>
+                        </div>
+                     </div>
+                </div>
+                
              
             </div>
         </div>
-        <div *ngIf="!returnFlight">
+        <!-- <div *ngIf="!returnFlight">
             <div *ngIf="_flightService.itemFlightCache.dataBooking.fromPlace.internal!=0 && _flightService.itemFlightCache.dataBooking.toPlace.internal!=0 && priceCathay && checkAddCathayTime() && !isExtenal && !departFlight.stops && !isApiDirect" class="div-item-service div-seat m-top-16">
                 <div class="d-flex m-bottom-6"> 
                     <div class="div-icon ">
@@ -479,10 +501,7 @@
                   <div  class="div-desc ">
                     Quyền lợi trễ chuyến bay từ 350.000vnđ/lần.
                     </div>
-                 
-                <!-- <div *ngIf="isShowPromoCathay" class="div-show-promocathay" (click)="openLinkPromoCathay()">
-                    Đón hè rực rỡ - Quà tặng hết cỡ <img class="p-left-10" src="../../assets/ic_flight/vector_orange.svg">
-                </div> -->
+                
                 <div class="d-flex">
                     <span class="price-total">{{gf.numberToCurrency(priceCathay, '.')}} <span class="price-vnd m-top-3">VND</span></span>
                     <div>
@@ -492,7 +511,7 @@
                   </div>
              
             </div>
-        </div>
+        </div> -->
       
         <div class="div-split" *ngIf="(departLuggage && departLuggage.length >0) || (returnLuggage && returnLuggage.length >0) || ((!listdepartseatselected && !listreturnseatselected) && allowchoiceseat) || (departConditionInfo && departConditionInfo.baggageHanded ) || (returnConditionInfo && returnConditionInfo.baggageHanded )"></div>
 

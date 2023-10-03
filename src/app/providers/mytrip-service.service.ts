@@ -26,6 +26,8 @@ export class MytripService {
   totalHistoryFoodCountText: string="";
   listcount: number;
   fromRequestChangeFlight: boolean;
+  objectDetail: any;
+  listQrLink: any;
 
   constructor() { }
 

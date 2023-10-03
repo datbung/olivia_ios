@@ -89,7 +89,7 @@ export class TopupPage implements OnInit {
             bankName : "Ngân hàng TMCP Đầu tư và Phát triển VN",
             bankBranch : "Chi nhánh 02 TP.HCM",
             imgBank: "./assets/ic_biztravel/bidv.jpg",
-            accountNumber : "130 1000 147 4890",
+            accountNumber : "130 147 4890",
             expanded: false
         },
 

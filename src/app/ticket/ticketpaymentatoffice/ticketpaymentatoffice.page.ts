@@ -50,6 +50,7 @@ export class TicketPaymentAtOfficePage implements OnInit{
       paymentMethod: 8
   }
   this.gf.ticketPaymentSave(objbookTicket);
+  this.gf.logEventFirebase('office', this.ticketService, 'ticketpaymentatoffice', 'add_payment_info', 'Ticket');
     this.navCtrl.navigateForward('/ticketpaymentdone/0');
   }
 

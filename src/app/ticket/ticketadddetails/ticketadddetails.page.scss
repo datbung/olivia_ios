@@ -471,6 +471,15 @@ ion-radio {
     color: #3f3b3b;
   }
 }
+.cls-input-date {
+  background-color: #ffffff !important;
+  border: solid 1px #dedfe3;
+  border-radius: 4px;
+}
+.cls-traffic-date {
+  padding: 0;
+  padding-left: 4px;
+}
 
 .div-traffic-time {
   font-size: 16px;
@@ -491,15 +500,16 @@ ion-radio {
   height: 178px;
   overflow: scroll;
   position: absolute;
-  width: 100%;
+  min-width: 120%;
   background: #fff;
   z-index: 99;
+  margin: 0 -16px;
   
   ion-item {
     border-bottom: solid 0.5px #f2f2f2;
     --inner-border-width: 0;
     --padding-start: 0;
-    margin-left: 16px;
+    margin-left: 32px;
   }
 }
 .item-select-location {
@@ -554,6 +564,12 @@ ion-radio {
 ion-searchbar {
   padding: 0;
   padding-inline-end: 12px;
+}
+
+.cls-deactive {
+  opacity: 0.6;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
 }
 
 }
@@ -794,4 +810,10 @@ ion-searchbar {
 }
 .m-left-32 {
   margin-left: 32px;
+}
+.cls-padding-bottom-350 {
+  padding-bottom: 350px;
+}
+.cls-minheight-1200 {
+  min-height: 1200px;
 }

@@ -49,8 +49,37 @@
         </div>
         <ng-template #otherbooking>
           <div
-            *ngIf="trip.booking_type == 'TICKET'  else bkgnormal">
-            <div class="div-bkg-ticket m-right-8" *ngIf="ischeckqrLink">
+            *ngIf="trip.booking_type == 'TICKET'  else bkgnormal" class="div-bkg-ticket-content">
+
+            <div class="div-bkg-ticket m-top-8">
+              <div class="div-ticket-info d-flex">
+                <div class="div-image"><img class="img-avatar" [src]="trip.avatar"></div>
+                <div class="div-ticket-name m-left-12">
+                    <div class="text-ticket-name">{{trip.hotel_name}}</div>
+                    <div class="text-ticket-address m-top-8 d-flex">
+                      <div class="icon-local"><img class="img-local" src="./assets/imgs/location.svg"></div>
+                      <div class="cls-hidden-row">{{trip.address}}</div>
+                     
+                    </div>
+                </div>
+              </div>
+              <div class="div-ticket-border-bottom m-top-16 m-bottom-24"></div>
+              <div class="div-ticket-info">
+                <div class="d-flex">
+                    <div class="div-icon-left"><img class="icon-date" src="./assets/ic_ticket/callendar.svg"></div>
+                    <div class="text-date m-left-4">{{trip.VVCCheckinDisplay}}</div>
+                </div>
+                <div class="d-flex m-top-12">
+                  <div class="div-icon-left"><img class="h-15" src="./assets/ic_ticket/ticket.svg"></div>
+                  <div class=" m-left-4">
+                    <div class="text-page-name">{{trip.combo_name}}</div>
+                    <div class="text-pax m-top-4">{{trip.paxDisplay}}</div>
+                    </div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="div-bkg-ticket m-right-8 m-top-16" *ngIf="ischeckqrLink">
               <div class="div-ticket-bkg" *ngFor="let itemqr of objectDetail.listNotes;let i=index">
                 <div class="div-name text-name-ticket">{{objectDetail.experienceName}} - {{i+1}}</div>
                 <div class="padding-8-12">
@@ -86,131 +115,71 @@
                   </div>
                 </div>
                
-                <div *ngIf="itemqr.qrLink" class="div-bkg-qrcode">
+                <div *ngIf="itemqr.qrLink" class="div-bkg-qrcode" (click)="showQrCodeSlide()">
                   <img class="img-qrcode" src={{itemqr.qrLink}}>
                 </div>
                 <div *ngIf="itemqr.token" class="div-bkg-ticketcode">{{itemqr.token}}</div>
                 <div *ngIf="itemqr.title" class="div-bkg-pax m-top-2">{{itemqr.title}}</div>
               </div>
       
-              <div class="div-bkg-price">
-
-                <div class="d-flex m-top-8">
-                  <div class="text-info d-flex" style="width: 210px;">
-                    {{trip.combo_name}}
-                  </div>
-                  <div *ngIf="amount_after_tax>0" class="position-absolute text-info font-weight-600">
-                    {{gf.numberToCurrency(amount_after_tax, '.')}} VND
-                  </div>
-                  <div *ngIf="amount_after_tax<=0" class="position-absolute text-info font-weight-600">
-                    {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
-                  </div>
-                </div>
-                <div class="text-name-airport">
-                  {{trip.paxDisplay}}
-                </div>
-
-                <div class="div-line-tour"></div>
-
-                <div class="d-flex m-top-8">
-                  <div class="text-info d-flex">
-                    Tổng cộng - <div class="font-weight-600 mt4"
-                      *ngIf="!trip.isFlyBooking && (trip.payment_status != 3 && trip.payment_status != -2)">
-                      <label *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">Đã thanh
-                        toán</label>
-                      <ng-template #waitpayment>
-                        <label class="text-red">Chưa thanh toán</label>
-                      </ng-template>
-                    </div>
-                  </div>
-                  <div *ngIf="amount_after_tax>0" class="position-absolute text-info font-weight-600"
-                    [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange'">
-                    {{gf.numberToCurrency(amount_after_tax, '.')}} VND
-                  </div>
-                  <div *ngIf="amount_after_tax<=0" class="position-absolute text-info font-weight-600"
-                    [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange'">
-                    {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
-                  </div>
-                </div>
-                <div class="text-name-airport">
-                  (Giá đã bao gồm thuế & phí)
-                </div>
-              </div>
-
-              
             </div>
             <div class="div-bkg-ticket" *ngIf="!ischeckqrLink">
-              <div class="div-ticket-bkg">
-                <div class="div-name text-name-ticket">{{trip.hotel_name}}</div>
-                <div class="padding-8-12">
-                  <div class="text-title-ticket">
-                    Gói
-                  </div>
-                  <div class="text-content m-top-8">
-                    {{trip.combo_name}}
-                  </div>
-                  <div class="d-flex m-top-8">
-                    <div class="text-title-ticket w-110 align-self-end">
-                      Ngày
-                    </div>
-                    <div class="text-content">
-                      {{trip.VVCCheckinDisplay1}}
-                    </div>
-                  </div>
-                  <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.orderNumber">
-                    <div class="text-title-ticket w-110 align-self-end">
-                      Order Number
-                    </div>
-                    <div class="text-content">
-                      {{objectDetail.orderNumber}}
-                    </div>
-                  </div>
-                  <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.confirmationCode">
-                    <div class="text-title-ticket w-110 align-self-end">
-                      Mã xác nhận
-                    </div>
-                    <div class="text-content">
-                      {{objectDetail.confirmationCode}}
-                    </div>
-                  </div>
-                  <div class="d-flex m-top-8" >
-                    <div class="text-title-ticket w-110 align-self-start">
-                      Số lượng
-                    </div>
-                    <div>
-                      <div class="text-content" *ngIf="objSummary && objSummary.adultNo>0">
-                        Người lớn x{{objSummary.adultNo}}
-                      </div>
-                      <div class="text-content"  *ngIf="objSummary && objSummary.childNo>0">
-                        Trẻ em x{{objSummary.childNo}}
-                      </div>
-                      <div class="text-content" *ngIf="objSummary && objSummary.seniorNo>0">
-                        Người già x{{objSummary.seniorNo}}
-                      </div>
-                      <div class="text-content" *ngIf="objSummary && objSummary.custom1No>0">
-                        {{objSummary.custom1Name}} x{{objSummary.custom1No}}
-                      </div>
-                      <div class="text-content" *ngIf="objSummary && objSummary.custom2No>0">
-                        {{objSummary.custom2Name}} x{{objSummary.custom2No}}
-                      </div>
-                    </div>
-                   
-                  </div>
-                  <div *ngIf="trip.listVoucher && trip.listVoucher.length > 0" class="m-top-16">
-                    <div class="text-waitpayment">Vé vào cổng / Voucher dịch vụ</div>
-                    <div class="text-name-airport">Tải vé về máy hoặc mở link để sử dụng dịch vụ</div>
-                  </div>
-                  <div *ngFor="let item of trip.listVoucher" class="d-flex m-top-16">
-                    <div (click)="openWebpage(item.link)" class="text-link-16 under-line align-self-center w-60">
-                      {{item.filename}}
-                    </div>
-                    <img (click)="downloadPDFVC(item.link)" class="m-l-10"  src="./assets/ic_mytripbooking/download.svg">
-                    <img (click)="share(item.link)"  class="m-l-16"  src="./assets/ic_mytripbooking/share.svg">
+              
+              <div *ngIf="((objSummary && ticketChangeLocation) || (objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0)) else showConfirmationCode" class="div-ticket-location m-top-24 m-right-8 p-bottom-16">
+                <div class="exp-name text-name-ticket" *ngIf="objSummary && objSummary.expeName">{{objSummary.expeName}}</div>
+                <div class="exp-name text-name-ticket" *ngIf="!objSummary && objectDetail && objectDetail.experienceName">{{objectDetail.experienceName}}</div>
+                <div class="exp-name text-sub-download p-top-8" *ngIf="objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0">Tải về máy hoặc mở link để sử dụng dịch vụ</div>
+                <div  *ngIf="objectDetail && objectDetail.fileUrls && objectDetail.fileUrls.length>0">
+                  <div class="div-v-align p-left-8 m-top-16 d-flex" *ngFor="let fileurl of ticketDownloadFiles">
+                    <div class="div-link" (click)="downloadPDFVC(fileurl.url)"><a >{{fileurl.name}}</a></div>
+                    <div class="div-button-ticket m-right-8" (click)="downloadPDFVC(fileurl.url)"> <img class="img-button-ticket" src="./assets/ic_ticket/download.svg" /></div>
+                    <div class="div-button-ticket m-right-8" (click)="sharePDF(fileurl.url)"><img class="img-button-ticket" src="./assets/ic_ticket/share.svg" /></div>
                   </div>
                   
                 </div>
-             
+                <div *ngIf="ticketChangeLocation" class="div-p8">
+                  <div class="text-normal">Địa điểm đổi vé:</div>
+                  <div class="text-title m-top-8">{{ticketChangeLocation}}</div>
+                </div>
+                <div class="div-p8" *ngIf="showIncludeContent" [innerHTML]="showIncludeContent"></div>
               </div>
+              <ng-template #showConfirmationCode>
+                <div class="div-ticket-location m-top-24 m-right-8" *ngIf="objectDetail">
+                  <div class="exp-name text-name-ticket">{{objectDetail.experienceName}}</div>
+                  <div class="padding-8-12">
+                    <div class="text-title-ticket">
+                      Gói
+                    </div>
+                    <div class="text-content m-top-8">
+                      {{objectDetail.packageName}}
+                    </div>
+                    <div class="d-flex m-top-8">
+                      <div class="text-title-ticket w-110 align-self-end">
+                        Ngày
+                      </div>
+                      <div class="text-content">
+                        {{objectDetail.startDateShow}}
+                      </div>
+                    </div>
+                    <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.orderNumber">
+                      <div class="text-title-ticket w-110 align-self-end">
+                        Order Number
+                      </div>
+                      <div class="text-content">
+                        {{objectDetail.orderNumber}}
+                      </div>
+                    </div>
+                     <div class="d-flex m-top-8" *ngIf="objectDetail && objectDetail.confirmationCode">
+                      <div class="text-title-ticket w-110 align-self-end">
+                        Mã xác nhận
+                      </div>
+                      <div class="text-content">
+                        {{objectDetail.confirmationCode}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
               <div *ngIf="trip.objdataRaw" class="div-location">
                           
                 <div class="div-options">
@@ -225,54 +194,75 @@
                 
                 </div>
               </div>
-              <div class="div-bkg-price">
-
-                <div class="d-flex m-top-8">
-                  <div class="text-info d-flex" style="width: 210px;">
-                    {{trip.combo_name}}
-                  </div>
-                  <div *ngIf="amount_after_tax>0" class="position-absolute text-info font-weight-600">
-                    {{gf.numberToCurrency(amount_after_tax, '.')}} VND
-                  </div>
-                  <div *ngIf="amount_after_tax<=0" class="position-absolute text-info font-weight-600">
-                    {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
-                  </div>
-                </div>
-                <div class="text-name-airport">
-                  {{trip.paxDisplay}}
-                </div>
-
-                <div class="div-line-tour"></div>
-
-                <div class="d-flex m-top-8">
-                  <div class="text-info d-flex">
-                    Tổng cộng - <div class="font-weight-600 mt4"
-                      *ngIf="!trip.isFlyBooking && (trip.payment_status != 3 && trip.payment_status != -2)">
-                      <label *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">Đã thanh
-                        toán</label>
-                      <ng-template #waitpayment>
-                        <label class="text-red">Chưa thanh toán</label>
-                      </ng-template>
-                    </div>
-                  </div>
-                  <div *ngIf="amount_after_tax>0" class="position-absolute text-info font-weight-600"
-                    [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange'">
-                    {{gf.numberToCurrency(amount_after_tax, '.')}} VND
-                  </div>
-                  <div *ngIf="amount_after_tax<=0" class="position-absolute text-info font-weight-600"
-                    [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange'">
-                    {{gf.numberToCurrency(trip.paid_amount, '.')}} VND
-                  </div>
-                </div>
-                <div class="text-name-airport">
-                  (Giá đã bao gồm thuế & phí)
-                </div>
-              </div>
 
             </div>
+            <!-- <div class="div-split-panel m-top-16 m-bottom-16" *ngIf=""></div> -->
+            <div class="div-split-panel m-top-24 m-bottom-16"></div>
+            <div class="d-flex " (click)="showPrice()">
+              <div class="text-info-2 font-weight-500" >
+                Giá bao gồm
+              </div>
+              <div *ngIf="!expandPrice" class="position-absolute">
+                <img src="./assets/imgs/ic_expand.svg" />
+              </div>
+              <div *ngIf="expandPrice" class="position-absolute">
+                <img src="./assets/imgs/ic_expand_down.svg" />
+              </div>
+            </div>
+              <div *ngIf="expandPrice" class="div-expand-price m-top-16 ">
+                <div class="d-flex" *ngIf="objSummary && objSummary.adultNo && objSummary.adultAvgPrice">
+                    <div class="text-left div-width-100">Người lớn x<span>{{objSummary.adultNo}}</span></div>
+                    <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.adultAvgPrice)}}</div>
+                </div>
+                <div class="d-flex m-top-8" *ngIf="objSummary && objSummary.childNo && objSummary.childAvgPrice">
+                  <div class="text-left div-width-100">Trẻ em x<span>{{objSummary.childNo}}</span></div>
+                  <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.childAvgPrice)}}</div>
+                </div>
+
+                <div class="d-flex m-top-8" *ngIf="objSummary && objSummary.custom1No && objSummary.custom1AvgPrice">
+                  <div class="text-left div-width-100">{{objSummary.custom1Name}} x<span>{{objSummary.custom1No}}</span></div>
+                  <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.custom1AvgPrice)}}</div>
+                </div>
+
+                <div class="d-flex m-top-8" *ngIf="objSummary && objSummary.custom2No && objSummary.custom2AvgPrice">
+                  <div class="text-left div-width-100">{{objSummary.custom2Name}} x<span>{{objSummary.custom2No}}</span></div>
+                  <div class="text-price-right div-width-100">{{gf.convertNumberToString(objSummary.custom2AvgPrice)}}</div>
+                </div>
+                <div *ngIf="trip.deal_no && trip.promotionDiscountAmount" class="d-flex m-top-8">
+                  <div class="text-left div-width-100">Ưu đãi</div>
+                  <div class="text-price-right div-width-100">
+                    {{gf.convertNumberToString(trip.promotionDiscountAmount)}}</div>
+                </div>
+              <div class="div-ticket-border-bottom m-top-8 m-bottom-8"></div>
+
+              <div class="d-flex">
+                <div class="text-info d-flex">
+                  Tổng cộng - <div class="font-weight-600 mt4"
+                    *ngIf="trip.payment_status != 3 && trip.payment_status != -2">
+                    <label *ngIf="(trip.payment_status == 1 || trip.payment_status == 5) else waitpayment">Đã thanh
+                      toán</label>
+                    <ng-template #waitpayment>
+                      <label class="text-red">Chưa thanh toán</label>
+                    </ng-template>
+                  </div>
+                </div>
+
+                <div *ngIf="amount_after_tax>0" class="position-absolute text-info font-weight-600"
+                  [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange f-18'">
+                  {{gf.numberToCurrency(amount_after_tax, '.')}} <span class="f-14">VND</span>
+                </div>
+                <div *ngIf="amount_after_tax<=0" class="position-absolute text-info font-weight-600"
+                  [ngClass]="(trip.payment_status == 1 || trip.payment_status == 5)?'':'text-orange f-18'">
+                  {{gf.numberToCurrency(trip.paid_amount, '.')}} <span class="f-14">VND</span>
+                </div>
+              </div>
+              <div class="text-sub">(Giá đã bao gồm thuế & phí)</div>
+
+            </div>
+
             <div class="d-flex m-top-16" (click)="ticketinfo()">
               <div class="text-info-2 font-weight-500">
-                Thông tin vé
+                Chi tiết gói dịch vụ
               </div>
               <div *ngIf="!isTTV" class="position-absolute">
                 <img src="./assets/imgs/ic_expand.svg" />
@@ -285,14 +275,23 @@
            
               <p [innerHTML]="includePrice"></p>
             </div>
-          
-            <div class="text-info-2 font-weight-500 m-top-16 m-bottom-10">
+
+            <div class="d-flex m-top-16" (click)="nextSupport(trip)">
+              <div class="text-info-2 font-weight-500">
+                Liên hệ hỗ trợ
+              </div>
+              <div class="position-absolute">
+                <img src="./assets/imgs/ic_expand.svg" />
+              </div>
+            </div>
+            <div class="div-split-panel"></div>
+            <!-- <div class="text-info-2 font-weight-500 m-top-16 m-bottom-10">
               Cách thức sử dụng 
             </div>
             <p>
               Vui lòng xuất trình e-voucher để sử dụng dịch vụ      
-            </p>
-            <div class="div-line-ticket"></div>
+            </p> -->
+            <!-- <div class="div-line-ticket"></div> -->
           </div>
 
           <ng-template #bkgnormal>
@@ -1171,6 +1170,15 @@
               <div class="text-pax div-width-250">Ưu đãi</div>
               <div class="text-price text-right div-width-150">
                 {{gf.convertNumberToString(trip.promotionDiscountAmount)}} VND</div>
+            </div>
+
+            <div class="d-flex m-top-8" *ngIf="trip.payment_fee">
+              <div class="text-pax div-width-250">
+                Phí tiện ích
+              </div>
+              <div class="text-price text-right div-width-100">
+                {{gf.convertNumberToString(trip.payment_fee)}} VND
+              </div>
             </div>
 
             <div class="div-line-tour"></div>
@@ -2906,12 +2914,12 @@
 
     <div
       *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) &&trip.delivery_payment_date_display && (trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5 ||trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)">
-      <div class="div-split-panel"></div>
+      <div class="div-split-panel"  *ngIf="trip.booking_type != 'TICKET'"></div>
       <button (click)="paymentselect(trip,1)" ion-button round outline class="button btn-payment">Thanh toán</button>
     </div>
     <div class=""
       *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) &&trip.delivery_payment_date_display && !(trip.pay_method==0||trip.pay_method==5||trip.pay_method==10) && !(trip.payment_status == 1 || trip.payment_status == 5|| trip.payment_status == 9|| trip.payment_status == -2 ||trip.payment_status == 3)">
-      <div class="div-split-panel"></div>
+      <div class="div-split-panel" *ngIf="trip.booking_type != 'TICKET'"></div>
       <div style="padding: 8px;" *ngIf="trip.pay_method==51||trip.pay_method==2">
         <div class="div-payment-combo-flight">
           <div class="div-payment-left">
@@ -3637,7 +3645,7 @@
     </div>
 
     <div  class="d-flex m-l-8  m-top-16 padding-bottom-20"  (click)="nextSupport(trip)"
-      *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.booking_type != 'TOUR' ">
+      *ngIf="!(trip.isBookingVMBQT && trip.isTravelPort) && trip.booking_type != 'TOUR' && trip.booking_type != 'TICKET' ">
       <div class="text-info-2 font-weight-500">
         Liên hệ hỗ trợ
       </div>

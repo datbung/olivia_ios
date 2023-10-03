@@ -36,6 +36,8 @@ export class voucherService{
   comboCarTotalDiscount: number;
   flightPromoCode: string;
   flightTotalDiscount: number;
+  ticketPromoCode: any;
+  ticketTotalDiscount: any;
 
   publicRollbackAllSelectedVoucher(data: any) {
     this.rollbackAllSelectedVoucher.next(data);
@@ -63,6 +65,7 @@ export class voucherService{
   private voucherHotelSubject = new Subject<any>();
   private voucherCarComboSubject = new Subject<any>();
   private voucherTourSubject = new Subject<any>();
+  private voucherTicketSubject = new Subject<any>();
   private voucherInternationalUsedSubject = new Subject<any>();
   private voucherHotelUsedSubject = new Subject<any>();
 
@@ -124,8 +127,13 @@ export class voucherService{
   publicVoucherTourClicked(data: any) {
     this.voucherTourSubject.next(data);
   }
-
+  publicVoucherTicketClicked(data: any) {
+    this.voucherTicketSubject.next(data);
+  }
   getTourObservable(): Subject<any> {
     return this.voucherTourSubject;
+  }
+  getTicketObservable(): Subject<any> {
+    return this.voucherTicketSubject;
   }
 }

@@ -38,8 +38,8 @@ export class FlightpricedetailPage implements OnInit {
   totalreturnpriceseat: any="";
   departFlight: any;
   returnFlight: any;
-  departLuggage: any;
-  returnLuggage: any;
+  departLuggage: any=[];
+  returnLuggage: any=[];
   totalpricedisplay: any;
   departluggageprice: any=0;
   returnluggageprice: any=0;
@@ -151,38 +151,77 @@ export class FlightpricedetailPage implements OnInit {
             this.totalreturnpriceseat = this.gf.convertNumberToString(this._flightService.itemFlightCache.returnSeatChoiceAmout);
           }
 
-          this.departLuggage = this._flightService.itemFlightCache.departFlight.airLineLuggage;
-          // if(this.departLuggage && this.departLuggage.length >0){
-          //     this.departLuggage.forEach(element => {
-          //       element.amountDisplay = this.gf.convertNumberToString(element.amount * element.quantity);
-          //     });
-          // }
-          if( (!this.departLuggage || this.departLuggage.length ==0) && this._flightService.itemFlightCache.departLuggage && this._flightService.itemFlightCache.departLuggage.length >0){
-            this.departLuggage =  this._flightService.itemFlightCache.departLuggage;
+          this.departluggageprice = this._flightService.itemFlightCache.adults.reduce((total,a)=>{ return total + (a.itemLug ? (a.itemLug.amount) : 0); }, 0);
+          this.departluggageprice += this._flightService.itemFlightCache.childs.reduce((total,c)=>{ return total + (c.itemLug ? (c.itemLug.amount) : 0); }, 0);
+          if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.returnFlight){
+            this.returnluggageprice = this._flightService.itemFlightCache.adults.reduce((total,a)=>{ return total + (a.itemLugReturn ? (a.itemLugReturn.amount) : 0); }, 0);
+            this.returnluggageprice += this._flightService.itemFlightCache.childs.reduce((total,c)=>{ return total + (c.itemLugReturn ? (c.itemLugReturn.amount) : 0); }, 0);
           }
-
-          if(this.departLuggage && this.departLuggage.length >0){
-            this.departLuggage.forEach(element => {
-              element.amountDisplay = this.gf.convertNumberToString(element.amount * element.quantity);
-            });
-        }
-
-          this.departluggageprice = this.departLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
-
-          if(this.returnFlight){
-            this.returnLuggage = this._flightService.itemFlightCache.returnFlight.airLineLuggage;
-
-            if( (!this.returnLuggage || this.returnLuggage.length ==0) && this._flightService.itemFlightCache.returnLuggage && this._flightService.itemFlightCache.returnLuggage.length >0){
-              this.returnLuggage =  this._flightService.itemFlightCache.returnLuggage;
+          let _a = this._flightService.itemFlightCache.adults.map(a => a.itemLug);
+          _a.forEach(element => {
+            if(element){
+              element.amountDisplay = this.gf.convertNumberToString(element.amount);
+              this.departLuggage.push(element);
             }
+          });
+          let _c = this._flightService.itemFlightCache.childs.map(a => a.itemLug);
+          _c.forEach(elementC => {
+            if(elementC){
+              elementC.amountDisplay = this.gf.convertNumberToString(elementC.amount);
+              this.departLuggage.push(elementC);
+            }
+          });
 
-              if(this.returnLuggage && this.returnLuggage.length >0){
-                this.returnLuggage.forEach(element => {
-                  element.amountDisplay = this.gf.convertNumberToString(element.amount * element.quantity);
+          if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.returnFlight){
+            
+                let _a = this._flightService.itemFlightCache.adults.map(a => a.itemLugReturn);
+                _a.forEach(element => {
+                  if(element){
+                    element.amountDisplay = this.gf.convertNumberToString(element.amount);
+                    this.returnLuggage.push(element);
+                  }
                 });
-            }
-            this.returnluggageprice = this.returnLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
+                let _c = this._flightService.itemFlightCache.childs.map(a => a.itemLugReturn);
+                _c.forEach(elementC => {
+                  if(elementC){
+                    elementC.amountDisplay = this.gf.convertNumberToString(elementC.amount);
+                    this.returnLuggage.push(elementC);
+                  }
+                });
+               
           }
+        //   this.departLuggage = this._flightService.itemFlightCache.departFlight.airLineLuggage;
+        //   // if(this.departLuggage && this.departLuggage.length >0){
+        //   //     this.departLuggage.forEach(element => {
+        //   //       element.amountDisplay = this.gf.convertNumberToString(element.amount * element.quantity);
+        //   //     });
+        //   // }
+        //   if( (!this.departLuggage || this.departLuggage.length ==0) && this._flightService.itemFlightCache.departLuggage && this._flightService.itemFlightCache.departLuggage.length >0){
+        //     this.departLuggage =  this._flightService.itemFlightCache.departLuggage;
+        //   }
+
+        //   if(this.departLuggage && this.departLuggage.length >0){
+        //     this.departLuggage.forEach(element => {
+        //       element.amountDisplay = this.gf.convertNumberToString(element.amount * element.quantity);
+        //     });
+        // }
+
+        //   this.departluggageprice = this.departLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
+
+        //   if(this.returnFlight){
+        //     this.returnLuggage = this._flightService.itemFlightCache.returnFlight.airLineLuggage;
+
+        //     if( (!this.returnLuggage || this.returnLuggage.length ==0) && this._flightService.itemFlightCache.returnLuggage && this._flightService.itemFlightCache.returnLuggage.length >0){
+        //       this.returnLuggage =  this._flightService.itemFlightCache.returnLuggage;
+        //     }
+
+        //       if(this.returnLuggage && this.returnLuggage.length >0){
+        //         this.returnLuggage.forEach(element => {
+        //           element.amountDisplay = this.gf.convertNumberToString(element.amount * element.quantity);
+        //         });
+        //     }
+        //     this.returnluggageprice = this.returnLuggage.reduce((total,b)=>{ return total + (b.quantity * b.amount); }, 0);
+        //   }
           
           this.departSeatChoice = this._flightService.itemFlightCache.departSeatChoice;
           this.returnSeatChoice = this._flightService.itemFlightCache.returnSeatChoice;

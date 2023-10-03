@@ -34,7 +34,14 @@ export class PolicyPage implements OnInit{
           this.Name = jsondata.Name;
           this.cin = jsondata.CheckinTime;
           this.cout = jsondata.CheckoutTime;
-          this.HotelPolicies = jsondata.HotelPolicies
+          this.HotelPolicies = jsondata.HotelPolicies;
+          for (let index = 0; index < this.HotelPolicies.length; index++) {
+            const element = this.HotelPolicies[index];
+            if (index == 1) {
+              element.PolicyDes = element.PolicyDes.replace(/\/\/cdn1.ivivu.com/g, 'https://cdn1.ivivu.com');
+            }
+            
+          }
         })
       }else{
         this.getdata();
@@ -111,7 +118,14 @@ export class PolicyPage implements OnInit{
           se.Name = jsondata.Name;
           se.cin = jsondata.CheckinTime;
           se.cout = jsondata.CheckoutTime;
-          se.HotelPolicies = jsondata.HotelPolicies
+          se.HotelPolicies = jsondata.HotelPolicies;
+          for (let index = 0; index < se.HotelPolicies.length; index++) {
+            const element = se.HotelPolicies[index];
+            if (index == 1) {
+              element.PolicyDes = element.PolicyDes.replace(/\/\/cdn1.ivivu.com/g, 'https://cdn1.ivivu.com');
+            }
+            
+          }
         })
        
       }

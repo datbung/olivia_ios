@@ -205,11 +205,11 @@ export class FlightPaymentSelectPage implements OnInit {
   }
   gobackpage(){
     this.gf.hideLoading();
-    this.navCtrl.navigateBack('flightadddetails');
+    this.navCtrl.navigateBack('flightaddservice');
   }
   gotoaddservicepage(){
     this.gf.hideLoading();
-    this.navCtrl.navigateBack('flightadddetails');
+    this.navCtrl.navigateBack('flightaddservice');
   }
 
   goback()

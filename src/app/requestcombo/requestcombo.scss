@@ -153,6 +153,10 @@
     }
 
     ::ng-deep{
+        input,
+        input::placeholder {
+            font-size: 14px;
+        }
         .sc-ion-alert-ios-h.sc-ion-alert-ios-s.request-combo-css  {
             --min-width: 250px !important;
             --width: auto !important;

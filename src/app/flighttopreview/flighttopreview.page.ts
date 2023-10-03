@@ -53,7 +53,7 @@ export class FlightTopReviewPage {
                 }, {}, "homeflight", "GetSlideHome").then((data) =>{
                   if(data && data.reviews){
                     
-                    console.log(this._flightService.listTopReviews)
+                    //console.log(this._flightService.listTopReviews)
                       data.reviews.forEach(element => {
                         element.reviewDateDisplay = moment(element.reviewDate).format("DD/MM/YYYY");
                         

@@ -345,7 +345,9 @@
     .m-r-8 {
         margin-right: 8px !important;
     }
-
+    .margin-left--4{
+        margin-left: -4px;
+    }
     .cls-no-departure {
         opacity: 0.5;
     }
@@ -356,18 +358,20 @@
         margin-right: 8px;
       }
       .div-option-time{
-        min-width: 90px;
+        padding: 8px 10px;
+        max-width: 100px;
         height: 38px;
-        margin: 8px 8px 16px 16px;
+        margin: 8px 4px;
         padding-top: 10px;
         border-radius: 30px;
         background-color: #f4f5f6;
         text-align: center;
       }
       .div-option-time-action{
-        min-width: 90px;
+        padding: 8px 10px;
+        max-width: 100px;
         height: 38px;
-        margin: 8px 8px 16px 16px;
+        margin: 8px 4px;
         padding-top: 10px;
         border-radius: 30px;
         background-color: var(--ion-color-primary);
@@ -499,6 +503,12 @@
     .spec-not-found{
         cursor: not-allowed;
         color: #aaa;
+    }
+    .non-pkg{
+        opacity: 0.65;
+        cursor: not-allowed;
+        pointer-events: none;
+        box-shadow: none;
     }
     
    

@@ -76,7 +76,7 @@ export class TicketSearchPage implements OnInit{
           se.gf.RequestApi('GET', url, headers, null, 'searchregion', 'getItems').then((data) => {
                   se.zone.run(() => {
                     let lstitems = JSON.parse(data);
-                    console.log(lstitems);
+                    //console.log(lstitems);
                     if(lstitems.data.experiences.length && lstitems.data.experiences.length >0 || lstitems.data.regions.length && lstitems.data.regions.length >0){
                       se.ischecktext=false;
                       se.ischecklist = true;
