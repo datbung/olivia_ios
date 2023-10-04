@@ -124,14 +124,17 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
           // this.app = app;
           
           this.gettopSale();
-          this.gf.getAllPlaceByArea().then((data) => {
-            //console.log(data);
-              this.zone.run(() => data.sort(function (a, b) {
-                return a.order - b.order;
-              })
-            )
-            this._flightService.listAllPlaceByArea = data;
-          });
+          if(!this._flightService.listAllPlaceByArea){
+            this.gf.getAllPlaceByArea().then((data) => {
+              //console.log(data);
+                this.zone.run(() => data.sort(function (a, b) {
+                  return a.order - b.order;
+                })
+              )
+              this._flightService.listAllPlaceByArea = data;
+            });
+          }
+          
           this.storage.get('jti').then(jti => {
             if (jti) {
               this.memberid = jti;
@@ -146,7 +149,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               this.isConnected = connected;
             })
           })
-          this.storage.remove("listAirport");
           this.storage.get("listAirport").then((data)=>{
             if(!data){
               this.loadLocation();

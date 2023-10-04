@@ -1347,8 +1347,8 @@ export class TabsPage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTopSale').then((data) => {
       let res = JSON.parse(data);
-      console.log(res.Response);
-      this.tourService.listTopSale = res.Response;
+
+      se.tourService.listTopSale = res.Response;
       se.tourService.tourDetailId = Id;
       se.tourService.backPage = 'hometour';
       se.navCtrl.navigateForward('/tourdetail');

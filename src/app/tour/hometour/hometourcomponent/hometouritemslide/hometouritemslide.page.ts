@@ -29,12 +29,63 @@ export class HomeTourItemSlidePage implements OnInit {
     private platform: Platform,
     public searchhotel: SearchHotel,
     public tourService: tourService) {
-      this.getTourGroupFutures();
-      this.getPopularLocation();
+      if(!this.tourService.DataTourGroupFutures){
+        this.getTourGroupFutures();
+      }else{
+        this.loadDataTourGroupFutures();
+      }
+      
+      if(!this.tourService.DataSlidePopular){
+        this.getPopularLocation();
+      }else{
+        this.loadDataPopularLocation();
+      }
+      
   }
 
   ngOnInit(){
 
+  }
+  loadDataTourGroupFutures(){
+    let se = this;
+    se.slideData = se.tourService.DataTourGroupFutures;
+    se.sortTourOrder(se.slideData, 'SortOrder').then(()=>{
+      se.slideData.forEach(element => {
+        if(element.TourGroupDetail && element.TourGroupDetail.length >0){
+          element.groupListId = element.TourGroupDetail.map((item) => item.Id).join(',');
+          
+          let arrSplit = element.Link.split('/');
+          if(arrSplit && arrSplit.length >0){
+            element.tourTopicId = arrSplit[arrSplit.length-1].replace('c','');
+          }else{
+            element.tourTopicId = element.TourGroupDetail[0].TourTopicId;
+          }
+          se.sortTourOrder(element.TourGroupDetail, 'SortOrder').then(()=>{
+            element.TourGroupDetail.forEach(group => {
+              if(group.AvartarLink && group.AvartarLink.indexOf('http') == -1){
+                group.AvartarLink = 'https:'+group.AvartarLink;
+              }
+              if(group.TopPlace) {
+                group.listTopPlace = group.TopPlace.split(',');
+              }
+              if(group.AvgPoint && (group.AvgPoint.toString().length == 1 || group.AvgPoint == 10)){
+                group.AvgPoint = group.AvgPoint + ".0";
+              }
+
+              if(this.tourService.listTopSale && this.tourService.listTopSale.length >0){
+                let itemmap = this.tourService.listTopSale.filter((item) => item.Id == group.Id );
+                if(itemmap && itemmap.length >0 && itemmap[0].TotalPax){
+                  group.TopSale = itemmap[0].TotalPax;
+                  element.hasTopSale = true;
+                }
+              }
+              
+            });
+          });
+          se.tourService.listTourTopic = se.slideData;
+        }
+      });
+    })
   }
 
   getTourGroupFutures() {
@@ -47,6 +98,7 @@ export class HomeTourItemSlidePage implements OnInit {
     se.gf.RequestApi('GET', url, headers, null, 'hometouritemslide', 'getTourGroupFutures').then((data) => {
       let res = JSON.parse(data);
       se.slideData = res.Response;
+      se.tourService.DataTourGroupFutures = res.Response;
       se.sortTourOrder(se.slideData, 'SortOrder').then(()=>{
         se.slideData.forEach(element => {
           if(element.TourGroupDetail && element.TourGroupDetail.length >0){
@@ -101,6 +153,16 @@ export class HomeTourItemSlidePage implements OnInit {
     })
   }
 
+  loadDataPopularLocation(){
+    let se = this;
+    se.slidePopular = se.tourService.DataSlidePopular;
+      se.slidePopular.forEach(slide => {
+        if(slide.AvatarLink && slide.AvatarLink.indexOf('http') == -1){
+          slide.AvatarLink = 'https:'+slide.AvatarLink;
+        }
+      });
+  }
+
   getPopularLocation() {
     let se = this;
     let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetPopularLocation';
@@ -111,6 +173,7 @@ export class HomeTourItemSlidePage implements OnInit {
     se.gf.RequestApi('GET', url, headers, null, 'hometouritemslide', 'GetPopularLocation').then((data) => {
       let res = JSON.parse(data);
       se.slidePopular = res.Response;
+      se.tourService.DataSlidePopular = res.Response;
       se.slidePopular.forEach(slide => {
         if(slide.AvatarLink && slide.AvatarLink.indexOf('http') == -1){
           slide.AvatarLink = 'https:'+slide.AvatarLink;

@@ -36,6 +36,8 @@ export class tourService{
   adult: any;
   child: any;
   arrchild: any=[];
+  DataTourGroupFutures: any;
+  DataSlidePopular: any;
   
   publicFilterTour(data: any) {
     this.filterTourSubject.next(data);

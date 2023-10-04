@@ -3939,7 +3939,6 @@ export class Tab1Page implements OnInit {
     // if(currentIndex != 3){
     //   this.activeTab = currentIndex;
     // }
-    
     if ( currentIndex === 1 ) {//Flight
       this.valueGlobal.logingoback = "";
       this._mytripservice.rootPage = "homeflight";

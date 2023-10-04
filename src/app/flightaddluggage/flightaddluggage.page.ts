@@ -158,7 +158,9 @@ export class FlightaddluggagePage implements OnInit {
   }
 
   ngOnInit() {
-   
+   if(this.sliderTab){
+    this.sliderTab.lockSwipes(true);
+   }
   }
 
   goback(){
@@ -248,9 +250,11 @@ export class FlightaddluggagePage implements OnInit {
   }
 
   SelectTab(tabindex){
+    this.sliderTab.lockSwipes(false);
     this.tabluggage = tabindex;
     this.sliderTab.slideTo(tabindex-1);
     this.contentFlightAddLuggage.scrollToTop(200);
+    this.sliderTab.lockSwipes(true);
   }
 
   getDetailTicket(item) : Promise<any>{

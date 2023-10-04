@@ -28,8 +28,15 @@ export class HomeTourPage implements OnInit {
     private platform: Platform,
     public networkProvider: NetworkProvider,
     public tourService: tourService) {
-    this.loadTopSale();
-    this.loadTotalSale();
+      if(!this.tourService.listTopSale){
+        this.loadTopSale();
+      }
+      if(!this.tourService.totalSale){
+        this.loadTotalSale();
+      }else{
+        this.totalSale = this.tourService.totalSale;
+      }
+    
   }
   loadTotalSale() {
     let url = C.urls.baseUrl.urlMobile+'/tour/api/TourApi/GetTotalBooking24H';
@@ -40,6 +47,7 @@ export class HomeTourPage implements OnInit {
     this.gf.RequestApi('GET', url, headers, null, 'hometour', 'loadTotalSale').then((data) => {
       let res = JSON.parse(data);
       this.totalSale = this.gf.convertNumberToString(res.Response);
+      this.tourService.totalSale = this.totalSale;
     })
   }
   loadTopSale() {
