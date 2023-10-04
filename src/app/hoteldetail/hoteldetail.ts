@@ -1391,7 +1391,8 @@ export class HotelDetailPage implements OnInit {
           }
           if(!isloaddata){
             if(checkLoadCombo){
-              let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0")+se.room;
+              let strchildage = se.searchhotel.arrchild && se.searchhotel.arrchild.length >0 ? se.searchhotel.arrchild.map(c => c.numage).join('_') : '';
+              let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0")+se.room+"_"+strchildage;
               if(se.activityService.HotelSearchReqContract && se.activityService.HotelSearchReqContract.id == key && se.activityService.HotelSearchReqContract.value){
                 let check = se.activityService.HotelSearchReqContract.value.Hotels;
                 if (check) {
@@ -1500,7 +1501,8 @@ export class HotelDetailPage implements OnInit {
     var result = true;
    
       return new Promise((resolve, reject) => {
-        let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0")+se.room;
+        let strchildage = se.searchhotel.arrchild && se.searchhotel.arrchild.length >0 ? se.searchhotel.arrchild.map(c => c.numage).join('_') : '';
+        let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0")+se.room+"_"+strchildage;
         if(se.activityService.HotelSearchReqContract && se.activityService.HotelSearchReqContract.id == key && se.activityService.HotelSearchReqContract.value){
           se.textMSG= se.activityService.HotelSearchReqContract.value.MSG;
           if(se.loader){
@@ -1561,7 +1563,9 @@ export class HotelDetailPage implements OnInit {
           this._hotelDetailContractPrice =  this._hotelDetailService.loadHotelDetailContractPrice(strUrl, headers, body).pipe(shareReplay());
           this._hotelDetailContractPrice.subscribe(data => {
             //console.log(data);
-            let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0")+se.room;
+            let strchildage = se.searchhotel.arrchild && se.searchhotel.arrchild.length >0 ? se.searchhotel.arrchild.map(c => c.numage).join('_') : '';
+            let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0")+se.room+"_"+strchildage;
+            console.log(key);
                 se.activityService.HotelSearchReqContract = { id: key, value: {...data}, formParam: form};
                 setTimeout(()=>{
                   se.activityService.HotelSearchReqContract = null;
@@ -1999,7 +2003,8 @@ async getdataroom() {
   var self = this;
   var se = this;
   var options;
-  let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0" ) +se.room;
+  let strchildage = se.searchhotel.arrchild && se.searchhotel.arrchild.length >0 ? se.searchhotel.arrchild.map(c => c.numage).join('_') : '';
+  let key = se.HotelID.toString() +"_"+se.cin.toString()+"_"+se.cout.toString()+"_"+se.adults.toString()+"_" + (se.child ? se.child.toString() : "0" ) +se.room+"_"+strchildage;
   if(se.activityService.HotelSearchReqContract && se.activityService.HotelSearchReqContract.id == key && se.activityService.HotelSearchReqContract.value){
           var result = {...se.activityService.HotelSearchReqContract.value};
           se.formParam = se.activityService.HotelSearchReqContract.formParam;
