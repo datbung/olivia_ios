@@ -4073,6 +4073,8 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
           regionFilters: this.ticketService.regionFilters,
           typeFilters: this.ticketService.typeFilters,
           topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
+          pageIndex: 1,
+          pageSize: 1000
         }
       }else if (this.ticketService.searchType == 2){
         // var arrregion = [];
@@ -4084,7 +4086,9 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
           // regionFilters: this.ticketService.regionFilters,
           // typeFilters: this.ticketService.typeFilters,
           topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
-          regionIds: this.ticketService.regionFilters
+          regionIds: this.ticketService.regionFilters,
+          pageIndex: 1,
+          pageSize: 1000
         }
       }else if (this.ticketService.searchType == 3){
         // var arrTopic = [];
@@ -4096,7 +4100,9 @@ refreshToken(mmemberid, devicetoken): Promise<any> {
           regionFilters: this.ticketService.regionFilters,
           // typeFilters: this.ticketService.typeFilters,
           // topicfilters:this.ticketService.topicfilters.length > 0 ? this.ticketService.topicfilters:[],
-          topicIds: this.ticketService.topicfilters
+          topicIds: this.ticketService.topicfilters,
+          pageIndex: 1,
+          pageSize: 1000
         }
       }
   
