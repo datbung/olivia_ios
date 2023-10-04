@@ -2250,8 +2250,8 @@ alert.present();
             }
           })
 
-          //this.gotopaymentpage();
-          this.navCtrl.navigateForward('/flightaddservice');
+          this.gotopaymentpage();
+          //this.navCtrl.navigateForward('/flightaddservice');
         }
 
         gotopaymentpage(){
@@ -2260,37 +2260,8 @@ alert.present();
           
           se.updatePassengerInfo().then((data)=>{
             if(!data.error){
-              
-              se._flightService.itemFlightCache.pnr = data;
-              if(se._flightService.itemFlightCache.totalPrice==0)
-                          {
-                           
-                            let itemcache = se._flightService.itemFlightCache;
-                            itemcache.ischeckpayment = 0;
-                            this.gf.checkTicketAvaiable(this._flightService.itemFlightCache).then((check) =>{
-                              if(check){
-                                var url = C.urls.baseUrl.urlContracting + '/build-link-to-pay-aio?paymentType=office&source=app&amount=' + itemcache.totalPrice.toString().replace(/\./g, '').replace(/\,/g, '') + '&orderCode=' + (itemcache.pnr.bookingCode ?itemcache.pnr.bookingCode:  itemcache.pnr.resNo) + '&memberId=' + se.jti + '&rememberToken=&buyerPhone=' + itemcache.phone+'&version=2';
-                                            se.gf.CreatePayoo(url).then((data) => {
-                                              se.gf.hideLoading();
-                                            if(data.success){
-                                              se._flightService.itemFlightCache.ischeckpayment= 1;
-                                                  se.navCtrl.navigateForward('flightpaymentdone/'+(se._flightService.itemFlightCache.pnr.bookingCode ?se._flightService.itemFlightCache.pnr.bookingCode:  se._flightService.itemFlightCache.pnr.resNo)+'/'+moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD')+'/'+moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD'));
-                                                }else{
-                                                  se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
-                                                  se.gf.hideLoading();
-                                                }
-                                          })
-                                  }
-                                  else{
-                                    se.gf.showAlertOutOfTicket(se._flightService.itemFlightCache, 2);
-                                    se.gf.hideLoading();
-                                  }
-                            })
-                          }
-                          else{
-                            se.gf.hideLoading();
-                            se.navCtrl.navigateForward('/flightpaymentselect');
-                          }
+              se.gf.hideLoading();
+              se.navCtrl.navigateForward('/flightaddservice');
             }else{
               se.gf.showToastWarning(data.error);
               se.gf.hideLoading();
@@ -2399,53 +2370,7 @@ alert.present();
               //let data = se._flightService.itemFlightCache;
                let departluggage=[],returnluggage=[],
                 departAirlineCode = data.departFlight.airlineCode, returnAirlineCode = data.returnFlight ? data.returnFlight.airlineCode : "";
-                
-                //Hành lý đi trả về từ api tìm vé
-                if(data.departFlight && data.departFlight.airLineLuggage && data.departFlight.airLineLuggage.length >0){
-                  const dl = data.departFlight.airLineLuggage.filter((item) => { return item.quantity >0});
-                  if(dl && dl.length >0){
-                    dl.forEach(element => {
-                      element.quantitycheck = element.quantity;
-                      departluggage.push(element)
-                    });
-                    //departluggage = [...dl];
-                  }
-                  
-                }
-                //Hành lý đi trả về từ api load hành lý
-                if(data.departLuggage && data.departLuggage.length >0){
-                  const dl = data.departLuggage.filter((item) => { return item.quantity >0});
-                  if(dl && dl.length >0){
-                    dl.forEach(element => {
-                      element.quantitycheck = element.quantity;
-                      departluggage.push(element)
-                    });
-                    //departluggage = [...dl];
-                  }
-                }
-                //Hành lý về trả về từ api tìm vé
-                if(data.returnFlight && data.returnFlight.airLineLuggage && data.returnFlight.airLineLuggage.length >0){
-                  const rl = data.returnFlight.airLineLuggage.filter((item) => { return item.quantity >0});
-                  if(rl && rl.length >0){
-                    //returnluggage = [...rl]
-                    rl.forEach(element => {
-                      element.quantitycheck = element.quantity;
-                      returnluggage.push(element)
-                    });
-                  }
-                  
-                }
-                //Hành lý về trả về từ api load hành lý
-                if(data.returnLuggage && data.returnLuggage.length >0){
-                  const rl = data.returnLuggage.filter((item) => { return item.quantity >0});
-                  if(rl && rl.length >0){
-                    //returnluggage = [...rl]
-                    rl.forEach(element => {
-                      element.quantitycheck = element.quantity;
-                      returnluggage.push(element)
-                    });
-                  }
-                }
+             
 
 
               for (let index = 0; index < se.adults.length; index++) {
@@ -2455,309 +2380,9 @@ alert.present();
                 let objhoten1 = se.splitFullName(element.name, ho1, ten1);
                 ho1 = objhoten1.firstname;
                 ten1 = objhoten1.lastname;
-                //hành lý
-                //pdanh 30-05-2023: truyền thêm netprice all case fixbug hành lý
-                let objAncilary =[],objAncilaryReturn =[] ;
-                let departluggageweight = 0, returnluggageweight = 0;
-                if(departluggage && departluggage.length >0){
-                  let objLuggage;
-                  if(departluggage && departluggage.length == 1){
-                    if(departluggage[0].quantitycheck >0){
-                        if(departAirlineCode == "JetStar"){
-                              objLuggage = {
-                                Name: departluggage[0].title, 
-                                Type: "Baggage", 
-                                Value: departluggage[0].weight,
-                                price: departluggage[0].amount,
-                                netPrice: departluggage[0].netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                            }
-                            else if(departAirlineCode == "VietnamAirlines"){
-                              let obj = JSON.parse(departluggage[0].purchaseKey);
-                              obj.NameId = "1.1";
-                              objLuggage = {
-                                Name: departluggage[0].title, 
-                                Type: "Baggage", 
-                                Key: JSON.stringify(obj),
-                                Value: departluggage[0].weight,
-                                price: departluggage[0].amount,
-                                netPrice:departluggage[0].netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                            }
-                            else{
-                              objLuggage = {
-                                Name: departluggage[0].title, 
-                                Type: "Baggage", 
-                                Key: departluggage[0].purchaseKey,
-                                Value: departluggage[0].weight,
-                                price: departluggage[0].amount,
-                                netPrice: departluggage[0].netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                          }
-
-                      //Chọn 1 kiện thì gán vào người thứ 1
-                      if(index == 0){
-                        objAncilary.push(objLuggage);
-                        departluggageweight = departluggage[0].weight;
-                      }
-                      //Chọn 2 kiện cùng số kg thì tách ra chia cho 2 người
-                      else if(departluggage[0].quantitycheck >= 1){
-                        objAncilary.push(objLuggage);
-                        departluggageweight = departluggage[0].weight;
-                      }
-                      departluggage[0].quantitycheck--;
-                    }
-
-
-                  }
-                  else if(departluggage && departluggage.length > 1){
-                      var dl1;
-                      if(index >0 && departluggage[index-1] && departluggage[index-1].quantitycheck >0){
-                        dl1 = departluggage[index-1];
-                      }else{
-                        dl1 = departluggage[index];
-                      }
-                      if(dl1){
-                        if(departAirlineCode == "JetStar"){
-                          objLuggage = {
-                            Name: dl1.title, 
-                            Type: "Baggage", 
-                            Value: dl1.weight,
-                            price: dl1.amount,
-                            netPrice: dl1.netPrice,
-                            flightNumber: data.departFlight.flightNumber
-                          }
-                        }
-                        else if(departAirlineCode == "VietnamAirlines")
-                            {
-                              let obj = JSON.parse(dl1.purchaseKey);
-                                  obj.NameId = "1.1";
-                              objLuggage = {
-                                Name: dl1.title, 
-                                Type: "Baggage", 
-                                Key: JSON.stringify(obj),
-                                Value: dl1.weight,
-                                price: dl1.amount,
-                                netPrice: dl1.netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                            }
-                        else{
-                          objLuggage = {
-                            Name: dl1.title, 
-                            Type: "Baggage", 
-                            Key: dl1.purchaseKey,
-                            Value: dl1.weight,
-                            price: dl1.amount,
-                            netPrice: dl1.netPrice,
-                            flightNumber: data.departFlight.flightNumber
-                          }
-                        }
-                        objAncilary.push(objLuggage);
-                        departluggageweight = dl1.weight;
-                        dl1.quantitycheck--;
-                      }
-                      
-                    }
-                       
-                }
-
-                if(returnluggage && returnluggage.length >0){
-                    let objReturnLuggage1;
-                    if(returnluggage && returnluggage.length ==1 && returnluggage[0].quantitycheck >0){
-                      if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                        objReturnLuggage1 = {
-                          Name: returnluggage[0].title, 
-                          Type: "Baggage", 
-                          Value: returnluggage[0].weight,
-                          price: returnluggage[0].amount,
-                          netPrice: returnluggage[0].netPrice,
-                          flightNumber: data.returnFlight.flightNumber
-                        }
-                      }
-                      else if(returnAirlineCode == "VietnamAirlines")
-                      {
-                                let obj = JSON.parse(returnluggage[0].purchaseKey);
-                                    obj.NameId = "1.1";
-                                objReturnLuggage1 = {
-                                  Name: returnluggage[0].title, 
-                                  Type: "Baggage", 
-                                  Key: JSON.stringify(obj),
-                                  Value: returnluggage[0].weight,
-                                  price: returnluggage[0].amount,
-                                  netPrice:returnluggage[0].netPrice,
-                                  flightNumber: data.returnFlight.flightNumber
-                                }
-                      }
-                      else{
-                        objReturnLuggage1 = {
-                          Name: returnluggage[0].title, 
-                          Type: "Baggage", 
-                          Key: returnluggage[0].purchaseKey,
-                          Value: returnluggage[0].weight,
-                          price: returnluggage[0].amount,
-                          netPrice: returnluggage[0].netPrice,
-                          flightNumber: data.returnFlight.flightNumber
-                        }
-                      }
-                      
-                      
-                      if(index == 0){
-                        objAncilaryReturn.push(objReturnLuggage1);
-                          returnluggageweight = returnluggage[0].weight;
-                      }
-                      else if(returnluggage[0].quantitycheck >= 1){
-                        objAncilaryReturn.push(objReturnLuggage1);
-                        returnluggageweight = returnluggage[0].weight;
-                      }
-
-                      returnluggage[0].quantitycheck--;
-                    }
-                    else if(returnluggage && returnluggage.length > 1){
-                      var rl1;
-                      if(index >0 && returnluggage[index-1] && returnluggage[index-1].quantitycheck >0){
-                        rl1 = returnluggage[index-1];
-                      }else{
-                        rl1 = returnluggage[index];
-                      }
-                      if(rl1){
-                        if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                          objReturnLuggage1 = {
-                            Name: rl1.title, 
-                            Type: "Baggage", 
-                            Value: rl1.weight,
-                            price: rl1.amount,
-                            netPrice: rl1.netPrice,
-                            flightNumber: data.returnFlight.flightNumber
-                          }
-                        }
-                        else if(returnAirlineCode == "VietnamAirlines")
-                            {
-                              let obj = JSON.parse(rl1.purchaseKey);
-                                  obj.NameId = "1.1";
-                              objReturnLuggage1 = {
-                                Name: rl1.title, 
-                                Type: "Baggage", 
-                                Key: JSON.stringify(obj),
-                                Value: rl1.weight,
-                                price: rl1.amount,
-                                netPrice:rl1.netPrice,
-                                flightNumber: data.returnFlight.flightNumber
-                              }
-                            }
-                        else{
-                          objReturnLuggage1 = {
-                            Name: rl1.title, 
-                            Type: "Baggage", 
-                            Key: rl1.purchaseKey,
-                            Value: rl1.weight,
-                            price: rl1.amount,
-                            netPrice: rl1.netPrice,
-                            flightNumber: data.returnFlight.flightNumber
-                          }
-                        }
-                        
-                        objAncilaryReturn.push(objReturnLuggage1);
-                        returnluggageweight = rl1.weight;
-                        rl1.quantitycheck--;
-                      }
-                      
-                    }
-                }
-
-                    //chỗ ngồi
-                    //Vietjet lấy key theo selectionKey; Bamboo lấy key theo seatNumber
-                    let objSeat;
-                    if(data.departSeatChoice && data.departSeatChoice.length >0){
-                      if(data.departSeatChoice.length ==1 && !data.departSeatChoice[0].choosed){
-                        let seat = data.departSeatChoice[0];
-                        let stop = data.departFlight.stops;
-                        if (departAirlineCode=='VietnamAirlines') {
-                            let objKey = { NameId: "1.1", SeatNumber: seat.name, Price: seat.amount };
-                            objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  JSON.stringify(objKey), Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.amount, PaxIndex: index+1 };
-                        }
-                        else{
-                          objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  seat.selectionKey ? seat.selectionKey : seat.seatNumber, Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.netPrice ? seat.netPrice: seat.amount, PaxIndex: index+1 };
-                        }
-                       
-                        objAncilary.push(objSeat);
-                        data.departSeatChoice[0].choosed = true;
-                      }else{
-                        let seat = data.departSeatChoice[index];
-                        if(seat){
-                          let stop = data.departFlight.stops;
-                          if (departAirlineCode=='VietnamAirlines') {
-                            let objKey = { NameId: "1.1", SeatNumber: seat.name, Price: seat.amount };
-                            objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  JSON.stringify(objKey), Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.amount, PaxIndex: index+1 };
-                        }
-                        else{
-                          objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  seat.selectionKey ? seat.selectionKey : seat.seatNumber, Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.netPrice ? seat.netPrice: seat.amount, PaxIndex: index+1 };
-                        }
-                          //objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  seat.selectionKey ? seat.selectionKey : seat.seatNumber, Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, PaxIndex: index+1 };
-                          objAncilary.push(objSeat);
-                          data.departSeatChoice[index].choosed = true;
-                        }
-                        
-                      }
-                      
-                    }
-  
-                    let objSeatReturn;
-                    if(data.returnSeatChoice && data.returnSeatChoice.length >0){
-                      if(data.returnSeatChoice.length ==1 && !data.returnSeatChoice[0].choosed){
-                        let seatreturn = data.returnSeatChoice[0];
-                        let stopreturn = data.returnFlight.stops;
-                        if (returnAirlineCode=='VietnamAirlines') {
-                            let objKey = { NameId: "1.1", SeatNumber: seatreturn.name, Price: seatreturn.amount };
-                            objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  JSON.stringify(objKey), Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.amount, PaxIndex: index+1 };
-                          
-                        }
-                        else{
-                          objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  seatreturn.selectionKey? seatreturn.selectionKey : seatreturn.seatNumber, Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.netPrice ? seatreturn.netPrice: seatreturn.amount, PaxIndex: index+1 };
-                        }
-                       
-                        objAncilaryReturn.push(objSeatReturn);
-                        data.returnSeatChoice[0].choosed = true;
-                      }else{
-                        let seatreturn = data.returnSeatChoice[index];
-                        if(seatreturn){
-                          let stopreturn = data.returnFlight.stops;
-                          if (returnAirlineCode=='VietnamAirlines') {
-                              let objKey = { NameId: "1.1", SeatNumber: seatreturn.name, Price: seatreturn.amount };
-                              objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  JSON.stringify(objKey), Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.amount, PaxIndex: index+1 };
-                          }
-                          else{
-                            objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  seatreturn.selectionKey? seatreturn.selectionKey : seatreturn.seatNumber, Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.netPrice ? seatreturn.netPrice: seatreturn.amount, PaxIndex: index+1 };
-                          }
-                          // objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  seatreturn.selectionKey? seatreturn.selectionKey : seatreturn.seatNumber , Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, PaxIndex: index+1 };
-                          objAncilaryReturn.push(objSeatReturn);
-                          data.returnSeatChoice[index].choosed = true;
-                        }
-                        
-                      }
-                      
-                    }
-                   //Đi chung
-                   let objTransfer;
-                   if (this._flightService.itemFlightCache.DICHUNGParam && this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo) {
-                     
-                     objTransfer={Type:"Transfer",price: this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo,netPrice:this._flightService.itemFlightCache.DICHUNGParam.TotalPriceGo,title:"1"}
-                     if(index == 0){
-                        objAncilary.push(objTransfer);
-                     }
-                     
-                   }
-                   if (this._flightService.itemFlightCache.DICHUNGParam && this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn) {
-                     objTransfer={Type:"Transfer",price: this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn,netPrice:this._flightService.itemFlightCache.DICHUNGParam.TotalPriceReturn,title:"1"}
-                     if(index == 0){
-                        objAncilaryReturn.push(objTransfer);
-                     }
-                   }
-                   element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
-                   element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
+                
+                   element.ancillaryJson = "";
+                   element.ancillaryReturnJson =  "";
                   //console.log(element.ancillaryJson);
                   //console.log(element.ancillaryReturnJson);
                   listpassenger.push({
@@ -2766,8 +2391,8 @@ alert.present();
                     "firstName": ten1,
                     "lastName": ho1,
                     "mobileNumber": "",
-                    "baggage": departluggageweight,
-                    "returnBaggage": returnluggageweight,
+                    "baggage": "",
+                    "returnBaggage": "",
                     "birthDay": element.dateofbirth,
                     "email": "",
                     "passportNumber": (se.showLotusPoint && se.isExtenal) ? element.passport :"",
@@ -2797,307 +2422,17 @@ alert.present();
                 let objAncilary =[],objAncilaryReturn =[] ;
                 let departluggageweight = 0, returnluggageweight = 0;
 
-                departluggage = departluggage.filter((item) => { return item.quantitycheck >0});
-                returnluggage = returnluggage.filter((item) => { return item.quantitycheck >0});
-
-                if(!element.isInfant){
-                    if(departluggage && departluggage.length >0){
-                      let objLuggage;
-                      if(departluggage && departluggage.length == 1){
-                        if(departluggage[0].quantitycheck >0){
-                            if(departAirlineCode == "JetStar"){
-                                  objLuggage = {
-                                    Name: departluggage[0].title, 
-                                    Type: "Baggage", 
-                                    Value: departluggage[0].weight,
-                                    price: departluggage[0].amount,
-                                    netPrice:departluggage[0].netPrice,
-                                    flightNumber: data.departFlight.flightNumber
-                                  }
-                                  
-                                }
-                                else if(departAirlineCode == "VietnamAirlines"){
-                                  let obj = JSON.parse(departluggage[0].purchaseKey);
-                                  obj.NameId = "1.1";
-                                  objLuggage = {
-                                    Name: departluggage[0].title, 
-                                    Type: "Baggage", 
-                                    Key: JSON.stringify(obj),
-                                    Value: departluggage[0].weight,
-                                    price: departluggage[0].amount,
-                                    netPrice:departluggage[0].netPrice,
-                                    flightNumber: data.departFlight.flightNumber
-                                  }
-                                }
-                                else{
-                                  objLuggage = {
-                                    Name: departluggage[0].title, 
-                                    Type: "Baggage", 
-                                    Key: departluggage[0].purchaseKey,
-                                    Value: departluggage[0].weight,
-                                    price: departluggage[0].amount,
-                                    netPrice:departluggage[0].netPrice,
-                                    flightNumber: data.departFlight.flightNumber
-                                  }
-                              }
-
-                          //Chọn 1 kiện thì gán vào người thứ 1
-                          if(index == 0){
-                            objAncilary.push(objLuggage);
-                            departluggageweight = departluggage[0].weight;
-                          }
-                          //Chọn 2 kiện cùng số kg thì tách ra chia cho 2 người
-                          else if(departluggage[0].quantitycheck >= 1){
-                            objAncilary.push(objLuggage);
-                            departluggageweight = departluggage[0].weight;
-                          }
-                          departluggage[0].quantitycheck--;
-                        }
-
-
-                      }
-                      else if(departluggage && departluggage.length > 1){
-                          var dlc;
-                          if(index >0 && departluggage[index-1] && departluggage[index-1].quantitycheck >0){
-                            dlc = departluggage[index-1];
-                          }else{
-                            dlc = departluggage[index];
-                          }
-                          if(dlc){
-                            if(departAirlineCode == "JetStar"){
-                              objLuggage = {
-                                Name: dlc.title, 
-                                Type: "Baggage", 
-                                Value: dlc.weight,
-                                price: dlc.amount,
-                                netPrice:dlc.netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                            }
-                            else if(departAirlineCode == "VietnamAirlines"){
-                              let obj = JSON.parse(dlc.purchaseKey);
-                              obj.NameId = "1.1";
-                              objLuggage = {
-                                Name: dlc.title, 
-                                Type: "Baggage", 
-                                Key: JSON.stringify(obj),
-                                Value: dlc.weight,
-                                price: dlc.amount,
-                                netPrice:dlc.netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                            }
-                            else{
-                              objLuggage = {
-                                Name: dlc.title, 
-                                Type: "Baggage", 
-                                Key: dlc.purchaseKey,
-                                Value: dlc.weight,
-                                price: dlc.amount,
-                                netPrice:dlc.netPrice,
-                                flightNumber: data.departFlight.flightNumber
-                              }
-                            }
-                            objAncilary.push(objLuggage);
-                            departluggageweight = dlc.weight;
-                            dlc.quantitycheck--;
-                          }
-                          
-                        }
-                          
-                    }
-
-                    if(returnluggage && returnluggage.length >0){
-                        let objReturnLuggage1;
-                        if(returnluggage && returnluggage.length ==1 && returnluggage[0].quantitycheck >0){
-                          if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                            objReturnLuggage1 = {
-                              Name: returnluggage[0].title, 
-                              Type: "Baggage", 
-                              Value: returnluggage[0].weight,
-                              price: returnluggage[0].amount,
-                              netPrice: returnluggage[0].netPrice,
-                              flightNumber: data.returnFlight.flightNumber
-                            }
-                          }
-                          else if(returnAirlineCode == "VietnamAirlines")
-                          {
-                            let obj = JSON.parse(returnluggage[0].purchaseKey);
-                                obj.NameId = "1.1";
-                            objReturnLuggage1 = {
-                              Name: returnluggage[0].title, 
-                              Type: "Baggage", 
-                              Key: JSON.stringify(obj),
-                              Value: returnluggage[0].weight,
-                              price: returnluggage[0].amount,
-                              netPrice:returnluggage[0].netPrice,
-                              flightNumber: data.returnFlight.flightNumber
-                            }
-                          }
-                          else{
-                            objReturnLuggage1 = {
-                              Name: returnluggage[0].title, 
-                              Type: "Baggage", 
-                              Key: returnluggage[0].purchaseKey,
-                              Value: returnluggage[0].weight,
-                              price: returnluggage[0].amount,
-                              netPrice: returnluggage[0].netPrice,
-                              flightNumber: data.returnFlight.flightNumber
-                            }
-                          }
-                          
-                          
-                          if(index == 0){
-                            objAncilaryReturn.push(objReturnLuggage1);
-                              returnluggageweight = returnluggage[0].weight;
-                          }
-                          else if(returnluggage[0].quantitycheck >= 1){
-                            objAncilaryReturn.push(objReturnLuggage1);
-                            returnluggageweight = returnluggage[0].weight;
-                          }
-
-                          returnluggage[0].quantitycheck--;
-                        }
-                        else if(returnluggage && returnluggage.length > 1){
-                          var rlc;
-                          if(index >0 && returnluggage[index-1] && returnluggage[index-1].quantitycheck >0){
-                            rlc = returnluggage[index-1];
-                          }else{
-                            rlc = returnluggage[index];
-                          }
-                          if(rlc){
-                            if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                              objReturnLuggage1 = {
-                                Name: rlc.title, 
-                                Type: "Baggage", 
-                                Value: rlc.weight,
-                                price: rlc.amount,
-                                netPrice:rlc.netPrice,
-                                flightNumber: data.returnFlight.flightNumber
-                              }
-                            }
-                            else if(returnAirlineCode == "VietnamAirlines")
-                            {
-                              let obj = JSON.parse(rlc.purchaseKey);
-                                  obj.NameId = "1.1";
-                              objReturnLuggage1 = {
-                                Name: rlc.title, 
-                                Type: "Baggage", 
-                                Key: JSON.stringify(obj),
-                                Value: rlc.weight,
-                                price: rlc.amount,
-                                netPrice:rlc.netPrice,
-                                flightNumber: data.returnFlight.flightNumber
-                              }
-                            }
-                            else{
-                              objReturnLuggage1 = {
-                                Name: rlc.title, 
-                                Type: "Baggage", 
-                                Key: rlc.purchaseKey,
-                                Value: rlc.weight,
-                                price: rlc.amount,
-                                netPrice:rlc.netPrice,
-                                flightNumber: data.returnFlight.flightNumber
-                              }
-                            }
-                            
-                            objAncilaryReturn.push(objReturnLuggage1);
-                            returnluggageweight = rlc.weight;
-                            rlc.quantitycheck--;
-                          }
-                          
-                        }
-                    }
-                }
-               
                 //tên
                 var ho1 ='', ten1='';
                 let objhoten1 = se.splitFullName(element.name, ho1, ten1);
                 ho1 = objhoten1.firstname;
                 ten1 = objhoten1.lastname;
-                //let objAncilary =[],objAncilaryReturn =[] ;
-                let indexseat = index + se.adults.length;
-                if(!element.isInfant){
-                  //chỗ ngồi
-                  let objSeat;
-                  if(data.departSeatChoice && data.departSeatChoice.length >0){
-                    if(data.departSeatChoice.length ==1){
-                      if(data.departSeatChoice[indexseat] && !data.departSeatChoice[indexseat].choosed){
-                        let seat = data.departSeatChoice[indexseat];
-                        let stop = data.departFlight.stops;
-
-                        if (departAirlineCode=='VietnamAirlines') {
-                          let objKey = { NameId: "1.1", SeatNumber: seat.name, Price: seat.amount };
-                          objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key: JSON.stringify(objKey), Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.amount, PaxIndex: indexseat+1 };
-                        }else{
-                          objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  seat.selectionKey ? seat.selectionKey : seat.seatNumber, Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.netPrice ? seat.netPrice: seat.amount, PaxIndex: indexseat+1 };
-                        }
-                        objAncilary.push(objSeat);
-                      }
-                      
-                    }else{
-                      if(data.departSeatChoice[indexseat] && !data.departSeatChoice[indexseat].choosed){
-                        let seat = data.departSeatChoice[indexseat];
-                        if(seat){
-                          let stop = data.departFlight.stops;
-                          if (departAirlineCode=='VietnamAirlines') {
-                            let objKey = { NameId: "1.1", SeatNumber: seat.name, Price: seat.amount };
-                            objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  JSON.stringify(objKey), Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.amount, PaxIndex: indexseat+1 };
-                          }else{
-                            objSeat = {Name: "Chỗ ngồi " + seat.name, Type : "Seat", Key:  seat.selectionKey ? seat.selectionKey : seat.seatNumber, Value: seat.name, journey: 1, segment: (stop >=1 ? 2 : 1), price: seat.amount, netPrice: seat.netPrice ? seat.netPrice: seat.amount, PaxIndex: indexseat+1 };
-                          }
-                          
-                          objAncilary.push(objSeat);
-                        }
-                        
-                      }
-                    }
-                    
-                  }
-  
-                  let objSeatReturn;
-                  if(data.returnSeatChoice && data.returnSeatChoice.length >0){
-                    if(data.returnSeatChoice.length ==1){
-                      if(data.returnSeatChoice[indexseat] && !data.returnSeatChoice[indexseat].choosed){
-                          let seatreturn = data.returnSeatChoice[indexseat];
-                          let stopreturn = data.returnFlight.stops;
-                          
-                          if (returnAirlineCode=='VietnamAirlines') {
-                            let objKey = { NameId: "1.1", SeatNumber: seatreturn.name, Price: seatreturn.amount };
-                            objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  JSON.stringify(objKey) , Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.amount, PaxIndex: indexseat+1 };
-                          }
-                          else{
-                            objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  seatreturn.selectionKey ? seatreturn.selectionKey : seatreturn.seatNumber , Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.netPrice ? seatreturn.netPrice: seatreturn.amount, PaxIndex: indexseat+1 };
-                          }
-                          objAncilaryReturn.push(objSeatReturn);
-                        }
-                    }else{
-                      if(data.returnSeatChoice[indexseat] && !data.returnSeatChoice[indexseat].choosed){
-                        let seatreturn = data.returnSeatChoice[indexseat];
-                        if(seatreturn){
-                          let stopreturn = data.returnFlight.stops;
-                          if (returnAirlineCode=='VietnamAirlines') {
-                            let objKey = { NameId: "1.1", SeatNumber: seatreturn.name, Price: seatreturn.amount };
-                            objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  JSON.stringify(objKey) , Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.amount, PaxIndex: indexseat+1 };
-                          }else{
-                            objSeatReturn = {Name: "Chỗ ngồi " + seatreturn.name, Type : "Seat", Key:  seatreturn.selectionKey ? seatreturn.selectionKey : seatreturn.seatNumber , Value: seatreturn.name, journey: (data.departFlight.airlineCode == data.returnFlight.airlineCode)? 2 : 1, segment: (stopreturn >=1 ? 2 : 1), price: seatreturn.amount, netPrice: seatreturn.netPrice ? seatreturn.netPrice: seatreturn.amount, PaxIndex: indexseat+1 };
-                          }
-                          
-                          objAncilaryReturn.push(objSeatReturn);
-                        }
-                          
-                        }
-                    }
-                    
-                  }
-                }
-                
+              
                 if(element.isInfant){
                   adultIndex++;
                 }
-                element.ancillaryJson = (objAncilary.length >0 ? JSON.stringify(objAncilary): "");
-                element.ancillaryReturnJson = (objAncilaryReturn.length >0 ? JSON.stringify(objAncilaryReturn): "");
+                element.ancillaryJson =  "";
+                element.ancillaryReturnJson = "";
 
                   listpassenger.push({
                     "passengerType": element.isInfant ? 2 : 1,
@@ -3132,39 +2467,7 @@ alert.present();
               data.ho = firstnamecontact;
               data.ten = lastnamecontact;
               var bookingJsonData;
-               //thêm param đi chung vào list đầu tiên
-              if (this._flightService.itemFlightCache.DICHUNGParam) {
-                this._flightService.itemFlightCache.DICHUNGParam.User={email:C.urls.baseUrl.emailDC,phone:se.sodienthoai,fullName:data.ho+" "+data.ten};
-                listpassenger[0].DICHUNGParam = this._flightService.itemFlightCache.DICHUNGParam;
-                var AirTicketObj=[];
-                let AirTicketItem= {PromotionNote:"",AirlineName:""};
-                let JsonItem = JSON.stringify(listpassenger[0].DICHUNGParam);
-                AirTicketItem.PromotionNote = JsonItem;
-                AirTicketItem.AirlineName = "APIDICHUNG";
-                AirTicketObj.push(AirTicketItem);
-                let Json = JSON.stringify(AirTicketObj);
-                bookingJsonData = Json;
-              }
-
-              let voucherSelectedMap = this._voucherService.voucherSelected.map(v => {
-                let newitem = {};
-                newitem["voucherCode"] = v.code;
-                newitem["voucherName"] = v.rewardsItem.title;
-                newitem["voucherType"] = v.applyFor || v.rewardsItem.rewardsType;
-                newitem["voucherDiscount"] = v.rewardsItem.price;
-                newitem["keepCurrentVoucher"] = this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0 ? this._flightService.itemFlightCache.listVouchersAlreadyApply.some(item => item.code == v.code) :false;
-                return newitem;
-              });
-              let promoSelectedMap = this._voucherService.listObjectPromoCode.map(v => {
-                let newitem = {};
-                newitem["voucherCode"] = v.code;
-                newitem["voucherName"] = v.name;
-                newitem["voucherType"] = 2;
-                newitem["voucherDiscount"] = v.price;
-                newitem["keepCurrentVoucher"] = this._flightService.itemFlightCache.listVouchersAlreadyApply && this._flightService.itemFlightCache.listVouchersAlreadyApply.length >0 ? this._flightService.itemFlightCache.listVouchersAlreadyApply.some(item => item.code == v.code) :false;
-                return newitem;
-              });
-
+             
               let checkpromocode = this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0;
               let arrpromocode = se._voucherService.flightPromoCode ? [{"voucherCode": se._voucherService.flightPromoCode, "voucherName": se._voucherService.flightPromoCode,"voucherType": 1,"voucherDiscount": se._voucherService.flightTotalDiscount,"keepCurrentVoucher": false  }] : [];
 
@@ -3196,21 +2499,14 @@ alert.present();
                     "departFlightId": data.departFlight ? data.departFlight.id : "",
                     "returnFlightId": data.returnFlight ? data.returnFlight.id : "",
                     "memberId": se.jti ? se.jti : "",
-                    "hotelAddon" : se._flightService.itemFlightCache.objHotelCitySelected ? se._flightService.itemFlightCache.objHotelCitySelected : "" ,//truyền thêm hotelcity nếu chọn
+                    "hotelAddon" : "" ,//truyền thêm hotelcity nếu chọn
                     "bookingJsonData":bookingJsonData,//đi chung
-                    //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
-                    "vouchers" : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
-                    "InsuranceType":se._flightService.itemFlightCache.InsuranceType,
-                    "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline
+                    "vouchers" : [],
+                    "InsuranceType": null,
+                    "isCheckinOnline": null,
+                    "isInitAncillary" : true
                   }
-                  if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){
-                    if(se._flightService.itemFlightCache.pnr && se._flightService.itemFlightCache.pnr.resNo && se._flightService.itemFlightCache.hasvoucher && se._flightService.itemFlightCache.promotionCode)
-                    {
-                      objPass.voucher={};
-                      objPass.voucher.keepCurrentVoucher=true;
-                      objPass.voucher.voucherCode = se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"";
-                    }
-                  }
+                  
                   
                   var options = {
                     method: 'POST',

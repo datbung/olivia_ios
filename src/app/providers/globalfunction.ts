@@ -777,6 +777,9 @@ export class GlobalFunction{
         if(type == 'listlastsearchHot'){
           res = arrays.some(r => r.expId == item.expId);
         }
+        if(type == 'ticketslide'){
+          res = arrays.some(r => r.experienceId == item.experienceId);
+        }
       }
       else{
         res = arrays.some(r => r.id == item.id);

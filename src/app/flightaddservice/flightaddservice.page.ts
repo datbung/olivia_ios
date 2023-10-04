@@ -3494,7 +3494,8 @@ export class FlightaddservicePage implements OnInit {
               //"voucher": { voucherCode: se._flightService.itemFlightCache.promotionCode ? se._flightService.itemFlightCache.promotionCode:"" },
               "vouchers" : !checkpromocode ? [...voucherSelectedMap,...promoSelectedMap] : arrpromocode,
               "InsuranceType":se._flightService.itemFlightCache.InsuranceType,
-              "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline
+              "isCheckinOnline": se._flightService.itemFlightCache.isCheckinOnline,
+              "isInitAncillary" : false
             }
               
             if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listObjectPromoCode && this._voucherService.listObjectPromoCode.length ==0){

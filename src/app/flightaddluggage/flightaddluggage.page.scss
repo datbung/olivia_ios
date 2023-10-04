@@ -164,6 +164,7 @@
         color: #3f3b3b;
     }
     .div-wrap-item-luggage {
+        z-index: 999;
         display: flex;
         width: auto;
         overflow: scroll;
@@ -177,7 +178,7 @@
             flex-direction: column;
             margin-right: 8px;
             text-align: center;
-            min-width: 113px;
+            min-width: 116px;
             height: 58px;
             padding: 8px 6px;
             border-radius: 4px;

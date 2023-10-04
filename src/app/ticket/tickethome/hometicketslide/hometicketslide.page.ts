@@ -20,6 +20,9 @@ export class HomeTicketSlidePage implements OnInit {
   slideData = [];
   slidePopular : any;
   slidePopularVN: any;
+  loadslidedatadone: boolean=false;
+  arrsk=[1,2,3,4,5,6];
+  pageSize=20;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -29,13 +32,51 @@ export class HomeTicketSlidePage implements OnInit {
     private platform: Platform,
     public searchhotel: SearchHotel,
     public ticketService: ticketService) {
-      this.getAllExperiences();
-      this.getPopularLocationVN();
-      this.getPopularLocation();
+      if(!this.ticketService.dataAllExperiences){
+        this.getAllExperiences();
+      }else{
+        this.loadDataAllExperiences();
+      }
+      if(!this.ticketService.dataPopularLocationVN){
+        this.getPopularLocationVN();
+      }else{
+        this.loadDataPopularLocationVN();
+      }
+
+      if(!this.ticketService.dataPopularLocation){
+        this.getPopularLocation();
+      }else{
+        this.loadDataPopularLocation();
+      }
+      
+      
   }
 
   ngOnInit(){
     this.ticketService.itemTicketTopic='';
+  }
+
+  loadDataAllExperiences(){
+    let se = this;
+      se.slideData = se.ticketService.dataAllExperiences;
+      for (let index = 0; index < se.slideData.length; index++) {
+        se.slideData[index].pageIndex = 1;
+        se.slideData[index].totalPage = Math.ceil(se.slideData[index].experienceHomeModels.length/20);
+        se.slideData[index].experienceHomeModelsDisplay = [];
+        for (let j = 0; j < se.slideData[index].experienceHomeModels.length; j++) {
+          const elementVVC = se.slideData[index].experienceHomeModels[j];
+          if(elementVVC.avgPoint && (elementVVC.avgPoint == 10  || elementVVC.avgPoint == 6  || elementVVC.avgPoint == 9  || elementVVC.avgPoint == 8  || elementVVC.avgPoint == 7)){
+            elementVVC.avgPoint = elementVVC.avgPoint + ".0";
+          }
+
+          if(j <20){
+            se.slideData[index].experienceHomeModelsDisplay.push(elementVVC);
+          }
+          
+        }
+      }
+      
+      se.loadslidedatadone = true;
   }
 
   getAllExperiences() {
@@ -47,15 +88,8 @@ export class HomeTicketSlidePage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'getAllExperiences').then((data) => {
       let res = JSON.parse(data);
-      se.slideData = res.data;
-      for (let index = 0; index < se.slideData.length; index++) {
-        for (let j = 0; j < se.slideData[index].experienceHomeModels.length; j++) {
-          const elementVVC = se.slideData[index].experienceHomeModels[j];
-          if(elementVVC.avgPoint && (elementVVC.avgPoint == 10  || elementVVC.avgPoint == 6  || elementVVC.avgPoint == 9  || elementVVC.avgPoint == 8  || elementVVC.avgPoint == 7)){
-            elementVVC.avgPoint = elementVVC.avgPoint + ".0";
-          }
-        }
-      }
+      se.ticketService.dataAllExperiences = res.data;
+      se.loadDataAllExperiences();
     })
   }
 
@@ -72,6 +106,21 @@ export class HomeTicketSlidePage implements OnInit {
     })
   }
 
+  loadDataPopularLocationVN(){
+    let se = this;
+    se.slidePopularVN = se.ticketService.dataPopularLocationVN;
+
+    if(se.slidePopularVN.vertical && se.slidePopularVN.vertical.avatarLink.indexOf('http') == -1){
+        se.slidePopularVN.vertical[0].avatarLink = 'https:'+se.slidePopularVN.vertical[0].avatarLink;
+    }
+
+    se.slidePopularVN.horizontals.forEach(slide => {
+      if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
+        slide.avatarLink = 'https:'+slide.avatarLink;
+      }
+    });
+  }
+
   getPopularLocationVN() {
     let se = this;
     let url = C.urls.baseUrl.urlTicket+'/api/Home/GetRecommendDestination?position=2&vertical=4';
@@ -81,18 +130,24 @@ export class HomeTicketSlidePage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometicketitemslide', 'GetRecommendDestination').then((data) => {
       let res = JSON.parse(data);
-      se.slidePopularVN = res.data;
-
-      if(se.slidePopularVN.vertical && se.slidePopularVN.vertical.avatarLink.indexOf('http') == -1){
-          se.slidePopularVN.vertical[0].avatarLink = 'https:'+se.slidePopularVN.vertical[0].avatarLink;
-      }
-
-      se.slidePopularVN.horizontals.forEach(slide => {
-        if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
-          slide.avatarLink = 'https:'+slide.avatarLink;
-        }
-      });
+      se.ticketService.dataPopularLocationVN = res.data;
+      se.loadDataPopularLocationVN();
     })
+  }
+
+  loadDataPopularLocation(){
+    let se = this;
+    se.slidePopular = se.ticketService.dataPopularLocation;
+
+    if(se.slidePopular.vertical && se.slidePopular.vertical.avatarLink.indexOf('http') == -1){
+        se.slidePopular.vertical[0].avatarLink = 'https:'+se.slidePopular.vertical[0].avatarLink;
+    }
+
+    se.slidePopular.horizontals.forEach(slide => {
+      if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
+        slide.avatarLink = 'https:'+slide.avatarLink;
+      }
+    });
   }
   getPopularLocation() {
     let se = this;
@@ -103,38 +158,40 @@ export class HomeTicketSlidePage implements OnInit {
     };
     se.gf.RequestApi('GET', url, headers, null, 'hometicketitemslide', 'GetRecommendDestination').then((data) => {
       let res = JSON.parse(data);
-      se.slidePopular = res.data;
-
-      if(se.slidePopular.vertical && se.slidePopular.vertical.avatarLink.indexOf('http') == -1){
-          se.slidePopular.vertical[0].avatarLink = 'https:'+se.slidePopular.vertical[0].avatarLink;
-      }
-
-      se.slidePopular.horizontals.forEach(slide => {
-        if(slide.avatarLink && slide.avatarLink.indexOf('http') == -1){
-          slide.avatarLink = 'https:'+slide.avatarLink;
-        }
-      });
+      se.ticketService.dataPopularLocation = res.data;
+      se.loadDataPopularLocation();
     })
   }
   /**
    * Sự kiện loadmore khi scroll topdeal
    * @param event biến event
    */
-   onScroll(event: any) {
+   onScroll(event: any, _index) {
     let scrolled = 0;
-    let el: any = document.getElementsByClassName('slide2-scroll');
+    let el: any = document.getElementsByClassName('item-ticketslide-scroll-'+_index);
     if (el.length > 0) {
       scrolled = Math.round(el[0].scrollWidth - el[0].scrollLeft);
     }
     if (scrolled == el[0].offsetWidth || scrolled + 1 == el[0].offsetWidth) {
       setTimeout(() => {
-        this.doInfinite();
+        console.log(_index)
+        this.doInfinite(_index);
       }, 500)
     }
 
   }
-  doInfinite() {
-    this.slideData = [...this.slideData];
+  doInfinite(_index) {
+    if(this.slideData && this.slideData[_index] && this.slideData[_index].pageIndex < this.slideData[_index].totalPage){
+      this.slideData[_index].pageIndex +=1;
+      let idxCount = this.pageSize*(this.slideData[_index].pageIndex -1);
+      for (let index = idxCount; index < this.pageSize * this.slideData[_index].pageIndex; index++) {
+        const element = this.slideData[_index].experienceHomeModels[index];
+        if(!this.gf.checkExistsItemInArray(this.slideData[_index].experienceHomeModelsDisplay, element, 'ticketslide')){
+          this.slideData[_index].experienceHomeModelsDisplay.push(element);
+        }
+      }
+      
+    }
   }
 
   showDetail(item){

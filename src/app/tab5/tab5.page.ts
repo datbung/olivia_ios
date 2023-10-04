@@ -296,6 +296,7 @@ export class Tab5Page implements OnInit {
               this.storage.remove('listblogtripdefault');
               this.storage.remove('listmytrips');
               this.storage.remove('flighttopdeal');
+              this.storage.remove("listAirport");
               this.storage.clear();
              
               this.zone.run(() => {
