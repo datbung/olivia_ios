@@ -2330,7 +2330,7 @@ export class FlightaddservicePage implements OnInit {
         se.gf.showToastWarning('Đang tải dữ liệu. Xin vui lòng đợi trong giây lát!')
         return;
       }
-      
+     
       if(se.checkEmptyHotelCity){
         se.showAlertChoiceHotelCity();
         return;
@@ -2394,7 +2394,16 @@ export class FlightaddservicePage implements OnInit {
         }else{
           //se.navCtrl.navigateForward('/flightpaymentselect');
             //se.navCtrl.navigateForward('/flightadddetails');
-            se.gotopaymentpage();
+            if(se.isCathay){
+              se.checkInput().then((check)=>{
+                if(check){
+                  se.gotopaymentpage();
+                }
+              });
+            }else{
+              se.gotopaymentpage();
+            }
+            
         }
     }
 
@@ -4302,7 +4311,7 @@ buildStringPromoCode(){
   gotopaymentpage(){
     var se = this;
     se._flightService.itemFlightCache.backtochoiceseat = false;
-    
+      
     se.updatePassengerInfo().then((data)=>{
       if(!data.error){
         
@@ -4341,5 +4350,74 @@ buildStringPromoCode(){
         se.gf.hideLoading();
       }
     })
+  }
+
+  /**
+         * @param inputcheck đối tượng check
+         * @param type: 1 - giới tính; 2 - name;
+         * @param isadult: true - là người lớn
+         */
+  checkInput() :Promise<any>{
+    var se = this;
+    return new Promise((resolve, reject) => {
+      if(se._flightService.itemFlightCache.adults && se._flightService.itemFlightCache.adults.length >0){
+        for (let index = 0; index < se._flightService.itemFlightCache.adults.length; index++) {
+          const element = se._flightService.itemFlightCache.adults[index];
+          if(!element.dateofbirth){
+            se.gf.showAlertMessageOnly('Vui lòng nhập ngày sinh Người lớn'+(element.id));
+            resolve(false);
+          }
+          if(element.dateofbirth){
+            let diffdate = moment(new Date()).diff(element.dateofbirth, 'months');
+            if(diffdate < 144){
+              se.gf.showAlertMessageOnly( "Vui lòng nhập ngày sinh Người lớn "+(element.id)+" trên 12 tuổi");
+              resolve(false);
+            }
+          }
+        }
+      }
+  
+      if(se._flightService.itemFlightCache.childs && se._flightService.itemFlightCache.childs.length >0){
+        for (let index = 0; index < se._flightService.itemFlightCache.childs.length; index++) {
+          const elementChild = se._flightService.itemFlightCache.childs[index];
+          
+          if(!elementChild.dateofbirth){
+            se.gf.showAlertMessageOnly("Vui lòng nhập ngày sinh "+ (!elementChild.isInfant ? "Trẻ em" : "Em bé") +" "+ (!elementChild.isInfant ? elementChild.id : elementChild.iddisplay));
+            resolve(false);
+          }
+        
+          if(elementChild.dateofbirth){
+            let returndate = se._flightService.itemFlightCache.roundTrip ? moment(se._flightService.itemFlightCache.checkOutDate).format('YYYY-MM-DD') : moment(se._flightService.itemFlightCache.checkInDate).format('YYYY-MM-DD');
+            let returndatestring = moment(returndate).format('DD-MM-YYYY');
+                        //Check độ tuổi trẻ em > 2
+                        if(!elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'months') < 24){
+                          se.gf.showAlertMessageOnly( "Vui lòng nhập ngày sinh Trẻ em "+(!elementChild.isInfant ? elementChild.id : elementChild.iddisplay) +" lớn hơn hoặc bằng 2 tuổi so với ngày về "+returndatestring);
+                          resolve(false);
+                        }
+                        //Check độ tuổi trẻ em <12
+                        if(!elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'months') >= 144){
+                          se.gf.showAlertMessageOnly( "Vui lòng nhập ngày sinh Trẻ em "+(!elementChild.isInfant ? elementChild.id : elementChild.iddisplay) +" không được lớn hơn 12 tuổi so với ngày về "+returndatestring);
+                          resolve(false);
+                        }
+                        
+                        //Check độ tuổi của em bé <14 ngày
+                        if(elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth).format('YYYY-MM-DD'), 'days') < 14){
+                            se.gf.showAlertMessageOnly("Vui lòng nhập ngày sinh Em bé "+ (!elementChild.isInfant ? elementChild.id : elementChild.iddisplay) +" lớn hơn 14 ngày tuổi so với ngày về "+returndatestring);
+                            resolve(false);
+                        }
+                        
+                        //Check độ tuổi của em bé <2
+                        if(elementChild.isInfant && moment(returndate).diff(moment(elementChild.dateofbirth), 'months') >= 24){
+                            se.gf.showAlertMessageOnly( "Vui lòng nhập ngày sinh Em bé "+ (!elementChild.isInfant ? elementChild.id : elementChild.iddisplay) +" không được lớn hơn 2 tuổi so với ngày về "+returndatestring);
+                            resolve(false);
+                        }
+                       
+          }
+        }
+      }
+      resolve(true);
+    })
+    
+     
   }
 }
