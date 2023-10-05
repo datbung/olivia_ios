@@ -290,7 +290,7 @@ export class VoucherSlideHotelPage implements OnInit{
           authorization: text
       };
       let body = {
-        bookingCode: 'hotel' ,codes: [], totalAmount: 0, comboDetailId: 0,
+        bookingCode: 'IVIVU' ,codes: [], totalAmount: 0, comboDetailId: 0,
         couponData: {
           "hotel": {
             "hotelId": this.booking.HotelId,

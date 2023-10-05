@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 51;
 	objects = {
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
@@ -65,7 +65,6 @@
 		48B9EEFF75B64B8E9E89D66D /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DC3EFD66AA4A55B817DD94 /* CDVFile.m */; };
 		4AA21902FCB14F53A8900BA6 /* PECropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 39D2F4469806431E85A99FEF /* PECropView.m */; };
 		4ADD118BA5204CF0855B62AF /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C89C73CC433408781E73874 /* SafariServices.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		4CC5D59A293F3C39008D516C /* FileOpener2.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC5D599293F3C39008D516C /* FileOpener2.m */; };
 		4D504AA12171406887D5DCA6 /* CDVWKWebViewEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C7B87BB4F410DA2D2BB58 /* CDVWKWebViewEngine.m */; };
 		50AEB308514D4AB0B3184C9E /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = EEB2334C25EC4437A1368F06 /* entropy.c */; };
 		5188BD79AFB242EB95BB1CC2 /* AppDelegate+FirebaseDynamicLinksPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 512A6DB3E86B42CE9EC3DAA5 /* AppDelegate+FirebaseDynamicLinksPlugin.m */; };
@@ -307,8 +306,6 @@
 		4B271661A8984BD5A0F9BF0F /* CDVViewController+SplashScreen.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "CDVViewController+SplashScreen.h"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.h"; sourceTree = "<group>"; };
 		4BCE92EB81C6499EACD377D7 /* GMVideoIcon.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; path = GMVideoIcon.png; sourceTree = "<group>"; };
 		4BF24E2D10614DB69529DE48 /* CodePushJWTClaim.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CodePushJWTClaim.h; path = "cordova-plugin-code-push/CodePushJWTClaim.h"; sourceTree = "<group>"; };
-		4CC5D597293F3C34008D516C /* FileOpener2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOpener2.h; path = "../../../../plugins/cordova-plugin-file-opener2/src/ios/FileOpener2.h"; sourceTree = "<group>"; };
-		4CC5D599293F3C39008D516C /* FileOpener2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileOpener2.m; path = "../../../../plugins/cordova-plugin-file-opener2/src/ios/FileOpener2.m"; sourceTree = "<group>"; };
 		50BF2BAD24D147CD82054203 /* CDVWKWebViewUIDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVWKWebViewUIDelegate.m; path = "cordova-plugin-ionic-webview/CDVWKWebViewUIDelegate.m"; sourceTree = "<group>"; };
 		512A6DB3E86B42CE9EC3DAA5 /* AppDelegate+FirebaseDynamicLinksPlugin.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+FirebaseDynamicLinksPlugin.m"; path = "cordova-plugin-firebase-dynamiclinks/AppDelegate+FirebaseDynamicLinksPlugin.m"; sourceTree = "<group>"; };
 		5184C78D02BF4725B04FF663 /* GMGridViewCell.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GMGridViewCell.h; path = "cordova-plugin-telerik-imagepicker/GMGridViewCell.h"; sourceTree = "<group>"; };
@@ -660,8 +657,6 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				4CC5D597293F3C34008D516C /* FileOpener2.h */,
-				4CC5D599293F3C39008D516C /* FileOpener2.m */,
 				354BC68D230B8F37008B4279 /* FCMPlugin.h */,
 				354BC690230B8F37008B4279 /* FCMPlugin.m */,
 				67607A5BFD644F8FB2E41351 /* UIImage+CropScaleOrientation.m */,
@@ -1071,7 +1066,6 @@
 		};
 		A64925D817AB519CAFE99055 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1181,7 +1175,6 @@
 				DECC48027CE44DCD8F9CC0BF /* StatusReport.m in Sources */,
 				ABB22C6F7E854B57A98DC603 /* UpdateHashUtils.m in Sources */,
 				294D97C4E58C45E8A6B43FF4 /* Utilities.m in Sources */,
-				4CC5D59A293F3C39008D516C /* FileOpener2.m in Sources */,
 				434CFFFD79C141FCB236005F /* CDVWKWebViewEngine+CodePush.m in Sources */,
 				58451F6E72DE4DE18C112C1A /* CodePushJWTAlgorithmFactory.m in Sources */,
 				A6861A1FCDDD4C56A145574F /* CodePushJWTAlgorithmNone.m in Sources */,
@@ -1311,6 +1304,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "iVIVU.com/iVIVU.com-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = iVIVU.com;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -1475,6 +1469,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "iVIVU.com/iVIVU.com-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = iVIVU.com;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";

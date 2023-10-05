@@ -1,6 +1,6 @@
 import { Component,NgZone, Renderer,OnInit } from '@angular/core';
 import { ModalController,Platform,AlertController,ToastController,NavController } from '@ionic/angular';
-import { SearchHotel, ValueGlobal, Bookcombo } from './../providers/book-service';
+import { SearchHotel, ValueGlobal, Bookcombo, Booking, RoomInfo } from './../providers/book-service';
 import * as moment from 'moment';
 import * as request from 'requestretry';
 import { Storage } from '@ionic/storage';
@@ -20,6 +20,8 @@ import {
 } from 'ion2-calendar';
 import { ConfirmemailPage } from '../confirmemail/confirmemail.page';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { AdddiscountPage } from '../adddiscount/adddiscount.page';
+import { voucherService } from '../providers/voucherService';
 
 @Component({
   selector: 'app-requestcombo',
@@ -49,16 +51,79 @@ export class RequestComboPage implements OnInit{
   hidepaxhint: boolean = false;
   currentSelectPax: any;
   textOther = "";
+  msg: string;
+  strPromoCode = "";
+  ischeckbtnpromo: boolean;
+  promocode: any;
+  ischecktext: number;
+  ischeckerror: number;
+  itemVoucher: any;
     constructor(public toastCtrl: ToastController,private alertCtrl: AlertController, public zone: NgZone, public modalCtrl: ModalController,
       public storage: Storage, public platform: Platform, public bookCombo: Bookcombo, public value: ValueGlobal, 
       public searchhotel: SearchHotel, public valueGlobal: ValueGlobal,private renderer:Renderer,public navCtrl: NavController,
       public gf: GlobalFunction,
-      private fb: Facebook) {
+      private fb: Facebook,public _voucherService: voucherService,    public booking: Booking,
+      public Roomif: RoomInfo) {
         this.gf.gaSetScreenName('requestcomboflight');
     }
 
     ngOnInit(){
       var se = this;
+      this._voucherService.getFlightComboObservable().subscribe((itemVoucher)=> {
+        if(itemVoucher){
+          // if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucherCombo){
+          //   this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+          //   this.gf.showAlertMessageOnly(`Mã voucher ${this.promocode} đang được sử dụng. Quý khách vui lòng kiểm tra lại.`);
+          //   return;
+          // }
+          //this._voucherService.selectVoucher = itemVoucher;
+          if(this.promocode && this.promocode != itemVoucher.code && !this.itemVoucher){
+            this._voucherService.rollbackSelectedVoucher.emit(itemVoucher);
+            this.gf.showAlertMessageOnly(`Chỉ hỗ trợ áp dụng nhiều voucher tiền mặt trên một đơn hàng, Coupon và Voucher khuyến mãi chỉ áp dụng một`);
+            return;
+          }
+  
+          this.zone.run(()=>{
+          
+            if(itemVoucher.claimed){
+              this.buildStringPromoCode();
+            }else{
+              this.itemVoucher = null;
+              this.promocode = "";
+              this.bookCombo.promoCode = "";
+              this.bookCombo.discountpromo = 0;
+              this.ischeckbtnpromo = false;
+  
+              this.buildStringPromoCode();
+  
+              if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length ==0 && this._voucherService.listPromoCode && this._voucherService.listPromoCode.length ==0){
+                this.strPromoCode = '';
+                this.ischeckbtnpromo = false;
+              }
+            }
+          })
+          
+          //this.modalCtrl.dismiss();
+        }
+      })
+  
+      this._voucherService.getObservableClearVoucherAfterPaymentDone().subscribe((check)=> {
+        if(check){
+          this.itemVoucher= null;
+              this.promocode = "";
+              this.bookCombo.promoCode = "";
+              this.bookCombo.discountpromo = 0;
+              this.ischeckbtnpromo = false;
+  
+              this.strPromoCode = '';
+            this._voucherService.voucherSelected = [];
+            this._voucherService.listPromoCode = "";
+            this._voucherService.listObjectPromoCode = [];
+            this._voucherService.totalDiscountPromoCode = 0;
+            this._voucherService.comboFlightPromoCode = "";
+            this._voucherService.comboFlightTotalDiscount = 0;
+        }
+      })
       se.storage.get('email').then(email => {
        se.usermail = email;
       });
@@ -133,7 +198,34 @@ export class RequestComboPage implements OnInit{
         }
       })
     }
+    ionViewWillEnter() {
+   
+  
+      this.zone.run(() => {
+        if (this._voucherService.selectVoucher) {
+          this._voucherService.rollbackSelectedVoucher.emit(this._voucherService.selectVoucher);
+          this._voucherService.selectVoucher = null;
+        }
 
+      })
+    }
+    buildStringPromoCode(){
+  
+      if(this._voucherService.voucherSelected && this._voucherService.voucherSelected.length >0){
+        this.strPromoCode = this._voucherService.voucherSelected.map(item => item.code).join(', ');
+      }else{
+        this.strPromoCode = '';
+      }
+    
+      if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+        if(this.strPromoCode){
+          this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+        }else{
+          this.strPromoCode += this._voucherService.listPromoCode.join(', ');
+        }
+      }
+      this._voucherService.ticketPromoCode = this.strPromoCode;
+    }
     ionViewDidLoad(){
       if(this.platform.ready){
         this.location=="SGN" ? this.radioCheck(1) : (this.location=="HAN" ? this.radioCheck(2) : this.radioCheck(3) );
@@ -242,6 +334,7 @@ export class RequestComboPage implements OnInit{
             Username: 'kmudivivu',
             employeeKey: '',
             Source: 6,
+            RequestPromotion: this.strPromoCode
             });
             urlstr = C.urls.baseUrl.urlContracting + '/gui-yeu-cau-gia-deal-fs';
         }else if(this.bookCombo.isFlightCombo || this.bookCombo.isNormalCombo){
@@ -269,6 +362,7 @@ export class RequestComboPage implements OnInit{
             Username: 'kmudivivu',
             employeeKey: '',
             Source: 6,
+            RequestPromotion: this.strPromoCode
           });
           urlstr = C.urls.baseUrl.urlContracting +'/gui-yeu-cau-gia-deal';
         }
@@ -768,4 +862,126 @@ export class RequestComboPage implements OnInit{
               }
             }
           }
+          async showdiscount(){
+            $('.div-point').removeClass('div-disabled');
+            this._voucherService.openFrom = 'flightcomboreview';
+            this.msg="";
+            this._voucherService.hasVoucher = true;
+            this._voucherService.listPromoCode = [];
+            this.promocode = "";
+            this.buildStringPromoCode();
+            this.zone.run(()=> {
+            
+              // if (this.ticketService.promocode) {
+              //   this.promocode = "";
+              //   this.discountpromo = 0;
+              //   this.ischeckpromo = false;
+              //   this.ticketService.promocode = "";
+              //   this.totalPriceNum = this.ticketService.totalPriceNum;
+              //   this.ticketService.discountpromo = 0;
+              // }
+      
+            })
+            const modal: HTMLIonModalElement =
+            await this.modalCtrl.create({
+              component: AdddiscountPage,
+            });
+            modal.present();
+            modal.onDidDismiss().then((data: OverlayEventDetail) => {
+              if(this._voucherService.listPromoCode && this._voucherService.listPromoCode.length >0){
+                if(this.strPromoCode){
+                  this.strPromoCode += ', '+this._voucherService.listPromoCode.join(', ');
+                }else{
+                  this.strPromoCode = this._voucherService.listPromoCode.join(', ');
+              
+                }
+
+              }else if (data.data) {//case voucher km
+                let vc = data.data;
+                if(vc.applyFor && vc.applyFor != 'comboflight'){
+                  this.gf.showAlertMessageOnly(`Mã giảm giá chỉ áp dụng cho đơn hàng ${ vc.applyFor == 'hotel' ? 'khách sạn' : 'vé máy bay'}. Quý khách vui lòng chọn lại mã khác!`);
+                  this._voucherService.rollbackSelectedVoucher.emit(vc);
+                  return;
+                }
+                else {
+                  this.zone.run(() => {
+                    if (data.data.promocode) {
+                      $('.div-point').addClass('div-disabled');
+                      this.promocode=data.data.promocode;
+                      this.promofunc();
+                    }
+                  })
+                }
+              }
+              else{
+                this.ischeckbtnpromo = false;
+              }
+            })
+      }
+      promofunc() {
+        var se = this;
+        if (se.promocode) {
+          var options = {
+            method: 'POST',
+            url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+            headers:
+            {
+              'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+              'cache-control': 'no-cache',
+              'content-type': 'application/json'
+            },
+            body: { bookingCode: 'FLIGHTCOMBO',code: se.promocode, totalAmount: 0,comboDetailId: this.bookCombo.ComboId,
+            couponData: {
+              "hotel": {
+                "hotelId": this.booking.HotelId,
+                "roomName": this.booking.RoomName,
+                "totalRoom": this.Roomif.roomnumber,
+                "totalAdult": this.booking.Adults,
+                "totalChild": this.booking.Child,
+                "jsonObject": "",
+                "checkIn": this.searchhotel.CheckInDate,
+                "checkOut": this.searchhotel.CheckOutDate
+              }
+            } },
+            json: true
+          };
+      
+          request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            se.zone.run(() => {
+              var json = body;
+              if (json.error==0) {
+                
+           
+                se.promocode = json.data.code;
+                se.strPromoCode = json.data.code;
+            
+                se.msg=json.msg;
+                se.ischecktext=0;
+                se.ischeckerror=0;
+              }
+              else if(json.error==1)
+              {
+                se.ischeckbtnpromo = false;
+                se.msg=json.msg;
+                se.ischecktext=1;
+                se.ischeckerror=1;
+              }
+              else if(json.error==2)
+              {
+                se.ischeckbtnpromo = false;
+                se.msg=json.msg;
+                se.ischecktext=2;
+                se.ischeckerror=1;
+              }
+              else {
+                se.ischeckbtnpromo = false;
+                se.msg = json.msg;
+                se.ischecktext = 2;
+                se.ischeckerror = 1;
+              }
+            })
+          });
+        }
+      }
 }

@@ -765,16 +765,21 @@ export class OrderPage {
 
                 //if (element.payment_status != 3 && element.payment_status != -2) {
                 if (element.avatar && element.avatar.indexOf("104x104") == -1 && element.avatar.indexOf('i.travelapi.com') == -1 && element.booking_type != 'TICKET') {
-                  let urlavatar = "";
-                  let tail = "";
-                  if (element.avatar.indexOf('jpeg') != -1) {
-                    urlavatar = element.avatar.substring(0, element.avatar.length - 5);
-                    tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
-                  } else {
-                    urlavatar = element.avatar.substring(0, element.avatar.length - 4);
-                    tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
+
+                  const hasCdn1 = element.avatar.includes("cdn1");
+                  if (hasCdn1) {
+                    const imageUrl = element.avatar;
+                    const newImageUrl = imageUrl.replace(/(\.\w+)$/, "-104x104$1");
+                    element.avatar = newImageUrl;
                   }
-                  element.avatar = urlavatar + "-" + "104x104" + tail;
+                  // if (element.avatar.indexOf('jpeg') != -1 || element.avatar.indexOf('webp') != -1) {
+                  //   urlavatar = element.avatar.substring(0, element.avatar.length - 5);
+                  //   tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
+                  // } else {
+                  //   urlavatar = element.avatar.substring(0, element.avatar.length - 4);
+                  //   tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
+                  // }
+               
                 }
                 if (element.avatar) {
                   element.avatar = (element.avatar.toLocaleString().trim().indexOf("http") != -1) ? element.avatar : ('https:' + element.avatar);
@@ -1788,15 +1793,19 @@ export class OrderPage {
               if (element.request_id.indexOf("HTBKG") == -1) {
                 let urlavatar = "", tail = "";
                 if (element.hotelAvatar.indexOf('i.travelapi.com') == -1 ) {
-                  if (element.hotelAvatar.indexOf('jpeg') != -1) {
-                    urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
-                    tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
-                  } else {
-                    urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 4);
-                    tail = element.hotelAvatar.substring(element.hotelAvatar.length - 4, element.hotelAvatar.length);
+                  // if (element.hotelAvatar.indexOf('jpeg') != -1 || element.hotelAvatar.indexOf('webp') != -1) {
+                  //   urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
+                  //   tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
+                  // } else {
+                  //   urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 4);
+                  //   tail = element.hotelAvatar.substring(element.hotelAvatar.length - 4, element.hotelAvatar.length);
+                  // }
+                  const hasCdn1 = element.hotelAvatar.includes("cdn1");
+                  if (hasCdn1) {
+                    const imageUrl = element.hotelAvatar;
+                    const newImageUrl = imageUrl.replace(/(\.\w+)$/, "-104x104$1");
+                    element.hotelAvatar = newImageUrl;
                   }
-
-                  element.avatar = urlavatar + "-" + "104x104" + tail;
                 } else {
                   element.avatar = element.hotelAvatar;
                 }
@@ -2404,9 +2413,15 @@ export class OrderPage {
                 }
                 //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
                 if (elementHis.avatar && elementHis.avatar.indexOf("104x104") == -1 && elementHis.avatar.indexOf('i.travelapi.com') == -1 && elementHis.booking_type != 'TICKET') {
-                  let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
-                  let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
-                  elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+                  // let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
+                  // let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
+                  // elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+                  const hasCdn1 = elementHis.avatar.includes("cdn1");
+                  if (hasCdn1) {
+                    const imageUrl = elementHis.avatar;
+                    const newImageUrl = imageUrl.replace(/(\.\w+)$/, "-104x104$1");
+                    elementHis.avatar = newImageUrl;
+                  }
                 }
                 if (elementHis.delivery_payment_date) {
                   let arrpaymentdate = elementHis.delivery_payment_date.split("T");
@@ -4133,16 +4148,20 @@ export class OrderPage {
                 //List trip yêu cầu
                 lstRQTrips.forEach(element => {
                   if (element.request_id.indexOf("HTBKG") == -1) {
-                    let urlavatar = "", tail = "";
-                    if (element.hotelAvatar.indexOf('jpeg') != -1) {
-                      urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
-                      tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
-                    } else {
-                      urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 4);
-                      tail = element.hotelAvatar.substring(element.hotelAvatar.length - 4, element.hotelAvatar.length);
-                    }
 
-                    element.hotelAvatar = urlavatar + "-" + "104x104" + tail;
+                    // if (element.hotelAvatar.indexOf('jpeg') != -1 || element.hotelAvatar.indexOf('webp') != -1) {
+                    //   urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 5);
+                    //   tail = element.hotelAvatar.substring(element.hotelAvatar.length - 5, element.hotelAvatar.length);
+                    // } else {
+                    //   urlavatar = element.hotelAvatar.substring(0, element.hotelAvatar.length - 4);
+                    //   tail = element.hotelAvatar.substring(element.hotelAvatar.length - 4, element.hotelAvatar.length);
+                    // }
+                    const hasCdn1 = element.hotelAvatar.includes("cdn1");
+                    if (hasCdn1) {
+                      const imageUrl = element.hotelAvatar;
+                      const newImageUrl = imageUrl.replace(/(\.\w+)$/, "-104x104$1");
+                      element.hotelAvatar = newImageUrl;
+                    }
                     element.booking_id = element.request_id;
                     element.checkInDisplay = se.gf.getDayOfWeek(element.start_date).daynameshort + ", " + moment(element.start_date).format('DD-MM-YYYY')
                     element.checkOutDisplay = se.gf.getDayOfWeek(element.end_date).daynameshort + ", " + moment(element.end_date).format('DD-MM-YYYY')

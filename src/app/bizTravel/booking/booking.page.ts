@@ -740,14 +740,17 @@ import { FileOpener } from  '@ionic-native/file-opener/ngx';
                       if (element.avatar && element.avatar.indexOf("104x104") ==-1  && element.avatar.indexOf('i.travelapi.com') ==-1) {
                         let urlavatar = "";
                         let tail = "";
-                        if(element.avatar.indexOf('jpeg') != -1){
-                          urlavatar = element.avatar.substring(0, element.avatar.length - 5);
-                          tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
-                        }else{
-                          urlavatar = element.avatar.substring(0, element.avatar.length - 4);
-                          tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
-                        }
-                        element.avatar = urlavatar + "-" + "104x104" + tail;
+                        // if(element.avatar.indexOf('jpeg') != -1){
+                        //   urlavatar = element.avatar.substring(0, element.avatar.length - 5);
+                        //   tail = element.avatar.substring(element.avatar.length - 5, element.avatar.length);
+                        // }else{
+                        //   urlavatar = element.avatar.substring(0, element.avatar.length - 4);
+                        //   tail = element.avatar.substring(element.avatar.length - 4, element.avatar.length);
+                        // }
+                        // element.avatar = urlavatar + "-" + "104x104" + tail;
+                        const imageUrl = element.avatar;
+                        const newImageUrl = imageUrl.replace(/(\.\w+)$/, "-104x104$1");
+                        element.avatar = newImageUrl;
                       }
                       if (element.delivery_payment_date) {
                         let arrpaymentdate = element.delivery_payment_date.split("T");

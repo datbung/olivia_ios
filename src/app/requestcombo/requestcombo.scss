@@ -151,7 +151,6 @@
     .text-error{
         color:red;
     }
-
     ::ng-deep{
         input,
         input::placeholder {
@@ -230,4 +229,27 @@
                   margin-bottom: 0px;
                 }
               }
+    }
+    .text-underline{
+        font-size: 16px;
+        color: #2f80ed;
+        text-decoration: underline;
+        margin-left: 3px;
+    }
+    .div-text-normal{
+        display: flex;
+        font-size: 16px;
+        color: #3f3b3b;
+        .text-point {
+          font-size: 14px;
+          font-weight: 500;
+          text-align: right;
+          color: #868998;
+        }
+    }
+    .m-bottom-24{
+        margin-bottom: 24px;
+    }
+    .m-top-5{
+        margin-top: 5px;
     }

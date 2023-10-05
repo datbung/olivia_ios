@@ -65,13 +65,29 @@
                     </ion-item>
                 </ion-row>
             </div>
-            <div class="hotel-request-email">
+            <div class="hotel-request-email m-bottom-24">
                 <ion-item  style="--padding-start: 0px;width: 100%;margin: 0 5px;">
                         <ion-label position="stacked" class="text-label">Email*</ion-label>
                         <ion-input id="cusEmail" [(ngModel)]="usermail" type="text" required></ion-input>
                     </ion-item>
             </div>
-           
+            <div (click)="showdiscount()">
+
+                <div class="div-text-normal">
+                  <div>Quý khách có mã ưu đãi?<span class="text-underline">Nhập mã tại đây</span></div>
+                </div>
+              </div>
+              <div class="div-voucher-apply d-flex"  *ngIf="strPromoCode" (click)="showdiscount()">
+                <div class="m-top-5">
+                  <span class="text-normal">Mã ưu đãi : <span class="text-code" *ngIf="strPromoCode">{{strPromoCode}}</span></span>
+
+                </div>
+                <!-- <div class="width-100 text-normal text-right p-r-5" *ngIf="strPromoCode">{{gf.convertNumberToString(totaldiscountpromo)}}đ</div>   -->
+                </div>
+              <!-- <ion-row> 
+                <ion-label *ngIf="ischeckerror==1" style="color: rgb(229, 40, 34);font-size: 12px">{{msg}}</ion-label>
+                <ion-label *ngIf="ischeckerror==0" style="color:#828282;font-size: 12px">{{msg}}</ion-label>
+              </ion-row> -->
             <div style="margin-top: 10px">
                 <label style="font-size:14px;color:#828282;font-style: italic">*Nhân viên tư vấn của chúng tôi sẽ liên hệ đến quý khách trong vòng 60 phút.</label>
             </div>
