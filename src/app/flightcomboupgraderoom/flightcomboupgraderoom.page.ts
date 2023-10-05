@@ -46,7 +46,7 @@ export class FlightcomboupgraderoomPage implements OnInit {
           se.roomPriceSale = se.activityService.objFlightComboUpgrade.roomPriceSale;
           se.hotelRoomClassestemp.forEach(hotelroom => {
               var co = 0;
-              debugger
+              
               for (let index = 0; index < hotelroom.MealTypeRates.length; index++) {
                 const mealtype = hotelroom.MealTypeRates[index];
                 if ((se.loginuser || mealtype.IsshowpricesOTA) && !mealtype.MSG) {

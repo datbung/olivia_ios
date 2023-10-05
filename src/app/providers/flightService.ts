@@ -88,6 +88,7 @@ export class flightService{
   itemReview: any;
   showFlightDetailFrom: string;
   listTopReviews: any;
+  listHotDeal: any;
   publicItemShowMoreFlightTopDeal(data: any) {
     this.itemShowMoreFlightTopDeal.next(data);
   }

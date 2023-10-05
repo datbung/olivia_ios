@@ -201,7 +201,7 @@ export class PopupinfobkgPage implements OnInit {
          }
     });
     // $(".days-btn").last().on('click',function(){
-    //   debugger
+    //   
     // })
     var se = this;
     const event: any = await this.myCalendar.onDidDismiss();

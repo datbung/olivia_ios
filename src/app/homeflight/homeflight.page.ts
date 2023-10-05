@@ -280,12 +280,21 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
             })
             
             setTimeout(()=>{
-              this.loadflighttopdeal();
+              if(!this._flightService.listHotDeal){
+                this.loadflighttopdeal();
+              }else{
+                this.loadcachetopdeal(this._flightService.listHotDeal);
+              }
+              
             }, 1  * 1000);
 
             //5' refresh lại api lấy mới dữ liệu
             setTimeout(()=>{
-              this.reloadflighttopdeal();
+              if(!this._flightService.listHotDeal){
+                this.reloadflighttopdeal();
+              }else{
+                this.loadcachetopdeal(this._flightService.listHotDeal);
+              }
             }, 1 * 60  * 1000);
 
             this.loadCalendarPrice();
@@ -1708,7 +1717,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
               };
               let result = JSON.parse(body);
               if(result && result.length >0){
-                
+                se._flightService.listHotDeal = result;
                   se.storage.get('flighttopdeal').then((data)=>{
                     if(data){
                       se.storage.remove('flighttopdeal').then(()=>{

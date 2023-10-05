@@ -1,5 +1,4 @@
 platform :ios, '7.0'
-config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
 target 'iVIVU.com' do
-	pod 'GoogleMaps', '~> 2.7.0'
+	
 end
