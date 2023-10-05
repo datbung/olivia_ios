@@ -489,7 +489,7 @@ if (se._flightService.itemFlightCache.returnCity && se.listDiChung.PhaseReturn_R
 
   // async checkExistCalendar(name){
   //   let obj = await this._calendar.findAllEventsInNamedCalendar(name).then((success)=>{
-  //     debugger
+  //     
   //   })
   //   //return obj ? true : false;
   //   return false;

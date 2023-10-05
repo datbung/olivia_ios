@@ -1708,7 +1708,7 @@ async downloadqrcode(){
 
 
   downloadPDF(url) {
-    // debugger;
+    // ;
     // const url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
     this.fileTransfer.download(url, this.file.documentsDirectory + 'file.pdf').then((entry) => {
       // console.log('download complete: ' + entry.toURL());
@@ -1718,7 +1718,7 @@ async downloadqrcode(){
     });
   }
   downloadPDFVC(url) {
-    // debugger;
+    // ;
     // const url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
     this.fileTransfer.download(url, this.file.documentsDirectory + 'file.pdf').then((entry) => {
       // console.log('download complete: ' + entry.toURL());

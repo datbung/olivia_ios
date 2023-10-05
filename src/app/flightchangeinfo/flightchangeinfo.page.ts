@@ -521,7 +521,7 @@ export class FlightchangeinfoPage implements OnInit {
       rollbackObjectSearch(){
         let se = this;
         let obj = se._flightService.objSearch;
-        //debugger
+        //
       }
         /**
    * Hàm bắt sự kiện click chọn ngày trên lịch bằng jquery

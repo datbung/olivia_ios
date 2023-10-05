@@ -78,7 +78,7 @@ export class HotelRoomDetailPage implements OnInit {
           }
 
     
-          $('.cls-slide-room-detail-image').click(function(e){ debugger})
+          $('.cls-slide-room-detail-image').click(function(e){ })
         }
       
       
@@ -105,7 +105,7 @@ export class HotelRoomDetailPage implements OnInit {
     }
     else{
       // click on ::before element
-      debugger
+      
     }
   
   }

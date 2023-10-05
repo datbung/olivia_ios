@@ -334,7 +334,7 @@ export class TourDepartureCalendarPage implements OnInit {
       for (let j = 0; j < this.tourService.departures.length; j++) {
         let lunarhasdeparture = (this.valueGlobal.listlunar && this.valueGlobal.listlunar.length > 0) ? this.valueGlobal.listlunar.filter((itemlunar) => { return moment(itemlunar.date).format('YYYY-MM-DD') == moment(this.tourService.departures[j]).format('YYYY-MM-DD') }) : '';
         //console.log(this.valueGlobal.listlunar[j]);
-        //debugger
+        //
         _daysConfig.push({
           date: this.tourService.departures[j],
           disable: false,
@@ -356,7 +356,7 @@ export class TourDepartureCalendarPage implements OnInit {
     //     cssClass: 'lunarcalendar'
     //  })
     // }
-    //debugger
+    //
     const options: CalendarModalOptions = {
       pickMode: "single",
       title: "Chọn ngày khởi hành",

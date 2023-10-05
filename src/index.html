@@ -41,28 +41,28 @@
   // is called before reCAPTCHA is loaded, the callback function that is passed
   // by `grecaptcha.ready()` is enqueued for execution after reCAPTCHA is
   // loaded.
-  if(typeof grecaptcha === 'undefined') {
-    grecaptcha = {};
-  }
-  grecaptcha.ready = function(cb){
-    if(typeof grecaptcha === 'undefined') {
-      // window.__grecaptcha_cfg is a global variable that stores reCAPTCHA's
-      // configuration. By default, any functions listed in its 'fns' property
-      // are automatically executed when reCAPTCHA loads.
-      const c = '___grecaptcha_cfg';
-      window[c] = window[c] || {};
-      (window[c]['fns'] = window[c]['fns']||[]).push(cb);
-    } else {
-      cb();
-    }
-  }
+  // if(typeof grecaptcha === 'undefined') {
+  //   grecaptcha = {};
+  // }
+  // grecaptcha.ready = function(cb){
+  //   if(typeof grecaptcha === 'undefined') {
+  //     // window.__grecaptcha_cfg is a global variable that stores reCAPTCHA's
+  //     // configuration. By default, any functions listed in its 'fns' property
+  //     // are automatically executed when reCAPTCHA loads.
+  //     const c = '___grecaptcha_cfg';
+  //     window[c] = window[c] || {};
+  //     (window[c]['fns'] = window[c]['fns']||[]).push(cb);
+  //   } else {
+  //     cb();
+  //   }
+  // }
 
-  // Usage
-  grecaptcha.ready(function(){
-    grecaptcha.render("container", {
-      sitekey: "6Lfy_gAnAAAAAK1jziFGhO6qF9irAG6b-lYsa27h"
-    });
-  });
+  // // Usage
+  // grecaptcha.ready(function(){
+  //   grecaptcha.render("container", {
+  //     sitekey: "6Lfy_gAnAAAAAK1jziFGhO6qF9irAG6b-lYsa27h"
+  //   });
+  // });
 </script>
 </head>
 

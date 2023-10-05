@@ -54,7 +54,7 @@ export class UserChangePasswordPage implements OnInit{
     }
 
     clickedElement(event){
-        debugger
+        
     }
 
     ionViewDidEnter(){

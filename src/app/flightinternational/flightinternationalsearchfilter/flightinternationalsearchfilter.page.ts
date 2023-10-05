@@ -120,7 +120,7 @@ export class FlightInternationalSearchfilterPage implements OnInit {
             this.minoverlayvalue = minOverlayValue.toString();
             this.maxoverlayvalue = maxOverlayValue.toString();
 
-            //debugger;
+            //;
             //this.priceobject = { lower: this.minvalue.toString(), upper: this.maxvalue.toString() };
             this.minpricedisplay = this.gf.convertNumberToString(minValue) + " triệu"; 
             this.maxpricedisplay = this.gf.convertNumberToString(maxValue) + " triệu";

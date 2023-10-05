@@ -186,7 +186,7 @@ export class HomeTicketSlidePage implements OnInit {
       let idxCount = this.pageSize*(this.slideData[_index].pageIndex -1);
       for (let index = idxCount; index < this.pageSize * this.slideData[_index].pageIndex; index++) {
         const element = this.slideData[_index].experienceHomeModels[index];
-        if(!this.gf.checkExistsItemInArray(this.slideData[_index].experienceHomeModelsDisplay, element, 'ticketslide')){
+        if(element.experienceId && !this.gf.checkExistsItemInArray(this.slideData[_index].experienceHomeModelsDisplay, element, 'ticketslide')){
           this.slideData[_index].experienceHomeModelsDisplay.push(element);
         }
       }

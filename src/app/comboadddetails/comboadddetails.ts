@@ -667,7 +667,7 @@ export class ComboadddetailsPage implements OnInit {
            this.listcars.HotelBooking.CompanyContactName = this.Roomif.nameOrder;
            this.listcars.HotelBooking.IsInvoice = 1;
           this.storage.set("email", this.email);
-          //debugger
+          //
           if(this.checkchangeemail){
             return;
           }
@@ -715,7 +715,7 @@ export class ComboadddetailsPage implements OnInit {
         this.Roomif.notetotal = this.note;
         this.listcars.HotelBooking.Note = this.note;
         this.storage.set("email", this.email);
-        //debugger
+        //
         if(this.checkchangeemail){
           return;
         }

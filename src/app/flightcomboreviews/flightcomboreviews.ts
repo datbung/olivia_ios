@@ -298,6 +298,7 @@ export class FlightComboReviewsPage implements OnInit{
       if (this.childrendisplay > 0) {
         this.paxtitle += ', ' + this.childrendisplay + ' trẻ em';
       }
+      
       this.getHotelContractPrice(this.bookCombo.FormParam);
       // this.GetUserInfo();
       this.storage.get('point').then(point => {

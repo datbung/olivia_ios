@@ -31,7 +31,6 @@ export class RoompaymentdonePage implements OnInit {
   constructor(public _platform: Platform, public Roomif: RoomInfo, public navCtrl: NavController, public zone: NgZone,
     public booking: Booking, public authService: AuthService, public activatedRoute: ActivatedRoute, public router: Router,
     public storage: Storage, public gf: GlobalFunction, public alertCtrl: AlertController, private launchReview: LaunchReview,
-    private inAppReview: InAppReview,
     public searchhotel: SearchHotel,
     private fb: Facebook, private _calendar: Calendar,
     public _voucherService: voucherService) {

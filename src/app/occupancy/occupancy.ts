@@ -52,7 +52,7 @@ export class OccupancyPage implements OnInit {
     }
     if (searchhotel.arrchild) {
       searchhotel.arrchild.forEach(element => {
-        this.arrchild.push(element);
+        this.arrchild.push({...element});
       });
     }
     this.showpopupfromrequestcombo = this.gf.getParams('requestcombo');

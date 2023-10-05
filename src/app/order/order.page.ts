@@ -6261,7 +6261,7 @@ export class OrderPage {
   }
 
   downloadPDF(url) {
-    // debugger;
+    // ;
     //  url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
     this.fileTransfer.download(url, this.file.documentsDirectory + 'BoardingPass.pdf').then((entry) => {
       // console.log('download complete: ' + entry.toURL());
@@ -6271,7 +6271,7 @@ export class OrderPage {
     });
   }
   downloadPDFVC(url) {
-    // debugger;
+    // ;
     //  url = 'https://cdn1.ivivu.com/files/2023/04/28/10/BoardingPass_.pdf';
     this.fileTransfer.download(url, this.file.documentsDirectory + 'filename.pdf').then((entry) => {
       // console.log('download complete: ' + entry.toURL());

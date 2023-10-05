@@ -3114,7 +3114,7 @@ async bookcombo() {
     
     let elements = document.querySelectorAll(".grad1");
     if (elements != null) {
-      // debugger
+      // 
     }
   }
 

@@ -3926,7 +3926,7 @@ export class Tab1Page implements OnInit {
   }
 
   slidechange(){
-    //debugger
+    //
     var se = this;
     se.slider.getActiveIndex().then((currentIndex)=>{
       se.activeTab = currentIndex;

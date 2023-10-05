@@ -59,12 +59,16 @@
                     </div>
                     
                   </div>
-                  <div *ngIf="showloadmore" class="div-loadmore">
+                  <!-- <div *ngIf="showloadmore" class="div-loadmore">
                     <ion-spinner
                       name="bubbles"
                       class="spinner-bubbles hydrated"
                     ></ion-spinner>
+                  </div> -->
+                  <div class="cls-deal m-l-16 position-relative" *ngIf="itemSlide.pageIndex < itemSlide.totalPage">
+                    <ion-skeleton-text animated style="width:278px;margin-right: 16px;height: 326px;border-radius: 6px;"></ion-skeleton-text>
                   </div>
+                  
               </div>
             </div>
           </div>
