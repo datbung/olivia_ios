@@ -37,6 +37,7 @@ export class AdddiscountPage implements OnInit {
       this.storage.get('auth_token').then(auth_token => {
         this.loginuser = auth_token;
        });
+       console.log(this._voucherService.hasVoucher );
   }
 
   ngOnInit() {
@@ -164,7 +165,7 @@ export class AdddiscountPage implements OnInit {
               "checkOut": this.searchHotel.CheckOutDate
             }
           };
-          _bookingCode = 'HOTEL';
+          _bookingCode = 'IVIVU';
         }
         var options;
         if(se._voucherService.openFrom == 'ticketadddetails')
@@ -187,19 +188,36 @@ export class AdddiscountPage implements OnInit {
             json: true
           };
         }else{
-          options = {
-            method: 'POST',
-            url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
-            headers:
-            {
-              'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
-              'cache-control': 'no-cache',
-              'content-type': 'application/json'
-            },
-            body: { bookingCode: _bookingCode ,code: code, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : (se._flightService.itemFlightCache.totalPrice || (se._flightService.itemFlightInternational ?se._flightService.itemFlightInternational.totalPrice :0))), comboDetailId: se.bookCombo.ComboId,
-            couponData: coupondata},
-            json: true
-          };
+          if (se._voucherService.openFrom == 'flightcomboreview') {
+            options = {
+              method: 'POST',
+              url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+              headers:
+              {
+                'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+                'cache-control': 'no-cache',
+                'content-type': 'application/json'
+              },
+              body: { bookingCode: _bookingCode ,code: code, totalAmount: 0, comboDetailId: se.bookCombo.ComboId,
+              couponData: coupondata},
+              json: true
+            };
+          }else{
+            options = {
+              method: 'POST',
+              url: C.urls.baseUrl.urlMobile + '/api/data/validpromocode',
+              headers:
+              {
+                'postman-token': '37a7a641-c2dd-9fc6-178b-6a5eed1bc611',
+                'cache-control': 'no-cache',
+                'content-type': 'application/json'
+              },
+              body: { bookingCode: _bookingCode ,code: code, totalAmount: se._voucherService.openFrom == 'touradddetails' ? se._tourService.totalPrice :( !se._voucherService.isFlightPage? se.valueGlobal.PriceAvgPlusTAStr.toString().replace(/\./g, '').replace(/\,/g, '') : (se._flightService.itemFlightCache.totalPrice || (se._flightService.itemFlightInternational ?se._flightService.itemFlightInternational.totalPrice :0))), comboDetailId: se.bookCombo.ComboId,
+              couponData: coupondata},
+              json: true
+            };
+          }
+         
         }
      
     

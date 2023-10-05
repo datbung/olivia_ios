@@ -601,13 +601,21 @@ export class MytripHistoryPage implements OnInit {
           }
           //if (elementHis.payment_status != 3 && elementHis.payment_status != -2) {
             if (elementHis.avatar && elementHis.avatar.indexOf("104x104") ==-1 && elementHis.avatar.indexOf('i.travelapi.com') ==-1 && elementHis.booking_type != 'TICKET') {
-              let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
-              let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
-              if (tail.indexOf("jpeg") !=-1) {
-                 urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 5);
-                 tail = elementHis.avatar.substring(elementHis.avatar.length - 5, elementHis.avatar.length);
+              // let urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 4);
+              // let tail = elementHis.avatar.substring(elementHis.avatar.length - 4, elementHis.avatar.length);
+              // if (tail.indexOf("jpeg") !=-1 || tail.indexOf("webp") !=-1) {
+              //    urlavatar = elementHis.avatar.substring(0, elementHis.avatar.length - 5);
+              //    tail = elementHis.avatar.substring(elementHis.avatar.length - 5, elementHis.avatar.length);
+              // }
+              // elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+      
+              const hasCdn1 = elementHis.avatar.includes("cdn1");
+              if (hasCdn1) {
+                const imageUrl = elementHis.avatar;
+                const newImageUrl = imageUrl.replace(/(\.\w+)$/, "-104x104$1");
+                elementHis.avatar = newImageUrl;
               }
-              elementHis.avatar = urlavatar + "-" + "104x104" + tail;
+              
             }
             if (elementHis.delivery_payment_date) {
               let arrpaymentdate = elementHis.delivery_payment_date.split("T");
