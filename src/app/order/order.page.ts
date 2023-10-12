@@ -761,6 +761,37 @@ export class OrderPage {
                   _listpax = _listpax.map((p) => { return p.trim().split(' ').slice(1).join(' ').replace('n', 'N').replace('t', 'T') + ' x' + p.trim().split(' ')[0] });
                   element.tourListPax = _listpax;
                 }
+                else if (element.booking_type == 'COMBO_FLIGHT'){
+                   //check đã xuất vé + có checkin online
+                   element.bookingjson = JSON.parse(element.booking_json_data);
+                   console.log(element.bookingjson);
+                  if ((element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate != '' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate != ''))) {
+                    let objjson = JSON.parse(element.booking_json_data);
+                    let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo && p.CheckinInfo.indexOf('http') != -1) });
+                    element.hadCheckinOnline = _checked;
+                    element.hadCheckinOnlineDepart=false;
+                    element.hadCheckinOnlineReturn=false;
+                    if (objjson[0]) {
+                      for (let i = 0; i < objjson[0].Passengers.length; i++) {
+                        const el = objjson[0].Passengers[i];
+                        if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
+                          element.hadCheckinOnlineDepart = true;
+                          break;
+                        }
+                      }
+                    }
+                    if (objjson.length > 1 && objjson[1]) {
+                      for (let i = 0; i < objjson[1].Passengers.length; i++) {
+                        const el = objjson[1].Passengers[i];
+                        if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
+                          element.hadCheckinOnlineReturn = true;
+                          break;
+                        }
+                      }
+                    }
+                    // console.log(JSON.parse(element.booking_json_data));
+                  }
+                }
                 element.isFlyBooking = false;
 
                 //if (element.payment_status != 3 && element.payment_status != -2) {
@@ -6182,7 +6213,7 @@ export class OrderPage {
 
   }
   share(item) {
-    this.socialSharing.share(null, null, item,null).then(() => {
+    this.socialSharing.share(null, null, item.CheckinInfo,null).then(() => {
       // Success!
     }).catch(() => {
       // Error!

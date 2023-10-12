@@ -46,7 +46,12 @@ export class MytripaymentselectPage implements OnInit {
     this.roomnumber=this.activityService.objPaymentMytrip.trip.room_count;
     this.totalPaxStr=this.activityService.objPaymentMytrip.trip.totalPaxStr;
     this.breakfast=this.activityService.objPaymentMytrip.trip.meal_plan;
-    this.priceshow=this.activityService.objPaymentMytrip.trip.priceShow;
+    if (this.activityService.objPaymentMytrip.trip.priceShow) {
+      this.priceshow=this.activityService.objPaymentMytrip.trip.priceShow;
+    }
+    else{
+      this.priceshow=this.activityService.objPaymentMytrip.trip.amount_after_tax;
+    }
     this.cus_phone=this.activityService.objPaymentMytrip.trip.cus_phone;
     this.bookingCode=this.activityService.objPaymentMytrip.trip.booking_id;
     if(this.activityService.objPaymentMytrip.trip.delivery_payment_date){

@@ -1325,14 +1325,17 @@ export class HotelDetailPage implements OnInit {
             }
             else {
               for (let index = 0; index < 3; index++) {
-                if(se.HotelReviews[index] && moment(se.HotelReviews[index].DateStayed).format('DD-MM-YYYY') != "Invalid date"){
-                  se.HotelReviews[index].DateStayed = moment(se.HotelReviews[index].DateStayed).format('DD-MM-YYYY');
-                }else{
-                  se.HotelReviews[index].DateStayed = se.HotelReviews[index].DateStayed;
+                if(se.HotelReviews[index] && se.HotelReviews[index].DateStayed){
+                  if(se.HotelReviews[index] && moment(se.HotelReviews[index].DateStayed).format('DD-MM-YYYY') != "Invalid date"){
+                    se.HotelReviews[index].DateStayed = moment(se.HotelReviews[index].DateStayed).format('DD-MM-YYYY');
+                  }else{
+                    se.HotelReviews[index].DateStayed = se.HotelReviews[index].DateStayed;
+                  }
                 }
-                
-                se.HotelReviews[index].ReviewPoint = Math.round(se.HotelReviews[index].ReviewPoint * 100) / 100;
-                se.arrHotelReviews.push(se.HotelReviews[index]);
+                if(se.HotelReviews[index] && se.HotelReviews[index].ReviewPoint){
+                  se.HotelReviews[index].ReviewPoint = Math.round(se.HotelReviews[index].ReviewPoint * 100) / 100;
+                  se.arrHotelReviews.push(se.HotelReviews[index]);
+                }
               }
             }
           }

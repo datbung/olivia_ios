@@ -4790,6 +4790,72 @@ and (orientation: portrait) {
     }
 
 }
+.div-checkin-online-combo {
+    align-items: center;
+    padding: 8px 0px;
+
+    .div-icon-check {
+        width: 18px;
+        height: 18px;
+        margin-right: 4px;
+        .img-check {
+            max-width: 18px;
+        }
+    }
+    .div-text-checkin{
+        font-size: 16px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #9fc43a;
+        width: 100%;
+    }
+    .div-text-checkin-online{
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #3f3b3b;
+    }
+    .div-icon-arrow {
+        width: 18px;
+        height: 18px;
+        margin-left: 8px;
+        margin-right: 16px;
+
+        .img-arrow {
+            max-width: 18px;
+        }
+    }
+    .cls-toggle{
+        position: absolute;
+        right: 16px;
+    }
+    .div-name{
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #2f80ed;
+        text-decoration: underline;
+    }
+    .witdh-204{
+        width: 204px;
+    }
+    .align-items-end{
+        align-items: end;
+    }
+
+}
 .div-checkin-online-1 {
     align-items: center;
     padding: 16px 16px;
@@ -4854,7 +4920,7 @@ and (orientation: portrait) {
     color: #003c71;
 }
 .div-name{
-    background-color: #ecf0f5;
+    // background-color: #ecf0f5;
     padding: 8px;
 }
 .text-title-ticket{

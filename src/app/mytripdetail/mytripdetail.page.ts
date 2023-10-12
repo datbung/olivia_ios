@@ -1683,7 +1683,7 @@ async downloadqrcode(){
     }
   }
   share(item) {
-    this.socialSharing.share(null, null, item, null).then(() => {
+    this.socialSharing.share(null, null, item.CheckinInfo, null).then(() => {
       // Success!
     }).catch(() => {
       // Error!
