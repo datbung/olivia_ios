@@ -648,7 +648,7 @@ export class FlightaddservicePage implements OnInit {
     }
 
     checkLuggage(){
-      let chocieDepartLuggage = [];
+      let chocieDepartLuggage = [], chocieReturnLuggage = [];
       let _a = this._flightService.itemFlightCache.adults.map(a => a.itemLug);
       _a.forEach(element => {
         if(element){
@@ -661,121 +661,43 @@ export class FlightaddservicePage implements OnInit {
           chocieDepartLuggage.push(elementC);
         }
       });
+
+      let _ar = this._flightService.itemFlightCache.adults.map(a => a.itemLugReturn);
+      _ar.forEach(element => {
+        if(element){
+          chocieReturnLuggage.push(element);
+        }
+      });
+      let _cr = this._flightService.itemFlightCache.childs.map(a => a.itemLugReturn);
+      _cr.forEach(elementC => {
+        if(elementC){
+          chocieReturnLuggage.push(elementC);
+        }
+      });
       
       setTimeout(()=>{
-        if(chocieDepartLuggage && chocieDepartLuggage.length>0){
+        this.zone.run(()=>{
           this.departLuggage = chocieDepartLuggage;
-            this.zone.run(()=>{
-                this.hasdepartluggage = true;
-                this.showbuttonluggage = false;
-            })
-        }else{
-            this.zone.run(()=>{
-                this.hasdepartluggage = false;
-                this.showbuttonluggage = true;
-            })
-        }
+          this.returnLuggage = chocieReturnLuggage;
+          if(chocieDepartLuggage && chocieDepartLuggage.length>0){
+              
+                  this.hasdepartluggage = true;
+                  this.showbuttonluggage = false;
+              
+          }
+          else  if(chocieReturnLuggage && chocieReturnLuggage.length>0){
+                  this.hasreturnluggage = true;
+                  this.showbuttonluggage = false;
+          }
+          else{
+                  this.hasdepartluggage = false;
+                  this.showbuttonluggage = true;
+          }
+        })
       },50)
       
       
-      //check chiều về
-      if(this._flightService.itemFlightCache && this._flightService.itemFlightCache.returnFlight){
-        let chocieReturnLuggage = [];
-            let _a = this._flightService.itemFlightCache.adults.map(a => a.itemLugReturn);
-            _a.forEach(element => {
-              if(element){
-                chocieReturnLuggage.push(element);
-              }
-            });
-            let _c = this._flightService.itemFlightCache.childs.map(a => a.itemLugReturn);
-            _c.forEach(elementC => {
-              if(elementC){
-                chocieReturnLuggage.push(elementC);
-              }
-            });
-            
-            if(chocieReturnLuggage && chocieReturnLuggage.length>0){
-              this.returnLuggage = chocieReturnLuggage;
-                this.zone.run(()=>{
-                    this.hasreturnluggage = true;
-                    this.showbuttonluggage = false;
-                })
-            }else{
-                this.zone.run(()=>{
-                    this.hasreturnluggage = false;
-                    this.showbuttonluggage = true;
-                })
-            }
-      }
-        // if(this._flightService.itemFlightCache.departFlight && this._flightService.itemFlightCache.departFlight.airLineLuggage && this._flightService.itemFlightCache.departFlight.airLineLuggage.length>0){
-        //     this.departLuggage = this._flightService.itemFlightCache.departFlight.airLineLuggage;
-        //     let chocieDepartLuggage = this.departLuggage.filter(element => {
-        //         return element.quantity;
-        //     });
-        //     if(chocieDepartLuggage && chocieDepartLuggage.length>0){
-        //         this.zone.run(()=>{
-        //             this.hasdepartluggage = true;
-        //             this.showbuttonluggage = false;
-        //         })
-        //     }else{
-        //         this.zone.run(()=>{
-        //             this.hasdepartluggage = false;
-        //             this.showbuttonluggage = true;
-        //         })
-        //     }
-        // }
-        // if(this._flightService.itemFlightCache.returnFlight && this._flightService.itemFlightCache.returnFlight.airLineLuggage && this._flightService.itemFlightCache.returnFlight.airLineLuggage.length>0){
-        //     this.returnLuggage = this._flightService.itemFlightCache.returnFlight.airLineLuggage;
-        //     let chocieReturnLuggage = this.returnLuggage.filter(element => {
-        //         return element.quantity;
-        //     });
-        //     if(chocieReturnLuggage && chocieReturnLuggage.length>0){
-        //         this.zone.run(()=>{
-        //             this.hasreturnluggage = true;
-        //             this.showbuttonluggage = false;
-        //         })
-        //     }else{
-        //         this.zone.run(()=>{
-        //             this.hasreturnluggage = false;
-        //             this.showbuttonluggage = true;
-        //         })
-        //     }
-        // }
-        // //check nếu load ancilary
-        // if(this._flightService.itemFlightCache.departLuggage && this._flightService.itemFlightCache.departLuggage.length>0){
-        //     this.departLuggage = this._flightService.itemFlightCache.departLuggage;
-        //     let chocieDepartLuggage = this.departLuggage.filter(element => {
-        //         return element.quantity;
-        //     });
-        //     if(chocieDepartLuggage && chocieDepartLuggage.length>0){
-        //         this.zone.run(()=>{
-        //             this.hasdepartluggage = true;
-        //             this.showbuttonluggage = false;
-        //         })
-        //     }else{
-        //         this.zone.run(()=>{
-        //             this.hasdepartluggage = false;
-        //             this.showbuttonluggage = true;
-        //         })
-        //     }
-        // }
-        // if(this._flightService.itemFlightCache.returnLuggage && this._flightService.itemFlightCache.returnLuggage.length>0){
-        //     this.returnLuggage = this._flightService.itemFlightCache.returnLuggage;
-        //     let chocieReturnLuggage = this.returnLuggage.filter(element => {
-        //         return element.quantity;
-        //     });
-        //     if(chocieReturnLuggage && chocieReturnLuggage.length>0){
-        //         this.zone.run(()=>{
-        //             this.hasreturnluggage = true;
-        //             this.showbuttonluggage = false;
-        //         })
-        //     }else{
-        //         this.zone.run(()=>{
-        //             this.hasreturnluggage = false;
-        //             this.showbuttonluggage = true;
-        //         })
-        //     }
-        // }
+      
     }
 
     checkLuggageZero(type){
@@ -2205,12 +2127,26 @@ export class FlightaddservicePage implements OnInit {
         this._voucherService.totalDiscountPromoCode = 0;
         this._voucherService.flightPromoCode = "";
         this._voucherService.flightTotalDiscount=0;
-        
-        if(this._flightService.itemFlightCache.isApiDirect){
-          this.navCtrl.navigateBack('/flightsearchresultinternational');
-        }else{
-          this.navCtrl.navigateBack('/flightadddetails');
+
+        if(this._flightService.itemFlightCache.adults && this._flightService.itemFlightCache.adults.length >0){
+          this._flightService.itemFlightCache.adults.forEach(element => {
+            element.itemLug = null;
+            element.itemLugReturn = null;
+          });
         }
+        if(this._flightService.itemFlightCache.childs && this._flightService.itemFlightCache.childs.length >0){
+          this._flightService.itemFlightCache.childs.forEach(elementc => {
+            elementc.itemLug = null;
+            elementc.itemLugReturn = null;
+          });
+        }
+
+        // if(this._flightService.itemFlightCache.isApiDirect){
+        //   this.navCtrl.navigateBack('/flightadddetails');
+        // }else{
+        //   this.navCtrl.navigateBack('/flightadddetails');
+        // }
+        this.navCtrl.navigateBack('/flightadddetails');
     }
 
     buyLuggage(){
@@ -2539,53 +2475,6 @@ export class FlightaddservicePage implements OnInit {
               //let data = se._flightService.itemFlightCache;
                let departluggage=[],returnluggage=[],
                 departAirlineCode = data.departFlight.airlineCode, returnAirlineCode = data.returnFlight ? data.returnFlight.airlineCode : "";
-                
-                // //Hành lý đi trả về từ api tìm vé
-                // if(data.departFlight && data.departFlight.airLineLuggage && data.departFlight.airLineLuggage.length >0){
-                //   const dl = data.departFlight.airLineLuggage.filter((item) => { return item.quantity >0});
-                //   if(dl && dl.length >0){
-                //     dl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       departluggage.push(element)
-                //     });
-                //     //departluggage = [...dl];
-                //   }
-                  
-                // }
-                // //Hành lý đi trả về từ api load hành lý
-                // if(data.departLuggage && data.departLuggage.length >0){
-                //   const dl = data.departLuggage.filter((item) => { return item.quantity >0});
-                //   if(dl && dl.length >0){
-                //     dl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       departluggage.push(element)
-                //     });
-                //     //departluggage = [...dl];
-                //   }
-                // }
-                // //Hành lý về trả về từ api tìm vé
-                // if(data.returnFlight && data.returnFlight.airLineLuggage && data.returnFlight.airLineLuggage.length >0){
-                //   const rl = data.returnFlight.airLineLuggage.filter((item) => { return item.quantity >0});
-                //   if(rl && rl.length >0){
-                //     //returnluggage = [...rl]
-                //     rl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       returnluggage.push(element)
-                //     });
-                //   }
-                  
-                // }
-                // //Hành lý về trả về từ api load hành lý
-                // if(data.returnLuggage && data.returnLuggage.length >0){
-                //   const rl = data.returnLuggage.filter((item) => { return item.quantity >0});
-                //   if(rl && rl.length >0){
-                //     //returnluggage = [...rl]
-                //     rl.forEach(element => {
-                //       element.quantitycheck = element.quantity;
-                //       returnluggage.push(element)
-                //     });
-                //   }
-                // }
 
 
               for (let index = 0; index < data.adults.length; index++) {
@@ -2598,111 +2487,7 @@ export class FlightaddservicePage implements OnInit {
                 //hành lý
                 let objAncilary =[],objAncilaryReturn =[] ;
                 let departluggageweight = 0, returnluggageweight = 0;
-                // if(departluggage && departluggage.length >0){
-                //   let objLuggage;
-                //   if(departluggage && departluggage.length == 1){
-                //     if(departluggage[0].quantitycheck >0){
-                //         if(departAirlineCode == "JetStar"){
-                //               objLuggage = {
-                //                 Name: departluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Value: departluggage[0].weight,
-                //                 price: departluggage[0].amount,
-                //                 netPrice: departluggage[0].netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                //             }
-                //             else if(departAirlineCode == "VietnamAirlines"){
-                //               let obj = JSON.parse(departluggage[0].purchaseKey);
-                //               obj.NameId = "1.1";
-                //               objLuggage = {
-                //                 Name: departluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Key: JSON.stringify(obj),
-                //                 Value: departluggage[0].weight,
-                //                 price: departluggage[0].amount,
-                //                 netPrice:departluggage[0].netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                //             }
-                //             else{
-                //               objLuggage = {
-                //                 Name: departluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Key: departluggage[0].purchaseKey,
-                //                 Value: departluggage[0].weight,
-                //                 price: departluggage[0].amount,
-                //                 netPrice: departluggage[0].netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                //           }
-
-                //       //Chọn 1 kiện thì gán vào người thứ 1
-                //       if(index == 0){
-                //         objAncilary.push(objLuggage);
-                //         departluggageweight = departluggage[0].weight;
-                //       }
-                //       //Chọn 2 kiện cùng số kg thì tách ra chia cho 2 người
-                //       else if(departluggage[0].quantitycheck >= 1){
-                //         objAncilary.push(objLuggage);
-                //         departluggageweight = departluggage[0].weight;
-                //       }
-                //       departluggage[0].quantitycheck--;
-                //     }
-
-
-                //   }
-                //   else if(departluggage && departluggage.length > 1){
-                //       var dl1;
-                //       if(index >0 && departluggage[index-1] && departluggage[index-1].quantitycheck >0){
-                //         dl1 = departluggage[index-1];
-                //       }else{
-                //         dl1 = departluggage[index];
-                //       }
-                //       if(dl1){
-                //         if(departAirlineCode == "JetStar"){
-                //           objLuggage = {
-                //             Name: dl1.title, 
-                //             Type: "Baggage", 
-                //             Value: dl1.weight,
-                //             price: dl1.amount,
-                //             netPrice: dl1.netPrice,
-                //             flightNumber: data.departFlight.flightNumber
-                //           }
-                //         }
-                //         else if(departAirlineCode == "VietnamAirlines")
-                //             {
-                //               let obj = JSON.parse(dl1.purchaseKey);
-                //                   obj.NameId = "1.1";
-                //               objLuggage = {
-                //                 Name: dl1.title, 
-                //                 Type: "Baggage", 
-                //                 Key: JSON.stringify(obj),
-                //                 Value: dl1.weight,
-                //                 price: dl1.amount,
-                //                 netPrice: dl1.netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                //             }
-                //         else{
-                //           objLuggage = {
-                //             Name: dl1.title, 
-                //             Type: "Baggage", 
-                //             Key: dl1.purchaseKey,
-                //             Value: dl1.weight,
-                //             price: dl1.amount,
-                //             netPrice: dl1.netPrice,
-                //             flightNumber: data.departFlight.flightNumber
-                //           }
-                //         }
-                //         objAncilary.push(objLuggage);
-                //         departluggageweight = dl1.weight;
-                //         dl1.quantitycheck--;
-                //       }
-                      
-                //     }
-                       
-                // }
+                
                 if(element.itemLug){
                   let objLuggage;
                   if(departAirlineCode == "JetStar"){
@@ -2743,109 +2528,6 @@ export class FlightaddservicePage implements OnInit {
                   objAncilary.push(objLuggage);
                   departluggageweight = element.itemLug.weight;
                 }
-
-                // if(returnluggage && returnluggage.length >0){
-                //   let objReturnLuggage1;
-                //   if(returnluggage && returnluggage.length ==1 && returnluggage[0].quantitycheck >0){
-                //     if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                //       objReturnLuggage1 = {
-                //         Name: returnluggage[0].title, 
-                //         Type: "Baggage", 
-                //         Value: returnluggage[0].weight,
-                //         price: returnluggage[0].amount,
-                //         netPrice: returnluggage[0].netPrice,
-                //         flightNumber: data.returnFlight.flightNumber
-                //       }
-                //     }
-                //     else if(returnAirlineCode == "VietnamAirlines")
-                //     {
-                //               let obj = JSON.parse(returnluggage[0].purchaseKey);
-                //                   obj.NameId = "1.1";
-                //               objReturnLuggage1 = {
-                //                 Name: returnluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Key: JSON.stringify(obj),
-                //                 Value: returnluggage[0].weight,
-                //                 price: returnluggage[0].amount,
-                //                 netPrice:returnluggage[0].netPrice,
-                //                 flightNumber: data.returnFlight.flightNumber
-                //               }
-                //     }
-                //     else{
-                //       objReturnLuggage1 = {
-                //         Name: returnluggage[0].title, 
-                //         Type: "Baggage", 
-                //         Key: returnluggage[0].purchaseKey,
-                //         Value: returnluggage[0].weight,
-                //         price: returnluggage[0].amount,
-                //         netPrice: returnluggage[0].netPrice,
-                //         flightNumber: data.returnFlight.flightNumber
-                //       }
-                //     }
-                    
-                    
-                //     if(index == 0){
-                //       objAncilaryReturn.push(objReturnLuggage1);
-                //         returnluggageweight = returnluggage[0].weight;
-                //     }
-                //     else if(returnluggage[0].quantitycheck >= 1){
-                //       objAncilaryReturn.push(objReturnLuggage1);
-                //       returnluggageweight = returnluggage[0].weight;
-                //     }
-
-                //     returnluggage[0].quantitycheck--;
-                //   }
-                //   else if(returnluggage && returnluggage.length > 1){
-                //     var rl1;
-                //     if(index >0 && returnluggage[index-1] && returnluggage[index-1].quantitycheck >0){
-                //       rl1 = returnluggage[index-1];
-                //     }else{
-                //       rl1 = returnluggage[index];
-                //     }
-                //     if(rl1){
-                //       if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                //         objReturnLuggage1 = {
-                //           Name: rl1.title, 
-                //           Type: "Baggage", 
-                //           Value: rl1.weight,
-                //           price: rl1.amount,
-                //           netPrice: rl1.netPrice,
-                //           flightNumber: data.returnFlight.flightNumber
-                //         }
-                //       }
-                //       else if(returnAirlineCode == "VietnamAirlines")
-                //           {
-                //             let obj = JSON.parse(rl1.purchaseKey);
-                //                 obj.NameId = "1.1";
-                //             objReturnLuggage1 = {
-                //               Name: rl1.title, 
-                //               Type: "Baggage", 
-                //               Key: JSON.stringify(obj),
-                //               Value: rl1.weight,
-                //               price: rl1.amount,
-                //               netPrice:rl1.netPrice,
-                //               flightNumber: data.returnFlight.flightNumber
-                //             }
-                //           }
-                //       else{
-                //         objReturnLuggage1 = {
-                //           Name: rl1.title, 
-                //           Type: "Baggage", 
-                //           Key: rl1.purchaseKey,
-                //           Value: rl1.weight,
-                //           price: rl1.amount,
-                //           netPrice: rl1.netPrice,
-                //           flightNumber: data.returnFlight.flightNumber
-                //         }
-                //       }
-                      
-                //       objAncilaryReturn.push(objReturnLuggage1);
-                //       returnluggageweight = rl1.weight;
-                //       rl1.quantitycheck--;
-                //     }
-                    
-                //   }
-                // }
 
                 if(element.itemLugReturn){
                   let objReturnLuggage1;
@@ -3020,111 +2702,6 @@ export class FlightaddservicePage implements OnInit {
             returnluggage = returnluggage.filter((item) => { return item.quantitycheck >0});
 
             if(!element.isInfant){
-                // if(departluggage && departluggage.length >0){
-                //   let objLuggage;
-                //   if(departluggage && departluggage.length == 1){
-                //     if(departluggage[0].quantitycheck >0){
-                //         if(departAirlineCode == "JetStar"){
-                //               objLuggage = {
-                //                 Name: departluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Value: departluggage[0].weight,
-                //                 price: departluggage[0].amount,
-                //                 netPrice:departluggage[0].netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                              
-                //             }
-                //             else if(departAirlineCode == "VietnamAirlines"){
-                //               let obj = JSON.parse(departluggage[0].purchaseKey);
-                //               obj.NameId = "1.1";
-                //               objLuggage = {
-                //                 Name: departluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Key: JSON.stringify(obj),
-                //                 Value: departluggage[0].weight,
-                //                 price: departluggage[0].amount,
-                //                 netPrice:departluggage[0].netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                //             }
-                //             else{
-                //               objLuggage = {
-                //                 Name: departluggage[0].title, 
-                //                 Type: "Baggage", 
-                //                 Key: departluggage[0].purchaseKey,
-                //                 Value: departluggage[0].weight,
-                //                 price: departluggage[0].amount,
-                //                 netPrice:departluggage[0].netPrice,
-                //                 flightNumber: data.departFlight.flightNumber
-                //               }
-                //           }
-
-                //       //Chọn 1 kiện thì gán vào người thứ 1
-                //       if(index == 0){
-                //         objAncilary.push(objLuggage);
-                //         departluggageweight = departluggage[0].weight;
-                //       }
-                //       //Chọn 2 kiện cùng số kg thì tách ra chia cho 2 người
-                //       else if(departluggage[0].quantitycheck >= 1){
-                //         objAncilary.push(objLuggage);
-                //         departluggageweight = departluggage[0].weight;
-                //       }
-                //       departluggage[0].quantitycheck--;
-                //     }
-
-
-                //   }
-                //   else if(departluggage && departluggage.length > 1){
-                //       var dlc;
-                //       if(index >0 && departluggage[index-1] && departluggage[index-1].quantitycheck >0){
-                //         dlc = departluggage[index-1];
-                //       }else{
-                //         dlc = departluggage[index];
-                //       }
-                //       if(dlc){
-                //         if(departAirlineCode == "JetStar"){
-                //           objLuggage = {
-                //             Name: dlc.title, 
-                //             Type: "Baggage", 
-                //             Value: dlc.weight,
-                //             price: dlc.amount,
-                //             netPrice:dlc.netPrice,
-                //             flightNumber: data.departFlight.flightNumber
-                //           }
-                //         }
-                //         else if(departAirlineCode == "VietnamAirlines"){
-                //           let obj = JSON.parse(dlc.purchaseKey);
-                //           obj.NameId = "1.1";
-                //           objLuggage = {
-                //             Name: dlc.title, 
-                //             Type: "Baggage", 
-                //             Key: JSON.stringify(obj),
-                //             Value: dlc.weight,
-                //             price: dlc.amount,
-                //             netPrice:dlc.netPrice,
-                //             flightNumber: data.departFlight.flightNumber
-                //           }
-                //         }
-                //         else{
-                //           objLuggage = {
-                //             Name: dlc.title, 
-                //             Type: "Baggage", 
-                //             Key: dlc.purchaseKey,
-                //             Value: dlc.weight,
-                //             price: dlc.amount,
-                //             netPrice:dlc.netPrice,
-                //             flightNumber: data.departFlight.flightNumber
-                //           }
-                //         }
-                //         objAncilary.push(objLuggage);
-                //         departluggageweight = dlc.weight;
-                //         dlc.quantitycheck--;
-                //       }
-                      
-                //     }
-                      
-                // }
                 if(element.itemLug){
                   let objLuggage;
                   if(departAirlineCode == "JetStar"){
@@ -3165,110 +2742,6 @@ export class FlightaddservicePage implements OnInit {
                   objAncilary.push(objLuggage);
                   departluggageweight = element.itemLug.weight;
                 }
-
-
-                // if(returnluggage && returnluggage.length >0){
-                //     let objReturnLuggage1;
-                //     if(returnluggage && returnluggage.length ==1 && returnluggage[0].quantitycheck >0){
-                //       if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                //         objReturnLuggage1 = {
-                //           Name: returnluggage[0].title, 
-                //           Type: "Baggage", 
-                //           Value: returnluggage[0].weight,
-                //           price: returnluggage[0].amount,
-                //           netPrice: returnluggage[0].netPrice,
-                //           flightNumber: data.returnFlight.flightNumber
-                //         }
-                //       }
-                //       else if(returnAirlineCode == "VietnamAirlines")
-                //       {
-                //         let obj = JSON.parse(returnluggage[0].purchaseKey);
-                //             obj.NameId = "1.1";
-                //         objReturnLuggage1 = {
-                //           Name: returnluggage[0].title, 
-                //           Type: "Baggage", 
-                //           Key: JSON.stringify(obj),
-                //           Value: returnluggage[0].weight,
-                //           price: returnluggage[0].amount,
-                //           netPrice:returnluggage[0].netPrice,
-                //           flightNumber: data.returnFlight.flightNumber
-                //         }
-                //       }
-                //       else{
-                //         objReturnLuggage1 = {
-                //           Name: returnluggage[0].title, 
-                //           Type: "Baggage", 
-                //           Key: returnluggage[0].purchaseKey,
-                //           Value: returnluggage[0].weight,
-                //           price: returnluggage[0].amount,
-                //           netPrice: returnluggage[0].netPrice,
-                //           flightNumber: data.returnFlight.flightNumber
-                //         }
-                //       }
-                      
-                      
-                //       if(index == 0){
-                //         objAncilaryReturn.push(objReturnLuggage1);
-                //           returnluggageweight = returnluggage[0].weight;
-                //       }
-                //       else if(returnluggage[0].quantitycheck >= 1){
-                //         objAncilaryReturn.push(objReturnLuggage1);
-                //         returnluggageweight = returnluggage[0].weight;
-                //       }
-
-                //       returnluggage[0].quantitycheck--;
-                //     }
-                //     else if(returnluggage && returnluggage.length > 1){
-                //       var rlc;
-                //       if(index >0 && returnluggage[index-1] && returnluggage[index-1].quantitycheck >0){
-                //         rlc = returnluggage[index-1];
-                //       }else{
-                //         rlc = returnluggage[index];
-                //       }
-                //       if(rlc){
-                //         if(returnAirlineCode && returnAirlineCode == "JetStar"){
-                //           objReturnLuggage1 = {
-                //             Name: rlc.title, 
-                //             Type: "Baggage", 
-                //             Value: rlc.weight,
-                //             price: rlc.amount,
-                //             netPrice:rlc.netPrice,
-                //             flightNumber: data.returnFlight.flightNumber
-                //           }
-                //         }
-                //         else if(returnAirlineCode == "VietnamAirlines")
-                //         {
-                //           let obj = JSON.parse(rlc.purchaseKey);
-                //               obj.NameId = "1.1";
-                //           objReturnLuggage1 = {
-                //             Name: rlc.title, 
-                //             Type: "Baggage", 
-                //             Key: JSON.stringify(obj),
-                //             Value: rlc.weight,
-                //             price: rlc.amount,
-                //             netPrice:rlc.netPrice,
-                //             flightNumber: data.returnFlight.flightNumber
-                //           }
-                //         }
-                //         else{
-                //           objReturnLuggage1 = {
-                //             Name: rlc.title, 
-                //             Type: "Baggage", 
-                //             Key: rlc.purchaseKey,
-                //             Value: rlc.weight,
-                //             price: rlc.amount,
-                //             netPrice:rlc.netPrice,
-                //             flightNumber: data.returnFlight.flightNumber
-                //           }
-                //         }
-                        
-                //         objAncilaryReturn.push(objReturnLuggage1);
-                //         returnluggageweight = rlc.weight;
-                //         rlc.quantitycheck--;
-                //       }
-                      
-                //     }
-                // }
 
                 if(element.itemLugReturn){
                   let objReturnLuggage1;

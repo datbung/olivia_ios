@@ -164,14 +164,7 @@ export class FlightaddluggagePage implements OnInit {
   }
 
   goback(){
-    this._flightService.itemFlightCache.adults.forEach(element => {
-      element.itemLug = null;
-      element.itemLugReturn = null;
-    });
-    this._flightService.itemFlightCache.childs.forEach(elementc => {
-      elementc.itemLug = null;
-      elementc.itemLugReturn = null;
-    });
+    
 
     this.navCtrl.navigateBack('/flightaddservice');
   }

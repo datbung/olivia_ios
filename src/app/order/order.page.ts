@@ -305,6 +305,7 @@ export class OrderPage {
         }
         else {
           se.isConnected = false;
+          se.hasloaddata = true;
           se.storage.get('listmytrips').then(data => {
             if (data) {
               se.loadMytrip(data, false);
@@ -429,6 +430,7 @@ export class OrderPage {
           }
         })
       } else {
+        this.hasloaddata = true;
         this.isConnected = false;
         this.storage.get('listmytrips').then(data => {
           if (data) {
@@ -436,6 +438,8 @@ export class OrderPage {
           }
         })
       }
+    }else{
+      this.hasloaddata = true;
     }
   }
 
@@ -528,7 +532,7 @@ export class OrderPage {
         var options = {
           method: 'GET',
           url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
-          //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&memberid=17c3fd5b-a372-41dd-936b-69beac9aa933&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
+          //url: C.urls.baseUrl.urlMobile + '/api/dashboard/getMyTripPaging?getall=true&memberid=b2d138c8-378f-404f-ac1e-647df522defa&getHistory=' + ishistory + '&pageIndex=' + se.pageIndex + '&pageSize=' + (ishistory ? 20 : 25),
           
           headers:
           {
@@ -762,36 +766,36 @@ export class OrderPage {
                   element.tourListPax = _listpax;
                 }
                 else if (element.booking_type == 'COMBO_FLIGHT'){
-                   //check đã xuất vé + có checkin online
-                   element.bookingjson = JSON.parse(element.booking_json_data);
-                   console.log(element.bookingjson);
-                  if ((element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate != '' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate != ''))) {
-                    let objjson = JSON.parse(element.booking_json_data);
-                    let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo && p.CheckinInfo.indexOf('http') != -1) });
-                    element.hadCheckinOnline = _checked;
-                    element.hadCheckinOnlineDepart=false;
-                    element.hadCheckinOnlineReturn=false;
-                    if (objjson[0]) {
-                      for (let i = 0; i < objjson[0].Passengers.length; i++) {
-                        const el = objjson[0].Passengers[i];
-                        if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
-                          element.hadCheckinOnlineDepart = true;
-                          break;
-                        }
-                      }
-                    }
-                    if (objjson.length > 1 && objjson[1]) {
-                      for (let i = 0; i < objjson[1].Passengers.length; i++) {
-                        const el = objjson[1].Passengers[i];
-                        if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
-                          element.hadCheckinOnlineReturn = true;
-                          break;
-                        }
-                      }
-                    }
-                    // console.log(JSON.parse(element.booking_json_data));
-                  }
-                }
+                  //check đã xuất vé + có checkin online
+                  element.bookingjson = JSON.parse(element.booking_json_data);
+                  console.log(element.bookingjson);
+                 if ((element.payment_status == 1 || element.payment_status == 5) && element.bookingsComboData[0].issueTicketDate != '' && (!element.bookingsComboData[1] || (element.bookingsComboData[1] && element.bookingsComboData[1].issueTicketDate != ''))) {
+                   let objjson = JSON.parse(element.booking_json_data);
+                   let _checked = objjson.some(item => { return item.Passengers && item.Passengers.some(p => p.CheckinInfo && p.CheckinInfo.indexOf('http') != -1) });
+                   element.hadCheckinOnline = _checked;
+                   element.hadCheckinOnlineDepart=false;
+                   element.hadCheckinOnlineReturn=false;
+                   if (objjson[0]) {
+                     for (let i = 0; i < objjson[0].Passengers.length; i++) {
+                       const el = objjson[0].Passengers[i];
+                       if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
+                         element.hadCheckinOnlineDepart = true;
+                         break;
+                       }
+                     }
+                   }
+                   if (objjson.length > 1 && objjson[1]) {
+                     for (let i = 0; i < objjson[1].Passengers.length; i++) {
+                       const el = objjson[1].Passengers[i];
+                       if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
+                         element.hadCheckinOnlineReturn = true;
+                         break;
+                       }
+                     }
+                   }
+                   // console.log(JSON.parse(element.booking_json_data));
+                 }
+               }
                 element.isFlyBooking = false;
 
                 //if (element.payment_status != 3 && element.payment_status != -2) {
@@ -1125,7 +1129,7 @@ export class OrderPage {
                     element.hadCheckinOnline = _checked;
                     element.hadCheckinOnlineDepart=false;
                     element.hadCheckinOnlineReturn=false;
-                    if (objjson[0]) {
+                    if (objjson[0] && objjson[0].Passengers) {
                       for (let i = 0; i < objjson[0].Passengers.length; i++) {
                         const el = objjson[0].Passengers[i];
                         if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
@@ -1134,7 +1138,7 @@ export class OrderPage {
                         }
                       }
                     }
-                    if (objjson.length > 1 && objjson[1]) {
+                    if (objjson.length > 1 && objjson[1] && objjson[1].Passengers) {
                       for (let i = 0; i < objjson[1].Passengers.length; i++) {
                         const el = objjson[1].Passengers[i];
                         if (el.CheckinInfo && el.CheckinInfo.indexOf('http') != -1) {
@@ -1854,9 +1858,7 @@ export class OrderPage {
                 element.address = element.hotelAddress;
                 element.totalPaxStr = "" + (element.total_adult ? element.total_adult + " người lớn" : "") + (element.total_child ? ", " + element.total_child + " trẻ em" : "");
                 se.getRatingStar(element);
-                // if (element.booking_id=='VC0002855') {
-                //   se.listMyTrips.push(element);
-                // }
+                
                 
                 se.listMyTrips.push(element);
                 se.mytripcount++;
@@ -2244,23 +2246,7 @@ export class OrderPage {
                   se.listMyTrips[0].listpolicy.push({ type: 2, name: element.replace('-', ''), isdepart: false, typePolicy:2 });
                 }
               });
-              // se.listMyTrips[0].listpolicy = [];
-              // if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].cancelPolicy){
-              //   se.listMyTrips[0].hasdepartpolicy = true;
-              //   se.listMyTrips[0].listpolicy.push({ type: 2, name: se.listMyTrips[0].bookingJsonDataParse[0].cancelPolicy, isdepart: true, typePolicy:2});//1- đổi vé; 2- hủy vé 
-              // }
-              // if(se.listMyTrips[0].bookingJsonDataParse[0] && se.listMyTrips[0].bookingJsonDataParse[0].changePolicy){
-              //   se.listMyTrips[0].hasdepartpolicy = true;
-              //   se.listMyTrips[0].listpolicy.push({ type: 1, name: se.listMyTrips[0].bookingJsonDataParse[0].changePolicy, isdepart: true, typePolicy:1});
-              // }
-              // if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].cancelPolicy){
-              //   se.listMyTrips[0].hasreturnpolicy = true;
-              //   se.listMyTrips[0].listpolicy.push({ type: 2, name: se.listMyTrips[0].bookingJsonDataParse[1].cancelPolicy, isdepart: false, typePolicy:2});//1- đổi vé; 2- hủy vé 
-              // }
-              // if(se.listMyTrips[0].bookingJsonDataParse[1] && se.listMyTrips[0].bookingJsonDataParse[1].changePolicy){
-              //   se.listMyTrips[0].hasdepartpolicy = true;
-              //   se.listMyTrips[0].listpolicy.push({ type: 1, name: se.listMyTrips[0].bookingJsonDataParse[1].changePolicy, isdepart: false, typePolicy:1});
-              // }
+             
             }
            
 
@@ -6213,7 +6199,7 @@ export class OrderPage {
 
   }
   share(item) {
-    this.socialSharing.share(null, null, item.CheckinInfo,null).then(() => {
+    this.socialSharing.share(null, null, item.item.CheckinInfo,null).then(() => {
       // Success!
     }).catch(() => {
       // Error!

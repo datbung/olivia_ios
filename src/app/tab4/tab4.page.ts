@@ -276,7 +276,7 @@ export class Tab4Page implements OnInit{
     var se = this;
     let timeCheckAll = await se.storage.get('timeCheckAll');
     se.zone.run(()=>{
-      if (!stt) {
+      if (!stt && data && data.length >0) {
         data.forEach(element =>{
           // if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
             let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');
@@ -318,7 +318,7 @@ export class Tab4Page implements OnInit{
           
         });
       }
-      else{
+      else if(data && data.length >0){
         data.forEach(element =>{
           // if(element.notifyType != "fly" && element.notifyAction != "flychangeinfo"){
             let arrdate = moment(element.created).format('DD/MM/YYYY/HH/mm').split('/');

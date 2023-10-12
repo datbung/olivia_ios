@@ -108,7 +108,7 @@ export class FlightInternationalFilterClassPage implements OnInit {
                 res = 'Hạng nhất đặc biệt';
                 break;
               default:
-                res = 'Nhiều hạng'
+                res = 'Hạng vé tối ưu'
               break;
           }
           return res;

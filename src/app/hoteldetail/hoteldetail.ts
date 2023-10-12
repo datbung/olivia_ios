@@ -2929,6 +2929,10 @@ async bookcombo() {
   goback() {
     this.zone.run(()=>{
       this.ischeck = false;
+      this.loadcomplete = true;
+      this.loaddonecombo = true;
+      this.loadpricecombodone = true;
+      this.hotelRoomClasses = [];
     })
     
     this.isexit = true;
@@ -2937,7 +2941,7 @@ async bookcombo() {
     if (this.searchhotel.rootPage == "mainpage" || this.searchhotel.rootPage == "topdeal" ) {
       //this.navCtrl.navigateBack('/tabs/tab1', {animated: true});
       setTimeout(()=>{
-        this.navCtrl.pop();
+        this.navCtrl.navigateBack('/tabs/tab1');
       },10)
       
       //this.navCtrl.back();
@@ -2981,7 +2985,7 @@ async bookcombo() {
           this.navCtrl.back();
         }
       }else{
-        this.navCtrl.navigateBack('/app/tabs/tab1');
+        this.navCtrl.navigateBack('/tabs/tab1');
       }
     }
   }

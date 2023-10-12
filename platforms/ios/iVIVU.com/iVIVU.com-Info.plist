@@ -26,7 +26,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.2.3</string>
+	<string>4.2.4</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -61,37 +61,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>4.2.3</string>
-	<key>FacebookAppID</key>
-	<string>628025334278848</string>
-	<key>FacebookDisplayName</key>
-	<string>iVIVU.com</string>
-	<key>FacebookHybridAppEvents</key>
-	<string>false</string>
-	<key>FacebookUrlSchemeSuffix</key>
-	<string>null</string>
-	<key>IonApi</key>
-	<string>https://api.ionicjs.com</string>
-	<key>IonAppId</key>
-	<string>e19952cb</string>
-	<key>IonChannelName</key>
-	<string>Production</string>
-	<key>IonMaxVersions</key>
-	<string>2</string>
-	<key>IonMinBackgroundDuration</key>
-	<string>30</string>
-	<key>IonUpdateMethod</key>
-	<string>auto</string>
-	<key>LSApplicationCategoryType</key>
-	<string>Ứng dụng cần truy cập thư viện camera cho tính năng chia sẻ ảnh nhận xét khách sạn và cập nhật ảnh của thông tin cá nhân.</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-share-api</string>
-		<string>fb-messenger-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
+	<string>4.2.4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
@@ -148,6 +118,33 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>FacebookAppID</key>
+	<string>628025334278848</string>
+	<key>FacebookDisplayName</key>
+	<string>iVIVU.com</string>
+	<key>FacebookHybridAppEvents</key>
+	<string>false</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+	<key>IonAppId</key>
+	<string>e19952cb</string>
+	<key>IonChannelName</key>
+	<string>Production</string>
+	<key>IonApi</key>
+	<string>https://api.ionicjs.com</string>
+	<key>IonUpdateMethod</key>
+	<string>auto</string>
+	<key>IonMaxVersions</key>
+	<string>2</string>
+	<key>IonMinBackgroundDuration</key>
+	<string>30</string>
+	<key>FacebookUrlSchemeSuffix</key>
+	<string>null</string>
 	
 	
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -24,7 +24,7 @@ import {tourService} from './providers/tourService';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { C } from './providers/constants';
 //import { Geolocation } from '@ionic-native/geolocation/ngx';
-
+declare let window: any;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
@@ -242,33 +242,34 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      try {
-        this.fb.setAdvertiserTrackingEnabled(true);
+      this.fb.setAdvertiserTrackingEnabled(true);
+      //try {
+       // this.fb.setAdvertiserTrackingEnabled(true);
 
-        const idfaPlugin = (cordova.plugins as any).idfa;
+      //   const idfaPlugin = (cordova.plugins as any).idfa;
         
-        idfaPlugin.getInfo()
-            .then(info => {
-                if (!info.trackingLimited) {
-                    return info.idfa || info.aaid;
-                } else if (info.trackingPermission === idfaPlugin.TRACKING_PERMISSION_NOT_DETERMINED) {
-                    return idfaPlugin.requestPermission().then(result => {
-                        if (result === idfaPlugin.TRACKING_PERMISSION_AUTHORIZED) {
-                            return idfaPlugin.getInfo().then(info => {
-                                return info.idfa || info.aaid;
-                            });
-                        }
-                    });
-                }
-            })
-            .then(idfaOrAaid => {
-                if (idfaOrAaid) {
-                    console.log(idfaOrAaid);
-                }
-            });
-        } catch (error) {
+      //   idfaPlugin.getInfo()
+      //       .then(info => {
+      //           if (!info.trackingLimited) {
+      //               return info.idfa || info.aaid;
+      //           } else if (info.trackingPermission === idfaPlugin.TRACKING_PERMISSION_NOT_DETERMINED) {
+      //               return idfaPlugin.requestPermission().then(result => {
+      //                   if (result === idfaPlugin.TRACKING_PERMISSION_AUTHORIZED) {
+      //                       return idfaPlugin.getInfo().then(info => {
+      //                           return info.idfa || info.aaid;
+      //                       });
+      //                   }
+      //               });
+      //           }
+      //       })
+      //       .then(idfaOrAaid => {
+      //           if (idfaOrAaid) {
+      //               console.log(idfaOrAaid);
+      //           }
+      //       });
+      //   } catch (error) {
         
-      }
+      // }
 
       this.deeplinks.routeWithNavController(this.navCtrl, {
         '/login': LoginPage

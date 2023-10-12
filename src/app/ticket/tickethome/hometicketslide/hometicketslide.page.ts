@@ -22,7 +22,7 @@ export class HomeTicketSlidePage implements OnInit {
   slidePopularVN: any;
   loadslidedatadone: boolean=false;
   arrsk=[1,2,3,4,5,6];
-  pageSize=20;
+  pageSize=10;
   constructor(private navCtrl: NavController, private gf: GlobalFunction,
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
@@ -35,7 +35,7 @@ export class HomeTicketSlidePage implements OnInit {
       if(!this.ticketService.dataAllExperiences){
         this.getAllExperiences();
       }else{
-        this.loadDataAllExperiences();
+        this.loadDataAllExperiences(false);
       }
       if(!this.ticketService.dataPopularLocationVN){
         this.getPopularLocationVN();
@@ -56,27 +56,36 @@ export class HomeTicketSlidePage implements OnInit {
     this.ticketService.itemTicketTopic='';
   }
 
-  loadDataAllExperiences(){
+  loadDataAllExperiences(isfirstload){
     let se = this;
       se.slideData = se.ticketService.dataAllExperiences;
-      for (let index = 0; index < se.slideData.length; index++) {
-        se.slideData[index].pageIndex = 1;
-        se.slideData[index].totalPage = Math.ceil(se.slideData[index].experienceHomeModels.length/20);
-        se.slideData[index].experienceHomeModelsDisplay = [];
-        for (let j = 0; j < se.slideData[index].experienceHomeModels.length; j++) {
-          const elementVVC = se.slideData[index].experienceHomeModels[j];
-          if(elementVVC.avgPoint && (elementVVC.avgPoint == 10  || elementVVC.avgPoint == 6  || elementVVC.avgPoint == 9  || elementVVC.avgPoint == 8  || elementVVC.avgPoint == 7)){
-            elementVVC.avgPoint = elementVVC.avgPoint + ".0";
+      if(isfirstload){
+        for (let index = 0; index < se.slideData.length; index++) {
+          se.slideData[index].pageIndex = 1;
+          se.slideData[index].totalPage = Math.ceil(se.slideData[index].experienceHomeModels.length/10);
+          se.slideData[index].experienceHomeModelsDisplay = [];
+          for (let j = 0; j < se.slideData[index].experienceHomeModels.length; j++) {
+            const elementVVC = se.slideData[index].experienceHomeModels[j];
+            if(elementVVC.avgPoint && elementVVC.avgPoint.toString().indexOf('.0') == -1 && (elementVVC.avgPoint == 10  || elementVVC.avgPoint == 6  || elementVVC.avgPoint == 9  || elementVVC.avgPoint == 8  || elementVVC.avgPoint == 7)){
+              elementVVC.avgPoint = elementVVC.avgPoint + ".0";
+            }
+  
+            if(j <10){
+              se.slideData[index].experienceHomeModelsDisplay.push(elementVVC);
+            }
+           
           }
-
-          if(j <20){
-            se.slideData[index].experienceHomeModelsDisplay.push(elementVVC);
+          if(se.slideData[0].experienceHomeModelsDisplay && se.slideData[0].experienceHomeModelsDisplay.length >=10){
+            se.loadslidedatadone = true;
           }
           
         }
+      }else{
+        se.loadslidedatadone = true;
       }
       
-      se.loadslidedatadone = true;
+      
+      
   }
 
   getAllExperiences() {
@@ -89,7 +98,7 @@ export class HomeTicketSlidePage implements OnInit {
     se.gf.RequestApi('GET', url, headers, null, 'hometicketslide', 'getAllExperiences').then((data) => {
       let res = JSON.parse(data);
       se.ticketService.dataAllExperiences = res.data;
-      se.loadDataAllExperiences();
+      se.loadDataAllExperiences(true);
     })
   }
 

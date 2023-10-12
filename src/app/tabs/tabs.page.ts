@@ -141,7 +141,7 @@ export class TabsPage implements OnInit {
                     }
   
                   } else {
-                    console.log(this.searchhotel.rootPage +'_'+ element ? 'true' : 'false');
+                    //console.log(this.searchhotel.rootPage +'_'+ element ? 'true' : 'false');
                     this.navCtrl.navigateBack('/');
                   }
                 }

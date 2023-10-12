@@ -4082,7 +4082,7 @@
           
                <!-- Checkin online -->
                <div *ngIf="trip.hadCheckinOnline" class="div-line-new-1 m-0-16"></div>
-               <div *ngIf="trip.hadCheckinOnline" class="div-checkin-online">
+               <div *ngIf="trip.isFlyBooking && trip.hadCheckinOnline" class="div-checkin-online">
                 <div class="d-flex">
                   <div class="div-icon-check">
                     <img  class="img-check"  src="./assets/ic_mytripbooking/check.svg">

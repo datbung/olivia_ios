@@ -100,7 +100,10 @@
                                                     <ng-template #noBaggageHanded>
                                                         <div class="text-detail">Không bao gồm hành lý xách tay</div>
                                                     </ng-template>
-                                                <div class="text-detail" *ngIf="(itemFlightTicketCondition.luggageSigned && itemFlightTicketCondition.luggageSigned.length <=5) else noluggageSigned">{{itemFlightTicketCondition.luggageSigned}}kg hành lý ký gửi </div>
+                                                <div class="text-detail" *ngIf="(itemFlightTicketCondition.luggageSigned && itemFlightTicketCondition.luggageSigned.length <=5) else noluggageSigned">
+                                                    <div *ngIf="itemFlightTicketCondition.luggageSigned.indexOf('kg') ==-1">{{itemFlightTicketCondition.luggageSigned}}kg hành lý ký gửi </div>
+                                                    <div *ngIf="itemFlightTicketCondition.luggageSigned.indexOf('kg') !=-1">{{itemFlightTicketCondition.luggageSigned}} hành lý ký gửi </div>
+                                                </div>
                                                 <ng-template #noluggageSigned>
                                                     <div class="text-detail">Không bao gồm hành lý ký gửi</div>
                                                 </ng-template>
@@ -235,7 +238,10 @@
                                                             <div class="text-detail">Không bao gồm hành lý xách tay</div>
                                                         </ng-template>
 
-                                                        <div class="text-detail" *ngIf="(itemstop.ticketCondition.luggageSigned && itemstop.ticketCondition.luggageSigned.length <=5) else noluggageSigned">{{itemstop.ticketCondition.luggageSigned}}kg hành lý ký gửi </div>
+                                                        <div class="text-detail" *ngIf="(itemstop.ticketCondition.luggageSigned && itemstop.ticketCondition.luggageSigned.length <=5) else noluggageSigned">
+                                                            <div *ngIf="itemstop.ticketCondition.luggageSigned.indexOf('kg') ==-1">{{itemstop.ticketCondition.luggageSigned}}kg hành lý ký gửi </div>
+                                                            <div *ngIf="itemstop.ticketCondition.luggageSigned.indexOf('kg') !=-1">{{itemstop.ticketCondition.luggageSigned}} hành lý ký gửi </div>
+                                                        </div>
                                                         <ng-template #noluggageSigned>
                                                             <div class="text-detail">Không bao gồm hành lý ký gửi</div>
                                                         </ng-template>

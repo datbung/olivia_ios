@@ -271,7 +271,7 @@ export class FlightadddetailsPage implements OnInit {
                         element.gender = elementcache.gender;
                         element.genderdisplay = elementcache.genderdisplay;
                         //element.airlineMemberCode = elementcache.airlineMemberCode;
-                        if(this._flightService.itemFlightCache.priceCathay>0){
+                        if(elementcache.dateofbirth){
                           element.dateofbirth = elementcache.dateofbirth;
                         }
                         if(se.isExtenal && se.showLotusPoint){
@@ -718,27 +718,20 @@ export class FlightadddetailsPage implements OnInit {
 
         resetLuggage(){
           let data = this._flightService.itemFlightCache;
-          if(data.departFlight.airLineLuggage && data.departFlight.airLineLuggage >0){
-            data.departFlight.airLineLuggage.forEach((item) => {
-              item.checkquantity = 0;
-            })
+          if(data.adults && data.adults.length >0){
+            data.adults.forEach(element => {
+              element.itemLug = null;
+              element.itemLugReturn = null;
+            });
           }
-          if(data.returnFlight && data.returnFlight.airLineLuggage && data.returnFlight.airLineLuggage.length >0){
-            data.returnFlight.airLineLuggage.forEach((item) => {
-              item.checkquantity = 0;
-            })
+          if(data.childs && data.childs.length >0){
+            data.childs.forEach(elementc => {
+              elementc.itemLug = null;
+              elementc.itemLugReturn = null;
+            });
           }
-
-          if(data.departLuggage && data.departLuggage.length >0){
-            data.departLuggage.forEach((item) => {
-              item.checkquantity = 0;
-            })
-          }
-          if(data.returnLuggage && data.returnLuggage.length >0){
-            data.returnLuggage.forEach((item) => {
-              item.checkquantity = 0;
-            })
-          }
+          
+          
         }
         textchangehoten(item){
 
