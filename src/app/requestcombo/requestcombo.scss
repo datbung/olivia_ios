@@ -43,7 +43,7 @@
         color: #3d3f47;
     }
     .list-departure{
-        margin: 2;
+        flex-wrap: wrap;
         display: inline-flex;
     }
     .rd-departure{
@@ -252,4 +252,17 @@
     }
     .m-top-5{
         margin-top: 5px;
+    }
+    .radio-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px; /* Điều chỉnh khoảng cách giữa các radio group containers */
+    }
+    .radio-Khac{
+        padding-left:30px;
+        width: 48px;
+        --color-checked:#26bed6
+    }
+    .radio-Khac-1{
+        --color-checked:#26bed6
     }
